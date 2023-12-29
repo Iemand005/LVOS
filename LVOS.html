@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>     <!--< Lasses Virtual Operating System >-->
+<html lang="en">    <!-------< Lasse Lauwerys © 2023 >------->
+<head>              <!------------< 17/12/2023 >------------->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./default.css">
+    <script src="./IE11Prototypes.js"></script>
+    <script src="./Scripts/WindowManager.js" defer></script>
+    <script src="./Reflector.js" defer></script>
+    <script src="./Scripts/DesktopManager.js" defer></script>
+
+    <script src="./ProvisionedApps.js" defer></script>
+    <link rel="stylesheet" href="./ProvisionedApps.css">
+    <link rel="stylesheet" href="./desktop.css">
+</head>
+<body>
+    <section id="desktop" flipped>
+        <section>
+            <form action="" id="applist">
+                <button name="browser">Browser</button>
+            </form>
+        </section>
+
+        <section id="windows">
+            <section id="dock">
+                <section id="reflection"></section>
+            </section>
+
+            <template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
+                <dialog open id=""><!-- I am using the dialog tag as a part of an application that the user interacts with. -->
+                    <content><!-- Visual Sudio 2013 suggested me to use content instead here to make it semantic. This places the dialog inside the shadow DOM. -->
+                        <!-- I was forced to add this extra wrapping article to work around a bug in EdgeHTML 18 that causes the backdrop filter to shift by the amount of pixels the box-shadow blur size has minus the top and left value. I don't know if it's a known bug but the browser is no longer officially supported. I will be adding this tag anyways but it's not necessary for functionality of the application. -->
+                        <header><!-- This header identifies the most near ancestor (dialog). In the header are the title and the navigation buttons. -->
+                            <h1>Wersit</h1><!-- Title of the window and also identifier of the header and dialog. -->
+                            <section><!-- Section used for thematic grouping of content. The grouping is necessary to keep the buttons together without needing extra unstable css tricks. -->
+                                <button disabled></button><!-- The navigation button styling is completely taken care of by css. -->
+                            </section><!-- This is the 5th? revision of my semantic floating dialog scheme. -->
+                        </header>
+                        <section><!-- The article tag is used for an interactive widget, which can range from a hard-coded app to an iframe containing an external website. -->
+                            <!-- This is the client area! Here the application itself should be placed. -->
+                        </section><!-- Adding a wrapper aound this allows the corners inside the window to be rounded too, in a similar way done on Windows 11. We can do it without wrapping with overflow hidden but that results in the scroll bars being rendered over top which looks ugly. Rounded corners also appear to break the experimental blur support on EdgeHTML 18 when a scrollbar appears as the blur layer then gets rendered to the screen after the border causing it to show a jagged inside lining of the quarter circle. I can't find any mentions of the bug online as it's a weird edge case (pun intended). Turns out, Edge Legacy is not the only browser that has problems here. Chrome has a very similar bug but it disappears upon resize (tested in Chrome 118), that would mean Edge Chromium, Opera, Brave and all other Chromium browsers likely have this weird effect too. I will thus not be implementing this! -->
+                        <!-- This is the non-client area! -->
+                    </content><!-- This unnecessary wrapping that is only here for EdgeHTML and WebView 1 compatibility. -->
+                        <!-- This is also the non-client area. Primarily reserved for the borders. -->
+                </dialog>
+            </template><!-- The client area in graphical user interface design refers to the area of the window where the user's content should be placed. The non-client area is for managing the window itself. -->
+
+            <dialog open id="0">
+                <content>
+                    <header>
+                        <h1>Window</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article>
+                        <iframe src="./example.html"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="console">
+                <content>
+                    <header>
+                        <h1>Window</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article>
+                        <form action="">
+                            <output name="stdout"></output>
+                            <input type="text" name="input" id="">
+                        </form>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="calculator">
+                <content>
+                    <header>
+                        <h1>Calculator</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article>
+                        <iframe src="./Applications/Calculator.html" frameborder="0"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog id="browser">
+                <content>
+                    <header>
+                        <h1>Browser</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article class="client">
+                        <form action="" id="browserform">
+                            <label for="browseraddress"></label>
+                            <input type="text" name="address" id="browseraddress">
+                            <button type="submit">Go</button>
+                        </form>
+                        <iframe src="https://example.com"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="3">
+                <content>
+                    <header>
+                        <h1>Window</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article>
+                        <iframe src="./Games/Conway/index.html"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="4">
+                <content>
+                    <header>
+                        <h1>Wersit</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article class="client">
+                        <iframe src="./Trash/Wersit/index.html"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="werbkrite">
+                <content class="nonclient">
+                    <header>
+                        <h1>Wersit</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article class="client">
+                        <iframe src="./Trash/werbkrite/index.html"></iframe>
+                    </article>
+                </content>
+            </dialog>
+
+            <dialog open id="minesweeper">
+                <content class="nonclient">
+                    <header>
+                        <h1>Minesweeper</h1>
+                        <section>
+                            <button disabled>🡕</button>
+                            <button disabled>❐</button>
+                            <button disabled>✕</button>
+                        </section>
+                    </header>
+                    <article>
+                        <iframe src="./Applications/Minesweeper.html"></iframe>
+                    </article>
+                </content>
+            </dialog>
+        </section>
+        <section id="metro"></section>
+    </section>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./conway.js" defer></script>
+</head>
+<body>
+    <main>
+        <section></section>
+        <article>
+            <h2><cite>Conway's game of life</cite></h2>
+            <p class="jswarning">Je moet JavaScript ingeschakeld hebben om dit spel uit te voeren!</p>
+            <canvas id="conway"></canvas>
+            <form>
+                <label for="physicsenabled">Voer spel uit</label>
+                <input type="checkbox" id="physicsenabled" checked="false">
+                <label for="physicsspeed">Snelheid:</label>
+                <input type="range" name="" id="physicsspeed" value="1" min="1" max="30">
+                <select name="" id="drawmethod">
+                    <option>Verwissel</option>
+                    <option>Muisknop specifiek</option>
+                    <option>Voeg toe</option>
+                    <option>Verwijder</option>
+                </select>
+            </form>
+            <p>Conway's spel der leven is een turingcomplete cellulaire automaat.</p>
+        </article>
+    </main>
+    <footer>
+        <p>Lasse Lauwerys &copy; 2023</p>
+    </footer>
+</body>
+</html>

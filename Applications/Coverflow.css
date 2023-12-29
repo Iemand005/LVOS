@@ -1,0 +1,79 @@
+html, body{
+    margin: 0;
+}
+
+body{
+    background-color: black;
+    height: 100%;
+}
+
+div#active{
+    transform: none;
+    margin: none;
+    margin: 0 4%;
+}
+
+div#active ~ div{
+    transform: rotateY(-42deg);
+    z-index: -1;
+}
+
+section{
+
+    /*width: fit-content;
+    margin: 0 400px;*/
+}
+
+.i1{
+    background-image: url(../Assets/Manja.jpg);
+}
+
+.i2{
+    background-image: url(../Assets/Manja.jpg);
+}
+
+div {
+    position: relative;
+    background-image: url(https://i.stack.imgur.com/P56gr.jpg);
+    width: 200px;
+    height: 200px;
+    transform: rotateY(42deg);
+    transition: all 200ms ease-out;
+    margin:  0 -4% /*-10%*/;
+}
+div:after {
+    content: "";
+    background: inherit;
+    display: block;
+    width: inherit;
+    height: inherit;
+    transform-origin: bottom;
+
+    transform: scaleY(-1);
+    mask-image: linear-gradient(to top, rgb(0 0 0 / 37%) 0%, transparent 60%);
+    -webkit-mask-image: linear-gradient(to top, rgb(0 0 0 / 37%) 0%, transparent 60%);
+}
+
+.coverflow{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    perspective: 598px;
+    justify-content: center;
+    overflow: visible;
+    position: absolute;
+    align-items: center;
+    overflow: auto;
+    overflow: hidden;
+    position: relative;
+    overflow: auto;
+    padding: 0 400px;
+    overflow-y: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    scroll-behavior: smooth;
+    
+}

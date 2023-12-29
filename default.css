@@ -1,0 +1,366 @@
+
+html, body{
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+    width: 100%;
+    animation: all 1s ease-in-out 0;
+    transition: all 1s;
+    overflow: hidden;
+}
+
+body{
+    pointer-events: none;
+    /* transform: rotateY(180deg); */
+    perspective: 1000px;
+    background-color: black;
+    background: radial-gradient(#333, black);
+}
+
+
+
+dialog header{
+    margin: 0;
+    /*display: flex;*/
+    pointer-events: none !important;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+main{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+dialog{
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 0 10px black;
+    background-color: rgba(255, 255, 255, 255);
+    -o-transform-origin: bottom left;
+    -ms-transform-origin: bottom left;
+    -moz-transform-origin: bottom left;
+    -webkit-transform-origin: bottom left;
+    transform-origin: bottom left;
+    -o-animation: untilt 400ms ease-out;
+    -moz-animation: untilt 400ms ease-out;
+    -webkit-animation: untilt 400ms ease-out;
+    animation: untilt 400ms ease-out;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    overflow: hidden;
+    position: absolute;
+    background: transparent;
+    border: none;
+    padding: 0;
+    overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
+
+}
+
+dialog header, dialog *, #desktop, #desktop img{
+    -moz-user-select: none;
+    -moz-user-drag: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -o-user-drag: none;
+    user-select: none;
+}
+
+#desktop img{
+    -o-object-fit: cover;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+dialog header button {
+    width: 30px;
+    height: 30px;
+    font-family: sans-serif;
+    -webkit-transition: all 700ms ease-out;
+    -moz-transition: all 700ms ease-out;
+    -o-transition: all 700ms ease-out;
+    transition: all 700ms ease-out;
+    overflow: hidden;
+    padding: 0;
+    display: block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    margin: 0;
+    border: none;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    border-bottom-left-radius: 5px;
+}
+
+/* Werkt blijkbaar? Om een of andere reden zelfs met meer dan 2 knoppen. */
+dialog header button:not(:disabled) ~ button:not(:disabled){
+    border-bottom-left-radius: 0px;
+}
+
+dialog header, dialog header section/*, dialog header section button:last-child*/{
+    border-top-right-radius: inherit;
+}
+
+dialog header section{
+    border-top-right-radius: inherit;
+}
+
+dialog header button:disabled{
+    outline: none;
+    width: 0px;
+    transition: all 500ms ease-out, border 10s ease 1s;
+    font-size: 0px;
+    border: none;
+    margin: 0;
+}
+
+dialog header section{
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    top: 0;
+    right: 0;
+    border: none;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+dialog header > h1{
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+}
+
+dialog > article, dialog > content{
+    display: block;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid black;
+    padding: 5px;
+    box-sizing: border-box;
+    width: inherit;
+    height: inherit;
+    overflow: hidden;
+    background-color: orange;
+}
+
+iframe{
+    border: 0;
+}
+
+input{
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.758);
+}
+
+template{
+    display: none; /* Internet Explorer 11 lijkt template niet te kennen. */
+}
+
+article{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+dialog > div{
+    position: absolute;
+    pointer-events: auto;
+}
+
+dialog > div:nth-of-type(odd){
+    width: 100%;
+}
+
+dialog > div:nth-of-type(even){
+    height: 100%;
+}
+
+
+dialog > div, dialog > div:nth-of-type(n + 5){
+    width: 5px;
+    height: 5px;
+}
+
+dialog > div:nth-of-type(1){
+    top: 0;
+    left: 0;
+    cursor: n-resize;
+}
+
+dialog > div:nth-of-type(2){
+    top: 0;
+    right: 0;
+    cursor: w-resize;
+}
+
+dialog > div:nth-of-type(3){
+    bottom: 0;
+    left: 0;
+    cursor: s-resize;
+}
+
+dialog > div:nth-of-type(4){
+    top: 0;
+    left: 0;
+    cursor: e-resize;
+}
+
+dialog > div:nth-of-type(5){
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+}
+
+dialog > div:nth-of-type(6){
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+}
+
+dialog > div:nth-of-type(7){
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}
+
+dialog > div:nth-of-type(8){
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+}
+
+dialog[open]{
+    animation: tilt 400ms ease-out;
+    pointer-events: auto;
+}
+
+dialog:not([open]){
+    pointer-events: none !important;
+    width: 0 !important;
+}
+
+dialog > article > section, dialog > content > article{
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    /* box-shadow: inset 0px 0px 10px black; */
+    pointer-events: auto;
+    display: flex;
+}
+
+dialog > content > article > *{
+    background-color: rgba(0, 0, 0, 0.267);
+    box-shadow: inset 0px 0px 10px black;
+}
+
+dialog > article > section > *, dialog > content > article > *{
+    width: 100%;
+    height: 100%;
+    /*height: 100%;
+    /*height: 100%;*/
+    vertical-align: bottom;
+}
+
+section#desktop{
+    height: 100%;
+    width: 100%;
+    background-color: orange;
+    z-index: -100;
+}
+
+
+
+.acrylic{
+    background-color: rgba(0, 0, 0, 0.507);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-repeat: repeat;
+    z-index: -1;
+}
+
+.acrylic::before{
+    pointer-events: none;
+    content: "";
+    opacity: 4;
+    z-index: 2;
+    background-image: url("./Assets/Noise.png");
+    width: 100%;
+    height: 100%;
+}
+
+button{
+    background-color: rgba(0, 0, 0, 0.219);
+    border: 1px solid black;
+    text-rendering: geometricPrecision;
+    pointer-events: auto !important;
+}
+
+button:hover{
+    background-color: rgba(153, 153, 153, 0.219);
+}
+
+@keyframes tilt { 
+    100% {
+        transform: perspective(4cm) rotateX(0deg) translateZ(0cm) translateY(0cm);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    0% {
+        transform: perspective(4cm) rotateX(15deg) translateZ(-10cm) translateY(10cm);
+        height: 0;
+        width: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes untilt { 
+    0% {
+        transform: perspective(4cm) rotateX(0deg) translateZ(0cm) translateY(0cm);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        transform: perspective(4cm) rotateX(15deg) translateZ(-10cm) translateY(5cm);
+        height: 0;
+        width: 0;
+        opacity: 0;
+    }
+}
+
+@supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
+    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+        background-color: rgba(255, 255, 255, 0.267);
+    }
+}
+
+@supports (-webkit-backdrop-filter: none) {
+    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+        -webkit-backdrop-filter: saturate(150%) blur(10px); /* For EdgeHTML 18 (Not Edge Chromium!) */
+    }
+}
+
+@supports (backdrop-filter: none){
+    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+        backdrop-filter: saturate(150%) blur(10px) !important;
+    }
+}

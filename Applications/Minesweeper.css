@@ -1,0 +1,98 @@
+
+/*/   -= Minesweeper =-   \*\
+\*\ Lasse Lauwerys © 2023 /*/
+
+ /*\
+  * => Created: 23/12/2023
+ \*/
+
+html, body{
+    margin: 0px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+button{
+    height: 20px;
+    width: 20px;
+    font-size: 15px;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    color: black;
+    box-sizing: border-box;
+    background-color: lightgray;
+    border: none;
+    display: flex; /* Chrome heeft a verschrikkelijk irritante bug that causes the buttons to be 4 pixels too high. I don't know the cause and I can't find anything on this regard so I'll simply use flex and ignore it.*/
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-top: 3px solid rgb(231, 231, 231);
+    border-left: 3px solid rgb(231, 231, 231);
+    border-right: 3px solid darkgray;
+    border-bottom: 3px solid darkgray;
+}
+
+button:disabled{
+    background-color: lightgray;
+    border-top: 1px solid darkgray;
+    border-left: 1px solid darkgray;
+    border-right: none;
+    border-bottom: none;
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+button.active{
+    border-top: 3px solid darkgray;
+    border-left: 3px solid darkgray;
+    border-right: 3px solid rgb(231, 231, 231);
+    border-bottom: 3px solid rgb(231, 231, 231);
+}
+
+button.n0{
+    color: transparent;
+}
+
+button.n1{
+    color: blue;
+}
+
+button.n2{
+    color: green;
+}
+
+button.n3{
+    color: red;
+}
+
+button.n4{
+    color: darkblue;
+}
+
+button.n5{
+    color: darkred;
+}
+
+button.n6{
+    color: darkcyan;
+}
+
+button.n7{
+    color: black;
+}
+
+button.n8{
+    color: darkgray; /*grey gray??*/
+}
+
+td{
+    padding: 0;
+    margin: 0;
+}
+
+table{
+    border-spacing: 0;
+}
