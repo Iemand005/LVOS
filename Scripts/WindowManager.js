@@ -22,9 +22,28 @@ let resizeDirection = 0;
 let topZ = 100;
 let canSave = true;
 
+
+function OSDocumentCrawler(document){
+    this.document = document;
+    this.getDesktop = function(){
+        return this.document.getElementById("desktop");
+    }
+    this.getAllDialogs = function(){
+        return this.document.getElementsByTagName("dialog");
+    }
+    this.getMetroBody = function(){
+        return this.document.getElementById("metro").firstChild;
+    }
+    this.getWindowsContainer = function(){
+        return this.document.getElementById("windows");
+    }
+}
+
+let bodyCrawler = new OSDocumentCrawler(document);
+
 function flip(enable){
     //if(enable == null)
-    const flipped = document.getElementById("desktop").toggleAttribute("flipped", enable);
+    const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
     const window = windows[activeWindow] || windows[0];
     if(flipped) exportWindowBodyToMetro(window);
     else retrieveWindowBodyFromMetro(window);
@@ -36,7 +55,7 @@ function initializeWindows(windows){
     /**
      * Initializes the windows inside the windows object.
      */
-    const dialogs = document.getElementsByTagName("dialog");
+    const dialogs = bodyCrawler.getAllDialogs();
     for (let index = 0; index < dialogs.length; index++) {
         const dialog = dialogs[index];
         console.log(dialog, dialog.id, dialog.src)
@@ -51,74 +70,9 @@ initializeWindows(windows);
 // Normally we use const in for in loops.
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time.
 for (let windowId in windows) {
-    const dialog = windows[windowId];
-    const target = dialog.target;
-    const body = getDialogBody(target);
-    const borderSection = target.getElementsByTagName("section")[0];
 
-    if(borderSection) for (let index = 0; index < 8; index++) {
-        const div = document.createElement("div");
-        div.draggable = false;
-        div.id = index + 1;
-        div.onmousedown = function(ev){
-            resizeDirection = parseInt(ev.target.id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-            windowActivationEvent(ev);
-        };
-        target.appendChild(div);
-    }
+
     
-    verifyEjectCapability(target);
-
-    body.addEventListener("load", function(event){
-        try {
-            verifyEjectCapability(getEventDialog(event));
-        } catch (exception){
-            target.getElementsByTagName("button")[0].style.display = "none";
-        }
-    });
-    
-    target.addEventListener("mousedown", function(event){
-        const dialog = getEventDialog(event);
-        if(dialog && dialog.tagName == "DIALOG") windowActivationEvent(event);
-    });
-
-
-    target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        const dialog = getEventDialog(event)
-        const rect = target.getClientRects()[0];
-        const viewboxPosition = getViewboxPosition();
-        const propeties = {
-            scrollbars: true,
-            resizable: true,
-            status: false,
-            location: false,
-            toolbar: false,
-            menubar: false,
-            width: rect.width,
-            height: rect.height,
-            left: rect.left + viewboxPosition.left,
-            top: rect.top + viewboxPosition.top
-        }
-
-        window.open(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href, windows[dialog.id].title, stringifyWindowProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
-    });
-
-    const buttons = target.getElementsByTagName("button");
-    console.log(buttons);
-    if(buttons[windowButtons.close]) buttons[windowButtons.close].addEventListener("click", function(event){
-        const dialog = getEventDialog(event);
-        dialog.open = false;
-        dialog.removeAttribute("open");
-    });
-    if(buttons[windowButtons.full]) buttons[windowButtons.full].addEventListener("click", function(event){
-        const style = windowActivationEvent(event).style;
-        style.top = 0,
-        style.left = 0,
-        style.right = 0,
-        style.bottom = 0,
-        style.width = "unset",
-        style.height = "unset";
-    });
 }
 
 document.addEventListener("mouseup", activateWindowPointers);
@@ -180,12 +134,11 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 }
 
 function getEventDialog(event){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementAt stack te lopen.
-    //let dialog;
     if (event.clientX && event.clientY) try { //console.log(event.clientX, event.clientY);
         return document.elementsFromPoint(event.clientX, /*400*/event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
-}//return document.elementsFromPoint(400, 400).find(function(element)=>element.nodeName == "DIALOG")
+}
 
 const contstrained = true;
 
@@ -308,34 +261,58 @@ loadWindowState();
 
 function exportWindowBodyToMetro(window){
     if(window){
-        const metro = document.getElementById("metro");
+        const metro = bodyCrawler.getMetroBody(); //++document.getElementById("metro");
         if(metro) metro.appendChild(window.body);
     } //else if()
 }
 
+
+
 function retrieveWindowBodyFromMetro(window){
-    const metro = document.getElementById("metro");
-    if(window && metro)window.content.appendChild(metro.firstChild);/*{
-        //for (let index in window.body.children) metro.appendChild(window.body.children[index]);
-        window.content.appendChild(metro.firstChild);
-    }*/
+    const metro = bodyCrawler.getMetroBody();
+    if (window && metro) window.content.appendChild(metro.firstChild);
 }
 
-function getMetroBody(){
-    return document.getElementById("metro").firstChild;
+
+
+function getDialogTemplate(){
+    return document.querySelector("template").content.children[0];//document.querySelector("template");
 }
 
-function Dialog(dialog){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
+function DialogBuilder(title, id){
+    this.title = title;
+    this.id = id;
+    this.createDialog = function(){
+        const target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
+        return target;
+    }
+}
+
+function createDialog(){
+    return bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
+    //return target;
+}
+
+function removeComments(element){
+    element.childNodes.forEach(function(child){
+        if (child.nodeName=="#comment") element.removeChild(child);
+        else removeComments(child);
+    });
+    return element;
+}
+
+var exampleWindow = {
+    title: "hey",
+    id: "cow"
+}
+
+// Window invocation API
+function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
      * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
      * @author Lasse Lauwerys
      * @param {Element} dialog This is a dialog element from the HTML structure.
      */
-    
-    if(object.nodeName == "DIALOG") {
-        this.target = object,
-        this.title = "Window"
-    }
     
     this.getBody = function(){
         return this.content.children[1];
@@ -343,17 +320,46 @@ function Dialog(dialog){ // Verouderde manier om een object constructor te maken
 
     this.getContent = function(){
         return this.target.getElementsByTagName("content")[0];
-    }
+    },
 
     this.getHead = function(){
         return this.target.getElementsByTagName("header")[0];
     },
 
-    this.content = this.getContent();
+    this.setTitle = function(title){
+        return this.getTitleElement().innerText = title;
+    },
+
+    this.getTitleElement = function(){
+        return this.getHead().querySelector("h1");
+    },
+
+    this.getTitle = function(){
+        return this.getTitleElement().innerText;
+    },
+
+    this.getId = function(){
+        return this.target.getAttribute("id");
+    },
+
+    //if() {
+        this.target = object.nodeName == "DIALOG" ? object : createDialog();//new DialogBuilder(this.title).createDialog(),
+        this.title = object.title || this.getTitle(),
+    //} else {
+        //this.title = object.title;
+        //this.target = 
+        this.setTitle(this.title),
+    //}
+    
+    this.target.setAttribute("id", this.id = object.id || object.title || this.getId()),
+    windows[this.id] = this,
+    //this.id);
+    
+
+    this.content = this.getContent(),
     this.body = this.getBody(), // An effort to trade memory for performance.
     this.head = this.getHead(),
     this.src = "",
-    this.title = "Window",
     this.getFrame = function(){
         return this.target.getElementsByTagName("iframe")[0];
     },
@@ -389,26 +395,26 @@ function Dialog(dialog){ // Verouderde manier om een object constructor te maken
     this.synchronise = synchroniseWindowState,
     this.open = function(){
         this.target.createAttribute("open");
-    }
+    },
     this.close = function(){
         this.target.removeAttribute("open");
-    }
+    },
     this.getButton = function(index){
         //console.log(this.head)
         return this.head.getElementsByTagName("button")[index];
-    }
+    },
     this.toggleButton = function(buttonId, enable){
         const button = this.getButton(buttonId);
         if(button) button.toggleAttribute("disabled", enable);
         //if(button && (enable == null || button.hasAttribute("disabled") === enable)) button.toggleAttribute("disabled");
-    }
+    },
     this.toggleCloseButton = function(enable){
         this.toggleButton(windowButtons.close, enable);
-    }
+    },
 
     this.toggleEjectButton = function(enable){
         this.toggleButton(windowButtons.eject, enable);
-    }
+    },
 
     this.togglePointerEvents = function(enable){
         if(enable == null) enable = this.target.style.pointerEvents == "none";
@@ -420,16 +426,89 @@ function Dialog(dialog){ // Verouderde manier om een object constructor te maken
             //else this.frame.style.zIndex = -1;
         } else this.frame = this.getFrame();
         
-    }
+    },
 
     this.getRect = function(index){
         //if(index == null) index = 0;
         return this.target.getClientRects()[index == null? 0: index];
-    }
+    },
 
     this.exchangeWindowMoveEvent = function (stats){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
         if(this.frame) this.frame.contentWindow.postMessage('hello', '*');
+    };
+
+    if(object.body) this.body.appendChild(object.body);
+
+    //const dialog = windows[windowId];
+    const target = this.target;
+    const body = getDialogBody(target);
+    const borderSection = target.getElementsByTagName("section")[0];
+
+    if(borderSection) for (let index = 0; index < 8; index++) {
+        const div = document.createElement("div");
+        div.draggable = false;
+        div.id = index + 1;
+        div.onmousedown = function(ev){
+            resizeDirection = parseInt(ev.target.id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+            windowActivationEvent(ev);
+        };
+        target.appendChild(div);
     }
+    
+    verifyEjectCapability(target);
+
+    body.addEventListener("load", function(event){
+        try {
+            verifyEjectCapability(getEventDialog(event));
+        } catch (exception){
+            target.getElementsByTagName("button")[0].style.display = "none";
+        }
+    });
+
+    
+    
+    this.target.addEventListener("mousedown", function(event){
+        const dialog = getEventDialog(event);
+        if(dialog && dialog.tagName == "DIALOG") windowActivationEvent(event);
+    });
+
+
+    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
+        const dialog = getEventDialog(event)
+        const rect = target.getClientRects()[0];
+        const viewboxPosition = getViewboxPosition();
+        const propeties = {
+            scrollbars: true,
+            resizable: true,
+            status: false,
+            location: false,
+            toolbar: false,
+            menubar: false,
+            width: rect.width,
+            height: rect.height,
+            left: rect.left + viewboxPosition.left,
+            top: rect.top + viewboxPosition.top
+        }
+
+        window.open(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href, windows[dialog.id].title, stringifyWindowProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+    });
+
+    const buttons = target.getElementsByTagName("button");
+    console.log(buttons);
+    if(buttons[windowButtons.close]) buttons[windowButtons.close].addEventListener("click", function(event){
+        const dialog = getEventDialog(event);
+        dialog.open = false;
+        dialog.removeAttribute("open");
+    });
+    if(buttons[windowButtons.full]) buttons[windowButtons.full].addEventListener("click", function(event){
+        const style = windowActivationEvent(event).style;
+        style.top = 0,
+        style.left = 0,
+        style.right = 0,
+        style.bottom = 0,
+        style.width = "unset",
+        style.height = "unset";
+    });
 }
 
 /*\

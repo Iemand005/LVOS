@@ -139,7 +139,7 @@ dialog header > h1{
     font-size: 15px;
 }
 
-dialog > article, dialog > content{
+dialog > content{
     display: block;
     display: flex;
     flex-direction: column;
@@ -253,7 +253,7 @@ dialog:not([open]){
     width: 0 !important;
 }
 
-dialog > article > section, dialog > content > article{
+dialog > content > article{
     border: 1px solid black;
     width: 100%;
     height: 100%;
@@ -262,18 +262,15 @@ dialog > article > section, dialog > content > article{
     /* box-shadow: inset 0px 0px 10px black; */
     pointer-events: auto;
     display: flex;
+    z-index: 1;
 }
 
 dialog > content > article > *{
     background-color: rgba(0, 0, 0, 0.267);
     box-shadow: inset 0px 0px 10px black;
-}
-
-dialog > article > section > *, dialog > content > article > *{
+    z-index: -1; /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any dialog body which gives the illusion of the prescense of lag. */
     width: 100%;
     height: 100%;
-    /*height: 100%;
-    /*height: 100%;*/
     vertical-align: bottom;
 }
 

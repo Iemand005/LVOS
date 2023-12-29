@@ -33,6 +33,13 @@ if(!Array.prototype.forEach) Array.prototype.forEach = function(callback) {
     // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
     for (let index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this);
 }
+if (!NodeList.prototype.forEach) NodeList.prototype.forEach = Array.prototype.forEach;
+
+if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = function(callback) {
+    for (let index in this) if (this.hasOwnProperty(index)) if(callback(this[index], index, this)) return this[index];
+}
+
+if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
 
 // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
