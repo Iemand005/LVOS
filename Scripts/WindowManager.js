@@ -332,7 +332,10 @@ function Dialog(dialog){ // Verouderde manier om een object constructor te maken
      * @param {Element} dialog This is a dialog element from the HTML structure.
      */
     
-    this.target = dialog,
+    if(object.nodeName == "DIALOG") {
+        this.target = object,
+        this.title = "Window"
+    }
     
     this.getBody = function(){
         return this.content.children[1];
