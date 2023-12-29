@@ -129,16 +129,12 @@ function windowActivationEvent(event){
      * Activates the window on which the provided event was fired.
      * @function windowActivationEvent()
      * @property event
-     * 
      */
     const dialog = getEventDialog(event);
     dialog.style.zIndex = topZ++;
     activeDrag = true;
     activeWindow = dialog.id;
     for (let windowId in windows) { windows[windowId].togglePointerEvents(false);
-        //const window = windows[windowId];
-        /*window.target.style.pointerEvents = "none";
-        window.body.style.pointerEvents = "none";*/
     }
     return dialog;
 }
