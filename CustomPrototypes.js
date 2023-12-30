@@ -1,0 +1,61 @@
+  //    Simple replacements for missing prototypes in Internet Explorer 11 due to it still using ES5. I tried my best to make my own prototypes to fill the missing functions so I can at least use some modern functions.
+ //     Lasse Lauwerys © 2023
+//      23/12/2023
+
+
+if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute){
+    this.setAttribute(attribute, null);
+};
+
+if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force){
+    if (force == null? force = !this.hasAttribute(attribute): force) this.createAttribute(attribute);
+    else this.removeAttribute(attribute);
+    return !force;
+};
+
+if(!MutationObserver) MutationObserver = function(callback){
+    this.observe = function(element){
+        element.addEventListener('DOMNodeInserted', callback, false);
+    }
+};
+
+function CompatibilityChecker(){
+    this.checkClasses = function(){
+        try { eval("class c{}") } catch(e) { return false }
+        return true;
+    }
+}
+
+
+function forEach(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
+    for (let index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+}
+
+function forForEach(callback) {
+    for (let index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+}
+
+
+// Deze is niet volledig, ik moet nog de thisArguments toevoegen, wat ook afhangt van de stricte modus. Ik gebruik hier wel hasOwnProperty om te verifiëren dat we geen sleutels binnen krijgen die niet in ons object bestaan (gebeurt normaal niet).
+if(!Array.prototype.forEach) Array.prototype.forEach = forForEach;
+if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forForEach;
+
+//Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
+Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
+
+HTMLCollection.prototype.forEach = forForEach;
+
+if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
+
+function find(callback) {
+    for (let index in this) if (this.hasOwnProperty(index)) if(callback(this[index], index, this)) return this[index];
+}
+
+if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
+
+// Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
+// if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
+
+if (!HTMLDocument.prototype.fullscreenElement) HTMLDocument.prototype.fullscreenElement = HTMLDocument.prototype.msFullscreenElement || HTMLDocument.prototype.mozFullScreenElement || HTMLDocument.prototype.webkitFullscreenElement;
+if (!HTMLElement.prototype.requestFullscreen) HTMLElement.prototype.requestFullscreen = HTMLElement.prototype.mozRequestFullScreen || HTMLElement.prototype.webkitRequestFullscreen || HTMLElement.prototype.msRequestFullscreen;
+if (!HTMLDocument.prototype.exitFullscreen) HTMLDocument.prototype.exitFullscreen = HTMLDocument.prototype.msExitFullscreen || HTMLDocument.prototype.mozCancelFullScreen || HTMLDocument.prototype.webkitExitFullscreen;

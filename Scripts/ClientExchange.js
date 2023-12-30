@@ -1,0 +1,8 @@
+
+function MessageClient(){
+
+}
+
+function MessageServer(){
+    
+}

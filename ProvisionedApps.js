@@ -107,3 +107,11 @@ function initializeConsoleApplication(){
 
 initializeConsoleApplication();
 
+// Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
+const demo = {
+    title: "demo",
+    id: "demo",
+    src: "./Applications/Velocities.html"
+}
+
+windows[demo.id] = new Dialog(demo);

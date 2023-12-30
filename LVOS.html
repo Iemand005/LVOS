@@ -1,20 +1,22 @@
 ﻿<!DOCTYPE html>     <!--< Lasses Virtual Operating System >-->
-<html lang="en">    <!-------< Lasse Lauwerys © 2023 >------->
-<head>              <!------------< 17/12/2023 >------------->
+<html lang="en">         <!--< Lasse Lauwerys © 2023 >-->
+<head>                         <!--< 17/12/2023 >-->
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="./default.css">
-    <script src="./IE11Prototypes.js"></script>
+    <link rel="stylesheet" href="./windows.css">
+    <script src="./CustomPrototypes.js"></script>
     <script src="./Scripts/WindowManager.js" defer></script>
     <script src="./Reflector.js" defer></script>
     <script src="./Scripts/DesktopManager.js" defer></script>
+    <script src="./Scripts/ClientExchange.js" defer></script>
 
     <script src="./ProvisionedApps.js" defer></script>
     <link rel="stylesheet" href="./ProvisionedApps.css">
     <link rel="stylesheet" href="./desktop.css">
+    <link rel="stylesheet" href="./themes.css">
 </head>
 <body>
     <section id="desktop" flipped>
@@ -30,7 +32,7 @@
             </section>
 
             <template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
-                <dialog open id=""><!-- I am using the dialog tag as a part of an application that the user interacts with. -->
+                <dialog open><!-- I am using the dialog tag as a part of an application that the user interacts with. -->
                     <content><!-- Visual Sudio 2013 suggested me to use content instead here to make it semantic. This places the dialog inside the shadow DOM. -->
                         <!-- I was forced to add this extra wrapping article to work around a bug in EdgeHTML 18 that causes the backdrop filter to shift by the amount of pixels the box-shadow blur size has minus the top and left value. I don't know if it's a known bug but the browser is no longer officially supported. I will be adding this tag anyways but it's not necessary for functionality of the application. -->
                         <header><!-- This header identifies the most near ancestor (dialog). In the header are the title and the navigation buttons. -->
@@ -100,7 +102,8 @@
                     </article>
                 </content>
             </dialog>
-
+            
+            
             <dialog id="browser">
                 <content>
                     <header>
@@ -170,7 +173,7 @@
                 </content>
             </dialog>
 
-            <dialog open id="minesweeper">
+            <dialog open id="minesweeper" class="corners-rounded">
                 <content class="nonclient">
                     <header>
                         <h1>Minesweeper</h1>

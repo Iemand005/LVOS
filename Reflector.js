@@ -13,25 +13,28 @@ function Reflector(element){
 function Reflector(element){
     this.element = element,
     this.clones = new Array(),
-    this.reflect = function(container){
-        const clone = container.cloneNode(true);
-        clone.id += "reflection";
-        this.clones.push(clone);
-        this.element.appendChild(clone);
+    this.reflect = function(target){
+        const reflection = target.cloneNode(true);
+        reflection.id += "reflection";
+        this.clones.push(reflection);
+        this.element.appendChild(reflection);
 
-        const observer = new MutationObserver(function(mutations) {
+        observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
-                    console.log("attribute changed");
-                    clone.style.top = mutation.target.style.top;
-                    clone.style.left = mutation.target.style.left;
-                    clone.style.width = mutation.target.style.width;
-                    clone.style.height = mutation.target.style.height;
+                    reflection.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));//toPixels(target.offsetTop + dock.offsetTop);//toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));//toPixels(targetRect.top - dockRect.top);
+                    reflection.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));//toPixels(0 - dock.offsetLeft);//toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
+                    reflection.style.width = mutation.target.style.width;
+                    reflection.style.height = mutation.target.style.height;
+                    reflection.style.zIndex = mutation.target.style.zIndex;
+        //reflectionBody.scrollTop = originalBody.scrollTop;
+                }
+                if(!reflecitons){
+                    //reflection
                 }
             });
         });
-          
-        observer.observe(this.element, { attributes: true });
-        return clone;
+        observer.observe(target, { attributes: true });
+        return reflection;
     }
 }

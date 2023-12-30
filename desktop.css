@@ -1,3 +1,6 @@
+html, body{
+    margin: 0;
+}
 #dock{
     position: absolute;
     height: 50px;
@@ -5,7 +8,6 @@
     width: 300px;
     z-index: 10000;
     overflow: hidden;
-    /*transform: rotate(180deg) scaleX(-1);*/
     transform-origin: top;
     border-radius: 5px;
     left: 50%; /* This method of centering the absolute element works for Internet Explorer 11 */
@@ -17,14 +19,12 @@
 }
 
 #reflection{
-    /*opacity: 0.5;*/
     transform: scaleY(-1) rotateX(45deg)/*rotateX(325deg)*/;
     transform-origin: top;
-    /*height: 100%;
-    width: 100%;*/
     position: absolute;
     width: 100%;
     height: 100%;
+    opacity: 0.4;
 }
 
 body[blur] #reflection{
@@ -38,15 +38,9 @@ body:not([blur]) dialog > article{
 
 #reflection > *{
     opacity: 0.3;
-    /*transform: scaleY(-1);*/
 }
 
 #desktop{
-    /*/width: 100%;
-    /* height: 14px; 
-    perspective: 200px;*/
-        /* transform: rotateY(180deg); */
-    
     background-color: orange;
     bottom: 0;
     position: absolute;
@@ -54,10 +48,16 @@ body:not([blur]) dialog > article{
     pointer-events: none;
     overflow: visible;
     transform-style: preserve-3d;
-    /* transition: all 1000ms ease-in-out, opacity 1s 500ms; */
     transition: all 1000ms ease-in-out;
     transition: all 600ms ease-out;
-    /* transition: none; */
+    width: 100%;
+}
+
+#desktop img{
+    -o-object-fit: cover;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
 }
 
 #wallpaper{
@@ -82,10 +82,7 @@ body:not([blur]) dialog > article{
     overflow: hidden;
     perspective: 300px;
     justify-content: center;
-    /* transform: rotateY(180deg); */
     display: flex;
-    /* transform: rotateY(180deg) translateZ(1px); */
-    /*translate: translateZ(1px);*/
     flex-wrap: wrap;
     overflow-y: scroll;
     justify-content: space-evenly;
@@ -97,11 +94,7 @@ body:not([blur]) dialog > article{
 #metro{
     height: 100%;
     width: 100%;
-    /*transform: rotateX(180deg);*/
     background: green;
-    /* transition: all 1s linear; */
-    /*position: absolute;
-    transform: rotateX(180deg) translateZ(1px);*/
 }
 
 #metro > *{
@@ -109,66 +102,34 @@ body:not([blur]) dialog > article{
     width: 100%;
 }
 
+#metro > article{
+    pointer-events: none;
+}
+
 #desktop[flipped], #metro{
-    /* transition: transform 1000ms; */
     transform: rotateY(180deg);
 }
 
 #windows, #metro{
-    transition: opacity 50ms ease-out 300ms;
-    /* transition: height 1000ms 00ms; */
+    transition: opacity 50ms ease-out 200ms;
 }
 
 #desktop[flipped] > #windows{
-    /* animation: flip 1s linear; */
-    /*/transform: rotateY(180deg) translateZ(0px);
-    transform: rotateY(180deg) translateZ(0px);/*/
     translate: 0 0 1px;
-    /* height: 0%; */
-    /* animation: flip 1s forwards; */
     opacity: 0;
-    /* bottom: unset; */
 }
 
 #desktop[flipped] > #metro{
-    /* transform: translateZ(1px); */
-    /* opacity: 1; */
-    /* animation: flip 1s linear reverse; */
-    /* animation: flip 1s ease-in-out linear reverse; */
-    /* translate: none; */
-    /* height: 100%; */
-    /* height: 1; */
-    /* translate: 0 0 -1px; */
     opacity: 1;
 }
 
 #desktop:not([flipped]) > #windows{
-    /*/transform: rotateY(180deg) translateZ(1px);
-    transform: rotateY(180deg) translateZ(1px);/*/
-    /* opacity: 1; */
-    /* animation: flip 1s linear reverse; */
-    /* transform: translateZ(0px); */
-    /* translate: none; */
-    /* opacity: 1; */
-    /* height: 100%; */
     opacity: 1;
-    /* translate: 0 0 -1px; */
 }
 
 #desktop:not([flipped]) > #metro{
-    /* transform: translateZ(1px); */
-    /* animation: flip 1s linear; */
-    /*transform: translateZ(0px);*/
-    /* opacity: 0; */
     translate: 0 0 -1px;
-    /* height: 0%; */
-    /* opacity: 0; */
-    /* bottom: unset; */
-    /* animation: flip 1s forwards; */
-    /* transition: linear  */
     opacity: 0;
-    /* animation: 0s ease-in-out 500ms forwards flip; */
-    /* transition: opacity 1s linear 200ms opacity; */
 }
 
 @media (pointer:none), (pointer:coarse){
@@ -190,26 +151,10 @@ body:not([blur]) dialog > article{
 }
 
 @keyframes flip{
-    /* 0%{
-        /* transform: rotateY(0deg); 
+    from{
         opacity: 1;
     }
-    49%{
-        /* transform: rotateY(90deg); 
-        opacity: 1;
-    }
-    50%{
-        /* transform: rotateY(90deg); 
-        opacity: 0;
-    }
-    100%{
-        /* transform: rotateY(180deg); 
-        opacity: 0;
-    } */
-    0%{
-        opacity: 1;
-    }
-    100%{
+    to{
         opacity: 0;
     }
 

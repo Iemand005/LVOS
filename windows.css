@@ -1,4 +1,6 @@
 
+/* General */
+
 html, body{
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,15 +19,20 @@ body{
     background: radial-gradient(#333, black);
 }
 
-
-
-dialog header{
-    margin: 0;
-    /*display: flex;*/
-    pointer-events: none !important;
-    justify-content: space-between;
-    padding: 10px;
+dialog *, #desktop, #desktop img{
+    -moz-user-select: none;
+    -moz-user-drag: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -o-user-drag: none;
+    user-select: none;
 }
+
+/* Main */
 
 main{
     height: 100%;
@@ -42,11 +49,7 @@ dialog{
     -ms-transform-origin: bottom left;
     -moz-transform-origin: bottom left;
     -webkit-transform-origin: bottom left;
-    transform-origin: bottom left;
-    -o-animation: untilt 400ms ease-out;
-    -moz-animation: untilt 400ms ease-out;
-    -webkit-animation: untilt 400ms ease-out;
-    animation: untilt 400ms ease-out;
+    transform-origin: center;
     margin: 0;
     padding: 0;
     z-index: 1;
@@ -56,37 +59,43 @@ dialog{
     border: none;
     padding: 0;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
-
 }
 
-dialog header, dialog *, #desktop, #desktop img{
-    -moz-user-select: none;
-    -moz-user-drag: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    -o-user-drag: none;
-    user-select: none;
+dialog header{
+    margin: 0;
+    /*display: flex;*/
+    pointer-events: none !important;
+    justify-content: space-between;
+    padding: 10px;
 }
 
-#desktop img{
-    -o-object-fit: cover;
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
+dialog header, dialog header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
+    border-top-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+dialog header section{
+    -webkit-transition: all 700ms ease-out;
+    -moz-transition: all 700ms ease-out;
+    -o-transition: all 700ms ease-out;
+    transition: all 700ms ease-out;
+    border-top-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    pointer-events: auto;
+    /*border: 1px solid black;*/
 }
 
 dialog header button {
     width: 30px;
     height: 30px;
     font-family: sans-serif;
-    -webkit-transition: all 700ms ease-out;
-    -moz-transition: all 700ms ease-out;
-    -o-transition: all 700ms ease-out;
-    transition: all 700ms ease-out;
+    transition: inherit;
     overflow: hidden;
     padding: 0;
     display: block;
@@ -95,22 +104,15 @@ dialog header button {
     box-sizing: content-box;
     margin: 0;
     border: none;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-    border-bottom-left-radius: 5px;
+    border-bottom-left-radius: inherit;
+    /*border-top: none !important;
+    border-right: none !important;*/
+    border: 1px solid black;
 }
 
-/* Werkt blijkbaar? Om een of andere reden zelfs met meer dan 2 knoppen. */
 dialog header button:not(:disabled) ~ button:not(:disabled){
     border-bottom-left-radius: 0px;
-}
-
-dialog header, dialog header section/*, dialog header section button:last-child*/{
-    border-top-right-radius: inherit;
-}
-
-dialog header section{
-    border-top-right-radius: inherit;
+    border-left: none;
 }
 
 dialog header button:disabled{
@@ -120,17 +122,6 @@ dialog header button:disabled{
     font-size: 0px;
     border: none;
     margin: 0;
-}
-
-dialog header section{
-    display: flex;
-    position: absolute;
-    flex-direction: row;
-    top: 0;
-    right: 0;
-    border: none;
-    overflow: hidden;
-    pointer-events: auto;
 }
 
 dialog header > h1{
@@ -167,7 +158,7 @@ input{
 }
 
 template{
-    display: none; /* Internet Explorer 11 lijkt template niet te kennen. */
+    display: none; /* Internet Explorer 11 does not seem to know template, so for all browsers that don't support this it'll be hidden anyways. */
 }
 
 article{
@@ -244,13 +235,15 @@ dialog > div:nth-of-type(8){
 }
 
 dialog[open]{
-    animation: tilt 400ms ease-out;
+    animation: opening 500ms ease-out forwards;
     pointer-events: auto;
 }
 
 dialog:not([open]){
+    animation: closing 400ms cubic-bezier(0, 0, 0.26, 0.7) forwards;
+    display: block; /* The display attribute is set to none by default */
+    z-index: -1000;
     pointer-events: none !important;
-    width: 0 !important;
 }
 
 dialog > content > article{
@@ -259,20 +252,34 @@ dialog > content > article{
     height: 100%;
     overflow: auto;
     box-sizing: border-box;
-    /* box-shadow: inset 0px 0px 10px black; */
     pointer-events: auto;
     display: flex;
     z-index: 1;
 }
 
-dialog > content > article > *{
+dialog > content > article > *, dialog > content > article > iframe {
     background-color: rgba(0, 0, 0, 0.267);
     box-shadow: inset 0px 0px 10px black;
     z-index: -1; /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any dialog body which gives the illusion of the prescense of lag. */
-    width: 100%;
-    height: 100%;
     vertical-align: bottom;
 }
+
+dialog[full]{
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+article > *{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+
 
 section#desktop{
     height: 100%;
@@ -280,8 +287,6 @@ section#desktop{
     background-color: orange;
     z-index: -100;
 }
-
-
 
 .acrylic{
     background-color: rgba(0, 0, 0, 0.507);
@@ -312,52 +317,41 @@ button:hover{
     background-color: rgba(153, 153, 153, 0.219);
 }
 
-@keyframes tilt { 
-    100% {
-        transform: perspective(4cm) rotateX(0deg) translateZ(0cm) translateY(0cm);
-        opacity: 1;
+@keyframes opening { 
+    to {
     }
-    50% {
-        opacity: 0;
-    }
-    0% {
-        transform: perspective(4cm) rotateX(15deg) translateZ(-10cm) translateY(10cm);
-        height: 0;
-        width: 0;
+    from {
+        transform: perspective(4cm) rotateX(5deg) translateZ(-2cm) translateY(-1cm);
         opacity: 0;
     }
 }
 
-@keyframes untilt { 
-    0% {
-        transform: perspective(4cm) rotateX(0deg) translateZ(0cm) translateY(0cm);
-        opacity: 1;
-    }
-    50% {
+@keyframes closing {
+    99% {
+        transform: perspective(4cm) rotateX(5deg) rotateY(2deg) translateZ(-1cm) translateY(-2cm);
         opacity: 0;
     }
-    100% {
-        transform: perspective(4cm) rotateX(15deg) translateZ(-10cm) translateY(5cm);
-        height: 0;
-        width: 0;
+    100%{
+        transform: perspective(4cm) rotateX(3deg) rotateY(1deg) translateZ(-1cm);
         opacity: 0;
+        display: none;
     }
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
-    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
         background-color: rgba(255, 255, 255, 0.267);
     }
 }
 
 @supports (-webkit-backdrop-filter: none) {
-    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For EdgeHTML 18 (Not Edge Chromium!) */
     }
 }
 
 @supports (backdrop-filter: none){
-    body[blur] dialog > article{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
 }

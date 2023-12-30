@@ -10,6 +10,13 @@
 \*/
 
 'use strict'; // Strict mode is required for older versions of Chrome (tested on 48).
+
+// Settings
+
+let blur = false;
+let reflections = false;
+let fasterWindowTracking = false;
+
 const windows = {}; // MDN says not to use "new Object();". W3Schools adds to it that {} is faster and more readable.
 const windowButtons = {
     eject: 0,
@@ -18,9 +25,12 @@ const windowButtons = {
 };
 let activeWindow = null;
 let activeDrag = false;
+let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
 let canSave = true;
+
+dragAction.set(0);
 
 
 function OSDocumentCrawler(document){
@@ -31,8 +41,11 @@ function OSDocumentCrawler(document){
     this.getAllDialogs = function(){
         return this.document.getElementsByTagName("dialog");
     }
+    this.getMetro = function(){
+        return this.document.getElementById("metro");
+    }
     this.getMetroBody = function(){
-        return this.document.getElementById("metro").firstChild;
+        return this.getMetro().firstChild;
     }
     this.getWindowsContainer = function(){
         return this.document.getElementById("windows");
@@ -43,10 +56,12 @@ let bodyCrawler = new OSDocumentCrawler(document);
 
 function flip(enable){
     //if(enable == null)
+    //const flipped = enable == null ? bodyCrawler.getDesktop().toggleAttribute("flipped") : bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
     const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
     const window = windows[activeWindow] || windows[0];
     if(flipped) exportWindowBodyToMetro(window);
     else retrieveWindowBodyFromMetro(window);
+    return flipped;
 }
 
 flip();
@@ -56,24 +71,25 @@ function initializeWindows(windows){
      * Initializes the windows inside the windows object.
      */
     const dialogs = bodyCrawler.getAllDialogs();
-    for (let index = 0; index < dialogs.length; index++) {
-        const dialog = dialogs[index];
-        console.log(dialog, dialog.id, dialog.src)
-        const window = windows[dialog.id] = new Dialog(dialog);
-        window.toggleCloseButton(true); // Enable the close button. We are doin these things in JavaScript for if someone has JavaScript disabled.
-        window.toggleButton(windowButtons.full, true);
-    }
+    dialogs.forEach(function(dialog){
+        const window = windows[String(dialog.id)] = new Dialog(dialog);
+        console.log("aars", windows, dialogs)
+         // Enable the close button. We are doin these things in JavaScript for if someone has JavaScript disabled.
+        //window.toggleButton(windowButtons.full, true);
+
+    });
+}
+
+function findTopWindow(){
+    windows.forEach(function(window){
+
+    });
 }
 
 initializeWindows(windows);
 
 // Normally we use const in for in loops.
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time.
-for (let windowId in windows) {
-
-
-    
-}
 
 document.addEventListener("mouseup", activateWindowPointers);
 document.addEventListener("mousemove", windowDragEvent);
@@ -88,20 +104,38 @@ function windowActivationEvent(event){
     dialog.style.zIndex = topZ++;
     activeDrag = true;
     activeWindow = dialog.id;
-    for (let windowId in windows) { windows[windowId].togglePointerEvents(false);
-    }
+    disableWindowPointers();
+    const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
+    windows[activeWindow].setClickOffset(mouse.x, mouse.y);
     return dialog;
 }
 
+function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
+    this.execute = function(){},
+    this.set = function(direction){ if(!activeDrag) activeDrag = true, this.execute = this.resizeFunctions[direction] || function(){} },
+    this.remove = function(){ activeDrag = false },
+    this.resizeFunctions = [
+        function(dialog, offset, difference, style){ style.left = dialog.x = (offset.left + difference.x + (window.scrollX || 0)) + "px", style.top = dialog.y = (offset.top + difference.y + (window.scrollY || 0)) + "px" },
+        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
+        function(dialog, offset, difference, style){ style.width = (dialog.width = offset.width + difference.x) + "px" },
+        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height + difference.y) + "px" },
+        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px" },
+        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
+        function(dialog, offset, difference, style){ style.width = (dialog.width = offset.width + difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
+        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height + difference.y) + "px", style.width = (dialog.width = offset.width + difference.x) + "px" },
+        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px" }
+    ];
+}
+
 function activateWindowPointers(){
-    for (let window in windows) windows[window].togglePointerEvents(true);
-    
-    resizeDirection = 0, activeDrag = false;
-    if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen.
+    activeDrag = false;
+    dragAction.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+    for(let index in windows) windows[index].togglePointerEvents(true);
+    if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
 }
 
 function disableWindowPointers(){
-    for (let window in windows) windows[window].togglePointerEvents(false);
+    for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ(){
@@ -116,26 +150,23 @@ function stringifyWindowProperties(properties){
     return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
 }
 
-function getDialogBody(target){
+function getDialogBody(target){ // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     return target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];//&&&&&&&&&&&&&;
 }
 
 function getViewboxPosition(){
-    return {
-        left: window.screenLeft,
-        top: window.screenTop
-    }
+    return { left: window.screenLeft, top: window.screenTop }
 }
 
-function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementAt stack te lopen.
+function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1) return object;
     else if(object.target) return getObjectDialog(object.target);
     else return getObjectDialog(object.parentElement);
 }
 
-function getEventDialog(event){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementAt stack te lopen.
-    if (event.clientX && event.clientY) try { //console.log(event.clientX, event.clientY);
-        return document.elementsFromPoint(event.clientX, /*400*/event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
+function getEventDialog(event){ // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
+    if (fasterWindowTracking && event.clientX && event.clientY) try {
+        return document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
 }
@@ -143,43 +174,18 @@ function getEventDialog(event){ // Alternatieve methode aan recursief het evenem
 const contstrained = true;
 
 function windowDragEvent(event){
-    //const timer = new Timer();
-    if(activeDrag && activeWindow && event.buttons == 1) {
-        const dialog = windows[activeWindow];
-        const mouse = {x: event.clientX, y:  event.clientY};
-        const offset = dialog.clickOffset;
+    if(activeDrag && activeWindow!=null && event.buttons == 1) {
 
-        if(!offset || !offset.x|| !offset.y){
-            const rect = dialog.getRect();            
-            offset.x = mouse.x;
-            offset.y = mouse.y;
-            offset.height = dialog.height || rect.height;
-            offset.width = dialog.width || rect.width;
-            offset.top = rect.top;
-            offset.left = rect.left;
-            offset.stats.reset();
-        }
-
-        //offset.stats.last = Date.now();
-        const scroll = {x: window.scrollX || 0, y: window.scrollY || 0};
-        const difference = {x: mouse.x - offset.x, y: mouse.y - offset.y};
-        const style = dialog.target.style;
-
-        //console.log(resizeDirection, offset.height + difference.y);
-        if(contains([4, 5, 8, 0], resizeDirection)) style.left = toPixels(dialog.x = offset.left + difference.x + scroll.x);
-        if(contains([4, 5, 8], resizeDirection)) style.width = toPixels(dialog.width = offset.width - difference.x);
-        if(contains([3, 7, 8], resizeDirection)) style.height = toPixels(dialog.height = offset.height + difference.y);
-        if(contains([2, 7, 6], resizeDirection)) style.width = toPixels(dialog.width = offset.width + difference.x);
-        if(contains([1, 5, 6], resizeDirection)) style.height = toPixels(dialog.height = offset.height - difference.y);
-        if(contains([1, 5, 6, 0], resizeDirection)) style.top = toPixels(dialog.y = offset.top + difference.y + scroll.y);
+        const dialog = windows[activeWindow], difference = {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y};
+        dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
         
         if(dialog.width < 0) dialog.width = 0;
         if(dialog.height < 0) dialog.height = 0;
         
-        if(false) dialog.exchangeWindowMoveEvent(offset.stats.update(difference.x, difference.y));
-        //console.log(timer.start, timer.elapsed());
-    }
-    //console.log(timer.elapsed());
+        if(dialog.moveEvents) {
+            dialog.exchangeWindowMoveEvent(difference);
+        }
+    } else activeDrag = false;
 }
 
 function Timer(){
@@ -189,10 +195,12 @@ function Timer(){
     }
 }
 
-//document.addEventListener("mouseup", reactivateWindowPointers);
-
 function toPixels(value){
-    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! 
+    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
+}
+
+function pixelsToCentimeters(pixels){
+    return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
 }
 
 function fromPixels(text){
@@ -221,7 +229,8 @@ function verifyEjectCapability(dialog){
 }
 
 function toggleBlur(enabled){
-    document.getElementsByTagName("body").toggleAttribute("blur", enabled);
+    if (enabled == null) document.body.toggleAttribute("blur");
+    else document.body.toggleAttribute("blur", enabled);
 }
 
 function saveWindowState(){
@@ -237,7 +246,6 @@ function loadWindowState(){
     if(canSave) try {
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState);
-            console.log("knars knaaaaaars!!", parsedWindows);
             for (let window in parsedWindows) {
                 console.log(windows[window].x, parsedWindows[window].x);
                 windows[window].x = parsedWindows[window].x;
@@ -260,20 +268,17 @@ function loadWindowState(){
 loadWindowState();
 
 function exportWindowBodyToMetro(window){
-    if(window){
-        const metro = bodyCrawler.getMetroBody(); //++document.getElementById("metro");
+    if(window){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
+        const metro = bodyCrawler.getMetro();
+        window.close();
         if(metro) metro.appendChild(window.body);
-    } //else if()
+    }
 }
-
-
 
 function retrieveWindowBodyFromMetro(window){
-    const metro = bodyCrawler.getMetroBody();
-    if (window && metro) window.content.appendChild(metro.firstChild);
+    const metroBody = bodyCrawler.getMetroBody();
+    if (window && metro) window.open(metroBody);
 }
-
-
 
 function getDialogTemplate(){
     return document.querySelector("template").content.children[0];//document.querySelector("template");
@@ -282,10 +287,8 @@ function getDialogTemplate(){
 function DialogBuilder(title, id){
     this.title = title;
     this.id = id;
-    this.createDialog = function(){
-        const target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
-        return target;
-    }
+    this.target;
+    this.createDialog = function(){ return this.target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
 }
 
 function createDialog(){
@@ -301,178 +304,167 @@ function removeComments(element){
     return element;
 }
 
+function Vector(x, y){
+    this.x = x || 0;
+    this.y = y || 0;
+    /*this.add = function(vector){
+        console.log(vector, this);
+        return this.x += vector.x, this.y += vector.y, this;
+},*//*
+    this,
+    this,
+    this;*/
+}
+Vector.prototype.add = function(vector){ return this.x += vector.x, this.y += vector.y, this; };
+Vector.prototype.sub = function(vector){ return this.x -= vector.x, this.y -= vector.y, this; };
+Vector.prototype.mul = function(vector){ return this.x *= vector.x, this.y *= vector.y, this; };
+Vector.prototype.div = function(vector){ return this.x /= vector.x, this.y /= vector.y, this; };
+Vector.prototype.clone = function(){ return new Vector(this.x, this.y); };
+
+
+
 var exampleWindow = {
     title: "hey",
     id: "cow"
 }
 
+function WindowCollection(){
+
+}
+
+//WindowCollection.prototype.forEach = function(){}
+
+//function DialogBuilder()
+
 // Window invocation API
+
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
      * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
      * @author Lasse Lauwerys
      * @param {Element} dialog This is a dialog element from the HTML structure.
      */
+
     
-    this.getBody = function(){
-        return this.content.children[1];
-    },
+this.getBody = Dialog.prototype.getBody;
+this.setTitle = Dialog.prototype.setTitle;
+this.getTitleElement = Dialog.prototype.getTitleElement;
+this.getContent = Dialog.prototype.getContent;
+this.getFrame = Dialog.prototype.getFrame;
+this.getTitle = Dialog.prototype.getTitle;
+this.getHead = Dialog.prototype.getHead;
+this.close = Dialog.prototype.close;
+this.getId = Dialog.prototype.getId;
+this.setId = Dialog.prototype.setId;
+this.open = Dialog.prototype.open;
+this.getInnerRect = Dialog.prototype.getInnerRect;
+this.getRect = Dialog.prototype.getRect;
+this.getButton = Dialog.prototype.getButton;
+this.setClickOffset = Dialog.prototype.setClickOffset;
+this.togglePointerEvents = Dialog.prototype.togglePointerEvents;
+this.toggleButton = Dialog.prototype.toggleButton;
+this.clearClickOffset = Dialog.prototype.clearClickOffset;
+this.toggleFullScreen = Dialog.prototype.toggleFullScreen;
+this.toggleCloseButton = Dialog.prototype.toggleCloseButton;
+this.toggleEjectButton = Dialog.prototype.toggleEjectButton;
+this.toggleFullButton = Dialog.prototype.toggleFullButton;
 
-    this.getContent = function(){
-        return this.target.getElementsByTagName("content")[0];
-    },
+this.close = function(){ return this.target.removeAttribute("open") };
+this.getId = function(){ return this.target.getAttribute("id") };
+this.getBody = function(){ return this.content.children[1] };
+this.getHead = function(){ return this.target.getElementsByTagName("header")[0] };
+this.setId = function(id){ return windows[id] = this, this.target.setAttribute("id", id) };
+this.getFrame = function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") };
+this.getTitle = function(){ return this.getTitleElement().innerText };
+this.open = function(body){ return this.target.createAttribute("open"); if(body!=null) this.content.appendChild(body) };
+this.getContent = function(){ return this.target.getElementsByTagName("content")[0] };
+this.getInnerRect = function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)!
+this.getRect = function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] };
+this.setTitle = function(title){ return this.getTitleElement().innerText = title };
+this.getButton = function(index){ return this.head.getElementsByTagName("button")[index] };
+this.getTitleElement = function(){ return this.getHead().querySelector("h1") };
+this.setClickOffset = function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() };
+this.togglePointerEvents = function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" };
+this.toggleButton = function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) };
+this.clearClickOffset = function(){ this.clickOffset.clear() };
+this.toggleFullScreen = function(enable){ this.target.toggleAttribute("full", enable) };
+this.toggleCloseButton = function(enable){ this.toggleButton(windowButtons.close, enable) };
+this.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) };
+this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
 
-    this.getHead = function(){
-        return this.target.getElementsByTagName("header")[0];
-    },
-
-    this.setTitle = function(title){
-        return this.getTitleElement().innerText = title;
-    },
-
-    this.getTitleElement = function(){
-        return this.getHead().querySelector("h1");
-    },
-
-    this.getTitle = function(){
-        return this.getTitleElement().innerText;
-    },
-
-    this.getId = function(){
-        return this.target.getAttribute("id");
-    },
-
-    //if() {
-        this.target = object.nodeName == "DIALOG" ? object : createDialog();//new DialogBuilder(this.title).createDialog(),
-        this.title = object.title || this.getTitle(),
-    //} else {
-        //this.title = object.title;
-        //this.target = 
-        this.setTitle(this.title),
-    //}
+    if(object.nodeName == "DIALOG"){}
+    else{
+        this.target = createDialog();
+        this.content = this.getContent();
+        this.frame = this.getBody().appendChild(document.createElement("iframe"));
+        this.src = this.frame.src = object.src;
+        this.title = this.setTitle(object.title);
+        this.id = this.setId(object.id || this.title);
+    }
     
-    this.target.setAttribute("id", this.id = object.id || object.title || this.getId()),
-    windows[this.id] = this,
-    //this.id);
-    
-
-    this.content = this.getContent(),
-    this.body = this.getBody(), // An effort to trade memory for performance.
-    this.head = this.getHead(),
-    this.src = "",
-    this.getFrame = function(){
-        return this.target.getElementsByTagName("iframe")[0];
-    },
-
-    this.frame = this.getFrame(),
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.width = 0;
+    this.height = 0;
+    this.target = object.nodeName == "DIALOG" ? object : this.frame = document.createElement("iframe"), this.src = object.src, object.target //|| createDialog();
+    this.title = object.title || this.getTitle();
+    this.id = object.id || this.getId() || this.title;
+    this.moveEvents = object.moveEvents || false;
+    this.content = this.getContent();
+    //this.frame = object.src ?  = document.createElement("iframe") || this.getFrame();
+    this.body = this.getBody(); // An effort to trade memory for performance.
+    this.head = this.getHead();
+    //this.src = object.src ? (this.frame = this.body.appendChild(document.createElement("iframe")), this.frame.src = object.src) : (this.frame = this.getFrame());
     this.clickOffset = {
-        x: 0, y: 0,
-        height: 0, width: 0,
-        start: {x: 0, y: 0},
-        stats: {
-            start: 0,
-            last: 0,
-            difference: {
-                x: 0,
-                y: 0
-            },
-            // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-            reset: function(){
-                this.start = Date.now(), this.last = this.start, this.difference.x = 0, this.difference.y = 0;
-                return this;
-            },
+        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
+            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
+            reset: function(){ return this.start = Date.now(), this.last = this.start, this.position = new Vector, this }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
             update: function(x, y){
-                this.last = Date.now(), this.difference.x = x, this.difference.y = y;
-                return this;
-            }
-        }
-    },
-    this.x = 0,
-    this.y = 0,
-    this.z = 0,
-    this.width = 0,
-    this.height = 0,
-    this.synchronise = synchroniseWindowState,
-    this.open = function(){
-        this.target.createAttribute("open");
-    },
-    this.close = function(){
-        this.target.removeAttribute("open");
-    },
-    this.getButton = function(index){
-        //console.log(this.head)
-        return this.head.getElementsByTagName("button")[index];
-    },
-    this.toggleButton = function(buttonId, enable){
-        const button = this.getButton(buttonId);
-        if(button) button.toggleAttribute("disabled", enable);
-        //if(button && (enable == null || button.hasAttribute("disabled") === enable)) button.toggleAttribute("disabled");
-    },
-    this.toggleCloseButton = function(enable){
-        this.toggleButton(windowButtons.close, enable);
+                this.last = Date.now();
+                this.position.x = x;
+                this.position.y = y;
+                this.positions.push(this.position.clone());
+                //console.log(this.difference, this.positions);
+                //this.lastPosition = this.positions.shift();
+                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
+                //console.log(this.difference, this.lastPosition, this.position, this.positions);
+                //this.difference.add(this.position);
+                this;return this; } //
+        },
+        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility.
     },
 
-    this.toggleEjectButton = function(enable){
-        this.toggleButton(windowButtons.eject, enable);
-    },
+    this.verifyEjectCapability = function(){
+        const style = this.getButton(windowButtons.eject).style;
+        try { if(this.getFrame().contentWindow.location.href == null) style.display = "none" }
+        catch (e){ style.display = "none" }
+    }
 
-    this.togglePointerEvents = function(enable){
-        if(enable == null) enable = this.target.style.pointerEvents == "none";
-        this.clickOffset.x = null, this.clickOffset.y = null, this.target.style.pointerEvents = this.body.style.pointerEvents = enable ? "auto" : "none";
-        //console.log(this.frame)
-        if(this.frame) {
-            this.frame.style.pointerEvents = this.target.style.pointerEvents;
-            //if(enable) this.frame.style.zIndex = 0;
-            //else this.frame.style.zIndex = -1;
-        } else this.frame = this.getFrame();
-        
-    },
+    this.toggleCloseButton(true);
+    this.toggleFullButton(true);
+    if(this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.getRect = function(index){
-        //if(index == null) index = 0;
-        return this.target.getClientRects()[index == null? 0: index];
-    },
+    this.synchronise = synchroniseWindowState;
 
-    this.exchangeWindowMoveEvent = function (stats){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
-        if(this.frame) this.frame.contentWindow.postMessage('hello', '*');
+
+    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
+        const stats = dialog.clickOffset.stats.update(difference.x, difference.y);
+        if(this.frame) this.frame.contentWindow.postMessage(stats, '*');
     };
 
     if(object.body) this.body.appendChild(object.body);
+    this.setTitle(this.title);
 
-    //const dialog = windows[windowId];
-    const target = this.target;
-    const body = getDialogBody(target);
-    const borderSection = target.getElementsByTagName("section")[0];
+    const dialog = this, target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection) for (let index = 0; index < 8; index++) {
-        const div = document.createElement("div");
-        div.draggable = false;
-        div.id = index + 1;
-        div.onmousedown = function(ev){
-            resizeDirection = parseInt(ev.target.id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-            windowActivationEvent(ev);
-        };
-        target.appendChild(div);
+        const div = target.appendChild(document.createElement("div"));
+        div.draggable = false, div.id = index + 1, div.onmousedown = function(ev){ dragAction.set(ev.target.id) } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
     }
-    
-    verifyEjectCapability(target);
 
-    body.addEventListener("load", function(event){
-        try {
-            verifyEjectCapability(getEventDialog(event));
-        } catch (exception){
-            target.getElementsByTagName("button")[0].style.display = "none";
-        }
-    });
-
-    
-    
-    this.target.addEventListener("mousedown", function(event){
-        const dialog = getEventDialog(event);
-        if(dialog && dialog.tagName == "DIALOG") windowActivationEvent(event);
-    });
-
-
+    body.addEventListener("load", function(event){ try { verifyEjectCapability(getEventDialog(event)) } catch (exception){ target.getElementsByTagName("button")[0].style.display = "none" }});
+    this.target.addEventListener("mousedown", function(event){ if(getEventDialog(event).tagName == "DIALOG") windowActivationEvent(event) });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -494,30 +486,48 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     });
 
     const buttons = target.getElementsByTagName("button");
-    console.log(buttons);
-    if(buttons[windowButtons.close]) buttons[windowButtons.close].addEventListener("click", function(event){
+    buttons[windowButtons.close].addEventListener("click", function(event){
         const dialog = getEventDialog(event);
         dialog.open = false;
         dialog.removeAttribute("open");
     });
-    if(buttons[windowButtons.full]) buttons[windowButtons.full].addEventListener("click", function(event){
-        const style = windowActivationEvent(event).style;
-        style.top = 0,
-        style.left = 0,
-        style.right = 0,
-        style.bottom = 0,
-        style.width = "unset",
-        style.height = "unset";
-    });
+    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+
+    windows[this.id] = this
 }
+
+
+Dialog.prototype.getBody = function(){ return this.content.children[1] };
+Dialog.prototype.setTitle = function(title){ return this.getTitleElement().innerText = title };
+Dialog.prototype.getTitleElement = function(){ return this.getHead().querySelector("h1") };
+Dialog.prototype.getContent = function(){ return this.target.getElementsByTagName("content")[0] };
+Dialog.prototype.getFrame = function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") };
+Dialog.prototype.getTitle = function(){ return this.getTitleElement().innerText };
+Dialog.prototype.getHead = function(){ return this.target.getElementsByTagName("header")[0] };
+Dialog.prototype.close = function(){ return this.target.removeAttribute("open") };
+Dialog.prototype.getId = function(){ return this.target.getAttribute("id") };
+Dialog.prototype.setId = function(id){ return windows[id] = this, this.target.setAttribute("id", id) };
+Dialog.prototype.open = function(body){ return this.target.createAttribute("open"); if(body!=null) this.content.appendChild(body) };
+Dialog.prototype.getInnerRect = function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)!
+Dialog.prototype.getRect = function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] };
+Dialog.prototype.getButton = function(index){ return this.head.getElementsByTagName("button")[index] };
+Dialog.prototype.setClickOffset = function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() };
+Dialog.prototype.togglePointerEvents = function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" };
+Dialog.prototype.toggleButton = function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) };
+Dialog.prototype.clearClickOffset = function(){ this.clickOffset.clear() };
+Dialog.prototype.toggleFullScreen = function(enable){ this.target.toggleAttribute("full", enable) };
+Dialog.prototype.toggleCloseButton = function(enable){ this.toggleButton(windowButtons.close, enable) };
+Dialog.prototype.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) };
+Dialog.prototype.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
+    
 
 /*\
  * \  Tested and confirmed functional:
  *  \  Chrome and all other Chromium based browsers versions 118 and up (will check lower versions down to 48 later on Windows 8.1 and 7, Android Chrome I might test down to version but targetting 36 and up), Internet Explorer 11, EdgeHTML 18.
  *   \  FireFox 115 ESR and up
- *    \ Chromium 118 (That means Chrome, Edge, Brave, Opera, ...)
- *    / FireFox
- *   / Internet Explorer 11
- *  / Chrome 48
+ *    \  Chromium 118 (That means Chrome, Edge, Brave, Opera, ...)
+ *    /  FireFox
+ *   /  Internet Explorer 11
+ *  /  Chrome 48
  * /
 \*/
