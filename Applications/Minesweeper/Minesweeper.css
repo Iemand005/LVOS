@@ -85,7 +85,7 @@ button.n7{
 }
 
 button.n8{
-    color: darkgray; /*grey gray??*/
+    color: darkgray;
 }
 
 td{
@@ -95,4 +95,6 @@ td{
 
 table{
     border-spacing: 0;
+    kerning:auto;
+    /*k:g;*/
 }
