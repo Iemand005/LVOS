@@ -8,7 +8,7 @@
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "${file}",
+            "url": "${workspaceFolder}\\${relativeFileDirname}",
             "webRoot": "${workspaceFolder}"
         },
         {
