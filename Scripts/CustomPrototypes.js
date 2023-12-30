@@ -53,7 +53,7 @@ function find(callback) {
 
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
 
-// // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
+// Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
 
 //if (!HTMLDocument.prototype.fullscreenElement) HTMLDocument.prototype.fullscreenElement = HTMLDocument.prototype.msFullscreenElement || HTMLDocument.prototype.mozFullScreenElement || HTMLDocument.prototype.webkitFullscreenElement;

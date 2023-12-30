@@ -1,7 +1,8 @@
 
-    //              Minesweeper!              \\    
-   //  Original game by Microsoft Corporation  \\   
-  //        Lasse Lauwerys - 23/12/2023         \\  
+    //              Minesweeper!              \\  
+   //       Lasse Lauwerys © 23/12/2023        \\
+  //   Original game by Microsoft Corporation   \\   
+
 
 'use strict';
 const width = 100;
