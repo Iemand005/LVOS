@@ -13,6 +13,12 @@ if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute
     return !force;
 };
 
+// This one was a little bit more difficult to get working right but I tested most values like numbers, null, true, false, undefined and it all gave the same results as the Array.fill method in Chrome does so I expect this polyfill to work the same for my applications.
+if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
+    for (let index = typeof from !== 'undefined' ? Number(from) : 0; index < Number(typeof to !== 'undefined' ? to : this.length); index++) this[index] = value;
+    return this;
+};
+
 if(!MutationObserver) MutationObserver = function(callback){
     this.observe = function(element){
         element.addEventListener('DOMNodeInserted', callback, false);
@@ -52,6 +58,8 @@ function find(callback) {
 }
 
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
+
+
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }

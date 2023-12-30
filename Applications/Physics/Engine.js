@@ -1,6 +1,4 @@
 
-const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
 
 
 
@@ -15,7 +13,7 @@ Element.prototype = {
 };
 
 // This is an older alternative to making classes with properties and inheritance. I am using constructor functions instead for compatibility with ES5 browsers.
-const ballPrototype = Ball.prototype = {
+Ball.prototype = {
     __proto__: Element.prototype
 }
 
@@ -24,6 +22,19 @@ function Ball(radius){
     this.velocity = new Vector,
     this.acceleration = new Vector,
     this.radius = radius || 1;
+}
+
+function BallCollection(amount){
+    this.balls = new Array(amount || 0).fill(new Ball);
+}
+
+BallCollection.prototype = {
+    balls: new Array,
+    updateAll: function(){
+        balls.forEach(function(ball){
+            ball.update();
+        });
+    }
 }
 
 //Ball.__proto__ = Element.prototype;
