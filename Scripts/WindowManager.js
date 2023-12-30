@@ -371,7 +371,7 @@ this.toggleFullButton = Dialog.prototype.toggleFullButton;
 
 this.close = function(){ return this.target.removeAttribute("open") };
 this.getId = function(){ return this.target.getAttribute("id") };
-this.getBody = function(){ return this.content.children[1] };
+this.getBody = function(){ return (this.content || (this.content = this.getContent())).children[1] };
 this.getHead = function(){ return this.target.getElementsByTagName("header")[0] };
 this.setId = function(id){ return windows[id] = this, this.target.setAttribute("id", id) };
 this.getFrame = function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") };
