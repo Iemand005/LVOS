@@ -1,6 +1,6 @@
-
-
-
+// Engine and physics
+// Lasse Lauwerys © 2023
+// 30/12/2023
 
 // The modern way to do this is with Object.assign()!
 Element.prototype = {
@@ -13,15 +13,17 @@ Element.prototype = {
 };
 
 // This is an older alternative to making classes with properties and inheritance. I am using constructor functions instead for compatibility with ES5 browsers.
-Ball.prototype = {
-    __proto__: Element.prototype
-}
+
 
 function Ball(radius){
     this.position = new Vector,
     this.velocity = new Vector,
     this.acceleration = new Vector,
     this.radius = radius || 1;
+}
+
+Ball.prototype = {
+    __proto__: Element.prototype,
 }
 
 function BallCollection(amount){

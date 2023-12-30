@@ -1,3 +1,6 @@
+// Canvas for physics simulation
+// Lasse © 2023
+// 30/12/2023
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -12,7 +15,7 @@ function drawCircle(ball){
 function renderFrame(balls){
     console.log(balls)
     balls.forEach(function(ball){
-        console.log(ball);
+        console.log(ball, Ball.prototype);
         ball.update();
         drawCircle(ball);
     });
@@ -23,4 +26,4 @@ function startEngine(){
     window.setInterval(renderFrame, 1000, balls.balls);
 }
 
-startEngine();
+//startEngine();

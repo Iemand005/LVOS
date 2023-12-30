@@ -1,3 +1,6 @@
+// Basic physics implementation
+// Lasse Lauwerys © 2023
+// 30/12/2023
 
 function Vector(x, y){
     this.x = x || 0;

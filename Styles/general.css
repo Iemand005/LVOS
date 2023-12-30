@@ -1,0 +1,13 @@
+
+/***************************\
+ * General design by Lasse *
+ * Copyright: Lasse © 2023 *
+ * Modified on: 30/12/2023 *
+\***************************/
+
+button{
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: black;
+    color: white;
+}
