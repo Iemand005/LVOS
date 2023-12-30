@@ -326,7 +326,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
      * @author Lasse Lauwerys
      * @param {Element} dialog This is a dialog element from the HTML structure.
      */
-    try{
+    try{/*
         this.close = function(){ return this.target.removeAttribute("open") };
         this.getId = function(){ return this.target.getAttribute("id") };
         this.getBody = function(){ return (this.content || (this.content = this.getContent())).children[1] };
@@ -348,7 +348,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.toggleFullScreen = function(enable){ this.target.toggleAttribute("full", enable) };
         this.toggleCloseButton = function(enable){ this.toggleButton(windowButtons.close, enable) };
         this.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) };
-        this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
+        this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };*/
 
         if(object.nodeName == "DIALOG"){
             this.target = object
@@ -458,9 +458,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
 
         windows[this.id] = this;
-    } catch (ex) {
-        console.error("failed;"+ ex);
-    }
+    } catch (ex) { console.error("failed;"+ ex); }
 }
 
 

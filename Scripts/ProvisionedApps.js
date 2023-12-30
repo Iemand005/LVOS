@@ -123,6 +123,9 @@ const applications = [
         title: "Camera",
         id: "camera",
         src: "./Applications/Camera/index.html",
+        camera: true,
+        microphone: true,
+        // add attribute allow="camera; microphone" to iframe!
         moveEvents: true // This flag enables attaching window movement statistic listener.
     }
 ]

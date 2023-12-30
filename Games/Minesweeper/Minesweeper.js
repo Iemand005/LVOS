@@ -5,8 +5,8 @@
 
 
 'use strict';
-const width = 100;
-const height = 30;
+const width = 20;
+const height = 20;
 
 const quickReveal = true;
 

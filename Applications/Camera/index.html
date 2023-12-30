@@ -12,7 +12,9 @@
 <body>
     <h1>You need to enable camera access to use this app.</h1>
     <button id="start">Start camera</button>
-    <video id="camera" autoplay="true"></video>
+    <video id="camera" autoplay="true">Your device doesn't support video!</video>
+    <img id="picture" alt="Camera output">
+    <canvas id="capture"></canvas>
     <section id="controls">
         <button id="photo">Photo</button>
         <button id="video">Video</button>
