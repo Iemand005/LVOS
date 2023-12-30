@@ -116,3 +116,17 @@ const demo = {
 }
 
 windows[demo.id] = new Dialog(demo);
+
+
+const applications = [
+    {
+        title: "Camera",
+        id: "camera",
+        src: "./Applications/Camera/index.html",
+        moveEvents: true // This flag enables attaching window movement statistic listener.
+    }
+]
+
+applications.forEach(function(application){
+    windows[demo.id] = new Dialog(application);
+});

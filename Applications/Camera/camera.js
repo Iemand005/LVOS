@@ -17,11 +17,16 @@ function cameraDenied(){
 
 async function getCamera(){
     // await navigator.getUserMedia({audio: true, video: { facingMode: front ? "user" : "environment" }}, cameraAccepted, cameraDenied);
-    await navigator.getUserMedia({audio: true, video: { facingMode: front ? "user" : "environment" }}).then(stream=>{
-        video.srcObject = stream;
-    }).catch(exception=>{
-        console.error(exception);
-    });
+    await navigator.getUserMedia(
+        {
+            audio: true,
+            video: {
+                facingMode: front ? "user" : "environment"
+            }
+        },
+        stream => video.srcObject = stream,
+        exception => console.error(exception)
+    );
 }
 
 startButton.onclick = getCamera;
