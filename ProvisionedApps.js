@@ -111,7 +111,8 @@ initializeConsoleApplication();
 const demo = {
     title: "demo",
     id: "demo",
-    src: "./Applications/Velocities.html"
+    src: "./Applications/Velocities.html",
+    moveEvents: true // This flag enables attaching window movement statistic listener.
 }
 
 windows[demo.id] = new Dialog(demo);

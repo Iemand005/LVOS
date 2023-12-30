@@ -23,32 +23,6 @@ let observer;
 function toggleReflections(force){
     if(force == null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
-    if(reflecitons)//{
-        for (let windowId in windows) //{
-            //const target = ;
-            /*const reflection = */reflector.reflect(windows[windowId].target);
-            //const reflectionDialog = new Dialog(reflection);
-            //const originalBody = getDialogBody(target);
-            //const reflectionBody = getDialogBody(reflection);
-            // observer = new MutationObserver(function(mutations) {
-            //     mutations.forEach(function(mutation) {
-            //         if (mutation.type === "attributes") {
-            //             reflection.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));//toPixels(target.offsetTop + dock.offsetTop);//toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));//toPixels(targetRect.top - dockRect.top);
-            //             reflection.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));//toPixels(0 - dock.offsetLeft);//toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
-            //             reflection.style.width = mutation.target.style.width;
-            //             reflection.style.height = mutation.target.style.height;
-            //             reflection.style.zIndex = mutation.target.style.zIndex;
-            //             reflectionBody.scrollTop = originalBody.scrollTop;
-            //         }
-            //         if(!reflecitons){
-            //             reflection
-            //         }
-            //     });
-            // });
-            // observer.observe(target, { attributes: true });
-        //}
-    /*}*/ else {
-        console.log("disconnectioning")
-        if(observer!=undefined && observer!=null) observer.disconnect();
-    }
+    if(reflecitons) for (let windowId in windows) reflector.reflect(windows[windowId].target);
+    else if(observer!=undefined && observer!=null) observer.disconnect();
 }
