@@ -107,7 +107,7 @@ function windowActivationEvent(event){
     return dialog;
 }
 
-function DragCalculator(dialog){
+function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
     this.dialog = dialog;
     this.offset = dialog.clickOffset;
     this.style = dialog.target.style;
@@ -117,29 +117,29 @@ DragCalculator.prototype = {
     dialog: new Dialog,
     offset: new Object,
     scroll: new Vector,
+    update: new Function,
     _difference: new Vector,
-    get difference() { return this._difference },
-    set difference(x, y) { return this._difference.x = x - this.offset.x, this._difference.y = y - this.offset.y },
     get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
     get width(){ return (this.dialog.width = this.offset.width + this.difference.x) + "px" },
     get height(){ return (this.dialog.height = this.offset.height + this.difference.y) + "px" },
     get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x) + "px" },
     get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y) + "px" },
+    get difference() { return this._difference },
+    set difference(pos) { return this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
     
     operations: [
-        function(){ style.left = this.left, style.top = this.top },
-        function(){ style.height = this.heightrv, style.top = this.top },
-        function(){ style.width = this.width },
-        function(){ style.height = this.height },
-        function(){ style.left = this.left, style.width = this.widthrv },
-        function(){ style.left = this.left, style.width = this.widthrv, style.height = this.heightrv, style.top = this.top },
-        function(){ style.width = this.width, style.height = this.heightrv,style.top = this.top },
-        function(){ style.height = this.height, style.width = this.width },
-        function(){ style.left = this.left, style.width = this.widthrv, style.height = this.height }
+        function(position){ return this.difference = position, style.left = this.left, style.top = this.top, this._difference },
+        function(position){ return this.difference = position, style.height = this.heightrv, style.top = this.top, this._difference },
+        function(position){ return this.difference = position, style.width = this.width, this._difference },
+        function(position){ return this.difference = position, style.height = this.height, this._difference },
+        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, this._difference },
+        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heightrv, style.top = this.top, this._difference },
+        function(position){ return this.difference = position, style.width = this.width, style.height = this.heightrv,style.top = this.top, this._difference },
+        function(position){ return this.difference = position, style.height = this.height, style.width = this.width, this._difference },
+        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heigh, this._differencet }
     ],
 
-    update: new Function,
     set: function(direction){
         this.update = operations[direction];
     }
@@ -164,7 +164,8 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
 
 function activateWindowPointers(){
     activeDrag = false;
-    dragAction.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+    dragAction.set(0);
+    windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
     if(windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
@@ -211,16 +212,18 @@ const contstrained = true;
 
 function windowDragEvent(event){
     if(activeDrag && activeWindow!=null && event.buttons == 1) {
-
-        const dialog = windows[activeWindow], difference = {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y};
-        dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
-        
+        console.time("hey")
+        const dialog = windows[activeWindow];//, difference = {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y};
+        //dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
+        const difference = dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
+        //dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
         if(dialog.width < 0) dialog.width = 0;
         if(dialog.height < 0) dialog.height = 0;
         
         if(dialog.moveEvents) {
             dialog.exchangeWindowMoveEvent(difference);
         }
+        console.timeEnd("hey")
     } else activeDrag = false;
 }
 
@@ -473,7 +476,11 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     if(borderSection) for (let index = 0; index < 8; index++) {
         const div = target.appendChild(document.createElement("div"));
-        div.draggable = false, div.id = index + 1, div.onmousedown = function(ev){ dragAction.set(ev.target.id) } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+        div.draggable = false, div.id = index + 1,
+        div.onmousedown = function(ev){
+            dragAction.set(ev.target.id);
+            dialog.dragCalculator.set(ev.target.id)
+        } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
     }
 
     body.addEventListener("load", function(event){ try { verifyEjectCapability(getEventDialog(event)) } catch (exception){ target.getElementsByTagName("button")[0].style.display = "none" }});
