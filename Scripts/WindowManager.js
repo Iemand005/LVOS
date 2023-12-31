@@ -141,15 +141,15 @@ DragCalculator.prototype.__proto__ = {
         get difference() { return this._difference },
         set difference(pos) { return this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
         operations: [
-            function(position){ return this.difference = position, this.style.left = this.left, this.style.top = this.top, this._difference },
-            function(position){ return this.difference = position, this.style.height = this.heightrv, this.style.top = this.top, this._difference },
-            function(position){ return this.difference = position, this.style.width = this.width, this._difference },
-            function(position){ return this.difference = position, this.style.height = this.height, this._difference },
-            function(position){ return this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this._difference },
-            function(position){ return this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heightrv, this.style.top = this.top, this._difference },
-            function(position){ return this.difference = position, this.style.width = this.width, this.style.height = this.heightrv,style.top = this.top, this._difference },
-            function(position){ return this.difference = position, this.style.height = this.height, this.style.width = this.width, this._difference },
-            function(position){ return this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._differencet }
+            function(position){ return (this.difference = position, this.style.left = this.left, this.style.top = this.top, this._difference) },
+            function(position){ return (this.difference = position, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
+            function(position){ return (this.difference = position, this.style.width = this.width, this._difference) },
+            function(position){ return (this.difference = position, this.style.height = this.height, this._difference) },
+            function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this._difference) },
+            function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
+            function(position){ return (this.difference = position, this.style.width = this.width, this.style.height = this.heightrv,style.top = this.top, this._difference) },
+            function(position){ return (this.difference = position, this.style.height = this.height, this.style.width = this.width, this._difference) },
+            function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._difference) }
         ],
         set: function(direction){
             this.update = this.operations[direction];
@@ -160,50 +160,50 @@ DragCalculator.prototype.__proto__ = {
     }
 }*/
 
-Object.defineProperty(DragCalculator.prototype, "mongool", {
-    get: function() {
-        return 'woesh'
-    }
-});
+// Object.defineProperty(DragCalculator.prototype, "mongool", {
+//     get: function() {
+//         return 'woesh'
+//     }
+// });
 
-DragCalculator.prototype.fuck = function(){console.log("noorman")}
-/*DragCalculator.prototype= {
-    kakadoen: function(){
-        return "moren"
-    },
-    feck: 0,
-    /*get thisisit(){ return "monster"}*/
-//}*/
+// DragCalculator.prototype.fuck = function(){console.log("noorman")}
+// /*DragCalculator.prototype= {
+//     kakadoen: function(){
+//         return "moren"
+//     },
+//     feck: 0,
+//     /*get thisisit(){ return "monster"}*/
+// //}*/
 
-aap = {
-    dialog: new Dialog,
-    offset: new Object,
-    scroll: new Vector,
-    update: new Function,
-    _difference: new Vector,
-    get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
-    get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
-    get width(){ return (this.dialog.width = this.offset.width + this.difference.x) + "px" },
-    get height(){ return (this.dialog.height = this.offset.height + this.difference.y) + "px" },
-    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x) + "px" },
-    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y) + "px" },
-    get difference() { return this._difference },
-    set difference(pos) { return this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
-    operations: [
-        function(position){ return this.difference = position, style.left = this.left, style.top = this.top, this._difference },
-        function(position){ return this.difference = position, style.height = this.heightrv, style.top = this.top, this._difference },
-        function(position){ return this.difference = position, style.width = this.width, this._difference },
-        function(position){ return this.difference = position, style.height = this.height, this._difference },
-        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, this._difference },
-        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heightrv, style.top = this.top, this._difference },
-        function(position){ return this.difference = position, style.width = this.width, style.height = this.heightrv,style.top = this.top, this._difference },
-        function(position){ return this.difference = position, style.height = this.height, style.width = this.width, this._difference },
-        function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heigh, this._differencet }
-    ],
-    set: function(direction){
-        this.update = operations[direction];
-    }
-}
+// aap = {
+//     dialog: new Dialog,
+//     offset: new Object,
+//     scroll: new Vector,
+//     update: new Function,
+//     _difference: new Vector,
+//     get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
+//     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
+//     get width(){ return (this.dialog.width = this.offset.width + this.difference.x) + "px" },
+//     get height(){ return (this.dialog.height = this.offset.height + this.difference.y) + "px" },
+//     get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x) + "px" },
+//     get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y) + "px" },
+//     get difference() { return this._difference },
+//     set difference(pos) { return this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
+//     operations: [
+//         function(position){ return this.difference = position, style.left = this.left, style.top = this.top, this._difference },
+//         function(position){ return this.difference = position, style.height = this.heightrv, style.top = this.top, this._difference },
+//         function(position){ return this.difference = position, style.width = this.width, this._difference },
+//         function(position){ return this.difference = position, style.height = this.height, this._difference },
+//         function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, this._difference },
+//         function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heightrv, style.top = this.top, this._difference },
+//         function(position){ return this.difference = position, style.width = this.width, style.height = this.heightrv,style.top = this.top, this._difference },
+//         function(position){ return this.difference = position, style.height = this.height, style.width = this.width, this._difference },
+//         function(position){ return this.difference = position, style.left = this.left, style.width = this.widthrv, style.height = this.heigh, this._differencet }
+//     ],
+//     set: function(direction){
+//         this.update = operations[direction];
+//     }
+// }
 
 //   --- Scores ---    
 // Chrome: 0.8ms to 1ms
@@ -211,19 +211,20 @@ aap = {
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(){},
     this.set = function(direction){ if(!activeDrag) activeDrag = true, this.execute = this.resizeFunctions[direction] || function(){} },
-    this.remove = function(){ activeDrag = false },
-    this.resizeFunctions = [
-        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
-        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
-        function(dialog, offset, difference, style){ style.width = (dialog.width = offset.width + difference.x) + "px" },
-        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height + difference.y) + "px" },
-        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px" },
-        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
-        function(dialog, offset, difference, style){ style.width = (dialog.width = offset.width + difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y + (window.scrollY || 0)) + "px" },
-        function(dialog, offset, difference, style){ style.height = (dialog.height = offset.height + difference.y) + "px", style.width = (dialog.width = offset.width + difference.x) + "px" },
-        function(dialog, offset, difference, style){ style.left = (dialog.x = offset.left + difference.x + (window.scrollX || 0)) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px" }
-    ];
+    this.remove = function(){ activeDrag = false }
 }
+    /*<<<this.resizeFunctions = [
+        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.top = (dialog.y = offset.top + difference.y) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.width = (dialog.width = offset.width + difference.x) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height + difference.y) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.width = (dialog.width = offset.width + difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height + difference.y) + "px", style.width = (dialog.width = offset.width + difference.x) + "px", difference) },
+        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px", difference) }
+    ];*/
+//}
 
 function activateWindowPointers(){
     activeDrag = false;
@@ -272,27 +273,26 @@ function getEventDialog(event){ // Hier is dus die alternatieve modus, maar hij 
 }
 
 const contstrained = true;
+let IE11Booster = false;
 
 function windowDragEvent(event){
     if(activeDrag && activeWindow!=null && event.buttons == 1) {
         //console.time("hey")
-        const dialog = windows[activeWindow], difference = {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y};
-        //dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
+        const dialog = windows[activeWindow],
+        //dragAction.execute(dialog, dialog.clicOffset, difference, dialog.target.style);
         //const difference = dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
-        console.time("kaka  ")
+        //console.time("kaka  ")
+        //console.timeEnd("kaka  ")
+        //console.time("kokjes")
+        //if(IE11Booster) dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style);
+        //else dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
+        difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
         dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
-        console.timeEnd("kaka  ")
-        console.time("kokjes")
-        dragAction.execute(dialog, dialog.clickOffset, difference, dialog.target.style);
-        console.timeEnd("kokjes")
+        //console.timeEnd("kokjes")
         if(dialog.width < 0) dialog.width = 0;
         if(dialog.height < 0) dialog.height = 0;
-        
-        if(dialog.moveEvents) {
-            //console.log(difference)
-            dialog.exchangeWindowMoveEvent(difference);
-        }
-        //console.timeEnd("hey")
+        console.log(difference)
+        if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
     } else activeDrag = false;
 }
 
