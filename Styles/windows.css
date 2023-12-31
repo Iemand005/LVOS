@@ -240,7 +240,8 @@ dialog[open]{
 }
 
 dialog:not([open]){
-    animation: closing 400ms cubic-bezier(0, 0, 0.26, 0.7) forwards;
+    transform-origin: center;
+    animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
     display: block; /* The display attribute is set to none by default */
     z-index: -1000;
     pointer-events: none !important;
@@ -279,8 +280,6 @@ article > *{
     overflow: auto;
 }
 
-
-
 section#desktop{
     height: 100%;
     width: 100%;
@@ -317,41 +316,38 @@ button:hover{
     background-color: rgba(153, 153, 153, 0.219);
 }
 
-@keyframes opening { 
-    to {
-    }
+@keyframes opening {
     from {
-        transform: perspective(4cm) rotateX(5deg) translateZ(-2cm) translateY(-1cm);
         opacity: 0;
+        transform: perspective(4cm) rotateX(5deg) translateZ(-2cm) translateY(-1cm);
     }
 }
 
 @keyframes closing {
     99% {
-        transform: perspective(4cm) rotateX(5deg) rotateY(2deg) translateZ(-1cm) translateY(-2cm);
         opacity: 0;
+        transform: perspective(4cm) rotateX(5deg) rotateY(1deg) translateZ(-2cm) translateY(-2cm);
     }
     100%{
-        transform: perspective(4cm) rotateX(3deg) rotateY(1deg) translateZ(-1cm);
         opacity: 0;
         display: none;
     }
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
-    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+    body[blur] dialog > content{
         background-color: rgba(255, 255, 255, 0.267);
     }
 }
 
 @supports (-webkit-backdrop-filter: none) {
-    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
-        -webkit-backdrop-filter: saturate(150%) blur(10px); /* For EdgeHTML 18 (Not Edge Chromium!) */
+    body[blur] dialog > content{ /* Moving the blur from the dialog to the content to work around graphical bug in EdgeHTML 18 */
+        -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
     }
 }
 
 @supports (backdrop-filter: none){
-    body[blur] dialog > content{ /* Moving the blur from the dialog to the article to fix bug in EdgeHTML 18 */
+    body[blur] dialog > content{
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
 }
