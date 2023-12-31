@@ -463,9 +463,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     }
 
     this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
-        const stats = dialog.clickOffset.stats.update(difference.x, difference.y);
-        //if(this.frame) this.frame.contentWindow.postMessage(JSON.stringify(stats), '*');
-        this.messageFrame(stats);
+        if(difference)this.messageFrame(dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
     this.messageFrame = function(object, literal){
