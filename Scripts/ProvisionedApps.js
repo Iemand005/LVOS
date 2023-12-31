@@ -115,7 +115,7 @@ const demo = {
     moveEvents: true // This flag enables attaching window movement statistic listener.
 }
 
-windows[demo.id] = new Dialog(demo);
+//windows[demo.id] = new Dialog(demo);
 
 
 const applications = [
