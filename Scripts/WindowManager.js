@@ -64,6 +64,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.z = 0;
     this.width = 0;
     this.height = 0;
+    this.minWidth = 100;
+    this.minHeight = 100;
     this.isOpen = false;
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
@@ -216,7 +218,6 @@ Dialog.prototype = {
     resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box" }
 }
 
-
 function OSDocumentCrawler(document){
     this.document = document;
 }
@@ -251,13 +252,12 @@ function initializeWindows(windows){
     flip();
     const dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function(dialog){
-        windows[String(dialog.id)] = new Dialog(dialog);
-         // Enable the close button. We are doing these things in JavaScript for if someone has JavaScript disabled.
+        windows[String(dialog.id)] = new Dialog(dialog); // Enable the close button. We are doing these things in JavaScript for if someone has JavaScript disabled.
     });
     loadWindowState();
+    //toggleReflections();
 }
 
-initializeWindows(windows);
 
 // Normally we use const in for in loops.
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time.
@@ -298,7 +298,7 @@ DragCalculator.prototype.__proto__ = {
     get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x) + "px" },
     get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y) + "px" },
     get difference() { return this._difference },
-    set difference(pos) { return this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
+    set difference(pos) { this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
     dialog: null,
     offset: new Object,
     scroll: new Vector,
@@ -440,21 +440,21 @@ function toggleBlur(enabled){
 }
 
 function collectEssentialWindowData(target, source){
-    return  target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+    return target.open = source.open, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 function saveWindowState(){
-    if(canSave) try {
-        if(localStorage){
-            const windowState = {};
-            for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
-            localStorage.windowState = JSON.stringify(windowState);
-        }
+    if(canSave && localStorage) try {
+        const windowState = {};
+        for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
+        localStorage.setItem("windowState", JSON.stringify(windowState));
+        // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch(exception) {
         console.error(exception);
         console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
         console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-        localStorage.windowState = null
+        // localStorage.windowState = null; 
+        localStorage.windowState = null; 
         canSave = false;
     }
 }
@@ -464,9 +464,10 @@ function loadWindowState(){
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
             for (let window in parsedWindows) try{
-                collectEssentialWindowData(windows[window], parsedWindows[window]);
-                windows[window].synchronise();
-            } catch(ex) { fails.push(ex) }
+                collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
+            } catch(ex) {
+                fails.push(ex);
+            }
             updateTopZ();
         }
     } catch(exception) {
@@ -514,8 +515,7 @@ function removeComments(element){
     return element;
 }
 
-toggleReflections();
-
+initializeWindows(windows);
 
 /*\
  * \  Tested and confirmed functional:
