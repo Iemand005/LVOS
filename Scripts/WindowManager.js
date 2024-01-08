@@ -1,16 +1,16 @@
 
 /*\
    \________
-   / ______/\                                            \\
-  / /     /\ \    LWM (Lasse's Window Manager)            \\
- /_/_____/  \ \   Targetting: ES5 (+ Self made extensions) \\
- \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024  //
-  \ \_____\/ /    Created: 17/12/2023                     //
-   \_______\/                                            //
+   / ______/\                                             \\
+  / /     /\ \    LWM (Lasse's Window Manager)             \\
+ /_/_____/  \ \   Targetting: ES5 (+ Self made extensions)  \\
+ \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024   //
+  \ \_____\/ /    Created: 17/12/2023                      //
+   \_______\/                                             //
    /
 \*/
 
-'use strict'; // Strict mode is required for older versions of Chrome (tested on 48).
+'use strict'; // Strict mode is required for older versions of Chrome (tested on 48, Windows 8.1 both destkop and Metro mode).
 
 // Settings
 let blur = false;
@@ -75,7 +75,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
     this.content = this.getContent();
-    this.body = this.getBody(); // An effort to trade memory for performance.
+    this.body = this.getBody(); // An effort to trade memory for performance by caching everything.
     this.head = this.getHead();
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
@@ -89,21 +89,22 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
                 this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
                 this;return this; } //
         },
-        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility.
+        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
-    this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,ee constructor needs.
+    this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
 
-    window.onmessage = function(ev){
+    window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
         const message = JSON.parse(ev.data);
         const data = message.data;
         const type = message.type;
 
         console.log(message)
-        if(type === types.windowSize) dialog.resizeBody(data.width, data.height);
+        if(type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
     }
 
     if(!this.scroll) this.body.style.overflow = "hidden";
 
+    // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     this.button = document.createElement("button");
     this.button.innerText = this.title;
     this.button.onclick = dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
@@ -125,7 +126,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.messageFrame({difference:new Vector});
     }
 
-    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
+    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
         if(difference)this.messageFrame(dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
@@ -145,6 +146,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         div.onmousedown = function(ev){
             if(IE11Booster) dragAction.set(ev.target.id);
             else dialog.dragCalculator.set(ev.target.id);
+            //console.log(dialog, dialog.dragCalculator.set);
         } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
     }
 
@@ -251,7 +253,7 @@ function initializeWindows(windows){
      * Initializes the windows inside the windows object.
      */
     document.onmouseup = activateWindowPointers;
-    document.onmousemove = windowDragEvent;
+    //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
     flip();
     const dialogs = bodyCrawler.getAllDialogs();
@@ -263,10 +265,8 @@ function initializeWindows(windows){
 }
 
 
-// Normally we use const in for in loops.
-// I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time.
-
-
+// Normally we use const in for in loops!
+// I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
 
 function windowActivationEvent(event){
     /**
@@ -275,8 +275,8 @@ function windowActivationEvent(event){
      * @property event
      */
     const dialog = getEventDialog(event);
-    dialog.style.zIndex = topZ++;
-    activeDrag = true;
+    dialog.style.zIndex = topZ++; // Put our window on top of the others.
+    activeDrag = true; // Activate window dragging so the mousemove event registers it.
     activeWindow = dialog.id;
     resizeDirection = 0;
     dragAction.set(0);
@@ -297,10 +297,10 @@ DragCalculator.prototype.__proto__ = {
     set: function(direction){ this.update = this.operations[direction] },
     get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
-    get width(){ return (this.dialog.width = this.offset.width + this.difference.x), ((this.dialog.width > this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
-    get height(){ return (this.dialog.height = this.offset.height + this.difference.y), ((this.dialog.height > this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
-    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x), ((this.dialog.width > this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
-    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y), ((this.dialog.height > this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
+    get width(){ return (this.dialog.width = this.offset.width + this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get height(){ return (this.dialog.height = this.offset.height + this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
+    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
     get difference() { return this._difference },
     set difference(pos) { this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
     dialog: null,
@@ -309,10 +309,10 @@ DragCalculator.prototype.__proto__ = {
     update: new Function,
     _difference: new Vector,
     operations: [ // It doesn't look good but it's the absolute fastest I can make it. For this part I pick function over readability, the speed of the window movements is the most important thing.
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.width = this.width, this._difference) },
-        function(position){ return (this.difference = position, this.style.height = this.height, this._difference) },
+        function(position){ return (this.difference = position, console.log("IK HEB KA KA GE DAAN"), this.style.left = this.left, this.style.top = this.top, this._difference) },
+        function(position){ return (this.difference = position, console.log(this.dialog.width, this.dialog.minWidth),  this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
+        function(position){ return (this.difference = position, console.log(this.dialog.width, this.dialog.minWidth),  this.style.width = this.width, this._difference) },
+        function(position){ return (this.difference = position, console.log(this.dialog.width, this.dialog.minWidth),  this.style.height = this.height, this._difference) },
         function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this._difference) },
         function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
         function(position){ return (this.difference = position, this.style.width = this.width, this.style.height = this.heightrv,style.top = this.top, this._difference) },
@@ -346,20 +346,25 @@ DragAction.prototype = {
 }
 
 function activateWindowPointers(){
+    //document.addEventListener("mousemove", windowDragEvent);
+    document.removeEventListener("mousemove", windowDragEvent);
+    console.log("anker")
     for(let index in windows) windows[index].togglePointerEvents(true);//, IE11Booster?dragAction.set(0):windows[index].dragCalculator.set(0);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
     if(windows[activeWindow]){
         if(windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
         if(IE11Booster) dragAction.set(0);
         else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
-        windows[activeWindow].dragCalculator.set(0);
+        //windows[activeWindow].dragCalculator.set(0);
     }
-    dragAction.set(0);
+    //dragAction.set(0);
     activeDrag = false;
-    dragAction.set(0);
+    //dragAction.set(0);
 }
 
 function disableWindowPointers(){
+    document.addEventListener("mousemove", windowDragEvent);
+    //document.removeEventListener("mousemove", windowDragEvent);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
@@ -397,14 +402,17 @@ function getEventDialog(event){ // Hier is dus die alternatieve modus, maar hij 
 }
 
 function windowDragEvent(event){
-    if(activeDrag && activeWindow!=null && event.buttons == 1) {
+    try {
         const dialog = windows[activeWindow], difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
         dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
+        //console.log(dialog.width, dialog.minWidth, activeWindow, activeDrag, resizeDirection)
         if(dialog.width < 0) dialog.width = 0;
         if(dialog.height < 0) dialog.height = 0;
         
         if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
-    } else activeDrag = false;
+    } catch (ex) {
+        console.error(ex);
+    }
 }
 
 function toPixels(value){
