@@ -26,6 +26,8 @@ const isGameOver = false;
 let mousedown = false;
 
 function Tile(button, x, y, mine){
+    this.disable = this.toggleDisabled.bind(this, false);
+    this.enable = this.toggleDisabled.bind(this, true);
     this.mine = mine || false;
     this.button = button;
     this.flagged = false;
@@ -124,15 +126,8 @@ Tile.prototype = {
         if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled");
     },
 
-    disable: function(){
-        this.toggleDisabled(false); 
-    },
-
-    enable: function(){
-        this.toggleDisabled(true);
-    },
-
     disableVisual: function(){
+        // (this.button || button).classList.remove("active");
         this.button.classList.remove("active");
     },
 
@@ -141,7 +136,7 @@ Tile.prototype = {
     },
 
     enableVisual: function(){
-        if(this.isClickAllowed()) this.button.classList.add("active");
+        if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active");
     },
 
     toggleFlag: function(enabled){
@@ -164,6 +159,9 @@ Tile.prototype = {
         });
     }
 }
+
+// Tile.prototype.disable = Tile.prototype.toggleDisabled.bind(this, false);
+// Tile.prototype.enable = Tile.prototype.toggleDisabled.bind(this, true);
 
 form.appendChild(table);
 for (let y = 0; y < height; y++) {
@@ -198,23 +196,15 @@ for (let y = 0; y < height; y++) {
             tile.disableVisual();
         }
 
-        button.onmouseover = function(ev){
-            //console.log(ev.button)
-            //console.log(ev.target, "ME! ME!")
-            if(tile.mousedown) tile.enableVisual();
-        }
+        button.onmouseover = tile.enableVisual.bind(tile);
+        button.onmouseout = tile.disableVisual.bind(tile);
+        button.ondblclick = new Function;
 
-        button.onmouseout = function(ev){
-            tile.disableVisual();
-        }
-
-        //button.on
         button.onmousedown = function(ev){
             if(!tile.isClickAllowed()) ev.preventDefault();
             if(tile.mousedown = !ev.button) tile.enableVisual();
         }
 
-        button.ondblclick = function(){}
     }
 }
 

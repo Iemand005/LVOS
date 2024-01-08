@@ -68,6 +68,8 @@ function flip(enable){
 
 flip();
 
+bodyCrawler.getDesktop().onanimationend
+
 function initializeWindows(windows){
     /**
      * Initializes the windows inside the windows object.
@@ -489,7 +491,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
         if(type === types.windowSize) {
             dialog.resizeBody(data.width, data.height);
-            console.log("EEE", type, data);
+            // console.log("EEE", type, data);
         }
     }
 
