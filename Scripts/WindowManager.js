@@ -17,7 +17,7 @@
 let blur = false;
 let reflections = false;
 let fasterWindowTracking = false;
-
+//{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 const windows = {}; // MDN says not to use "new Object();". W3Schools adds to it that {} is faster and more readable.
 const windowButtons = {
     eject: 0,
@@ -31,6 +31,242 @@ let resizeDirection = 0;
 let topZ = 100;
 let canSave = true;
 let IE11Booster = true;
+let pkak;
+
+
+function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
+    /**
+     * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
+     * @author Lasse Lauwerys
+     * @param {Element} dialog This is a dialog element from the HTML structure.
+     */
+
+    //if(!this.open) setDialogPrototype();
+    if(!object) return;
+    const dialog = this;
+    // this.setTitle = function(title){ return this.getTitleElement().innerText = title },
+    // this.getTitleElement = function(){ return this.getHead().querySelector("h1") },
+    // this.getContent = function(){ return this.target.getElementsByTagName("content")[0] },
+    // this.getFrame = function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") },
+    // this.getTitle = function(){ return this.getTitleElement().innerText },
+    // this.getHead = function(){ return this.target.getElementsByTagName("header")[0] },
+    // this.getBody = function(){ return this.content.children[1] },
+    // this.close = function(){ return this.target.removeAttribute("open") },
+    // this.getId = function(){ return this.target.getAttribute("id") },
+    // this.setId = function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
+    // this.open = function(){ return this.target.createAttribute("open") },
+    // this.getInnerRect = function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
+    // this.getRect = function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
+    // this.getButton = function(index){ return this.head.getElementsByTagName("button")[index] },
+    // this.setClickOffset = function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
+    // this.togglePointerEvents = function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
+    // this.toggleButton = function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
+    // this.clearClickOffset = function(){ this.clickOffset.clear() },
+    // this.toggleFullScreen = function(enable){ this.target.toggleAttribute("full", enable) },
+    // this.toggleCloseButton = function(enable){ this.toggleButton(windowButtons.close, enable) },
+    // this.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) },
+    // this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
+
+    // this.resize = function(width, height){
+    //     this.target.style.width = (this.width = width) + "px",
+    //     this.target.style.height = (this.height = height) + "px";
+    // }
+
+    this.move = function(x, y){
+        this.target.style.left = (this.x = x) + "px",
+        this.target.style.top = (this.y = y) + "px";
+    }
+
+    this.resize = function(width, height){
+        this.target.style.width = (this.width = width) + "px",
+        this.target.style.height = (this.height = height) + "px";
+    }
+
+    this.resizeBody = function(width, height){
+        this.body.style.width = (this.width = width) + "px",
+        this.body.style.height = (this.height = height) + "px",
+        this.target.style.width = null,
+        this.target.style.height = null;
+    }
+
+    this.messenger = new Messenger();
+    const types = this.messenger.types;
+
+    if(object.nodeName == "DIALOG"){
+        this.target = object
+    }
+    else{
+        this.target = createDialog();
+        this.content = this.getContent();
+        this.frame = this.getBody().appendChild(document.createElement("iframe"));
+        this.src = this.frame.src = object.src;
+        this.title = this.setTitle(object.title);
+        this.id = this.setId(object.id || this.title);
+        this.fixed = object.fixed;
+        this.scroll = object.scroll;
+    }
+
+    // this.messenger = new Messenger();
+    // this.messenger.onmessage = function(message){
+    //     console.log(message);
+    // }
+    
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.width = 0;
+    this.height = 0;
+    //object.nodeName == "DIALOG" ? // : this.frame = document.createElement("iframe"), this.src = object.src, object.target //|| createDialog();
+    this.title = object.title || this.getTitle();
+    this.id = object.id || this.getId() || this.title;
+    this.moveEvents = object.moveEvents || false;
+    this.content = this.getContent();
+    //this.frame = object.src ?  = document.createElement("iframe") || this.getFrame();
+    this.body = this.getBody(); // An effort to trade memory for performance.
+    this.head = this.getHead();
+    //this.src = object.src ? (this.frame = this.body.appendChild(document.createElement("iframe")), this.frame.src = object.src) : (this.frame = this.getFrame());
+    this.clickOffset = {
+        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
+            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
+            reset: function(){ return this.start = Date.now(), this.last = this.start, this.position = new Vector, this }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+            update: function(x, y){
+                this.last = Date.now();
+                this.position.x = x;
+                this.position.y = y;
+                this.positions.push(this.position.clone());
+                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
+                this;return this; } //
+        },
+        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility.
+    },
+    this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,ee constructor needs.
+
+    window.onmessage = function(ev){
+        const message = JSON.parse(ev.data);
+        const data = message.data;
+        const type = message.type;
+
+        if(type === types.windowSize) {
+            dialog.resizeBody(data.width, data.height);
+            // console.log("EEE", type, data);
+        }
+    }
+
+    if(!this.scroll) this.body.style.overflow = "hidden";
+
+    this.button = document.createElement("button");
+    this.button.onclick = function(){
+        this.open();
+    }
+
+    this.verifyEjectCapability = function(){
+        const style = this.getButton(windowButtons.eject).style;
+        try { if(this.getFrame().contentWindow.location.href == null) style.display = "none" }
+        catch (e){ style.display = "none" }
+    }
+
+    this.toggleCloseButton(true);
+    this.toggleFullButton(true);
+    if(this.verifyEjectCapability()) this.toggleEjectButton(true);
+
+    this.synchronise = synchroniseWindowState;
+
+    this.exchangeWindowMouseUpEvent = function(){
+        this.messageFrame({difference:new Vector});
+    }
+
+    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
+        if(difference)this.messageFrame(dialog.clickOffset.stats.update(difference.x, difference.y));
+    };
+
+    this.messageFrame = function(object, literal){
+        if(this.frame) this.frame.contentWindow.postMessage(literal?object:JSON.stringify(object), '*');
+    }
+
+    if(object.body) this.body.appendChild(object.body);
+    this.setTitle(this.title);
+
+    //const dialog = this, 
+    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+
+    if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
+        const div = target.appendChild(document.createElement("div"));
+        div.draggable = false, div.id = index + 1,
+        div.onmousedown = function(ev){
+            if(IE11Booster) dragAction.set(ev.target.id);
+            else dialog.dragCalculator.set(ev.target.id);
+        } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+    }
+
+    body.addEventListener("load", function(event){ try { verifyEjectCapability(getEventDialog(event)) } catch (exception){ target.getElementsByTagName("button")[0].style.display = "none" }});
+    this.target.addEventListener("mousedown", function(event){ if(getEventDialog(event).tagName == "DIALOG") windowActivationEvent(event) });
+    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
+        const dialog = getEventDialog(event)
+        const rect = target.getClientRects()[0];
+        const viewboxPosition = getViewboxPosition();
+        const propeties = {
+            scrollbars: true,
+            resizable: true,
+            status: false,
+            location: false,
+            toolbar: false,
+            menubar: false,
+            width: rect.width,
+            height: rect.height,
+            left: rect.left + viewboxPosition.left,
+            top: rect.top + viewboxPosition.top
+        }
+
+        window.open(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href, windows[dialog.id].title, stringifyWindowProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+    });
+
+    const buttons = target.getElementsByTagName("button");
+    buttons[windowButtons.close].addEventListener("click", function(event){
+        const dialog = getEventDialog(event);
+        dialog.open = false;
+        dialog.removeAttribute("open");
+    });
+    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+    windows[this.id] = this;
+}
+
+function injectApplication(application){
+    windows[demo.id] = new Dialog(application);
+    loadWindowState();
+}
+
+function injectApplications(applications){
+    applications.forEach(function(application){
+        windows[demo.id] = new Dialog(application);
+    });
+    loadWindowState();
+}
+
+Dialog.prototype = {
+    setTitle: function(title){ return this.getTitleElement().innerText = title },
+    getTitleElement: function(){ return this.getHead().querySelector("h1") },
+    getContent: function(){ return this.target.getElementsByTagName("content")[0] },
+    getFrame: function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") },
+    getTitle: function(){ return this.getTitleElement().innerText },
+    getHead: function(){ return this.target.getElementsByTagName("header")[0] },
+    getBody: function(){ return this.content.children[1] },
+    close: function(){ return this.target.removeAttribute("open") },
+    getId: function(){ return this.target.getAttribute("id") },
+    setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
+    open: function(){ return this.target.createAttribute("open") },
+    getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
+    getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
+    getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
+    setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
+    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
+    toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
+    clearClickOffset: function(){ this.clickOffset.clear() },
+    toggleFullScreen: function(enable){ this.target.toggleAttribute("full", enable) },
+    toggleCloseButton: function(enable){ this.toggleButton(windowButtons.close, enable) },
+    toggleEjectButton: function(enable){ this.toggleButton(windowButtons.eject, enable) },
+    toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable) }
+}
+
 
 dragAction.set(0);
 
@@ -147,7 +383,7 @@ DragCalculator.prototype.__proto__ = {
         function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._difference) },
         function(){}
     ]
-}// This comma must have been it...
+}
 
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(){};
@@ -364,221 +600,6 @@ function removeComments(element){
     return element;
 }
 
-function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
-    /**
-     * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
-     * @author Lasse Lauwerys
-     * @param {Element} dialog This is a dialog element from the HTML structure.
-     */
-
-    //if(!this.open) setDialogPrototype();
-    if(!object) return;
-    const dialog = this;
-    this.setTitle = function(title){ return this.getTitleElement().innerText = title },
-    this.getTitleElement = function(){ return this.getHead().querySelector("h1") },
-    this.getContent = function(){ return this.target.getElementsByTagName("content")[0] },
-    this.getFrame = function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") },
-    this.getTitle = function(){ return this.getTitleElement().innerText },
-    this.getHead = function(){ return this.target.getElementsByTagName("header")[0] },
-    this.getBody = function(){ return this.content.children[1] },
-    this.close = function(){ return this.target.removeAttribute("open") },
-    this.getId = function(){ return this.target.getAttribute("id") },
-    this.setId = function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
-    this.open = function(){ return this.target.createAttribute("open") },
-    this.getInnerRect = function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
-    this.getRect = function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
-    this.getButton = function(index){ return this.head.getElementsByTagName("button")[index] },
-    this.setClickOffset = function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
-    this.togglePointerEvents = function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
-    this.toggleButton = function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
-    this.clearClickOffset = function(){ this.clickOffset.clear() },
-    this.toggleFullScreen = function(enable){ this.target.toggleAttribute("full", enable) },
-    this.toggleCloseButton = function(enable){ this.toggleButton(windowButtons.close, enable) },
-    this.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) },
-    this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
-
-    // this.resize = function(width, height){
-    //     this.target.style.width = (this.width = width) + "px",
-    //     this.target.style.height = (this.height = height) + "px";
-    // }
-
-    this.move = function(x, y){
-        this.target.style.left = (this.x = x) + "px",
-        this.target.style.top = (this.y = y) + "px";
-    }
-
-    this.resize = function(width, height){
-        this.target.style.width = (this.width = width) + "px",
-        this.target.style.height = (this.height = height) + "px";
-    }
-
-    this.resizeBody = function(width, height){
-        this.body.style.width = (this.width = width) + "px",
-        this.body.style.height = (this.height = height) + "px",
-        this.target.style.width = null,
-        this.target.style.height = null;
-    }
-
-    this.messenger = new Messenger();
-    const types = this.messenger.types;
-    // window.onmessage = function(ev){
-    //     const message = JSON.parse(ev.data);
-    //     const data = message.data;
-    //     const type = message.type;
-
-    //     if(type === types.windowSize) {
-    //         dialog.resize(data.width, data.height);
-    //         console.log("EEE", type, data);
-    //     }
-    // }
-    // this.messenger.onmessage = function(message){
-    //     console.log("YO", message);
-    // }
-
-    if(object.nodeName == "DIALOG"){
-        this.target = object
-    }
-    else{
-        this.target = createDialog();
-        this.content = this.getContent();
-        this.frame = this.getBody().appendChild(document.createElement("iframe"));
-        this.src = this.frame.src = object.src;
-        this.title = this.setTitle(object.title);
-        this.id = this.setId(object.id || this.title);
-        this.fixed = object.fixed;
-        this.scroll = object.scroll;
-    }
-
-    // this.messenger = new Messenger();
-    // this.messenger.onmessage = function(message){
-    //     console.log(message);
-    // }
-    
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
-    this.width = 0;
-    this.height = 0;
-    //object.nodeName == "DIALOG" ? // : this.frame = document.createElement("iframe"), this.src = object.src, object.target //|| createDialog();
-    this.title = object.title || this.getTitle();
-    this.id = object.id || this.getId() || this.title;
-    this.moveEvents = object.moveEvents || false;
-    this.content = this.getContent();
-    //this.frame = object.src ?  = document.createElement("iframe") || this.getFrame();
-    this.body = this.getBody(); // An effort to trade memory for performance.
-    this.head = this.getHead();
-    //this.src = object.src ? (this.frame = this.body.appendChild(document.createElement("iframe")), this.frame.src = object.src) : (this.frame = this.getFrame());
-    this.clickOffset = {
-        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
-            reset: function(){ return this.start = Date.now(), this.last = this.start, this.position = new Vector, this }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-            update: function(x, y){
-                this.last = Date.now();
-                this.position.x = x;
-                this.position.y = y;
-                this.positions.push(this.position.clone());
-                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-                this;return this; } //
-        },
-        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility.
-    },
-    this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,ee constructor needs.
-
-    window.onmessage = function(ev){
-        const message = JSON.parse(ev.data);
-        const data = message.data;
-        const type = message.type;
-
-        if(type === types.windowSize) {
-            dialog.resizeBody(data.width, data.height);
-            // console.log("EEE", type, data);
-        }
-    }
-
-    if(!this.scroll) this.body.style.overflow = "hidden";
-
-    this.verifyEjectCapability = function(){
-        const style = this.getButton(windowButtons.eject).style;
-        try { if(this.getFrame().contentWindow.location.href == null) style.display = "none" }
-        catch (e){ style.display = "none" }
-    }
-
-    this.toggleCloseButton(true);
-    this.toggleFullButton(true);
-    if(this.verifyEjectCapability()) this.toggleEjectButton(true);
-
-    this.synchronise = synchroniseWindowState;
-
-    this.exchangeWindowMouseUpEvent = function(){
-        this.messageFrame({difference:new Vector});
-    }
-
-    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible.
-        if(difference)this.messageFrame(dialog.clickOffset.stats.update(difference.x, difference.y));
-    };
-
-    this.messageFrame = function(object, literal){
-        if(this.frame) this.frame.contentWindow.postMessage(literal?object:JSON.stringify(object), '*');
-    }
-
-    if(object.body) this.body.appendChild(object.body);
-    this.setTitle(this.title);
-
-    //const dialog = this, 
-    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
-
-    if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
-        const div = target.appendChild(document.createElement("div"));
-        div.draggable = false, div.id = index + 1,
-        div.onmousedown = function(ev){
-            if(IE11Booster) dragAction.set(ev.target.id);
-            else dialog.dragCalculator.set(ev.target.id);
-        } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-    }
-
-    body.addEventListener("load", function(event){ try { verifyEjectCapability(getEventDialog(event)) } catch (exception){ target.getElementsByTagName("button")[0].style.display = "none" }});
-    this.target.addEventListener("mousedown", function(event){ if(getEventDialog(event).tagName == "DIALOG") windowActivationEvent(event) });
-    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        const dialog = getEventDialog(event)
-        const rect = target.getClientRects()[0];
-        const viewboxPosition = getViewboxPosition();
-        const propeties = {
-            scrollbars: true,
-            resizable: true,
-            status: false,
-            location: false,
-            toolbar: false,
-            menubar: false,
-            width: rect.width,
-            height: rect.height,
-            left: rect.left + viewboxPosition.left,
-            top: rect.top + viewboxPosition.top
-        }
-
-        window.open(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href, windows[dialog.id].title, stringifyWindowProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
-    });
-
-    const buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", function(event){
-        const dialog = getEventDialog(event);
-        dialog.open = false;
-        dialog.removeAttribute("open");
-    });
-    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
-    windows[this.id] = this;
-}
-
-function injectApplication(application){
-    windows[demo.id] = new Dialog(application);
-    loadWindowState();
-}
-
-function injectApplications(applications){
-    applications.forEach(function(application){
-        windows[demo.id] = new Dialog(application);
-    });
-    loadWindowState();
-}
 
 
 /*\
