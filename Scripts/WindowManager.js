@@ -133,7 +133,7 @@ DragCalculator.prototype.__proto__ = {
     scroll: new Vector,
     update: new Function,
     _difference: new Vector,
-    operations: [
+    operations: [ // It doesn't look good but it's the absolute fastest I can make it. For this part I pick function over readability, the speed of the window movements is the most important thing.
         function(position){ return (this.difference = position, this.style.left = this.left, this.style.top = this.top, this._difference) },
         function(position){ return (this.difference = position, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
         function(position){ return (this.difference = position, this.style.width = this.width, this._difference) },
@@ -142,7 +142,8 @@ DragCalculator.prototype.__proto__ = {
         function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
         function(position){ return (this.difference = position, this.style.width = this.width, this.style.height = this.heightrv,style.top = this.top, this._difference) },
         function(position){ return (this.difference = position, this.style.height = this.height, this.style.width = this.width, this._difference) },
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._difference) }
+        function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._difference) },
+        function(){}
     ]
 }// This comma must have been it...
 
@@ -159,7 +160,8 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
         function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
         function(dialog, offset, difference, style){ return (style.width = (dialog.width = offset.width + difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
         function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height + difference.y) + "px", style.width = (dialog.width = offset.width + difference.x) + "px"), difference },
-        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px"), difference }
+        function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px"), difference },
+        function(){}
     ];
 }
 
@@ -247,7 +249,7 @@ function pixelsToCentimeters(pixels){
 
 function fromPixels(text){
     if(text!=null) try{ return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
-    catch { return text }
+    catch (ex) { return text }
     else return 0;
 }
 
@@ -277,11 +279,15 @@ function toggleBlur(enabled){
     else document.body.toggleAttribute("blur", enabled);
 }
 
+function collectEssentialWindowData(target, source){
+    return target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+}
+
 function saveWindowState(){
     if(canSave) try {
         if(localStorage){
             const windowState = {};
-            for (let id in windows) windowState[id] = transferEssentialWindowData({}, windows[id]);
+            for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
             localStorage.windowState = JSON.stringify(windowState);
         }
     } catch(exception) {
@@ -293,10 +299,6 @@ function saveWindowState(){
     }
 }
 
-function transferEssentialWindowData(target, source){
-    return target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
-}
-
 function loadWindowState(){
     if(canSave) try {
         if(localStorage && localStorage.windowState){
@@ -304,7 +306,7 @@ function loadWindowState(){
             for (let window in parsedWindows) {
                 //console.log(windows[window].x, parsedWindows[window].x);
                 try{
-                    transferEssentialWindowData(windows[window], parsedWindows[window]);
+                    collectEssentialWindowData(windows[window], parsedWindows[window]);
                     windows[window].synchronise();
                 } catch(ex) { fails.push(ex) }
             }
@@ -319,7 +321,7 @@ function loadWindowState(){
     } else {
         console.error("Storage access is disabled for this session!");
     }
-    console.log(fails.length + "fialed atmeptpttptps retteketet")
+    //console.log(fails.length + "fialed atmeptpttptps retteketet")
 }
 
 loadWindowState();
@@ -369,6 +371,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     //if(!this.open) setDialogPrototype();
     if(!object) return;
+    const dialog = this;
     this.setTitle = function(title){ return this.getTitleElement().innerText = title },
     this.getTitleElement = function(){ return this.getHead().querySelector("h1") },
     this.getContent = function(){ return this.target.getElementsByTagName("content")[0] },
@@ -392,6 +395,44 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.toggleEjectButton = function(enable){ this.toggleButton(windowButtons.eject, enable) },
     this.toggleFullButton = function(enable){ this.toggleButton(windowButtons.full, enable) };
 
+    // this.resize = function(width, height){
+    //     this.target.style.width = (this.width = width) + "px",
+    //     this.target.style.height = (this.height = height) + "px";
+    // }
+
+    this.move = function(x, y){
+        this.target.style.left = (this.x = x) + "px",
+        this.target.style.top = (this.y = y) + "px";
+    }
+
+    this.resize = function(width, height){
+        this.target.style.width = (this.width = width) + "px",
+        this.target.style.height = (this.height = height) + "px";
+    }
+
+    this.resizeBody = function(width, height){
+        this.body.style.width = (this.width = width) + "px",
+        this.body.style.height = (this.height = height) + "px",
+        this.target.style.width = null,
+        this.target.style.height = null;
+    }
+
+    this.messenger = new Messenger();
+    const types = this.messenger.types;
+    // window.onmessage = function(ev){
+    //     const message = JSON.parse(ev.data);
+    //     const data = message.data;
+    //     const type = message.type;
+
+    //     if(type === types.windowSize) {
+    //         dialog.resize(data.width, data.height);
+    //         console.log("EEE", type, data);
+    //     }
+    // }
+    // this.messenger.onmessage = function(message){
+    //     console.log("YO", message);
+    // }
+
     if(object.nodeName == "DIALOG"){
         this.target = object
     }
@@ -402,7 +443,14 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.src = this.frame.src = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
+        this.fixed = object.fixed;
+        this.scroll = object.scroll;
     }
+
+    // this.messenger = new Messenger();
+    // this.messenger.onmessage = function(message){
+    //     console.log(message);
+    // }
     
     this.x = 0;
     this.y = 0;
@@ -434,6 +482,19 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,ee constructor needs.
 
+    window.onmessage = function(ev){
+        const message = JSON.parse(ev.data);
+        const data = message.data;
+        const type = message.type;
+
+        if(type === types.windowSize) {
+            dialog.resizeBody(data.width, data.height);
+            console.log("EEE", type, data);
+        }
+    }
+
+    if(!this.scroll) this.body.style.overflow = "hidden";
+
     this.verifyEjectCapability = function(){
         const style = this.getButton(windowButtons.eject).style;
         try { if(this.getFrame().contentWindow.location.href == null) style.display = "none" }
@@ -461,9 +522,10 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(object.body) this.body.appendChild(object.body);
     this.setTitle(this.title);
 
-    const dialog = this, target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    //const dialog = this, 
+    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
-    if(borderSection) for (let index = 0; index < 8; index++) {
+    if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
         const div = target.appendChild(document.createElement("div"));
         div.draggable = false, div.id = index + 1,
         div.onmousedown = function(ev){
@@ -503,6 +565,19 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
     windows[this.id] = this;
 }
+
+function injectApplication(application){
+    windows[demo.id] = new Dialog(application);
+    loadWindowState();
+}
+
+function injectApplications(applications){
+    applications.forEach(function(application){
+        windows[demo.id] = new Dialog(application);
+    });
+    loadWindowState();
+}
+
 
 /*\
  * \  Tested and confirmed functional:

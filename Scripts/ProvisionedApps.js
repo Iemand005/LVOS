@@ -130,6 +130,19 @@ const applications = [
     }
 ]
 
-applications.forEach(function(application){
+/*applications.forEach(function(application){
     windows[demo.id] = new Dialog(application);
-});
+});*/
+
+const games = [
+    {
+        title: "Minesweeper",
+        id: "minesweeper",
+        src: "./Games/Minesweeper/index.html",
+        fixed: true,
+        scroll: false
+    }
+]
+
+injectApplications(applications);
+injectApplications(games);

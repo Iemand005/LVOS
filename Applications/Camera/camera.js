@@ -3,6 +3,8 @@
 // Created: 30/12/2023
 // Target: ES6 (Dropped support for IE11!)
 
+'use strict';
+
 const video = document.getElementById("camera");
 const output = document.getElementById("picture");
 const takeVideo = document.getElementById("video");
@@ -22,16 +24,20 @@ function cameraDenied(){
 
 }
 
-async function getCamera(){
+function getCamera(){
     // await navigator.getUserMedia({audio: true, video: { facingMode: front ? "user" : "environment" }}, cameraAccepted, cameraDenied);
-    await navigator.getUserMedia(
+    navigator.getUserMedia(
         {
             audio: true,
             video: {
                 facingMode: front ? "user" : "environment"
             }
         },
-        stream => (video.srcObject = videoStream = stream, recorder = new MediaRecorder(stream)),
+        stream => {
+            video.srcObject = videoStream = stream;
+            video.src = window.URL.createObjectURL(videoStream)
+            if(typeof MediaRecorder !== 'undefined') recorder = new MediaRecorder(stream);
+        },
         exception => console.error(exception)
     );
 }

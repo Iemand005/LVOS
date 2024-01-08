@@ -12,7 +12,7 @@ applist.addEventListener("submit", function(event){
     console.log(event.target.name);
 });
 
-let reflecitons = true;
+let reflecitons = false;
 
 const windowr = document.getElementById("windows");
 const dock = document.getElementById("dock");

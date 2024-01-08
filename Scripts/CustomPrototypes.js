@@ -2,6 +2,7 @@
  //     Lasse Lauwerys © 2023
 //      23/12/2023
 
+'use strict';
 
 if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute){
     this.setAttribute(attribute, null);
@@ -49,7 +50,7 @@ if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forForEach;
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
 
-HTMLCollection.prototype.forEach = forForEach;
+//HTMLCollection.prototype.forEach = forForEach;
 
 if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
 
@@ -60,10 +61,8 @@ function find(callback) {
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
 
 
+if (!navigator.getUserMedia) navigator.getUserMedia = navigator.webkitGetUserMedia;
+
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
-
-//if (!HTMLDocument.prototype.fullscreenElement) HTMLDocument.prototype.fullscreenElement = HTMLDocument.prototype.msFullscreenElement || HTMLDocument.prototype.mozFullScreenElement || HTMLDocument.prototype.webkitFullscreenElement;
-//if (!HTMLElement.prototype.requestFullscreen) HTMLElement.prototype.requestFullscreen = HTMLElement.prototype.mozRequestFullScreen || HTMLElement.prototype.webkitRequestFullscreen || HTMLElement.prototype.msRequestFullscreen;
-//if (!HTMLDocument.prototype.exitFullscreen) HTMLDocument.prototype.exitFullscreen = HTMLDocument.prototype.msExitFullscreen || HTMLDocument.prototype.mozCancelFullScreen || HTMLDocument.prototype.webkitExitFullscreen;

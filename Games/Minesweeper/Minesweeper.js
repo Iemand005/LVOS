@@ -7,13 +7,9 @@
 'use strict';
 const width = 20;
 const height = 20;
-
 const quickReveal = true;
 
-const tiles = new Array(height);
-const lineartiles = new Array(height*width);
-
-const body = document.querySelector("body");
+const body = document.body;
 const form = document.querySelector("section");
 const table = document.createElement("table");
 
@@ -24,9 +20,150 @@ const signs = {
     none: ""
 }
 
+const tiles = new Array(height);
+const lineartiles = new Array(height*width);
 const isGameOver = false;
-
 let mousedown = false;
+
+function Tile(button, x, y, mine){
+    this.mine = mine || false;
+    this.button = button;
+    this.flagged = false;
+    this.position = { x: x, y: y };
+    this.revealed = false;
+    this.mousedown = false;
+}
+
+Tile.prototype = {
+    reveal: function(){
+        if(this.revealed) return 0;
+        this.revealed = true;
+        const neighbours = this.getNeighbours()
+        const neighbourCount = this.countNeighbouringMines();
+        const remaining = countRemainingFields();
+
+        const classes = this.button.classList;
+        classes.add("revealed");
+        this.disable();
+        if(!this.mine) {
+            if(remaining==0) gameOver(true);
+            this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
+        }
+        else {
+            this.button.innerText = signs.bomb;
+            gameOver();
+        };
+
+        if(neighbourCount == 0) for(let neighbour in neighbours) neighbours[neighbour].reveal();
+
+        return neighbourCount;
+    },
+    generate: function(){
+        this.mine = 1 == Math.round(Math.random() * 0.6);
+    },
+    getNeighbours: function(){
+        const neighbours = new Array();
+        for (let i = 0; i < 9; i++) {
+            const x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
+            if((!(x == this.position.x && y == this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
+        }
+        return neighbours;
+    },
+
+    getNeighbouringMines: function(neighbours){
+        return this.iterateNeighbours(neighbours, function(neighbour){
+            return neighbour.mine;
+        });
+    },
+
+    countNeighbouringMines: function(neighbours){
+        return this.getNeighbouringMines().length;
+    },
+
+    getNeighbouringNotMines: function(neighbours){
+        return this.iterateNeighbours(neighbours, function(neighbour){
+            return !neighbour.mine;
+        });
+    },
+
+    iterateNeighbours: function(neighbours, filter){
+        return (neighbours || this.getNeighbours()).filter(filter);
+    },
+
+    getFlaggedNeighbouringMines: function(neighbours){
+        return this.iterateNeighbours(neighbours, function(neighbour){
+            return neighbour.flagged == 1;
+        });
+    },
+
+    countFlaggedNeighbouringMines: function(neighbours){
+        return this.getFlaggedNeighbouringMines(neighbours).length;
+    },
+
+    getUnflaggedNeighbouringMines: function(neighbours){
+        return this.iterateNeighbours(neighbours, function(neighbour){
+            return neighbour.flagged != 1;
+        });
+    },
+
+    countUnflaggedNeighbouringMines: function(neighbours){
+        return this.getUnflaggedNeighbouringMines(neighbours).length;
+    },
+
+    getUnflaggedNeighbouringNotMines: function(neighbours){
+        return this.iterateNeighbours(neighbours, function(neighbour){
+            return neighbour.mine && neighbour.flagged != 1;
+        });
+    },
+
+    countUnflaggedNeighbouringNotMines: function(neighbours){
+        return this.getUnflaggedNeighbouringnotMines(neighbours).length;
+    },
+
+    toggleDisabled: function(enabled){ // Deprecated due to issues with IE11;
+        if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled");
+    },
+
+    disable: function(){
+        this.toggleDisabled(false); 
+    },
+
+    enable: function(){
+        this.toggleDisabled(true);
+    },
+
+    disableVisual: function(){
+        this.button.classList.remove("active");
+    },
+
+    isClickAllowed: function(){
+        return this.flagged != 1;
+    },
+
+    enableVisual: function(){
+        if(this.isClickAllowed()) this.button.classList.add("active");
+    },
+
+    toggleFlag: function(enabled){
+        if(!this.revealed){
+            this.flagged = enabled == null? (this.flagged + 1)%3: enabled?3:0;
+            this.button.innerText = this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none;
+            //if(this.flagged == 1) this.disable();
+            //else this.enable();
+        }
+    },
+
+    quickReveal: function(){
+        if(!quickReveal) return;
+        const neighbours = this.getNeighbours();
+        //const neighbourCount = ;
+        //const flagged = ;
+        //console.log(flagged);
+        if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){
+            neighbour.reveal();
+        });
+    }
+}
 
 form.appendChild(table);
 for (let y = 0; y < height; y++) {
@@ -36,6 +173,7 @@ for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
         const button = document.createElement("button");
         const data = document.createElement("td");
+        button.classList.add("mine");
         data.appendChild(button);
         row.appendChild(data);
         const index = x + (y*width);
@@ -83,12 +221,16 @@ for (let y = 0; y < height; y++) {
 document.ondblclick = quickRevealEvent;
 body.ondblclick = quickRevealEvent;
 
+//document.postMessage()
+
+const messenger = new Messenger;
+//const document.body.getElementsByTagName("table")[0]
+messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight})
+
 function quickRevealEvent(ev) {
-    //console.log("elaba");
     const element = document.elementFromPoint(ev.clientX, ev.clientY);
-    //console.log("gotta reveal all!", element);
     const tile = lineartiles[parseInt(element.firstChild.id || element.id)];
-    if(tile.flagged!=1) tile.quickReveal();
+    if(tile && tile.flagged!=1) tile.quickReveal();
 }
 
 document.onmouseup = function(ev){
@@ -131,142 +273,7 @@ function countRemainingFields(){
     }).length;
 }
 
-function Tile(button, x, y, mine){
-    this.mine = mine || false,
-    this.button = button,
-    this.flagged = false,
-    this.position = { x: x, y: y },
-    this.revealed = false,
-    this.mousedown = false,
-    this.reveal = function(){
-        if(this.revealed) return 0;
-        this.revealed = true;
-        const neighbours = this.getNeighbours()
-        const neighbourCount = this.countNeighbouringMines();
-        const remaining = countRemainingFields();
 
-        const classes = this.button.classList;
-        classes.add("revealed");
-        this.disable();
-        if(!this.mine) {
-            if(remaining==0) gameOver(true);
-            this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
-        }
-        else {
-            this.button.innerText = signs.bomb;
-            gameOver();
-        };
-
-        if(neighbourCount == 0) for(let neighbour in neighbours) neighbours[neighbour].reveal();
-
-        return neighbourCount;
-    },
-    this.generate = function(){
-        this.mine = 1 == Math.round(Math.random() * 0.6);
-    },
-    this.getNeighbours = function(){
-        const neighbours = new Array();
-        for (let i = 0; i < 9; i++) {
-            const x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
-            if((!(x == this.position.x && y == this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
-        }
-        return neighbours;
-    }
-
-    this.getNeighbouringMines = function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return neighbour.mine;
-        });
-    }
-
-    this.countNeighbouringMines = function(neighbours){
-        return this.getNeighbouringMines().length;
-    }
-
-    this.getNeighbouringNotMines = function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return !neighbour.mine;
-        });
-    }
-
-    this.iterateNeighbours = function(neighbours, filter){
-        return (neighbours || this.getNeighbours()).filter(filter);
-    }
-
-    this.getFlaggedNeighbouringMines = function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return neighbour.flagged == 1;
-        });
-    }
-
-    this.countFlaggedNeighbouringMines = function(neighbours){
-        return this.getFlaggedNeighbouringMines(neighbours).length;
-    }
-
-    this.getUnflaggedNeighbouringMines = function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return neighbour.flagged != 1;
-        });
-    }
-
-    this.countUnflaggedNeighbouringMines = function(neighbours){
-        return this.getUnflaggedNeighbouringMines(neighbours).length;
-    }
-
-    this.getUnflaggedNeighbouringNotMines = function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return neighbour.mine && neighbour.flagged != 1;
-        });
-    }
-
-    this.countUnflaggedNeighbouringNotMines = function(neighbours){
-        return this.getUnflaggedNeighbouringnotMines(neighbours).length;
-    }
-
-    this.toggleDisabled = function(enabled){ // Deprecated due to issues with IE11;
-        if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled");
-    }
-
-    this.disable = function(){
-        this.toggleDisabled(false); 
-    }
-
-    this.enable = function(){
-        this.toggleDisabled(true);
-    }
-
-    this.disableVisual = function(){
-        this.button.classList.remove("active");
-    }
-
-    this.isClickAllowed = function(){
-        return this.flagged != 1;
-    }
-
-    this.enableVisual = function(){
-        if(this.isClickAllowed()) this.button.classList.add("active");
-    }
-
-    this.toggleFlag = function(enabled){
-        if(!this.revealed){
-            this.flagged = enabled == null? (this.flagged + 1)%3: enabled?3:0;
-            this.button.innerText = this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none;
-            //if(this.flagged == 1) this.disable();
-            //else this.enable();
-        }
-    }
-
-    this.quickReveal = function(){
-        if(!quickReveal) return;
-        const neighbours = this.getNeighbours();
-        //const neighbourCount = ;
-        //const flagged = ;
-        //console.log(flagged);
-        if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){
-            neighbour.reveal();
-        });
-    }
-}
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333

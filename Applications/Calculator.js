@@ -1,4 +1,6 @@
 
+'use strict';
+
 const body = document.querySelector("body");
 /*for (let index = 0; index < 0; index++) {
     const button = document.createElement("button");
