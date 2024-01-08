@@ -13,6 +13,10 @@ file.onchange = function(ev){
         analyser = audioContext.createAnalyser();
     src.connect(analyser);
     analyser.connect(audioContext.destination);
+    doAnalStuff(analyser);
+}
+
+function doAnalStuff(analyser){
     analyser.fftSize = 32;
     const bufferLength = analyser.frequencyBinCount;
     console.log(bufferLength);
@@ -22,11 +26,10 @@ file.onchange = function(ev){
     for (var i = 0; i < bufferLength; i++) console.log(barHeight = dataArray[i])
 }
 
-function doAnalStuff(){
-    
-}
-
 function animateFrame(e){
     requestAnimationFrame(animateFrame);
     console.log(e)
 }
+
+
+
