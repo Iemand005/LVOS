@@ -102,7 +102,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     this.button = document.createElement("button");
     this.button.innerText = this.title;
-    this.button.onclick = dialog.open; // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
+    this.button.onclick = dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
     document.getElementById("applist").appendChild(this.button);
 
     this.verifyEjectCapability = function(){

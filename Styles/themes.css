@@ -4,3 +4,7 @@
 dialog.rounded-corners{
     border-radius: 10px !important;
 }
+
+dialog.rounded-corners > content > article {
+    border-radius: 5px;
+}
