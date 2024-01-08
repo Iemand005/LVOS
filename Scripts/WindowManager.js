@@ -30,6 +30,7 @@ let activeDrag = false;
 let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
+let bodyCrawler = new OSDocumentCrawler(document);
 
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
@@ -184,18 +185,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     windows[this.id] = this;
 }
 
-function injectApplication(application){
-    windows[demo.id] = new Dialog(application);
-    loadWindowState();
-}
-
-function injectApplications(applications){
-    applications.forEach(function(application){
-        windows[demo.id] = new Dialog(application);
-    });
-    loadWindowState();
-}
-
 Dialog.prototype = {
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
@@ -222,69 +211,6 @@ Dialog.prototype = {
     move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px" },
     resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box" },
     resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box" }
-}
-
-function OSDocumentCrawler(document){
-    this.document = document;
-}
-
-OSDocumentCrawler.prototype = {
-    getMetro: function(){ return this.document.getElementById("metro") },
-    getDesktop: function(){ return this.document.getElementById("desktop") },
-    getMetroBody: function(){ return this.getMetro().firstChild },
-    getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
-    getWindowsContainer: function(){ return this.document.getElementById("windows") }
-}
-
-let bodyCrawler = new OSDocumentCrawler(document);
-
-function flip(enable){
-    const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
-    const window = windows[activeWindow] || windows[0];
-    if(flipped) exportWindowBodyToMetro(window);
-    else retrieveWindowBodyFromMetro(window);
-    return flipped;
-}
-
-
-
-function initializeWindows(windows){
-    /**
-     * Initializes the windows inside the windows object.
-     */
-    document.onmouseup = activateWindowPointers;
-    //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
-    dragAction.set(0);
-    flip();
-    const dialogs = bodyCrawler.getAllDialogs();
-    dialogs.forEach(function(dialog){
-        windows[String(dialog.id)] = new Dialog(dialog); // Enable the close button. We are doing these things in JavaScript for if someone has JavaScript disabled.
-    });
-    loadWindowState();
-    //toggleReflections();
-}
-
-
-// Normally we use const in for in loops!
-// I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
-
-function windowActivationEvent(event){
-    /**
-     * Activates the window on which the provided event was fired.
-     * @function windowActivationEvent()
-     * @property event
-     */
-    const dialog = getEventDialog(event);
-    dialog.style.zIndex = topZ++; // Put our window on top of the others.
-    activeDrag = true; // Activate window dragging so the mousemove event registers it.
-    activeWindow = dialog.id;
-    resizeDirection = 0;
-    dragAction.set(0);
-    windows[activeWindow].dragCalculator.set(0);
-    disableWindowPointers();
-    const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
-    windows[activeWindow].setClickOffset(mouse.x, mouse.y);
-    return dialog;
 }
 
 function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
@@ -322,6 +248,7 @@ DragCalculator.prototype.__proto__ = {
     ]
 }
 
+// This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons.
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(){};
     this.set = function(direction){ if(!activeDrag) activeDrag = true, this.execute = this.resizeFunctions[direction] || function(){} },
@@ -345,10 +272,79 @@ DragAction.prototype = {
     remove: function () { activeDrag = false; }
 }
 
+function OSDocumentCrawler(document){
+    this.document = document;
+}
+
+OSDocumentCrawler.prototype = {
+    getMetro: function(){ return this.document.getElementById("metro") },
+    getDesktop: function(){ return this.document.getElementById("desktop") },
+    getMetroBody: function(){ return this.getMetro().firstChild },
+    getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
+    getWindowsContainer: function(){ return this.document.getElementById("windows") }
+}
+
+function flip(enable){
+    const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
+    const window = windows[activeWindow] || windows[0];
+    if(flipped) exportWindowBodyToMetro(window);
+    else retrieveWindowBodyFromMetro(window);
+    return flipped;
+}
+
+function initializeWindows(windows){
+    document.onmouseup = activateWindowPointers;
+    //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
+    dragAction.set(0);
+    flip();
+    const dialogs = bodyCrawler.getAllDialogs();
+    dialogs.forEach(function(dialog){
+        windows[String(dialog.id)] = new Dialog(dialog); // Enable the close button. We are doing these things in JavaScript for if someone has JavaScript disabled.
+    });
+    loadWindowState();
+    //toggleReflections();
+}
+// Normally we use const in for in loops!
+// I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
+
+function windowActivationEvent(event){
+    /**
+     * Activates the window on which the provided event was fired.
+     * @function windowActivationEvent()
+     * @property event
+     */
+    const dialog = getEventDialog(event);
+    dialog.style.zIndex = topZ++; // Put our window on top of the others.
+    activeDrag = true; // Activate window dragging so the mousemove event registers it.
+    activeWindow = dialog.id;
+    resizeDirection = 0;
+    dragAction.set(0);
+    windows[activeWindow].dragCalculator.set(0);
+    disableWindowPointers();
+    const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
+    windows[activeWindow].setClickOffset(mouse.x, mouse.y);
+    return dialog;
+}
+
+function windowDragEvent(event){
+    try {
+        const dialog = windows[activeWindow], difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
+        dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
+        //console.log(dialog.width, dialog.minWidth, activeWindow, activeDrag, resizeDirection)
+        if(dialog.width < 0) dialog.width = 0;
+        if(dialog.height < 0) dialog.height = 0;
+        
+        if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
+    } catch (ex) {
+        console.error(ex);
+    }
+}
+
 function activateWindowPointers(){
     //document.addEventListener("mousemove", windowDragEvent);
     document.removeEventListener("mousemove", windowDragEvent);
     console.log("anker")
+    dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);//, IE11Booster?dragAction.set(0):windows[index].dragCalculator.set(0);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
     if(windows[activeWindow]){
@@ -370,10 +366,6 @@ function disableWindowPointers(){
 
 function updateTopZ(){
     for(let window in windows) if(windows[window].z > topZ) topZ = windows[window].z;
-}
-
-function getWindowClient(window){
-    window.target.getElementsByTagName("iframe")[0];
 }
 
 function stringifyWindowProperties(properties){
@@ -399,20 +391,6 @@ function getEventDialog(event){ // Hier is dus die alternatieve modus, maar hij 
         return document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
-}
-
-function windowDragEvent(event){
-    try {
-        const dialog = windows[activeWindow], difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
-        dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
-        //console.log(dialog.width, dialog.minWidth, activeWindow, activeDrag, resizeDirection)
-        if(dialog.width < 0) dialog.width = 0;
-        if(dialog.height < 0) dialog.height = 0;
-        
-        if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
-    } catch (ex) {
-        console.error(ex);
-    }
 }
 
 function toPixels(value){
@@ -531,6 +509,19 @@ function removeComments(element){
     });
     return element;
 }
+
+function injectApplication(application){
+    windows[demo.id] = new Dialog(application);
+    loadWindowState();
+}
+
+function injectApplications(applications){
+    applications.forEach(function(application){
+        windows[demo.id] = new Dialog(application);
+    });
+    loadWindowState();
+}
+
 
 initializeWindows(windows);
 
