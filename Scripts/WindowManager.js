@@ -1,12 +1,12 @@
 
 /*\
    \________
-   / ______/\                                             \\
-  / /     /\ \    LWM (Lasse's Window Manager)             \\
- /_/_____/  \ \   Targetting: ES5 (+ Self made extensions)  \\
- \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024   //
-  \ \_____\/ /    Created: 17/12/2023                      //
-   \_______\/                                             //
+   / ______/\                                                 \\
+  / /     /\ \    LWM (Lasse's Window Manager)                 \\
+ /_/_____/  \ \   Targetting: ES5 (with custom ES6 extensions)  \\
+ \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024       //
+  \ \_____\/ /    Created: 17/12/2023                          //
+   \_______\/                                                 //
    /
 \*/
 
@@ -416,6 +416,7 @@ function synchroniseWindowState(window){
     window.target.toggleAttribute("open", window.open);
 }
 
+// Onderdeel van de aller eerste window move event handler.
 function contains(array, number){
     return Boolean(array.indexOf(number) + 1);
 }
@@ -491,6 +492,7 @@ function getDialogTemplate(){
     return (document.querySelector("template").content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
 
+// Class to build dialogs that can be passed to the Window insertion API. Not finished, window construction objects have to be designed and built by hand for now!
 function DialogBuilder(title, id){
     this.title = title;
     this.id = id;
@@ -502,7 +504,7 @@ function createDialog(){
     return bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
 }
 
-function removeComments(element){
+function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function(child){
         if (child.nodeName=="#comment") element.removeChild(child);
         else removeComments(child);
@@ -511,27 +513,25 @@ function removeComments(element){
 }
 
 function injectApplication(application){
-    windows[demo.id] = new Dialog(application);
+    windows[demo.id] = new Dialog(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     loadWindowState();
 }
 
 function injectApplications(applications){
-    applications.forEach(function(application){
-        windows[demo.id] = new Dialog(application);
-    });
+    applications.forEach(function(application){ windows[demo.id] = new Dialog(application) }); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
     loadWindowState();
 }
 
 
 initializeWindows(windows);
 
-/*\
- * \  Tested and confirmed functional:
- *  \  Chrome and all other Chromium based browsers versions 118 and up (will check lower versions down to 48 later on Windows 8.1 and 7, Android Chrome I might test down to version but targetting 36 and up), Internet Explorer 11, EdgeHTML 18.
- *   \  FireFox 115 ESR and up
- *    \  Chromium 118 (That means Chrome, Edge, Brave, Opera, ...)
- *    /  FireFox
+/*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better.
+ * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
+ *  \  Chrome for Android Chrome targetting 36 and up.
+ *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
+ *    \  Chromium 118 (That means Chrome, Edge Chromium, Brave, Opera, ...)
+ *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Windows 8.1 I expect this to work fine!
  *   /  Internet Explorer 11
  *  /  Chrome 48
- * /
+ * /  EdgeHTML 18 (Edge Legacy)
 \*/
