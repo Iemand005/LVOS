@@ -346,11 +346,12 @@ DragAction.prototype = {
 function activateWindowPointers(){
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
-    if(windows[activeWindow] && windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
-    if(IE11Booster) dragAction.set(0);
-    else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+    if(windows[activeWindow] && windows[activeWindow].moveEvents){
+        windows[activeWindow].exchangeWindowMouseUpEvent();
+        if(IE11Booster) dragAction.set(0);
+        else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+    }
     activeDrag = false;
-    dragAction.set(0)
 }
 
 function disableWindowPointers(){
