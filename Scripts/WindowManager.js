@@ -94,10 +94,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         const data = message.data;
         const type = message.type;
 
-        if(type === types.windowSize) {
-            dialog.resizeBody(data.width, data.height);
-            // console.log("EEE", type, data);
-        }
+        console.log(message)
+        if(type === "windowSize") dialog.resizeBody(data.width, data.height);
     }
 
     if(!this.scroll) this.body.style.overflow = "hidden";
