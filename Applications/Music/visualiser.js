@@ -7,11 +7,12 @@ const audio = document.getElementsByTagName("audio")[0];
 file.onchange = function(ev){
     console.log("File received!", ev);
     audio.src = URL.createObjectURL(this.files[0]);
-    const ctx = new AudioContext(),
-        src = ctx.createMediaElementSource(audio),
-        analyser = ctx.createAnalyser();
+    const audioContext = new AudioContext(),
+        src = audioContext.createMediaElementSource(audio),
+        //src = audioContext.createMediaStreamSource()
+        analyser = audioContext.createAnalyser();
     src.connect(analyser);
-    analyser.connect(ctx.destination);
+    analyser.connect(audioContext.destination);
     analyser.fftSize = 32;
     const bufferLength = analyser.frequencyBinCount;
     console.log(bufferLength);
@@ -19,6 +20,10 @@ file.onchange = function(ev){
     analyser.getByteFrequencyData(dataArray);
 
     for (var i = 0; i < bufferLength; i++) console.log(barHeight = dataArray[i])
+}
+
+function doAnalStuff(){
+    
 }
 
 function animateFrame(e){
