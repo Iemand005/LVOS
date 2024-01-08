@@ -132,6 +132,12 @@ const games = [
         scroll: false
     },
     {
+        title: "Conway",
+        id: "conway",
+        src: "./Games/Conway/index.html",
+        classes: ["rounded-corners"]
+    },
+    {
         title: "Velocities",
         id: "velocities",
         src: "./Applications/Velocities/index.html",

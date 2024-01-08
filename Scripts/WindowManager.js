@@ -57,6 +57,10 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
+        if(typeof object.classes === 'object'){
+            object.classes.forEach(function(someclass){ this.target.classList.add(someclass) }, dialog); // We can't use class since it's a keyword!!
+            // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 browsers.
+        }
     }
 
     this.x = 0;
@@ -293,10 +297,10 @@ DragCalculator.prototype.__proto__ = {
     set: function(direction){ this.update = this.operations[direction] },
     get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
-    get width(){ return (this.dialog.width = this.offset.width + this.difference.x) + "px" },
-    get height(){ return (this.dialog.height = this.offset.height + this.difference.y) + "px" },
-    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x) + "px" },
-    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y) + "px" },
+    get width(){ return (this.dialog.width = this.offset.width + this.difference.x), ((this.dialog.width > this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get height(){ return (this.dialog.height = this.offset.height + this.difference.y), ((this.dialog.height > this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
+    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x), ((this.dialog.width > this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y), ((this.dialog.height > this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
     get difference() { return this._difference },
     set difference(pos) { this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
     dialog: null,
