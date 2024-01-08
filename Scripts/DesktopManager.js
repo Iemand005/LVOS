@@ -1,7 +1,7 @@
 /**
  * @author Lasse Lauwerys
  * @version 1.0.0
- * 
+ * @copyright Lasse Lauwerys © 2023
  */
 'use strict';
 console.log(windows)
@@ -18,7 +18,6 @@ const windowr = document.getElementById("windows");
 const dock = document.getElementById("dock");
 const reflectionr = document.getElementById("reflection");
 const reflector = new Reflector(document.getElementById("reflection"));
-let observer;
 
 function toggleReflections(force){
     if(force == null) reflecitons = !reflecitons;

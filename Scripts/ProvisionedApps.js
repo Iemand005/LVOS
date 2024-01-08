@@ -135,7 +135,6 @@ const games = [
         title: "Velocities",
         id: "velocities",
         src: "./Applications/Velocities/index.html",
-        fixed: false,
         moveEvents: true // This flag enables attaching window movement statistic listener.
     }
 ]

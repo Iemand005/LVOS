@@ -95,7 +95,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         const type = message.type;
 
         console.log(message)
-        if(type === "windowSize") dialog.resizeBody(data.width, data.height);
+        if(type === types.windowSize) dialog.resizeBody(data.width, data.height);
     }
 
     if(!this.scroll) this.body.style.overflow = "hidden";
@@ -342,14 +342,17 @@ DragAction.prototype = {
 }
 
 function activateWindowPointers(){
-    for(let index in windows) windows[index].togglePointerEvents(true);
+    for(let index in windows) windows[index].togglePointerEvents(true);//, IE11Booster?dragAction.set(0):windows[index].dragCalculator.set(0);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
-    if(windows[activeWindow] && windows[activeWindow].moveEvents){
-        windows[activeWindow].exchangeWindowMouseUpEvent();
+    if(windows[activeWindow]){
+        if(windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
         if(IE11Booster) dragAction.set(0);
         else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+        windows[activeWindow].dragCalculator.set(0);
     }
+    dragAction.set(0);
     activeDrag = false;
+    dragAction.set(0);
 }
 
 function disableWindowPointers(){
