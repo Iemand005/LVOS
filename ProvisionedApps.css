@@ -17,6 +17,11 @@ form{
     justify-content: space-between;
     height: 100%;
     flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 2rem;
+    flex-wrap: nowrap;
 }
 
 table{

@@ -19,19 +19,6 @@ let fasterWindowTracking = false;
 let canSave = true;
 let IE11Booster = true;
 
-const windows = {}; // MDN says not to use "new Object();". W3Schools adds to it that {} is faster and more readable.
-const windowButtons = {
-    eject: 0,
-    full: 1,
-    close: 2
-};
-let activeWindow = null;
-let activeDrag = false;
-let dragAction = new DragAction();
-let resizeDirection = 0;
-let topZ = 100;
-let bodyCrawler = new OSDocumentCrawler(document);
-
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
      * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
@@ -219,7 +206,7 @@ function DragCalculator(dialog){ // This is the 4th iteration of optimising the 
     this.style = dialog.target.style;
 }
 
-DragCalculator.prototype.__proto__ = {
+DragCalculator.prototype = {
     set: function(direction){ this.update = this.operations[direction] },
     get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
@@ -251,8 +238,6 @@ DragCalculator.prototype.__proto__ = {
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons.
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(){};
-    this.set = function(direction){ if(!activeDrag) activeDrag = true, this.execute = this.resizeFunctions[direction] || function(){} },
-    this.remove = function () { activeDrag = false; }
     this.resizeFunctions = [
         function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
         function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
@@ -263,13 +248,11 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
         function(dialog, offset, difference, style){ return (style.width = (dialog.width = offset.width + difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
         function(dialog, offset, difference, style){ return (style.height = (dialog.height = offset.height + difference.y) + "px", style.width = (dialog.width = offset.width + difference.x) + "px"), difference },
         function(dialog, offset, difference, style){ return (style.left = (dialog.x = offset.left + difference.x) + "px", style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px"), difference },
-        function(){}
     ];
 }
 
 DragAction.prototype = {
-    set: function(direction){ if(!activeDrag) activeDrag = true, this.execute = this.resizeFunctions[direction] || function(){} },
-    remove: function () { activeDrag = false; }
+    set: function(direction){ this.execute = this.resizeFunctions[direction] || new Function },
 }
 
 function OSDocumentCrawler(document){
@@ -283,6 +266,20 @@ OSDocumentCrawler.prototype = {
     getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
     getWindowsContainer: function(){ return this.document.getElementById("windows") }
 }
+
+// Setting up the global variables after defining the classes to avoid undefined prototypes!
+const windows = {}; // MDN says not to use "new Object();". W3Schools adds to it that {} is faster and more readable.
+const windowButtons = {
+    eject: 0,
+    full: 1,
+    close: 2
+};
+let activeWindow = null;
+let activeDrag = false;
+let dragAction = new DragAction();
+let resizeDirection = 0;
+let topZ = 100;
+let bodyCrawler = new OSDocumentCrawler(document);
 
 function flip(enable){
     const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
@@ -315,11 +312,11 @@ function windowActivationEvent(event){
      */
     const dialog = getEventDialog(event);
     dialog.style.zIndex = topZ++; // Put our window on top of the others.
-    activeDrag = true; // Activate window dragging so the mousemove event registers it.
+    // Deprecated! activeDrag = true; // Activate window dragging so the mousemove event registers it.
     activeWindow = dialog.id;
     resizeDirection = 0;
-    dragAction.set(0);
-    windows[activeWindow].dragCalculator.set(0);
+    //dragAction.set(0);
+    //windows[activeWindow].dragCalculator.set(0);
     disableWindowPointers();
     const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
     windows[activeWindow].setClickOffset(mouse.x, mouse.y);
