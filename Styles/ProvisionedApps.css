@@ -21,7 +21,7 @@ form{
     flex-direction: row;
     justify-content: space-between;
     height: 2rem;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 }
 
 #console form {

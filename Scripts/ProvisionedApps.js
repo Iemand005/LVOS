@@ -13,17 +13,26 @@ browserform.addEventListener("submit", function(event){
 
     try{
         console.log("The browser is navigating to '" + url + "'");
-        if(!/^https?:\/\//i.test(url)) url = "https://" + url; // Sanitising the url.
-
+        if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
+        url = new URL(url);
         var http = new XMLHttpRequest(); // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
-        http.open('HEAD', url, false);
+        http.open('HEAD', url.href, false);
         http.send();
 
-        browserframe.src = url;
+        browserframe.src = url.href;
         // const links = browserframe.document.getElementsByTagName("a");
         // for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
     } catch (e) {
         //let ai = 
+        console.log(url, url.hostname)
+        if(url.hostname.indexOf("youtube")!=-1) {
+            console.log("yoututbe!");
+            if(window.location.pathname === "/watch"){
+                console.log("wanna watch??");
+                windows["video"]
+            }
+        }
+
         console.error(e.code);
         url = new URL("./Applications/Error/error.html", window.location.href);
         url.searchParams.set("errormessage", e.message);
@@ -146,6 +155,11 @@ const applications = [
         camera: true,
         microphone: true,
         // add attribute allow="camera; microphone" to iframe!
+    },
+    {
+        title: "Video",
+        id: "video",
+        src: "./Applications/Video/index.html",
     }
 ]
 
@@ -168,7 +182,8 @@ const games = [
         id: "velocities",
         src: "./Applications/Velocities/index.html",
         moveEvents: true // This flag enables attaching window movement statistic listener.
-    }
+    },
+    {}
 ]
 
 injectApplications(applications);
