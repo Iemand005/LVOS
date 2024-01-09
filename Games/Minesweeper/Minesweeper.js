@@ -73,19 +73,11 @@ Tile.prototype = {
     },
 
     getNeighbouringMines: function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return neighbour.mine;
-        });
+        return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine });
     },
 
-    countNeighbouringMines: function(neighbours){
+    countNeighbouringMines: function(){
         return this.getNeighbouringMines().length;
-    },
-
-    getNeighbouringNotMines: function(neighbours){
-        return this.iterateNeighbours(neighbours, function(neighbour){
-            return !neighbour.mine;
-        });
     },
 
     iterateNeighbours: function(neighbours, filter){
@@ -122,46 +114,18 @@ Tile.prototype = {
         return this.getUnflaggedNeighbouringnotMines(neighbours).length;
     },
 
-    toggleDisabled: function(enabled){ // Deprecated due to issues with IE11;
-        if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled");
-    },
-
-    disableVisual: function(){
-        // (this.button || button).classList.remove("active");
-        this.button.classList.remove("active");
-    },
-
-    isClickAllowed: function(){
-        return this.flagged != 1;
-    },
-
-    enableVisual: function(){
-        if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active");
-    },
-
-    toggleFlag: function(enabled){
-        if(!this.revealed){
-            this.flagged = enabled == null? (this.flagged + 1)%3: enabled?3:0;
-            this.button.innerText = this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none;
-            //if(this.flagged == 1) this.disable();
-            //else this.enable();
-        }
-    },
-
+    toggleDisabled: function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled") },
+    disableVisual: function(){ this.button.classList.remove("active") },
+    isClickAllowed: function(){ return this.flagged != 1 },
+    enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active") },
+    toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none},
     quickReveal: function(){
-        if(!quickReveal) return;
-        const neighbours = this.getNeighbours();
-        //const neighbourCount = ;
-        //const flagged = ;
-        //console.log(flagged);
-        if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){
-            neighbour.reveal();
-        });
+        if(quickReveal){
+            const neighbours = this.getNeighbours();
+            if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){neighbour.reveal()});
+        }
     }
 }
-
-// Tile.prototype.disable = Tile.prototype.toggleDisabled.bind(this, false);
-// Tile.prototype.enable = Tile.prototype.toggleDisabled.bind(this, true);
 
 form.appendChild(table);
 for (let y = 0; y < height; y++) {
@@ -211,23 +175,14 @@ for (let y = 0; y < height; y++) {
 document.ondblclick = quickRevealEvent;
 body.ondblclick = quickRevealEvent;
 
-//document.postMessage()
 
 const messenger = new Messenger;
-//const document.body.getElementsByTagName("table")[0]
 messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight})
 
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX, ev.clientY);
     const tile = lineartiles[parseInt(element.firstChild.id || element.id)];
     if(tile && tile.flagged!=1) tile.quickReveal();
-}
-
-{{{{{{{[[[]]]}}}}}}
-{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{
-[{e:{[{[{[{[{[{[{[[[[[[[[{[{[{[{[{[{}]:[]}]:[]}]:[]}]:[]}]:[]}]]]]]]]]:[]}]:[]}]:[]}]:[]}]:[]}]:[]}]:[]}}]
-}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
-{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 }
 
 document.onmouseup = function(ev){

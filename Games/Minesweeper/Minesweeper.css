@@ -131,3 +131,7 @@ section, button, articlen button {
 body, section, article, button{
     background-color: lightgray;
 }
+
+output{
+    color: red;
+}

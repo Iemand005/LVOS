@@ -1,0 +1,27 @@
+
+div.segment{
+    width: 72px;
+    border-color: black;
+    border-width: 10px;
+    border-style: solid;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-top-color: transparent;
+}
+
+div.segment:after{
+    content: "";
+    height: 0px;
+    width: inherit;
+    /* background: orange; */
+    position: absolute;
+    display: block;
+    margin-left: -10px;
+    margin-top: 10px;
+    /* border-top: inherit; */
+    border: inherit;
+    border-bottom: 0;
+    border-top-color: black;
+    /* border-right: aliceblue solid 10px; */
+    /* border-left: aliceblue solid 10px;
+}
