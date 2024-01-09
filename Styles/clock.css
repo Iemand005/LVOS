@@ -45,3 +45,12 @@ div.segmenty:after{
     border-left-color: black;
     border-right-color: transparent;
 }
+
+div.segmentr{
+    margin-left: 60px;
+    margin-top: -70px;
+}
+
+div.segmenth{
+    margin-top: -20px;
+}
