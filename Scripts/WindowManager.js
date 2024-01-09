@@ -175,7 +175,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
 Dialog.prototype = {
     get isOpen(){ return this.target.hasAttribute("open") },
-    set isOpen(force){ this.target.toggleAttribute("open", force), saveWindowState() },
+    set isOpen(force){ this.target.toggleAttribute("open", force)/* , saveWindowState() */ },
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
     getContent: function(){ return this.target.getElementsByTagName("content")[0] },
@@ -185,7 +185,8 @@ Dialog.prototype = {
     getBody: function(){ return this.content.children[1] },
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
     getId: function(){ return this.target.getAttribute("id") },
-    open: function(options){ this.isOpen = true },
+    toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined) },
+    open: function(){ return saveWindowState(), this.isOpen = true },
     openUrl: function(url){
         console.log("this should be a lnik!", url);
         const frameUrl = new URL(this.frame.src);
@@ -448,7 +449,7 @@ function synchroniseWindowState(window){
     if(window.y) window.target.style.top = toPixels(window.y);
     if(window.width) window.target.style.width = toPixels(window.width);
     if(window.height) window.target.style.height = toPixels(window.height);
-    window.target.toggleAttribute("open", window.isOpen);
+    //window.target.toggleAttribute("open", window.isOpen);
     console.log(window.isOpen)
 }
 
@@ -476,10 +477,12 @@ function collectEssentialWindowData(target, source){
 }
 
 function saveWindowState(){
+    console.warn("SAVING!")
     if(canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
         localStorage.setItem("windowState", JSON.stringify(windowState));
+        console.log(windowState)
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch(exception) {
         console.error(exception);
@@ -547,6 +550,10 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
         else removeComments(child);
     });
     return element;
+}
+
+function toggleCharms(force){
+    document.getElementsByTagName("aside")[0].classList.toggle("open", force);
 }
 
 function injectApplication(application){

@@ -160,6 +160,11 @@ const applications = [
         title: "Video",
         id: "video",
         src: "./Applications/Video/index.html",
+    },
+    {
+        title: "Cover Flow",
+        id: "coverflow",
+        src: "./Applications/Coverflow/Coverflow.html",
     }
 ]
 

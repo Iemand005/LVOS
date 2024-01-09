@@ -149,8 +149,9 @@ aside#charms{
     top: 0;
     right: -300px;
     /* transition: all 1s ease-in-out; */
-    transition: all 400ms cubic-bezier(0.36, 0.15, 0.22, 0.95);
-    transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1);
+    /* transition: all 400ms cubic-bezier(0.36, 0.15, 0.22, 0.95); */
+    /* transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1); */
+    animation: charmsclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
     background-color: green;
 /* /    opacity: 1; */
     width: 300px;
@@ -158,13 +159,14 @@ aside#charms{
 }
 
 aside#charms.open{
+    animation: sesameopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
     /* animation: none; */
 
     /* transition: all 1s ease-in-out; */
 
 
     /* background-color: green; */
-    right: 0;
+    /* right: 0; */
 
 }
 
@@ -185,6 +187,26 @@ aside#charms.open{
         opacity: 1 !important;
     }
 }
+
+@keyframes sesameopen{
+    from{
+        right: -300px;
+    }
+    to{
+        right: 0px;
+    }
+}
+
+@keyframes charmsclose{
+    from{
+        right: 0px;
+    }
+    to{
+        display: none;
+        right: -300px;
+    }
+}
+
 
 @keyframes metroflip{
     from{

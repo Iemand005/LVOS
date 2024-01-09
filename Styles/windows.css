@@ -11,6 +11,10 @@ html, body{
     overflow: hidden;
 }
 
+body>header, body>footer, header.hidden{
+    display: none;
+}
+
 body{
     pointer-events: none;
     /* transform: rotateY(180deg); */
