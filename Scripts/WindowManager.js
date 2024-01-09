@@ -30,7 +30,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(!object) return;
     const dialog = this;
 
-
     this.messenger = new Messenger();
     const types = this.messenger.types;
 
@@ -81,6 +80,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
+    //this.open = function(body){ return console.log(body), this.getBody().appendChild(body), this.target.createAttribute("open") },
 
     window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
         const message = JSON.parse(ev.data);
@@ -283,7 +283,14 @@ let topZ = 100;
 let bodyCrawler = new OSDocumentCrawler(document);
 
 function flip(enable){
-    const flipped = bodyCrawler.getDesktop().toggleAttribute("flipped", enable);
+    flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
+    // const window = windows[activeWindow] || windows[0];
+    // if(flipped) exportWindowBodyToMetro(window);
+    // else retrieveWindowBodyFromMetro(window);
+    // return flipped;
+}
+
+function flipHandler(flipped){
     const window = windows[activeWindow] || windows[0];
     if(flipped) exportWindowBodyToMetro(window);
     else retrieveWindowBodyFromMetro(window);
@@ -293,21 +300,21 @@ function flip(enable){
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
     document.getElementById("desktop").ontransitionend  = function(){
-        console.log("you've flipped!")
+        ///console.log("you've flipped!")
         if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-            console.log("eyes")
-            if(!flipped){ flipped = true;
+            //console.log("eyes")
+            if(!flipped){flipHandler( flipped = true)
             console.log("I s zwear we are flip now and oly once! kanobi")
 
 
             }
         } else {
             if(flipped) {
-                flipped = false;
+                flipHandler( flipped = false)
                 console.log("terug naar garkiv your assbit");
             }
             
-            console.log("nonotoon")
+           // console.log("nonotoon")
         }
     }
     //document.getElementById("desktop").onanimationend  = function(){console.log("you've maybe!")}
@@ -501,9 +508,10 @@ function exportWindowBodyToMetro(window){
     }
 }
 
-function retrieveWindowBodyFromMetro(window){
+function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
-    if (window && metro) window.open(metroBody);
+    console.log("knars ar", dialog, metroBody)
+    if (dialog && metro) dialog.open(metroBody);
 }
 
 function getDialogTemplate(){
