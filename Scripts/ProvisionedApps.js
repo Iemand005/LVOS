@@ -26,10 +26,10 @@ browserform.addEventListener("submit", function(event){
         //let ai = 
         console.log(url, url.hostname)
         if(url.hostname.indexOf("youtube")!=-1) {
-            console.log("yoututbe!");
-            if(window.location.pathname === "/watch"){
+            console.log("yoututbe!", url.pathname);
+            if(url.pathname === "/watch"){
                 console.log("wanna watch??");
-                windows["video"].open(url.href);
+                windows["video"].openUrl(url.href);
             }
         }
 

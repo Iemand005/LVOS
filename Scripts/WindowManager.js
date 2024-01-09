@@ -28,7 +28,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
      */
 
     if(!object) return;
-    const dialog = this;
+    let dialog = this;
 
     this.messenger = new Messenger();
     const types = this.messenger.types;
@@ -103,9 +103,13 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     this.button = document.createElement("button");
     this.button.innerText = this.title;
-    this.button.onclick = funtion(){
-        dialog.open();
-    }//dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
+    
+    dialog = this;
+    this.button.addEventListener("click", function(){
+        console.log(this, dialog)
+        dialog.target.createAttribute("open")
+        //dialog.open();
+    });//dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
     document.getElementById("applist").appendChild(this.button);
 
     this.verifyEjectCapability = function(){
@@ -183,6 +187,12 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 }
 
 Dialog.prototype = {
+    __proto__: {
+        open: function(options){
+            if(options) console.log("anjetta", options);
+            return this.target.createAttribute("open")
+        },
+    },
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
     getContent: function(){ return this.target.getElementsByTagName("content")[0] },
@@ -195,6 +205,17 @@ Dialog.prototype = {
     open: function(options){
         //if(options) console.log("ankrosja", options);
         return this.target.createAttribute("open")
+    },
+    open2: function(options){
+        return this.target.createAttribute("open")
+    },
+    openUrl: function(url){
+        console.log("this should be a lnik!", url);
+        const frameUrl = new URL(this.frame.src);
+        frameUrl.searchParams.set("url", url);
+        this.frame.src = frameUrl.href;
+        console.log(this)
+        this.open2();
     },
     close: function(){ return this.target.removeAttribute("open") },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
