@@ -24,6 +24,13 @@ form{
     flex-wrap: nowrap;
 }
 
+#console form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
 table{
     width: 100%;
 }

@@ -46,20 +46,24 @@ DisplayBuilder.prototype = {
         });
     },
     resize: function(size, fat){
-        //if(size) this.size = size;
-        //if(fat) this.fat = fat;
-        const style = element.style;
-        document.querySelectorAll("div.segmentdisplay > div.segmentr").forEach(function(element){
-            element.style.marginLeft = size + fat*2 + "px";
-            element.style.marginTop = -(size + fat*2) + "px";
-            element.style.marginBottom = fat + "px";
-            console.log(this, element)
-        });
+
         document.querySelectorAll("div.segmentdisplay > div").forEach(function(element){
             element.style.borderWidth = fat + "px";
         });
         document.querySelectorAll("div.segmentdisplay > div.segmentx").forEach(function(element){
             element.style.marginLeft = fat + "px";
+            element.style.width = size + "px";
+        });
+
+        document.querySelectorAll("div.segmentdisplay > div.segmenty").forEach(function(element){
+            //element.style.marginLeft = fat + "px";
+            element.style.height = size + "px";
+        });
+        document.querySelectorAll("div.segmentdisplay > div.segmentr").forEach(function(element){
+            element.style.marginLeft = size + fat*2 + "px";
+            element.style.marginTop = -(size + fat*2) + "px";
+            element.style.marginBottom = fat + "px";
+            console.log(this, element)
         });
     }
 }
