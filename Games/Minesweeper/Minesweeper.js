@@ -225,7 +225,18 @@ function countRemainingFields(){
     }).length;
 }
 
-const countDisplay = new DisplayBuilder();
+function buildDisplays(){
+    // const countDisplay1 = new DisplayBuilder();
+    // const countDisplay2 = new DisplayBuilder();
+    // const countDisplay3 = new DisplayBuilder();
+    const countDisplays = [new DisplayBuilder, new DisplayBuilder, new DisplayBuilder];
+    countDisplays.forEach(function(countDisplay){
+        document.getElementsByTagName("output")[0].appendChild(countDisplay.build());
+    })
+}
+
+buildDisplays();
+
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333

@@ -1,12 +1,54 @@
 
+
 div.segmentdisplay{
-    border-color: black;
+    width: 10px;
+    height: 10px;
+    border-color: red;
+    margin-right: 16px;
+    margin-right: 13px;
+    margin-left: 3px;
+    display: inline-block;
 }
+
+/* Scaling is done here, the values can be adjusted to make displays of specific sizes. The JavaScript scaling function doesn't work yet because I don't know how to apply it to all the after pseudo elements yet. */
+
+div.segmentdisplay > div{
+    border-width: 3px;
+}
+
+div.segmentdisplay > div.segmentx{
+    margin-left: 3px;
+}
+
+div.segmentdisplay > div.segmentx:after{
+    margin-top: 3px;
+    margin-left: -3px;
+    border-top-width: 3px;
+}
+
+div.segmentdisplay > div.segmenty:after{
+    margin-top: -3px;
+    margin-left: 3px;
+    border-left-width: 3px;
+}
+
+div.segmentdisplay > div.segmentr{
+    margin-left: 16px; /* Width plus 2 times the weight */
+    margin-top: -16px; /* Negative height plus 2 times the weight */
+}
+
+div.segmentdisplay > div.segmenth{
+    margin-top: -3px; /* 2 times the weight */
+}
+
+/* Fixed styles, these don't affect the clock for customisation but are required for it to look right so we don't need to modify these. */
 
 div.segmentdisplay > div{
     display: block;
     border-style: solid;
     border-color: inherit;
+    width: inherit;
+    height: inherit;
 }
 
 div.segmentdisplay > div:after{
@@ -39,38 +81,4 @@ div.segmentdisplay > div.segmenty{
 
 div.segmentdisplay > div.segmenty:after{
     border-right-width: 0 !important;
-}
-
-/* Scaling is done here, the values can be adjusted to make displays of specific sizes. The JavaScript scaling function doesn't work yet because I don't know how to apply it to all the after pseudo elements yet. */
-
-div.segmentdisplay > div{
-    width: 50px;
-    height: 50px;
-    border-width: 10px;
-}
-
-div.segmentdisplay > div.segmentx{
-    margin-left: 10px;
-}
-
-div.segmentdisplay > div.segmentx:after{
-    margin-left: -10px;
-    margin-top: 10px;
-    border-top-width: 10px;
-}
-
-div.segmentdisplay > div.segmenty:after{
-    margin-left: 10px;
-    margin-top: -10px;
-    border-left-width: 10px;
-}
-
-div.segmentdisplay > div.segmentr{
-    margin-left: 70px;
-    margin-top: -70px;
-    margin-bottom: 10px;
-}
-
-div.segmentdisplay > div.segmenth{
-    margin-top: -20px;
 }

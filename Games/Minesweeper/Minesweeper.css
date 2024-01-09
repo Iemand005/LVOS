@@ -64,6 +64,8 @@ article {
     width: 100%;
     height: 100px;
     display: flex;
+    display: flex;
+    justify-content: space-between;
     box-sizing: border-box;
     margin-bottom: 10px;
 }
@@ -134,4 +136,7 @@ body, section, article, button{
 
 output{
     color: red;
+    background-color: #3e0000;
+    height: 46px;
+    width: 80px;
 }
