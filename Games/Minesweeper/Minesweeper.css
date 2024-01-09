@@ -143,6 +143,14 @@ body, section, article, button{
 
 output{
     color: red;
+    text-align: center;
+    /* display: flex; */
+    /* align-content: center; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    vertical-align: center;
+    line-height: 46px;
+
     background-color: #3e0000;
     background: radial-gradient( circle at 2px 2px, #000 1px, #3e0000 2px ) 0 0 / 4px 5px;
     background: radial-gradient( circle at 2px 2px, #640000 0px, #3e0000 2px ) 0 0 / 2px 2px;

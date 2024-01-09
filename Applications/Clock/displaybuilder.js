@@ -12,12 +12,12 @@ function DisplayBuilder(number, index, singular){
 }
 
 function tokenizeNumber(number){
-    //console.log(number)
+    console.log(number)
     //if(number>0)
 
-    return (typeof number ==='number')? (number>=0?[Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
+    return (typeof number ==='number') && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
     ://else
-    [number<=-1000?Math.ceil((number % 1000)/100):10, number<-1?10:Math.ceil((number % 100) / 10), Math.ceil(number % 10)])
+    [number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)])
     :[10, 10, 10];
     //return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
@@ -30,7 +30,7 @@ displayNumbers = [
     [false, true, true, true, false, true, false],
     [true, true, false, true, false, true, true],
     [true, true, false, true, true, true, true],
-    [true, true, true, false, false, true, false],
+    [true, false, true, false, false, true, false],
     [true, true, true, true, true, true, true],
     [true, true, true, true, false, true, true],
     [false, false, false, true, false, false, false],
@@ -57,7 +57,7 @@ DisplayBuilder.prototype = {
         this.segments.forEach(function(segment, index){
             //console.log(number, number*-1)
             //console.log(number>=0 && number<=10)
-            if(!displayNumbers[number>0 && number<10?number: 0][index]) segment.style.opacity = "0.1";
+            if(!displayNumbers[number>=0 && number<=11?number: 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
     },
@@ -100,7 +100,7 @@ MultiDigitDisplayBuilder.prototype = {
     },
     update: function(number){
         //console.log("9".repeat(this.digits), this.digits)
-        const max = Number("9".repeat(this.digits));
+        const max = "9".repeat(this.digits);
         this.displays.forEach(function(display, index){
             display.update(max>number?tokenizeNumber(number)[index]:9);
         });
