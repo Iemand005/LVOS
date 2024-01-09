@@ -43,14 +43,9 @@ DisplayBuilder.prototype = {
         return display;
     },
     update: function(number){
-        //let i = 0;
-        //number = tokenizeNumber(number)[this.index];
         this.segments.forEach(function(segment, index){
-            //i++
-            console.log(/* displayNumbers, */ number, this.index, tokenizeNumber(number)[this.index])
-            if(!displayNumbers[number || 0][index]) {
-                segment.style.opacity = "0.1";
-            } else segment.style.opacity = "1";
+            if(!displayNumbers[number || 0][index]) segment.style.opacity = "0.1";
+            else segment.style.opacity = "1";
         });
     },
     resize: function(size, fat){

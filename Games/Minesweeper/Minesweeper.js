@@ -24,6 +24,7 @@ const tiles = new Array(height);
 const lineartiles = new Array(height*width);
 const isGameOver = false;
 let mousedown = false;
+let gameStarted = false;
 
 function Tile(button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
@@ -39,6 +40,7 @@ function Tile(button, x, y, mine){
 Tile.prototype = {
     reveal: function(){
         if(this.revealed) return 0;
+        if(!gameStarted) gameStarted = true, activateTimer();
         this.revealed = true;
         const neighbours = this.getNeighbours()
         const neighbourCount = this.countNeighbouringMines();
@@ -225,27 +227,19 @@ function countRemainingFields(){
     }).length;
 }
 
-function buildDisplays(){
-    // const countDisplay1 = new DisplayBuilder();
-    // const countDisplay2 = new DisplayBuilder();
-    // const countDisplay3 = new DisplayBuilder();
-    const countDisplays = [new DisplayBuilder(0, 0), new DisplayBuilder(0, 1), new DisplayBuilder(0, 2)];
-    countDisplays.forEach(function(countDisplay){
-        document.getElementsByTagName("output")[0].appendChild(countDisplay.build());
-    });
-
-    const timeDisplays = [new DisplayBuilder(0, 0), new DisplayBuilder(0, 1), new DisplayBuilder(0, 2)];
-    timeDisplays.forEach(function(timeDisplays){
-        document.getElementsByTagName("output")[1].appendChild(timeDisplays.build());
-    });
-    return [countDisplays, timeDisplays];
-}
-
-//const displays = buildDisplays();
 const displays = [new MultiDigitDisplayBuilder(3, 3), new MultiDigitDisplayBuilder(3, 0)];
 displays[0].build(document.getElementsByTagName("output")[0]);
 displays[1].build(document.getElementsByTagName("output")[1]);
+displays[1].update(0)
 
+function activateTimer(){
+    let timer = 0;
+    displays[1].update(timer++)
+    window.setInterval(function(){displays[1].update(timer++)}, 1000);
+    //window.setInterval(displays[1].update.bind(displays[1], timer), 1000);
+}
+
+//activateTimer();
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333
