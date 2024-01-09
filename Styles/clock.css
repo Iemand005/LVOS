@@ -1,7 +1,9 @@
 
-div.segment{
+div.segmentx{
+    height: 0px;
     width: 72px;
     border-color: black;
+    margin-left: 10px;
     border-width: 10px;
     border-style: solid;
     border-right-color: transparent;
@@ -9,19 +11,42 @@ div.segment{
     border-top-color: transparent;
 }
 
-div.segment:after{
+div.segmentx:after{
     content: "";
-    height: 0px;
+    height: inherit;
     width: inherit;
-    /* background: orange; */
     position: absolute;
     display: block;
     margin-left: -10px;
     margin-top: 10px;
-    /* border-top: inherit; */
     border: inherit;
     border-bottom: 0;
     border-top-color: black;
-    /* border-right: aliceblue solid 10px; */
-    /* border-left: aliceblue solid 10px;
+}
+
+div.segmenty{
+    margin-left: -10px;
+    height: 72px;
+    width: 0px;
+    border-color: black;
+    border-width: 10px;
+    border-style: solid;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
+    border-left-color: transparent;
+}
+
+div.segmenty:after{
+    content: "";
+    height: inherit;
+    width: inherit;
+    position: absolute;
+    display: block;
+    margin-left: 10px;
+    margin-top: -10px;
+    border: inherit;
+    /* border-bottom: 0; */
+    border-left-color: black;
+    /* border-left-color: black; */
+    border-right-color: transparent;
 }
