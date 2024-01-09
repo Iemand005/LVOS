@@ -1,10 +1,15 @@
 
-function DisplayBuilder(number){
+function DisplayBuilder(number, index){
     this.display;
+    this.index = index || 0;
     this.number= number || 0;
     this.segments = [];
     this.size = 50;
     this.fat = 10;
+}
+
+function tokenizeNumber(number){
+    return [Math.floor(139 % 10), Math.floor((160 % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
 
 displayNumbers = [

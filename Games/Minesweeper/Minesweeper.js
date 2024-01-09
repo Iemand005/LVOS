@@ -232,7 +232,12 @@ function buildDisplays(){
     const countDisplays = [new DisplayBuilder, new DisplayBuilder, new DisplayBuilder];
     countDisplays.forEach(function(countDisplay){
         document.getElementsByTagName("output")[0].appendChild(countDisplay.build());
-    })
+    });
+
+    const timeDisplays = [new DisplayBuilder, new DisplayBuilder, new DisplayBuilder];
+    countDisplays.forEach(function(timeDisplays){
+        document.getElementsByTagName("output")[1].appendChild(timeDisplays.build());
+    });
 }
 
 buildDisplays();
