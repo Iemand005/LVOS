@@ -29,7 +29,7 @@ browserform.addEventListener("submit", function(event){
             console.log("yoututbe!");
             if(window.location.pathname === "/watch"){
                 console.log("wanna watch??");
-                windows["video"]
+                windows["video"].open(url.href);
             }
         }
 

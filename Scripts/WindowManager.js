@@ -80,7 +80,14 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
-    //this.open = function(body){ return console.log(body), this.getBody().appendChild(body), this.target.createAttribute("open") },
+    /*this.open = function(options){
+        if(typeof options == 'string'){
+            console.log("this should be a lnik!", options);
+            const frameUrl = new URL(this.frame.src);
+            frameUrl.searchParams.set("url", options);
+            this.frame.src = frameUrl.href;
+        }// else return console.log(options), this.getBody().appendChild(options), this.target.createAttribute("open")
+    }*/
 
     window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
         const message = JSON.parse(ev.data);
@@ -96,7 +103,9 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     this.button = document.createElement("button");
     this.button.innerText = this.title;
-    this.button.onclick = dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
+    this.button.onclick = funtion(){
+        dialog.open();
+    }//dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
     document.getElementById("applist").appendChild(this.button);
 
     this.verifyEjectCapability = function(){
@@ -164,7 +173,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     const buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function(event){
         const dialog = getEventDialog(event);
-        dialog.open = false;
+        //dialog.open = false;
         dialog.removeAttribute("open");
     });
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
@@ -183,7 +192,10 @@ Dialog.prototype = {
     getBody: function(){ return this.content.children[1] },
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
     getId: function(){ return this.target.getAttribute("id") },
-    open: function(){ return this.target.createAttribute("open") },
+    open: function(options){
+        //if(options) console.log("ankrosja", options);
+        return this.target.createAttribute("open")
+    },
     close: function(){ return this.target.removeAttribute("open") },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
