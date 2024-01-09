@@ -74,6 +74,8 @@ article {
 
 output {
     width: 100%;
+    border-style: solid;
+    border-width: 2px;
 }
 
 button.n0{
@@ -121,7 +123,7 @@ article, section, table, button{
     border-width: 3px;
 }
 
-button:active:not(:disabled):not(.mine), button.active, table, article{
+button:active:not(:disabled):not(.mine), button.active, table, article, output{
     border-top-color: darkgray;
     border-left-color: darkgray;
     border-right-color: rgb(231, 231, 231);

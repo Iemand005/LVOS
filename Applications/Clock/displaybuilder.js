@@ -10,6 +10,7 @@ function DisplayBuilder(number, index){
 }
 
 function tokenizeNumber(number){
+    return [Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
     return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
 
@@ -47,7 +48,7 @@ DisplayBuilder.prototype = {
         this.segments.forEach(function(segment, index){
             //i++
             console.log(/* displayNumbers, */ number, this.index, tokenizeNumber(number)[this.index])
-            if(!displayNumbers[tokenizeNumber(number)[this.index] || 0][index]) {
+            if(!displayNumbers[number || 0][index]) {
                 segment.style.opacity = "0.1";
             } else segment.style.opacity = "1";
         });
