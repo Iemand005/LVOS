@@ -42,3 +42,7 @@ table > tr:nth-child(odd){
 table > tr:nth-child(even){
     background-color: rgba(128, 128, 128, 0.123);
 }
+
+input{
+    pointer-events: auto !important;
+}

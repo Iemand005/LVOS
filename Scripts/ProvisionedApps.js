@@ -3,15 +3,41 @@
 // Last modified: 8/1/2024 - added back velocity demo, code cleanup and bug fix.
 
 'use strict';
+
 const browser = document.getElementById("browser");
 const browserform = document.getElementById("browserform");
 const browserframe = browser.getElementsByTagName("iframe")[0];
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
-    console.log("The browser is navigating to " + event.target.address.value);
-    browserframe.src = event.target.address.value;
-    const links = browserframe.document.getElementsByTagName("a");
-    for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
+    let url = event.target.address.value;
+
+    try{
+        console.log("The browser is navigating to '" + url + "'");
+        if(!/^https?:\/\//i.test(url)) url = "https://" + url; // Sanitising the url.
+
+        var http = new XMLHttpRequest(); // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
+        http.open('HEAD', url, false);
+        http.send();
+
+        browserframe.src = url;
+        // const links = browserframe.document.getElementsByTagName("a");
+        // for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
+    } catch (e) {
+        //let ai = 
+        console.error(e.code);
+        url = new URL("./Applications/Error/error.html", window.location.href);
+        url.searchParams.set("errormessage", e.message);
+        url.searchParams.set("code", e.code);
+        if(e.code === 19) { // Error handling for other potential problems can be done here!
+            //url = new URL("./Applications/Error/error.html", window.location.href);
+            // url.searchParams.set("message", "pkake");
+            url.searchParams.set("message", "Some websites like the ones hosted by Google do not allow loading their website inside another website for security reasons.");
+            //url.searchParams.set("code", e.code);
+            //browserframe.src = "./Applications/Error/error.html?message=something went wrong!"
+            browserframe.src = url;
+            console.log("Blocked by CORS! Websites like the ones from Google don't allow insertion in an iframe if not embedded!")
+        }
+    }
 });
 
 function initializeConsoleApplication(){
