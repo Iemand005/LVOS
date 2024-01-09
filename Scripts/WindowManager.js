@@ -58,7 +58,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.height = 0;
     this.minWidth = 100;
     this.minHeight = 100;
-    this.isOpen = false;
+    //this.isOpen = false;
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
@@ -122,7 +122,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.toggleFullButton(true);
     if(this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.synchronise = synchroniseWindowState;
+    this.synchronise = synchroniseWindowState.bind(this);
 
     this.exchangeWindowMouseUpEvent = function(){
         this.messageFrame({difference:new Vector});
@@ -187,6 +187,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 }
 
 Dialog.prototype = {
+    get isOpen(){ return this.target.hasAttribute("open") },
+    set isOpen(force){ this.target.toggleAttribute("open", force), saveWindowState() },
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
     getContent: function(){ return this.target.getElementsByTagName("content")[0] },
@@ -196,13 +198,7 @@ Dialog.prototype = {
     getBody: function(){ return this.content.children[1] },
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
     getId: function(){ return this.target.getAttribute("id") },
-    open: function(options){ // I can't use the word "open" for this function. I don't know why! The prototype gets overwritten with an instance specific "undefined".
-        //if(options) console.log("ankrosja", options);
-        return this.target.createAttribute("open")
-    },
-    open2: function(options){
-        return this.target.createAttribute("open")
-    },
+    open: function(options){ this.isOpen = true },
     openUrl: function(url){
         console.log("this should be a lnik!", url);
         const frameUrl = new URL(this.frame.src);
@@ -211,7 +207,7 @@ Dialog.prototype = {
         console.log(this)
         this.launch();
     },
-    close: function(){ return this.target.removeAttribute("open") },
+    close: function(){ return this.isOpen = false/* this.target.removeAttribute("open")*/ },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
     getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
@@ -465,7 +461,8 @@ function synchroniseWindowState(window){
     if(window.y) window.target.style.top = toPixels(window.y);
     if(window.width) window.target.style.width = toPixels(window.width);
     if(window.height) window.target.style.height = toPixels(window.height);
-    window.target.toggleAttribute("open", window.open);
+    window.target.toggleAttribute("open", window.isOpen);
+    console.log(window.isOpen)
 }
 
 // Onderdeel van de aller eerste window move event handler.
@@ -574,7 +571,6 @@ function injectApplications(applications){
     applications.forEach(function(application){ windows[demo.id] = new Dialog(application) }); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
     loadWindowState();
 }
-
 
 initializeWindows(windows);
 
