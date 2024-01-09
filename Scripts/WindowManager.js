@@ -291,14 +291,7 @@ function flip(enable){
 
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
-    document.onanimationend = function(){console.log("meybe something interesting happend")}
-ƒ (){console.log("meybe something interesting happend")}
-ProvisionedApps.js:47 anker
-ProvisionedApps.js:47 meybe something interesting happend
-document.ontransitionend  = function(){console.log("meybe something interesting happend again")}
-ƒ (){console.log("meybe something interesting happend again")}
-57ProvisionedApps.js:47 meybe something interesting happend again
-document.getElementById("desktop").ontransitionend  = function(){console.log("you've flipped!")}
+    document.getElementById("desktop").ontransitionend  = function(){console.log("you've flipped!")}
 
     //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
