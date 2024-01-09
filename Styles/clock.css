@@ -1,5 +1,5 @@
 
-div.segment{
+div.segmentdisplay > div{
     width: 50px;
     height: 50px;
     border-color: black;
@@ -8,7 +8,7 @@ div.segment{
     display: block;
 }
 
-div.segment:after{
+div.segmentdisplay > div:after{
     content: "";
     position: absolute;
     height: inherit;
@@ -16,7 +16,7 @@ div.segment:after{
     border: inherit;
 }
 
-div.segmentx{
+div.segmentdisplay > div.segmentx{
     height: 0px;
     margin-left: 10px;
     border-right-color: transparent;
@@ -24,7 +24,7 @@ div.segmentx{
     border-top-color: transparent;
 }
 
-div.segmenty{
+div.segmentdisplay > div.segmenty{
     width: 0px;
     margin-left: -10px;
     border-bottom-color: transparent;
@@ -32,25 +32,25 @@ div.segmenty{
     border-top-color: transparent;
 }
 
-div.segmentx:after{
+div.segmentdisplay > div.segmentx:after{
     margin-left: -10px;
     margin-top: 10px;
     border-bottom: 0;
     border-top-color: black;
 }
 
-div.segmenty:after{
+div.segmentdisplay > div.segmenty:after{
     margin-left: 10px;
     margin-top: -10px;
     border-left-color: black;
     border-right-color: transparent;
 }
 
-div.segmentr{
+div.segmentdisplay > div.segmentr{
     margin-left: 60px;
     margin-top: -70px;
 }
 
-div.segmenth{
+div.segmentdisplay > div.segmenth{
     margin-top: -20px;
 }
