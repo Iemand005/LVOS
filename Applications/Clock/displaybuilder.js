@@ -3,6 +3,8 @@ function DisplayBuilder(number){
     this.display;
     this.number= number || 0;
     this.segments = [];
+    this.size = 50;
+    this.fat = 10;
 }
 
 displayNumbers = [
@@ -39,8 +41,25 @@ DisplayBuilder.prototype = {
             //i++
             console.log(displayNumbers, this.number)
             if(!displayNumbers[number || 0][index]) {
-                segment.style.opacity = "0";
+                segment.style.opacity = "0.1";
             } else segment.style.opacity = "1";
+        });
+    },
+    resize: function(size, fat){
+        //if(size) this.size = size;
+        //if(fat) this.fat = fat;
+        const style = element.style;
+        document.querySelectorAll("div.segmentdisplay > div.segmentr").forEach(function(element){
+            element.style.marginLeft = size + fat*2 + "px";
+            element.style.marginTop = -(size + fat*2) + "px";
+            element.style.marginBottom = fat + "px";
+            console.log(this, element)
+        });
+        document.querySelectorAll("div.segmentdisplay > div").forEach(function(element){
+            element.style.borderWidth = fat + "px";
+        });
+        document.querySelectorAll("div.segmentdisplay > div.segmentx").forEach(function(element){
+            element.style.marginLeft = fat + "px";
         });
     }
 }
