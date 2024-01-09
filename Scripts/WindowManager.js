@@ -163,9 +163,9 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     const buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function(event){
-        const dialog = getEventDialog(event);
-        //dialog.open = false;
-        dialog.removeAttribute("open");
+        //const dialog = getEventDialog(event);
+        dialog.close();
+        //console.log("MER" + dialog.isOpen)
     });
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
     this.synchronise();
@@ -186,7 +186,7 @@ Dialog.prototype = {
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
     getId: function(){ return this.target.getAttribute("id") },
     toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined) },
-    open: function(){ return saveWindowState(), this.isOpen = true },
+    open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen }, // Open, save, return if it's opened or not.
     openUrl: function(url){
         console.log("this should be a lnik!", url);
         const frameUrl = new URL(this.frame.src);
@@ -195,7 +195,7 @@ Dialog.prototype = {
         console.log(this)
         this.launch();
     },
-    close: function(){ return this.isOpen = false/* this.target.removeAttribute("open")*/ },
+    close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/ },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
     getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
