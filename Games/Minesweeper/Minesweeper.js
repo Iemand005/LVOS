@@ -229,18 +229,22 @@ function buildDisplays(){
     // const countDisplay1 = new DisplayBuilder();
     // const countDisplay2 = new DisplayBuilder();
     // const countDisplay3 = new DisplayBuilder();
-    const countDisplays = [new DisplayBuilder, new DisplayBuilder, new DisplayBuilder];
+    const countDisplays = [new DisplayBuilder(0, 0), new DisplayBuilder(0, 1), new DisplayBuilder(0, 2)];
     countDisplays.forEach(function(countDisplay){
         document.getElementsByTagName("output")[0].appendChild(countDisplay.build());
     });
 
-    const timeDisplays = [new DisplayBuilder, new DisplayBuilder, new DisplayBuilder];
-    countDisplays.forEach(function(timeDisplays){
+    const timeDisplays = [new DisplayBuilder(0, 0), new DisplayBuilder(0, 1), new DisplayBuilder(0, 2)];
+    timeDisplays.forEach(function(timeDisplays){
         document.getElementsByTagName("output")[1].appendChild(timeDisplays.build());
     });
+    return [countDisplays, timeDisplays];
 }
 
-buildDisplays();
+//const displays = buildDisplays();
+const displays = [new MultiDigitDisplayBuilder(3, 3), new MultiDigitDisplayBuilder(3, 0)];
+displays[0].build(document.getElementsByTagName("output")[0]);
+displays[1].build(document.getElementsByTagName("output")[1]);
 
 
 /**\

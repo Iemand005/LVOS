@@ -2,6 +2,7 @@
 function DisplayBuilder(number, index){
     this.display;
     this.index = index || 0;
+    console.log(this.index)
     this.number= number || 0;
     this.segments = [];
     this.size = 50;
@@ -9,7 +10,7 @@ function DisplayBuilder(number, index){
 }
 
 function tokenizeNumber(number){
-    return [Math.floor(139 % 10), Math.floor((160 % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
+    return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
 
 displayNumbers = [
@@ -42,10 +43,11 @@ DisplayBuilder.prototype = {
     },
     update: function(number){
         //let i = 0;
+        //number = tokenizeNumber(number)[this.index];
         this.segments.forEach(function(segment, index){
             //i++
-            console.log(displayNumbers, this.number)
-            if(!displayNumbers[number || 0][index]) {
+            console.log(/* displayNumbers, */ number, this.index, tokenizeNumber(number)[this.index])
+            if(!displayNumbers[tokenizeNumber(number)[this.index] || 0][index]) {
                 segment.style.opacity = "0.1";
             } else segment.style.opacity = "1";
         });
@@ -69,6 +71,26 @@ DisplayBuilder.prototype = {
             element.style.marginTop = -(size + fat*2) + "px";
             element.style.marginBottom = fat + "px";
             console.log(this, element)
+        });
+    }
+}
+
+function MultiDigitDisplayBuilder(digits, number){
+    this.displays = [];
+    for (let i = 0; i < digits; i++) {
+        this.displays.push(new DisplayBuilder(number, i));
+    }    
+}
+
+MultiDigitDisplayBuilder.prototype = {
+    build: function(target){
+        this.displays.forEach(function(display){
+            target.appendChild(display.build());
+        });
+    },
+    update: function(number){
+        this.displays.forEach(function(display, index){
+            display.update(tokenizeNumber(number)[index]);
         });
     }
 }
