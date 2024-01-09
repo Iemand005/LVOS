@@ -5,17 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Clock</title>
-    <link rel="stylesheet" href="../../Styles/clock.css">
+    <link rel="stylesheet" href="./clock.css">
+    <script src="./displaybuilder.js" defer></script>
+    <script src="./clock.js" defer></script>
 </head>
 <body>
-    <div class="segmentdisplay">
-        <div class="segmentx"></div>
-        <div class="segmenty"></div>
-        <div class="segmenty segmentr"></div>
-        <div class="segmentx segmenth"></div>
-        <div class="segmenty"></div>
-        <div class="segmenty segmentr"></div>
-        <div class="segmentx segmenth"></div>
-    </div>
+    <form>
+        <input type="range" name="size" id="size">
+        <input type="range" name="fat" id="fat">
+    </form>
+    <template>
+        <div class="segmentdisplay">
+            <div class="segmentx"></div>
+            <div class="segmenty"></div>
+            <div class="segmenty segmentr"></div>
+            <div class="segmentx segmenth"></div>
+            <div class="segmenty"></div>
+            <div class="segmenty segmentr"></div>
+            <div class="segmentx segmenth"></div>
+        </div>
+</template>
 </body>
 </html>
