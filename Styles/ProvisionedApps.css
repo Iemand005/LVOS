@@ -6,6 +6,9 @@ dialog#console form > input{
     right: 0;
 }*/
 
+form#applist{
+    flex-wrap: wrap;
+}
 
 form{
     display: flex;
@@ -21,7 +24,7 @@ form{
     flex-direction: row;
     justify-content: space-between;
     height: 2rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 #console form {

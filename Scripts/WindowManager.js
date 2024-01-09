@@ -14,7 +14,7 @@
 
 // Settings
 let blur = false;
-let reflections = false;
+let reflections = true;
 let fasterWindowTracking = false;
 let canSave = true;
 let IE11Booster = true;
@@ -567,6 +567,7 @@ function injectApplications(applications){
 }
 
 initializeWindows(windows);
+toggleReflections(reflections);
 
 /*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):

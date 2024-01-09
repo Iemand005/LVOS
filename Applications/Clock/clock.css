@@ -4,9 +4,6 @@ div.segmentdisplay{
 }
 
 div.segmentdisplay > div{
-    width: 50px;
-    height: 50px;
-    border-width: 10px;
     display: block;
     border-style: solid;
     border-color: inherit;
@@ -23,18 +20,14 @@ div.segmentdisplay > div:after{
 
 div.segmentdisplay > div.segmentx{
     height: 0 !important;
-    margin-left: 10px;
     border-right-color: transparent !important;
     border-left-color: transparent !important;
     border-top-width: 0 !important;
 }
 
 div.segmentdisplay > div.segmentx:after{
-    margin-left: -10px;
-    margin-top: 10px;
     border-bottom: 0 !important;
     border-top-color: inherit;
-    border-top-width: 10px;
 }
 
 div.segmentdisplay > div.segmenty{
@@ -45,10 +38,31 @@ div.segmentdisplay > div.segmenty{
 }
 
 div.segmentdisplay > div.segmenty:after{
+    border-right-width: 0 !important;
+}
+
+/* Scaling is done here, the values can be adjusted to make displays of specific sizes. The JavaScript scaling function doesn't work yet because I don't know how to apply it to all the after pseudo elements yet. */
+
+div.segmentdisplay > div{
+    width: 50px;
+    height: 50px;
+    border-width: 10px;
+}
+
+div.segmentdisplay > div.segmentx{
+    margin-left: 10px;
+}
+
+div.segmentdisplay > div.segmentx:after{
+    margin-left: -10px;
+    margin-top: 10px;
+    border-top-width: 10px;
+}
+
+div.segmentdisplay > div.segmenty:after{
     margin-left: 10px;
     margin-top: -10px;
     border-left-width: 10px;
-    border-right-width: 0 !important;
 }
 
 div.segmentdisplay > div.segmentr{

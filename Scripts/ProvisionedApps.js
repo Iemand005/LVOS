@@ -169,13 +169,7 @@ const applications = [
 ]
 
 const games = [
-    {
-        title: "Minesweeper",
-        id: "minesweeper",
-        src: "./Games/Minesweeper/index.html",
-        fixed: true,
-        scroll: false
-    },
+
     {
         title: "Conway",
         id: "conway",
@@ -188,7 +182,13 @@ const games = [
         src: "./Applications/Velocities/index.html",
         moveEvents: true // This flag enables attaching window movement statistic listener.
     },
-    {}
+    {
+        title: "Minesweeper",
+        id: "minesweeper",
+        src: "./Games/Minesweeper/index.html",
+        fixed: true,
+        scroll: false
+    },
 ]
 
 injectApplications(applications);

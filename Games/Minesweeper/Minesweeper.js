@@ -225,7 +225,7 @@ function countRemainingFields(){
     }).length;
 }
 
-
+const countDisplay = new DisplayBuilder();
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333
