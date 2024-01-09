@@ -24,19 +24,19 @@ div.segmentdisplay > div.segmentx{
     border-top-color: transparent;
 }
 
+div.segmentdisplay > div.segmentx:after{
+    margin-left: -10px;
+    margin-top: 10px;
+    border-bottom: 0;
+    border-top-color: black;
+}
+
 div.segmentdisplay > div.segmenty{
     width: 0px;
     margin-left: -10px;
     border-bottom-color: transparent;
     border-left-color: transparent;
     border-top-color: transparent;
-}
-
-div.segmentdisplay > div.segmentx:after{
-    margin-left: -10px;
-    margin-top: 10px;
-    border-bottom: 0;
-    border-top-color: black;
 }
 
 div.segmentdisplay > div.segmenty:after{
