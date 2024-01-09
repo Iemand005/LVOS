@@ -14,5 +14,9 @@ document.getElementById("size").onchange = function(){
     });
     akka.querySelectorAll("div.segmentx:after").forEach(function(element){
         element.style.borderTopColor = "red";
+        element.style.opacity = "0.3";
+    });
+    akka.querySelectorAll("div.segmentdisplay>div").forEach(function(element){
+        element.style.borderColor = "red";
     });
 }
