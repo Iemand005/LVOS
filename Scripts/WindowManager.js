@@ -187,12 +187,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 }
 
 Dialog.prototype = {
-    __proto__: {
-        open: function(options){
-            if(options) console.log("anjetta", options);
-            return this.target.createAttribute("open")
-        },
-    },
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
     getContent: function(){ return this.target.getElementsByTagName("content")[0] },
@@ -202,7 +196,7 @@ Dialog.prototype = {
     getBody: function(){ return this.content.children[1] },
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
     getId: function(){ return this.target.getAttribute("id") },
-    open: function(options){
+    open: function(options){ // I can't use the word "open" for this function. I don't know why! The prototype gets overwritten with an instance specific "undefined".
         //if(options) console.log("ankrosja", options);
         return this.target.createAttribute("open")
     },
@@ -215,7 +209,7 @@ Dialog.prototype = {
         frameUrl.searchParams.set("url", url);
         this.frame.src = frameUrl.href;
         console.log(this)
-        this.open2();
+        this.launch();
     },
     close: function(){ return this.target.removeAttribute("open") },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
@@ -494,7 +488,7 @@ function toggleBlur(enabled){
 }
 
 function collectEssentialWindowData(target, source){
-    return target.open = source.open, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+    return target.isOpen = source.isOpen, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 function saveWindowState(){
@@ -544,7 +538,7 @@ function exportWindowBodyToMetro(window){
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
     console.log("knars ar", dialog, metroBody)
-    if (dialog && metro) dialog.open(metroBody);
+    if (dialog && metro) dialog.launch(metroBody);
 }
 
 function getDialogTemplate(){
