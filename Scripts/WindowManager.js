@@ -18,6 +18,7 @@ let reflections = false;
 let fasterWindowTracking = false;
 let canSave = true;
 let IE11Booster = true;
+let flipped = false;
 
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
@@ -291,7 +292,25 @@ function flip(enable){
 
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
-    document.getElementById("desktop").ontransitionend  = function(){console.log("you've flipped!")}
+    document.getElementById("desktop").ontransitionend  = function(){
+        console.log("you've flipped!")
+        if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+            console.log("eyes")
+            if(!flipped){ flipped = true;
+            console.log("I s zwear we are flip now and oly once! kanobi")
+
+
+            }
+        } else {
+            if(flipped) {
+                flipped = false;
+                console.log("terug naar garkiv your assbit");
+            }
+            
+            console.log("nonotoon")
+        }
+    }
+    //document.getElementById("desktop").onanimationend  = function(){console.log("you've maybe!")}
 
     //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);

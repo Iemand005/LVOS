@@ -111,11 +111,15 @@ body:not([blur]) dialog > article{
     transition: opacity 50ms ease-out 200ms;
 }
 
-#desktop[flipped]{
+#desktop[flipped]>#metro{
     animation: forwards 1s ease-in flip;
 }
 
-/*
+#desktop[flipped]>#windows{
+    animation: forwards 1s ease-in flip;
+}
+
+
 #desktop[flipped], #metro{
     transform: rotateY(180deg);
 }
@@ -136,7 +140,7 @@ body:not([blur]) dialog > article{
 #desktop:not([flipped]) > #metro{
     translate: 0 0 -1px;
     opacity: 0;
-}*/
+}
 
 @media (pointer:none), (pointer:coarse){
 
@@ -156,7 +160,7 @@ body:not([blur]) dialog > article{
     }
 }
 
-@keyframes flip{
+@keyframes metroflip{
     from{
         transform: rotateY(180deg);
         opacity: 1;
@@ -165,5 +169,15 @@ body:not([blur]) dialog > article{
         translate: 0 0 -1px;
         opacity: 0;
     }
+}
 
+@keyframes flop{
+    to{
+        transform: rotateY(180deg);
+        opacity: 1;
+    }
+    from{
+        translate: 0 0 1px;
+        opacity: 0;
+    }
 }
