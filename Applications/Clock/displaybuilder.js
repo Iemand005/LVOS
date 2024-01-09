@@ -12,10 +12,13 @@ function DisplayBuilder(number, index, singular){
 }
 
 function tokenizeNumber(number){
+    //console.log(number)
     //if(number>0)
-    return number>=0?[Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
+
+    return (typeof number ==='number')? (number>=0?[Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
     ://else
-    [number<=-1000?Math.ceil((number % 1000)/100):10, Math.ceil((number % 100) / 10), Math.ceil(number % 10)];
+    [number<=-1000?Math.ceil((number % 1000)/100):10, number<-1?10:Math.ceil((number % 100) / 10), Math.ceil(number % 10)])
+    :[10, 10, 10];
     //return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
 
@@ -31,6 +34,7 @@ displayNumbers = [
     [true, true, true, true, true, true, true],
     [true, true, true, true, false, true, true],
     [false, false, false, true, false, false, false],
+    [false, false, false, false, false, false, false],
 ]
 
 DisplayBuilder.prototype = {
@@ -51,8 +55,9 @@ DisplayBuilder.prototype = {
     },
     update: function(number){
         this.segments.forEach(function(segment, index){
-            console.log(number, number*-1)
-            if(!displayNumbers[number>0?number: number*-1 || 0][index]) segment.style.opacity = "0.1";
+            //console.log(number, number*-1)
+            //console.log(number>=0 && number<=10)
+            if(!displayNumbers[number>0 && number<10?number: 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
     },
@@ -81,7 +86,8 @@ DisplayBuilder.prototype = {
 
 function MultiDigitDisplayBuilder(digits, number){
     this.displays = [];
-    for (let i = 0; i < digits; i++) {
+    this.digits = digits
+    for (let i = 0; i < this.digits; i++) {
         this.displays.push(new DisplayBuilder(number, i));
     }    
 }
@@ -93,8 +99,10 @@ MultiDigitDisplayBuilder.prototype = {
         });
     },
     update: function(number){
+        //console.log("9".repeat(this.digits), this.digits)
+        const max = Number("9".repeat(this.digits));
         this.displays.forEach(function(display, index){
-            display.update(tokenizeNumber(number)[index]);
+            display.update(max>number?tokenizeNumber(number)[index]:9);
         });
     }
 }
