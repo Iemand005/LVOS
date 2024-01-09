@@ -12,8 +12,11 @@ function DisplayBuilder(number, index, singular){
 }
 
 function tokenizeNumber(number){
-    return [Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
-    return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
+    //if(number>0)
+    return number>=0?[Math.floor((number % 1000)/100), Math.floor((number % 100) / 10), Math.floor(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
+    ://else
+    [number<=-1000?Math.ceil((number % 1000)/100):10, Math.ceil((number % 100) / 10), Math.ceil(number % 10)];
+    //return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
 }
 
 displayNumbers = [
