@@ -10,17 +10,20 @@ div.segmentdisplay{
     display: inline-block;
 }
 
+
+
 /* Scaling is done here, the values can be adjusted to make displays of specific sizes. The JavaScript scaling function doesn't work yet because I don't know how to apply it to all the after pseudo elements yet. */
 
 div.segmentdisplay > div{
     border-width: 3px;
 }
 
-div.segmentdisplay > div.segmentx{
+div.segmentdisplay > div.segmentx, div.segmentdisplay > div:nth-child(3n + 1){
     margin-left: 3px;
+    /* border-color: aqua; */
 }
 
-div.segmentdisplay > div.segmentx:after{
+div.segmentdisplay > div.segmentx:after, div.segmentdisplay > div:nth-child(3n + 1):after{
     margin-top: 3px;
     margin-left: -3px;
     border-top-width: 3px;
@@ -29,6 +32,7 @@ div.segmentdisplay > div.segmentx:after{
 div.segmentdisplay > div.segmenty:after{
     margin-top: -3px;
     margin-left: 3px;
+    margin-bottom: -3px;
     border-left-width: 3px;
 }
 
@@ -60,14 +64,14 @@ div.segmentdisplay > div:after{
     /* opacity: inherit; */
 }
 
-div.segmentdisplay > div.segmentx{
+div.segmentdisplay > div.segmentx, div.segmentdisplay > div:nth-child(3n + 1){
     height: 0 !important;
     border-right-color: transparent !important;
     border-left-color: transparent !important;
     border-top-width: 0 !important;
 }
 
-div.segmentdisplay > div.segmentx:after{
+div.segmentdisplay > div.segmentx:after, div.segmentdisplay > div:nth-child(3n + 1):after{
     border-bottom: 0 !important;
     border-top-color: inherit;
 }
@@ -81,4 +85,18 @@ div.segmentdisplay > div.segmenty{
 
 div.segmentdisplay > div.segmenty:after{
     border-right-width: 0 !important;
+}
+
+div.segmentdisplay > div:nth-child(4):after{
+    margin-top: 3px;
+    border-top-width: 3px;
+    margin-left: -3px;
+    border-bottom-width: 0;
+}
+
+div.segmentdisplay.singular > div:first-child{
+    margin-top: 3px;
+    border-top-width: 3px;
+    margin-left: -3px;
+    border-bottom-width: 0;
 }

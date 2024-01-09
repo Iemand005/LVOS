@@ -1,5 +1,5 @@
 
-function DisplayBuilder(number, index){
+function DisplayBuilder(number, index, singular){
     this.display;
     this.index = index || 0;
     console.log(this.index)
@@ -7,6 +7,8 @@ function DisplayBuilder(number, index){
     this.segments = [];
     this.size = 50;
     this.fat = 10;
+    this.singular = !!singular;
+    if(singular) this.singular = true
 }
 
 function tokenizeNumber(number){
@@ -25,6 +27,7 @@ displayNumbers = [
     [true, true, true, false, false, true, false],
     [true, true, true, true, true, true, true],
     [true, true, true, true, false, true, true],
+    [false, false, false, true, false, false, false],
 ]
 
 DisplayBuilder.prototype = {
@@ -32,10 +35,11 @@ DisplayBuilder.prototype = {
     build: function(){
         const display = document.createElement("div");
         display.classList.add("segmentdisplay");
+        if(this.singular) display.classList.add("singular");
         for (let i = 0; i < 7; i++) {
             const segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
-            if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
+            //if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
             if(i==1 || i==2 || i==4 || i==5) segment.classList.add("segmenty");
             if(i==2 || i==5) segment.classList.add("segmentr");
             if(i==3 || i==6) segment.classList.add("segmenth");
@@ -44,7 +48,8 @@ DisplayBuilder.prototype = {
     },
     update: function(number){
         this.segments.forEach(function(segment, index){
-            if(!displayNumbers[number || 0][index]) segment.style.opacity = "0.1";
+            console.log(number, number*-1)
+            if(!displayNumbers[number>0?number: number*-1 || 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
     },

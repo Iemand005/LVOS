@@ -144,6 +144,8 @@ body, section, article, button{
 output{
     color: red;
     background-color: #3e0000;
+    background: radial-gradient( circle at 2px 2px, #000 1px, #3e0000 2px ) 0 0 / 4px 5px;
+    background: radial-gradient( circle at 2px 2px, #640000 0px, #3e0000 2px ) 0 0 / 2px 2px;
     height: 46px;
     width: 80px;
 }
