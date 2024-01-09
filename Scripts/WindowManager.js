@@ -80,14 +80,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
-    /*this.open = function(options){
-        if(typeof options == 'string'){
-            console.log("this should be a lnik!", options);
-            const frameUrl = new URL(this.frame.src);
-            frameUrl.searchParams.set("url", options);
-            this.frame.src = frameUrl.href;
-        }// else return console.log(options), this.getBody().appendChild(options), this.target.createAttribute("open")
-    }*/
 
     window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
         const message = JSON.parse(ev.data);
@@ -104,12 +96,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.button = document.createElement("button");
     this.button.innerText = this.title;
     
-    dialog = this;
-    this.button.addEventListener("click", function(){
-        console.log(this, dialog)
-        dialog.target.createAttribute("open")
-        //dialog.open();
-    });//dialog.open.bind(dialog); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
+    this.button.onclick = dialog.open.bind(this); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
     document.getElementById("applist").appendChild(this.button);
 
     this.verifyEjectCapability = function(){
