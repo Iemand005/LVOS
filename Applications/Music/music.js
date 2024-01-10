@@ -8,6 +8,10 @@ const audio = document.getElementsByTagName("audio")[0];
 const visualiser = document.getElementById("visualiser");
 const ctx = visualiser.getContext("2d");
 const fullscreen = document.getElementById("fullscreen");
+const volume = document.getElementById("volume");
+const seek = document.getElementById("seek");
+const seekOutput = document.getElementById("seek-output");
+const volumeOutput = document.getElementById("volume-output");
 const elements = [];
 
 
@@ -39,4 +43,20 @@ file.onchange = function(ev){
     const eudioVisualiser = new AudioVisualiser(frequencies);
     eudioVisualiser.initializeWithMediaElement(audio);
     animateFrame(eudioVisualiser);
+    seek.max = audio.duration;
 }
+
+seek.oninput = function(ev){
+    audio.currentTime = this.value;
+}
+
+volume.oninput = function(ev){
+    audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
+}
+
+function refresh(){
+    seekOutput.innerText = parseInt(this.value/60) +":" + parseInt(this.value%60) + "."+ this.value%1;
+    audio.currentTime
+}
+
+setInterval(refresh, 100);

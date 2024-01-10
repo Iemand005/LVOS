@@ -17,8 +17,10 @@
     <button id="fullscreen">Fullscreen</button>
     <form>
         <button>Play</button>
-        <input type="range" name="seek" id="seek">
-        <input type="range" name="volume" id="volume">
+        <input min="0" step="0.0000001" max="0" type="range" name="seek" id="seek">
+        <output id="seek-output"></output>
+        <input min="0" step="0.0000001" max="100" type="range" name="volume" id="volume">
+        <output id="volume-output"></output>
     </form>
     <canvas id="visualiser"></canvas>
 </body>
