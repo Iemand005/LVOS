@@ -209,6 +209,9 @@ for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 
 body.ondblclick = quickRevealEvent;
 button.onclick = startGame.bind();
+// window.onfocus = sendDesiredSize;
+// window.onpageshow = sendDesiredSize;
+window.onmessage = sendDesiredSize;
 document.ondblclick = quickRevealEvent;
 document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
 document.onmouseup = function(ev){

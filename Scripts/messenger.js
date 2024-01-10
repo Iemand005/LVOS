@@ -16,6 +16,8 @@ Messenger.types = {
 Messenger.prototype = {
 
     types: {
+        po: "é",
+        open: "open",
         windowSize: "windowSize",
         launchOverlay: "launchOverlay"
     },
@@ -41,7 +43,7 @@ Messenger.broadcastFromChild = function(type, message){
 
 Messenger.broadcastToParent = Messenger.broadcastFromChild;
 
-Messenger.broadcastToChild = function(type, message, iFrame){
+Messenger.broadcastToChild = Messenger.broadcastChild = function(type, message, iFrame){
         broadcast(iFrame.contentWindow, type, message);
         // broadcast(window.top, type, message);
 }
