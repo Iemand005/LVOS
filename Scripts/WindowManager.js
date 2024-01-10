@@ -83,27 +83,13 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
 
     window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-        const message = JSON.parse(ev.data);
-        const data = message.data;
-        const type = message.type;
-
-        console.log(message)
+        const message = JSON.parse(ev.data), data = message.data, type = message.type;
         if(type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
     }
 
     if(!this.scroll) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    // this.createOpenButton = function(){
-    //     // {const button = document.createElement("button")}
-    //     // this.buttons.push(document.createElement("button"));
-    //     return this.buttons.unshift(document.createElement("button")).onclick = dialog.open.bind(this), this.buttons[0];
-    // }
-
-    //this.button = document.createElement("button");
-    //this.button.innerText = this.title;
-    
-    //this.button.onclick = dialog.open.bind(this); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
     document.getElementById("applist").appendChild(this.createOpenButton());
 
     this.verifyEjectCapability = function(){
@@ -133,7 +119,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(object.body) this.body.appendChild(object.body);
     this.setTitle(this.title);
 
-    //const dialog = this, 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
@@ -195,14 +180,6 @@ Dialog.prototype = {
     getId: function(){ return this.target.getAttribute("id") },
     toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined) },
     open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen }, // Open, save, return if it's opened or not.
-    openUrl: function(url){
-        // console.log("this should be a lnik!", url);
-        const frameUrl = new URL(this.frame.src);
-        frameUrl.searchParams.set("url", url);
-        this.frame.src = frameUrl.href;
-        // console.log(this)
-        this.launch();
-    },
     close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/ },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
@@ -218,7 +195,13 @@ Dialog.prototype = {
     toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable) },
     move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px" },
     resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box" },
-    resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box" }
+    resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box" },
+    openUrl: function(url){
+        const frameUrl = new URL(this.frame.src);
+        frameUrl.searchParams.set("url", url);
+        this.frame.src = frameUrl.href;
+        this.launch();
+    },
 }
 
 function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
@@ -304,10 +287,6 @@ let bodyCrawler = new OSDocumentCrawler(document);
 
 function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
-    // const window = windows[activeWindow] || windows[0];
-    // if(flipped) exportWindowBodyToMetro(window);
-    // else retrieveWindowBodyFromMetro(window);
-    // return flipped;
 }
 
 function flipHandler(flipped){
@@ -320,9 +299,7 @@ function flipHandler(flipped){
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
     document.getElementById("desktop").ontransitionend  = function(){
-        ///console.log("you've flipped!")
         if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-            //console.log("eyes")
             if(!flipped){flipHandler( flipped = true)
             console.log("I s zwear we are flip now and oly once! kanobi")
 
@@ -333,12 +310,8 @@ function initializeWindows(windows){
                 flipHandler( flipped = false)
                 console.log("terug naar garkiv your assbit");
             }
-            
-           // console.log("nonotoon")
         }
     }
-    //document.getElementById("desktop").onanimationend  = function(){console.log("you've maybe!")}
-
     //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
     flip();
@@ -384,7 +357,6 @@ function windowDragEvent(event){
 
 function activateWindowPointers(){
     document.removeEventListener("mousemove", windowDragEvent);
-    // console.log("anker")
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
