@@ -65,6 +65,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.content = this.getContent();
     this.body = this.getBody(); // An effort to trade memory for performance by caching everything.
     this.head = this.getHead();
+    this.buttons = [];
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
             start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
@@ -93,11 +94,17 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(!this.scroll) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    this.button = document.createElement("button");
-    this.button.innerText = this.title;
+    // this.createOpenButton = function(){
+    //     // {const button = document.createElement("button")}
+    //     // this.buttons.push(document.createElement("button"));
+    //     return this.buttons.unshift(document.createElement("button")).onclick = dialog.open.bind(this), this.buttons[0];
+    // }
+
+    //this.button = document.createElement("button");
+    //this.button.innerText = this.title;
     
-    this.button.onclick = dialog.open.bind(this); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
-    document.getElementById("applist").appendChild(this.button);
+    //this.button.onclick = dialog.open.bind(this); // We use the dialog variable instead of "this" since in the event handler context "this" refers to the top level (window) object.
+    document.getElementById("applist").appendChild(this.createOpenButton());
 
     this.verifyEjectCapability = function(){
         const style = this.getButton(windowButtons.eject).style;
@@ -199,6 +206,7 @@ Dialog.prototype = {
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
     getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
+    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")).onclick = this.open.bind(this), this.buttons[0]},
     setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
     togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
     toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
@@ -477,12 +485,12 @@ function collectEssentialWindowData(target, source){
 }
 
 function saveWindowState(){
-    console.warn("SAVING!")
+    // console.warn("SAVING!")
     if(canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
         localStorage.setItem("windowState", JSON.stringify(windowState));
-        console.log(windowState)
+        // console.log(windowState)
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch(exception) {
         console.error(exception);
