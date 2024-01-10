@@ -17,7 +17,7 @@ AudioVisualiser.prototype = {
     initializeWithMediaStream: function(stream){
         this.source = this.context.createMediaStreamSource(stream);
     },
-    initialize: function(fttSize){
+    start: function(fttSize){
         this.source.connect(this.analyser);
         this.analyser.fftSize = fttSize || 64;
         this.data = new Uint8Array(this.analyser.frequencyBinCount);
