@@ -11,18 +11,19 @@ function AudioVisualiser(){
 
 AudioVisualiser.prototype = {
     initializeWithMediaElement: function(element){
-        this.source = this.analyser.context.createMediaElementSource(element);
+        this.source = this.context.createMediaElementSource(element);
     },
 
     initializeWithMediaStream: function(stream){
-        this.source = this.analyser.context.createMediaStreamSource(stream);
+        this.source = this.context.createMediaStreamSource(stream);
     },
-    startAnalyser: function(fttSize){
+    initialize: function(fttSize){
         this.source.connect(this.analyser);
-        
         this.analyser.fftSize = fttSize || 64;
         this.data = new Uint8Array(this.analyser.frequencyBinCount);
-        this.analyser.getByteFrequencyData(this.data);
+    },
+    get analyserData(){
+        return this.analyser.getByteFrequencyData(this.data), this.data;
     }
 }
 
