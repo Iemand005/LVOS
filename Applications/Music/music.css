@@ -1,6 +1,21 @@
 
+/* Music application for LVOS by Lasse © 2024 (10/1/2024 - 11/1/2024) */
+
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 canvas{
     width: 100%;
+    height: 100%;
+    background-color: black;
 }
 
 button#play {

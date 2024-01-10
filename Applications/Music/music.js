@@ -17,43 +17,69 @@ const volumeOutput = document.getElementById("volume-output");
 const fft = document.getElementById("fft");
 const elements = [];
 
-const transitionspeed = 5000000;
-let lol = {red:0, green: 0, blue:0};
-let previousLol = {red:0, green: 0, blue:0};
-let emo =  {red:0, green: 0, blue:0};
 
 fullscreen.onclick = function(){
     Messenger.broadcastToParent(Messenger.types.launchOverlay);
 }
 
+let circular = true;
+let clear = false;
+const colorBuffer = [0, 0];
+
 function animateFrame(eudioVisualiser, time){
-    // console.log(e)
+
     requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    // ctx.fillStyle = "red"
-    for(let key in lol) {
-        if(random(10, 0)*transitionspeed < time) previousLol[key] = lol[key], lol[key] = Math.random();
-        emo[key] = lerp(previousLol[key], lol[key], transitionspeed/time);
+    if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    else {
+        // console.log("rat")
+        ctx.fillStyle = "#FF000099"//"#00000010"
+        ctx.beginPath();
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.fill();
+        ctx.closePath();
     }
-    console.log(emo)
+    
+    // <onsole.log(emo)
     seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
-    ctx.canvas.width = visualiser.clientWidth;
-    ctx.canvas.height = visualiser.clientHeight;
+    const width = ctx.canvas.width = visualiser.clientWidth;
+    const height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
 
-    const count = eudioVisualiser.frequencyBinCount;
-    const width = ctx.canvas.width/count;
+    const data = eudioVisualiser.data;
+    const count = data.length;
+    
+    let cX = width/2;
+    let cY = height/2;
+    const hue = time/321;
+    ctx.beginPath();
+    if(circular){
+        let rad = 0, inc = Math.PI*2*(1/count);
+        for(let index in data){
+            const amp = parseInt(data[index]);
+            const x = 10+ amp * Math.cos(rad) + cX;
+            const y = 10+ amp * Math.sin(rad) + cY;
+    ctx.beginPath();
+    //ctx.fillStyle = "#FF000099"
+    //ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    for(let index in eudioVisualiser.data){
+    ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
+
+            ctx.arc(x, y, 2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
+
+    // ctx.fill();
+    rad += inc;
+        }
+    } else for(let index in data){
         const amp = parseInt(eudioVisualiser.data[index]);
         const x = index * width;
         const red = amp+emo.red, green = amp+emo.green, blue = amp+emo.blue;
         ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
-        ctx.beginPath();
-        ctx.fillRect(x, ctx.canvas.height, width, -(ctx.canvas.height/256 *amp));
-        ctx.fill();
-        ctx.closePath();
+        ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
     }
+    ctx.fill();
+    ctx.closePath();
 }
 
 function startAnimation(audioVisualiser){
