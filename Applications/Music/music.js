@@ -14,27 +14,25 @@ const elements = [];
 function animateFrame(eudioVisualiser){
     //window.setTimeout(new Function(), 1000);
     requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
-    /*for(let index in eudioVisualiser.data){
+    for(let index in eudioVisualiser.data){
         //elements[index].innerText = eudioVisualiser.data[index];
-        const amp = eudioVisualiser.data;
+        const amp = eudioVisualiser.data[index];
         const count = eudioVisualiser.frequencyBinCount;
-        const x = index * count/ctx.canvas.width;
-        const y = index * count/ctx.canvas.height;
-        const x1 = (index+1) * count/ctx.canvas.width;
-        const y1 = (index+1) * count/ctx.canvas.height;
+        const x = index * (ctx.canvas.width/count);
+        const x1 = (index+1) * (ctx.canvas.width/count);
         ctx.fillStyle = "red"
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+// console.log(x*index)
         ctx.beginPath();
-        ctx.fillRect(x, 0, x1-x, amp);
+        
+        ctx.fillRect(0, 10, 10, 10);
+        ctx.fillText(amp, 10, 10);
+        ctx.fillStyle = "green"
+        ctx.fillRect(10, 10, 10, amp*10 + 30);
         ctx.fill();
-        ctx.stroke();
         ctx.closePath();
-    }*/
-    ctx.fillStyle = "red"
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    ctx.beginPath();
-    ctx.fillRect(0, 0, 10, eudioVisualiser.data[10]*1);
-    ctx.fill();
-    ctx.closePath();
+    }
+    
     //console.log(e)
 }
 
