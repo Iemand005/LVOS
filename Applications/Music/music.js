@@ -23,6 +23,7 @@ function animateFrame(eudioVisualiser){
     requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.fillStyle = "red"
+    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ audio.currentTime%1;
 
     for(let index in eudioVisualiser.data){
         const amp = parseInt(eudioVisualiser.data[index]);
@@ -55,8 +56,8 @@ volume.oninput = function(ev){
 }
 
 function refresh(){
-    seekOutput.innerText = parseInt(this.value/60) +":" + parseInt(this.value%60) + "."+ this.value%1;
+    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ audio.currentTime%1;
     audio.currentTime
 }
 
-setInterval(refresh, 100);
+//setInterval(refresh, 100);
