@@ -43,10 +43,11 @@ DisplayBuilder.prototype = {
         const display = document.createElement("div");
         display.classList.add("segmentdisplay");
         if(this.singular) display.classList.add("singular");
-        for (let i = 0; i < 7; i++) {
+        classifier: for (let i = 0; i < 7; i++) {
             const segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
-            //if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
+            if(this.singular) continue classifier; // Labelled for loop, similar to a goto command.
+            if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
             if(i==1 || i==2 || i==4 || i==5) segment.classList.add("segmenty");
             if(i==2 || i==5) segment.classList.add("segmentr");
             if(i==3 || i==6) segment.classList.add("segmenth");
@@ -84,11 +85,11 @@ DisplayBuilder.prototype = {
     }
 }
 
-function MultiDigitDisplayBuilder(digits, number){
+function MultiDigitDisplayBuilder(digits, number, singlesided){
     this.displays = [];
     this.digits = digits
     for (let i = 0; i < this.digits; i++) {
-        this.displays.push(new DisplayBuilder(number, i));
+        this.displays.push(new DisplayBuilder(number, i, singlesided));
     }    
 }
 

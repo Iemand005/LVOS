@@ -8,6 +8,7 @@
 const width = 10;
 const height = 10;
 const quickReveal = true;
+const singleSidedDisplay = true;
 
 const body = document.body;
 const form = document.querySelector("section");
@@ -121,9 +122,9 @@ Tile.prototype = {
     },
 
     toggleDisabled: function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled") },
-    disableVisual: function(){ this.button.classList.remove("active") },
+    disableVisual: function(){ this.button.classList.remove("active")/* , setEmoji(signs.click) */ },
     isClickAllowed: function(){ return this.flagged != 1 },
-    enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active") },
+    enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active")/* , setEmoji(signs.click) */ },
     toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none},
     quickReveal: function(){
         if(quickReveal){
@@ -164,6 +165,7 @@ function startGame(){
                 } else ev.preventDefault();
             }
             button.onmouseup = function(){
+                // if(!isGameOver) setEmoji(signs.alive);
                 tile.mousedown = false;
                 tile.disableVisual();
             }
@@ -173,6 +175,7 @@ function startGame(){
             button.ondblclick = new Function;
 
             button.onmousedown = function(ev){
+                setEmoji(signs.click);
                 if(!tile.isClickAllowed()) ev.preventDefault();
                 if(tile.mousedown = !ev.button) tile.enableVisual();
             }
@@ -204,11 +207,14 @@ function quickRevealEvent(ev) {
 
 document.onmouseup = function(ev){
     ev.preventDefault();
+    if(!isGameOver) setEmoji(signs.alive);
     lineartiles.forEach(function(tile){
         tile.mousedown = false;
     });
     return false;
 }
+
+document.onmousedown = setEmoji.bind(this, !isGameOver?signs.click:signs.dead);
 
 const mutationObserver = new MutationObserver(function(){
     const rect = body.getBoundingClientRect();
@@ -247,9 +253,31 @@ function countRemainingFields(){
     }).length;
 }
 
-const displays = [new MultiDigitDisplayBuilder(3, 3), new MultiDigitDisplayBuilder(3, 0)];
-displays[0].build(document.getElementsByTagName("output")[0]);
-displays[1].build(document.getElementsByTagName("output")[1]);
+const outputs = document.getElementsByTagName("output");
+
+const displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)];
+// displays[0].build(outputs[0]);
+// displays[1].build(outputs[1]);
+if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
+
+for(let i=0; i<outputs.length; i++){
+    displays[i].build(outputs[i]);
+    if(singleSidedDisplay){
+        // button.style.width = button.style.height = outputs[i].style.height = "28px";
+        // button.style.fontSize = "15px";
+        // button.style.padding = 0;
+        // outputs[i].style.width = "44px";
+    }
+    // if(singleSidedDisplay){
+    //     for(let j=0; j<outputs[i].children.length; j++) {
+    //         outputs[i].children[j].style.marginRight = "4px"};
+    //     }
+    //     // outputs[1].style.marginRight = "4px";
+    // }
+}
+
+
+
 displays[1].update(0)
 
 function activateTimer(){

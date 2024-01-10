@@ -142,6 +142,7 @@ body, section, article, button{
 
 output{
     color: red;
+    border-width: 1px;
     /* text-align: center;
     vertical-align: center;
     line-height: 46px; */
@@ -155,4 +156,17 @@ output{
 article > button{
     font-size: 18px;
     padding: 15px;
+    box-sizing: border-box;
+}
+
+article.original > button{
+    width: "28px";
+    height: "28px";
+    font-size: "15px";
+    padding: 0;
+}
+
+article.original > output{
+    width: "44px";
+    height: "28px";
 }

@@ -94,6 +94,12 @@ div.segmentdisplay > div:nth-child(4):after{
     border-bottom-width: 0;
 }
 
+div.segmentdisplay.singular{
+    margin-right: 2px;
+    margin-left: 3px;
+    margin: 2px;
+}
+
 div.segmentdisplay.singular > div{
     width: 0px;
     border-color: transparent;
@@ -101,6 +107,7 @@ div.segmentdisplay.singular > div{
     margin-bottom: -2px;
     margin-bottom: -3px;
     margin-bottom: -0.5px;
+
 }
 
 div.segmentdisplay.singular > div:first-child{
