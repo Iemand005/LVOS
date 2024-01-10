@@ -160,13 +160,13 @@ article > button{
 }
 
 article.original > button{
-    width: "28px";
-    height: "28px";
-    font-size: "15px";
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
     padding: 0;
 }
 
 article.original > output{
-    width: "44px";
-    height: "28px";
+    width: 44px;
+    height: 28px;
 }
