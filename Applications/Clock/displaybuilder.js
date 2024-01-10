@@ -11,18 +11,11 @@ function DisplayBuilder(number, index, singular){
     if(singular) this.singular = true
 }
 
-function tokenizeNumber(number){
-    //console.log(number)
-    //if(number>0)
-
-    return (typeof number ==='number') && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.
-    ://else
-    [number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)])
-    :[10, 10, 10];
-    //return [Math.floor(number % 10), Math.floor((number % 100) / 10), Math.floor((number % 1000)/100)]; // There are probably better ways to do this but this was the first I came up with and it works for now.
+function tokenizeNumber(number){ // There are probably better ways to do this but this was the first I came up with and it works for now.
+    return typeof number ==='number' && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)]:[number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)]):[10, 10, 10];
 }
 
-displayNumbers = [
+displayNumbers = [ // These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " ";
     [true, true, true, false, true, true, true],
     [false, false, true, false, false, true, false],
     [true, false, true, true, true, false, true],
@@ -56,8 +49,6 @@ DisplayBuilder.prototype = {
     },
     update: function(number){
         this.segments.forEach(function(segment, index){
-            //console.log(number, number*-1)
-            //console.log(number>=0 && number<=10)
             if(!displayNumbers[number>=0 && number<=11?number: 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
@@ -73,14 +64,12 @@ DisplayBuilder.prototype = {
         });
 
         document.querySelectorAll("div.segmentdisplay > div.segmenty").forEach(function(element){
-            //element.style.marginLeft = fat + "px";
             element.style.height = size + "px";
         });
         document.querySelectorAll("div.segmentdisplay > div.segmentr").forEach(function(element){
             element.style.marginLeft = size + fat*2 + "px";
             element.style.marginTop = -(size + fat*2) + "px";
             element.style.marginBottom = fat + "px";
-            console.log(this, element)
         });
     }
 }

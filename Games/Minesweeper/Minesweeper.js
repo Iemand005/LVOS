@@ -58,6 +58,9 @@ function Tile(button, x, y, mine){
 }
 
 Tile.prototype = {
+    generate: function(){ // This generates the mines, the algorithm can also be modified to generate a specified amount of mines instead of random.
+        this.mine = 1 == Math.round(Math.random() * 0.6);
+    },
     reveal: function(){
         if(this.revealed) return 0;
         if(!gameStarted) gameStarted = true, activateTimer();
@@ -73,9 +76,6 @@ Tile.prototype = {
         else this.button.innerText = !isGameWon?signs.exploded:signs.correct, gameOver();
         if(neighbourCount == 0) for(let neighbour in neighbours) neighbours[neighbour].reveal();
         return neighbourCount;
-    },
-    generate: function(){ // This generates the mines, the algorithm can also be modified to generate a specified amount of mines instead of random.
-        this.mine = 1 == Math.round(Math.random() * 0.6);
     },
     getNeighbours: function(){
         const neighbours = new Array();
@@ -107,41 +107,21 @@ Tile.prototype = {
     },
 }
 
-form.appendChild(table);
-
 function startGame(){
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;
     setEmoji();
-    while(table.firstChild) table.removeChild(table.firstChild);
+    while(table.firstChild) table.removeChild(table.firstChild); // Clear the table
     for (let y = 0; y < height; y++) {
         tiles[y] = new Array();
         const row = document.createElement("tr");
         table.appendChild(row);
         for (let x = 0; x < width; x++) {
-            const
-                button = document.createElement("button"),
-                tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
-            button.classList.add("mine");
+            const button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
             row.appendChild(document.createElement("td")).appendChild(button);
+            button.classList.add("mine");
             tile.generate();
-            
-            button.oncontextmenu = function(ev){
-                ev.preventDefault();
-                tile.toggleFlag();
-            }
-            button.onclick = function(ev){
-                if(ev.button == 0 && tile.isClickAllowed()){
-                    const neighbours = tile.reveal();
-                    if(!tile.mine) button.innerText = neighbours;
-                    else gameOver();
-                } else ev.preventDefault();
-            }
-            button.onmouseup = function(){
-                tile.mousedown = false;
-                tile.disableVisual();
-            }
 
             button.onmouseover = tile.enableVisual.bind(tile);
             button.onmouseout = tile.disableVisual.bind(tile);
@@ -153,39 +133,39 @@ function startGame(){
                 if(tile.mousedown = !ev.button) tile.enableVisual();
             }
 
+            button.onmouseup = function(){
+                tile.mousedown = false;
+                tile.disableVisual();
+            }
+
+            button.onclick = function(ev){
+                if(ev.button == 0 && tile.isClickAllowed()){
+                    const neighbours = tile.reveal();
+                    if(!tile.mine) button.innerText = neighbours;
+                    else gameOver();
+                } else ev.preventDefault();
+            }
+
+            button.oncontextmenu = function(ev){
+                ev.preventDefault();
+                tile.toggleFlag();
+            }
         }
     }
-    bombCount = countBombs();
-    displays[0].update(bombCount);
+
+    displays[0].update(bombCount = countBombs());
     sendDesiredSize();
 }
-
 
 function sendDesiredSize(){
     messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight});
 }
-
-document.ondblclick = quickRevealEvent;
-body.ondblclick = quickRevealEvent;
-
-
 
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX, ev.clientY);
     const tile = lineartiles[parseInt(element.firstChild.id || element.id)];
     if(tile && tile.flagged!=1) tile.quickReveal();
 }
-
-document.onmouseup = function(ev){
-    ev.preventDefault();
-    if(!isGameOver) setEmoji(signs.alive);
-    lineartiles.forEach(function(tile){
-        tile.mousedown = false;
-    });
-    return false;
-}
-
-
 
 function randomNumberBetween(start, end){
     return (Math.random()*(end - start)) + start;
@@ -195,7 +175,7 @@ function gameOver(won){
     if(isGameOver) return;
     isGameWon = won, isGameOver = true;
     displays[0].update(0);
-    lineartiles.forEach(function(tile){ tile.reveal() });
+    lineartiles.forEach(function(tile){ tile.reveal(); });
     setEmoji();
     gameStarted = false;
     stopTimer();
@@ -224,20 +204,25 @@ function stopTimer(reset){
     window.clearInterval(timerInterval);
 }
 
-mutationObserver.observe(body, {childList: true});
-
 if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
-
 for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 
-stopTimer(true);
+body.ondblclick = quickRevealEvent;
 button.onclick = startGame.bind();
+document.ondblclick = quickRevealEvent;
 document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
+document.onmouseup = function(ev){
+    ev.preventDefault();
+    if(!isGameOver) setEmoji(signs.alive);
+    lineartiles.forEach(function(tile){ tile.mousedown = false; });
+    return false;
+}
 
-startGame();
+form.appendChild(table);
+mutationObserver.observe(body, {childList: true});
 
-
-//activateTimer();
+stopTimer(true);
+startGame(); // If we don't use the defer attribute you have to put this function in the "onload" event of the body element.
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333

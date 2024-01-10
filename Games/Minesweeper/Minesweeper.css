@@ -6,7 +6,7 @@
  | Created: 23/12/2023 |
  \*********************/
 
-html, body{
+html, body, button:disabled{
     margin: 0px;
     -webkit-user-select: none;
     user-select: none;
@@ -14,9 +14,9 @@ html, body{
 }
 
 body {
-    display: flex;
     flex-direction: column;
-    display: table;
+    display: table; /* I want the content size to be minimal, we can use the table display to obtain this property, using fit-content width doesn't work yet on all browsers. */
+    margin: auto;
 }
 
 button{
@@ -37,13 +37,10 @@ button{
 }
 
 button:disabled{
-    border-top: 1px solid darkgray;
-    border-left: 1px solid darkgray;
+    border: 1px solid darkgray;
     border-right: none;
     border-bottom: none;
     pointer-events: none;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 table{
