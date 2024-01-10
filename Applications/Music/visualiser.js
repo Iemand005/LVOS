@@ -27,33 +27,7 @@ AudioVisualiser.prototype = {
     }
 }
 
-const file = document.getElementById("file");
-const audio = document.getElementsByTagName("audio")[0];
 
-const eudioVisualiser = new AudioVisualiser;
-
-eudioVisualiser.initializeWithMediaElement(audio);
-
-eudioVisualiser.start();
-
-const elements = [];
-
-for (let i = 0; i < eudioVisualiser.analyser.frequencyBinCount; i++) {
-    const element = document.createElement("p");
-    elements.push(element);
-    document.appendChild(element);
-}
- 
-
-function animateFrame(e){
-    requestAnimationFrame(animateFrame);
-    for(let index in eudioVisualiser.analyserData){
-        elements[index].innerText = eudioVisualiser.analyserData[index];
-    }
-    //console.log(e)
-}
-
-animateFrame();
 
 
 
