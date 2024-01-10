@@ -10,6 +10,8 @@ const ctx = visualiser.getContext("2d");
 const fullscreen = document.getElementById("fullscreen");
 const volume = document.getElementById("volume");
 const seek = document.getElementById("seek");
+const play = document.getElementById("play");
+const options = document.getElementById("options");
 const seekOutput = document.getElementById("seek-output");
 const volumeOutput = document.getElementById("volume-output");
 const elements = [];
@@ -23,7 +25,11 @@ function animateFrame(eudioVisualiser){
     requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.fillStyle = "red"
-    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ audio.currentTime%1;
+
+    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
+    ctx.canvas.width = visualiser.clientWidth;
+    ctx.canvas.height = visualiser.clientHeight;
+    seek.value = audio.currentTime;
 
     for(let index in eudioVisualiser.data){
         const amp = parseInt(eudioVisualiser.data[index]);
@@ -40,11 +46,32 @@ function animateFrame(eudioVisualiser){
 file.onchange = function(ev){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
-    audio.play();
     const eudioVisualiser = new AudioVisualiser(frequencies);
     eudioVisualiser.initializeWithMediaElement(audio);
     animateFrame(eudioVisualiser);
     seek.max = audio.duration;
+    volume.value = audio.volume*100;
+}
+
+options.onsubmit = function(ev){
+    ev.preventDefault();
+}
+
+// play.onclick = function(){
+//     audio.play();
+//     // if(audio.)this.COMMENT_NODE
+// }
+
+play.onclick = audio.play.bind(audio);
+
+audio.onplaying = function(){
+    play.innerText = "⏸︎";
+    play.onclick = audio.pause.bind(audio);
+}
+
+audio.onpause = function(){
+    play.innerText = "⏵︎";
+    play.onclick = audio.play.bind(audio);
 }
 
 seek.oninput = function(ev){
@@ -56,7 +83,7 @@ volume.oninput = function(ev){
 }
 
 function refresh(){
-    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ audio.currentTime%1;
+    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
     audio.currentTime
 }
 
