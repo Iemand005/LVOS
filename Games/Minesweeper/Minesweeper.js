@@ -3,43 +3,48 @@
    //       Lasse Lauwerys © 23/12/2023        \\
   //   Original game by Microsoft Corporation   \\   
 
-
 'use strict';
-const width = 10;
-const height = 10;
-const quickReveal = true;
-const singleSidedDisplay = true;
-const showBombInsteadOfCheckmark = true;
 
-const body = document.body;
-const form = document.querySelector("section");
-const table = document.createElement("table");
-const outputs = document.getElementsByTagName("output");
+const // Declaring the constant variables.
+    width = 10, height = 10,
+    quickReveal = true,
+    singleSidedDisplay = true,
+    showBombInsteadOfCheckmark = true,
 
-const signs = { // Quick configuration of the signs used in game.
-    bomb: "💣",
-    exploded: "💥",
-    correct: "✔",
-    flag: "🚩",
-    alive: "😃",
-    scared: "😮",
-    dead: "😵",
-    won: "😁",
-    unknown: "❓",
-    none: ""
-}
+    body = document.body,
+    form = document.querySelector("section"),
+    table = document.createElement("table"),
+    outputs = document.getElementsByTagName("output"),
+    button = document.querySelector("article>button"),
+    rect = body.getBoundingClientRect(),
 
-const tiles = new Array(height);
-const lineartiles = new Array(height*width);
+    signs = { // Quick configuration of the signs used in game.
+        bomb: "💣",
+        exploded: "💥",
+        correct: "✔",
+        flag: "🚩",
+        alive: "😃",
+        scared: "😮",
+        dead: "😵",
+        won: "😁",
+        unknown: "❓",
+        none: ""
+    },
 
-let isGameOver = false;
-let isGameWon = false;
-let mousedown = false;
-let gameStarted = false;
-let timerInterval = 0;
-let bombCount = 0;
+    // declaring the objects.
+    tiles = new Array(height),
+    lineartiles = new Array(height*width),
+    messenger = new Messenger,
+    displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)],
+    mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
-const displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)];
+// Declaring the modifiable variables.
+let isGameOver = false,
+    isGameWon = false,
+    mousedown = false,
+    gameStarted = false,
+    timerInterval = 0,
+    bombCount = 0;
 
 function Tile(button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
@@ -115,11 +120,11 @@ function startGame(){
         const row = document.createElement("tr");
         table.appendChild(row);
         for (let x = 0; x < width; x++) {
-            const tile = tiles[y][x] = lineartiles[index] = new Tile(button, x, y), index = x + (y*width), button = document.createElement("button"), data = document.createElement("td");
+            const
+                button = document.createElement("button"),
+                tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
             button.classList.add("mine");
-            data.appendChild(button);
-            row.appendChild(data);
-            button.id = index;
+            row.appendChild(document.createElement("td")).appendChild(button);
             tile.generate();
             
             button.oncontextmenu = function(ev){
@@ -163,11 +168,7 @@ function sendDesiredSize(){
 document.ondblclick = quickRevealEvent;
 body.ondblclick = quickRevealEvent;
 
-const button = document.querySelector("article>button");
 
-//button.onclick = startGame().bind();
-
-const messenger = new Messenger;
 
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX, ev.clientY);
@@ -184,14 +185,7 @@ document.onmouseup = function(ev){
     return false;
 }
 
-document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
 
-const mutationObserver = new MutationObserver(function(){
-    const rect = body.getBoundingClientRect();
-    window.innerWidth = rect.width;
-});
-
-mutationObserver.observe(body, {childList: true});
 
 function randomNumberBetween(start, end){
     return (Math.random()*(end - start)) + start;
@@ -199,13 +193,9 @@ function randomNumberBetween(start, end){
 
 function gameOver(won){
     if(isGameOver) return;
-    // sigameo
-    isGameWon = won;
-    isGameOver = true;
+    isGameWon = won, isGameOver = true;
     displays[0].update(0);
     lineartiles.forEach(function(tile){ tile.reveal() });
-    // if(won)setEmoji(signs.won);
-    // else setEmoji(signs.dead);
     setEmoji();
     gameStarted = false;
     stopTimer();
@@ -223,11 +213,6 @@ function countBombs(){
     return lineartiles.filter(function(tile){ return tile.mine }).length;
 }
 
-if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
-
-for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
-
-
 function activateTimer(){
     let timer = 0;
     displays[1].update(timer++);
@@ -239,9 +224,15 @@ function stopTimer(reset){
     window.clearInterval(timerInterval);
 }
 
-//displays[1].update(0);
+mutationObserver.observe(body, {childList: true});
+
+if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
+
+for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
+
 stopTimer(true);
 button.onclick = startGame.bind();
+document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
 
 startGame();
 
