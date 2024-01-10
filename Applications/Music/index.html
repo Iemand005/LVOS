@@ -7,6 +7,7 @@
     <title>Music</title>
     <link rel="stylesheet" href="./music.css">
     <script src="../../Scripts/messenger.js"></script>
+    <script src="../../Scripts/basics.js"></script>
     <script src="./visualiser.js" defer></script>
     <script src="./music.js" defer></script>
     <script src="./visualiseradvanced.js" defer></script> <!-- This contains features extra for newer browsers (like microphone) -->
@@ -19,7 +20,8 @@
     <form id="options">
         <button id="play">⏵︎</button>
         <input min="0" step="0.0000001" max="0" type="range" name="seek" id="seek">
-        <output id="seek-output"></output>
+        <output id="seek-output">--:--.--</output>
+        <label for="volume">🔊</label>
         <input min="0" step="0.0000001" max="100" type="range" name="volume" id="volume">
         <output id="volume-output"></output>
         <input min="5" step="1" max="15" type="range" name="fft" id="fft">
