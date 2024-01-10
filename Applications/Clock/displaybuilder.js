@@ -12,7 +12,7 @@ function DisplayBuilder(number, index, singular){
 }
 
 function tokenizeNumber(number){
-    console.log(number)
+    //console.log(number)
     //if(number>0)
 
     return (typeof number ==='number') && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)] // There are probably better ways to do this but this was the first I came up with and it works for now.

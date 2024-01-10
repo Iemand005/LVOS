@@ -5,8 +5,8 @@
 
 
 'use strict';
-const width = 20;
-const height = 20;
+const width = 10;
+const height = 10;
 const quickReveal = true;
 
 const body = document.body;
@@ -16,7 +16,10 @@ const table = document.createElement("table");
 const signs = {
     bomb: "💥",
     flag: "🚩",
-    unknown: "?",
+    alive: "😃",
+    click: "😮",
+    dead: "😵",
+    unknown: "❓",
     none: ""
 }
 
@@ -25,6 +28,7 @@ const lineartiles = new Array(height*width);
 const isGameOver = false;
 let mousedown = false;
 let gameStarted = false;
+let timerInterval = 0;
 
 function Tile(button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
@@ -130,53 +134,64 @@ Tile.prototype = {
 }
 
 form.appendChild(table);
-for (let y = 0; y < height; y++) {
-    tiles[y] = new Array();
-    const row = document.createElement("tr");
-    table.appendChild(row);
-    for (let x = 0; x < width; x++) {
-        const button = document.createElement("button");
-        const data = document.createElement("td");
-        button.classList.add("mine");
-        data.appendChild(button);
-        row.appendChild(data);
-        const index = x + (y*width);
-        const tile = tiles[y][x] = lineartiles[index] = new Tile(button, x, y);
-        button.id = index;
-        tile.generate();
-        
-        button.oncontextmenu = function(ev){
-            ev.preventDefault();
-            tile.toggleFlag();
-        }
-        button.onclick = function(ev){
-            if(ev.button == 0 && tile.isClickAllowed()){
-                //tile.enableVisual();
-                const neighbours = tile.reveal();
-                if(!tile.mine) button.innerText = neighbours;
-                else gameOver();
-            } else ev.preventDefault();
-        }
-        button.onmouseup = function(){
-            tile.mousedown = false;
-            tile.disableVisual();
-        }
 
-        button.onmouseover = tile.enableVisual.bind(tile);
-        button.onmouseout = tile.disableVisual.bind(tile);
-        button.ondblclick = new Function;
+function startGame(){
+    if(table.firstChild) table.removeChild(table.firstChild);
+    for (let y = 0; y < height; y++) {
+        tiles[y] = new Array();
+        const row = document.createElement("tr");
+        table.appendChild(row);
+        for (let x = 0; x < width; x++) {
+            const button = document.createElement("button");
+            const data = document.createElement("td");
+            button.classList.add("mine");
+            data.appendChild(button);
+            row.appendChild(data);
+            const index = x + (y*width);
+            const tile = tiles[y][x] = lineartiles[index] = new Tile(button, x, y);
+            button.id = index;
+            tile.generate();
+            
+            button.oncontextmenu = function(ev){
+                ev.preventDefault();
+                tile.toggleFlag();
+            }
+            button.onclick = function(ev){
+                if(ev.button == 0 && tile.isClickAllowed()){
+                    const neighbours = tile.reveal();
+                    if(!tile.mine) button.innerText = neighbours;
+                    else gameOver();
+                } else ev.preventDefault();
+            }
+            button.onmouseup = function(){
+                tile.mousedown = false;
+                tile.disableVisual();
+            }
 
-        button.onmousedown = function(ev){
-            if(!tile.isClickAllowed()) ev.preventDefault();
-            if(tile.mousedown = !ev.button) tile.enableVisual();
+            button.onmouseover = tile.enableVisual.bind(tile);
+            button.onmouseout = tile.disableVisual.bind(tile);
+            button.ondblclick = new Function;
+
+            button.onmousedown = function(ev){
+                if(!tile.isClickAllowed()) ev.preventDefault();
+                if(tile.mousedown = !ev.button) tile.enableVisual();
+            }
+
         }
-
     }
 }
+
+startGame();
 
 document.ondblclick = quickRevealEvent;
 body.ondblclick = quickRevealEvent;
 
+const button = document.querySelector("article>button");
+
+button.onclick = function(){
+    window.clearInterval(timerInterval);
+    startGame();
+}
 
 const messenger = new Messenger;
 messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight})
@@ -217,7 +232,12 @@ function gameOver(won){
     } else {
         //console.log(output);
         output.innerText = "You died!";
+        setEmoji(signs.dead);
     }
+}
+
+function setEmoji(emoji){
+    button.innerText = emoji;
 }
 
 function countRemainingFields(){
@@ -235,7 +255,7 @@ displays[1].update(0)
 function activateTimer(){
     let timer = 0;
     displays[1].update(timer++)
-    window.setInterval(function(){displays[1].update(timer++)}, 1000);
+    timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
     //window.setInterval(displays[1].update.bind(displays[1], timer), 1000);
 }
 
