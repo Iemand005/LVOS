@@ -2,12 +2,11 @@
 function DisplayBuilder(number, index, singular){
     this.display;
     this.index = index || 0;
-    console.log(this.index)
     this.number= number || 0;
     this.segments = [];
     this.size = 50;
     this.fat = 10;
-    this.singular = !!singular;
+    this.singular = Boolean(singular);
     if(singular) this.singular = true
 }
 
@@ -39,7 +38,7 @@ DisplayBuilder.prototype = {
         classifier: for (let i = 0; i < 7; i++) {
             const segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
-            if(this.singular) continue classifier; // Labelled for loop, similar to a goto command.
+            if(this.singular) continue classifier; // Labelled for loop, similar to a goto command. CSS takes care of the styling automatically, so we don't need the rest anymore.
             if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
             if(i==1 || i==2 || i==4 || i==5) segment.classList.add("segmenty");
             if(i==2 || i==5) segment.classList.add("segmentr");
@@ -89,7 +88,6 @@ MultiDigitDisplayBuilder.prototype = {
         });
     },
     update: function(number){
-        //console.log("9".repeat(this.digits), this.digits)
         const max = "9".repeat(this.digits);
         this.displays.forEach(function(display, index){
             display.update(max>number?tokenizeNumber(number)[index]:9);

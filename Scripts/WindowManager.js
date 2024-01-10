@@ -182,7 +182,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
 Dialog.prototype = {
     get isOpen(){ return this.target.hasAttribute("open") },
-    set isOpen(force){ this.target.toggleAttribute("open", force)/* , saveWindowState() */ },
+    set isOpen(force){ this.target.toggleAttribute("open", force), this.focus() },
+    focus: function(){this.target.style.zIndex = topZ++},
     setTitle: function(title){ return this.getTitleElement().innerText = title },
     getTitleElement: function(){ return this.getHead().querySelector("h1") },
     getContent: function(){ return this.target.getElementsByTagName("content")[0] },
@@ -195,18 +196,18 @@ Dialog.prototype = {
     toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined) },
     open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen }, // Open, save, return if it's opened or not.
     openUrl: function(url){
-        console.log("this should be a lnik!", url);
+        // console.log("this should be a lnik!", url);
         const frameUrl = new URL(this.frame.src);
         frameUrl.searchParams.set("url", url);
         this.frame.src = frameUrl.href;
-        console.log(this)
+        // console.log(this)
         this.launch();
     },
     close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/ },
     getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
     getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
-    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")).onclick = this.open.bind(this), this.buttons[0]},
+    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},
     setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
     togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
     toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
@@ -358,12 +359,9 @@ function windowActivationEvent(event){
      * @property event
      */
     const dialog = getEventDialog(event);
-    dialog.style.zIndex = topZ++; // Put our window on top of the others.
-    // Deprecated! activeDrag = true; // Activate window dragging so the mousemove event registers it.
+    dialog.focus();
     activeWindow = dialog.id;
     resizeDirection = 0;
-    //dragAction.set(0);
-    //windows[activeWindow].dragCalculator.set(0);
     disableWindowPointers();
     const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
     windows[activeWindow].setClickOffset(mouse.x, mouse.y);
@@ -374,9 +372,9 @@ function windowDragEvent(event){
     try {
         const dialog = windows[activeWindow], difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
         dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
-        //console.log(dialog.width, dialog.minWidth, activeWindow, activeDrag, resizeDirection)
-        if(dialog.width < 0) dialog.width = 0;
-        if(dialog.height < 0) dialog.height = 0;
+
+        if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
+        if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
         
         if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
     } catch (ex) {
@@ -385,26 +383,21 @@ function windowDragEvent(event){
 }
 
 function activateWindowPointers(){
-    //document.addEventListener("mousemove", windowDragEvent);
     document.removeEventListener("mousemove", windowDragEvent);
-    console.log("anker")
+    // console.log("anker")
     dragAction.set(0);
-    for(let index in windows) windows[index].togglePointerEvents(true);//, IE11Booster?dragAction.set(0):windows[index].dragCalculator.set(0);
+    for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
     if(windows[activeWindow]){
         if(windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
         if(IE11Booster) dragAction.set(0);
         else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
-        //windows[activeWindow].dragCalculator.set(0);
     }
-    //dragAction.set(0);
     activeDrag = false;
-    //dragAction.set(0);
 }
 
 function disableWindowPointers(){
     document.addEventListener("mousemove", windowDragEvent);
-    //document.removeEventListener("mousemove", windowDragEvent);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
@@ -457,8 +450,6 @@ function synchroniseWindowState(window){
     if(window.y) window.target.style.top = toPixels(window.y);
     if(window.width) window.target.style.width = toPixels(window.width);
     if(window.height) window.target.style.height = toPixels(window.height);
-    //window.target.toggleAttribute("open", window.isOpen);
-    console.log(window.isOpen)
 }
 
 // Onderdeel van de aller eerste window move event handler.
