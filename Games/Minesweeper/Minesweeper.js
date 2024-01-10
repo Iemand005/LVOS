@@ -211,7 +211,7 @@ body.ondblclick = quickRevealEvent;
 const button = document.querySelector("article>button");
 
 button.onclick = function(){
-    window.clearInterval(timerInterval);
+    //window.clearInterval(timerInterval);
     startGame();
 }
 
@@ -247,7 +247,7 @@ function randomNumberBetween(start, end){
 
 function gameOver(won){
     if(isGameOver) return;
-    displays[1].update(0);
+    //displays[1].update(0);
     lineartiles.forEach(function(tile){ tile.reveal() });
     if(won)setEmoji(signs.won);
     else setEmoji(signs.dead);
@@ -260,10 +260,7 @@ function setEmoji(emoji){
 }
 
 function countRemainingFields(){
-    return lineartiles.filter(function(tile){
-        //console.log(!tile.mine);
-        return !tile.mine && !tile.revealed;
-    }).length;
+    return lineartiles.filter(function(tile){return !tile.mine && !tile.revealed}).length;
 }
 
 function countBombs(){
@@ -279,7 +276,7 @@ displays[1].update(0);
 
 function activateTimer(){
     let timer = 0;
-    displays[1].update(timer++)
+    displays[1].update(timer++);
     timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
 }
 
