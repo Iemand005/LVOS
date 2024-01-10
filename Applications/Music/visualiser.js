@@ -30,32 +30,30 @@ AudioVisualiser.prototype = {
 const file = document.getElementById("file");
 const audio = document.getElementsByTagName("audio")[0];
 
-file.onchange = function(ev){
-    console.log("File received!", ev);
-    audio.src = URL.createObjectURL(this.files[0]);
-    const audioContext = new AudioContext(),
-        source = audioContext.createMediaElementSource(audio),
-        analyser = audioContext.createAnalyser();
-    
-    
-    doAnalStuff(analyser, source);
+const eudioVisualiser = new AudioVisualiser;
+
+eudioVisualiser.initializeWithMediaElement(audio);
+
+eudioVisualiser.start();
+
+const elements = [];
+
+for (let i = 0; i < eudioVisualiser.analyser.frequencyBinCount; i++) {
+    const element = document.createElement("p");
+    elements.push(element);
+    document.appendChild(element);
 }
-
-function doAnalStuff(analyser, source){
-
-    src.connect(analyser);
-    analyser.connect(audioContext.destination);
-    analyser.fftSize = 32;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(dataArray);
-
-    for (var i = 0; i < bufferLength; i++) console.log(barHeight = dataArray[i])
-}
+ 
 
 function animateFrame(e){
     requestAnimationFrame(animateFrame);
-    console.log(e)
+    for(let index in eudioVisualiser.analyserData){
+        elements[index].innerText = eudioVisualiser.analyserData[index];
+    }
+    //console.log(e)
 }
+
+animateFrame();
 
 
 
