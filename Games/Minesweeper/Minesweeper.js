@@ -9,27 +9,37 @@ const width = 10;
 const height = 10;
 const quickReveal = true;
 const singleSidedDisplay = true;
+const showBombInsteadOfCheckmark = true;
 
 const body = document.body;
 const form = document.querySelector("section");
 const table = document.createElement("table");
+const outputs = document.getElementsByTagName("output");
 
-const signs = {
-    bomb: "💥",
+const signs = { // Quick configuration of the signs used in game.
+    bomb: "💣",
+    exploded: "💥",
+    correct: "✔",
     flag: "🚩",
     alive: "😃",
-    click: "😮",
+    scared: "😮",
     dead: "😵",
+    won: "😁",
     unknown: "❓",
     none: ""
 }
 
 const tiles = new Array(height);
 const lineartiles = new Array(height*width);
-const isGameOver = false;
+
+let isGameOver = false;
+let isGameWon = false;
 let mousedown = false;
 let gameStarted = false;
 let timerInterval = 0;
+let bombCount = 0;
+
+const displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)];
 
 function Tile(button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
@@ -44,6 +54,7 @@ function Tile(button, x, y, mine){
 
 Tile.prototype = {
     reveal: function(){
+        if(isGameWon && this.mine) this.button.innerText = signs.correct;
         if(this.revealed) return 0;
         if(!gameStarted) gameStarted = true, activateTimer();
         this.revealed = true;
@@ -59,7 +70,7 @@ Tile.prototype = {
             this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
         }
         else {
-            this.button.innerText = signs.bomb;
+            this.button.innerText = signs.exploded;
             gameOver();
         };
 
@@ -117,27 +128,29 @@ Tile.prototype = {
         });
     },
 
-    countUnflaggedNeighbouringNotMines: function(neighbours){
-        return this.getUnflaggedNeighbouringnotMines(neighbours).length;
-    },
+    countUnflaggedNeighbouringNotMines: function(neighbours){ return this.getUnflaggedNeighbouringnotMines(neighbours).length },
 
     toggleDisabled: function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled") },
     disableVisual: function(){ this.button.classList.remove("active")/* , setEmoji(signs.click) */ },
     isClickAllowed: function(){ return this.flagged != 1 },
-    enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active")/* , setEmoji(signs.click) */ },
-    toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?signs.flag:signs.unknown:signs.none},
+    enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active") },
     quickReveal: function(){
         if(quickReveal){
             const neighbours = this.getNeighbours();
             if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){neighbour.reveal()});
         }
-    }
+    },
+    toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),signs.flag):(displays[0].update(++bombCount),signs.unknown):signs.none},
 }
 
 form.appendChild(table);
 
 function startGame(){
-    if(table.firstChild) table.removeChild(table.firstChild);
+    // for (let i = 0; i < table.children.length; i++) table.removeChild(table.children[i])
+    //if(table.firstChild) table.removeChild(table.firstChild);
+    isGameWon = false;
+    isGameOver = false;
+    while(table.firstChild) table.removeChild(table.firstChild);
     for (let y = 0; y < height; y++) {
         tiles[y] = new Array();
         const row = document.createElement("tr");
@@ -175,16 +188,22 @@ function startGame(){
             button.ondblclick = new Function;
 
             button.onmousedown = function(ev){
-                setEmoji(signs.click);
+                setEmoji(signs.scared);
                 if(!tile.isClickAllowed()) ev.preventDefault();
                 if(tile.mousedown = !ev.button) tile.enableVisual();
             }
 
         }
     }
+    bombCount = countBombs();
+    displays[0].update(bombCount);
+    sendDesiredSize();
 }
 
-startGame();
+
+function sendDesiredSize(){
+    messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight});
+}
 
 document.ondblclick = quickRevealEvent;
 body.ondblclick = quickRevealEvent;
@@ -197,7 +216,6 @@ button.onclick = function(){
 }
 
 const messenger = new Messenger;
-messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight})
 
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX, ev.clientY);
@@ -214,7 +232,7 @@ document.onmouseup = function(ev){
     return false;
 }
 
-document.onmousedown = setEmoji.bind(this, !isGameOver?signs.click:signs.dead);
+document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
 
 const mutationObserver = new MutationObserver(function(){
     const rect = body.getBoundingClientRect();
@@ -229,17 +247,12 @@ function randomNumberBetween(start, end){
 
 function gameOver(won){
     if(isGameOver) return;
-    const output = document.getElementsByTagName("output")[0];
-    lineartiles.forEach(function(tile){
-        tile.reveal();
-    });
-    if(won){
-        output.innerText = "You WIN!";
-    } else {
-        //console.log(output);
-        output.innerText = "You died!";
-        setEmoji(signs.dead);
-    }
+    displays[1].update(0);
+    lineartiles.forEach(function(tile){ tile.reveal() });
+    if(won)setEmoji(signs.won);
+    else setEmoji(signs.dead);
+    gameStarted = false;
+    stopTimer();
 }
 
 function setEmoji(emoji){
@@ -253,39 +266,29 @@ function countRemainingFields(){
     }).length;
 }
 
-const outputs = document.getElementsByTagName("output");
-
-const displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)];
-// displays[0].build(outputs[0]);
-// displays[1].build(outputs[1]);
-if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
-
-for(let i=0; i<outputs.length; i++){
-    displays[i].build(outputs[i]);
-    if(singleSidedDisplay){
-        // button.style.width = button.style.height = outputs[i].style.height = "28px";
-        // button.style.fontSize = "15px";
-        // button.style.padding = 0;
-        // outputs[i].style.width = "44px";
-    }
-    // if(singleSidedDisplay){
-    //     for(let j=0; j<outputs[i].children.length; j++) {
-    //         outputs[i].children[j].style.marginRight = "4px"};
-    //     }
-    //     // outputs[1].style.marginRight = "4px";
-    // }
+function countBombs(){
+    return lineartiles.filter(function(tile){ return tile.mine }).length;
 }
 
 
+if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
 
-displays[1].update(0)
+for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
+
+displays[1].update(0);
 
 function activateTimer(){
     let timer = 0;
     displays[1].update(timer++)
     timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
-    //window.setInterval(displays[1].update.bind(displays[1], timer), 1000);
 }
+
+function stopTimer(){
+    window.clearInterval(timerInterval);
+}
+
+startGame();
+
 
 //activateTimer();
 
