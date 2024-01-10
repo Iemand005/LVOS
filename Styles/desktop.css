@@ -159,15 +159,15 @@ aside#charms{
 }
 
 aside#charms.open{
-    animation: sesameopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
-    /* animation: none; */
+    animation: opensesame 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
+}
 
-    /* transition: all 1s ease-in-out; */
+#overlay{
+    animation: overlayclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
+}
 
-
-    /* background-color: green; */
-    /* right: 0; */
-
+#overlay.open{
+    animation: overlayopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
 }
 
 @media (pointer:none), (pointer:coarse){
@@ -188,7 +188,7 @@ aside#charms.open{
     }
 }
 
-@keyframes sesameopen{
+@keyframes opensesame{
     from{
         right: -300px;
     }
@@ -207,6 +207,24 @@ aside#charms.open{
     }
 }
 
+@keyframes overlayopen{
+    from{
+        right: 0px;
+    }
+    to{
+        display: none;
+        right: -300px;
+    }
+}
+@keyframes overlayclose{
+    from{
+        right: 0px;
+    }
+    to{
+        display: none;
+        right: -300px;
+    }
+}
 
 @keyframes metroflip{
     from{

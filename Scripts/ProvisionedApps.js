@@ -165,6 +165,11 @@ const applications = [
         title: "Cover Flow",
         id: "coverflow",
         src: "./Applications/Coverflow/Coverflow.html",
+    },
+    {
+        title: "Music",
+        id: "music",
+        src: "./Applications/Music/index.html"
     }
 ]
 
