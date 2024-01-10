@@ -172,36 +172,36 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 }
 
 Dialog.prototype = {
-    get isOpen(){ return this.target.hasAttribute("open") },
-    set isOpen(force){ this.target.toggleAttribute("open", force), this.focus() },
-    focus: function(){this.target.style.zIndex = topZ++},
-    setTitle: function(title){ return this.getTitleElement().innerText = title },
-    getTitleElement: function(){ return this.getHead().querySelector("h1") },
-    getContent: function(){ return this.target.getElementsByTagName("content")[0] },
-    getFrame: function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe") },
-    getTitle: function(){ return this.getTitleElement().innerText },
-    getHead: function(){ return this.target.getElementsByTagName("header")[0] },
-    getBody: function(){ return this.content.children[1] },
-    setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id) },
-    getId: function(){ return this.target.getAttribute("id") },
-    toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined) },
-    open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen }, // Open, save, return if it's opened or not.
-    close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/ },
-    getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight} }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
-    getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index] },
-    getButton: function(index){ return this.head.getElementsByTagName("button")[index] },
-    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},
-    setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset() },
-    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none" },
-    toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable) },
-    clearClickOffset: function(){ this.clickOffset.clear() },
-    toggleFullScreen: function(enable){ this.target.toggleAttribute("full", enable) },
-    toggleCloseButton: function(enable){ this.toggleButton(windowButtons.close, enable) },
-    toggleEjectButton: function(enable){ this.toggleButton(windowButtons.eject, enable) },
-    toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable) },
-    move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px" },
-    resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box" },
-    resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box" },
+    get isOpen(){ return this.target.hasAttribute("open"); },
+    set isOpen(force){ this.target.toggleAttribute("open", force), this.target.style.zIndex = topZ++;/* , this.focus() */ },
+    /* focus: function(){this.target.style.zIndex = topZ++}, */
+    setTitle: function(title){ return this.getTitleElement().innerText = title; },
+    getTitleElement: function(){ return this.getHead().querySelector("h1"); },
+    getContent: function(){ return this.target.getElementsByTagName("content")[0]; },
+    getFrame: function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    getTitle: function(){ return this.getTitleElement().innerText; },
+    getHead: function(){ return this.target.getElementsByTagName("header")[0]; },
+    getBody: function(){ return this.content.children[1]; },
+    setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id); },
+    getId: function(){ return this.target.getAttribute("id"); },
+    toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined); },
+    open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen; }, // Open, save, return if it's opened or not.
+    close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/; },
+    getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight}; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
+    getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index]; },
+    getButton: function(index){ return this.head.getElementsByTagName("button")[index]; },
+    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},;
+    setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
+    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
+    clearClickOffset: function(){ this.clickOffset.clear(); },
+    toggleFullScreen: function(enable){ this.target.toggleAttribute("full", enable); },
+    toggleCloseButton: function(enable){ this.toggleButton(windowButtons.close, enable); },
+    toggleEjectButton: function(enable){ this.toggleButton(windowButtons.eject, enable); },
+    toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable); },
+    move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
+    resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
+    resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
     openUrl: function(url){
         const frameUrl = new URL(this.frame.src);
         frameUrl.searchParams.set("url", url);
@@ -338,7 +338,7 @@ function windowActivationEvent(event){
      * @property event
      */
     const dialog = getEventDialog(event);
-    dialog.focus();
+    //dialog.focus();
     activeWindow = dialog.id;
     resizeDirection = 0;
     disableWindowPointers();

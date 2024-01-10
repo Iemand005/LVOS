@@ -165,6 +165,7 @@ aside#charms.open{
 #overlay{
     transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1);
     transition: all 3621ms cubic-bezier(0.8, -0.01, 1, 1);
+    transition: all 3621ms cubic-bezier(0, 0, 0.13, 0.97);
     opacity: 0;
     background: black;
     width: 100%;
@@ -174,6 +175,8 @@ aside#charms.open{
 
 #overlay.open{
     transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
+    /* ll 1163ms */
+    transition: all 1163ms cubic-bezier(0, 0, 0.19, 0.86);
     opacity: 1;
     /* animation: overlayopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
 }

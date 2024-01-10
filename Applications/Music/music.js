@@ -12,7 +12,7 @@ const elements = [];
 
 
 fullscreen.onclick = function(){
-    Messenger.broadcastToParent(Messenger.types.)
+    Messenger.broadcastToParent(Messenger.types.launchOverlay);
 }
 
 function animateFrame(eudioVisualiser){
