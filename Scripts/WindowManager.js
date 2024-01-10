@@ -85,6 +85,12 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     window.onmessage = function(ev){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
         const message = JSON.parse(ev.data), data = message.data, type = message.type;
         if(type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        switch(type){
+            case types.launchOverlay:
+                document.getElementById("overlay").classList.toggle("open");
+                break;
+        }
+        console.log("Received message " + type);
     }
 
     if(!this.scroll) this.body.style.overflow = "hidden";

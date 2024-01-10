@@ -8,10 +8,16 @@ function broadcast(target, type, message){
 
 function Messenger(){}
 
+Messenger.types = {
+    windowSize: "windowSize",
+    launchOverlay: "launchOverlay"
+},
+
 Messenger.prototype = {
 
     types: {
-        windowSize: "windowSize"
+        windowSize: "windowSize",
+        launchOverlay: "launchOverlay"
     },
 
     // event: new CustomEvent("message"),
@@ -22,8 +28,20 @@ Messenger.prototype = {
     broadcastFromChild: function(type, message){
         broadcast(window.top, type, message);
     },
+    broatcastToParent: this.broadcastFromChild,
 
     broadcastToChild: function(type, message, iFrame){
         broadcast(iFrame.contentWindow, type, message);
     }
+}
+
+Messenger.broadcastFromChild = function(type, message){
+    broadcast(window.top, type, message);
+}
+
+Messenger.broadcastToParent = Messenger.broadcastFromChild;
+
+Messenger.broadcastToChild = function(type, message, iFrame){
+        broadcast(iFrame.contentWindow, type, message);
+        // broadcast(window.top, type, message);
 }

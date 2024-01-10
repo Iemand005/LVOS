@@ -7,11 +7,13 @@ const file = document.getElementById("file");
 const audio = document.getElementsByTagName("audio")[0];
 const visualiser = document.getElementById("visualiser");
 const ctx = visualiser.getContext("2d");
-
+const fullscreen = document.getElementById("fullscreen");
 const elements = [];
 
 
- 
+fullscreen.onclick = function(){
+    Messenger.broadcastToParent(Messenger.types.)
+}
 
 function animateFrame(eudioVisualiser){
     requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
