@@ -10,50 +10,39 @@
    /
 \*/
 
-'use strict'; // Strict mode is required for older versions of Chrome (tested on 48, Windows 8.1 both destkop and Metro mode).
+'use strict'; // Strict mode is required for older browsers (tested on Chrome 48, Windows 8.1 both destkop and Metro mode).
 
-// Settings
-let blur = false;
-let reflections = true;
-let fasterWindowTracking = false;
-let canSave = true;
-let IE11Booster = true;
-let flipped = false;
+let // Defining the default settings as let so we can modify them.
+    blur = false,
+    reflections = true,
+    fasterWindowTracking = false,
+    canSave = true,
+    IE11Booster = true,
+    flipped = false;
 
-// let [hey, hoi] = [0, 1];
-// let {kak, rommel} = {kak:1, rommel:19, e:17};
-// const numbers = [1, 2, 3];
-// const newArray = [...numbers, 4, 5];
-
-// function* hey(){
-//     yield cow;
-// }
-
-function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
+function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ECMAScript 5.
     /**
      * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
      * @author Lasse Lauwerys
-     * @param {Element} dialog This is a dialog element from the HTML structure.
+     * @param {Element} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
      */
 
     if(!object) return;
     let dialog = this;
 
-    this.messenger = new Messenger();
-    //const hey = 0;
-
     if(object.nodeName == "DIALOG") this.target = object;
     else{
         this.target = createDialog();
-        this.frame = this.body.appendChild(document.createElement("iframe"));
-        this.src = this.frame.src = object.src;
+        this.frame = object.src;
+        //this.body.appendChild(document.createElement("iframe"));
+        //this.frame.src = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if(typeof object.classes === 'object'){
             object.classes.forEach(function(someclass){ this.target.classList.add(someclass) }, dialog); // We can't use class since it's a keyword!!
-            // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 browsers.
+            // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 based browsers.
         }
     }
 
@@ -67,9 +56,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
-    // this.content = this.getContent();
-    // this.body = this.getBody(); // An effort to trade memory for performance by caching everything.
-    // this.head = this.getHead();
     this.buttons = [];
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
@@ -155,16 +141,18 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     windows[this.id] = this;
 }
+// const hey;
 
 Dialog.prototype = {
     get isOpen(){ return this.target.hasAttribute("open"); },
-    set isOpen(force){ this.target.toggleAttribute("open", force), this.activate();/* , this.focus() */ },
+    set isOpen(force){ this.target.toggleAttribute("open", force), this.activate(); },
+    set frame(url){ this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
     get body(){ return this.content.children[1]; },
     // get head()
     get head(){ return this.target.getElementsByTagName("header")[0]; },
     get content(){ return this.target.getElementsByTagName("content")[0]; },
     get frame(){ return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function(){ this.target.style.zIndex = topZ++, this.messageFrame(Messenger.types.open)/* Messenger.m */; },
+    activate: function(){ this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open)/* Messenger.m */; },
     setTitle: function(title){ return this.getTitleElement().innerText = title; },
     getTitleElement: function(){ return this.head.querySelector("h1"); },
     getTitle: function(){ return this.getTitleElement().innerText; },
@@ -322,6 +310,7 @@ function flip(enable){
 
 let metroBodyOrigin;
 function flipHandler(flipped){
+    toggleCharms(false);
     if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
     else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
     return flipped;
@@ -401,6 +390,7 @@ function windowDragEvent(event){
 }
 
 function activateWindowPointers(){
+    if(flipped) return;
     document.removeEventListener("mousemove", windowDragEvent);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
@@ -489,8 +479,8 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     else document.body.toggleAttribute("blur", enabled);
 }
 
-function collectEssentialWindowData(target, source){
-    return target.isOpen = source.isOpen, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+function collectEssentialWindowData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
+    return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 function saveWindowState(){
@@ -547,10 +537,9 @@ function exportWindowBodyToMetro(dialog){
 
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
-    console.log("knars ar", dialog, metroBody)
     if (dialog && metro) {
         dialog.content.appendChild(metroBody);
-    dialog.open();
+        dialog.open();
     }
 }
 
@@ -579,7 +568,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 function toggleCharms(force){
-    document.getElementsByTagName("aside")[0].classList.toggle("open", force);
+    document.getElementById("charms").classList.toggle("open", force);
 }
 
 function hexToRGB(hex){

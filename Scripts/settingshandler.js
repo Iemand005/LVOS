@@ -1,6 +1,7 @@
 
 const settings = bodyCrawler.settings;
 settings.onsubmit=function(ev){ev.preventDefault();}
+const desktop = document.getElementById("desktop");
 
 bodyCrawler.theme.onchange = function(ev){
     console.log(this.selectedIndex);
@@ -13,15 +14,11 @@ bodyCrawler.theme.onchange = function(ev){
 }
 
 const charmsbutton = applist.appendChild(document.createElement("button"));
-//charmsbutton.onclick = toggleCharms.bind();
-charmsbutton.innerText = "Charms"
-// charmsbutton.onclick = toggleCharmsEvent.bind();
+charmsbutton.innerText = "Charms";
 
 const charmsbutton2 = document.getElementById("dockapplist").appendChild(document.createElement("button"));
-// charmsbutton2.onclick = toggleCharmsEvent//toggleCharms.bind();
 charmsbutton2.innerText = "Charms"
 
-// document.body.addEventListener("mousedown", toggleCharmsEvent);
 window.addEventListener("mousedown", toggleCharmsEvent);
 
 function toggleCharmsEvent(ev){
@@ -43,6 +40,39 @@ color.oninput = color.onchange = function(ev){
 
 accent.oninput = accent.onchange = function(ev){
     setAccentColor(this.value);
+}
+
+
+
+window.ondrag = document.ondrag = function(ev){
+    ev.preventDefault();
+    desktop.style.opacity = 0;
+}
+
+window.ondragleave = function(ev){
+    ev.preventDefault();
+    desktop.style.opacity = null;
+}
+
+window.ondrop = document.ondrop = function(ev){
+    ev.preventDefault();
+
+    if (ev.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...ev.dataTransfer.items].forEach((item, i) => {
+          // If dropped items aren't files, reject them
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            console.log(`… file[${i}].name = ${file.name}`);
+          }
+        });
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        [...ev.dataTransfer.files].forEach((file, i) => {
+          console.log(`… file[${i}].name = ${file.name}`);
+        });
+      }
+    console.log(ev);
 }
 // bodyCrawler.charms.onmousedown = function(ev){ev.preventDefault()}
 // document.body.addEventListener("mousedown", toggleCharms.bind(this, false));
