@@ -376,10 +376,9 @@ function initializeWindows(windows){
     flip();
     const dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function(dialog){
-        windows[String(dialog.id)] = new Dialog(dialog); // Enable the close button. We are doing these things in JavaScript for if someone has JavaScript disabled.
+        windows[String(dialog.id)] = new Dialog(dialog); 
     });
     loadWindowState();
-    //toggleReflections();
 }
 // Normally we use const in for in loops!
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
@@ -387,8 +386,6 @@ function initializeWindows(windows){
 function windowActivationEvent(event){
     /**
      * Activates the window on which the provided event was fired.
-     * @function windowActivationEvent()
-     * @property event
      */
     const dialog = getEventDialog(event);
     activeWindow = dialog.id;
@@ -509,7 +506,7 @@ function collectEssentialWindowData(target, source){
 
 function saveWindowState(){
     if(!loaded) return;
-    console.warn("SAVING!");
+    console.log("Saving window state.");
     if(canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) {
@@ -520,7 +517,6 @@ function saveWindowState(){
             }
         }
         localStorage.setItem("windowState", JSON.stringify(windowState));
-        // console.log(windowState)
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch(exception) {
         console.error(exception);

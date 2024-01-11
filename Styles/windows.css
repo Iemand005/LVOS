@@ -159,6 +159,7 @@ dialog header button {
     border-style: solid;
     border-width: inherit;
     border-color: inherit;
+    border: 1px solid black;
 }
 
 dialog header button:not(:disabled) ~ button:not(:disabled){
