@@ -333,37 +333,26 @@ const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.over
 
 
 toggleOverlay(true);
-// overlay.style./
+
 let timeout;
 let loaded = false;
 let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
-    // console.log("I s zwear we are flip now and oly once! kanobi")
-    
     clearTimeout(timeout);
     timeout = setTimeout(function(){
-        if(!loaded){
-        toggleOverlay(false);
-        loaded = true;
-        }
+        toggleOverlay(this, !(!loaded?(loaded = true):false));
     }, 500);
 
-    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-        if(!mobile){
-            console.log("flipped to mobile!");
-            // exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow]);
-            flipHandler(true);
-            mobile = true;
-        }
-        
-    } else {
-        if(mobile){
-            console.log("I s zwear we are flip now and oly once! kanobi");
-            // retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
-            flipHandler(true);
+    //timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("heya"), loaded = true):false)), 500);
 
+    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches && !mobile){
+        console.log("flipped to mobile!");
+        flipHandler(true);
+        mobile = true;
+    } else if(mobile){
+            console.log("I s zwear we are flip now and oly once! kanobi");
+            flipHandler(true);
             mobile = false;
-        }
     }
 }
 
