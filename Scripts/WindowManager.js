@@ -564,6 +564,18 @@ function toggleCharms(force){
     document.getElementsByTagName("aside")[0].classList.toggle("open", force);
 }
 
+function setColor(color){
+    for(let index in windows){
+        const content = windows[index].target.getElementsByTagName("content")[0];
+        content.style.backgroundColor = color;
+    }
+}
+
+function setAccentColor(color){
+    document.getElementById("charms").style.backgroundColor = color;;
+    document.getElementById("metro").style.backgroundColor = color;
+}
+
 function injectApplication(application){
     windows[demo.id] = new Dialog(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     loadWindowState();

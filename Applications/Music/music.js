@@ -21,10 +21,10 @@ const elements = [];
 ctx.globalAlpha = 0.1;
 
 fullscreen.onclick = function(){
-    //options.style.display = "none";
     Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
 }
 
+let audioVisualiser;
 let circular = true;
 let clear = false;
 const colorBuffer = [0, 0];
@@ -35,8 +35,7 @@ function animateFrame(audioVisualiser, time){
     requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
-        // console.log("rat")
-        ctx.fillStyle = "#FF000099"//"#00000010"
+        ctx.fillStyle = "#FF000099"
         ctx.beginPath();
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.fill();
@@ -60,8 +59,6 @@ function animateFrame(audioVisualiser, time){
         let rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
-            //if(valueBuffer && )
-            //const currentAmp = parseInt(timeData[index])
             const amp = parseInt(timeData[index]);
 
             const a = parseInt(freqData[index]);
@@ -71,9 +68,6 @@ function animateFrame(audioVisualiser, time){
             ctx.beginPath();
 
             ctx.fillStyle = "hsl(" + hue + ",100%,"+ a/255*100 +"%)";
-            // ctx.beginPath();
-
-            // ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
 
             ctx.arc(x, y, 10, 0, Math.PI*2);
             ctx.fill();
@@ -84,10 +78,7 @@ function animateFrame(audioVisualiser, time){
     } else for(let index in freqData){
         const amp = parseInt(freqData[index]);
         const x = parseInt(index) * (width/count);
-        //const red = amp, green = amp+emo.green, blue = amp+emo.blue;
-        //ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
         ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
-// console.log(x)
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
     }
     ctx.fill();
@@ -104,30 +95,24 @@ function startAnimation(audioVisualiser){
 file.onchange = function(ev){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
-    const auidoVisualiser = new AudioVisualiser(frequencies);
-    auidoVisualiser.initializeWithMediaElement(audio);
-    startAnimation(auidoVisualiser);
+    audioVisualiser = new AudioVisualiser(frequencies);
+    audioVisualiser.initializeWithMediaElement(audio);
+    startAnimation(audioVisualiser);
     seek.max = audio.duration;
     volume.value = audio.volume*100;
-    // fft.oninput = function(){
-    //     auidoVisualiser.updateBinCount(Math.pow(2, this.value)); // "2 ** this.value" works in more modern browsers too.
-    // }
 }
 
 options.onsubmit = function(ev){
     ev.preventDefault();
 }
 
-// play.onclick = function(){
-//     audio.play();
-//     // if(audio.)this.COMMENT_NODE
-// }
-
 play.onclick = audio.play.bind(audio);
 
 audio.onplaying = function(){
     play.innerText = "⏸︎";
     play.onclick = audio.pause.bind(audio);
+    // audioVisualiser = new AudioVisualiser(frequencies);
+    // audioVisualiser.initializeWithMediaElement(audio);
 }
 
 audio.onpause = function(){

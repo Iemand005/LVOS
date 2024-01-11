@@ -21,5 +21,16 @@ charmsbutton2.onclick = toggleCharms.bind();
 charmsbutton2.innerText = "Charms"
 
 bodyCrawler.desktop.addEventListener("mousedown", toggleCharms.bind(this, false));
+
+const color = document.getElementById("color");
+const accent = document.getElementById("accent");
+
+color.oninput = color.onchange = function(ev){
+    setColor(this.value);
+}
+
+accent.oninput = accent.onchange = function(ev){
+    setAccentColor(this.value);
+}
 // bodyCrawler.charms.onmousedown = function(ev){ev.preventDefault()}
 // document.body.addEventListener("mousedown", toggleCharms.bind(this, false));
