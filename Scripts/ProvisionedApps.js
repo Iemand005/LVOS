@@ -198,3 +198,5 @@ const games = [
 
 injectApplications(applications);
 injectApplications(games);
+
+toggleReflections(true);

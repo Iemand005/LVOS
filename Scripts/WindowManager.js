@@ -270,6 +270,7 @@ DocumentCrawler.prototype = {
     get settings(){ return document.getElementById("settings"); },
     get theme(){ return document.getElementById("theme"); },
     get desktop(){ return document.getElementById("desktop"); },
+    get applist(){ return document.getElementById("applist"); },
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!

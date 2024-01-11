@@ -12,6 +12,14 @@ bodyCrawler.theme.onchange = function(ev){
     }
 }
 
+const charmsbutton = applist.appendChild(document.createElement("button"));
+charmsbutton.onclick = toggleCharms.bind();
+charmsbutton.innerText = "Charms"
+
+const charmsbutton2 = document.getElementById("dockapplist").appendChild(document.createElement("button"));
+charmsbutton2.onclick = toggleCharms.bind();
+charmsbutton2.innerText = "Charms"
+
 bodyCrawler.desktop.addEventListener("mousedown", toggleCharms.bind(this, false));
 // bodyCrawler.charms.onmousedown = function(ev){ev.preventDefault()}
 // document.body.addEventListener("mousedown", toggleCharms.bind(this, false));
