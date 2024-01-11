@@ -148,6 +148,37 @@ const demo = { // More parameters will be added over time when I need them, you 
 
 // Working tests of my Window injection API.
 const applications = [
+    <dialog id="calculator">
+                    <content>
+                        <header>
+                            <h1>Calculator</h1>
+                            <section>
+                                <button disabled>🡕</button>
+                                <button disabled>❐</button>
+                                <button disabled>✕</button>
+                            </section>
+                        </header>
+                        <article>
+                            <iframe src="./Applications/Calculator.html" frameborder="0"></iframe>
+                        </article>
+                    </content>
+                </dialog>
+                
+                <dialog id="0">
+                    <content>
+                        <header>
+                            <h1>Window</h1>
+                            <section>
+                                <button disabled>🡕</button>
+                                <button disabled>❐</button>
+                                <button disabled>✕</button>
+                            </section>
+                        </header>
+                        <article>
+                            <iframe src="./example.html"></iframe>
+                        </article>
+                    </content>
+                </dialog>
     {
         title: "Camera",
         id: "camera",
