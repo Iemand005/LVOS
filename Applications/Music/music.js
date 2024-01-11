@@ -20,13 +20,14 @@ const elements = [];
 ctx.globalAlpha = 0.1;
 
 fullscreen.onclick = function(){
-    options.style.display = "none";
+    //options.style.display = "none";
     Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
 }
 
 let circular = true;
 let clear = false;
 const colorBuffer = [0, 0];
+const valueBuffer = new Array(30);
 
 function animateFrame(audioVisualiser, time){
 
@@ -56,8 +57,12 @@ function animateFrame(audioVisualiser, time){
     ctx.beginPath();
     if(circular){
         let rad = 0, inc = Math.PI*2*(1/count);
+        ctx.lineWidth = 100;
         for(let index in timeData){
+            //if(valueBuffer && )
+            //const currentAmp = parseInt(timeData[index])
             const amp = parseInt(timeData[index]);
+
             const a = parseInt(freqData[index]);
 
             const x = (amp) * Math.cos(rad) + cX;
@@ -69,7 +74,7 @@ function animateFrame(audioVisualiser, time){
 
             // ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
 
-            ctx.arc(x, y, 2, 0, Math.PI*2);
+            ctx.arc(x, y, 10, 0, Math.PI*2);
             ctx.fill();
             ctx.closePath();
 
