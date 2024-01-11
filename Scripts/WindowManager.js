@@ -316,6 +316,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
         console.log("Received message " + type);
     }
 }
+
 Messenger.receive(messageReceived);
 
 function flip(enable){
@@ -338,12 +339,13 @@ let timeout;
 let loaded = false;
 let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
-    clearTimeout(timeout);
-    timeout = setTimeout(function(){
-        toggleOverlay(this, !(!loaded?(loaded = true):false));
-    }, 500);
 
-    //timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("heya"), loaded = true):false)), 500);
+    clearTimeout(timeout);
+    timeout = setTimeout(function(){ toggleOverlay(this,!(!loaded?(loaded=true):false)); }, 500);
+
+    // Why doesn't this work?
+    // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
+    // The reason I found out is that JavaScript evaluates the parameters of the function calls before calling the function! We are forced to wrap it in another function to avoid this behaviour.
 
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches && !mobile){
         console.log("flipped to mobile!");
