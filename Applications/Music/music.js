@@ -26,9 +26,9 @@ let circular = true;
 let clear = false;
 const colorBuffer = [0, 0];
 
-function animateFrame(eudioVisualiser, time){
+function animateFrame(audioVisualiser, time){
 
-    requestAnimationFrame(animateFrame.bind(this, eudioVisualiser));
+    requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
         // console.log("rat")
@@ -45,19 +45,19 @@ function animateFrame(eudioVisualiser, time){
     const height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
 
-    const data = eudioVisualiser.data;
+    const data = audioVisualiser.timeDomainData;
     const count = data.length;
     
-    let cX = width/2;
-    let cY = height/2;
+    let cX = width/8;
+    let cY = height/8;
     const hue = time/321;
     ctx.beginPath();
     if(circular){
         let rad = 0, inc = Math.PI*2*(1/count);
         for(let index in data){
             const amp = parseInt(data[index]);
-            const x = 10+ amp * Math.cos(rad) + cX;
-            const y = 10+ amp * Math.sin(rad) + cY;
+            const x = (amp + cX) * Math.cos(rad) + cX;
+            const y = (amp + cX) * Math.sin(rad) + cY;
     ctx.beginPath();
     //ctx.fillStyle = "#FF000099"
     //ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -72,7 +72,7 @@ function animateFrame(eudioVisualiser, time){
     rad += inc;
         }
     } else for(let index in data){
-        const amp = parseInt(eudioVisualiser.data[index]);
+        const amp = parseInt(audioVisualiser.frequencyData[index]);
         const x = index * width;
         const red = amp+emo.red, green = amp+emo.green, blue = amp+emo.blue;
         ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";

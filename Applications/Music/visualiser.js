@@ -33,7 +33,10 @@ AudioVisualiser.prototype = {
     get frequencyBinCount(){
         return this.analyser.frequencyBinCount;
     },
-    get data(){
+    get frequencyData(){
         return this.analyser.getByteFrequencyData(this._data), this._data;
+    },
+    get timeDomainData(){
+        return this.analyser.getByteTimeDomainData(this._data), this._data;
     }
 }
