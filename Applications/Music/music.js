@@ -139,6 +139,22 @@ volume.oninput = function(ev){
     
 // }
 
+function autoHideControls(){
+    // options.style.display = "block";
+//options.style.opacity = 1;
+options.classList.add("hidden")
+clearTimeout(timeout);
+    // document.body.style.cursor = "auto";
+    timeout = setTimeout(options.classList.remove.bind(options.classList, "hidden"), 3000);
+}
+
+let timeout;
+if(new URL(window.location).searchParams.get("fullscreen")) {
+    // options.style.opacity = 0;
+    autoHideControls();
+    document.onmousemove = autoHideControls;
+}
+
 Messenger.receive(function(type, message){
     switch(type){
         case Messenger.types.prepareToLaunchOverlay:

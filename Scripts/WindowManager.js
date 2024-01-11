@@ -293,7 +293,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                     console.log("nded transition!")
                     windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
                     const oriurl = new URL(windows[source].frame.src);
-
+                    oriurl.searchParams.set("fullscreen", true);
+                    windows[source].frame.src = oriurl.href;
                     bodyCrawler.overlay.ontransitionend = null;
                 }
                 bodyCrawler.overlay.classList.toggle("open");
