@@ -38,8 +38,6 @@ function animateFrame(audioVisualiser, time){
         ctx.fill();
         ctx.closePath();
     }
-    
-    // <onsole.log(emo)
     seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
     const width = ctx.canvas.width = visualiser.clientWidth;
     const height = ctx.canvas.height = visualiser.clientHeight;
@@ -58,18 +56,18 @@ function animateFrame(audioVisualiser, time){
             const amp = parseInt(data[index]);
             const x = (amp + cX) * Math.cos(rad) + cX;
             const y = (amp + cX) * Math.sin(rad) + cY;
-    ctx.beginPath();
-    //ctx.fillStyle = "#FF000099"
-    //ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.beginPath();
 
-    ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
+            ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
+            ctx.beginPath();
+
+            ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
 
             ctx.arc(x, y, 2, 0, Math.PI*2);
-    ctx.fill();
-    ctx.closePath();
+            ctx.fill();
+            ctx.closePath();
 
-    // ctx.fill();
-    rad += inc;
+            rad += inc;
         }
     } else for(let index in data){
         const amp = parseInt(audioVisualiser.frequencyData[index]);
