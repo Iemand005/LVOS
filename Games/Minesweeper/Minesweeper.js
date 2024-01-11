@@ -161,7 +161,7 @@ function sendDesiredSize(){
 }
 
 function quickRevealEvent(ev) {
-    const element = document.elementFromPoint(ev.clientX, ev.clientY);
+    const element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
     const tile = lineartiles[parseInt(element.firstChild.id || element.id)];
     if(tile && tile.flagged!=1) tile.quickReveal();
 }
@@ -207,6 +207,7 @@ if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.tog
 for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 
 body.ondblclick = quickRevealEvent;
+body.ontouchend = quickRevealEvent;
 button.onclick = startGame.bind();
 // window.onfocus = sendDesiredSize;
 // window.onpageshow = sendDesiredSize;

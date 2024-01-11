@@ -23,11 +23,11 @@ form{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 2rem;
+    /* height: 2rem; */
     flex-wrap: nowrap;
 }
 
-#console form {
+#console form, #metro > article > form {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

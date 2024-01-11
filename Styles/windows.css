@@ -90,7 +90,7 @@ dialog{
     backdrop-filter: blur(37px);
 } */
 
-content::before, dialog::before {
+/* content::before, dialog::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -99,7 +99,7 @@ content::before, dialog::before {
     left: 0;
     backdrop-filter: blur(37px);
     z-index: -1;
-}
+} */
 
 dialog header{
     margin: 0;

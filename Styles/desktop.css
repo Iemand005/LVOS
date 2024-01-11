@@ -94,7 +94,11 @@ body:not([blur]) dialog > article{
 #metro{
     height: 100%;
     width: 100%;
-    background: green;
+    background: white;
+    display: flex;
+    /* align-content: center; */
+    justify-content: center;
+    align-items: center;
 }
 
 #metro > *{

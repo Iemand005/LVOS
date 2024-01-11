@@ -45,8 +45,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(object.nodeName == "DIALOG") this.target = object;
     else{
         this.target = createDialog();
-        this.content = this.getContent();
-        this.frame = this.getBody().appendChild(document.createElement("iframe"));
+        this.frame = this.body.appendChild(document.createElement("iframe"));
         this.src = this.frame.src = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
@@ -68,9 +67,9 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
-    this.content = this.getContent();
-    this.body = this.getBody(); // An effort to trade memory for performance by caching everything.
-    this.head = this.getHead();
+    // this.content = this.getContent();
+    // this.body = this.getBody(); // An effort to trade memory for performance by caching everything.
+    // this.head = this.getHead();
     this.buttons = [];
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
@@ -91,12 +90,13 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     document.getElementById("applist").appendChild(this.createOpenButton());
+    document.getElementById("metroapplist").appendChild(this.createOpenButton());
 
-    this.verifyEjectCapability = function(){
-        const style = this.getButton(windowButtons.eject).style;
-        try { if(this.getFrame().contentWindow.location.href == null) style.display = "none" }
-        catch (e){ style.display = "none" }
-    }
+    // this.verifyEjectCapability = function(){
+    //     //let canEject = false, e = 
+    //     return function(){try{return this.frame.contentWindow.document||this.frame.contentDocument!==null;}catch(e){return false}}();
+    //     //return canEject;
+    // }
 
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
@@ -104,16 +104,14 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 
     this.synchronise = synchroniseWindowState.bind(this);
 
-    this.exchangeWindowMouseUpEvent = function(){
-        this.messageFrame("mouseUp", {difference:new Vector});
-    }
+    this.exchangeWindowMouseUpEvent = this.messageFrame.bind(this, "mouseUp", {difference:new Vector});
 
     this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
         if(difference)this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
     if(object.body) this.body.appendChild(object.body);
-    this.setTitle(this.title);
+    this.setTitle(this.title);//sun
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
@@ -149,7 +147,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     });
 
     const buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", dialog.close.bind());
+    buttons[windowButtons.close].addEventListener("click", dialog.close.bind(dialog));
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
     this.close();
 
@@ -161,14 +159,16 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 Dialog.prototype = {
     get isOpen(){ return this.target.hasAttribute("open"); },
     set isOpen(force){ this.target.toggleAttribute("open", force), this.activate();/* , this.focus() */ },
+    get body(){ return this.content.children[1]; },
+    // get head()
+    get head(){ return this.target.getElementsByTagName("header")[0]; },
+    get content(){ return this.target.getElementsByTagName("content")[0]; },
+    get frame(){ return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
     activate: function(){ this.target.style.zIndex = topZ++, this.messageFrame(Messenger.types.open)/* Messenger.m */; },
     setTitle: function(title){ return this.getTitleElement().innerText = title; },
-    getTitleElement: function(){ return this.getHead().querySelector("h1"); },
-    getContent: function(){ return this.target.getElementsByTagName("content")[0]; },
-    getFrame: function(){ return this.frame = this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    getTitleElement: function(){ return this.head.querySelector("h1"); },
     getTitle: function(){ return this.getTitleElement().innerText; },
-    getHead: function(){ return this.target.getElementsByTagName("header")[0]; },
-    getBody: function(){ return this.content.children[1]; },
+    /* getBody: function(){ return this.content.children[1]; }, */
     setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id); },
     getId: function(){ return this.target.getAttribute("id"); },
     toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined); },
@@ -179,6 +179,7 @@ Dialog.prototype = {
     getButton: function(index){ return this.head.getElementsByTagName("button")[index]; },
     createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},
     setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
+    verifyEjectCapability: function(){ return function(){ try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch(e) { return false }}(); },
     togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
     toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
     clearClickOffset: function(){ this.clickOffset.clear(); },
@@ -336,13 +337,10 @@ let loaded = false;
 let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
 
-    clearTimeout(timeout);
-    timeout = setTimeout(function(){
-        // const e = !(!loaded?(loaded=true):false)
-        // console.log("wtf dude", e)
-        toggleOverlay(!(!loaded?(loaded=true):false));
-
-    }, 0);
+    if(!loaded){
+        clearTimeout(timeout); // I don't know why it works with the timeout set to 0 unless if the 3 repeated animation events actually get called in less than 1ms. I guess it's handy since we want it to load as fast as possible;
+        timeout = setTimeout(function(){ toggleOverlay(!(!loaded?(loaded=true):false)); }, 500);
+    }
 
     // Why doesn't this work?
     // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
@@ -353,24 +351,24 @@ document.getElementById("desktop").ontransitionend  = function(){
         flipHandler(true);
         mobile = true;
     } else if(mobile){
-            console.log("I s zwear we are flip now and oly once! kanobi");
-            flipHandler(true);
-            mobile = false;
+        console.log("I s zwear we are flip now and oly once! kanobi");
+        flipHandler(false);
+        mobile = false;
     }
 }
 
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
     
-    //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
-    flip();
     const dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function(dialog){
-        windows[String(dialog.id)] = new Dialog(dialog); 
+        windows[dialog.id] = new Dialog(dialog); 
     });
+    flip();
     loadWindowState();
 }
+
 // Normally we use const in for in loops!
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
 
@@ -539,18 +537,21 @@ function loadWindowState(){
     } else console.error("Storage access is disabled for this session!");
 }
 
-function exportWindowBodyToMetro(window){
-    if(window){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
+function exportWindowBodyToMetro(dialog){
+    if(dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
-        window.close();
-        if(metro) metro.appendChild(window.body);
+        dialog.close();
+        if(metro) metro.appendChild(dialog.body);
     }
 }
 
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
     console.log("knars ar", dialog, metroBody)
-    if (dialog && metro) dialog.launch(metroBody);
+    if (dialog && metro) {
+        dialog.content.appendChild(metroBody);
+    dialog.open();
+    }
 }
 
 function getDialogTemplate(){

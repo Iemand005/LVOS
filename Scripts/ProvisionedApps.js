@@ -4,7 +4,7 @@
 
 'use strict';
 
-const bindConsole = false;
+const bindConsole = true;
 
 const browser = document.getElementById("browser");
 const browserform = document.getElementById("browserform");
@@ -59,7 +59,7 @@ function initializeConsoleApplication(){
     const interceptConsole = function(){
         if(stdout.firstChild) stdout.removeChild(stdout.firstChild);
         stdout.appendChild(console.getHTML());
-        article.scrollTop = article.scrollHeight;
+        consoleform.scrollTop = consoleform.scrollHeight;
     }
 
     consoleform.addEventListener("submit", function(event){
