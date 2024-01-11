@@ -1,24 +1,24 @@
 // Messenger
 // Lasse Lauwerys
-// 8/1/2024
+// 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS
 
-function broadcast(target, type, message){
-    target.postMessage(JSON.stringify({type: type, data: message}), '*');
+function broadcast(target, type, message, id){
+    if(target) target.postMessage(JSON.stringify({type:type, data:message, id:id}), '*');
 }
 
 let onmessage = new Function();
 
 Messenger.receive = function(callback){
-    window.onmessage = function(ev) {
+    window.addEventListener("message", function(ev) {
         const data = JSON.parse(ev.data);
-        callback(data.type, data.data);
-    }
+        callback(data.type, data.data, data.id);
+    });
 }
 
 function Messenger(){
-    window.onmessage = function(ev) {
-        this.onmessage(JSON.parse(ev.data));
-    }
+    // window.onmessage = function(ev) {
+    //     this.onmessage(JSON.parse(ev.data));
+    // }
 }
 
 Messenger.types = {
@@ -40,9 +40,9 @@ Messenger.prototype = {
         readyToLaunchOverlay: "readyToLaunchOverlay"
     },
 
-    types: Messenger.types,
+    // types: Messenger.types,
 
-    onmessage = new Function(),
+    // onmessage = new Function(),
 
     // event: new CustomEvent("message"),
 
