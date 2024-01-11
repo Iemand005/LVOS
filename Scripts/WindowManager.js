@@ -198,10 +198,6 @@ Dialog.prototype = {
     },
 }
 
-// function newFunction() {
-//     return this.messenger.types;
-// }
-
 function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
     this.dialog = dialog;
     this.offset = dialog.clickOffset;
@@ -341,7 +337,12 @@ let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
 
     clearTimeout(timeout);
-    timeout = setTimeout(function(){ toggleOverlay(this,!(!loaded?(loaded=true):false)); }, 500);
+    timeout = setTimeout(function(){
+        // const e = !(!loaded?(loaded=true):false)
+        // console.log("wtf dude", e)
+        toggleOverlay(!(!loaded?(loaded=true):false));
+
+    }, 0);
 
     // Why doesn't this work?
     // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
