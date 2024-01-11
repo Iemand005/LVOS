@@ -107,10 +107,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         if(difference)this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
-    // this.messageFrame = function(object, literal){
-    //     if(this.frame) this.frame.contentWindow.postMessage(literal?object:JSON.stringify(object), '*');
-    // }
-
     if(object.body) this.body.appendChild(object.body);
     this.setTitle(this.title);
 
@@ -122,7 +118,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         div.onmousedown = function(ev){
             if(IE11Booster) dragAction.set(ev.target.id);
             else dialog.dragCalculator.set(ev.target.id);
-            //console.log(dialog, dialog.dragCalculator.set);
         } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
     }
 
