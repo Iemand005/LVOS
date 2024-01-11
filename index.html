@@ -17,6 +17,7 @@
     <script src="./Scripts/Reflector.js" defer></script>
     <script src="./Scripts/DesktopManager.js" defer></script>
     <script src="./Scripts/WindowManager.js" defer></script>
+    <script src="./Scripts/settingshandler.js" defer></script>
     <script src="./Scripts/ProvisionedApps.js" defer></script> <!-- The script order is very important here! -->
 </head>
 <body>
@@ -176,7 +177,13 @@
         </section>
         <aside id="charms">
             <h1>Settings</h1>
-            <form action=""></form>
+            <form id="settings">
+                <select name="theme" id="theme">
+                    <option value="square">Square</option>
+                    <option value="normal">Normal</option>
+                    <option value="round">Rounded</option>
+                </select>
+            </form>
         </aside>
         <section id="overlay"></section>
     </main>

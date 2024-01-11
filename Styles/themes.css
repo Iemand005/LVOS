@@ -8,3 +8,7 @@ dialog.rounded-corners{
 dialog.rounded-corners > content > article {
     border-radius: 5px;
 }
+
+dialog.sharp-corners{
+    border-radius: 0px !important;
+}

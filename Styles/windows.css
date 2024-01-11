@@ -42,6 +42,8 @@ main{
     height: 100%;
     width: 100%;
     overflow: hidden;
+    pointer-events: none;
+    perspective: 1000px;
 }
 
 dialog{
@@ -62,6 +64,7 @@ dialog{
     background: transparent;
     border: none;
     padding: 0;
+    transition: all 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
 }
 
@@ -147,6 +150,7 @@ dialog > content{
     height: inherit;
     overflow: hidden;
     background-color: orange;
+    transition: inherit;
 }
 
 iframe{
@@ -260,6 +264,7 @@ dialog > content > article{
     pointer-events: auto;
     display: flex;
     z-index: 1;
+    transition: inherit;
     /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
 }
 

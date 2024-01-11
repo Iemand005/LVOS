@@ -265,7 +265,10 @@ DocumentCrawler.prototype = {
     getMetroBody: function(){ return this.getMetro().firstChild },
     getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
     getWindowsContainer: function(){ return this.document.getElementById("windows") },
-    get overlay(){ return document.getElementById("overlay"); }
+    get overlay(){ return document.getElementById("overlay"); },
+    get charms(){ return document.getElementById("charms"); },
+    get settings(){ return document.getElementById("settings"); },
+    get theme(){ return document.getElementById("theme"); }
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
@@ -283,7 +286,7 @@ let topZ = 100;
 let bodyCrawler = new DocumentCrawler(document);
 
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-    console.log(data, type, source)    
+    //console.log(data, type, source)    
     const types = Messenger.types;
     if(source){
         if(type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
@@ -322,23 +325,27 @@ function flipHandler(flipped){
     else retrieveWindowBodyFromMetro(window);
     return flipped;
 }
+// document.getElementById("desktop").ontransitionend  = function(){
+//     console.log("I s zwear we are flip now and oly once! kanobi")
+    
+//     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+//         if(!flimminonce){flimminonce = true
+//             flipHandler( true)
+//         console.log("I s zwear we are flip now and oly once! kanobi")
 
+
+//         }
+//     } else {
+//         if(flimminonce) {
+//             flipHandler( flimminonce = false)
+//             console.log("terug naar garkiv your assbit");
+//         }
+//     }
+// }
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
-    document.getElementById("desktop").ontransitionend  = function(){
-        if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-            if(!flipped){flipHandler( flipped = true)
-            console.log("I s zwear we are flip now and oly once! kanobi")
-
-
-            }
-        } else {
-            if(flipped) {
-                flipHandler( flipped = false)
-                console.log("terug naar garkiv your assbit");
-            }
-        }
-    }
+    const flimminonce = false;
+    
     //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
     flip();
@@ -447,6 +454,7 @@ function synchroniseWindowState(window){
     window = this || window;
     if(window.x) window.target.style.left = toPixels(window.x);
     if(window.y) window.target.style.top = toPixels(window.y);
+    if(window.z) window.target.style.zIndex = window.z;
     if(window.width) window.target.style.width = toPixels(window.width);
     if(window.height) window.target.style.height = toPixels(window.height);
 }
@@ -471,7 +479,7 @@ function toggleBlur(enabled){
 }
 
 function collectEssentialWindowData(target, source){
-    return target.isOpen = source.isOpen, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+    return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 function saveWindowState(){
