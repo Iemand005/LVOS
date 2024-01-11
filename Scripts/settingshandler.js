@@ -11,3 +11,7 @@ bodyCrawler.theme.onchange = function(ev){
         if(this.selectedIndex == 2) window.target.classList.remove("sharp-corners"), window.target.classList.add("rounded-corners");
     }
 }
+
+bodyCrawler.desktop.addEventListener("mousedown", toggleCharms.bind(this, false));
+// bodyCrawler.charms.onmousedown = function(ev){ev.preventDefault()}
+// document.body.addEventListener("mousedown", toggleCharms.bind(this, false));

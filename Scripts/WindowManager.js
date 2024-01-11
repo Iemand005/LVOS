@@ -268,7 +268,8 @@ DocumentCrawler.prototype = {
     get overlay(){ return document.getElementById("overlay"); },
     get charms(){ return document.getElementById("charms"); },
     get settings(){ return document.getElementById("settings"); },
-    get theme(){ return document.getElementById("theme"); }
+    get theme(){ return document.getElementById("theme"); },
+    get desktop(){ return document.getElementById("desktop"); },
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!

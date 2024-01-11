@@ -64,7 +64,8 @@ dialog{
     background: transparent;
     border: none;
     padding: 0;
-    transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out, top 0, left 0, width 0, height 0;
+    transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
 }
 
