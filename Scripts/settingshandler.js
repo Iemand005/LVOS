@@ -26,8 +26,7 @@ window.addEventListener("mousedown", toggleCharmsEvent);
 
 function toggleCharmsEvent(ev){
     clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-    // collectEssentialWindowData.log()
-    console.log(clickedElement)
+
     if(!(clickedElement == bodyCrawler.charms || bodyCrawler.charms.contains(clickedElement))) {
         if(clickedElement == charmsbutton || clickedElement == charmsbutton2) toggleCharms();
         else toggleCharms(false);

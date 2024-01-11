@@ -4,13 +4,10 @@
  * @copyright Lasse Lauwerys © 2023
  */
 'use strict';
-console.log(windows)
+
 const applist = document.getElementById("applist");
 
-applist.addEventListener("submit", function(event){
-    event.preventDefault();
-    console.log(event.target.name);
-});
+applist.addEventListener("submit", function(event){ event.preventDefault(); });
 
 let reflecitons = false;
 

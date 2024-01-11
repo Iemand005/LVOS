@@ -4,6 +4,8 @@
 
 'use strict';
 
+const bindConsole = false;
+
 const browser = document.getElementById("browser");
 const browserform = document.getElementById("browserform");
 const browserframe = browser.getElementsByTagName("iframe")[0];
@@ -133,8 +135,7 @@ function initializeConsoleApplication(){
 
     
 }
-
-initializeConsoleApplication();
+if(bindConsole) initializeConsoleApplication();
 
 // Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
 const demo = { // More parameters will be added over time when I need them, you will probably find them as I start using the API instead of hard coding the applications.
