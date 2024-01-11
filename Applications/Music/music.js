@@ -15,6 +15,7 @@ const options = document.getElementById("options");
 const seekOutput = document.getElementById("seek-output");
 const volumeOutput = document.getElementById("volume-output");
 const fft = document.getElementById("fft");
+const visualiserOption = document.getElementById("style");
 const elements = [];
 
 ctx.globalAlpha = 0.1;
@@ -55,7 +56,7 @@ function animateFrame(audioVisualiser, time){
     const hue = time/321;
     const a = 70;
     ctx.beginPath();
-    if(circular){
+    if(visualiserOption.selectedIndex){
         let rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
@@ -80,11 +81,13 @@ function animateFrame(audioVisualiser, time){
 
             rad += inc;
         }
-    } else for(let index in timeData){
-        const amp = parseInt(audioVisualiser.frequencyData[index]);
-        const x = index * width;
-        const red = amp+emo.red, green = amp+emo.green, blue = amp+emo.blue;
-        ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
+    } else for(let index in freqData){
+        const amp = parseInt(freqData[index]);
+        const x = parseInt(index) * (width/count);
+        //const red = amp, green = amp+emo.green, blue = amp+emo.blue;
+        //ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
+        ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
+// console.log(x)
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
     }
     ctx.fill();
