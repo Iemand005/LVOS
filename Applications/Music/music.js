@@ -21,7 +21,7 @@ ctx.globalAlpha = 0.1;
 
 fullscreen.onclick = function(){
     options.style.display = "none";
-    Messenger.broadcastToParent(Messenger.types.launchOverlay);
+    Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
 }
 
 let circular = true;

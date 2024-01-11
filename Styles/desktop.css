@@ -180,6 +180,14 @@ aside#charms.open{
     opacity: 1;
     /* animation: overlayopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
 }
+#overlay>*{
+    transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
+    height: 100%;
+    opacity: 0;
+}
+#overlay.shown>*{
+    opacity: 1;
+}
 
 @media (pointer:none), (pointer:coarse){
 

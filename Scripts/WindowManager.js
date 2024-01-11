@@ -82,26 +82,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
 
-    function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-        console.log(dialog, type, source)    
-        
-        if(type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
-        switch(type){
-            case types.launchOverlay:
-                document.getElementById("overlay").ontransitionend = function(){
-                    dialog.messageFrame(Messenger.types.prepareToLaunchOverlay);
-                }
-                document.getElementById("overlay").classList.toggle("open");
-                break;
-            case types.readyToLaunchOverlay:
-                    document.getElementById("overlay").appendChild(dialog.body);
-                break;
-        }
-        console.log("Received message " + type);
-    }
-    //window.onmessage = messageReceived.bind(this);
-    Messenger.receive(messageReceived);
-
     if(!this.scroll) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
@@ -275,16 +255,17 @@ DragAction.prototype = {
     set: function(direction){ this.execute = this.resizeFunctions[direction] || new Function },
 }
 
-function OSDocumentCrawler(document){
+function DocumentCrawler(document){
     this.document = document;
 }
 
-OSDocumentCrawler.prototype = {
+DocumentCrawler.prototype = {
     getMetro: function(){ return this.document.getElementById("metro") },
     getDesktop: function(){ return this.document.getElementById("desktop") },
     getMetroBody: function(){ return this.getMetro().firstChild },
     getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
-    getWindowsContainer: function(){ return this.document.getElementById("windows") }
+    getWindowsContainer: function(){ return this.document.getElementById("windows") },
+    get overlay(){ return document.getElementById("overlay"); }
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
@@ -299,7 +280,34 @@ let activeDrag = false;
 let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
-let bodyCrawler = new OSDocumentCrawler(document);
+let bodyCrawler = new DocumentCrawler(document);
+
+function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
+    console.log(data, type, source)    
+    const types = Messenger.types;
+    if(source){
+        if(type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        switch(type){
+            case types.launchOverlay:
+                bodyCrawler.overlay.ontransitionend = function(){
+                    console.log("nded transition!")
+                    windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
+                    const oriurl = new URL(windows[source].frame.src);
+
+                    bodyCrawler.overlay.ontransitionend = null;
+                }
+                bodyCrawler.overlay.classList.toggle("open");
+                break;
+            case types.readyToLaunchOverlay:
+                    bodyCrawler.overlay.appendChild(windows[source].body);
+                    //bodyCrawler.overlay.classList.add("shown");
+                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500)
+                break;
+        }
+        console.log("Received message " + type);
+    }
+}
+Messenger.receive(messageReceived);
 
 function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));

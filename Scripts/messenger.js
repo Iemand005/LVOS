@@ -29,35 +29,14 @@ Messenger.types = {
 
 Messenger.prototype = {
 
-    types: {
-        po: "é",
-        open: "open",
-        windowSize: "windowSize",
-        launchOverlay: "launchOverlay",
-        readyToLaunchOverlay: "readyToLaunchOverlay"
-    },
-
-    // types: Messenger.types,
-
-    // onmessage = new Function(),
-
-    // event: new CustomEvent("message"),
-
-    // broadcastFromChild: broadcast.bind(window.top),
-    // broadcastToChild: broadcast.bind()
-
-    broadcastFromChild: function(type, message){
-        broadcast(window.top, type, message);
-    },
-    broatcastToParent: this.broadcastFromChild,
 
     broadcastToChild: function(type, message, iFrame){
         broadcast(iFrame.contentWindow, type, message);
     }
 }
 
-Messenger.broadcastFromChild = function(type, message){
-    broadcast(window.top, type, message);
+Messenger.broadcastFromChild = function(type, message, id){
+    broadcast(window.top, type, message, id);
 }
 
 Messenger.broadcastToParent = Messenger.broadcastFromChild;
