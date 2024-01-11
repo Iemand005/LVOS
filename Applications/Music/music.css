@@ -33,10 +33,11 @@ button#play {
 }
 
 form{
-    transition: all 1s;
+    transition: all 300s;
 }
 
 form.hidden{
+    /* transition: all 1s; */
     opacity: 0;
     cursor: none;
 }

@@ -140,12 +140,9 @@ volume.oninput = function(ev){
 // }
 
 function autoHideControls(){
-    // options.style.display = "block";
-//options.style.opacity = 1;
-options.classList.add("hidden")
-clearTimeout(timeout);
-    // document.body.style.cursor = "auto";
-    timeout = setTimeout(options.classList.remove.bind(options.classList, "hidden"), 3000);
+    options.classList.remove("hidden");
+    clearTimeout(timeout);
+    timeout = setTimeout(options.classList.add.bind(options.classList, "hidden"), 3000);
 }
 
 let timeout;
