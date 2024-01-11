@@ -20,6 +20,15 @@ let canSave = true;
 let IE11Booster = true;
 let flipped = false;
 
+// let [hey, hoi] = [0, 1];
+// let {kak, rommel} = {kak:1, rommel:19, e:17};
+// const numbers = [1, 2, 3];
+// const newArray = [...numbers, 4, 5];
+
+// function* hey(){
+//     yield cow;
+// }
+
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ES5.
     /**
      * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
@@ -31,11 +40,9 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     let dialog = this;
 
     this.messenger = new Messenger();
-    const types = this.messenger.types;
+    //const hey = 0;
 
-    if(object.nodeName == "DIALOG"){
-        this.target = object
-    }
+    if(object.nodeName == "DIALOG") this.target = object;
     else{
         this.target = createDialog();
         this.content = this.getContent();
@@ -58,7 +65,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.height = 0;
     this.minWidth = 100;
     this.minHeight = 100;
-    //this.isOpen = false;
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
@@ -72,11 +78,10 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
             reset: function(){ return this.start = Date.now(), this.last = this.start, this.position = new Vector, this }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
             update: function(x, y){
                 this.last = Date.now();
-                this.position.x = x;
-                this.position.y = y;
+                this.position.x = x, this.position.y = y;
                 this.positions.push(this.position.clone());
                 this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-                this;return this; } //
+                this;return this; }
         },
         clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
@@ -144,11 +149,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     });
 
     const buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", function(event){
-        //const dialog = getEventDialog(event);
-        dialog.close();
-        //console.log("MER" + dialog.isOpen)
-    });
+    buttons[windowButtons.close].addEventListener("click", dialog.close.bind());
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
     this.close();
 
@@ -196,6 +197,10 @@ Dialog.prototype = {
         this.launch();
     },
 }
+
+// function newFunction() {
+//     return this.messenger.types;
+// }
 
 function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
     this.dialog = dialog;
@@ -262,7 +267,7 @@ DocumentCrawler.prototype = {
     getMetroBody: function(){ return this.getMetro().firstChild },
     getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
     getWindowsContainer: function(){ return this.document.getElementById("windows") },
-    get overlay(){ return document.getElementById("overlay"); },
+    get overlay(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
     get charms(){ return document.getElementById("charms"); },
     get settings(){ return document.getElementById("settings"); },
     get theme(){ return document.getElementById("theme"); },
@@ -355,7 +360,6 @@ document.getElementById("desktop").ontransitionend  = function(){
 
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
-    const flimminonce = false;
     
     //document.onmousemove = windowDragEvent; // I'm going to step back from keeping this always active to speed things up by doing calculations on window activation and deactivation.
     dragAction.set(0);
@@ -481,7 +485,7 @@ function verifyEjectCapability(dialog){
     }
 }
 
-function toggleBlur(enabled){
+function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.toggleAttribute("blur");
     else document.body.toggleAttribute("blur", enabled);
 }
@@ -508,14 +512,13 @@ function saveWindowState(){
         console.error(exception);
         console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
         console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-        // localStorage.windowState = null; 
         localStorage.windowState = null; 
         canSave = false;
     }
 }
 
 function loadWindowState(){
-    console.log("loading", localStorage.windowState)
+    console.log("Loading window state.")
     if(canSave) try {
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
@@ -588,7 +591,6 @@ function isColorDark(color){
 }
 
 function setColor(color){
-    const rgb = hexToRGB(color);
     // const y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
     // const c = y < 128 ? "black" : "white";
     const isWhite = isColorDark(color);

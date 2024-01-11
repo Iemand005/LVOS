@@ -55,7 +55,10 @@ function animateFrame(audioVisualiser, time){
     let cY = height/2;
     const hue = time/321;
     const a = 70;
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
     ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    ctx.fill();
     if(visualiserOption.selectedIndex){
         let rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
@@ -72,18 +75,21 @@ function animateFrame(audioVisualiser, time){
 
             ctx.arc(x, y, 10, 0, Math.PI*2);
             ctx.fill();
-            ctx.closePath();
+            // ctx.closePath();
 
             rad += inc;
         }
     } else for(let index in freqData){
+    ctx.beginPath();
+
         const amp = parseInt(freqData[index]);
         const x = parseInt(index) * (width/count);
         ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
+        ctx.fill();
+    // ctx.closePath();
     }
-    ctx.fill();
-    ctx.closePath();
+    
 }
 
 function startAnimation(audioVisualiser){
