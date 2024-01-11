@@ -11,7 +11,7 @@ form#applist{
 }
 
 form{
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
@@ -19,7 +19,7 @@ form{
     flex-direction: row;
     justify-content: space-between;
     height: 100%;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;

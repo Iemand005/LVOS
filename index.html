@@ -182,13 +182,21 @@
         <aside id="charms">
             <h1>Settings</h1>
             <form id="settings">
+                <label for="theme">Theme: </label>
                 <select name="theme" id="theme">
                     <option value="square">Square</option>
                     <option value="normal" selected>Normal</option>
                     <option value="round">Rounded</option>
                 </select>
+                <label for="color">Color: </label>
                 <input type="color" name="color" id="color">
+                <input type="button" value="resetcolor">
+                <label for="accent">Accent color: </label>
                 <input type="color" name="accent" id="accent">
+                <input type="button" value="resetaccent">
+                <input type="range" name="border" id="border">
+                <input type="button" value="toggleblur">
+                <input type="button" value="togglereflections">
             </form>
         </aside>
         <section id="overlay"></section>

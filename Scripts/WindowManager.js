@@ -566,16 +566,35 @@ function toggleCharms(force){
     document.getElementsByTagName("aside")[0].classList.toggle("open", force);
 }
 
+function hexToRGB(hex){
+    const int = parseInt(hex.replace('#', ''), 16);
+    return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
+}
+
+function isColorDark(color){
+    const rgb = hexToRGB(color);
+    return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
+}
+
 function setColor(color){
+    const rgb = hexToRGB(color);
+    // const y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
+    // const c = y < 128 ? "black" : "white";
+    const isWhite = isColorDark(color);
     for(let index in windows){
         const content = windows[index].target.getElementsByTagName("content")[0];
         content.style.backgroundColor = color;
+        content.style.color = isWhite?"white":"black";
     }
 }
 
 function setAccentColor(color){
-    document.getElementById("charms").style.backgroundColor = color;;
-    document.getElementById("metro").style.backgroundColor = color;
+    const isWhite = isColorDark(color);
+    const metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
+    metroStyle.backgroundColor = charmStyle.backgroundColor = color;
+    metroStyle.color = charmStyle.color = isWhite?"white":"black";
+    // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
+
 }
 
 function injectApplication(application){

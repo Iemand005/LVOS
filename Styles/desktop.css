@@ -160,6 +160,7 @@ aside#charms{
     height: 100%;
     padding: 0 21px;
     box-sizing: border-box;
+    user-select: none;
 }
 
 aside#charms.open{
@@ -208,6 +209,14 @@ aside#charms.open{
     align-content: center;
     align-items: center;
     justify-content: center;
+}
+
+aside#charms form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    height: fit-content;
 }
 
 @media (pointer:none), (pointer:coarse){
