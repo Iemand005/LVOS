@@ -117,14 +117,11 @@ audio.onplaying = function(){
     play.innerText = "⏸︎";
     play.onclick = audio.pause.bind(audio);
     audioVisualiser.initializeWithMediaElement(audio);
-
-    // audioVisualiser.connectElement();
 }
 
 audio.onpause = function(){
     play.innerText = "⏵︎";
     play.onclick = audio.play.bind(audio);
-    // audioVisualiser.connectStream();
 }
 
 seek.oninput = function(ev){
@@ -135,34 +132,22 @@ volume.oninput = function(ev){
     audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
 }
 
+let timeout;
 function autoHideControls(){
     document.body.classList.remove("full");
     clearTimeout(timeout);
     timeout = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
-let timeout;
 if(new URL(window.location).searchParams.get("fullscreen")) {
     autoHideControls();
     document.onmousemove = autoHideControls;
 }
 
-Messenger.receive(function(type, message){
-    switch(type){
-        case Messenger.types.prepareToLaunchOverlay:
-            options.style.display = "none";
-            Messenger.broadcastToParent(Messenger.types.readyToLaunchOverlay, "ready", "music");
-            break;
-    }
-});
-
 function refresh(){
     const m = parseInt(audio.currentTime/60);
     const s = parseInt(audio.currentTime%60);
     const ms = parseInt(audio.currentTime%1/0.01);
-    // let mst = parseInt(ms%1/0.01) + ""
-    // mst +=" ".repeat(e.length%2);
-    // const text = (m<10?"0"+m:m) +",:0" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     const text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
-    seekOutput.innerText = text;// + ' '.repeat(text.length%20)
+    seekOutput.innerText = text;
 }

@@ -329,23 +329,30 @@ function flipHandler(flipped){
     else retrieveWindowBodyFromMetro(window);
     return flipped;
 }
-// document.getElementById("desktop").ontransitionend  = function(){
-//     console.log("I s zwear we are flip now and oly once! kanobi")
+
+toggleOverlay(true);
+// overlay.style./
+let timeout;
+document.getElementById("desktop").ontransitionend  = function(){
+    console.log("I s zwear we are flip now and oly once! kanobi")
+    clearTimeout(timeout);
+    timeout = setTimeout(toggleOverlay.bind(this, false), 3000);
     
-//     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-//         if(!flimminonce){flimminonce = true
-//             flipHandler( true)
-//         console.log("I s zwear we are flip now and oly once! kanobi")
+    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+        if(!flimminonce){flimminonce = true
+            flipHandler( true)
+        console.log("I s zwear we are flip now and oly once!")
 
 
-//         }
-//     } else {
-//         if(flimminonce) {
-//             flipHandler( flimminonce = false)
-//             console.log("terug naar garkiv your assbit");
-//         }
-//     }
-// }
+        }
+    }/*  else {
+        if(flimminonce) {
+            flipHandler( flimminonce = false)
+            console.log("terug naar");
+        }
+    } */
+}
+
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
     const flimminonce = false;
@@ -596,6 +603,9 @@ function setAccentColor(color){
     // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
 
 }
+
+const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(this, "open"); // The force attribute gets automatically forwarded!
+
 
 function injectApplication(application){
     windows[demo.id] = new Dialog(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
