@@ -41,7 +41,8 @@ function animateFrame(audioVisualiser, time){
         ctx.fill();
         ctx.closePath();
     }
-    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
+    refresh();
+    //seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
     const width = ctx.canvas.width = visualiser.clientWidth;
     const height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
@@ -156,9 +157,12 @@ Messenger.receive(function(type, message){
 });
 
 function refresh(){
+    const m = parseInt(audio.currentTime/60);
+    const s = parseInt(audio.currentTime%60);
     const ms = parseInt(audio.currentTime%1/0.01);
-    let mst = parseInt(ms%1/0.01) + ""
-    mst +=" ".repeat(e.length%2);
-    const text = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ mst;
+    // let mst = parseInt(ms%1/0.01) + ""
+    // mst +=" ".repeat(e.length%2);
+    // const text = (m<10?"0"+m:m) +",:0" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
+    const text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     seekOutput.innerText = text;// + ' '.repeat(text.length%20)
 }

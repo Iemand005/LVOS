@@ -155,6 +155,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         //console.log("MER" + dialog.isOpen)
     });
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+    this.close();
+
     this.synchronise();
 
     windows[this.id] = this;
