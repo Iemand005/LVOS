@@ -92,14 +92,19 @@ function startAnimation(audioVisualiser){
     animateFrame(audioVisualiser);
 }
 
-file.onchange = function(ev){
+file.onchange = function(){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
     audioVisualiser = new AudioVisualiser(frequencies);
     audioVisualiser.initializeWithMediaElement(audio);
     startAnimation(audioVisualiser);
-    seek.max = audio.duration;
+    // console.log(audio.duration)
+    // seek.max = parseInt(audio.duration);
     volume.value = audio.volume*100;
+}
+
+audio.oncanplay = function(){
+    seek.max = audio.duration;
 }
 
 options.onsubmit = function(ev){

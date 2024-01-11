@@ -11,6 +11,7 @@ body{
     flex-direction: column;
     height: 100%;
     pointer-events: all;
+    color: white;
 }
 
 canvas{
