@@ -304,14 +304,16 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                     windows[source].frame.src = oriurl.href;
                     bodyCrawler.overlay.ontransitionend = null;
                     bodyCrawler.overlay.requestFullscreen();
+                    bodyCrawler.overlay.appendChild(windows[source].body);
+                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
+
                     // bodyCrawler.overlay.requestPointerLock();
                 }
                 bodyCrawler.overlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
                     bodyCrawler.overlay.appendChild(windows[source].body);
-                    //bodyCrawler.overlay.classList.add("shown");
-                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500)
+                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 break;
         }
         console.log("Received message " + type);
@@ -330,21 +332,28 @@ function flipHandler(flipped){
     return flipped;
 }
 
+const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
+
+
 toggleOverlay(true);
 // overlay.style./
 let timeout;
 document.getElementById("desktop").ontransitionend  = function(){
-    console.log("I s zwear we are flip now and oly once! kanobi")
+    // console.log("I s zwear we are flip now and oly once! kanobi")
     clearTimeout(timeout);
-    timeout = setTimeout(toggleOverlay.bind(this, false), 3000);
+    timeout = setTimeout(function(){
+        // toggleOverlay.bind(this, false)
+        toggleOverlay(false);
+        document.getElementById("desktop").ontransitionend = null;
+    }, 500);
     
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-        if(!flimminonce){flimminonce = true
-            flipHandler( true)
+        // if(!flimminonce){flimminonce = true
+        //     flipHandler( true)
         console.log("I s zwear we are flip now and oly once!")
 
 
-        }
+        // }
     }/*  else {
         if(flimminonce) {
             flipHandler( flimminonce = false)
@@ -603,9 +612,6 @@ function setAccentColor(color){
     // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
 
 }
-
-const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(this, "open"); // The force attribute gets automatically forwarded!
-
 
 function injectApplication(application){
     windows[demo.id] = new Dialog(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
