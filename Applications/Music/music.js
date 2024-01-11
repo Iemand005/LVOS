@@ -95,11 +95,10 @@ function startAnimation(audioVisualiser){
 file.onchange = function(){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
+    if(audioVisualiser) audioVisualiser.dump();
     audioVisualiser = new AudioVisualiser(frequencies);
     audioVisualiser.initializeWithMediaElement(audio);
     startAnimation(audioVisualiser);
-    // console.log(audio.duration)
-    // seek.max = parseInt(audio.duration);
     volume.value = audio.volume*100;
 }
 
@@ -116,13 +115,15 @@ play.onclick = audio.play.bind(audio);
 audio.onplaying = function(){
     play.innerText = "⏸︎";
     play.onclick = audio.pause.bind(audio);
-    // audioVisualiser = new AudioVisualiser(frequencies);
-    // audioVisualiser.initializeWithMediaElement(audio);
+    audioVisualiser.initializeWithMediaElement(audio);
+
+    // audioVisualiser.connectElement();
 }
 
 audio.onpause = function(){
     play.innerText = "⏵︎";
     play.onclick = audio.play.bind(audio);
+    // audioVisualiser.connectStream();
 }
 
 seek.oninput = function(ev){
@@ -155,8 +156,9 @@ Messenger.receive(function(type, message){
 });
 
 function refresh(){
-    seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
-    audio.currentTime
+    const ms = parseInt(audio.currentTime%1/0.01);
+    let mst = parseInt(ms%1/0.01) + ""
+    mst +=" ".repeat(e.length%2);
+    const text = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ mst;
+    seekOutput.innerText = text;// + ' '.repeat(text.length%20)
 }
-
-//setInterval(refresh, 100);

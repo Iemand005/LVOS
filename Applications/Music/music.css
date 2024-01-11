@@ -41,6 +41,12 @@ form{
     background: linear-gradient();
     background: linear-gradient(0deg, transparent 1px, #000000b8 20px);
     padding-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 body.full > form{
@@ -49,6 +55,13 @@ body.full > form{
 
 body.full{
     cursor: none;
+}
+
+#playcontrols{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
 }
 
 input[type=range], input[type=range]:focus::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-runnable-track, input[type=range]::-moz-range-track, input[type=range]::-ms-track{
