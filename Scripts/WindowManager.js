@@ -322,10 +322,10 @@ function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
 }
 
+let metroBodyOrigin;
 function flipHandler(flipped){
-    const window = windows[activeWindow] || windows[0];
-    if(flipped) exportWindowBodyToMetro(window);
-    else retrieveWindowBodyFromMetro(window);
+    if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
+    else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
     return flipped;
 }
 
@@ -336,21 +336,34 @@ toggleOverlay(true);
 // overlay.style./
 let timeout;
 let loaded = false;
+let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
     // console.log("I s zwear we are flip now and oly once! kanobi")
-    if(!loaded){
     
     clearTimeout(timeout);
     timeout = setTimeout(function(){
-        // toggleOverlay.bind(this, false)
+        if(!loaded){
         toggleOverlay(false);
-        loaded = true
-        //document.getElementById("desktop").ontransitionend = null;
+        loaded = true;
+        }
     }, 500);
-}
-    
+
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-        console.log("flipped to mobile!")
+        if(!mobile){
+            console.log("flipped to mobile!");
+            // exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow]);
+            flipHandler(true);
+            mobile = true;
+        }
+        
+    } else {
+        if(mobile){
+            console.log("I s zwear we are flip now and oly once! kanobi");
+            // retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
+            flipHandler(true);
+
+            mobile = false;
+        }
     }
 }
 
@@ -491,14 +504,19 @@ function toggleBlur(enabled){
 }
 
 function collectEssentialWindowData(target, source){
-    return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
+    return target.isOpen = source.isOpen, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 function saveWindowState(){
-    // console.warn("SAVING!")
+    console.warn("SAVING!");
+    if(!loaded) return;
     if(canSave && localStorage) try {
         const windowState = {};
-        for (let id in windows) windowState[id] = collectEssentialWindowData({}, windows[id]);
+        for (let id in windows) {
+            windows[id].width = this.target.clientWidth;
+            windows[id].height = this.target.clientHeight;
+            windowState[id] = collectEssentialWindowData({}, windows[id]);
+        }
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // console.log(windowState)
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
@@ -513,6 +531,7 @@ function saveWindowState(){
 }
 
 function loadWindowState(){
+    console.log("loading", localStorage.windowState)
     if(canSave) try {
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
