@@ -1,7 +1,7 @@
 
-    //              Minesweeper!              \\  
-   //       Lasse Lauwerys © 23/12/2023        \\
-  //   Original game by Microsoft Corporation   \\   
+    //              Minesweeper!              \\    
+   //       Lasse Lauwerys © 23/12/2023        \\   
+  //   Original game by Microsoft Corporation   \\  
 
 'use strict';
 
@@ -34,7 +34,6 @@ const // Declaring the constant variables.
     // declaring the objects.
     tiles = new Array(height),
     lineartiles = new Array(height*width),
-    messenger = new Messenger,
     displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)],
     mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
@@ -158,7 +157,7 @@ function startGame(){
 }
 
 function sendDesiredSize(){
-    messenger.broadcastFromChild(messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight});
+    Messenger.broadcastFromChild(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed bug 11/1/2024.
 }
 
 function quickRevealEvent(ev) {

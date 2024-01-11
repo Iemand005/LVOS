@@ -140,9 +140,11 @@ volume.oninput = function(ev){
 // }
 
 Messenger.receive(function(type, message){
-    if(type === Messenger.types.prepareToLaunchOverlay){
-        options.style.display = "none";
-        Messenger.broadcastToParent(Messenger.types.readyToLaunchOverlay/* "done" */);
+    switch(type){
+        case Messenger.types.prepareToLaunchOverlay:
+            options.style.display = "none";
+            Messenger.broadcastToParent(Messenger.types.readyToLaunchOverlay, "ready", "music");
+            break;
     }
 });
 

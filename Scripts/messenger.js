@@ -16,9 +16,6 @@ Messenger.receive = function(callback){
 }
 
 function Messenger(){
-    // window.onmessage = function(ev) {
-    //     this.onmessage(JSON.parse(ev.data));
-    // }
 }
 
 Messenger.types = {
