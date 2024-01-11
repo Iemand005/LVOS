@@ -508,14 +508,16 @@ function collectEssentialWindowData(target, source){
 }
 
 function saveWindowState(){
-    console.warn("SAVING!");
     if(!loaded) return;
+    console.warn("SAVING!");
     if(canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) {
-            windows[id].width = this.target.clientWidth;
-            windows[id].height = this.target.clientHeight;
-            windowState[id] = collectEssentialWindowData({}, windows[id]);
+            if(windows[id]){
+                windows[id].width = windows[id].target.clientWidth;
+                windows[id].height = windows[id].target.clientHeight;
+                windowState[id] = collectEssentialWindowData({}, windows[id]);
+            }
         }
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // console.log(windowState)
