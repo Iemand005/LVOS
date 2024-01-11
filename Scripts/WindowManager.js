@@ -87,7 +87,13 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         if(type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch(type){
             case types.launchOverlay:
+                document.ontransitionend = function(){
+                    dialog.messageFrame(Messenger.types.prepareToLaunchOverlay);
+                }
                 document.getElementById("overlay").classList.toggle("open");
+                break;
+            case types.readyToLaunchOverlay:
+                    document.getElementById("overlay").appendChild(dialog.body);
                 break;
         }
         console.log("Received message " + type);
@@ -111,16 +117,16 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.synchronise = synchroniseWindowState.bind(this);
 
     this.exchangeWindowMouseUpEvent = function(){
-        this.messageFrame({difference:new Vector});
+        this.messageFrame("mouseUp", {difference:new Vector});
     }
 
     this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if(difference)this.messageFrame(dialog.clickOffset.stats.update(difference.x, difference.y));
+        if(difference)this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
-    this.messageFrame = function(object, literal){
-        if(this.frame) this.frame.contentWindow.postMessage(literal?object:JSON.stringify(object), '*');
-    }
+    // this.messageFrame = function(object, literal){
+    //     if(this.frame) this.frame.contentWindow.postMessage(literal?object:JSON.stringify(object), '*');
+    // }
 
     if(object.body) this.body.appendChild(object.body);
     this.setTitle(this.title);
@@ -174,7 +180,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 Dialog.prototype = {
     get isOpen(){ return this.target.hasAttribute("open"); },
     set isOpen(force){ this.target.toggleAttribute("open", force), this.activate();/* , this.focus() */ },
-    activate: function(){ this.target.style.zIndex = topZ++, this.messageFrame()/* Messenger.m */; },
+    activate: function(){ this.target.style.zIndex = topZ++, this.messageFrame(Messenger.types.open)/* Messenger.m */; },
     setTitle: function(title){ return this.getTitleElement().innerText = title; },
     getTitleElement: function(){ return this.getHead().querySelector("h1"); },
     getContent: function(){ return this.target.getElementsByTagName("content")[0]; },
@@ -199,7 +205,7 @@ Dialog.prototype = {
     toggleCloseButton: function(enable){ this.toggleButton(windowButtons.close, enable); },
     toggleEjectButton: function(enable){ this.toggleButton(windowButtons.eject, enable); },
     toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable); },
-    messageFrame: function(){ Messenger.broadcastToChild(Messenger.types.open, "", this.frame); },
+    messageFrame: function(type, message){ Messenger.broadcastToChild(type, message, this.frame); },
     move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
     resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
     resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },

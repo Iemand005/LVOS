@@ -10,7 +10,8 @@ function AudioVisualiser(fftSize){
 }
 
 AudioVisualiser.prototype = {
-    _data: new Uint8Array(),
+    _frequencyData: new Uint8Array(),
+    _timeDomainData: new Uint8Array(),
     initializeWithMediaElement: function(element){
         this.source = this.context.createMediaElementSource(element);
         this.source.connect(this.analyser);
@@ -24,19 +25,16 @@ AudioVisualiser.prototype = {
     },
     updateBinCount: function(fftSize){
         this.analyser.fftSize = fftSize || 64;
-        this._data = new Uint8Array(this.analyser.frequencyBinCount)
-    },
-    set frequencyBinCount(fftSize){
-        this.analyser.fftSize = fftSize || 64;
-        this._data = new Uint8Array(this.analyser.frequencyBinCount)
+        this._frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+        this._timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
     },
     get frequencyBinCount(){
         return this.analyser.frequencyBinCount;
     },
     get frequencyData(){
-        return this.analyser.getByteFrequencyData(this._data), this._data;
+        return this.analyser.getByteFrequencyData(this._frequencyData), this._frequencyData;
     },
     get timeDomainData(){
-        return this.analyser.getByteTimeDomainData(this._data), this._data;
+        return this.analyser.getByteTimeDomainData(this._timeDomainData), this._timeDomainData;
     }
 }

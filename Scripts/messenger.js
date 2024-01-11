@@ -6,12 +6,29 @@ function broadcast(target, type, message){
     target.postMessage(JSON.stringify({type: type, data: message}), '*');
 }
 
-function Messenger(){}
+let onmessage = new Function();
+
+Messenger.receive = function(callback){
+    window.onmessage = function(ev) {
+        const data = JSON.parse(ev.data);
+        callback(data.type, data.data);
+    }
+}
+
+function Messenger(){
+    window.onmessage = function(ev) {
+        this.onmessage(JSON.parse(ev.data));
+    }
+}
 
 Messenger.types = {
+    po: "é",
+    open: "open",
     windowSize: "windowSize",
-    launchOverlay: "launchOverlay"
-},
+    launchOverlay: "launchOverlay",
+    prepareToLaunchOverlay: "prepareToLaunchOverlay",
+    readyToLaunchOverlay: "readyToLaunchOverlay"
+}
 
 Messenger.prototype = {
 
@@ -19,8 +36,13 @@ Messenger.prototype = {
         po: "é",
         open: "open",
         windowSize: "windowSize",
-        launchOverlay: "launchOverlay"
+        launchOverlay: "launchOverlay",
+        readyToLaunchOverlay: "readyToLaunchOverlay"
     },
+
+    types: Messenger.types,
+
+    onmessage = new Function(),
 
     // event: new CustomEvent("message"),
 

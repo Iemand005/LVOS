@@ -13,11 +13,9 @@
     <script src="./visualiseradvanced.js" defer></script> <!-- This contains features extra for newer browsers (like microphone) -->
 </head>
 <body>
-    <input type="file" name="file" id="file" value="Open"> <!-- file -->
     <audio></audio>
-    <button id="mic">Microphone</button>
-    <button id="fullscreen">Fullscreen</button>
     <form id="options">
+        <input type="file" name="file" id="file" value="Open"> <!-- file -->
         <button id="play">⏵︎</button>
         <input min="0" step="0.0000001" max="0" type="range" name="seek" id="seek">
         <output id="seek-output">--:--.--</output>
@@ -25,6 +23,8 @@
         <input min="0" step="0.0000001" max="100" type="range" name="volume" id="volume">
         <output id="volume-output"></output>
         <input min="5" step="1" max="15" type="range" name="fft" id="fft">
+        <button id="mic">Microphone</button>
+        <button id="fullscreen">Fullscreen</button>
     </form>
     <canvas id="visualiser"></canvas>
 </body>

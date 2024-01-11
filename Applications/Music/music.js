@@ -17,8 +17,10 @@ const volumeOutput = document.getElementById("volume-output");
 const fft = document.getElementById("fft");
 const elements = [];
 
+ctx.globalAlpha = 0.1;
 
 fullscreen.onclick = function(){
+    options.style.display = "none";
     Messenger.broadcastToParent(Messenger.types.launchOverlay);
 }
 
@@ -43,25 +45,29 @@ function animateFrame(audioVisualiser, time){
     const height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
 
-    const data = audioVisualiser.timeDomainData;
-    const count = data.length;
+    const freqData = audioVisualiser.frequencyData;
+    const timeData = audioVisualiser.timeDomainData;
+    const count = timeData.length;
     
-    let cX = width/8;
-    let cY = height/8;
+    let cX = width/2;
+    let cY = height/2;
     const hue = time/321;
+    const a = 70;
     ctx.beginPath();
     if(circular){
         let rad = 0, inc = Math.PI*2*(1/count);
-        for(let index in data){
-            const amp = parseInt(data[index]);
-            const x = (amp + cX) * Math.cos(rad) + cX;
-            const y = (amp + cX) * Math.sin(rad) + cY;
+        for(let index in timeData){
+            const amp = parseInt(timeData[index]);
+            const a = parseInt(freqData[index]);
+
+            const x = (amp) * Math.cos(rad) + cX;
+            const y = (amp) * Math.sin(rad) + cY;
             ctx.beginPath();
 
-            ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
-            ctx.beginPath();
+            ctx.fillStyle = "hsl(" + hue + ",100%,"+ a/255*100 +"%)";
+            // ctx.beginPath();
 
-            ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
+            // ctx.fillStyle = "hsl(" + hue + ",100%,50%)";
 
             ctx.arc(x, y, 2, 0, Math.PI*2);
             ctx.fill();
@@ -69,7 +75,7 @@ function animateFrame(audioVisualiser, time){
 
             rad += inc;
         }
-    } else for(let index in data){
+    } else for(let index in timeData){
         const amp = parseInt(audioVisualiser.frequencyData[index]);
         const x = index * width;
         const red = amp+emo.red, green = amp+emo.green, blue = amp+emo.blue;
@@ -128,6 +134,17 @@ seek.oninput = function(ev){
 volume.oninput = function(ev){
     audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
 }
+
+// window.onmessage = function(ev){
+    
+// }
+
+Messenger.receive(function(type, message){
+    if(type === Messenger.types.prepareToLaunchOverlay){
+        options.style.display = "none";
+        Messenger.broadcastToParent(Messenger.types.readyToLaunchOverlay/* "done" */);
+    }
+});
 
 function refresh(){
     seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);

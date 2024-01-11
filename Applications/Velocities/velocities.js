@@ -1,6 +1,8 @@
   window.addEventListener('message', function(event) {
     //console.log("Message received from the parent: " + event.data); // Message received from parent
-    const stats = JSON.parse(event.data);
+    //console.log(event)
+    const stats = JSON.parse(event.data).data;
+    if(!stats) return;
     document.querySelector("output").innerText = "x: "+stats.difference.x + " y:" +stats.difference.y;
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
