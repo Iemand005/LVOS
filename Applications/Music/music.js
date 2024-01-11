@@ -135,19 +135,14 @@ volume.oninput = function(ev){
     audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
 }
 
-// window.onmessage = function(ev){
-    
-// }
-
 function autoHideControls(){
-    options.classList.remove("hidden");
+    document.body.classList.remove("full");
     clearTimeout(timeout);
-    timeout = setTimeout(options.classList.add.bind(options.classList, "hidden"), 3000);
+    timeout = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
 let timeout;
 if(new URL(window.location).searchParams.get("fullscreen")) {
-    // options.style.opacity = 0;
     autoHideControls();
     document.onmousemove = autoHideControls;
 }

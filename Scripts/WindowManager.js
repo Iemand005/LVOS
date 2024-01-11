@@ -296,6 +296,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                     oriurl.searchParams.set("fullscreen", true);
                     windows[source].frame.src = oriurl.href;
                     bodyCrawler.overlay.ontransitionend = null;
+                    bodyCrawler.overlay.requestFullscreen();
+                    // bodyCrawler.overlay.requestPointerLock();
                 }
                 bodyCrawler.overlay.classList.toggle("open");
                 break;

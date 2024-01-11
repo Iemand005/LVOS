@@ -10,6 +10,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
+    pointer-events: all;
 }
 
 canvas{
@@ -33,12 +34,14 @@ button#play {
 }
 
 form{
-    transition: all 300s;
+    transition: all 300ms;
 }
 
-form.hidden{
-    /* transition: all 1s; */
+body.full > form{
     opacity: 0;
+}
+
+body.full{
     cursor: none;
 }
 
