@@ -52,9 +52,8 @@ browserform.addEventListener("submit", function(event){
 });
 
 function initializeConsoleApplication(){
-    const consoleElement = document.getElementById("console");
-    const article = consoleElement.querySelector("section");
-    const consoleform = consoleElement.getElementsByTagName("form")[0];
+    if(!windows["console"]) return;
+    const consoleform = windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
     const stdout = consoleform.stdout || consoleform.getElementsByTagName("output")[0];
     const interceptConsole = function(){
         if(stdout.firstChild) stdout.removeChild(stdout.firstChild);

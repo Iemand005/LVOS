@@ -57,6 +57,9 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
     this.buttons = [];
+    this.originalBody = this.body;
+    this.originalFrame = this.frame;
+    this.originalContent = this.content;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
             start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
@@ -168,7 +171,7 @@ Dialog.prototype = {
     createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},
     setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
     verifyEjectCapability: function(){ return function(){ try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch(e) { return false }}(); },
-    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.body.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
     toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
     clearClickOffset: function(){ this.clickOffset.clear(); },
     toggleFullScreen: function(enable){ this.target.toggleAttribute("full", enable); },
@@ -303,13 +306,23 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 }
 
 let metroBodyOrigin;
-function swapMetroBody(dialog){
-    // retrieveWindowBodyFromMetro(windows[activeWindow]);
-    retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
-    exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
+function swapMetroBody(){
+    restoreMetroBody();
+    activeWindowToMetro();
+    // exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
     // else 
 }
 
+// const restoreMetroBody = retrieveWindowBodyFromMetro.bind(this, windows[metroBodyOrigin]);
+// const activeWindowToMetro = exportWindowBodyToMetro.bind(this, windows[activeWindow]);
+
+function restoreMetroBody(){
+    retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
+}
+
+function activeWindowToMetro(){
+    exportWindowBodyToMetro(windows[activeWindow]);
+}
 
 function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
@@ -317,8 +330,9 @@ function flip(enable){
 
 function flipHandler(flipped){
     toggleCharms(false);
-    if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
-    else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
+    if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]), windows[metroBodyOrigin].close();
+        
+        else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]), windows[metroBodyOrigin].open();;
     return flipped;
 }
 
@@ -536,19 +550,19 @@ function loadWindowState(){
 }
 
 function exportWindowBodyToMetro(dialog){
+    if(bodyCrawler.getMetroBody()) retrieveWindowBodyFromMetro();
     if(dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
-        dialog.close();
         if(metro && dialog.body) metro.appendChild(dialog.body);
     }
 }
 
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
-    if (dialog && metro) {
+    if(!metroBody) return;
+    if (dialog) {
         dialog.content.appendChild(metroBody);
-        dialog.open();
-    }
+    } else restoreMetroBody();
 }
 
 function getDialogTemplate(){

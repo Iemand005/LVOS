@@ -222,6 +222,15 @@ aside#metroapplist.bottom{
     background: linear-gradient(0, #000000c9, #ccc1c1b8 70%, transparent);
     flex-direction: row;
     flex-wrap: wrap;
+    bottom: 0;
+    height: 43px;
+    top: unset;
+    width: 100%;
+    background: linear-gradient(0, #000000c9, #00000087 70%, transparent);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    padding: 15px 0;
 }
 
 aside#metroapplist> button{

@@ -31,6 +31,9 @@ function toggleCharmsEvent(ev){
     
 }
 
+const metroAppList = document.getElementById("metroapplist");
+metroAppList.classList.toggle("bottom", true);
+
 function hexToRGB(hex){
     const int = parseInt(hex.replace('#', ''), 16);
     return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
