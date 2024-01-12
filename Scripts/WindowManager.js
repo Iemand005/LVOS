@@ -34,8 +34,6 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     else{
         this.target = createDialog();
         this.frame = object.src;
-        //this.body.appendChild(document.createElement("iframe"));
-        //this.frame.src = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
@@ -155,7 +153,7 @@ Dialog.prototype = {
     get head(){ return this.target.getElementsByTagName("header")[0]; },
     get content(){ return this.target.getElementsByTagName("content")[0]; },
     get frame(){ return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function(){ return this.target.style.zIndex = this.z = topZ++, swapMetroBody(this), this.messageFrame(Messenger.types.open), activeWindow = this.id; },
+    activate: function(){ return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeWindow = this.id, swapMetroBody(this); },
     setTitle: function(title){ return this.getTitleElement().innerText = title; },
     getTitleElement: function(){ return this.head.querySelector("h1"); },
     getTitle: function(){ return this.getTitleElement().innerText; },
@@ -276,6 +274,10 @@ let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
 let bodyCrawler = new DocumentCrawler(document);
+let metroBodyOrigin;
+let timeout;
+let loaded = false;
+// let flipped = false;
 
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     //console.log(data, type, source)    
@@ -305,12 +307,11 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
     }
 }
 
-let metroBodyOrigin;
 function swapMetroBody(){
-    restoreMetroBody();
-    activeWindowToMetro();
-    // exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
-    // else 
+    if(flipped){
+        restoreMetroBody();
+        activeWindowToMetro();
+    }
 }
 
 // const restoreMetroBody = retrieveWindowBodyFromMetro.bind(this, windows[metroBodyOrigin]);
@@ -328,12 +329,12 @@ function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
 }
 
-function flipHandler(flipped){
+function flipHandler(enabled){
     toggleCharms(false);
-    if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]), windows[metroBodyOrigin].close();
-        
-        else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]), windows[metroBodyOrigin].open();;
-    return flipped;
+    swapMetroBody();
+    //if(enabled) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]), windows[metroBodyOrigin].close();
+    //else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]), windows[metroBodyOrigin].open();;
+    return flipped = enabled;
 }
 
 Messenger.receive(messageReceived);
@@ -342,9 +343,6 @@ const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.over
 
 toggleOverlay(true);
 
-let timeout;
-let loaded = false;
-let mobile = false;
 document.getElementById("desktop").ontransitionend  = function(){
 
     if(!loaded){
@@ -356,14 +354,17 @@ document.getElementById("desktop").ontransitionend  = function(){
     // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
     // The reason I found out is that JavaScript evaluates the parameters of the function calls before calling the function! We are forced to wrap it in another function to avoid this behaviour.
 
-    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches && !mobile){
+    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches){
         // console.log("flipped to mobile!");
-        flipHandler(true);
-        mobile = true;
-    } else if(mobile){
-        // console.log("I s zwear we are flip now and oly once! kanobi");
+        if(!flipped){
+            flipHandler(true);
+            activeWindowToMetro();
+        }
+    } else if(flipped){
+        console.log("I s zwear we are flip now and oly once! kanobi");
         flipHandler(false);
-        mobile = false;
+        restoreMetroBody()
+        // flipped = false;
     }
 }
 
@@ -375,7 +376,7 @@ function initializeWindows(windows){
     dialogs.forEach(function(dialog){
         windows[dialog.id] = new Dialog(dialog); 
     });
-    flip();
+    //flip();
     loadWindowState();
 }
 
@@ -550,10 +551,10 @@ function loadWindowState(){
 }
 
 function exportWindowBodyToMetro(dialog){
-    if(bodyCrawler.getMetroBody()) retrieveWindowBodyFromMetro();
+    if(bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveWindowBodyFromMetro();
     if(dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
-        if(metro && dialog.body) metro.appendChild(dialog.body);
+        if(metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
     }
 }
 
@@ -562,7 +563,7 @@ function retrieveWindowBodyFromMetro(dialog){
     if(!metroBody) return;
     if (dialog) {
         dialog.content.appendChild(metroBody);
-    } else restoreMetroBody();
+    }// else restoreMetroBody();
 }
 
 function getDialogTemplate(){
@@ -590,7 +591,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 function toggleCharms(force){
-    document.getElementById("charms").classList.toggle("open", force);
+    return document.getElementById("charms").classList.toggle("open", force);
 }
 
 function injectApplication(application){
