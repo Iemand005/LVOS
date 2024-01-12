@@ -11,6 +11,8 @@
 \*/
 
 'use strict'; // Strict mode is required for older browsers (tested on Chrome 48, Windows 8.1 both destkop and Metro mode).
+'use esnext'; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of let and const.
+'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use let and const on those too.
 
 let // Defining the default settings as let so we can modify them.
     blur = false,
@@ -18,6 +20,7 @@ let // Defining the default settings as let so we can modify them.
     fasterWindowTracking = false,
     canSave = true,
     IE11Booster = true,
+    loadingOverlay = true,
     flipped = false;
 
 function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ECMAScript 5.
@@ -30,7 +33,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(!object) return;
     let dialog = this;
 
-    if(object.nodeName == "DIALOG") this.target = object;
+    if(object.nodeName === "DIALOG") this.target = object;
     else{
         this.target = createDialog();
         this.frame = object.src;
@@ -40,7 +43,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.scroll = object.scroll;
         if(object.microphone || object.camera)this.frame.setAttribute("allow", "camera; microphone"); // Not absolutely necessary but it's more secure.
         if(typeof object.classes === 'object'){
-            object.classes.forEach(function(someclass){ this.target.classList.add(someclass) }, dialog); // We can't use class since it's a keyword!!
+            object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
             // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 based browsers.
         }
     }
@@ -61,8 +64,8 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     this.originalContent = this.content;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
-            reset: function(){ return this.start = Date.now(), this.last = this.start, this.position = new Vector, this }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+            start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
+            reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
             update: function(x, y){
                 this.last = Date.now();
                 this.position.x = x, this.position.y = y;
@@ -70,7 +73,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
                 this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
                 this;return this; }
         },
-        clear: function(){ this.x = 0, this.y = 0 } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
+        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     },
     this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
 
@@ -106,14 +109,14 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
     if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
         const div = target.appendChild(document.createElement("div"));
         div.draggable = false, div.id = index + 1,
-        div.onmousedown = function(ev){
-            if(IE11Booster) dragAction.set(ev.target.id);
+        div.onmousedown = function (ev) {
+            if (IE11Booster) dragAction.set(ev.target.id);
             else dialog.dragCalculator.set(ev.target.id);
-        } // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+        }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
     }
 
-    body.addEventListener("load", function(event){ try { verifyEjectCapability(getEventDialog(event)) } catch (exception){ target.getElementsByTagName("button")[0].style.display = "none" }});
-    this.target.addEventListener("mousedown", function(event){ if(getEventDialog(event).tagName == "DIALOG") windowActivationEvent(event) });
+    body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
+    this.target.addEventListener("mousedown", function (event) { if (getEventDialog(event).tagName === "DIALOG") windowActivationEvent(event); });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -146,48 +149,50 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
 // const hey;
 
 Dialog.prototype = {
-    get isOpen(){ return this.target.hasAttribute("open"); },
-    set isOpen(force){ this.target.toggleAttribute("open", force), this.activate(); },
-    set frame(url){ this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
-    get body(){ return this.content.children[1]; },
+    get isOpen() { return this.target.hasAttribute("open"); },
+    set isOpen(force) { this.target.toggleAttribute("open", force), this.activate(); },
+    set frame(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
+    get body() { return this.content.children[1]; },
     // get head()
-    get head(){ return this.target.getElementsByTagName("header")[0]; },
-    get content(){ return this.target.getElementsByTagName("content")[0]; },
-    get frame(){ return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function(){ return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeWindow = this.id, swapMetroBody(this); },
-    setTitle: function(title){ return this.getTitleElement().innerText = title; },
-    getTitleElement: function(){ return this.head.querySelector("h1"); },
-    getTitle: function(){ return this.getTitleElement().innerText; },
+    get head() { return this.target.getElementsByTagName("header")[0]; },
+    get content() { return this.target.getElementsByTagName("content")[0]; },
+    get frame() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    activate: function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeWindow = this.id, swapMetroBody(this); },
+    setTitle: function (title) { return this.getTitleElement().innerText = title; },
+    getTitleElement: function () { return this.head.querySelector("h1"); },
+    getTitle: function () { return this.getTitleElement().innerText; },
     /* getBody: function(){ return this.content.children[1]; }, */
-    setId: function(id){ return windows[id] = this, this.target.setAttribute("id", id); },
-    getId: function(){ return this.target.getAttribute("id"); },
-    toggleTitlebar: function(force){ return !this.head.classList.toggle("hidden", typeof force!=='undefined'?!force:undefined); },
-    open: function(){ return this.isOpen = true, saveWindowState(), this.isOpen; }, // Open, save, return if it's opened or not.
-    close: function(){ return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/; },
-    getInnerRect: function(){ return {top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight}; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
-    getRect: function(index){ return index == null? this.target.getBoundingClientRect(): this.target.getClientRects()[index]; },
-    getButton: function(index){ return this.head.getElementsByTagName("button")[index]; },
-    createOpenButton: function(){ return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0]},
-    setClickOffset: function(x, y){ return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
-    verifyEjectCapability: function(){ return function(){ try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch(e) { return false }}(); },
-    togglePointerEvents: function(enable){ return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
-    toggleButton: function(buttonId, enable){ return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
-    clearClickOffset: function(){ this.clickOffset.clear(); },
-    toggleFullScreen: function(enable){ this.target.toggleAttribute("full", enable); },
-    toggleCloseButton: function(enable){ this.toggleButton(windowButtons.close, enable); },
-    toggleEjectButton: function(enable){ this.toggleButton(windowButtons.eject, enable); },
-    toggleFullButton: function(enable){ this.toggleButton(windowButtons.full, enable); },
-    messageFrame: function(type, message){ Messenger.broadcastToChild(type, message, this.frame); },
-    move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
-    resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
-    resizeBody: function(width, height){ if(this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
-    openUrl: function(url){
+    setId: function (id) { return windows[id] = this, this.target.setAttribute("id", id); },
+    getId: function () { return this.target.getAttribute("id"); },
+    toggleTitlebar: function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); },
+    open: function () { return this.isOpen = true, saveWindowState(), this.isOpen; }, // Open, save, return if it's opened or not.
+    close: function () { return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/; },
+    getInnerRect: function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
+    getRect: function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; },
+    getButton: function (index) { return this.head.getElementsByTagName("button")[index]; },
+    createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
+    setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
+    verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
+    togglePointerEvents: function (enable) { return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
+    clearClickOffset: function () { this.clickOffset.clear(); },
+    toggleFullScreen: function (enable) { this.target.toggleAttribute("full", enable); },
+    toggleCloseButton: function (enable) { this.toggleButton(windowButtons.close, enable); },
+    toggleEjectButton: function (enable) { this.toggleButton(windowButtons.eject, enable); },
+    toggleFullButton: function (enable) { this.toggleButton(windowButtons.full, enable); },
+    messageFrame: function (type, message) { Messenger.broadcastToChild(type, message, this.frame); },
+    move: function (x, y) { this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
+    resize: function (width, height) { this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
+    resizeBody: function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
+    openUrl: function (url) {
         const frameUrl = new URL(this.frame.src);
         frameUrl.searchParams.set("url", url);
         this.frame.src = frameUrl.href;
         this.launch();
     },
-}
+    set borderSize(value) { this.content.style.padding = toPixels(value); },
+    get borderSize() { return fromPixels(this.content.style.padding); },
+};
 
 function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
     this.dialog = dialog;
@@ -196,12 +201,12 @@ function DragCalculator(dialog){ // This is the 4th iteration of optimising the 
 }
 
 DragCalculator.prototype = {
-    set: function(direction){ this.update = this.operations[direction] },
-    get top(){ return (this.dialog.y = this.offset.top + this.difference.y) + "px" },
+    set: function (direction) { this.update = this.operations[direction]; },
+    get top() { return (this.dialog.y = this.offset.top + this.difference.y) + "px"; },
     get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
-    get width(){ return (this.dialog.width = this.offset.width + this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get width() { return (this.dialog.width = this.offset.width + this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth) ? this.dialog.minWidth : this.dialog.width) + "px"; },
     get height(){ return (this.dialog.height = this.offset.height + this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
-    get widthrv(){ return (this.dialog.width = this.offset.width - this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth)? this.dialog.minWidth: this.dialog.width) + "px" },
+    get widthrv() { return (this.dialog.width = this.offset.width - this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth) ? this.dialog.minWidth : this.dialog.width) + "px"; },
     get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
     get difference() { return this._difference },
     set difference(pos) { this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
@@ -287,7 +292,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
         if(type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch(type){
             case types.launchOverlay:
-                bodyCrawler.overlay.ontransitionend = function(){
+                bodyCrawler.overlay.ontransitionend = function () {
                     windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
                     const oriurl = new URL(windows[source].frame.src);
                     oriurl.searchParams.set("fullscreen", true);
@@ -296,7 +301,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                     bodyCrawler.overlay.requestFullscreen();
                     bodyCrawler.overlay.appendChild(windows[source].body);
                     window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
-                }
+                };
                 bodyCrawler.overlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
@@ -315,6 +320,7 @@ function swapMetroBody(){
     }
 }
 
+// This does not work because the parameters actually get evaluated on the binding declaration, and thus before the function is actually called!
 // const restoreMetroBody = retrieveWindowBodyFromMetro.bind(this, windows[metroBodyOrigin]);
 // const activeWindowToMetro = exportWindowBodyToMetro.bind(this, windows[activeWindow]);
 
@@ -327,14 +333,13 @@ function activeWindowToMetro(){
 }
 
 function flip(enable){
-    flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
+    bodyCrawler.getDesktop().toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(bodyCrawler.getDesktop().classList.toggle("flipped", enable));
 }
 
 function flipHandler(enabled){
     toggleCharms(false);
     swapMetroBody();
-    //if(enabled) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]), windows[metroBodyOrigin].close();
-    //else retrieveWindowBodyFromMetro(windows[metroBodyOrigin]), windows[metroBodyOrigin].open();;
     return flipped = enabled;
 }
 
@@ -342,32 +347,38 @@ Messenger.receive(messageReceived);
 
 const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
 
-toggleOverlay(true);
+toggleOverlay(loadingOverlay);
 
-document.getElementById("desktop").ontransitionend  = function(){
+if (loadingOverlay) document.getElementById("desktop").ontransitionend = checkForFlip;
+function checkForFlip() {
 
-    if(!loaded){
+    if (!loaded) {
+        //I'll s'
+        console.log("th I'll set the timeoutrat");
         clearTimeout(timeout); // I don't know why it works with the timeout set to 0 unless if the 3 repeated animation events actually get called in less than 1ms. I guess it's handy since we want it to load as fast as possible;
-        timeout = setTimeout(function(){ toggleOverlay(!(!loaded?(loaded=true):false)); }, 500);
+        timeout = setTimeout(function () { toggleOverlay(!(!loaded ? (loaded = true) : false)); }, 500);
     }
 
     // Why doesn't this work?
     // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
     // The reason I found out is that JavaScript evaluates the parameters of the function calls before calling the function! We are forced to wrap it in another function to avoid this behaviour.
 
-    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches){
-        // console.log("flipped to mobile!");
-        if(!flipped){
+    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+        console.log("Switching to Mobile mode...");
+        if (!flipped) {
             flipHandler(true);
             activeWindowToMetro();
         }
-    } else if(flipped){
-        console.log("I s zwear we are flip now and oly once! kanobi");
+    } else if (flipped) {
+        console.log("Switching to Desktop mode...");
         flipHandler(false);
-        restoreMetroBody()
+        restoreMetroBody();
         // flipped = false;
     }
-}
+};
+
+window.onresize = checkForFlip();
+//felse loaded = true;
 
 function initializeWindows(windows){
     document.onmouseup = activateWindowPointers;
@@ -378,6 +389,7 @@ function initializeWindows(windows){
         windows[dialog.id] = new Dialog(dialog); 
     });
     //flip();
+    checkForFlip();
     loadWindowState();
 }
 
@@ -400,8 +412,7 @@ function windowActivationEvent(event){
 
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeWindow], difference = IE11Booster? dragAction.execute(dialog, dialog.clickOffset, {x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y}, dialog.target.style):
-        dialog.dragCalculator.update({x: event.clientX, y: event.clientY});
+        const dialog = windows[activeWindow], difference = IE11Booster ? dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style) : dialog.dragCalculator.update({ x: event.clientX, y: event.clientY });
 
         if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
         if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
@@ -593,6 +604,10 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 
 function toggleCharms(force){
     return document.getElementById("charms").classList.toggle("open", force);
+}
+
+function isCharmsOpen() {
+    return document.getElementById("charms").classList.contains("open");
 }
 
 function injectApplication(application){

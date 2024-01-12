@@ -1,19 +1,21 @@
-// Canvas for physics simulation
+// Canvas for physics simulation using Verlet integration methods (not finished but functional)
 // Lasse © 2023
 // 30/12/2023
+
+'use strict';
+'use esnext';
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
 function drawCircle(ball){
     ctx.beginPath();
-    //ctx.moveTo(0, 0);
-    ctx.arc(10, 10, 10, 0, 2 * Math.PI); // 360 degrees is equal to 2π
+    ctx.arc(10, 10, 10, 0, 2 * Math.PI); // 360 degrees is equal to 2π srad
     ctx.stroke();
 }
 
 function renderFrame(balls){
-    console.log(balls)
+    console.log(balls);
     balls.forEach(function(ball){
         console.log(ball, Ball.prototype);
         ball.update();

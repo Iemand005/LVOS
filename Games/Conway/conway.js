@@ -6,6 +6,9 @@
 //=========================//
 
 'use strict';
+'use esnext';
+'use moz';
+
 const horizontalCellCount = 10;
 const verticalCellCount = 10;
 const cellSize = 10;
@@ -66,13 +69,13 @@ function toggleCellEvent(event){
     if(mousedown){
         const rect = conway.getClientRects()[0]; // Kan ook moet element.getCientBoundingRect() maar deze functie bestaat in IE11 niet.
         const position = {x: Math.floor(((event.clientX - rect.left)/cellSize) / (rect.width / ctx.canvas.width)), y: Math.floor(((event.clientY - rect.top) / cellSize) / (rect.height / ctx.canvas.height))}; // De berekening tussen client rect en canvas rect heb ik toegevoegd voor het geval dat iemand de breedte op een percentage zet bijvoorbeeld, waardoor het canvas uitgerokken word. We willen natuurlijk dat de muispositie correct vertaald word in alle gevallen.
-        if(!(lastUpdatedPosition.x == position.x && lastUpdatedPosition.y == position.y)){ // Zo kan de laatste positie constant blijven en hoeven we ook geen kopie te maken. Als we de objecten van huidige en vorige positie gelijkstellen word het een objectverwijzing.
+        if(!(lastUpdatedPosition.x == position.x && lastUpdatedPosition.y === position.y)){ // Zo kan de laatste positie constant blijven en hoeven we ook geen kopie te maken. Als we de objecten van huidige en vorige positie gelijkstellen word het een objectverwijzing.
             lastUpdatedPosition.x = position.x;
             lastUpdatedPosition.y = position.y;
             const cell = cells[position.x][position.y];
             switch(updateMethod){
                 case 1:
-                    mousedown == 2 ? cell.kill() : cell.spawn(); 
+                    mousedown === 2 ? cell.kill() : cell.spawn(); 
                 case 2:
                     cell.spawn();
                     break;
@@ -109,7 +112,7 @@ function applyPhysics(){
     iterateCells(function(cell, x, y){
         const aliveNeighbours = getAliveNeighbourPositions(x, y);
         cell.dead = aliveNeighbours.length > 3 || aliveNeighbours.length < 2;
-        cell.born = aliveNeighbours.length == 3;
+        cell.born = aliveNeighbours.length === 3;
         return cell;
     });
     iterateCells(function(cell){

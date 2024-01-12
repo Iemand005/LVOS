@@ -1,3 +1,9 @@
+// Error page display handler for LWM
+// Lasse Lauwerys © 2024
+
+'use strict';
+'use esnext';
+'use moz';
 
 const reasoningElement = document.getElementById("reason");
 const urlSearchParams = new URLSearchParams(window.location.search);

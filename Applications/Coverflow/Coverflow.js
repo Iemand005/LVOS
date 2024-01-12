@@ -1,3 +1,9 @@
+//  Cover flow
+// Lasse Lauwerys © 2024
+
+'use strict';
+'use esnext';
+'use moz';
 
 const oneDiv = document.querySelector("div");
 const allDivs = document.querySelectorAll("div");
@@ -25,8 +31,12 @@ allDivs.forEach(function(element){
     });
 });
 
-document.querySelector("section").style.width = neededWidth;
-flow.getElementsByTagName("section")[0].style.width = neededWidth + "px";
+const section = document.querySelector("section");
+
+if (section) {
+    document.querySelector("section").style.width = neededWidth;
+    flow.getElementsByTagName("section")[0].style.width = neededWidth + "px";
+}
 
 function activateElement(element){
 

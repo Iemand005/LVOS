@@ -3,13 +3,15 @@
 //      23/12/2023
 
 'use strict';
+'use esnext';
 
 if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute){
     this.setAttribute(attribute, null);
 };
 
+// Bug fix, "force === null" --> "typeof force === 'undefined'".
 if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force){
-    if (force == null? force = !this.hasAttribute(attribute): force) this.createAttribute(attribute);
+    if (typeof force === 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
     else this.removeAttribute(attribute);
     return !force;
 };
@@ -63,6 +65,13 @@ if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint =
 
 if (!navigator.getUserMedia) navigator.getUserMedia = navigator.webkitGetUserMedia;
 
+// I tested this one with "String.prototype.repeat.bind("hey", 2)()", this gives me the same result with polyfill as the native code!
+if (!String.prototype.repeat) String.prototype.repeat = function (e) {
+    if (typeof this === 'undefined') throw new TypeError("String.prototype.repeat called on null or undefined"); // To correspond to String.prototype.repeat.bind(null, undefined)() in Google Chrome
+    let result = "";
+    for (let i = 0; i < e; i++) result += this;
+    return result;
+}
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }

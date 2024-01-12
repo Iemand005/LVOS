@@ -207,7 +207,14 @@ input{
     padding: 0;
     margin: 0;
     width: 100%;
+    text-align: center;
+    align-items: center;
+    align-content: center;
     background-color: rgba(255, 255, 255, 0.758);
+}
+
+input[type=checkbox]{
+    width: unset;
 }
 
 template{
@@ -297,8 +304,16 @@ dialog:not([open]){
     animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
     display: block; /* The display attribute is set to none by default */
     z-index: -1000;
-    pointer-events: none !important;
+    /*pointer-events: none !important;*/
 }
+
+dialog:not([open]), dialog:not([open]) > content, dialog:not([open]) > div, dialog:not([open]) > content > article, dialog:not([open]) > content > article * {
+    pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
+}
+
+ /*{
+    pointer-events: none !important;
+}*/
 
 dialog > content > article{
     border: inherit;

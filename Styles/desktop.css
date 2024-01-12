@@ -53,6 +53,10 @@ body:not([blur]) dialog > article{
     width: 100%;
 }
 
+/*section#desktop[flipped] article#metrobody{
+    pointer-events: none !important;
+}*/
+
 #desktop img{
     -o-object-fit: cover;
     object-fit: cover;
@@ -92,6 +96,10 @@ body:not([blur]) dialog > article{
 }
 
 article#metrobody{
+    pointer-events: none !important;
+}
+
+section#desktop[flipped] article#metrobody{
     pointer-events: all !important;
 }
 
@@ -290,9 +298,26 @@ aside#metroapplist> button{
     width: 300px;
     z-index: 100000;
     display: flex;
-    align-content: center;
-    align-items: center;
+    /*align-content: center;*/
+    /*align-items: center;*/
     justify-content: center;
+    position: absolute;
+    pointer-events: all;
+    height: 50px;
+    bottom: 0;
+    width: 300px;
+    z-index: 10000;
+    overflow: hidden;
+    /*transform-origin: top;*/
+    /*border-radius: 5px;*/
+    left: 50%;
+    /*transform: rotateX(45deg) translateX(-50%);*/
+    transform: translateX(-50%) translateY(-50%);
+    /*background-color: lightgray;*/
+    /*perspective: 300px;*/
+    /*box-shadow: 0 0 10px black;*/
+    /*background: linear-gradient(0deg, #b2b2b2, #737373);*/
+
 }
 
 aside#charms form{

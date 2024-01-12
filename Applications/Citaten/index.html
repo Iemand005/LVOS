@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Citaten</title>
+    <script src="./citates.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body onload="//loaded()/*console.log(getAll());*/">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="./index.html">Citaten</a></li>
+                <li><a href="./add.html">Nieuw Citaat</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form onsubmit="submitCitate(this)">
+            <label for="title">Titel</label>
+            <input id="title"  name="title" type="text">
+            <label for="message">Boodschap</label>
+            <input id="message" name="message" type="text">
+            <label for="author">Autheur</label>
+            <input id="author" name="author" type="text">
+            <input type="submit" value="Vertuur">
+            <output></output>
+        </form>
+        <article>
+            <h1>Citaten</h1>
+            <section id="citates">
+                <template>
+                    <figure>
+                        <figcaption><cite></cite></figcaption>
+                        <blockquote></blockquote>
+                    </figure>                      
+                </template>
+            </section>
+        </article>
+    </main>
+    <footer>
+        <p>Lasse Lauwerys &copy; 2023</p>
+    </footer>
+</body>
+</html>

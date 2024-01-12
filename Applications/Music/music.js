@@ -1,3 +1,9 @@
+// Scripts for the front end of the music application
+// Lasse Lauwerys © 2023
+
+'use strict';
+'use esnext';
+'use moz';
 
 const frequencies = 128;
 
@@ -145,7 +151,8 @@ function autoHideControls(){
     timeout = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
-if(new URL(window.location).searchParams.get("fullscreen")) {
+console.error("Implement the URL replacement!")
+if(false) if(new URL(window.location).searchParams && new URL(window.location).searchParams.get("fullscreen")) {
     autoHideControls();
     document.onmousemove = autoHideControls;
 }

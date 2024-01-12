@@ -3,29 +3,31 @@
 // Last modified: 8/1/2024 - added back velocity demo, code cleanup and bug fix.
 
 'use strict';
+'use esnext';
 
 const bindConsole = true;
 
-const browser = windows["browser"].target;//document.getElementById("browser");
-const browserform = windows["browser"].originalBody;//document.getElementById("browserform");
+const browser = windows.browser.target;//document.getElementById("browser");
+const browserform = windows.browser.originalBody;//document.getElementById("browserform");
 const browserframe = browser.getElementsByTagName("iframe")[0];
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
     let url = event.target.address.value;
-
+    let xhr = new XMLHttpRequest();
     try{
         console.log("The browser is navigating to '" + url + "'");
         if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
         url = new URL(url);
         console.log("full url: ", url.href);
-        var http = new XMLHttpRequest(); // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
-        http.open('HEAD', url.href, false);
-        http.send();
+         // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
+         xhr.open('HEAD', url.href, false);
+         xhr.send();
 
         browserframe.src = url.href;
         // const links = browserframe.document.getElementsByTagName("a");
         // for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
     } catch (e) {
+        // if(e.code == )
         console.log(url, url.hostname)
         if(url.hostname.indexOf("youtube")!=-1) {
             console.log("yoututbe!", url.pathname);
@@ -169,6 +171,7 @@ const applications = [
         title: "Video",
         id: "video",
         src: "./Applications/Video/index.html",
+        hidden: true
     },
     {
         title: "Cover Flow",
@@ -179,7 +182,37 @@ const applications = [
         title: "Music",
         id: "music",
         src: "./Applications/Music/index.html"
-    }
+    },
+    {
+        title: "Citates",
+        id: "citates",
+        src: "./Applications/Citaten/index.html",
+        hidden: true // Hiding the incomplete apps. These are enabled once finished.
+    },
+    {
+        title: "Clock",
+        id: "clock",
+        src: "./Applications/Clock/index.html",
+        hidden: true
+    },
+    {
+        title: "Verlet",
+        id: "verlet",
+        src: "./Applications/Verlet/index.html",
+        hidden: true
+    },
+    {
+        title: "Recorder",
+        id: "recorder",
+        src: "./Applications/Recorder/index.html",
+        hidden: true
+    },
+    {
+        title: "Error",
+        id: "error",
+        src: "./Applications/Error/index.html",
+        hidden: true
+    },
 ]
 
 const games = [
@@ -201,6 +234,12 @@ const games = [
         src: "./Games/Minesweeper/index.html",
         fixed: true,
         scroll: false
+    },
+    {
+        title: "Chess",
+        id: "chess",
+        src: "./Games/Chess/index.html",
+        hidden: true
     },
 ]
 

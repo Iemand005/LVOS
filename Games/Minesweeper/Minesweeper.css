@@ -140,6 +140,7 @@ body, section, article, button{
 output{
     color: red;
     border-width: 1px;
+    display: flex; /*¨¨Fixes bug in Internet Explorer that causes a weird padding on top of the output content. **/
     /* text-align: center;
     vertical-align: center;
     line-height: 46px; */

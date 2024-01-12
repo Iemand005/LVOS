@@ -1,0 +1,93 @@
+
+/* General styles */
+
+html, body{
+    height: 100%; /* Dit zorgt ervoor dat mijn footer altijd zeker aan de onderkant van de pagina is. */
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Header styles */
+
+header{
+    background-color: black;
+    color: wheat;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+li{
+    text-decoration: none;
+    padding: 10px 0;
+}
+
+a{
+    text-decoration: none;
+    padding: 10px;
+    color: red;
+}
+
+li:hover{
+    background-color: grey;
+    cursor: pointer;
+}
+
+/* Main styles */
+
+main{
+    flex-shrink: 0;
+    padding: 20px;
+}
+
+section#citates{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+template{
+    display: none; /* Gebeurt op IE11 niet vanzelf? */
+}
+
+figure{
+    background-color: green;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    text-decoration: none;
+    font-style: normal;
+    flex-grow: 1;
+    box-shadow: 0 0 10px black;
+    border: 1px solid black;
+}
+
+figcaption{
+    display: flex;
+    justify-content: space-between;
+}
+
+cite{
+    margin: 10px;
+}
+
+/* This code was tested on FireFox 120, Internet Explorer 11, Microsoft Edge 44, Microsoft EdgeHTML 18. */

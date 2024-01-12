@@ -1,12 +1,14 @@
-// Engine and physics
+// Engine and physics for Verlet Störmer integration
 // Lasse Lauwerys © 2023
 // 30/12/2023
 
+'use strict';
+
 // The modern way to do this is with Object.assign()!
 Element.prototype = {
-    position: new Vector,
-    velocity: new Vector,
-    acceleration: new Vector,
+    position: new Vector(),
+    velocity: new Vector(),
+    acceleration: new Vector(),
     update: function(){
         this.position.add(this.velocity.add(this.acceleration));
     }
@@ -16,15 +18,13 @@ Element.prototype = {
 
 
 function Ball(radius){
-    this.position = new Vector,
-    this.velocity = new Vector,
-    this.acceleration = new Vector,
+    this.position = new Vector(),
+    this.velocity = new Vector(),
+    this.acceleration = new Vector(),
     this.radius = radius || 1;
 }
 
-Ball.prototype = {
-    __proto__: Element.prototype,
-}
+Ball.prototype[[Prototype]] = Element.prototype;  // Inherits the prototype of Element
 
 function BallCollection(amount){
     this.balls = new Array(amount || 0).fill(new Ball);
@@ -32,11 +32,9 @@ function BallCollection(amount){
 
 BallCollection.prototype = {
     balls: new Array,
-    updateAll: function(){
-        balls.forEach(function(ball){
+    updateAll: function () {
+        balls.forEach(function (ball) {
             ball.update();
         });
     }
-}
-
-//Ball.__proto__ = Element.prototype;
+};

@@ -4,6 +4,9 @@
 // Target: ES6 (Dropped support for IE11!)
 
 'use strict';
+'use esnext';
+'use esnext';
+'use moz';
 
 const video = document.getElementById("camera");
 const output = document.getElementById("picture");
@@ -46,8 +49,6 @@ startButton.onclick = getCamera;
 
 takePhoto.onclick = ev => {
     ev.preventDefault();
-    //const info = getStreamInfo(videoStream);
-    // const photo = getPhoto(videoStream, info.width, info.height);
     const photo = getPhoto(video, video.videoWidth, video.videoHeight);
     console.log("foto", photo)
     output.setAttribute("src", photo);

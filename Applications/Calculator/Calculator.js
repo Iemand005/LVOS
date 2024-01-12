@@ -1,6 +1,6 @@
 
 'use strict';
-
+'use esnext';
 const body = document.querySelector("body");
 /*for (let index = 0; index < 0; index++) {
     const button = document.createElement("button");
@@ -9,7 +9,7 @@ const body = document.querySelector("body");
 }*/
 const buttons = document.getElementsByTagName("input");
 const output = document.querySelector("output");
-const inputs = new Array();
+const inputs = [];
 
 document.querySelector("form").onsubmit = function(event){
     event.preventDefault();

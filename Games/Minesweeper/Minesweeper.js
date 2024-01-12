@@ -18,7 +18,7 @@ const // Declaring the constant variables.
     button = document.querySelector("article>button"),
     rect = body.getBoundingClientRect(),
 
-    signs = { // Quick configuration of the signs used in game.
+    signs = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
         bomb: "💣",
         exploded: "💥",
         correct: "✔",
@@ -211,8 +211,6 @@ for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 body.ondblclick = quickRevealEvent;
 body.ontouchend = quickRevealEvent;
 button.onclick = startGame.bind();
-// window.onfocus = sendDesiredSize;
-// window.onpageshow = sendDesiredSize;
 window.onmessage = sendDesiredSize;
 document.ondblclick = quickRevealEvent;
 document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);

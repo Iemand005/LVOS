@@ -1,3 +1,9 @@
+// 7 Segment display building tools
+// Lasse Lauwerys © 2024
+
+'use strict';
+'use esnext';
+'use moz';
 
 function DisplayBuilder(number, index, singular){
     this.display;
@@ -7,14 +13,14 @@ function DisplayBuilder(number, index, singular){
     this.size = 50;
     this.fat = 10;
     this.singular = Boolean(singular);
-    if(singular) this.singular = true
+    if (singular) this.singular = true;
 }
 
 function tokenizeNumber(number){ // There are probably better ways to do this but this was the first I came up with and it works for now.
     return typeof number ==='number' && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)]:[number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)]):[10, 10, 10];
 }
 
-displayNumbers = [ // These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " ";
+const displayNumbers = [ // These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " ";
     [true, true, true, false, true, true, true],
     [false, false, true, false, false, true, false],
     [true, false, true, true, true, false, true],
@@ -39,10 +45,10 @@ DisplayBuilder.prototype = {
             const segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
             if(this.singular) continue classifier; // Labelled for loop, similar to a goto command. CSS takes care of the styling automatically, so we don't need the rest anymore.
-            if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
-            if(i==1 || i==2 || i==4 || i==5) segment.classList.add("segmenty");
-            if(i==2 || i==5) segment.classList.add("segmentr");
-            if(i==3 || i==6) segment.classList.add("segmenth");
+            if(i===0 || i===3 || i===6) segment.classList.add("segmentx");
+            if(i===1 || i===2 || i===4 || i===5) segment.classList.add("segmenty");
+            if(i===2 || i===5) segment.classList.add("segmentr");
+            if(i===3 || i===6) segment.classList.add("segmenth");
         }
         return display;
     },

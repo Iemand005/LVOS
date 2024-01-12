@@ -1,4 +1,6 @@
-function Vector(x, y){
+
+
+function Vector(x, y) {
     this.x = x || 0;
     this.y = y || 0;
 }
@@ -42,11 +44,11 @@ function Rectangle(x, y, width, height){
 }
 
 Rectangle.prototype = {
-    contains: function(vector){
+    contains: function (vector) {
         return vector.x >= this.position.x && vector.y >= this.position.y && vector.x < this.position.x + this.width && vector.y < this.position.y + this.height;
     },
-    get x(){ return this.position.x },
-    get y(){ return this.position.y },
-    set x(value){ return this.position.x = value },
-    set y(value){ return this.position.y = value }
-}
+    get x() { return this.position.x; },
+    get y() { return this.position.y; },
+    set x(value) { return this.position.x = value; },
+    set y(value) { return this.position.y = value; }
+};

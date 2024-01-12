@@ -64,6 +64,18 @@ div.segmentdisplay > div:after{
     /* opacity: inherit; */
 }
 
+div.segmentdisplay > div:after{
+    opacity: inherit; /* I need this on IE11 for some reason! */
+}
+
+/*div.singular.segmentdisplay > div:first-child{
+    margin-top: -2.5px;
+}*/
+
+/*article.original > output{
+    padding-top: 5px;
+}*/
+
 div.segmentdisplay > div.segmentx, div.segmentdisplay > div:nth-child(3n + 1){
     height: 0;
     border-right-color: transparent !important;
