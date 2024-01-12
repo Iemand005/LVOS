@@ -172,6 +172,67 @@ aside#charms.open{
     animation: opensesame 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
 }
 
+aside#metroapplist{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #000000b8 70px, transparent);
+    background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+    color: white;
+    padding-right: 19px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    /* display: table; */
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+    color: white;
+    padding-right: 19px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 109px;
+    /* display: table; */
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+    color: white;
+    padding-right: 19px;
+}
+
+aside#metroapplist.bottom{
+    bottom: 0;
+    height: 76px;
+    top: unset;
+    width: 100%;
+    background: linear-gradient(0, #000000c9, #ccc1c1b8 70%, transparent);
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+aside#metroapplist> button{
+    color: white;
+
+    border-color: white;
+    color: black;
+    border-color: black;
+    background-color: #ffffffb0;
+}
+
 #overlay{
     transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1);
     transition: all 3621ms cubic-bezier(0.8, -0.01, 1, 1);

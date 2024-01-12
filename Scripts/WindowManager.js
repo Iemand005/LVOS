@@ -152,7 +152,7 @@ Dialog.prototype = {
     get head(){ return this.target.getElementsByTagName("header")[0]; },
     get content(){ return this.target.getElementsByTagName("content")[0]; },
     get frame(){ return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function(){ this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open)/* Messenger.m */; },
+    activate: function(){ return this.target.style.zIndex = this.z = topZ++, swapMetroBody(this), this.messageFrame(Messenger.types.open), activeWindow = this.id; },
     setTitle: function(title){ return this.getTitleElement().innerText = title; },
     getTitleElement: function(){ return this.head.querySelector("h1"); },
     getTitle: function(){ return this.getTitleElement().innerText; },
@@ -247,7 +247,7 @@ function DocumentCrawler(document){
 }
 
 DocumentCrawler.prototype = {
-    getMetro: function(){ return this.document.getElementById("metro") },
+    getMetro: function(){ return this.document.getElementById("metrobody") },
     getDesktop: function(){ return this.document.getElementById("desktop") },
     getMetroBody: function(){ return this.getMetro().firstChild },
     getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
@@ -302,13 +302,19 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
     }
 }
 
-Messenger.receive(messageReceived);
+let metroBodyOrigin;
+function swapMetroBody(dialog){
+    // retrieveWindowBodyFromMetro(windows[activeWindow]);
+    retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
+    exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
+    // else 
+}
+
 
 function flip(enable){
     flipHandler(bodyCrawler.getDesktop().toggleAttribute("flipped", enable));
 }
 
-let metroBodyOrigin;
 function flipHandler(flipped){
     toggleCharms(false);
     if(flipped) exportWindowBodyToMetro(windows[metroBodyOrigin = activeWindow] || windows[metroBodyOrigin = 0]);
@@ -316,8 +322,9 @@ function flipHandler(flipped){
     return flipped;
 }
 
-const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
+Messenger.receive(messageReceived);
 
+const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
 
 toggleOverlay(true);
 
@@ -336,11 +343,11 @@ document.getElementById("desktop").ontransitionend  = function(){
     // The reason I found out is that JavaScript evaluates the parameters of the function calls before calling the function! We are forced to wrap it in another function to avoid this behaviour.
 
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches && !mobile){
-        console.log("flipped to mobile!");
+        // console.log("flipped to mobile!");
         flipHandler(true);
         mobile = true;
     } else if(mobile){
-        console.log("I s zwear we are flip now and oly once! kanobi");
+        // console.log("I s zwear we are flip now and oly once! kanobi");
         flipHandler(false);
         mobile = false;
     }
@@ -483,6 +490,14 @@ function collectEssentialWindowData(target, source){ // By using the same functi
     return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
+function handleStorageException(exception){
+    console.error(exception);
+    console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
+    console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
+    localStorage.windowState = null; 
+    canSave = false;
+}
+
 function saveWindowState(){
     if(!loaded) return;
     console.log("Saving window state.");
@@ -498,11 +513,7 @@ function saveWindowState(){
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch(exception) {
-        console.error(exception);
-        console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
-        console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-        localStorage.windowState = null; 
-        canSave = false;
+        handleStorageException(exception);
     }
 }
 
@@ -512,18 +523,15 @@ function loadWindowState(){
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
             for (let window in parsedWindows) try{
-                collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
+                if(windows[window] && parsedWindows[window]) collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
             } catch(ex) {
                 fails.push(ex);
             }
+            fails.forEach(console.error.bind(this, "Tailed to load a window!"));
             updateTopZ();
         }
     } catch(exception) {
-        console.error(exception);
-        console.warn("Something went wrong! The stored window state will be reset in an attempt to recover from this issue.");
-        console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-        localStorage.windowState = null;
-        canSave = false;
+        handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
 }
 
@@ -531,7 +539,7 @@ function exportWindowBodyToMetro(dialog){
     if(dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
         dialog.close();
-        if(metro) metro.appendChild(dialog.body);
+        if(metro && dialog.body) metro.appendChild(dialog.body);
     }
 }
 
@@ -569,36 +577,6 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 
 function toggleCharms(force){
     document.getElementById("charms").classList.toggle("open", force);
-}
-
-function hexToRGB(hex){
-    const int = parseInt(hex.replace('#', ''), 16);
-    return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
-}
-
-function isColorDark(color){
-    const rgb = hexToRGB(color);
-    return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
-}
-
-function setColor(color){
-    // const y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
-    // const c = y < 128 ? "black" : "white";
-    const isWhite = isColorDark(color);
-    for(let index in windows){
-        const content = windows[index].target.getElementsByTagName("content")[0];
-        content.style.backgroundColor = color;
-        content.style.color = isWhite?"white":"black";
-    }
-}
-
-function setAccentColor(color){
-    const isWhite = isColorDark(color);
-    const metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
-    metroStyle.backgroundColor = charmStyle.backgroundColor = color;
-    metroStyle.color = charmStyle.color = isWhite?"white":"black";
-    // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
-
 }
 
 function injectApplication(application){
