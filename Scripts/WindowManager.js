@@ -38,6 +38,7 @@ function Dialog(object){ // Verouderde manier om een object constructor te maken
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
+        if(object.microphone || object.camera)this.frame.setAttribute("allow", "camera; microphone"); // Not absolutely necessary but it's more secure.
         if(typeof object.classes === 'object'){
             object.classes.forEach(function(someclass){ this.target.classList.add(someclass) }, dialog); // We can't use class since it's a keyword!!
             // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 based browsers.
@@ -179,7 +180,7 @@ Dialog.prototype = {
     messageFrame: function(type, message){ Messenger.broadcastToChild(type, message, this.frame); },
     move: function(x, y){ this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
     resize: function(width, height){ this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
-    resizeBody: function(width, height){ this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
+    resizeBody: function(width, height){ if(this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
     openUrl: function(url){
         const frameUrl = new URL(this.frame.src);
         frameUrl.searchParams.set("url", url);

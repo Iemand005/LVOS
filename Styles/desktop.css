@@ -91,6 +91,10 @@ body:not([blur]) dialog > article{
     /*Kenia*/
 }
 
+article#metrobody{
+    pointer-events: all !important;
+}
+
 #metro{
     height: 100%;
     width: 100%;
@@ -99,6 +103,7 @@ body:not([blur]) dialog > article{
     /* align-content: center; */
     justify-content: center;
     align-items: center;
+    display: flex;
 }
 
 #metro > *{
@@ -212,6 +217,10 @@ aside#metroapplist{
     background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
     color: white;
     padding-right: 19px;
+}
+
+#browserform{
+    height: 23px;
 }
 
 aside#metroapplist.bottom{

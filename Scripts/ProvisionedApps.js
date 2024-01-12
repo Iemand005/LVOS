@@ -6,8 +6,8 @@
 
 const bindConsole = true;
 
-const browser = document.getElementById("browser");
-const browserform = document.getElementById("browserform");
+const browser = windows["browser"].target;//document.getElementById("browser");
+const browserform = windows["browser"].originalBody;//document.getElementById("browserform");
 const browserframe = browser.getElementsByTagName("iframe")[0];
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
@@ -17,6 +17,7 @@ browserform.addEventListener("submit", function(event){
         console.log("The browser is navigating to '" + url + "'");
         if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
         url = new URL(url);
+        console.log("full url: ", url.href);
         var http = new XMLHttpRequest(); // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
         http.open('HEAD', url.href, false);
         http.send();
@@ -25,7 +26,6 @@ browserform.addEventListener("submit", function(event){
         // const links = browserframe.document.getElementsByTagName("a");
         // for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
     } catch (e) {
-        //let ai = 
         console.log(url, url.hostname)
         if(url.hostname.indexOf("youtube")!=-1) {
             console.log("yoututbe!", url.pathname);
@@ -71,7 +71,6 @@ function initializeConsoleApplication(){
             console.results.push({type: 2, data: [exception]});
         }
         interceptConsole();
-        //consoleElement.scrollTo(consoleElement.scrollX, consoleElement.scrollHeight);
     });
 
     console.results = new Array();
@@ -80,7 +79,7 @@ function initializeConsoleApplication(){
     console.standardLog = console.log.bind(console);
     console.logs = new Array();
     console.log = function(){
-        console.standardLog.apply(console, arguments);
+        console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
         console.results.push({type: 1, data: arguments});
         interceptConsole();
     }
@@ -153,11 +152,11 @@ const applications = [
         id: "calculator",
         src: "./Applications/Calculator.html"
     },
-                {
-                    title: "Exmple",
-                    id: "0",
-                    src: "./example.html"
-                },
+    {
+        title: "Exmple",
+        id: "0",
+        src: "./example.html"
+    },
     {
         title: "Camera",
         id: "camera",
@@ -184,7 +183,6 @@ const applications = [
 ]
 
 const games = [
-
     {
         title: "Conway",
         id: "conway",

@@ -163,7 +163,7 @@ function sendDesiredSize(){
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
     if(element) {
-        const tile = lineartiles[parseInt(element.firstChild.id || element.id)];
+        const tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
         if(tile && tile.flagged!=1) tile.quickReveal();
     }
 }
