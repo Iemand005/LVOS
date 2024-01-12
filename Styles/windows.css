@@ -8,11 +8,14 @@ html, body{
     width: 100%;
     animation: all 1s ease-in-out 0;
     transition: all 1s;
-    overflow: hidden;
 }
 
-body>header, body>footer, header.hidden{
+body > header, body > footer, header.hidden{
     display: none;
+}
+
+html, body, main, main > section, main > section > section{
+    overflow: hidden;
 }
 
 body{
@@ -68,38 +71,6 @@ dialog{
     transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
 }
-
-/* content::before {
-    content: '';
-    height: inherit;
-    position: absolute;
-    background: red;
-    width: inherit;
-    display: block;
-    opacity: 1;
-    height: inherit;
-    position: absolute;
-    background: #ff00004f;
-    width: inherit;
-    display: block;
-    opacity: 1;
-    margin: 0;
-    top: 0;
-    left: 0;
-    z-index: -10;
-    backdrop-filter: blur(37px);
-} */
-
-/* content::before, dialog::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    backdrop-filter: blur(37px);
-    z-index: -1;
-} */
 
 dialog header{
     margin: 0;

@@ -1,25 +1,16 @@
 /*
-dialog#console form > input{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}*/
+*
+ *
+  *   Provisioned app styling
+  *   Lasse Lauwerys © 2024
+ *
+*/
 
 form#applist{
     flex-wrap: wrap;
 }
 
 form{
-    /* display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 100%;
-    flex-wrap: wrap; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
