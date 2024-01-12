@@ -29,14 +29,23 @@ table{
     width: 100%;
 }
 
-table > tr:nth-child(odd){
+table > tr:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.123);
 }
 
-table > tr:nth-child(even){
+table > tr:nth-child(even) {
     background-color: rgba(128, 128, 128, 0.123);
 }
 
-input{
+input {
     pointer-events: auto !important;
+}
+
+#stdout > table {
+    display: flex;
+    flex-direction: column-reverse; /* I decided to flip it around instead of making it scroll because scrolling gives problem on some browsers. To avoid wasting time, I'm thus applying flex to the table. */
+}
+
+#stdin {
+    text-align: left;
 }

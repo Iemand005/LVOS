@@ -4,19 +4,11 @@
 'use strict';
 'use esnext';
 
-function SettingHandler() {
+function SettingHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
     this.storage = localStorage;
 }
 
 SettingHandler.prototype = { get: function (key) { return this.storage.getItem(key); }, set: function (key, value) { this.storage.setItem(key, value); } };
-
-const settings = new SettingHandler();
-
-//const settings = bodyCrawler.settings;
-bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-const desktop = document.getElementById("desktop");
-
-bodyCrawler.theme.onchange = function (ev) { setTheme(this.selectedIndex); };
 
 function setTheme(id) {
     if (typeof id === 'undefined') return;
@@ -34,14 +26,6 @@ function setTheme(id) {
     }
 }
 
-const charmsbutton = applist.appendChild(document.createElement("button"));
-charmsbutton.innerText = "Charms";
-
-const charmsbutton2 = document.getElementById("dockapplist").appendChild(document.createElement("button"));
-charmsbutton2.innerText = "Charms"
-
-window.addEventListener("mousedown", toggleCharmsEvent);
-
 function toggleCharmsEvent(ev) {
     const clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
     if (!isCharmsOpen() || clickedElement == charmsbutton || clickedElement == charmsbutton2) return;
@@ -57,27 +41,6 @@ function setBorderSize(size) {
     settings.set("borderSize", size);
     for (let index in windows) windows[index].borderSize = size;
 }
-
-const elements = {
-    color: document.getElementById("color"),
-    accent: document.getElementById("accent"),
-    resetColor: document.getElementById("resetaccent"),
-    resetAccent: document.getElementById("resetaccent"),
-    border: document.getElementById("border"),
-}
-
-const blurToggle = document.getElementById("blurtoggle");
-const reflectionToggle = document.getElementById("reflectiontoggle");
-elements.resetAccent.onclick = setAccentColor.bind(this, "");
-elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
-
-blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
-reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
-
-charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
-
-const metroAppList = document.getElementById("metroapplist");
-metroAppList.classList.toggle("bottom", true);
 
 function hexToRGB(hex) {
     if (typeof hex === 'undefined') return;
@@ -121,42 +84,57 @@ function loadSettings() {
     setTheme(settings.get("theme"));
     getBorderSize(settings.get("borderSize"));
 }
-loadSettings();
 
+const settings = new SettingHandler();
 
-elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
+const elements = {
+    desktop: document.getElementById("desktop"),
+    color: document.getElementById("color"),
+    accent: document.getElementById("accent"),
+    resetColor: document.getElementById("resetaccent"),
+    resetAccent: document.getElementById("resetaccent"),
+    border: document.getElementById("border"),
+    dockAppList: document.getElementById("dockapplist");
+}
 
+const metroAppList = document.getElementById("metroapplist");
+const blurToggle = document.getElementById("blurtoggle");
+const reflectionToggle = document.getElementById("reflectiontoggle");
+// const dockAppListElement = 
+const charmsbutton = applist.appendChild(document.createElement("button"));
+const charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+
+bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
+bodyCrawler.theme.onchange = function () { setTheme(this.selectedIndex); };
+reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
+blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
+elements.resetAccent.onclick = setAccentColor.bind(this, "");
+elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
+elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
+charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
 
+metroAppList.classList.toggle("bottom", true);
+
+charmsbutton.innerText = "Charms";
+charmsbutton2.innerText = "Charms"
+
+window.addEventListener("mousedown", toggleCharmsEvent);
+
+// This isn't finished yet, I am still working on making dragging and dropping files work properly so we can drag and drop a photo to have it immediately set as wallpaper! While this is work in progress you can set the wallpaper from the charms bar.
 window.ondrag = document.ondrag = function(ev){
     ev.preventDefault();
-    desktop.style.opacity = 0;
+    elements.desktop.style.opacity = 0;
 }
 
 window.ondragleave = function(ev){
     ev.preventDefault();
-    desktop.style.opacity = null;
+    elements.desktop.style.opacity = null;
 }
 
 window.ondrop = document.ondrop = function(ev){
     ev.preventDefault();
-
-    //if (ev.dataTransfer.items) {
-    //    // Use DataTransferItemList interface to access the file(s)
-    //    [...ev.dataTransfer.items].forEach((item, i) => {
-    //      // If dropped items aren't files, reject them
-    //      if (item.kind === "file") {
-    //        const file = item.getAsFile();
-    //        console.log(`… file[${i}].name = ${file.name}`);
-    //      }
-    //    });
-    //  } else {
-    //    // Use DataTransfer interface to access the file(s)
-    //    [...ev.dataTransfer.files].forEach((file, i) => {
-    //      console.log(`… file[${i}].name = ${file.name}`);
-    //    });
-    //  }
     console.log(ev);
 }
-// bodyCrawler.charms.onmousedown = function(ev){ev.preventDefault()}
-// document.body.addEventListener("mousedown", toggleCharms.bind(this, false));
+
+loadSettings();

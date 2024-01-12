@@ -70,8 +70,8 @@
                         </header>
                         <article>
                             <form action="">
-                                <output name="stdout"></output>
-                                <input type="text" name="input" id="">
+                                <input type="text" name="input" id="stdin">
+                                <output name="stdout" id="stdout"></output>
                             </form>
                         </article>
                     </content>
@@ -119,10 +119,9 @@
                 <input type="button" id="resetaccent" value="Reset accent">
                 <label for="border">Border size: </label>
                 <input type="range" value="0" min="0" max="50" step="0.01" name="borderslider" id="border">
-                
                 <label for="blurtoggle">Blur: <input type="checkbox" id="blurtoggle" value="toggleblur"></label>
-                
                 <label for="reflectiontoggle">Reflections: <input type="checkbox" id="reflectiontoggle" value="togglereflections"></label>
+                <input type="file" name="wallpaper" id="wallpaper">
             </form>
         </aside>
         <section id="overlay" class="open"></section>
