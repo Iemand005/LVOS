@@ -9,7 +9,7 @@
 // Switch between canvas and html for rendering the objects. Canvas looks smoother as it interpolates the pixels with floating point position, while html aligns the elements to the display pixels.
 const canvasRenderer = true;
 const flipY = false;
-const framerate = 30//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
+const framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
 const frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
 
 // We are using a block to contain the scope of our style variable, this is equivalent to the deprecated with statement, or a using statement in C#.
@@ -369,7 +369,7 @@ const simulation = new Simulation(canvasRenderer);
 
 
 const b = new Ball(40, 400, 10);
-b.acceleration.y = 3.81//9.81;
+b.acceleration.y = 3000.81//9.81;
 b.verlet.pinned = true;
 
 //const mousePosition = new Vector;

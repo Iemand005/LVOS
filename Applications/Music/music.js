@@ -151,8 +151,8 @@ function autoHideControls(){
     timeout = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
-console.error("Implement the URL replacement!")
-if(false) if(new URL(window.location).searchParams && new URL(window.location).searchParams.get("fullscreen")) {
+console.error("Implement the URL replacement for older browsers!")
+if(new URL(window.location).searchParams && new URL(window.location).searchParams.get("fullscreen")) {
     autoHideControls();
     document.onmousemove = autoHideControls;
 }

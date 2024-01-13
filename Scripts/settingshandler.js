@@ -94,15 +94,16 @@ const elements = {
     resetColor: document.getElementById("resetaccent"),
     resetAccent: document.getElementById("resetaccent"),
     border: document.getElementById("border"),
-    dockAppList: document.getElementById("dockapplist");
+    dockAppList: document.getElementById("dockapplist")
 }
 
 const metroAppList = document.getElementById("metroapplist");
 const blurToggle = document.getElementById("blurtoggle");
 const reflectionToggle = document.getElementById("reflectiontoggle");
-// const dockAppListElement = 
 const charmsbutton = applist.appendChild(document.createElement("button"));
 const charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+
+elements.dockAppList.appendChild(windows.browser.createOpenButton());
 
 bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 bodyCrawler.theme.onchange = function () { setTheme(this.selectedIndex); };
@@ -116,8 +117,8 @@ charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
 
 metroAppList.classList.toggle("bottom", true);
 
-charmsbutton.innerText = "Charms";
-charmsbutton2.innerText = "Charms"
+charmsbutton.innerText = "Settings";
+charmsbutton2.innerText = "Settings";
 
 window.addEventListener("mousedown", toggleCharmsEvent);
 

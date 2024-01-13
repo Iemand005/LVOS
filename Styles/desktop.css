@@ -100,7 +100,7 @@ body:not([blur]) dialog > article{
 }
 
 #windows{
-    overflow: hidden;
+    /* overflow: hidden; */
     perspective: 300px;
     justify-content: center;
     display: flex;
@@ -108,7 +108,7 @@ body:not([blur]) dialog > article{
     overflow-y: scroll;
     justify-content: space-evenly;
     pointer-events: none;
-    overflow: hidden;
+    overflow: hidden !important;
     /*Kenia*/
 }
 
@@ -308,7 +308,7 @@ aside#metroapplist> button{
     opacity: 1;
 }
 
-#dockapplist{
+#dockapplist{ /* ToDo: Implement moving apps in and out the dock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.) */
     position: absolute;
     height: 50px;
     bottom: 0;

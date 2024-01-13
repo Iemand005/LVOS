@@ -10,6 +10,11 @@ const bindConsole = true;
 const browser = windows.browser.target;//document.getElementById("browser");
 const browserform = windows.browser.originalBody;//document.getElementById("browserform");
 const browserframe = browser.getElementsByTagName("iframe")[0];
+const dockapplist = document.getElementById("dockapplist");
+
+dockapplist.appendChild(windows.browser.createOpenButton());
+dockapplist.appendChild(windows.console.createOpenButton());
+
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
     let url = event.target.address.value;
@@ -20,8 +25,8 @@ browserform.addEventListener("submit", function(event){
         url = new URL(url);
         console.log("full url: ", url.href);
          // We can't extract the website info from our iframe for security reasons, my idea here is to first probe the website before feeding it to our independent iframe.
-         xhr.open('HEAD', url.href, false);
-         xhr.send();
+        //  xhr.open('HEAD', url.href, false);
+        //  xhr.send();
 
         browserframe.src = url.href;
         // const links = browserframe.document.getElementsByTagName("a");
@@ -245,5 +250,10 @@ const games = [
 
 injectApplications(applications);
 injectApplications(games);
+
+elements.dockAppList.appendChild(windows.browser.createOpenButton());
+elements.dockAppList.appendChild(windows.console.createOpenButton());
+dockapplist.appendChild(windows.music.createOpenButton());
+
 
 toggleReflections(true);
