@@ -108,11 +108,13 @@ function Window(object){
 
     if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
         const div = target.appendChild(document.createElement("div"));
-        div.draggable = false, div.id = index + 1,
-        div.onmousedown = function (ev) {
+        div.draggable = false, div.id = index + 1;
+        const pointerDown = function (ev) {
             if (IE11Booster) dragAction.set(ev.target.id);
             else dialog.dragCalculator.set(ev.target.id);
         }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+        if (div.onpointerdown) div.onpointerdown = pointerDown;
+        else div.onmousedown = pointerDown;
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
@@ -376,6 +378,7 @@ window.onresize = checkForFlip();
 
 function initializeWindows(windows){
     if (document.onpointerdown) document.onpointerdown = activateWindowPointers;
+    else if (document.onpointerdown) document.onpointerdown = activateWindowPointers;
     else document.onmousedown = activateWindowPointers;
     
     dragAction.set(0);
