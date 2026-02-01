@@ -8,36 +8,16 @@ function Vector(x, y){
 }
 
 Vector.prototype = {
-    add: function (vector) {
-        return this.x += vector.x, this.y += vector.y, this;
-    },
-    sub: function (vector) {
-        return this.x -= vector.x, this.y -= vector.y, this;
-    },
-    mul: function (vector) {
-        return this.x *= vector.x, this.y *= vector.y, this;
-    },
-    div: function (vector) {
-        return this.x /= vector.x, this.y /= vector.y, this;
-    },
-    sum: function (vector) {
-        return new Vector(this.x + vector.x, this.y + vector.y);
-    },
-    difference: function (vector) {
-        return new Vector(this.x - vector.x, this.y - vector.y);
-    },
-    product: function (vector) {
-        return new Vector(this.x * vector.x, this.y * vector.y);
-    },
-    quotient: function (vector) {
-        return new Vector(this.x / vector.x, this.y / vector.y);
-    },
-    set: function (vector) {
-        return this.x = vector.x, this.y = vector.y, this;
-    },
-    clone: function () {
-        return new Vector(this.x, this.y);
-    }
+    add: function (vector) { return this.x += vector.x, this.y += vector.y, this; },
+    sub: function (vector) { return this.x -= vector.x, this.y -= vector.y, this; },
+    mul: function (vector) { return this.x *= vector.x, this.y *= vector.y, this; },
+    div: function (vector) { return this.x /= vector.x, this.y /= vector.y, this; },
+    sum: function (vector) { return new Vector(this.x + vector.x, this.y + vector.y); },
+    difference: function (vector) { return new Vector(this.x - vector.x, this.y - vector.y); },
+    product: function (vector) { return new Vector(this.x * vector.x, this.y * vector.y); },
+    quotient: function (vector) { return new Vector(this.x / vector.x, this.y / vector.y); },
+    set: function (vector) { return this.x = vector.x, this.y = vector.y, this; },
+    clone: function () { return new Vector(this.x, this.y); }
 };
 
 function Rectangle(x, y, width, height) {

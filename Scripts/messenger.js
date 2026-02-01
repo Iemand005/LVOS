@@ -6,6 +6,13 @@
 'use esnext';
 'use moz';
 
+/**
+ * 
+ * @param {HTMLIFrameElement} target 
+ * @param {*} type 
+ * @param {*} message 
+ * @param {*} id 
+ */
 function broadcast(target, type, message, id){
     if(target) target.postMessage(JSON.stringify({type:type, data:message, id:id}), '*');
 }

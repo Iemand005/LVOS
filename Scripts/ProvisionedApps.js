@@ -58,6 +58,14 @@ browserform.addEventListener("submit", function(event){
     }
 });
 
+const ConsoleOutType = {
+    Input: -1,
+    Return: 0,
+    Log: 1,
+    Warn: 2,
+    Error: 3,
+}
+
 function initializeConsoleApplication(){
     if(!windows["console"]) return;
     const consoleform = windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
@@ -71,11 +79,11 @@ function initializeConsoleApplication(){
     consoleform.addEventListener("submit", function(event){
         event.preventDefault();
         try{
-            console.results.push({type: -1, data: [event.target.input.value]});
-            console.results.push({type: 0, data: [eval(event.target.input.value)]});
+            console.results.push({type: ConsoleOutType.Input, data: [event.target.input.value]});
+            console.results.push({type: ConsoleOutType.Log, data: [eval(event.target.input.value)]});
         }
         catch(exception){
-            console.results.push({type: 2, data: [exception]});
+            console.results.push({type: ConsoleOutType.Error, data: [exception]});
         }
         interceptConsole();
     });
@@ -87,7 +95,15 @@ function initializeConsoleApplication(){
     console.logs = new Array();
     console.log = function(){
         console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
-        console.results.push({type: 1, data: arguments});
+        console.results.push({type: ConsoleOutType.Log, data: arguments});
+        interceptConsole();
+    }
+
+    console.standardWarning = console.error.bind(console);
+    console.warnings = new Array();
+    console.warn = function(){
+        console.standardWarning.apply(console, arguments);
+        console.results.push({type: ConsoleOutType.Warn, data: arguments});
         interceptConsole();
     }
 
@@ -95,7 +111,7 @@ function initializeConsoleApplication(){
     console.errors = new Array();
     console.error = function(){
         console.standardError.apply(console, arguments);
-        console.results.push({type: 2, data: arguments});
+        console.results.push({type: ConsoleOutType.Error, data: arguments});
         interceptConsole();
     }
 
@@ -109,19 +125,25 @@ function initializeConsoleApplication(){
                 const data = result.data[dataIndex];
                 const span = document.createElement("span");
                 switch(result.type){
-                    case -1:
+                    case ConsoleOutType.Input:
                         span.style.color = "black";
                         span.innerText = data;
                         tableData.insertAdjacentText("beforeend", "← ");
                         tableData.insertAdjacentElement("beforeend", span);
                         break;
-                    case 0:
+                    case ConsoleOutType.Return:
                         span.style.color = "gray";
                         span.innerText = data;
                         tableData.insertAdjacentText("beforeend", "→ ");
                         tableData.insertAdjacentElement("beforeend", span);
                         break;
-                    case 2:
+                    case ConsoleOutType.Warn:
+                        span.style.color = "yellow";
+                        span.innerText = data;
+                        tableData.appendChild(span);
+                        span.insertAdjacentText("afterbegin", "⚠ ");
+                        break;  
+                    case ConsoleOutType.Error:
                         span.style.color = "red";
                         span.innerText = data;
                         tableData.appendChild(span);
