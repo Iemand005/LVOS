@@ -54,7 +54,7 @@ function Dialog(object){
     this.width = 0;
     this.height = 0;
     this.minWidth = 100;
-    this.minHeight = 100;
+    this.minHeight = 200;
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
@@ -146,7 +146,6 @@ function Dialog(object){
 
     windows[this.id] = this;
 }
-// const hey;
 
 Dialog.prototype = {
     get isOpen() { return this.target.hasAttribute("open"); },
@@ -194,7 +193,7 @@ Dialog.prototype = {
     get borderSize() { return fromPixels(this.content.style.padding); },
 };
 
-function DragCalculator(dialog){ // This is the 4th iteration of optimising the window drag calculations. This is a little bit slower than the previous version but it's far cleaner and more easy to modify so I can add constraints.
+function DragCalculator(dialog){
     this.dialog = dialog;
     this.offset = dialog.clickOffset;
     this.style = dialog.target.style;

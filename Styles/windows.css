@@ -26,7 +26,7 @@ body{
     background: radial-gradient(#333, black);
 }
 
-dialog *, #desktop, #desktop img{
+.window *, #desktop, #desktop img{
     -moz-user-select: none;
     -moz-user-drag: none;
     -webkit-user-select: none;
@@ -49,7 +49,7 @@ main{
     perspective: 1000px;
 }
 
-dialog{
+.window{
     border: 1px solid black;
     border-radius: 5px;
     box-shadow: 0 0 10px black;
@@ -72,7 +72,7 @@ dialog{
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
 }
 
-dialog header{
+.window header{
     margin: 0;
     /*display: flex;*/
     pointer-events: none !important;
@@ -84,12 +84,12 @@ dialog header{
     border-color: inherit;
 }
 
-dialog header, dialog header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
+.window header, .window header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
 }
 
-dialog header section{
+.window header section{
     -webkit-transition: all 700ms ease-out;
     -moz-transition: all 700ms ease-out;
     -o-transition: all 700ms ease-out;
@@ -109,7 +109,7 @@ dialog header section{
     border-color: inherit;
 }
 
-dialog header button {
+.window header button {
     width: 30px;
     height: 30px;
     font-family: sans-serif;
@@ -133,12 +133,12 @@ dialog header button {
     border: 1px solid black;
 }
 
-dialog header button:not(:disabled) ~ button:not(:disabled){
+.window header button:not(:disabled) ~ button:not(:disabled){
     border-bottom-left-radius: 0px;
     border-left: none;
 }
 
-dialog header button:disabled{
+.window header button:disabled{
     outline: none;
     width: 0px;
     transition: all 500ms ease-out, border 10s ease 1s;
@@ -147,13 +147,13 @@ dialog header button:disabled{
     margin: 0;
 }
 
-dialog header > h1{
+.window header > h1{
     padding: 0;
     margin: 0;
     font-size: 15px;
 }
 
-dialog > content{
+.window > content{
     display: block;
     display: flex;
     flex-direction: column;
@@ -198,79 +198,79 @@ article{
     flex-direction: column;
 }
 
-dialog > div{
+.window > div{
     position: absolute;
     pointer-events: auto;
 }
 
-dialog > div:nth-of-type(odd){
+.window > div:nth-of-type(odd){
     width: 100%;
 }
 
-dialog > div:nth-of-type(even){
+.window > div:nth-of-type(even){
     height: 100%;
 }
 
 
-dialog > div, dialog > div:nth-of-type(n + 5){
+.window > div, .window > div:nth-of-type(n + 5){
     width: 5px;
     height: 5px;
 }
 
-dialog > div:nth-of-type(1){
+.window > div:nth-of-type(1){
     top: 0;
     left: 0;
     cursor: n-resize;
 }
 
-dialog > div:nth-of-type(2){
+.window > div:nth-of-type(2){
     top: 0;
     right: 0;
     cursor: w-resize;
 }
 
-dialog > div:nth-of-type(3){
+.window > div:nth-of-type(3){
     bottom: 0;
     left: 0;
     cursor: s-resize;
 }
 
-dialog > div:nth-of-type(4){
+.window > div:nth-of-type(4){
     top: 0;
     left: 0;
     cursor: e-resize;
 }
 
-dialog > div:nth-of-type(5){
+.window > div:nth-of-type(5){
     top: 0;
     left: 0;
     cursor: nw-resize;
 }
 
-dialog > div:nth-of-type(6){
+.window > div:nth-of-type(6){
     top: 0;
     right: 0;
     cursor: ne-resize;
 }
 
-dialog > div:nth-of-type(7){
+.window > div:nth-of-type(7){
     bottom: 0;
     right: 0;
     cursor: se-resize;
 }
 
-dialog > div:nth-of-type(8){
+.window > div:nth-of-type(8){
     bottom: 0;
     left: 0;
     cursor: sw-resize;
 }
 
-dialog[open]{
+.window[open]{
     animation: opening 500ms ease-out forwards;
     pointer-events: auto;
 }
 
-dialog:not([open]){
+.window:not([open]){
     transform-origin: center;
     animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
     display: block; /* The display attribute is set to none by default */
@@ -278,7 +278,7 @@ dialog:not([open]){
     /*pointer-events: none !important;*/
 }
 
-dialog:not([open]), dialog:not([open]) > content, dialog:not([open]) > div, dialog:not([open]) > content > article, dialog:not([open]) > content > article * {
+.window:not([open]), .window:not([open]) > content, .window:not([open]) > div, .window:not([open]) > content > article, .window:not([open]) > content > article * {
     pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
 }
 
@@ -286,7 +286,7 @@ dialog:not([open]), dialog:not([open]) > content, dialog:not([open]) > div, dial
     pointer-events: none !important;
 }*/
 
-dialog > content > article{
+.window > content > article{
     border: inherit;
     width: 100%;
     height: 100%;
@@ -299,14 +299,14 @@ dialog > content > article{
     /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
 }
 
-dialog > content > article > *, dialog > content > article > iframe {
+.window > content > article > *, .window > content > article > iframe {
     background-color: rgba(0, 0, 0, 0.267);
     box-shadow: inset 0px 0px 10px black;
-    z-index: -1; /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any dialog body which gives the illusion of the prescense of lag. */
+    z-index: -1; /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any .window body which gives the illusion of the prescense of lag. */
     vertical-align: bottom;
 }
 
-dialog[full]{
+.window[full]{
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -376,19 +376,19 @@ button:hover{
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
-    body[blur] dialog > content{
+    body[blur] .window > content{
         background-color: rgba(255, 255, 255, 0.267);
     }
 }
 
 @supports (-webkit-backdrop-filter: none) {
-    body[blur] dialog > content{ /* Moving the blur from the dialog to the content to work around graphical bug in EdgeHTML 18 */
+    body[blur] .window > content{ /* Moving the blur from the .window to the content to work around graphical bug in EdgeHTML 18 */
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
     }
 }
 
 @supports (backdrop-filter: none){
-    body[blur] dialog > content{
+    body[blur] .window > content{
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
 }

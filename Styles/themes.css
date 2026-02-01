@@ -1,14 +1,14 @@
 
-/* dialog themes */
+/* .window themes */
 
-dialog.rounded-corners{
+.window.rounded-corners{
     border-radius: 10px !important;
 }
 
-dialog.rounded-corners > content > article {
+.window.rounded-corners > content > article {
     border-radius: 5px;
 }
 
-dialog.sharp-corners{
+.window.sharp-corners{
     border-radius: 0px !important;
 }
