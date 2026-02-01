@@ -1,10 +1,15 @@
 // 7 Segment display building tools
-// Lasse Lauwerys © 2024
+// Lasse Lauwerys ï¿½ 2024
 
 'use strict';
 'use esnext';
 'use moz';
 
+/**
+ * @param {number} number 
+ * @param {number} index 
+ * @param {boolean} singular 
+ */
 function DisplayBuilder(number, index, singular){
     this.display;
     this.index = index || 0;
@@ -20,7 +25,11 @@ function tokenizeNumber(number){ // There are probably better ways to do this bu
     return typeof number ==='number' && number>-100? (number>=0?[parseInt((number % 1000)/100), parseInt((number % 100) / 10), parseInt(number % 10)]:[number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)]):[10, 10, 10];
 }
 
-const displayNumbers = [ // These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " ";
+/**
+ * These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " "
+ * @type Array<Array<boolean>, 7>
+ */
+const displayNumbers = [
     [true, true, true, false, true, true, true],
     [false, false, true, false, false, true, false],
     [true, false, true, true, true, false, true],
@@ -52,12 +61,14 @@ DisplayBuilder.prototype = {
         }
         return display;
     },
+    /** @type (number:number)=>void */
     update: function(number){
         this.segments.forEach(function(segment, index){
             if(!displayNumbers[number>=0 && number<=11?number: 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
     },
+    /** @type (size: number, fat: boolean)=>void */
     resize: function(size, fat){
 
         document.querySelectorAll("div.segmentdisplay > div").forEach(function(element){
@@ -79,11 +90,11 @@ DisplayBuilder.prototype = {
     }
 }
 
-function MultiDigitDisplayBuilder(digits, number, singlesided){
+function MultiDigitDisplayBuilder(digits, number, singleSided){
     this.displays = [];
     this.digits = digits
     for (let i = 0; i < this.digits; i++) {
-        this.displays.push(new DisplayBuilder(number, i, singlesided));
+        this.displays.push(new DisplayBuilder(number, i, singleSided));
     }    
 }
 
@@ -96,7 +107,7 @@ MultiDigitDisplayBuilder.prototype = {
     update: function(number){
         const max = "9".repeat(this.digits);
         this.displays.forEach(function(display, index){
-            display.update(max>number?tokenizeNumber(number)[index]:9);
+            display.update(max > number ? tokenizeNumber(number)[index] : 9);
         });
     }
 }
