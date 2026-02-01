@@ -28,7 +28,7 @@ let // Defining the default settings as let so we can modify them.
  * @author Lasse Lauwerys
  * @param {Element} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
-function Dialog(object){
+function Window(object){
 
     if(!object) return;
     let dialog = this;
@@ -147,7 +147,7 @@ function Dialog(object){
     windows[this.id] = this;
 }
 
-Dialog.prototype = {
+Window.prototype = {
     get isOpen() { return this.target.hasAttribute("open"); },
     set isOpen(force) { this.target.toggleAttribute("open", force), this.activate(); },
     set frame(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
@@ -256,7 +256,7 @@ DocumentCrawler.prototype = {
     getMetro: function(){ return this.document.getElementById("metrobody") },
     getDesktop: function(){ return this.document.getElementById("desktop") },
     getMetroBody: function(){ return this.getMetro().firstChild },
-    getAllDialogs: function(){ return this.document.getElementsByTagName("dialog") },
+    getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getWindowsContainer: function(){ return this.document.getElementById("windows") },
     get overlay(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
     get charms(){ return document.getElementById("charms"); },
@@ -358,10 +358,6 @@ function checkForFlip() {
         timeout = setTimeout(function () { toggleOverlay(!(!loaded ? (loaded = true) : false)); }, 500);
     }
 
-    // Why doesn't this work?
-    // timeout = setTimeout(toggleOverlay.bind(this, !(!loaded?(console.warn("Too soon!"), loaded = true):false)), 500);
-    // The reason I found out is that JavaScript evaluates the parameters of the function calls before calling the function! We are forced to wrap it in another function to avoid this behaviour.
-
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
         console.log("Switching to Mobile mode...");
         if (!flipped) {
@@ -372,7 +368,6 @@ function checkForFlip() {
         console.log("Switching to Desktop mode...");
         flipHandler(false);
         restoreMetroBody();
-        // flipped = false;
     }
 };
 
@@ -380,12 +375,13 @@ window.onresize = checkForFlip();
 //felse loaded = true;
 
 function initializeWindows(windows){
-    document.onmouseup = activateWindowPointers;
+    if (document.onpointerdown) document.onpointerdown = activateWindowPointers;
+    else document.onmousedown = activateWindowPointers;
     
     dragAction.set(0);
     const dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function(dialog){
-        windows[dialog.id] = new Dialog(dialog); 
+        windows[dialog.id] = new Window(dialog); 
     });
     //flip();
     checkForFlip();
@@ -441,7 +437,7 @@ function disableWindowPointers(){
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
-function updateTopZ(){
+function updateTopZ() {
     for(let window in windows) if(windows[window].z > topZ) topZ = windows[window].z;
 }
 
@@ -449,7 +445,11 @@ function stringifyWindowProperties(properties){
     return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
 }
 
-function getDialogBody(target){ // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
+/**
+ * @param {HTMLElement} target 
+ * @returns HTMLElement
+ */
+function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     return target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];//&&&&&&&&&&&&&;
 }
 
@@ -457,27 +457,47 @@ function getViewboxPosition(){
     return { left: window.screenLeft, top: window.screenTop }
 }
 
+/**
+ * @param {HTMLElement} object 
+ * @returns HTMLElement
+ */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
-    if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1) return object;
+    if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || object.classList.contains("window")) return object;
     else if(object.target) return getObjectDialog(object.target);
     else return getObjectDialog(object.parentElement);
 }
 
-function getEventDialog(event){ // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
+/**
+ * @param {Event} event 
+ * @returns HTMLElement
+ */
+function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterWindowTracking && event.clientX && event.clientY) try {
         return document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
 }
 
-function toPixels(value){
+/**
+ * @param {number} value 
+ * @returns string
+ */
+function toPixels(value) {
     return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
 }
 
+/**
+ * @param {number} pixels 
+ * @returns number
+ */
 function pixelsToCentimeters(pixels){
     return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
 }
 
+/**
+ * @param {string} text 
+ * @returns number
+ */
 function fromPixels(text){
     if(text!=null) try{ return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
     catch (ex) { return text }
@@ -499,7 +519,7 @@ function contains(array, number){
 }
 
 function verifyEjectCapability(dialog){
-    try{
+    try {
         if(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
     }
     catch (exception){
@@ -572,9 +592,7 @@ function exportWindowBodyToMetro(dialog){
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
     if(!metroBody) return;
-    if (dialog) {
-        dialog.content.appendChild(metroBody);
-    }// else restoreMetroBody();
+    if (dialog) dialog.content.appendChild(metroBody);
 }
 
 function getDialogTemplate(){
@@ -586,7 +604,7 @@ function DialogBuilder(title, id){
     this.title = title;
     this.id = id;
     this.target;
-    this.createDialog = function(){ return this.target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
+    this.createDialog = function() { return this.target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
 }
 
 function createDialog(){
@@ -610,12 +628,12 @@ function isCharmsOpen() {
 }
 
 function injectApplication(application){
-    windows[demo.id] = new Dialog(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
+    windows[demo.id] = new Window(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     loadWindowState();
 }
 
 function injectApplications(applications){
-    applications.forEach(function(application){ windows[demo.id] = new Dialog(application) }); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
+    applications.forEach(function(application) { windows[demo.id] = new Window(application) }); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
     loadWindowState();
 }
 

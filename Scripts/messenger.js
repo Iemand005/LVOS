@@ -1,6 +1,6 @@
 // Messenger
 // Lasse Lauwerys
-// 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS
+// 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS -> patch 01/02/2026, don't parse if not a string
 
 'use strict';
 'use esnext';
@@ -12,8 +12,10 @@ function broadcast(target, type, message, id){
 
 Messenger.receive = function (callback) {
     window.addEventListener("message", function (ev) {
-        const data = JSON.parse(ev.data);
-        callback(data.type, data.data, data.id);
+        const data = typeof ev.data === "string" ? JSON.parse(ev.data) : data
+        // does data have all the things
+        if (data.type && data.data && data.id)
+            callback(data.type, data.data, data.id);
     });
 };
 
@@ -21,7 +23,6 @@ function Messenger(){
 }
 
 Messenger.types = {
-    po: "é",
     open: "open",
     windowSize: "windowSize",
     launchOverlay: "launchOverlay",
@@ -30,8 +31,6 @@ Messenger.types = {
 };
 
 Messenger.prototype = {
-
-
     broadcastToChild: function (type, message, iFrame) {
         broadcast(iFrame.contentWindow, type, message);
     }
@@ -45,5 +44,4 @@ Messenger.broadcastToParent = Messenger.broadcastFromChild;
 
 Messenger.broadcastToChild = Messenger.broadcastChild = function (type, message, iFrame) {
     broadcast(iFrame.contentWindow, type, message);
-    // broadcast(window.top, type, message);
 };
