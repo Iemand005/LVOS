@@ -38,7 +38,7 @@
                 <section id="dockapplist"></section>
 
                 <template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
-                    <div class="window"  open><!-- I am using the dialog tag as a part of an application that the user interacts with. -->
+                    <dialog class="window"  open><!-- I am using the dialog tag as a part of an application that the user interacts with. -->
                         <content><!-- Visual Sudio 2013 suggested me to use content instead here to make it semantic. This places the dialog inside the shadow DOM. I don't know if it's proper HTML 5 or HTML 4 but I used it so I'm keeping it the way it is for now. -->
                             <!-- I was forced to add this extra wrapping article to work around a bug in EdgeHTML 18 that causes the backdrop filter to shift by the amount of pixels the box-shadow blur size has minus the top and left value. I don't know if it's a known bug but the browser is no longer officially supported. I will be adding this tag anyways but it's not necessary for functionality of the application. -->
                             <header><!-- This header identifies the most near ancestor (dialog). In the header are the title and the navigation buttons. -->
@@ -55,7 +55,7 @@
                             <!-- This is the non-client area! -->
                         </content><!-- This unnecessary wrapping that is only here for EdgeHTML and WebView 1 compatibility. -->
                             <!-- This is also the non-client area. Primarily reserved for the borders. -->
-                    </div>
+                    </dialog>
                 </template><!-- The client area in graphical user interface design refers to the area of the window where the user's content should be placed. The non-client area is for managing the window itself. -->
 
                 <dialog class="window"  open id="console">
