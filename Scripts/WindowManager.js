@@ -23,12 +23,12 @@ let // Defining the default settings as let so we can modify them.
     loadingOverlay = true,
     flipped = false;
 
-function Dialog(object){ // Verouderde manier om een object constructor te maken. Tegenwoordig gebruiken we klassen, maar ik doe het hier nog zo voor compatibiliteit met ECMAScript 5.
-    /**
-     * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
-     * @author Lasse Lauwerys
-     * @param {Element} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
-     */
+/**
+ * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
+ * @author Lasse Lauwerys
+ * @param {Element} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ */
+function Dialog(object){
 
     if(!object) return;
     let dialog = this;
