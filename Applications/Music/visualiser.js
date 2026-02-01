@@ -13,8 +13,8 @@ function AudioVisualiser(fftSize){
 }
 
 AudioVisualiser.prototype = {
-    _frequencyData: new Uint8Array(),
-    _timeDomainData: new Uint8Array(),
+    frequencyData: new Uint8Array(),
+    timeDomainData: new Uint8Array(),
 
     dump: function () {
         this.analyser.disconnect();
@@ -38,16 +38,16 @@ AudioVisualiser.prototype = {
 
     updateBinCount: function (fftSize) {
         this.analyser.fftSize = fftSize || 64;
-        this._frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
-        this._timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
+        this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+        this.timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
     },
     get frequencyBinCount() {
         return this.analyser.frequencyBinCount;
     },
     get frequencyData() {
-        return this.analyser.getByteFrequencyData(this._frequencyData), this._frequencyData;
+        return this.analyser.getByteFrequencyData(this.frequencyData), this.frequencyData;
     },
     get timeDomainData() {
-        return this.analyser.getByteTimeDomainData(this._timeDomainData), this._timeDomainData;
+        return this.analyser.getByteTimeDomainData(this.timeDomainData), this.timeDomainData;
     }
 };
