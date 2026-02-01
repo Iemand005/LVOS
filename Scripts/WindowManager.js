@@ -407,7 +407,9 @@ function windowActivationEvent(event){
 
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeWindow], difference = IE11Booster ? dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style) : dialog.dragCalculator.update({ x: event.clientX, y: event.clientY });
+        const dialog = windows[activeWindow], difference = 
+            IE11Booster ? dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style)
+            : dialog.dragCalculator.update({ x: event.clientX, y: event.clientY });
 
         if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
         if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
