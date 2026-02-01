@@ -422,7 +422,7 @@ function windowDragEvent(event){
 
 function activateWindowPointers(){
     if(flipped) return;
-    document.removeEventListener("mousemove", windowDragEvent);
+    document.removeEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
@@ -435,7 +435,7 @@ function activateWindowPointers(){
 }
 
 function disableWindowPointers(){
-    document.addEventListener("mousemove", windowDragEvent);
+    document.addEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
