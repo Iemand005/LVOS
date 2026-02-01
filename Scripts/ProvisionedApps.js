@@ -1,6 +1,7 @@
-// Application handler for the Window Manager
-// Copyright Lasse Lauwerys 2023-2024
-// Last modified: 8/1/2024 - added back velocity demo, code cleanup and bug fix.
+   /* Application handler for the Window Manager
+  // Copyright Lasse Lauwerys 2023-2024
+  / Last modified: 8/1/2024 - added back velocity demo, code cleanup and bug fix.
+*/
 
 'use strict';
 'use esnext';
@@ -48,7 +49,6 @@ browserform.addEventListener("submit", function(event){
         url.searchParams.set("code", e.code);
         if(e.code === 19) { // Error handling for other potential problems can be done here!
             //url = new URL("./Applications/Error/error.html", window.location.href);
-            // url.searchParams.set("message", "pkake");
             url.searchParams.set("message", "Some websites like the ones hosted by Google do not allow loading their website inside another website for security reasons.");
             //url.searchParams.set("code", e.code);
             //browserframe.src = "./Applications/Error/error.html?message=something went wrong!"
