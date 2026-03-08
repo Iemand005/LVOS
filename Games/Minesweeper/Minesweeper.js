@@ -160,14 +160,9 @@ function sendDesiredSize(){
     Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 }
 
-function checkHost() {
-    Messenger.receive(function(type, data) {
-        if (type === "identity") {
-            console.log("Reveived identity", data);
-        }
-    });
-    Messenger.broadcastToParent(Messenger.types.identify, null, "minesweeper");
-}
+Messenger.onHostBeingLVOS(function () {
+    console.log("My host is LVOS!!");
+});
 
 function quickRevealEvent(ev) {
     const element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
