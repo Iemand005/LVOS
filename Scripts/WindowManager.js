@@ -182,7 +182,7 @@ Window.prototype = {
     setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
     verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
     togglePointerEvents: function (enable) {
-        if (enable == null)enale = this.target.style.pointerEvents == "none"
+        if (enable == null) enable = this.target.style.pointerEvents == "none";
         return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
     },
     toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
@@ -448,6 +448,14 @@ function activateWindowPointers(){
         else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
     }
     activeDrag = false;
+}
+
+/**
+ * @param {HTMLElement} element 
+ * @param {boolean} enable 
+ */
+function toggleMoveEventListener(element, enable) {
+    (enable ? document.addEventListener : document.removeEventListener)(element.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
 function disableWindowPointers(){
