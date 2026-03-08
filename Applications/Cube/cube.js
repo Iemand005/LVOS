@@ -55,7 +55,7 @@ function Graphics(canvas) {
   this.gl.clearColor(0,0,0,1);
 
   
-
+  this.onrender = function () {};
 }
 
 Graphics.prototype.clear = function () {
@@ -83,7 +83,12 @@ Graphics.prototype.loadShaders = function (vsSource, fsSource) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 };
 
-Graphics.prototype.drawScene = function (programInfo, buffers) {
+let squareRotation = 0.0;
+let deltaTime = 0;
+// let now = 0;
+let then = 0;
+
+Graphics.prototype.drawScene = function (programInfo, buffers, deltaTime) {
   const gl = this.gl;
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
@@ -119,9 +124,14 @@ Graphics.prototype.drawScene = function (programInfo, buffers) {
 
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
+  // now *= 0.001; // convert to seconds
+  // deltaTime = now - then;
+  // then = now;
+  squareRotation += deltaTime;
   mat4.translate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to translate
+    // squareRotation,
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
@@ -168,6 +178,28 @@ Graphics.prototype.drawScene = function (programInfo, buffers) {
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 }
+
+// Graphics.prototype.render = function () {
+
+// };
+
+Graphics.prototype.render = function (now) {
+  now *= 0.001; // convert to seconds
+  deltaTime = now - then;
+  then = now;
+
+  // console.log(this);
+  // console.log(deltaTime);
+
+  this.drawScene(programInfo, buffers, deltaTime);
+  // squareRotation += deltaTime;
+
+  requestAnimationFrame(Graphics.prototype.render.bind(this));
+}
+
+Graphics.prototype.startRendering = function () {
+  requestAnimationFrame(Graphics.prototype.render.bind(this));
+};
 
 // Tell WebGL how to pull out the positions from the position
 // buffer into the vertexPosition attribute.
@@ -253,6 +285,7 @@ const buffers = {
     color: colorBuffer
   };;
 
-graphics.drawScene(programInfo, buffers)
+graphics.drawScene(programInfo, buffers, 0);
+graphics.startRendering();
 
 console.log(graphics);
