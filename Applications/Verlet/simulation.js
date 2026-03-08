@@ -7,7 +7,7 @@
 'use strict'
 
 // Switch between canvas and html for rendering the objects. Canvas looks smoother as it interpolates the pixels with floating point position, while html aligns the elements to the display pixels.
-const canvasRenderer = false;
+const canvasRenderer = true;
 const flipY = false;
 const framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
 const frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
@@ -304,8 +304,7 @@ QuadTree.prototype.updateDraw = function(){
         
             ctx.fillStyle = "yellow";
             ctx.beginPath();
-            ctx.rect(this.boundary.x, this.boundary.y, this.boundary.width, this.boundary.height)
-            //ctx.arc(scalePixels(this.pos.x), flipY ? canvas.height - scalePixels(this.pos.y): scalePixels(this.pos.y), scalePixels(this.rad), 0, 2*Math.PI);
+            ctx.rect(0, 0, canvas.width, canvas.height)
             ctx.fill();
             const borderColor = true;
             if(borderColor) {
@@ -324,17 +323,6 @@ QuadTree.prototype.updateDraw = function(){
         }
         QuadTree.prototype.draw = function(){
             if(!this.element) if(!this.initialize()) return;
-            // const style = this.element.style;
-            // style.top = toPx(this.boundary.y);
-            // style.left = toPx(this.boundary.x)
-            // style.width = toPx(this.boundary.width);
-            // style.height = toPx(this.boundary.height);
-            // style.backgroundColor = "green";
-            // style.borderStyle = "solid";
-            // style.borderColor = "purple";
-            // style.borderWidth = "1px";
-            // style.position = "absolute";
-            // style.boxSizing = "border-box";
             this.drawChildren();
         }
         this.clear = new Function();
