@@ -411,7 +411,7 @@ function windowActivationEvent(event){
     const dialog = getEventDialog(event);
     activeWindow = dialog.id;
     resizeDirection = 0;
-    enableWIndowDrag();
+    enableWindowDrag();
     const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
     windows[activeWindow].setClickOffset(mouse.x, mouse.y);
     windows[activeWindow].activate();
@@ -436,6 +436,13 @@ function windowDragEvent(event){
     }
 }
 
+/**
+ * @param {boolean} enable 
+ */
+function toggleWindowDragEventHandler(enable) {
+    (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+}
+
 function disableWindowDrag(){
     if(flipped) return;
     toggleWindowDragEventHandler(false);
@@ -450,14 +457,7 @@ function disableWindowDrag(){
     activeDrag = false;
 }
 
-/**
- * @param {boolean} enable 
- */
-function toggleWindowDragEventHandler(enable) {
-    (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
-}
-
-function enableWIndowDrag(){
+function enableWindowDrag(){
     toggleWindowDragEventHandler(true);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
