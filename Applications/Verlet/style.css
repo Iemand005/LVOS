@@ -4,3 +4,17 @@ html, body, canvas {
   height: 100%;
   margin: 0;
 }
+
+#backdrop {
+  width: 100%;;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: green;
+  border-style: solid;
+  border-color: purple;
+  border-width: 1px;
+  position: absolute;
+  box-sizing: border-box;
+}

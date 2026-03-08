@@ -320,21 +320,21 @@ QuadTree.prototype.updateDraw = function(){
         }
     } else {
         QuadTree.prototype.initialize = function(){
-            return this.element = document.body.appendChild(document.createElement("div")), this.element;
+            return this.element = document.body.appendChild(document.createElement("div")), this.element.id = "backdrop", this.element;
         }
         QuadTree.prototype.draw = function(){
             if(!this.element) if(!this.initialize()) return;
-            const style = this.element.style;
-            style.top = toPx(this.boundary.y);
-            style.left = toPx(this.boundary.x)
-            style.width = toPx(this.boundary.width);
-            style.height = toPx(this.boundary.height);
-            style.backgroundColor = "green";
-            style.borderStyle = "solid";
-            style.borderColor = "purple";
-            style.borderWidth = "1px";
-            style.position = "absolute";
-            style.boxSizing = "border-box";
+            // const style = this.element.style;
+            // style.top = toPx(this.boundary.y);
+            // style.left = toPx(this.boundary.x)
+            // style.width = toPx(this.boundary.width);
+            // style.height = toPx(this.boundary.height);
+            // style.backgroundColor = "green";
+            // style.borderStyle = "solid";
+            // style.borderColor = "purple";
+            // style.borderWidth = "1px";
+            // style.position = "absolute";
+            // style.boxSizing = "border-box";
             this.drawChildren();
         }
         this.clear = new Function();
