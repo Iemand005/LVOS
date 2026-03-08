@@ -147,7 +147,9 @@ function Window(object){
     });
 
     const buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", dialog.close.bind(dialog));
+    buttons[windowButtons.close].addEventListener("click", function () {
+        dialog.close();
+    }.bind(dialog));
     buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
     this.close();
 
@@ -600,33 +602,31 @@ function saveWindowState(){
 
 function loadWindowState(){
     console.log("Loading window state.")
-    if(canSave) try {
+    if (canSave) try {
         if(localStorage && localStorage.windowState){
             const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
-            for (let window in parsedWindows) try{
-                if(windows[window] && parsedWindows[window]) collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
-            } catch(ex) {
-                fails.push(ex);
-            }
+            for (let window in parsedWindows) try {
+                if (windows[window] && parsedWindows[window]) collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
+            } catch (ex) { fails.push(ex); }
             fails.forEach(console.error.bind(this, "Tailed to load a window!"));
             updateTopZ();
         }
-    } catch(exception) {
+    } catch (exception) {
         handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
 }
 
 function exportWindowBodyToMetro(dialog){
-    if(bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveWindowBodyFromMetro();
-    if(dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
+    if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveWindowBodyFromMetro();
+    if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
-        if(metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
+        if (metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
     }
 }
 
 function retrieveWindowBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
-    if(!metroBody) return;
+    if (!metroBody) return;
     if (dialog) dialog.content.appendChild(metroBody);
 }
 
@@ -663,13 +663,22 @@ function isCharmsOpen() {
 }
 
 function injectApplication(application){
-    windows[demo.id] = new Window(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
+    loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     loadWindowState();
 }
 
+function loadApp(app) {
+    windows[demo.id] = new Window(app);
+}
+
 function injectApplications(applications){
-    applications.forEach(function(application) { windows[demo.id] = new Window(application) }); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
+    applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
     loadWindowState();
+}
+
+function closeApp(appId) {
+    const element = windows[appId].target;
+    element.parentElement.removeChild(element);
 }
 
 initializeWindows(windows);
