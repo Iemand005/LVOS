@@ -56,11 +56,11 @@ function Graphics(canvas) {
 
   this.gl.clearColor(0,0,0,1);
 
-  this. buffers = {
+  this.buffers = {
     position: [],
     indices: [],
     color: []
-  };;
+  };
 
   
   this.onrender = function () {};
@@ -177,6 +177,7 @@ mat4.rotate(
   const stride = 0; // how many bytes to get from one set of values to the next
   // 0 = use type and numComponents above
   const offset = 0; // how many bytes inside the buffer to start from
+  if (!this.buffers) return;
   gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.position);
   gl.vertexAttribPointer(
     programInfo.attribLocations.vertexPosition,
@@ -232,7 +233,7 @@ mat4.rotate(
   const offset = 0;
   gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   }
-}
+};
 
 // Graphics.prototype.render = function () {
 
@@ -245,6 +246,7 @@ Graphics.prototype.render = function (now) {
 
   // console.log(this);
   // console.log(deltaTime);
+  console.log(this)
 
   this.drawScene(programInfo, deltaTime);
   // squareRotation += deltaTime;
@@ -342,8 +344,10 @@ const indexBuffer = gl.createBuffer();
     new Uint16Array(indices),
     gl.STATIC_DRAW
   );
+
+  // if (!this.buffers) return;
+
   
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
   // ith this code:
 // js
 
@@ -362,15 +366,14 @@ let colors = [];
 
 for (let cIndex in faceColors) {
   // Repeat each color four times for the four vertices of the face
-  const c = faceColors[i];
+  const c = faceColors[cIndex];
   colors = colors.concat(c, c, c, c);
 }
 
 
 
   const colorBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+ 
 
 const buffers = {
     position: positionBuffer,
@@ -378,10 +381,14 @@ const buffers = {
     color: colorBuffer
   };;
 
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+ gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
   graphics.buffers = buffers;
 
-graphics.drawScene(programInfo, buffers, 0);
-graphics.startRendering();
+// graphics.drawScene(programInfo, 0);
+// graphics.startRendering();
 
 console.log(graphics);
 
