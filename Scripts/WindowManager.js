@@ -387,9 +387,9 @@ window.onresize = checkForFlip();
 //felse loaded = true;
 
 function initializeWindows(windows){
-    if (document.onpointerdown) document.onpointerdown = activateWindowPointers;
-    else if (document.onpointerdown) document.onpointerdown = activateWindowPointers;
-    else document.onmousedown = activateWindowPointers;
+    if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
+    else if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
+    else document.onmousedown = disableWindowDrag;
     
     dragAction.set(0);
     const dialogs = bodyCrawler.getAllDialogs();
@@ -436,9 +436,9 @@ function windowDragEvent(event){
     }
 }
 
-function activateWindowPointers(){
+function disableWindowDrag(){
     if(flipped) return;
-    document.removeEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+    enableWindowDrag(false);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
@@ -451,15 +451,14 @@ function activateWindowPointers(){
 }
 
 /**
- * @param {HTMLElement} element 
  * @param {boolean} enable 
  */
-function toggleMoveEventListener(element, enable) {
-    (enable ? document.addEventListener : document.removeEventListener)(element.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+function enableWindowDrag(enable) {
+    (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
 function disableWindowPointers(){
-    document.addEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+    enableWindowDrag(true);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
