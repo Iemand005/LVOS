@@ -125,7 +125,7 @@ function Window(object){
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
-    this.target.addEventListener("mousedown", function (event) { if (isWindow(getEventDialog(event).tagName)) windowActivationEvent(event); });
+    this.target.addEventListener("mousedown", function (event) { if (isWindow(getEventDialog(event))) windowActivationEvent(event); });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -296,9 +296,9 @@ let loaded = false;
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     //console.log(data, type, source)    
     const types = Messenger.types;
-    if(source){
-        if(type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
-        switch(type){
+    if (source) {
+        if (type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        switch (type) {
             case types.launchOverlay:
                 bodyCrawler.overlay.ontransitionend = function () {
                     windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
@@ -322,7 +322,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 }
 
 function swapMetroBody(){
-    if(flipped){
+    if (flipped) {
         restoreMetroBody();
         activeWindowToMetro();
     }
@@ -415,6 +415,9 @@ function windowActivationEvent(event){
     return dialog;
 }
 
+/**
+ * @param {PointerEvent | MouseEvent} event 
+ */
 function windowDragEvent(event){
     try {
         const dialog = windows[activeWindow], difference = 
