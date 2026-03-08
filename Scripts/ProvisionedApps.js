@@ -174,7 +174,22 @@ const demo = { // More parameters will be added over time when I need them, you 
 
 //windows[demo.id] = new Dialog(demo); Deprecated! Using an API now to wrap this action so it happens safely!
 
+/**
+ * @typedef Application
+ * @prop {string} title
+ * @prop {string} id
+ * @prop {string} src
+ * @prop {boolean?} fixed
+*  @prop {boolean?} scroll
+ * @prop {boolean?} hidden
+ * @prop {boolean?} camera
+ * @prop {boolean?} microphone
+ * @prop {boolean?} moveEvents
+ * @prop {string[] | null} classes
+ */
+
 // Working tests of my Window injection API.
+/** @type {Application[]} */ */
 const applications = [
     {
         title: "Calculator",
@@ -191,8 +206,7 @@ const applications = [
         id: "camera",
         src: "./Applications/Camera/index.html",
         camera: true,
-        microphone: true,
-        // add attribute allow="camera; microphone" to iframe!
+        microphone: true, // add attribute allow="camera; microphone" to iframe!
     },
     {
         title: "Video",
@@ -260,6 +274,7 @@ const applications = [
     //     hidden: true
     // }
 ]
+
 
 const games = [
     {

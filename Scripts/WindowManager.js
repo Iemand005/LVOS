@@ -2,9 +2,9 @@
 /*\
    \________
    / ______/\                                                 \\
-  / /     /\ \    LWM (Lasse's Dialog Manager)                 \\
+  / /     /\ \    LWM (Lasse's Window Manager)                 \\
  /_/_____/  \ \   Targetting: ES5 (with custom ES6 extensions)  \\
- \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024       //
+ \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2026       //
   \ \_____\/ /    Created: 17/12/2023                          //
    \_______\/                                                 //
    /
@@ -161,55 +161,74 @@ function Dialog(object){
     windows[this.id] = this;
 }
 
-Dialog.prototype = {
-    get isOpen() { return this.target.hasAttribute("open"); },
-    set isOpen(force) { this.target.toggleAttribute("open", force), this.activate(); },
-    set frame(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
-    get body() { return this.content.children[1]; },
-    get head() { return this.target.getElementsByTagName("header")[0]; },
-    get content() { return this.target.getElementsByTagName("content")[0]; },
-    get frame() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); },
-    setTitle: function (title) { return this.getTitleElement().innerText = title; },
-    getTitleElement: function () { return this.head.querySelector("h1"); },
-    getTitle: function () { return this.getTitleElement().innerText; },
-    setId: function (id) { return windows[id] = this, this.target.setAttribute("id", id); },
-    getId: function () { return this.target.getAttribute("id"); },
-    toggleTitlebar: function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); },
-    open: function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not.
-    close: function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; },
-    getInnerRect: function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
-    getRect: function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; },
-    getButton: function (index) { return this.head.getElementsByTagName("button")[index]; },
-    createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
-    setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
-    verifyEjectCapability: function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
-    togglePointerEvents: function (enable) {
-        if (enable == null) enable = this.target.style.pointerEvents == "none";
-        return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
-    },
-    toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
-    clearClickOffset: function () { this.clickOffset.clear(); },
-    toggleFullScreen: function (enable) { this.target.toggleAttribute("full", enable); },
-    toggleCloseButton: function (enable) { this.toggleButton(windowButtons.close, enable); },
-    toggleEjectButton: function (enable) { this.toggleButton(windowButtons.eject, enable); },
-    toggleFullButton: function (enable) { this.toggleButton(windowButtons.full, enable); },
-    messageFrame: function (type, message) { Messenger.broadcastToChild(type, message, this.frame); },
-    move: function (x, y) { this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; },
-    resize: function (width, height) { this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; },
-    resizeBody: function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; },
-    openUrl: function (url) {
-        const frameUrl = new URL(this.frame.src);
-        frameUrl.searchParams.set("url", url);
-        this.frame.src = frameUrl.href;
-        this.launch();
-    },
-    set borderSize(value) {
+// Dialog.prototype.Dialog.Dialog
+
+
+// Dialog.prototype. = {
+Object.defineProperty(Dialog.prototype, "isOpen", {
+    get: function() { return this.target.hasAttribute("open"); },
+    set: function (force) { this.target.toggleAttribute("open", force), this.activate(); }
+});
+Object.defineProperty(Dialog.prototype, "frame", {
+    set : function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
+});
+Object.defineProperty(Dialog.prototype, "body", {
+    get : function() { return this.content.children[1]; },
+});
+Object.defineProperty(Dialog.prototype, "head", {
+    get : function() { return this.target.getElementsByTagName("header")[0]; },
+});
+Object.defineProperty(Dialog.prototype, "content", {
+    get : function() { return this.target.getElementsByTagName("content")[0]; },
+});
+Object.defineProperty(Dialog.prototype, "frame", {
+    get : function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); }
+});
+Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
+Dialog.prototype.setTitle = function (title) { return this.getTitleElement().innerText = title; }
+Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
+Dialog.prototype.getTitle = function () { return this.getTitleElement().innerText; }
+Dialog.prototype.setId = function (id) { return windows[id] = this, this.target.setAttribute("id", id); }
+Dialog.prototype.getId = function () { return this.target.getAttribute("id"); }
+Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
+Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
+Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
+Dialog.prototype.getInnerRect = function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+Dialog.prototype.getRect = function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
+Dialog.prototype.getButton = function (index) { return this.head.getElementsByTagName("button")[index]; }
+Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] }
+Dialog.prototype.setClickOffset = function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); }
+Dialog.prototype.verifyEjectCapability = function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); }
+Dialog.prototype.togglePointerEvents = function (enable) {
+    if (enable == null) enable = this.target.style.pointerEvents == "none";
+    return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
+}
+Dialog.prototype.toggleButton = function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); }
+Dialog.prototype.clearClickOffset = function () { this.clickOffset.clear(); }
+Dialog.prototype.toggleFullScreen = function (enable) { this.target.toggleAttribute("full", enable); }
+Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windowButtons.close, enable); }
+Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); }
+Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); }
+Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); }
+Dialog.prototype.move = function (x, y) { this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; }
+Dialog.prototype.resize = function (width, height) { this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; }
+Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
+Dialog.prototype.openUrl = function (url) {
+    const frameUrl = new URL(this.frame.src);
+    frameUrl.searchParams.set("url", url);
+    this.frame.src = frameUrl.href;
+    this.launch();
+},
+Object.defineProperty(Dialog.prototype, "borderSize", {
+    set: function (value) {
         this.content.style.padding = toPixels(value);
         this.content.style.border = toPixels(value);
     },
-    get borderSize() { return fromPixels(this.content.style.padding); },
-};
+    get: function () { return fromPixels(this.content.style.padding); },
+});
+
+// const e = new Dialog;
+// e.
 
 function DragCalculator(dialog){
     this.dialog = dialog;
@@ -331,15 +350,10 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 }
 
 function swapMetroBody(){
-    if (flipped) {
-        restoreMetroBody();
-        activeDialogToMetro();
-    }
+    if (!flipped) return;
+    restoreMetroBody();
+    activeDialogToMetro();
 }
-
-// This does not work because the parameters actually get evaluated on the binding declaration, and thus before the function is actually called!
-// const restoreMetroBody = retrieveDialogBodyFromMetro.bind(this, windows[metroBodyOrigin]);
-// const activeDialogToMetro = exportDialogBodyToMetro.bind(this, windows[activeDialog]);
 
 function restoreMetroBody(){
     retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
@@ -688,7 +702,7 @@ function closeApp(appId) {
 initializeDialogs(windows);
 toggleReflections(reflections);
 
-/*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better.
+/*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targetting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
