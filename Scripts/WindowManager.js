@@ -170,7 +170,8 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function (force) { this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    set : function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
+    get : function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    set : function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
     get : function() { return this.content.children[1]; },
@@ -181,9 +182,7 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "content", {
     get : function() { return this.target.getElementsByTagName("content")[0]; },
 });
-Object.defineProperty(Dialog.prototype, "frame", {
-    get : function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); }
-});
+
 Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
 Dialog.prototype.setTitle = function (title) { return this.getTitleElement().innerText = title; }
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
