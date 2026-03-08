@@ -1,0 +1,3 @@
+[submodule "Applications/GeodeWeb"]
+	path = Applications/GeodeWeb
+	url = https://github.com/Iemand005/GeodeWeb
