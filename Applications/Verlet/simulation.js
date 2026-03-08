@@ -11,24 +11,9 @@ const canvasRenderer = true;
 const flipY = false;
 const framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
 const frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
-
-// We are using a block to contain the scope of our style variable, this is equivalent to the deprecated with statement, or a using statement in C#.
-{
-    const style = document.body.style;
-    style.margin = 0;
-    style.width = "100%";
-    style.height = "100%";
-    style.position = "absolute";
-    style.overflow = "hidden";
-}
-
 function Verlet(position, pinned){
-    //this.positions = [new Vector, new Vector];
     if(!position) position = new Vector;
-    //this.positions[0] = position.clone(), this.positions[1] = position.clone();
     this.positions = [position.clone(), position.clone()];
-    //this.position = position.clone();
-    //this.oldPosition = position.clone();
     this.timeBuffer = [Date.now()/1000];
     this.pinned = pinned || false;
 }
@@ -207,6 +192,10 @@ function random(min, max){
     return Math.random()* (max-min) + min;
 }
 
+// window.onresize = console.log;
+
+// window.addEventListener("resize", console.log)
+
 function Simulation(canvasRenderer){
     this.objects = [];
     this.boundaries = new Rectangle(boundaries.left, boundaries.top, boundaries.right, boundaries.bottom);
@@ -215,18 +204,29 @@ function Simulation(canvasRenderer){
     quadTree.updateDraw();
     
     if(canvasRenderer){
-        const canvas = this.canvas = document.getElementById("box") || document.createElement("canvas");
-        this.canvas.id = "box";
+        const canvas = this.canvas = document.getElementById("box");
+
+
+        // window.onresize = function () {
+        //     const bounds = canvas.getBoundingClientRect();
+        //     canvas.width = bounds.width;
+        //     canvas.height = bounds.height;
+        // };
+
 
         document.body.appendChild(this.canvas);
         const ctx = this.ctx = this.canvas.getContext("2d");
         // 5
         this.rescale = function(){
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-        }
+            console.log(this.canvas)
+            const bounds = this.canvas.getBoundingClientRect();
+            this.canvas.width = bounds.width;
+            this.canvas.height = bounds.height;
+        }.bind(this);
        
         this.rescale();
+
+        window.addEventListener("resize", this.rescale);
 
         Ball.prototype.draw = function(){
             ctx.fillStyle = this.color || "yellow";
@@ -244,7 +244,10 @@ function Simulation(canvasRenderer){
             
         }
 
+        // console.log(this.canvas)
+
         this.clear = function(){
+            console.log(this.canvas.width)
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
         
@@ -276,12 +279,6 @@ function Simulation(canvasRenderer){
     }
 }
 
-function getCanvas(){
-    let canvas = document.getElementById("box");
-    return canvas? canvas: canvas = document.createElement("canvas"), canvas.id = "box", document.body.appendChild(canvas), canvas;
-    //return canvas;
-}
-
 const updateEvent = new Event("update");
 
 Simulation.prototype.update = function(){
@@ -304,12 +301,11 @@ Simulation.prototype.start = function(framerate){
 }
 
 QuadTree.prototype.updateDraw = function(){
-    const tree = this;
     if(canvasRenderer){
         QuadTree.prototype.initialize = new Function();
         QuadTree.prototype.draw = function(){
         
-            const canvas = this.canvas = getCanvas();
+            const canvas = this.canvas;
             const ctx = this.ctx = canvas.getContext("2d");
             ctx.fillStyle = "yellow";
             ctx.beginPath();
