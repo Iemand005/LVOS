@@ -52,14 +52,17 @@ Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
     Messenger.broadcast(iFrame.contentWindow, type, message);
 };
 
-/** @param {(type:MessageType,data:*,id:string?)=>void} callback */
-Messenger.receive = function (callback) {
-    window.addEventListener("message", function (ev) {
+/**
+ * @param {(type:MessageType,data:*,id:string?)=>void} callback
+ * @param {boolean} destroy
+ */
+Messenger.receive = function (callback, destroy) {
+    const messageHandler = function (ev) {
         try {
             /** @type {Message} */
             const data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
             
-            if ((data.type && data.data && data.id)) switch (data.type) {
+            if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id);
                 case "identify":
                     console.log("Reveived an identity request", ev);
@@ -72,7 +75,11 @@ Messenger.receive = function (callback) {
         } catch (ex) {
             console.warn("Error decoding data", ev.data, ex);
         }
-    });
+    };
+
+    window.addEventListener("message", messageHandler);
+
+    return messageHandler;
 };
 
 
@@ -85,10 +92,10 @@ Messenger.broadcastToChild = Messenger.broadcastChild = function (type, message,
     Messenger.broadcast(iFrame.contentWindow, type, message);
 };
 
-/** @param {(isLVOS:boolean)=>void} callback */
+/** @param {()=>void} callback */
 Messenger.isHostLVOS = function (callback) {
     Messenger.receive(function(type, data) {
-        if (type === "identity") callback
+        if (type === "identity" && data.name == "LVOS") callback();
     });
-    Messenger.broadcastToParent(Messenger.types.identify, null, "minesweeper");
+    Messenger.broadcastToParent(Messenger.types.identify);
 }
