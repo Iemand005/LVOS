@@ -213,6 +213,7 @@ Graphics.prototype.startRendering = function () {
 Graphics.prototype.resize = function (width, height) {
   this.canvas.width = width;
   this.canvas.height = height;
+  gl.viewport(0, 0, width, height);
 };
 
 // Tell WebGL how to pull out the positions from the position
@@ -306,5 +307,5 @@ console.log(graphics);
 
 window.onresize = function (ev) {
   const {width, height} = canvas.getBoundingClientRect();
-  graphics.resize(canvas.clientWidth, canvas.clientHeight);
+  graphics.resize(width, height);
 }
