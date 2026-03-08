@@ -157,7 +157,11 @@ function startGame(){
 }
 
 function sendDesiredSize(){
-    Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed bug 11/1/2024.
+    Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
+}
+
+function checkHost() {
+    Messenger.broadcastToParent()
 }
 
 function quickRevealEvent(ev) {
@@ -225,12 +229,12 @@ form.appendChild(table);
 mutationObserver.observe(body, {childList: true});
 
 stopTimer(true);
-startGame(); // If we don't use the defer attribute you have to put this function in the "onload" event of the body element.
+startGame();
 
 /**\
-\ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222     33333
- \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  33     33
-  | * |  LL        aa  aa     SSSSSS    SSSSSS   eeee      || cc     ||       222    00      00      222       333
- / * /   LL       aaaaaaaa         SS        SS  ee         \\ cccc //      22        00    00     22      33     33
-/ * /    LLLLLL  aa      aa  SSSSSSS   SSSSSSS   eeeeeee      ======      22222222      0000     22222222    33333
+\ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222    666666
+ \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  66      
+  | * |  LL        aa  aa     SSSSSS    SSSSSS   eeee      || cc     ||       222    00      00      222    666666
+ / * /   LL       aaaaaaaa         SS        SS  ee         \\ cccc //      22        00    00     22      66    66
+/ * /    LLLLLL  aa      aa  SSSSSSS   SSSSSSS   eeeeeee      ======      22222222      0000     22222222   666666
 \**/

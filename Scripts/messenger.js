@@ -12,10 +12,16 @@ Messenger.types = {
     launchOverlay: "launchOverlay",
     prepareToLaunchOverlay: "prepareToLaunchOverlay",
     readyToLaunchOverlay: "readyToLaunchOverlay",
-    identify: "identify"
+    identify: "identify",
+    identity: "identity"
 };
 
 /** @typedef {keyof typeof Messenger.types} MessageType */
+
+/**
+ * @typedef Identity
+ * @prop {string} name
+ */
 
 /**
  * @typedef Message
@@ -24,20 +30,29 @@ Messenger.types = {
  * @prop {string} id
  */
 
+function Messenger(){
+}
+
 /**
  * @param {HTMLIFrameElement} target 
  * @param {MessageType} type 
  * @param {*} message 
  * @param {*} id 
  */
-function broadcast(target, type, message, id){
+Messenger.broadcast = function (target, type, message, id){
     if(target) target.postMessage(JSON.stringify({type: type, data: message, id: id}), '*');
 }
 
-function Messenger(){
-}
+/**
+ * @param {MessageType} type 
+ * @param {*} message 
+ * @param {HTMLIFrameElement} iFrame 
+ */
+Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
+    Messenger.broadcast(iFrame.contentWindow, type, message);
+};
 
-Messenger.receive = function (callback) {
+Messenger.prototype.receive = function (callback) {
     window.addEventListener("message", function (ev) {
         try {
             /** @type {Message} */
@@ -47,6 +62,9 @@ Messenger.receive = function (callback) {
                 default: callback(data.type, data.data, data.id);
                 case "identify":
                     console.log("Reveived an identity request", ev);
+                    /** @type {Identity} */
+                    const identity = { name: "LVOS" };
+                    Messenger.broadcastChild(Messenger.types.identity,  identity, ev.target);
                     break;
             }
             // else console.warn("Missing data property", data);
@@ -56,19 +74,12 @@ Messenger.receive = function (callback) {
     });
 };
 
-/**
- * @param {MessageType} type 
- * @param {*} message 
- * @param {HTMLIFrameElement} iFrame 
- */
-Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
-    broadcast(iFrame.contentWindow, type, message);
+
+
+Messenger.broadcastToParent = function (type, message, id) {
+    Messenger.broadcast(window.top, type, message, id);
 };
 
-Messenger.prototype.broadcastToParent = function (type, message, id) {
-    broadcast(window.top, type, message, id);
-};
-
-Messenger.prototype.broadcastToChild = Messenger.broadcastChild = function (type, message, iFrame) {
-    broadcast(iFrame.contentWindow, type, message);
+Messenger.broadcastToChild = Messenger.broadcastChild = function (type, message, iFrame) {
+    Messenger.broadcast(iFrame.contentWindow, type, message);
 };
