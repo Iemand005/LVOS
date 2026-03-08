@@ -1,3 +1,6 @@
 [submodule "Applications/GeodeWeb"]
 	path = Applications/GeodeWeb
 	url = https://github.com/Iemand005/GeodeWeb
+[submodule "Applications/FrostedColours"]
+	path = Applications/FrostedColours
+	url = https://github.com/Iemand005/FrostedColours.git
