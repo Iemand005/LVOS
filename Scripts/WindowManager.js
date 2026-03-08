@@ -387,9 +387,9 @@ window.onresize = checkForFlip();
 //felse loaded = true;
 
 function initializeWindows(windows){
-    if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
-    else if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
-    else document.onmousedown = disableWindowDrag;
+    if (document.onpointerup) document.onpointerup = disableWindowDrag;
+    // else if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
+    else document.onmouseup = disableWindowDrag;
     
     dragAction.set(0);
     const dialogs = bodyCrawler.getAllDialogs();
@@ -440,8 +440,9 @@ function windowDragEvent(event){
  * @param {boolean} enable 
  */
 function toggleWindowDragEventHandler(enable) {
-    console.log(enable)
-    (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+    // console.log(enable)
+    const act =enable ? document.addEventListener : document.removeEventListener;
+    act(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
 function disableWindowDrag(){
