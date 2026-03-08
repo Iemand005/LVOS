@@ -1,0 +1,30 @@
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+/* foreignObject */
+
+form {
+  width: 100%;
+  height: 100%;
+  margin: 10px;
+}
+
+table, input {
+  display: block;
+    width: 100%;
+  height: 100%;
+}
+
+tbody, tr, td {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+tbody {
+  flex-direction: column;
+}

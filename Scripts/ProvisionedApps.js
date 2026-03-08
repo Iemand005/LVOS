@@ -179,7 +179,7 @@ const applications = [
     {
         title: "Calculator",
         id: "calculator",
-        src: "./Applications/Calculator.html"
+        src: "./Applications/Calculator/index.html"
     },
     {
         title: "Exmple",
@@ -237,9 +237,15 @@ const applications = [
     {
         title: "Error",
         id: "error",
-        src: "./Applications/Error/index.html",
+        src: "./Applications/Error/error.html",
         hidden: true
     },
+    {
+        title: "Cube",
+        id: "cube",
+        src: "./Applications/Cube/cube.html",
+        hidden: true
+    }
 ]
 
 const games = [
