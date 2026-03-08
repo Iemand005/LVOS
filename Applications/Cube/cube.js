@@ -45,6 +45,8 @@ Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
  * @param {HTMLCanvasElement} canvas 
  */
 function Graphics(canvas) {
+  /* @type {HTMLCanvasElement} */
+  this.canvas = canvas;
   this.gl = canvas.getContext("webgl");
   this.ie11 = false;
   if (!this.gl) {
@@ -208,6 +210,11 @@ Graphics.prototype.startRendering = function () {
   requestAnimationFrame(Graphics.prototype.render.bind(this));
 };
 
+Graphics.prototype.resize = function (width, height) {
+  this.canvas.width = width;
+  this.canvas.height = height;
+};
+
 // Tell WebGL how to pull out the positions from the position
 // buffer into the vertexPosition attribute.
 function setPositionAttribute(gl, buffers, programInfo) {
@@ -296,3 +303,8 @@ graphics.drawScene(programInfo, buffers, 0);
 graphics.startRendering();
 
 console.log(graphics);
+
+window.onresize = function (ev) {
+  const {width, height} = canvas.getBoundingClientRect();
+  graphics.resize(canvas.clientWidth, canvas.clientHeight);
+}
