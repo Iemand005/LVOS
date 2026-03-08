@@ -189,7 +189,7 @@ const demo = { // More parameters will be added over time when I need them, you 
  */
 
 // Working tests of my Window injection API.
-/** @type {Application[]} */ */
+/** @type {Application[]} */
 const applications = [
     {
         title: "Calculator",
@@ -275,7 +275,7 @@ const applications = [
     // }
 ]
 
-
+/** @type {Application[]} */
 const games = [
     {
         title: "Conway",
