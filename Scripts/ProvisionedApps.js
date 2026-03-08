@@ -252,6 +252,13 @@ const applications = [
         src: "./Applications/GeodeWeb/login.html",
         hidden: true
     }
+    // ,
+    // {
+    //     title: "Browser",
+    //     id: "browser",
+    //     src: "./Applications/Browser/index.html",
+    //     hidden: true
+    // }
 ]
 
 const games = [
