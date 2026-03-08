@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+      <h1>Browser</h1>
+      <section>
+          <button disabled>🡕</button>
+          <button disabled>❐</button>
+          <button disabled>✕</button>
+      </section>
+  </header>
+  <main class="client">
+      <form action="" id="browserform">
+          <label for="browseraddress"></label>
+          <input type="text" name="address" id="browseraddress"><!-- We can also do type="url" but I want to allow lazy url typing and let JS take care of the rest. -->
+          <button type="submit">Go</button>
+      </form>
+      <iframe src="https://example.com"></iframe>
+  </main>
+</body>
+</html>

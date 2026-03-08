@@ -245,6 +245,12 @@ const applications = [
         id: "cube",
         src: "./Applications/Cube/cube.html",
         hidden: true
+    },
+    {
+        title: "Geode",
+        id: "geode",
+        src: "./Applications/GeodeWeb/login.html",
+        hidden: true
     }
 ]
 
@@ -279,12 +285,9 @@ const games = [
 injectApplications(applications);
 injectApplications(games);
 
-if (elements) {
-
-    elements.dockAppList.appendChild(windows.browser.createOpenButton());
-    elements.dockAppList.appendChild(windows.console.createOpenButton());
-    dockapplist.appendChild(windows.music.createOpenButton());
-}
+dockAppList.appendChild(windows.browser.createOpenButton());
+dockAppList.appendChild(windows.console.createOpenButton());
+dockapplist.appendChild(windows.music.createOpenButton());
 
 
 toggleReflections(true);
