@@ -440,6 +440,7 @@ function windowDragEvent(event){
  * @param {boolean} enable 
  */
 function toggleWindowDragEventHandler(enable) {
+    console.log(enable)
     (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
