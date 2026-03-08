@@ -19,7 +19,7 @@ let // Defining the default settings as let so we can modify them.
     reflections = true,
     fasterDialogTracking = true,
     canSave = true,
-    IE11Booster = true,
+    IE11Booster = false,
     loadingOverlay = true,
     flipped = false;
 
@@ -179,8 +179,23 @@ Object.defineProperty(Dialog.prototype, "body", {
 Object.defineProperty(Dialog.prototype, "head", {
     get : function() { return this.target.getElementsByTagName("header")[0]; },
 });
+
+Object.defineProperty(Dialog.prototype, "width", {
+    get : function() { return this.target.getBoundingClientRect().width; },
+    set: function(width) { this.target.style.width = toPixels(width); }
+});
+
+Object.defineProperty(Dialog.prototype, "height", {
+    get : function() { return this.target.getBoundingClientRect().height; },
+    set: function(height) { this.target.style.height = toPixels(height); }
+});
+
 Object.defineProperty(Dialog.prototype, "content", {
-    get : function() { return this.target.getElementsByTagName("content")[0]; },
+    get : function() {
+        /** @type {HTMLElement} */
+        const content = this.target.getElementsByTagName("content")[0];
+        return content;
+    }
 });
 
 Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
@@ -222,6 +237,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
     set: function (value) {
         this.content.style.padding = toPixels(value);
         this.content.style.border = toPixels(value);
+        this.content.style.borderRadius = toPixels(value);
     },
     get: function () { return fromPixels(this.content.style.padding); },
 });

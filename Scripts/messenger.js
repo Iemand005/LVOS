@@ -43,10 +43,16 @@ Messenger.types = {
     readyToLaunchOverlay: "readyToLaunchOverlay"
 };
 
-Messenger.prototype = {
-    broadcastToChild: function (type, message, iFrame) {
-        broadcast(iFrame.contentWindow, type, message);
-    }
+/** @typedef {typeof Messenger.types[keyof typeof Messenger.types]} MessageType */
+
+
+/**
+ * @param {Messenger.types} type 
+ * @param {*} message 
+ * @param {HTMLIFrameElement} iFrame 
+ */
+Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
+    broadcast(iFrame.contentWindow, type, message);
 };
 
 Messenger.broadcastFromChild = function (type, message, id) {
