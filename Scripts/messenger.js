@@ -55,9 +55,11 @@ Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
 /**
  * @param {(type:MessageType,data:*,id:string?)=>void} callback
  * @param {boolean} destroy
+ * @returns {(this: Window, ev: MessageEvent<any>) => any}
  */
 Messenger.receive = function (callback, destroy) {
-    const messageHandler = function (ev) {
+    // /** @type {} */
+    const messageListener = function (ev) {
         try {
             /** @type {Message} */
             const data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
@@ -77,9 +79,9 @@ Messenger.receive = function (callback, destroy) {
         }
     };
 
-    window.addEventListener("message", messageHandler);
+    window.addEventListener("message", messageListener);
 
-    return messageHandler;
+    return messageListener;
 };
 
 
