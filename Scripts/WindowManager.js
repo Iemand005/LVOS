@@ -2,7 +2,7 @@
 /*\
    \________
    / ______/\                                                 \\
-  / /     /\ \    LWM (Lasse's Window Manager)                 \\
+  / /     /\ \    LWM (Lasse's Dialog Manager)                 \\
  /_/_____/  \ \   Targetting: ES5 (with custom ES6 extensions)  \\
  \ \     \  / /   Copyright: Lasse Lauwerys © 2023 - 2024       //
   \ \_____\/ /    Created: 17/12/2023                          //
@@ -10,14 +10,14 @@
    /
 \*/
 
-'use strict'; // Strict mode is required for older browsers (tested on Chrome 48, Windows 8.1 both destkop and Metro mode).
+'use strict'; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both destkop and Metro mode).
 'use esnext'; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of let and const.
 'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use let and const on those too.
 
 let // Defining the default settings as let so we can modify them.
     blur = false,
     reflections = true,
-    fasterWindowTracking = true,
+    fasterDialogTracking = true,
     canSave = true,
     IE11Booster = true,
     loadingOverlay = true,
@@ -26,7 +26,7 @@ let // Defining the default settings as let so we can modify them.
 /**
  * @param {HTMLElement} element 
  */
-function isWindow(element) {
+function isDialog(element) {
     return element && element.classList && element.classList.contains("window");
 }
 
@@ -35,12 +35,15 @@ function isWindow(element) {
  * @author Lasse Lauwerys
  * @param {HTMLElement} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
-function Window(object){
+function Dialog(object){
 
     if(!object) return;
     let dialog = this;
 
-    if(isWindow(object)) this.target = object;
+    /** @type {HTMLElement} */
+    this.target = null;
+
+    if(isDialog(object)) this.target = object;
     else{
         this.target = createDialog();
         this.frame = object.src;
@@ -92,7 +95,7 @@ function Window(object){
 
     // this.verifyEjectCapability = function(){
     //     //let canEject = false, e = 
-    //     return function(){try{return this.frame.contentWindow.document||this.frame.contentDocument!==null;}catch(e){return false}}();
+    //     return function(){try{return this.frame.contentDialog.document||this.frame.contentDocument!==null;}catch(e){return false}}();
     //     //return canEject;
     // }
 
@@ -100,11 +103,11 @@ function Window(object){
     this.toggleFullButton(true);
     if(this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.synchronise = synchroniseWindowState.bind(this);
+    this.synchronise = synchroniseDialogState.bind(this);
 
-    this.exchangeWindowMouseUpEvent = this.messageFrame.bind(this, "mouseUp", {difference:new Vector});
+    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", {difference:new Vector});
 
-    this.exchangeWindowMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+    this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
         if(difference)this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
@@ -125,7 +128,7 @@ function Window(object){
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
-    this.target.addEventListener("mousedown", function (event) { if (isWindow(getEventDialog(event))) windowActivationEvent(event); });
+    this.target.addEventListener("mousedown", function (event) { if (isDialog(getEventDialog(event))) windowActivationEvent(event); });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -143,7 +146,7 @@ function Window(object){
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href, windows[dialog.id].title, stringifyWindowProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+        window.open(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
     });
 
     const buttons = target.getElementsByTagName("button");
@@ -158,31 +161,29 @@ function Window(object){
     windows[this.id] = this;
 }
 
-Window.prototype = {
+Dialog.prototype = {
     get isOpen() { return this.target.hasAttribute("open"); },
     set isOpen(force) { this.target.toggleAttribute("open", force), this.activate(); },
     set frame(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; },
     get body() { return this.content.children[1]; },
-    // get head()
     get head() { return this.target.getElementsByTagName("header")[0]; },
     get content() { return this.target.getElementsByTagName("content")[0]; },
     get frame() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    activate: function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeWindow = this.id, swapMetroBody(this); },
+    activate: function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); },
     setTitle: function (title) { return this.getTitleElement().innerText = title; },
     getTitleElement: function () { return this.head.querySelector("h1"); },
     getTitle: function () { return this.getTitleElement().innerText; },
-    /* getBody: function(){ return this.content.children[1]; }, */
     setId: function (id) { return windows[id] = this, this.target.setAttribute("id", id); },
     getId: function () { return this.target.getAttribute("id"); },
     toggleTitlebar: function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); },
-    open: function () { return this.isOpen = true, saveWindowState(), this.isOpen; }, // Open, save, return if it's opened or not.
-    close: function () { return this.isOpen = false, saveWindowState(), this.isOpen/* this.target.removeAttribute("open")*/; },
+    open: function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not.
+    close: function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; },
     getInnerRect: function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed),
     getRect: function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; },
     getButton: function (index) { return this.head.getElementsByTagName("button")[index]; },
     createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
     setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
-    verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
+    verifyEjectCapability: function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
     togglePointerEvents: function (enable) {
         if (enable == null) enable = this.target.style.pointerEvents == "none";
         return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
@@ -203,7 +204,10 @@ Window.prototype = {
         this.frame.src = frameUrl.href;
         this.launch();
     },
-    set borderSize(value) { this.content.style.padding = toPixels(value); },
+    set borderSize(value) {
+        this.content.style.padding = toPixels(value);
+        this.content.style.border = toPixels(value);
+    },
     get borderSize() { return fromPixels(this.content.style.padding); },
 };
 
@@ -271,7 +275,7 @@ DocumentCrawler.prototype = {
     getDesktop: function(){ return this.document.getElementById("desktop") },
     getMetroBody: function(){ return this.getMetro().firstChild },
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
-    getWindowsContainer: function(){ return this.document.getElementById("windows") },
+    getDialogsContainer: function(){ return this.document.getElementById("windows") },
     get overlay(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
     get charms(){ return document.getElementById("charms"); },
     get settings(){ return document.getElementById("settings"); },
@@ -287,7 +291,7 @@ const windowButtons = {
     full: 1,
     close: 2
 };
-let activeWindow = null;
+let activeDialog = null;
 let activeDrag = false;
 let dragAction = new DragAction();
 let resizeDirection = 0;
@@ -329,20 +333,20 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 function swapMetroBody(){
     if (flipped) {
         restoreMetroBody();
-        activeWindowToMetro();
+        activeDialogToMetro();
     }
 }
 
 // This does not work because the parameters actually get evaluated on the binding declaration, and thus before the function is actually called!
-// const restoreMetroBody = retrieveWindowBodyFromMetro.bind(this, windows[metroBodyOrigin]);
-// const activeWindowToMetro = exportWindowBodyToMetro.bind(this, windows[activeWindow]);
+// const restoreMetroBody = retrieveDialogBodyFromMetro.bind(this, windows[metroBodyOrigin]);
+// const activeDialogToMetro = exportDialogBodyToMetro.bind(this, windows[activeDialog]);
 
 function restoreMetroBody(){
-    retrieveWindowBodyFromMetro(windows[metroBodyOrigin]);
+    retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
 }
 
-function activeWindowToMetro(){
-    exportWindowBodyToMetro(windows[activeWindow]);
+function activeDialogToMetro(){
+    exportDialogBodyToMetro(windows[activeDialog]);
 }
 
 function flip(enable){
@@ -379,7 +383,7 @@ function checkForFlip() {
         console.log("Switching to Mobile mode...");
         if (!flipped) {
             flipHandler(true);
-            activeWindowToMetro();
+            activeDialogToMetro();
         }
     } else if (flipped) {
         console.log("Switching to Desktop mode...");
@@ -391,19 +395,19 @@ function checkForFlip() {
 window.onresize = checkForFlip();
 //felse loaded = true;
 
-function initializeWindows(windows){
-    if (document.onpointerup) document.onpointerup = disableWindowDrag;
-    // else if (document.onpointerdown) document.onpointerdown = disableWindowDrag;
-    else document.onmouseup = disableWindowDrag;
+function initializeDialogs(windows){
+    if (document.onpointerup) document.onpointerup = disableDialogDrag;
+    // else if (document.onpointerdown) document.onpointerdown = disableDialogDrag;
+    else document.onmouseup = disableDialogDrag;
     
     dragAction.set(0);
     const dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function(dialog){
-        windows[dialog.id] = new Window(dialog); 
+        windows[dialog.id] = new Dialog(dialog); 
     });
     //flip();
     checkForFlip();
-    loadWindowState();
+    loadDialogState();
 }
 
 // Normally we use const in for in loops!
@@ -414,12 +418,12 @@ function windowActivationEvent(event){
      * Activates the window on which the provided event was fired.
      */
     const dialog = getEventDialog(event);
-    activeWindow = dialog.id;
+    activeDialog = dialog.id;
     resizeDirection = 0;
-    enableWindowDrag();
+    enableDialogDrag();
     const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
-    windows[activeWindow].setClickOffset(mouse.x, mouse.y);
-    windows[activeWindow].activate();
+    windows[activeDialog].setClickOffset(mouse.x, mouse.y);
+    windows[activeDialog].activate();
     return dialog;
 }
 
@@ -428,14 +432,14 @@ function windowActivationEvent(event){
  */
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeWindow], difference = 
+        const dialog = windows[activeDialog], difference = 
             IE11Booster ? dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style)
             : dialog.dragCalculator.update({ x: event.clientX, y: event.clientY });
 
         if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
         if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
         
-        if(dialog.moveEvents) dialog.exchangeWindowMoveEvent(difference);
+        if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
     } catch (ex) {
         console.error(ex);
     }
@@ -444,27 +448,27 @@ function windowDragEvent(event){
 /**
  * @param {boolean} enable 
  */
-function toggleWindowDragEventHandler(enable) {
+function toggleDialogDragEventHandler(enable) {
     if (enable) document.addEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
     else document.removeEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
-function disableWindowDrag(){
+function disableDialogDrag(){
     if(flipped) return;
-    toggleWindowDragEventHandler(false);
+    toggleDialogDragEventHandler(false);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
-    if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
-    if(windows[activeWindow]){
-        if(windows[activeWindow].moveEvents) windows[activeWindow].exchangeWindowMouseUpEvent();
+    if(canSave) saveDialogState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
+    if(windows[activeDialog]){
+        if(windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
         if(IE11Booster) dragAction.set(0);
-        else windows[activeWindow].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+        else windows[activeDialog].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
     }
     activeDrag = false;
 }
 
-function enableWindowDrag(){
-    toggleWindowDragEventHandler(true);
+function enableDialogDrag(){
+    toggleDialogDragEventHandler(true);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
@@ -472,7 +476,7 @@ function updateTopZ() {
     for(let window in windows) if(windows[window].z > topZ) topZ = windows[window].z;
 }
 
-function stringifyWindowProperties(properties){
+function stringifyDialogProperties(properties){
     return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
 }
 
@@ -507,7 +511,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
  * @returns HTMLElement
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
-    if (fasterWindowTracking && event.clientX && event.clientY) try {
+    if (fasterDialogTracking && event.clientX && event.clientY) try {
         const window = document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.classList && element.classList.contains("window") });
         return window;
     } catch (ex) { console.error(ex) }
@@ -540,7 +544,7 @@ function fromPixels(text){
     else return 0;
 }
 
-function synchroniseWindowState(window){
+function synchroniseDialogState(window){
     window = this || window;
     if(window.x) window.target.style.left = toPixels(window.x);
     if(window.y) window.target.style.top = toPixels(window.y);
@@ -556,7 +560,7 @@ function contains(array, number){
 
 function verifyEjectCapability(dialog){
     try {
-        if(dialog.getElementsByTagName("iframe")[0].contentWindow.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
+        if(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
     }
     catch (exception){
         dialog.getElementsByTagName("button")[0].style.display = "none";
@@ -569,7 +573,7 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     settings.set("blur", enabled);
 }
 
-function collectEssentialWindowData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
+function collectEssentialDialogData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
     return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
@@ -581,7 +585,7 @@ function handleStorageException(exception){
     canSave = false;
 }
 
-function saveWindowState(){
+function saveDialogState(){
     if(!loaded) return;
     console.log("Saving window state.");
     if(canSave && localStorage) try {
@@ -590,7 +594,7 @@ function saveWindowState(){
             if(windows[id]){
                 windows[id].width = windows[id].target.clientWidth;
                 windows[id].height = windows[id].target.clientHeight;
-                windowState[id] = collectEssentialWindowData({}, windows[id]);
+                windowState[id] = collectEssentialDialogData({}, windows[id]);
             }
         }
         localStorage.setItem("windowState", JSON.stringify(windowState));
@@ -600,13 +604,13 @@ function saveWindowState(){
     }
 }
 
-function loadWindowState(){
+function loadDialogState(){
     console.log("Loading window state.")
     if (canSave) try {
         if(localStorage && localStorage.windowState){
-            const parsedWindows = JSON.parse(localStorage.windowState), fails = [];
-            for (let window in parsedWindows) try {
-                if (windows[window] && parsedWindows[window]) collectEssentialWindowData(windows[window], parsedWindows[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
+            const parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
+            for (let window in parsedDialogs) try {
+                if (windows[window] && parsedDialogs[window]) collectEssentialDialogData(windows[window], parsedDialogs[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
             } catch (ex) { fails.push(ex); }
             fails.forEach(console.error.bind(this, "Tailed to load a window!"));
             updateTopZ();
@@ -616,15 +620,15 @@ function loadWindowState(){
     } else console.error("Storage access is disabled for this session!");
 }
 
-function exportWindowBodyToMetro(dialog){
-    if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveWindowBodyFromMetro();
+function exportDialogBodyToMetro(dialog){
+    if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
     if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         const metro = bodyCrawler.getMetro();
         if (metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
     }
 }
 
-function retrieveWindowBodyFromMetro(dialog){
+function retrieveDialogBodyFromMetro(dialog){
     const metroBody = bodyCrawler.getMetroBody();
     if (!metroBody) return;
     if (dialog) dialog.content.appendChild(metroBody);
@@ -634,16 +638,16 @@ function getDialogTemplate(){
     return (document.querySelector("template").content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
 
-// Class to build dialogs that can be passed to the Window insertion API. Not finished, window construction objects have to be designed and built by hand for now!
+// Class to build dialogs that can be passed to the Dialog insertion API. Not finished, window construction objects have to be designed and built by hand for now!
 function DialogBuilder(title, id){
     this.title = title;
     this.id = id;
     this.target;
-    this.createDialog = function() { return this.target = bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
+    this.createDialog = function() { return this.target = bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
 }
 
 function createDialog(){
-    return bodyCrawler.getWindowsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
+    return bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
 }
 
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
@@ -664,16 +668,16 @@ function isCharmsOpen() {
 
 function injectApplication(application){
     loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
-    loadWindowState();
+    loadDialogState();
 }
 
 function loadApp(app) {
-    windows[demo.id] = new Window(app);
+    windows[demo.id] = new Dialog(app);
 }
 
 function injectApplications(applications){
     applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
-    loadWindowState();
+    loadDialogState();
 }
 
 function closeApp(appId) {
@@ -681,7 +685,7 @@ function closeApp(appId) {
     element.parentElement.removeChild(element);
 }
 
-initializeWindows(windows);
+initializeDialogs(windows);
 toggleReflections(reflections);
 
 /*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better.
@@ -689,7 +693,7 @@ toggleReflections(reflections);
  *  \  Chrome for Android Chrome targetting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 118 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Windows 8.1 I expect this to work fine!
+ *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
  *   /  Internet Explorer 11
  *  /  Chrome 48
  * /  EdgeHTML 18 (Edge Legacy)

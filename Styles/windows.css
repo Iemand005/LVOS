@@ -69,6 +69,7 @@ main{
     transition: all 500ms ease-in-out, top 0, left 0, width 0, height 0;
     transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
+    color: black;
 }
 
 .window header{
@@ -81,6 +82,7 @@ main{
     border-style: none;
     border-width: inherit;
     border-color: inherit;
+    color: black;
 }
 
 .window header, .window header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
@@ -126,7 +128,7 @@ main{
     border-style: solid;
     border-width: inherit;
     border-color: inherit;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 .window header button:not(:disabled) ~ button:not(:disabled){
@@ -154,7 +156,7 @@ main{
     flex-direction: column;
     pointer-events: none;
     border-radius: inherit;
-    border: 1px solid black;
+    border: 1px solid #0000007d;
     padding: 5px;
     box-sizing: border-box;
     width: inherit;
@@ -162,6 +164,7 @@ main{
     overflow: hidden;
     background-color: orange;
     transition: inherit;
+    color: black;
 }
 
 iframe{
@@ -264,6 +267,7 @@ article{
     animation: opening 500ms ease-out forwards;
     pointer-events: auto;
     backdrop-filter: blur(10px);
+    background:     linear-gradient(0deg, #0000002b, #ffffff00);
 }
 
 .window:not([open]){

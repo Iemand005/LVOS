@@ -360,7 +360,7 @@ simulation.start(framerate);
 
 
 ballcount: for (let index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
-for (let index = 0; index < 10; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
+for (let index = 0; index < 100; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
 //console.log(ballcount);
 
 // const simulation2 = new Simulation(canvasRenderer);
