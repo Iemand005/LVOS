@@ -339,11 +339,7 @@ const indexBuffer = gl.createBuffer();
 
   // Now send the element array to GL
 
-  gl.bufferData(
-    gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array(indices),
-    gl.STATIC_DRAW
-  );
+ 
 
   // if (!this.buffers) return;
 
@@ -373,6 +369,8 @@ for (let cIndex in faceColors) {
 
 
   const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
  
 
 const buffers = {
@@ -381,9 +379,11 @@ const buffers = {
     color: colorBuffer
   };;
 
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
- gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices); gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(indices),
+    gl.STATIC_DRAW
+  );
 
   graphics.buffers = buffers;
 
