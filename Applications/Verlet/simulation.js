@@ -192,9 +192,8 @@ function random(min, max){
     return Math.random()* (max-min) + min;
 }
 
-// window.onresize = console.log;
-
-// window.addEventListener("resize", console.log)
+const canvas = document.getElementById("box");
+const ctx = canvas.getContext("2d");
 
 function Simulation(canvasRenderer){
     this.objects = [];
@@ -204,21 +203,14 @@ function Simulation(canvasRenderer){
     quadTree.updateDraw();
     
     if(canvasRenderer){
-        const canvas = this.canvas = document.getElementById("box");
-
-
-        // window.onresize = function () {
-        //     const bounds = canvas.getBoundingClientRect();
-        //     canvas.width = bounds.width;
-        //     canvas.height = bounds.height;
-        // };
-
+        
+        this.canvas = canvas;
 
         document.body.appendChild(this.canvas);
         const ctx = this.ctx = this.canvas.getContext("2d");
         // 5
         this.rescale = function(){
-            console.log(this.canvas)
+            // console.log(this.canvas)
             const bounds = this.canvas.getBoundingClientRect();
             this.canvas.width = bounds.width;
             this.canvas.height = bounds.height;
@@ -305,8 +297,6 @@ QuadTree.prototype.updateDraw = function(){
         QuadTree.prototype.initialize = new Function();
         QuadTree.prototype.draw = function(){
         
-            const canvas = this.canvas;
-            const ctx = this.ctx = canvas.getContext("2d");
             ctx.fillStyle = "yellow";
             ctx.beginPath();
             ctx.rect(this.boundary.x, this.boundary.y, this.boundary.width, this.boundary.height)
