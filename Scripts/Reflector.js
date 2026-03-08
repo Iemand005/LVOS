@@ -6,20 +6,20 @@
 'use esnext';
 'use moz';
 
-function Reflector(element){
+function Reflector(element) {
     this.element = element;
     this.observer;
     this.clones = []; // We use the array literal notation [] instead of the constructor new Array().
 }
 
 Reflector.prototype.reflect = function (target) {
-    try{
+    try {
         const reflection = target.cloneNode(true);
         reflection.id += "reflection";
         this.clones.push(reflection);
         this.element.appendChild(reflection);
 
-        this.observer = new MutationObserver(function(mutations) {
+        this.observer = new MutationObserver(function (mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
                     reflection.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));
@@ -32,7 +32,7 @@ Reflector.prototype.reflect = function (target) {
         });
         this.observer.observe(target, { attributes: true });
         return reflection;
-    } catch(ex) {
+    } catch (ex) {
         console.warn(ex); // The reflections aren't that important, we don't want to throw excessive errors.
     }
 }

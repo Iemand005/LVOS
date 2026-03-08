@@ -61,8 +61,8 @@ function Dialog(object){
     this.x = 0;
     this.y = 0;
     this.z = 0;
-    this.width = 0;
-    this.height = 0;
+    this.width = 200;
+    this.height = 100;
     this.minWidth = 100;
     this.minHeight = 200;
     this.title = object.title || this.getTitle();
