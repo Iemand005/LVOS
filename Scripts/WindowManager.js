@@ -24,16 +24,23 @@ let // Defining the default settings as let so we can modify them.
     flipped = false;
 
 /**
+ * @param {HTMLElement} element 
+ */
+function isWindow(element) {
+    return element && element.classList && element.classList.contains("window");
+}
+
+/**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
- * @param {Element} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ * @param {HTMLElement} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
 function Window(object){
 
     if(!object) return;
     let dialog = this;
 
-    if(object.nodeName === "DIALOG") this.target = object;
+    if(isWindow(object)) this.target = object;
     else{
         this.target = createDialog();
         this.frame = object.src;
@@ -118,7 +125,7 @@ function Window(object){
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
-    this.target.addEventListener("mousedown", function (event) { if (getEventDialog(event).tagName === "DIALOG") windowActivationEvent(event); });
+    this.target.addEventListener("mousedown", function (event) { if (isWindow(getEventDialog(event).tagName)) windowActivationEvent(event); });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -174,7 +181,7 @@ Window.prototype = {
     createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
     setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
     verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
-    togglePointerEvents: function (enable) { return; return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    togglePointerEvents: function (enable) { return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
     toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
     clearClickOffset: function () { this.clickOffset.clear(); },
     toggleFullScreen: function (enable) { this.target.toggleAttribute("full", enable); },
