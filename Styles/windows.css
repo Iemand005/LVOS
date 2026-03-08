@@ -51,7 +51,7 @@ main{
 
 .window{
     border-radius: 5px;
-    box-shadow: 0 0 10px black;
+    box-shadow: 0 1rem 6rem #000000a8;
     background-color: rgba(255, 255, 255, 255);
     -o-transform-origin: bottom left;
     -ms-transform-origin: bottom left;
