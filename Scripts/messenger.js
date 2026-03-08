@@ -43,11 +43,11 @@ Messenger.types = {
     readyToLaunchOverlay: "readyToLaunchOverlay"
 };
 
-/** @typedef {typeof Messenger.types[keyof typeof Messenger.types]} MessageType */
+/** @typedef {keyof typeof Messenger.types} MessageType */
 
 
 /**
- * @param {Messenger.types} type 
+ * @param {MessageType} type 
  * @param {*} message 
  * @param {HTMLIFrameElement} iFrame 
  */
