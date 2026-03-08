@@ -306,6 +306,6 @@ graphics.startRendering();
 console.log(graphics);
 
 window.onresize = function (ev) {
-  const {width, height} = canvas.getBoundingClientRect();
-  graphics.resize(width, height);
+  const bounds =  canvas.getBoundingClientRect();
+  graphics.resize(bounds.width, bounds.height);
 }
