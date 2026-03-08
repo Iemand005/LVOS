@@ -7,7 +7,7 @@
 'use strict'
 
 // Switch between canvas and html for rendering the objects. Canvas looks smoother as it interpolates the pixels with floating point position, while html aligns the elements to the display pixels.
-const canvasRenderer = true;
+const canvasRenderer = false;
 const flipY = false;
 const framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
 const frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
@@ -25,10 +25,14 @@ const boundaries = {
     bottom: document.body.clientHeight,
 }
 
-document.onresize = function(){
-    console.log('resized!')
-    boundaries.right = document.body.clientWidth, bottom = document.body.clientHeight;
+function resizeBoundaries(){
+    console.log('resized!');
+    const rect = document.body.getBoundingClientRect();
+    boundaries.right = rect.width, boundaries.bottom = rect.height;
 }
+
+// document.onresize = resizeBoundaries;
+window.addEventListener("resize", resizeBoundaries);
 
 Verlet.prototype = {
     positions: [new Vector, new Vector],
@@ -195,6 +199,7 @@ function random(min, max){
 const canvas = document.getElementById("box");
 const ctx = canvas.getContext("2d");
 
+
 function Simulation(canvasRenderer){
     this.objects = [];
     this.boundaries = new Rectangle(boundaries.left, boundaries.top, boundaries.right, boundaries.bottom);
@@ -340,10 +345,6 @@ QuadTree.prototype.updateDraw = function(){
 
 QuadTree.prototype.drawChildren = function(){
     if(this.divided){
-        // if(this.northwest) this.northwest.draw();
-        // if(this.northeast) this.northeast.draw();
-        // if(this.southwest) this.southwest.draw();
-        // if(this.southeast) this.southeast.draw();
         this.northwest.draw();
         this.northeast.draw();
         this.southwest.draw();
@@ -370,7 +371,7 @@ simulation.objects.push(b);
 simulation.start(framerate);
 
 
-//ballcount: for (let index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
+ballcount: for (let index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
 for (let index = 0; index < 10; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
 //console.log(ballcount);
 
