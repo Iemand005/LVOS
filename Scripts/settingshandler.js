@@ -8,7 +8,10 @@ function SettingHandler() { // First class declarations, then the functions and 
     this.storage = localStorage;
 }
 
-SettingHandler.prototype = { get: function (key) { return this.storage.getItem(key); }, set: function (key, value) { this.storage.setItem(key, value); } };
+SettingHandler.prototype = {
+    get: function (key) { return this.storage.getItem(key);
+
+    }, set: function (key, value) { this.storage.setItem(key, value); } };
 
 function setTheme(id) {
     if (typeof id === 'undefined') return;
@@ -83,6 +86,11 @@ function loadSettings() {
     setAccentColor(settings.get("accentColor"));
     setTheme(settings.get("theme"));
     getBorderSize(settings.get("borderSize"));
+    updateBlurState();
+}
+
+function updateBlurState () {
+    toggleBlur(JSON.parse(settings.get("blur")));
 }
 
 const settings = new SettingHandler();

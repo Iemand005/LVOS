@@ -367,7 +367,10 @@ function checkForFlip() {
         //I'll s'
         console.log("th I'll set the timeoutrat");
         clearTimeout(timeout); // I don't know why it works with the timeout set to 0 unless if the 3 repeated animation events actually get called in less than 1ms. I guess it's handy since we want it to load as fast as possible;
-        timeout = setTimeout(function () { toggleOverlay(!(!loaded ? (loaded = true) : false)); }, 500);
+        timeout = setTimeout(function () {
+            toggleOverlay(!(!loaded ? (loaded = true) : false));
+            updateBlurState();
+        }, 500);
     }
 
     if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
@@ -561,6 +564,7 @@ function verifyEjectCapability(dialog){
 function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.toggleAttribute("blur");
     else document.body.toggleAttribute("blur", enabled);
+    settings.set("blur", enabled);
 }
 
 function collectEssentialWindowData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
