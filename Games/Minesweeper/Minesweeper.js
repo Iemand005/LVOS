@@ -157,7 +157,7 @@ function startGame(){
 }
 
 function sendDesiredSize(){
-    Messenger.broadcastFromChild(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed bug 11/1/2024.
+    Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed bug 11/1/2024.
 }
 
 function quickRevealEvent(ev) {
