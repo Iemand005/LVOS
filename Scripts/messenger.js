@@ -17,6 +17,9 @@ function broadcast(target, type, message, id){
     if(target) target.postMessage(JSON.stringify({type:type, data:message, id:id}), '*');
 }
 
+function Messenger(){
+}
+
 Messenger.receive = function (callback) {
     window.addEventListener("message", function (ev) {
         try {
@@ -24,15 +27,13 @@ Messenger.receive = function (callback) {
             
             if ((data.type && data.data && data.id))
                 callback(data.type, data.data, data.id);
-            else console.warn("Data is missing a property", data);
+            else console.warn("Missing data property", data);
         } catch {
             console.warn("Error decoding data", ev.data);
         }
     });
 };
 
-function Messenger(){
-}
 
 Messenger.types = {
     open: "open",
