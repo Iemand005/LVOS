@@ -201,7 +201,7 @@ const programInfo = {
   program: graphics.shaderProgram,
   attribLocations: {
     vertexPosition: gl.getAttribLocation(graphics.shaderProgram, "aVertexPosition"),
-    vertexPosition: gl.getAttribLocation(graphics.shaderProgram, "aVertexColor")
+    vertexColor: gl.getAttribLocation(graphics.shaderProgram, "aVertexColor")
   },
   uniformLocations: {
     projectionMatrix: gl.getUniformLocation(graphics.shaderProgram, "uProjectionMatrix"),
