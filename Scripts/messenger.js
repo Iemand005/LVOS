@@ -19,10 +19,15 @@ function broadcast(target, type, message, id){
 
 Messenger.receive = function (callback) {
     window.addEventListener("message", function (ev) {
-        const data = typeof ev.data === "string" ? JSON.parse(ev.data) : data
-        // does data have all the things
-        if (data.type && data.data && data.id)
-            callback(data.type, data.data, data.id);
+        try {
+            const data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
+            
+            if ((data.type && data.data && data.id))
+                callback(data.type, data.data, data.id);
+            else console.warn("Data is missing a property", data);
+        } catch {
+            console.warn("Error decoding data", ev.data);
+        }
     });
 };
 
