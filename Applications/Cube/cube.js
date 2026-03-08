@@ -135,6 +135,13 @@ Graphics.prototype.drawScene = function (programInfo, buffers, deltaTime) {
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
+  mat4.rotate(
+  modelViewMatrix, // destination matrix
+  modelViewMatrix, // matrix to rotate
+  squareRotation, // amount to rotate in radians
+  [0, 0, 1]
+);
+
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
   setPositionAttribute(gl, buffers, programInfo);
