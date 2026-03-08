@@ -263,6 +263,7 @@ article{
 .window[open]{
     animation: opening 500ms ease-out forwards;
     pointer-events: auto;
+    backdrop-filter: blur(10px);
 }
 
 .window:not([open]){
