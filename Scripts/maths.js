@@ -5,3 +5,5 @@ function lerp (start, end, amount){
 function random(start, end){
     return Math.random()*(end-start) + start;
 }
+
+

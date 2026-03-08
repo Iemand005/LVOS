@@ -110,6 +110,7 @@ Graphics.prototype.drawScene = function (programInfo, buffers) {
 
   // note: glMatrix always has the first argument
   // as the destination to receive the result.
+  gl.gM
   mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
   // Set the drawing position to the "identity" point, which is
@@ -121,7 +122,7 @@ Graphics.prototype.drawScene = function (programInfo, buffers) {
   mat4.translate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0],
+    [-0.0, 0.0, -6.0]
   ); // amount to translate
 
   // Tell WebGL how to pull out the positions from the position
@@ -135,12 +136,12 @@ Graphics.prototype.drawScene = function (programInfo, buffers) {
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
     false,
-    projectionMatrix,
+    projectionMatrix
   );
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.modelViewMatrix,
     false,
-    modelViewMatrix,
+    modelViewMatrix
   );
 
   {
@@ -166,29 +167,29 @@ function setPositionAttribute(gl, buffers, programInfo) {
     type,
     normalize,
     stride,
-    offset,
+    offset
   );
   gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }
 
-export { drawScene };
+// export { drawScene };
 
 const graphics = new Graphics(canvas);
+const gl = graphics.gl;
 graphics.clear();
 graphics.loadShaders(vsSource, fsSource);
 
 const programInfo = {
   program: graphics.shaderProgram,
   attribLocations: {
-    vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+    vertexPosition: gl.getAttribLocation(graphics.shaderProgram, "aVertexPosition")
   },
   uniformLocations: {
-    projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-    modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+    projectionMatrix: gl.getUniformLocation(graphics.shaderProgram, "uProjectionMatrix"),
+    modelViewMatrix: gl.getUniformLocation(graphics.shaderProgram, "uModelViewMatrix")
   }
 };
 
-const gl = graphics.gl;
 
 const positionBuffer = gl.createBuffer();
 
@@ -205,7 +206,7 @@ const positionBuffer = gl.createBuffer();
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
 
 const buffers = {
-    position: positionBuffer,
+    position: positionBuffer
   };;
 
 graphics.drawScene(programInfo, buffers)
