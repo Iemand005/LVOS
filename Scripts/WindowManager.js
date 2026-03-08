@@ -411,7 +411,7 @@ function windowActivationEvent(event){
     const dialog = getEventDialog(event);
     activeWindow = dialog.id;
     resizeDirection = 0;
-    disableWindowPointers();
+    enableWIndowDrag();
     const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
     windows[activeWindow].setClickOffset(mouse.x, mouse.y);
     windows[activeWindow].activate();
@@ -438,7 +438,7 @@ function windowDragEvent(event){
 
 function disableWindowDrag(){
     if(flipped) return;
-    enableWindowDrag(false);
+    toggleWindowDragEventHandler(false);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
     if(canSave) saveWindowState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
@@ -453,12 +453,12 @@ function disableWindowDrag(){
 /**
  * @param {boolean} enable 
  */
-function enableWindowDrag(enable) {
+function toggleWindowDragEventHandler(enable) {
     (enable ? document.addEventListener : document.removeEventListener)(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
-function disableWindowPointers(){
-    enableWindowDrag(true);
+function enableWIndowDrag(){
+    toggleWindowDragEventHandler(true);
     for(let index in windows) windows[index].togglePointerEvents(false);
 }
 
