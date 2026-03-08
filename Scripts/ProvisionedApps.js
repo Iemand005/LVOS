@@ -279,9 +279,12 @@ const games = [
 injectApplications(applications);
 injectApplications(games);
 
-elements.dockAppList.appendChild(windows.browser.createOpenButton());
-elements.dockAppList.appendChild(windows.console.createOpenButton());
-dockapplist.appendChild(windows.music.createOpenButton());
+if (elements) {
+
+    elements.dockAppList.appendChild(windows.browser.createOpenButton());
+    elements.dockAppList.appendChild(windows.console.createOpenButton());
+    dockapplist.appendChild(windows.music.createOpenButton());
+}
 
 
 toggleReflections(true);
