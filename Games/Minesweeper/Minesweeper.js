@@ -161,7 +161,12 @@ function sendDesiredSize(){
 }
 
 function checkHost() {
-    Messenger.broadcastToParent()
+    Messenger.receive(function(type, data) {
+        if (type === "identity") {
+            console.log("Reveived identity", data);
+        }
+    });
+    Messenger.broadcastToParent(Messenger.types.identify, null, "minesweeper");
 }
 
 function quickRevealEvent(ev) {

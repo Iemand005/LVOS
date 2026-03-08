@@ -52,7 +52,8 @@ Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
     Messenger.broadcast(iFrame.contentWindow, type, message);
 };
 
-Messenger.prototype.receive = function (callback) {
+/** @param {(type:MessageType,data:*,id:string?)=>void} callback */
+Messenger.receive = function (callback) {
     window.addEventListener("message", function (ev) {
         try {
             /** @type {Message} */
@@ -64,7 +65,7 @@ Messenger.prototype.receive = function (callback) {
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
                     const identity = { name: "LVOS" };
-                    Messenger.broadcastChild(Messenger.types.identity,  identity, ev.target);
+                    Messenger.broadcast(ev.source, Messenger.types.identity,  identity);
                     break;
             }
             // else console.warn("Missing data property", data);
@@ -83,3 +84,11 @@ Messenger.broadcastToParent = function (type, message, id) {
 Messenger.broadcastToChild = Messenger.broadcastChild = function (type, message, iFrame) {
     Messenger.broadcast(iFrame.contentWindow, type, message);
 };
+
+/** @param {(isLVOS:boolean)=>void} callback */
+Messenger.isHostLVOS = function (callback) {
+    Messenger.receive(function(type, data) {
+        if (type === "identity") callback
+    });
+    Messenger.broadcastToParent(Messenger.types.identify, null, "minesweeper");
+}
