@@ -181,7 +181,10 @@ Window.prototype = {
     createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
     setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
     verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
-    togglePointerEvents: function (enable) { return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    togglePointerEvents: function (enable) {
+        if (enable == null)enale = this.target.style.pointerEvents == "none"
+        return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
+    },
     toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
     clearClickOffset: function () { this.clickOffset.clear(); },
     toggleFullScreen: function (enable) { this.target.toggleAttribute("full", enable); },
