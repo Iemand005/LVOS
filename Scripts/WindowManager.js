@@ -54,7 +54,6 @@ function Dialog(object){
         if(object.microphone || object.camera)this.frame.setAttribute("allow", "camera; microphone"); // Not absolutely necessary but it's more secure.
         if(typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
-            // Arrow nonation: object.classes.forEach(someclass => this.object.target.classList.add(someclass)); Not used in this file for IE11 and other ES5 based browsers.
         }
     }
 
@@ -163,35 +162,44 @@ function Dialog(object){
 
 // Dialog.prototype.Dialog.Dialog
 
+function max(a, b) {
+    if (a > b) return a;
+    else return b;
+}
+
+function min(a, b) {
+    if (a < b) return a;
+    else return b;
+}
 
 // Dialog.prototype. = {
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return this.target.hasAttribute("open"); },
-    set: function (force) { this.target.toggleAttribute("open", force), this.activate(); }
+    set: function(force) { this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get : function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    set : function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
+    get: function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    set: function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
-    get : function() { return this.content.children[1]; },
+    get: function() { return this.content.children[1]; },
 });
 Object.defineProperty(Dialog.prototype, "head", {
-    get : function() { return this.target.getElementsByTagName("header")[0]; },
+    get: function() { return this.target.getElementsByTagName("header")[0]; },
 });
 
 Object.defineProperty(Dialog.prototype, "width", {
-    get : function() { return this.target.getBoundingClientRect().width; },
-    set: function(width) { this.target.style.width = toPixels(width); }
+    get: function() { return max(this.target.getBoundingClientRect().width, this.minWidth); },
+    set: function(width) { this.target.style.width = toPixels(max(width, this.minWidth)); }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
-    get : function() { return this.target.getBoundingClientRect().height; },
-    set: function(height) { this.target.style.height = toPixels(height); }
+    get: function() { return max(this.target.getBoundingClientRect().height, this.minHeight); },
+    set: function(height) { this.target.style.height = toPixels(max(height, this.minHeight)); }
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
-    get : function() {
+    get: function() {
         /** @type {HTMLElement} */
         const content = this.target.getElementsByTagName("content")[0];
         return content;
