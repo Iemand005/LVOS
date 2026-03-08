@@ -171,7 +171,7 @@ mat4.rotate(
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
-  {  const numComponents = 2; // pull out 2 values per iteration
+  {  const numComponents = 3; // pull out 3 values per iteration (x, y, z)
   const type = gl.FLOAT; // the data in the buffer is 32bit floats
   const normalize = false; // don't normalize
   const stride = 0; // how many bytes to get from one set of values to the next
@@ -246,8 +246,6 @@ Graphics.prototype.render = function (now) {
 
   // console.log(this);
   // console.log(deltaTime);
-  console.log(this)
-
   this.drawScene(programInfo, deltaTime);
   // squareRotation += deltaTime;
 
@@ -261,7 +259,7 @@ Graphics.prototype.startRendering = function () {
 Graphics.prototype.resize = function (width, height) {
   this.canvas.width = width;
   this.canvas.height = height;
-  gl.viewport(0, 0, width, height);
+  this.gl.viewport(0, 0, width, height);
 };
 
 
@@ -387,8 +385,9 @@ const buffers = {
 
   graphics.buffers = buffers;
 
-// graphics.drawScene(programInfo, 0);
-// graphics.startRendering();
+const bounds = canvas.getBoundingClientRect();
+graphics.resize(bounds.width, bounds.height);
+graphics.startRendering();
 
 console.log(graphics);
 
