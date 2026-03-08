@@ -28,8 +28,8 @@ Messenger.receive = function (callback) {
             if ((data.type && data.data && data.id))
                 callback(data.type, data.data, data.id);
             // else console.warn("Missing data property", data);
-        } catch {
-            console.warn("Error decoding data", ev.data);
+        } catch (ex) {
+            console.warn("Error decoding data", ev.data, ex);
         }
     });
 };
