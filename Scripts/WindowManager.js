@@ -17,7 +17,7 @@
 let // Defining the default settings as let so we can modify them.
     blur = false,
     reflections = true,
-    fasterWindowTracking = false,
+    fasterWindowTracking = true,
     canSave = true,
     IE11Booster = true,
     loadingOverlay = true,
@@ -174,7 +174,7 @@ Window.prototype = {
     createOpenButton: function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] },
     setClickOffset: function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); },
     verifyEjectCapability: function () { return function () { try { return this.frame.contentWindow.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); },
-    togglePointerEvents: function (enable) { return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
+    togglePointerEvents: function (enable) { return; return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable == null ? this.target.style.pointerEvents == "none" : enable ? "auto" : "none"; },
     toggleButton: function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); },
     clearClickOffset: function () { this.clickOffset.clear(); },
     toggleFullScreen: function (enable) { this.target.toggleAttribute("full", enable); },
@@ -467,7 +467,11 @@ function getViewboxPosition(){
  * @returns HTMLElement
  */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
-    if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || object.classList.contains("window")) return object;
+    if (!object.classList) {
+        console.log(object)
+        return;
+    }
+    if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object.classList && object.classList.contains("window"))) return object;
     else if(object.target) return getObjectDialog(object.target);
     else return getObjectDialog(object.parentElement);
 }
@@ -478,7 +482,8 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterWindowTracking && event.clientX && event.clientY) try {
-        return document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.nodeName == "DIALOG" });
+        const window = document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.classList && element.classList.contains("window") });
+        return window;
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
 }
