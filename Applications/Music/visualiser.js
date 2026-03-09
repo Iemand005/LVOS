@@ -10,44 +10,47 @@ function AudioVisualiser(fftSize){
     this.elementSource;
     this.streamSource;
     this.updateBinCount(fftSize);
+    this._frequencyData = new Uint8Array(),
+    this._timeDomainData = new Uint8Array()
 }
 
-AudioVisualiser.prototype = {
-    frequencyData: new Uint8Array(),
-    timeDomainData: new Uint8Array(),
-
-    dump: function () {
+AudioVisualiser.prototype.dump = function () {
         this.analyser.disconnect();
-    },
+    };
 
-    disconnectAnalyser: function () {
+AudioVisualiser.prototype.disconnectAnalyser = function () {
         if (this.analyser && this.analyser.disconnect) this.analyser.disconnect();
-    },
+    };
 
-    initializeWithMediaElement: function (element) {
+AudioVisualiser.prototype.initializeWithMediaElement = function (element) {
         this.source = this.context.createMediaElementSource(element);
         this.source.connect(this.analyser);
         this.analyser.connect(this.context.destination);
-    },
+    };
 
-    initializeWithMediaStream: function (stream) {
+AudioVisualiser.prototype.initializeWithMediaStream = function (stream) {
         this.source = this.context.createMediaStreamSource(stream);
         this.source.connect(this.analyser);
         this.analyser.connect(this.context.destination);
-    },
+    };
 
-    updateBinCount: function (fftSize) {
+AudioVisualiser.prototype.updateBinCount = function (fftSize) {
         this.analyser.fftSize = fftSize || 64;
-        this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
-        this.timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
+        this._frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+        this._timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
     },
-    get frequencyBinCount() {
+    Object.defineProperty(Geode.prototype, "frequencyBinCount", {
+  get: function() {
         return this.analyser.frequencyBinCount;
-    },
-    get frequencyData() {
-        return this.analyser.getByteFrequencyData(this.frequencyData), this.frequencyData;
-    },
-    get timeDomainData() {
-        return this.analyser.getByteTimeDomainData(this.timeDomainData), this.timeDomainData;
     }
-};
+});
+    Object.defineProperty(Geode.prototype, "frequencyData", {
+    get: function() {
+        return this.analyser.getByteFrequencyData(this._frequencyData), this._frequencyData;
+    },
+});
+    Object.defineProperty(Geode.prototype, "timeDomainData", {
+    get: function() {
+        return this.analyser.getByteTimeDomainData(this._timeDomainData), this._timeDomainData;
+    }
+});

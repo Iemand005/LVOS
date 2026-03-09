@@ -1,7 +1,7 @@
 
 
 
-const bindConsole = true;
+const bindConsole = false;
 
 
 const ConsoleOutType = {

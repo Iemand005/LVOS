@@ -19,7 +19,7 @@ let // Defining the default settings as let so we can modify them.
     reflections = true,
     fasterDialogTracking = true,
     canSave = true,
-    IE11Booster = false,
+    IE11Booster = true,
     loadingOverlay = true,
     flipped = false;
 
@@ -159,8 +159,6 @@ function Dialog(object){
 
     windows[this.id] = this;
 }
-
-// Dialog.prototype.Dialog.Dialog
 
 function max(a, b) {
     if (a > b) return a;
@@ -598,8 +596,7 @@ function contains(array, number){
 function verifyEjectCapability(dialog){
     try {
         if(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
-    }
-    catch (exception){
+    } catch (exception){
         dialog.getElementsByTagName("button")[0].style.display = "none";
     }
 }
@@ -725,7 +722,7 @@ function closeApp(appId) {
 initializeDialogs(windows);
 toggleReflections(reflections);
 
-/*\ The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
+/*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targetting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
