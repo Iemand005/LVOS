@@ -108,7 +108,7 @@ function startAnimation(audioVisualiser){
 file.onchange = function(){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
-    if(audioVisualiser) audioVisualiser.dump();
+    if(audioVisualiser) audioVisualiser.destroy();
     audioVisualiser = new AudioVisualiser(frequencies);
     audioVisualiser.initializeWithMediaElement(audio);
     startAnimation(audioVisualiser);

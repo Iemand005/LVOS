@@ -14,7 +14,7 @@ function AudioVisualiser(fftSize){
     this._timeDomainData = new Uint8Array()
 }
 
-AudioVisualiser.prototype.dump = function () {
+AudioVisualiser.prototype.destroy = function () {
         this.analyser.disconnect();
     };
 
@@ -58,6 +58,14 @@ AudioVisualiser.prototype.updateBinCount = function (fftSize) {
         this._frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
         this._timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
     },
+
+Object.defineProperty(AudioVisualiser, "sharedContext", {
+  get: function() {
+    if (!AudioVisualiser._sharedContext) AudioVisualiser._sharedContext = new AudioContext();
+    this.context = AudioVisualiser._sharedContext;
+    }
+});
+
     Object.defineProperty(AudioVisualiser.prototype, "frequencyBinCount", {
   get: function() {
         return this.analyser.frequencyBinCount;
