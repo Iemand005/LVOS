@@ -414,7 +414,7 @@ function checkForFlip() {
         }, 500);
     }
 
-    if (window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+    if (false || window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
         console.log("Switching to Mobile mode...");
         if (!flipped) {
             flipHandler(true);
