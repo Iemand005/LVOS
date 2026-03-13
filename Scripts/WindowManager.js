@@ -66,6 +66,8 @@ function Dialog(object){
     this._height = 100;
     this.minWidth = 100;
     this.minHeight = 200;
+    this._isMinWidth = false;
+    this._isMinHeight = false;
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.moveEvents = object.moveEvents || false;
@@ -209,6 +211,9 @@ Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
     set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); }
 });
+
+Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return this._isMinWidth; }});
+Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { return this._isMinHeight; } });
 
 Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
