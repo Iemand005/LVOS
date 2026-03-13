@@ -85,8 +85,7 @@ function Dialog(object){
                 this;return this; }
         },
         clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
-    },
-    this.dragCalculator = new DragCalculator(this); // Watch out because this makes it circular! It also has to be defined after the properties the obect ,eeeeeeeeeeeeeee constructor needs.
+    };
 
     if(!this.scroll) this.body.style.overflow = "hidden";
 
@@ -121,8 +120,7 @@ function Dialog(object){
         const div = target.appendChild(document.createElement("div"));
         div.draggable = false, div.id = index + 1;
         const pointerDown = function (ev) {
-            if (IE11Booster) dragAction.set(ev.target.id);
-            else dialog.dragCalculator.set(ev.target.id);
+            dragAction.set(ev.target.id);
         }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
         if (div.onpointerdown) div.onpointerdown = pointerDown;
         else div.onmousedown = pointerDown;
@@ -253,46 +251,6 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
     },
     get: function () { return fromPixels(this.content.style.padding); },
 });
-
-// const e = new Dialog;
-// e.
-
-function DragCalculator(dialog){
-    this.dialog = dialog;
-    this.offset = dialog.clickOffset;
-    this.style = dialog.target.style;
-
-    this._difference = { x: 0, y: 0 };
-}
-
-DragCalculator.prototype = {
-    set: function (direction) { this.update = this.operations[direction]; },
-    get top() { return (this.dialog.y = this.offset.top + this.difference.y) + "px"; },
-    get left(){ return (this.dialog.x = this.offset.left + this.difference.x) + "px" },
-    get width() { return (this.dialog.width = this.offset.width + this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth) ? this.dialog.minWidth : this.dialog.width) + "px"; },
-    get height(){ return (this.dialog.height = this.offset.height + this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
-    get widthrv() { return (this.dialog.width = this.offset.width - this.difference.x), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.width < this.dialog.minWidth) ? this.dialog.minWidth : this.dialog.width) + "px"; },
-    get heightrv(){ return (this.dialog.height = this.offset.height - this.difference.y), console.log(this.dialog.width, this.dialog.minWidth), ((this.dialog.height < this.dialog.minHeight)? this.dialog.minHeight: this.dialog.height) + "px" },
-    get difference() { return this._difference },
-    set difference(pos) { this._difference.x = pos.x - this.offset.x, this._difference.y = pos.y - this.offset.y },
-    dialog: null,
-    offset: new Object,
-    scroll: new Vector,
-    update: new Function,
-    _difference: new Vector,
-    operations: [ // It doesn't look good but it's the absolute fastest I can make it. For this part I pick function over readability, the speed of the window movements is the most important thing.
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.width = this.width, this._difference) },
-        function(position){ return (this.difference = position, this.style.height = this.height, this._difference) },
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this._difference) },
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heightrv, this.style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.width = this.width, this.style.height = this.heightrv,style.top = this.top, this._difference) },
-        function(position){ return (this.difference = position, this.style.height = this.height, this.style.width = this.width, this._difference) },
-        function(position){ return (this.difference = position, this.style.left = this.left, this.style.width = this.widthrv, this.style.height = this.heigh, this._difference) },
-        function(){}
-    ]
-}
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
@@ -475,9 +433,7 @@ function windowActivationEvent(event){
  */
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeDialog], difference = 
-            IE11Booster ? dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style)
-            : dialog.dragCalculator.update({ x: event.clientX, y: event.clientY });
+        const dialog = windows[activeDialog], difference = dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y }, dialog.target.style)
 
         if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
         if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
@@ -504,7 +460,6 @@ function disableDialogDrag() {
     if(canSave) saveDialogState();
     if(windows[activeDialog]){
         if(windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
-        if(!IE11Booster) windows[activeDialog].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
     }
 }
 
