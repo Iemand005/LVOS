@@ -15,7 +15,7 @@ Graphics.prototype.loadShader = function (type, source) {
   if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
     alert(
       "An error occurred compiling the shaders: " +
-      this.gl.getShaderInfoLog(shader)
+        this.gl.getShaderInfoLog(shader)
     );
     this.gl.deleteShader(shader);
     return null;
@@ -40,7 +40,7 @@ Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
   if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
     alert(
       "Unable to initialize the shader program: " +
-      this.gl.getProgramInfoLog(shaderProgram)
+        this.gl.getProgramInfoLog(shaderProgram)
     );
     return null;
   }
@@ -66,10 +66,10 @@ function Graphics(canvas) {
   this.buffers = {
     position: [],
     indices: [],
-    color: [],
+    color: []
   };
 
-  this.onrender = function () { };
+  this.onrender = function () {};
 }
 
 Graphics.prototype.clear = function () {
@@ -127,26 +127,26 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
   mat4.translate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0],
+    [-0.0, 0.0, -6.0]
   ); // amount to translate
 
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
     squareRotation, // amount to rotate in radians
-    [0, 0, 1],
+    [0, 0, 1]
   ); // axis to rotate around (Z)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
     squareRotation * 0.7, // amount to rotate in radians
-    [0, 1, 0],
+    [0, 1, 0]
   ); // axis to rotate around (Y)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
     squareRotation * 0.3, // amount to rotate in radians
-    [1, 0, 0],
+    [1, 0, 0]
   ); // axis to rotate around (X)
 
   // Tell WebGL how to pull out the positions from the position
@@ -166,7 +166,7 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
       type,
       normalize,
       stride,
-      offset,
+      offset
     );
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
@@ -183,7 +183,7 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
     type,
     normalize,
     stride,
-    offset,
+    offset
   );
   gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
 
@@ -194,12 +194,12 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
     false,
-    projectionMatrix,
+    projectionMatrix
   );
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.modelViewMatrix,
     false,
-    modelViewMatrix,
+    modelViewMatrix
   );
 
   {
@@ -253,20 +253,20 @@ const programInfo = {
   attribLocations: {
     vertexPosition: gl.getAttribLocation(
       graphics.shaderProgram,
-      "aVertexPosition",
+      "aVertexPosition"
     ),
-    vertexColor: gl.getAttribLocation(graphics.shaderProgram, "aVertexColor"),
+    vertexColor: gl.getAttribLocation(graphics.shaderProgram, "aVertexColor")
   },
   uniformLocations: {
     projectionMatrix: gl.getUniformLocation(
       graphics.shaderProgram,
-      "uProjectionMatrix",
+      "uProjectionMatrix"
     ),
     modelViewMatrix: gl.getUniformLocation(
       graphics.shaderProgram,
-      "uModelViewMatrix",
-    ),
-  },
+      "uModelViewMatrix"
+    )
+  }
 };
 
 const positionBuffer = gl.createBuffer();
@@ -295,7 +295,7 @@ const positions = [
   1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
 
   // Left face
-  -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0,
+  -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0
 ];
 
 // Now pass the list of positions into WebGL to build the
@@ -333,7 +333,7 @@ const faceColors = [
   [0.0, 1.0, 0.0, 1.0], // Top face: green
   [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
   [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  [1.0, 0.0, 1.0, 1.0] // Left face: purple
 ];
 
 // Convert the array of colors into a table for all the vertices.
@@ -353,14 +353,14 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 const buffers = {
   position: positionBuffer,
   indices: indexBuffer,
-  color: colorBuffer,
+  color: colorBuffer
 };
 
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 gl.bufferData(
   gl.ELEMENT_ARRAY_BUFFER,
   new Uint16Array(indices),
-  gl.STATIC_DRAW,
+  gl.STATIC_DRAW
 );
 
 graphics.buffers = buffers;
