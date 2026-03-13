@@ -227,20 +227,24 @@ Object.defineProperty(Dialog.prototype, "height", {
 
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
-    set: function(top) { this.y = min(top, this.bottom - this.height); } });
+    set: function(top) {
+        const difference  = this.top - top;
+        if (difference + this.height < this.minHeight) this.top = this.bottom - this.minHeight;
+        else {
+            this.y = top;
+            this.height += difference;
+        }
+    }
+});
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        const leftdiff  = this.left - left;
-        if (leftdiff + this.width < this.minWidth) {
-            console.log("Going be")
-            this.left = this.right - this.minWidth;
-        } else {
+        const difference  = this.left - left;
+        if (difference + this.width < this.minWidth) this.left = this.right - this.minWidth;
+        else {
             this.x = left;
-            this.width += leftdiff;
+            this.width += difference;
         }
-        // this.x = min(left, this.right - this.width);
-        // this.width += max
     }
 });
 
@@ -322,15 +326,15 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
     this.execute = function(){};
     /** @type {DragFunction[]} */
     this.resizeFunctions = [
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ if (!dialog._isMinHeight) return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x) }, // Right
-        function(dialog, offset, difference){ if (!dialog._isMinWidth) return (dialog.height = offset.height + difference.y) }, // Bottom
-        function(dialog, offset, difference){ if (!dialog._isMinWidth) return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x) },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ if (!dialog._isMinHeight) return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x) },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y) },
+        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y },
+        function(dialog, offset, difference){ dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },
+        function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Rght
+        function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Botom
+        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x },
+        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },
+        function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y },
+        function(dialog, offset, difference){ dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x },
+        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y },
     ];
 }
 
