@@ -197,7 +197,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._height; },
-    set: function(height) { if (typeof height == "number") this.target.style.top = toPixels(this._y = max(y, 0)); }
+    set: function(y) { if (typeof y == "number") this.target.style.top = toPixels(this._y = max(y, 0)); }
 });
 
 Object.defineProperty(Dialog.prototype, "width", {
@@ -270,11 +270,11 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
         function(dialog, offset, difference){ return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y), difference },
         function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x), difference },
         function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, style.width = (dialog.width = offset.width - difference.x) + "px"), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height - difference.y) + "px", style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x, style.height = (dialog.height = offset.height - difference.y) + "px",style.top = (dialog.y = offset.top + difference.y) + "px"), difference },
-        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, style.width = (dialog.width = offset.width + difference.x) + "px"), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, style.width = (dialog.width = offset.width - difference.x) + "px", style.height = (dialog.height = offset.height + difference.y) + "px"), difference },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x), difference },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y), difference },
+        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y), difference },
+        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x), difference },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y), difference },
     ];
 }
 
