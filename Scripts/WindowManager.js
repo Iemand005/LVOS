@@ -163,13 +163,17 @@ function Dialog(object){
 }
 
 function max(a, b) {
-    if (a > b) return a;
-    else return b;
+    if (typeof a == "number" && typeof b == "number") {
+        if (a > b) return a;
+        else return b;
+    }
 }
 
 function min(a, b) {
-    if (a < b) return a;
-    else return b;
+    if (typeof a == "number" && typeof b == "number") {
+        if (a < b) return a;
+        else return b;
+    }
 }
 
 // Dialog.prototype. = {
@@ -190,12 +194,12 @@ Object.defineProperty(Dialog.prototype, "head", {
 
 Object.defineProperty(Dialog.prototype, "width", {
     get: function() { return this._width; },
-    set: function(width) { this.target.style.width = toPixels(this._width = max(width, this.minWidth)); }
+    set: function(width) { if (typeof width == "number") this.target.style.width = toPixels(this._width = max(width, this.minWidth)); }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
-    get: function() { return max(this.target.getBoundingClientRect().height, this.minHeight); },
-    set: function(height) { this.target.style.height = toPixels(this._height = max(height, this.minHeight)); }
+    get: function() { return this._height; },
+    set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); }
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
