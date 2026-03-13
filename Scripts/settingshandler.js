@@ -4,12 +4,12 @@
 'use strict';
 'use esnext';
 
-function SettingHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
+function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
     this.storage = localStorage;
 }
 
-SettingHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
-SettingHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
+SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
+SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 function setTheme(id) {
     if (typeof id === 'undefined') return;
@@ -83,7 +83,7 @@ function loadSettings() {
     setColor(settings.get("color"));
     setAccentColor(settings.get("accentColor"));
     setTheme(settings.get("theme"));
-    getBorderSize(settings.get("borderSize"));
+    // getBorderSize(settings.get("borderSize"));
     updateBlurState();
 }
 
@@ -91,7 +91,7 @@ function updateBlurState () {
     toggleBlur(JSON.parse(settings.get("blur")));
 }
 
-const settings = new SettingHandler();
+const settings = new SettingsHandler();
 
 const elements = {
     desktop: document.getElementById("desktop"),

@@ -15,7 +15,7 @@ Graphics.prototype.loadShader = function (type, source) {
   if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
     alert(
       "An error occurred compiling the shaders: " +
-      this.gl.getShaderInfoLog(shader),
+      this.gl.getShaderInfoLog(shader)
     );
     this.gl.deleteShader(shader);
     return null;

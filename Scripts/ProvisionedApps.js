@@ -201,8 +201,8 @@ const games = [
 injectApplications(applications);
 injectApplications(games);
 
-dockAppList.appendChild(windows.browser.createOpenButton());
-dockAppList.appendChild(windows.console.createOpenButton());
+dockapplist.appendChild(windows.browser.createOpenButton());
+dockapplist.appendChild(windows.console.createOpenButton());
 dockapplist.appendChild(windows.music.createOpenButton());
 
 
