@@ -231,11 +231,15 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        const originalWidth = this.width;
-        const originalLeft = this.left;
-        this.x = min(left, this.right - this.width);
-        const leftdiff  = originalLeft - left;
-        this.width += leftdiff
+        const leftdiff  = this.left - left;
+        if (leftdiff + this.width < this.minWidth) {
+            console.log("Going be")
+            
+        } else {
+
+        }
+        // this.x = min(left, this.right - this.width);
+        // this.width += max
     }
 });
 
