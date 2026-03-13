@@ -234,9 +234,10 @@ Object.defineProperty(Dialog.prototype, "left", {
         const leftdiff  = this.left - left;
         if (leftdiff + this.width < this.minWidth) {
             console.log("Going be")
-            
+            this.left = this.right - this.minWidth;
         } else {
-
+            this.x = left;
+            this.width += leftdiff;
         }
         // this.x = min(left, this.right - this.width);
         // this.width += max
