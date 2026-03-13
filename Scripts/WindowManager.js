@@ -204,12 +204,16 @@ Object.defineProperty(Dialog.prototype, "y", {
 
 Object.defineProperty(Dialog.prototype, "width", {
     get: function() { return this._width; },
-    set: function(width) { if (typeof width == "number") this.target.style.width = toPixels(this._width = max(width, this.minWidth)); }
+    set: function(width) {
+        if (typeof width == "number")
+            this.target.style.width = toPixels(this._width = max(width, this.minWidth));
+            this._isMinWidth = this._width === this.minWidth;
+        }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
-    set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); }
+    set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return this._isMinWidth; }});
@@ -267,12 +271,20 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
     get: function () { return fromPixels(this.content.style.padding); },
 });
 
+/**
+ * @typedef {{x: number, y: number}} Vector
+ */
+/**
+ * @typedef {(dialog: Dialog, offset: Vector, difference)=>void} DragFunction
+ */
+
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(dialog, offset, difference){};
+    /** @type {} */
     this.resizeFunctions = [
         function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ if (!dialog.ism) return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
         function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x) },
         function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y) },
         function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x) },
@@ -306,7 +318,7 @@ DocumentCrawler.prototype = {
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-/** @type {Dialog} */
+/** @type {Keymap} */
 const windows = {};
 const windowButtons = {
     eject: 0,
@@ -448,7 +460,8 @@ function windowActivationEvent(event){
  */
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeDialog], difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
+        const dialog = windows[activeDialog];
+        const difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
         dragAction.execute(dialog, dialog.clickOffset, difference);
         
