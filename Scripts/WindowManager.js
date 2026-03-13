@@ -261,6 +261,8 @@ function DragCalculator(dialog){
     this.dialog = dialog;
     this.offset = dialog.clickOffset;
     this.style = dialog.target.style;
+
+    this._difference = { x: 0, y: 0 };
 }
 
 DragCalculator.prototype = {
@@ -339,7 +341,6 @@ const windowButtons = {
     close: 2
 };
 let activeDialog = null;
-let activeDrag = false;
 let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
@@ -495,18 +496,16 @@ function toggleDialogDragEventHandler(enable) {
     else document.removeEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
 }
 
-function disableDialogDrag(){
+function disableDialogDrag() {
     if(flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set(0);
     for(let index in windows) windows[index].togglePointerEvents(true);
-    if(canSave) saveDialogState(); // We slaan hier onze configuratie van de vensters op. Dit word altijd uitgevoerd wanneer een venster neergezet word, op deze manier moeten we niet onnodig veel schrijven naar het browsergebeugen. On IE based browsers we don't have storage access when opening from a file! This is for security reasons, but modern browsers run in more secure sandboxes so don't need this anymore.
+    if(canSave) saveDialogState();
     if(windows[activeDialog]){
         if(windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
-        if(IE11Booster) dragAction.set(0);
-        else windows[activeDialog].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
+        if(!IE11Booster) windows[activeDialog].dragCalculator.set(0);  // We overwrite the drag on click event now! This saves an if statement, the need to clear and makes the drag start from the actual point the mouse was pressed;
     }
-    activeDrag = false;
 }
 
 function enableDialogDrag(){
