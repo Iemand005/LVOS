@@ -31,32 +31,44 @@ function isDialog(element) {
 }
 
 /**
+ * @typedef {import('./ProvisionedApps.js').Application} Application
+ */
+
+/**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
- * @param {HTMLElement} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
-function Dialog(object){
+function Dialog(object) {
 
-    if(!object) return;
+    if (!object) return;
     let dialog = this;
 
     /** @type {HTMLElement} */
     this.target = null;
 
-    if(isDialog(object)) this.target = object;
-    else{
+    if (object instanceof HTMLElement) {
+        if (!isDialog(object)) return console.warn("This is not a dialog element");
+        this.target = object;
+        // this.title = object;
+        this.title = object.title;
+    } else {
         this.target = createDialog();
         this.frame = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
-        if(object.microphone || object.camera)this.frame.setAttribute("allow", "camera; microphone"); // Not absolutely necessary but it's more secure.
-        if(typeof object.classes === 'object'){
+        if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+        if (typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
         }
-    }
 
+        this.moveEvents = object.moveEvents || false;
+    }
+    
+    this.title = object.title || this.getTitle();
+    this.id = object.id || this.getId() || this.title;
     this._x = 0;
     this._y = 0;
     this.z = 0;
@@ -68,9 +80,6 @@ function Dialog(object){
     this.minHeight = 200;
     this._isMinWidth = false;
     this._isMinHeight = false;
-    this.title = object.title || this.getTitle();
-    this.id = object.id || this.getId() || this.title;
-    this.moveEvents = object.moveEvents || false;
     this.buttons = [];
     this.originalBody = this.body;
     this.originalFrame = this.frame;
@@ -193,12 +202,12 @@ Object.defineProperty(Dialog.prototype, "head", {
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
-    get: function() { return this._width; },
+    get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") this.target.style.left = toPixels(this._x = max(x, 0)); }
 });
 
 Object.defineProperty(Dialog.prototype, "y", {
-    get: function() { return this._height; },
+    get: function() { return this._y; },
     set: function(y) { if (typeof y == "number") this.target.style.top = toPixels(this._y = max(y, 0)); }
 });
 
@@ -214,6 +223,16 @@ Object.defineProperty(Dialog.prototype, "width", {
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
     set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
+});
+
+Object.defineProperty(Dialog.prototype, "left", {
+    get: function() { return this.x; },
+    set: function(left) { this.x = left; }
+});
+
+Object.defineProperty(Dialog.prototype, "right", {
+    get: function() { return this.x + this.width; },
+    set: function(right) { this.width = right - this.x; }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return this._isMinWidth; }});
@@ -275,28 +294,29 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
  * @typedef {{x: number, y: number}} Vector
  */
 /**
- * @typedef {(dialog: Dialog, offset: Vector, difference)=>void} DragFunction
+ * @typedef {(dialog: Dialog, offset: DOMRect, difference)=>void} DragFunction
  */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
-    this.execute = function(dialog, offset, difference){};
-    /** @type {} */
+    /** @type {DragFunction} */
+    this.execute = function(){};
+    /** @type {DragFunction[]} */
     this.resizeFunctions = [
         function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ if (!dialog.ism) return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x) },
-        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y) },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x) },
+        function(dialog, offset, difference){ if (!dialog._isMinHeight) return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x) }, // Right
+        function(dialog, offset, difference){ if (!dialog._isMinWidth) return (dialog.height = offset.height + difference.y) }, // Bottom
+        function(dialog, offset, difference){ if (!dialog._isMinWidth) return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x) },
         function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ if (!dialog._isMinHeight) return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y) },
         function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x) },
         function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y) },
     ];
 }
 
 DragAction.prototype = {
-    set: function(direction){ this.execute = this.resizeFunctions[direction] || new Function },
+    set: function(direction) { this.execute = this.resizeFunctions[direction || 0] || new Function }
 }
 
 function DocumentCrawler(document){
@@ -318,7 +338,7 @@ DocumentCrawler.prototype = {
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-/** @type {Keymap} */
+/** @type {{[id:string]: Dialog}} */
 const windows = {};
 const windowButtons = {
     eject: 0,
@@ -423,7 +443,7 @@ function checkForFlip() {
 window.onresize = checkForFlip();
 //felse loaded = true;
 
-function initializeDialogs(windows){
+function initializeDialogs() {
     if (document.onpointerup) document.onpointerup = disableDialogDrag;
     else document.onmouseup = disableDialogDrag;
     // if (document.ontouchend) document.ontouchend = disableDialogDrag;
@@ -707,7 +727,7 @@ function closeApp(appId) {
     element.parentElement.removeChild(element);
 }
 
-initializeDialogs(windows);
+initializeDialogs();
 toggleReflections(reflections);
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
