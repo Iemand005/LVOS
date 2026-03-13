@@ -225,8 +225,19 @@ Object.defineProperty(Dialog.prototype, "height", {
     set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
 });
 
-Object.defineProperty(Dialog.prototype, "top", { get: function() { return this.y; }, set: function(top) { this.y = top; } });
-Object.defineProperty(Dialog.prototype, "left", { get: function() { return this.x; }, set: function(left) { this.x = left; } });
+Object.defineProperty(Dialog.prototype, "top", {
+    get: function() { return this.y; },
+    set: function(top) { this.y = min(top, this.bottom - this.height); } });
+Object.defineProperty(Dialog.prototype, "left", {
+    get: function() { return this.x; },
+    set: function(left) {
+        const originalWidth = this.width;
+        const originalLeft = this.left;
+        this.x = min(left, this.right - this.width);
+        const leftdiff  = originalLeft - left;
+        this.width += leftdiff
+    }
+});
 
 Object.defineProperty(Dialog.prototype, "right", {
     get: function() { return this.x + this.width; },
