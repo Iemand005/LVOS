@@ -330,10 +330,13 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
         function(dialog, offset, difference){ dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Rght
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Botom
-        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x },
+        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x }, // Left
         function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },
-        function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y },
-        function(dialog, offset, difference){ dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x },
+        function(dialog, offset, difference){
+            dialog.width = offset.width + difference.x,
+            dialog.height = offset.height - difference.y
+            dialog.y = offset.top + difference.y },// Top right
+        function(dialog, offset, difference){ dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x }, // Bottom right
         function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y },
     ];
 }
