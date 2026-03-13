@@ -40,7 +40,7 @@ Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
   if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
     alert(
       "Unable to initialize the shader program: " +
-      this.gl.getProgramInfoLog(shaderProgram),
+      this.gl.getProgramInfoLog(shaderProgram)
     );
     return null;
   }

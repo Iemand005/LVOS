@@ -22,11 +22,11 @@ document.querySelector("form").onsubmit = function(event){
 
 
 for (let i = 0; i < 10; i++) {
-    document.getElementById(i).onclick = function(event){
-        //const number = event.target.id;
-        inputs.push(i);
-        display(inputs.join(""));
-    }
+    // document.getElementById(i).onclick = function(event){
+    //     //const number = event.target.id;
+    //     inputs.push(i);
+    //     display(inputs.join(""));
+    // }
 }
 
 function display(message){
