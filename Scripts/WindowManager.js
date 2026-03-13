@@ -61,7 +61,9 @@ function Dialog(object){
     this.y = 0;
     this.z = 0;
     this.width = 200;
+    this._width = 200;
     this.height = 100;
+    this._height = 100;
     this.minWidth = 100;
     this.minHeight = 200;
     this.title = object.title || this.getTitle();
@@ -187,13 +189,13 @@ Object.defineProperty(Dialog.prototype, "head", {
 });
 
 Object.defineProperty(Dialog.prototype, "width", {
-    get: function() { return max(this.target.getBoundingClientRect().width, this.minWidth); },
-    set: function(width) { this.target.style.width = toPixels(max(width, this.minWidth)); }
+    get: function() { return this._width; },
+    set: function(width) { this.target.style.width = toPixels(this._width = max(width, this.minWidth)); }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return max(this.target.getBoundingClientRect().height, this.minHeight); },
-    set: function(height) { this.target.style.height = toPixels(max(height, this.minHeight)); }
+    set: function(height) { this.target.style.height = toPixels(this._height = max(height, this.minHeight)); }
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
@@ -325,7 +327,8 @@ DocumentCrawler.prototype = {
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-const windows = {}; // MDN says not to use "new Object();". W3Schools adds to it that {} is faster and more readable.
+/** @type {Dialog} */
+const windows = {};
 const windowButtons = {
     eject: 0,
     full: 1,
