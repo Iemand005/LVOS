@@ -266,15 +266,15 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
     this.execute = function(dialog, offset, difference){};
     this.resizeFunctions = [
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x), difference },
-        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y), difference },
-        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x), difference },
-        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y), difference },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ return (dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x) },
+        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y) },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x) },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ return (dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y,dialog.y = offset.top + difference.y) },
+        function(dialog, offset, difference){ return (dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x) },
+        function(dialog, offset, difference){ return (dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y) },
     ];
 }
 
@@ -309,13 +309,13 @@ const windowButtons = {
     close: 2
 };
 let activeDialog = null;
-let dragAction = new DragAction();
 let resizeDirection = 0;
 let topZ = 100;
 let bodyCrawler = new DocumentCrawler(document);
 let metroBodyOrigin;
 let timeout;
 let loaded = false;
+const dragAction = new DragAction();
 // let flipped = false;
 
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
@@ -443,11 +443,9 @@ function windowActivationEvent(event){
  */
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeDialog],
-            difference = dragAction.execute(dialog, dialog.clickOffset, { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y });
+        const dialog = windows[activeDialog], difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
-        if(dialog.width < dialog.minWidth) dialog.width = dialog.minWidth;
-        if(dialog.height < dialog.minHeight) dialog.height = dialog.minHeight;
+        dragAction.execute(dialog, dialog.clickOffset, difference);
         
         if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
     } catch (ex) {
