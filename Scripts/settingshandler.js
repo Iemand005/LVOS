@@ -8,10 +8,8 @@ function SettingHandler() { // First class declarations, then the functions and 
     this.storage = localStorage;
 }
 
-SettingHandler.prototype = {
-    get: function (key) { return this.storage.getItem(key);
-
-    }, set: function (key, value) { this.storage.setItem(key, value); } };
+SettingHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
+SettingHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 function setTheme(id) {
     if (typeof id === 'undefined') return;
