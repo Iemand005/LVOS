@@ -110,7 +110,7 @@ function Dialog(object) {
 
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
-    let dialog = this;
+    const dialog = this;
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
@@ -197,7 +197,8 @@ Dialog.prototype.initWithObject = function (object) {
     if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
     else this.target.addEventListener("mousedown", windowActivationEvent);
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        const dialog = getEventDialog(event)
+        // const dialogElement = getEventDialog(event);
+        // const dialog = windows[dialogElement.id];
         const rect = target.getClientRects()[0];
         const viewboxPosition = getViewboxPosition();
         const propeties = {
@@ -213,7 +214,8 @@ Dialog.prototype.initWithObject = function (object) {
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(this.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+        window.open(dialog.href, dialog.title, stringifyDialogProperties(propeties));
+        dialog.quit();
     });
 
     const buttons = target.getElementsByTagName("button");
@@ -364,7 +366,25 @@ Object.defineProperty(Dialog.prototype, "closeable", {
     get: function() { return this.application != null; }
 });
 
-Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
+/** @type {Dialog} */
+let focusedDialog = null;
+Dialog.prototype.focus = function() {
+    if (focusedDialog !== null) {
+        focusedDialog.target.removeAttribute("focus");
+        console.log("removed focus from", focusedDialog.title);
+    }
+    if (this.target) this.target.setAttribute("focus", true);
+    focusedDialog = this;
+}
+Dialog.prototype.activate = function () {
+    // if (focusedDialog !== null) {
+        focusedDialog.focus();
+    // }
+    // this.target.setAttribute("focus");
+    // focusedDialog = this;
+    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this);
+
+}
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
 Dialog.prototype.setId = function (id) { return this.id = id; }
 Dialog.prototype.getId = function () { return this.id; }
