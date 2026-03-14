@@ -239,9 +239,9 @@ Graphics.prototype.resize = function (width, height) {
   const dpr = window.devicePixelRatio || 1;
   this.canvas.width = width * dpr;
   this.canvas.height = height * dpr;
-  this.gl.viewport(0, 0, width, height);
+  this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
   // ctx.scale(dpr, dpr);
-  this.gl.scalef(dpr, dpr);
+  if (this.gl.scale) this.gl.scale(dpr, dpr);
 };
 
 // export { drawScene };
