@@ -279,7 +279,7 @@ Object.defineProperty(Dialog.prototype, "y", {
             this.target.style.top = toPixels(this._y);
             this.target.style.transform = "none";
         }
-    }'
+    }
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
