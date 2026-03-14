@@ -165,25 +165,29 @@ main {
     background-color: orange;
     transition: inherit;
     color: black;
-}
 
-.window > content {
-    transition: filter 0.2s ease-in-out;
+    transform-origin: center;
+    background:     linear-gradient(0deg, #0000002b, #ffffff00);
+    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(1rem);
+    
+    transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .window[focus] > content {
     filter: saturate(1);
+    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.3);
 }
 
 .window:not([focus]) > content {
-    filter: saturate(0.6);
+    filter: saturate(0.8);
 }
 
-iframe{
+iframe {
     border: 0;
 }
 
-input{
+input {
     border: 0;
     padding: 0;
     margin: 0;
@@ -194,96 +198,27 @@ input{
     background-color: rgba(255, 255, 255, 0.758);
 }
 
-input[type=checkbox]{
+input[type=checkbox] {
     width: unset;
 }
 
-template{
+template {
     display: none; /* Internet Explorer 11 does not seem to know template, so for all browsers that don't support this it'll be hidden anyways. */
 }
 
-article{
+article {
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
 }
 
-.window > div{
+.window > div {
     position: absolute;
     pointer-events: auto;
 }
 
-.window > div:nth-of-type(odd){
-    width: 100%;
-}
-
-.window > div:nth-of-type(even){
-    height: 100%;
-}
-
-
-.window > div, .window > div:nth-of-type(n + 5){
-    width: 5px;
-    height: 5px;
-}
-
-.window > div:nth-of-type(1){
-    top: 0;
-    left: 0;
-    cursor: n-resize;
-}
-
-.window > div:nth-of-type(2){
-    top: 0;
-    right: 0;
-    cursor: w-resize;
-}
-
-.window > div:nth-of-type(3){
-    bottom: 0;
-    left: 0;
-    cursor: s-resize;
-}
-
-.window > div:nth-of-type(4){
-    top: 0;
-    left: 0;
-    cursor: e-resize;
-}
-
-.window > div:nth-of-type(5){
-    top: 0;
-    left: 0;
-    cursor: nw-resize;
-}
-
-.window > div:nth-of-type(6){
-    top: 0;
-    right: 0;
-    cursor: ne-resize;
-}
-
-.window > div:nth-of-type(7){
-    bottom: 0;
-    right: 0;
-    cursor: se-resize;
-}
-
-.window > div:nth-of-type(8){
-    bottom: 0;
-    left: 0;
-    cursor: sw-resize;
-}
-
-.window[open]{
+.window[open] {
     pointer-events: auto;
-}
-
-.window > content {
-    transform-origin: center;
-    background:     linear-gradient(0deg, #0000002b, #ffffff00);
-    box-shadow: 0 1rem 6rem #000000a8;
-    backdrop-filter: blur(1rem);
 }
 
 .window[open] > content {
@@ -329,7 +264,7 @@ article{
     vertical-align: bottom;
 }
 
-.window[full]{
+.window[full] {
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -338,20 +273,20 @@ article{
     height: 100% !important;
 }
 
-article > *{
+article > * {
     width: 100%;
     height: 100%;
     overflow: auto;
 }
 
-section#desktop{
+section#desktop {
     height: 100%;
     width: 100%;
     background-color: orange;
     z-index: -100;
 }
 
-.acrylic{
+.acrylic {
     background-color: rgba(0, 0, 0, 0.507);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -359,7 +294,7 @@ section#desktop{
     z-index: -1;
 }
 
-.acrylic::before{
+.acrylic::before {
     pointer-events: none;
     content: "";
     opacity: 4;
@@ -369,16 +304,82 @@ section#desktop{
     height: 100%;
 }
 
-button{
+button {
     background-color: rgba(0, 0, 0, 0.219);
     border: 1px solid black;
     text-rendering: geometricPrecision;
     pointer-events: auto !important;
 }
 
-button:hover{
+button:hover {
     background-color: rgba(153, 153, 153, 0.219);
 }
+
+/* Resize grabbers */
+
+.window > div:nth-of-type(odd) {
+    width: 100%;
+}
+
+.window > div:nth-of-type(even) {
+    height: 100%;
+}
+
+
+.window > div, .window > div:nth-of-type(n + 5) {
+    width: 5px;
+    height: 5px;
+}
+
+.window > div:nth-of-type(1) {
+    top: 0;
+    left: 0;
+    cursor: n-resize;
+}
+
+.window > div:nth-of-type(2) {
+    top: 0;
+    right: 0;
+    cursor: w-resize;
+}
+
+.window > div:nth-of-type(3) {
+    bottom: 0;
+    left: 0;
+    cursor: s-resize;
+}
+
+.window > div:nth-of-type(4) {
+    top: 0;
+    left: 0;
+    cursor: e-resize;
+}
+
+.window > div:nth-of-type(5) {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+}
+
+.window > div:nth-of-type(6) {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+}
+
+.window > div:nth-of-type(7) {
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}
+
+.window > div:nth-of-type(8) {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+}
+
+/* Animation */
 
 @keyframes opening {
     from {
