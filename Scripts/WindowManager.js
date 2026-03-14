@@ -487,7 +487,7 @@ Dialog.prototype.close = function () { return this.isOpen = false, saveDialogSta
 Dialog.prototype.getInnerRect = function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
 Dialog.prototype.getRect = function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
 Dialog.prototype.getButton = function (index) { return this.head.getElementsByTagName("button")[index]; }
-Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] }
+Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 Dialog.prototype.setClickOffset = function (x, y) {
     const rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
@@ -533,7 +533,11 @@ Dialog.prototype.openUrl = function (url) {
     this.launch();
 };
 
-Dialog.prototype.quit = function () { if (this.closeable) this.target.parentElement.removeChild(this.target);
+Dialog.prototype.quit = function () {
+    if (this.closeable) {
+        this.target.parentElement.removeChild(this.target);
+        this.target = null;
+    }
     else this.close();
  };
 Dialog.prototype.launch = function () {
@@ -554,7 +558,7 @@ Dialog.prototype.launch = function () {
     //     }
     // }
 
-    this.initWithObject(this.application);
+    if (!this.target) this.initWithObject(this.application);
 
     
 
