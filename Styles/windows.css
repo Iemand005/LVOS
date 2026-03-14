@@ -264,15 +264,25 @@ article{
 }
 
 .window[open]{
-    animation: opening 500ms ease-out forwards;
     pointer-events: auto;
     backdrop-filter: blur(10px);
     background:     linear-gradient(0deg, #0000002b, #ffffff00);
 }
 
-.window:not([open]){
+.window > content {
     transform-origin: center;
+}
+
+.widnow[open] > content {
+    animation: opening 500ms ease-out forwards;
+}
+
+.widnow:not([open]) > content {
     animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
+}
+
+
+.window:not([open]){
     display: block; /* The display attribute is set to none by default */
     z-index: -1000;
     /*pointer-events: none !important;*/
@@ -367,7 +377,7 @@ button:hover{
 @keyframes closing {
     99% {
         opacity: 0;
-        transform: perspective(4cm) rotateX(5deg) rotateY(1deg) translateZ(-2cm) translateY(-2cm);
+        transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm);
     }
     100%{
         opacity: 0;

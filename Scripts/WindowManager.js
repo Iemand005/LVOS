@@ -49,6 +49,10 @@ function titlify(title) {
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
 function Dialog(object) {
+    this._x = 0;
+    this._y = 0;
+    this._width = 0;
+    this._height = 0;
 
     if (!object) return;
     let dialog = this;
@@ -81,8 +85,6 @@ function Dialog(object) {
     
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
-    this._x = 0;
-    this._y = 0;
     this.z = 0;
     this.width = 200;
     this._width = 200;
@@ -238,7 +240,7 @@ Object.defineProperty(Dialog.prototype, "x", {
      } }
 });
 
-const myThingie = document.
+// const myThingie = document.
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
