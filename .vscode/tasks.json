@@ -16,6 +16,52 @@
                 "command": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\VSLaunchBrowser.exe"
             },
             "args": ["AppXq0fevzme2pys62n3e0fbqa7peapykr8v"]
+        },
+        {
+            "label": "Open in Simple Browser",
+            "type": "shell",
+            "command": "${input:openSimpleBrowser}",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Start Live Server",
+            "type": "shell",
+            "command": "${input:startLiveServer}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Live Server and Open in Simple Browser",
+            "type": "shell",
+            "command": "echo Starting...",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Start Live Server",
+                "Open in Simple Browser"
+            ],
+            "problemMatcher": []
+        },
+    ],
+    "inputs": [
+        // {
+        //     "id": "openSimpleBrowser",
+        //     "type": "promptString",
+        //     "description": "Confirm URL to open",
+        //     "default": "file:///${workspaceFolder}/index.html"
+        // },
+        {
+            "id": "openSimpleBrowser",
+            "type": "command",
+            "command": "simpleBrowser.api.open",
+            "args": ["${workspaceFolderBasename}"]
+        },
+        {
+            "id": "startLiveServer",
+            "type": "command",
+            "command": "extension.liveServer.goOnline"
         }
     ]
 }

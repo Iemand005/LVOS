@@ -23,6 +23,10 @@ let // Defining the default settings as let so we can modify them.
     loadingOverlay = true,
     flipped = false;
 
+const supportsPointer = typeof PointerEvent !== "undefined";
+
+if (supportsPointer) console.log("Supports pointer events!");
+
 /**
  * @param {HTMLElement} element 
  */
@@ -119,17 +123,17 @@ function Dialog(object) {
 
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
-    if(this.verifyEjectCapability()) this.toggleEjectButton(true);
+    if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
     this.synchronise = synchroniseDialogState.bind(this);
 
-    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", {difference:new Vector});
+    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
     this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if(difference)this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
+        if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
-    if(object.body) this.body.appendChild(object.body);
+    if (object.body) this.body.appendChild(object.body);
     this.setTitle(this.title);//sun
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
@@ -145,7 +149,7 @@ function Dialog(object) {
             const pointerDown = function (ev) {
                 dragAction.set(ev.target.id);
             }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-            if (div.onpointerdown) div.onpointerdown = pointerDown;
+            if (supportsPointer) div.onpointerdown = pointerDown;
             else div.onmousedown = pointerDown;
             target.appendChild(div);
         }
@@ -489,7 +493,7 @@ window.onresize = checkForFlip();
 //felse loaded = true;
 
 function initializeDialogs() {
-    if (document.onpointerup) document.onpointerup = disableDialogDrag;
+    if (typeof onpointerup !== "undefined") document.onpointerup = disableDialogDrag;
     else document.onmouseup = disableDialogDrag;
     // if (document.ontouchend) document.ontouchend = disableDialogDrag;
     
@@ -545,14 +549,13 @@ function toggleDialogDragEventHandler(enable) {
 }
 
 function disableDialogDrag() {
-    if(flipped) return;
+    if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set(0);
-    for(let index in windows) windows[index].togglePointerEvents(true);
-    if(canSave) saveDialogState();
-    if(windows[activeDialog]){
-        if(windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
-    }
+    for (let index in windows) windows[index].togglePointerEvents(true);
+    if (canSave) saveDialogState();
+    if (windows[activeDialog])
+        if (windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
 }
 
 function enableDialogDrag(){
@@ -585,10 +588,7 @@ function getViewboxPosition(){
  * @returns HTMLElement
  */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
-    if (!object.classList) {
-        console.log(object)
-        return;
-    }
+    if (!object.classList) return console.log(object);
     if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object.classList && object.classList.contains("window"))) return object;
     else if(object.target) return getObjectDialog(object.target);
     else return getObjectDialog(object.parentElement);
@@ -627,18 +627,18 @@ function pixelsToCentimeters(pixels){
  * @returns number
  */
 function fromPixels(text){
-    if(text!=null) try{ return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
+    if (text!=null) try{ return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
     catch (ex) { return text }
     else return 0;
 }
 
 function synchroniseDialogState(window){
     window = this || window;
-    if(window.x) window.target.style.left = toPixels(window.x);
-    if(window.y) window.target.style.top = toPixels(window.y);
-    if(window.z) window.target.style.zIndex = window.z;
-    if(window.width) window.target.style.width = toPixels(window.width);
-    if(window.height) window.target.style.height = toPixels(window.height);
+    if (window.x) window.target.style.left = toPixels(window.x);
+    if (window.y) window.target.style.top = toPixels(window.y);
+    if (window.z) window.target.style.zIndex = window.z;
+    if (window.width) window.target.style.width = toPixels(window.width);
+    if (window.height) window.target.style.height = toPixels(window.height);
 }
 
 // Onderdeel van de aller eerste window move event handler.
@@ -673,9 +673,9 @@ function handleStorageException(exception){
 }
 
 function saveDialogState(){
-    if(!loaded) return;
+    if (!loaded) return;
     console.log("Saving window state.");
-    if(canSave && localStorage) try {
+    if (canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) {
             if(windows[id]){
@@ -686,7 +686,7 @@ function saveDialogState(){
         }
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
-    } catch(exception) {
+    } catch (exception) {
         handleStorageException(exception);
     }
 }

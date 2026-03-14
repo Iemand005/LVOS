@@ -1,5 +1,9 @@
 {
   "recommendations": [
     "esbenp.prettier-vscode",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "VisualStudioExptTeam.vscodeintellicode-completions",
+    "dbaeumer.vscode-eslint",
+    "firefox-devtools.vscode-firefox-debug"
   ]
 }
