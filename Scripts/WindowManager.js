@@ -378,7 +378,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function () {
     // if (focusedDialog !== null) {
-        focusedDialog.focus();
+        this.focus();
     // }
     // this.target.setAttribute("focus");
     // focusedDialog = this;
