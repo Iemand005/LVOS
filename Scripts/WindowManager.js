@@ -54,7 +54,9 @@ function Dialog(object) {
     this._y = 0;
     this._width = 0;
     this._height = 0;
-    
+    this._isMinWidth = false;
+    this._isMinHeight = false;
+
     this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
@@ -86,7 +88,7 @@ function Dialog(object) {
         }
         this.frame = object.src;
         this.title = object.title;
-        this.id = this.setId(object.id || this.title);
+        this.id = object.id || this.title;
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
@@ -96,9 +98,7 @@ function Dialog(object) {
 
     
     this._title = object.title || this.getTitleElement().innerText;
-    this.id = object.id || this.getId() || this.title;
-    this._isMinWidth = false;
-    this._isMinHeight = false;
+    this.id = object.id || this.id || this.title;
     this.buttons = [];
     this.originalBody = this.body;
     this.originalFrame = this.frame;
@@ -123,12 +123,6 @@ function Dialog(object) {
     document.getElementById("applist").appendChild(this.createOpenButton());
     document.getElementById("metroapplist").appendChild(this.createOpenButton());
 
-    // this.verifyEjectCapability = function(){
-    //     //let canEject = false, e = 
-    //     return function(){try{return this.frame.contentDialog.document||this.frame.contentDocument!==null;}catch(e){return false}}();
-    //     //return canEject;
-    // }
-
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
@@ -142,16 +136,11 @@ function Dialog(object) {
     };
 
     if (object.body) this.body.appendChild(object.body);
-    // this.setTitle(this.title);//sun
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
-        console.log(this.id);
-        // log fart
-        // console.log(body);
         for (let index = 0; index < 8; index++) {
-            // console.log(target);
             const div = document.createElement("div");
             div.draggable = false, div.id = index + 1;
             const pointerDown = function (ev) {
@@ -184,7 +173,8 @@ function Dialog(object) {
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(this.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+        window.open(windows[dialog.id].href, windows[dialog.id].title, stringifyDialogProperties(propeties));
+        windows[dialog.id].quit();
     });
 
     const buttons = target.getElementsByTagName("button");
@@ -227,16 +217,11 @@ Dialog.prototype.initWithObject = function (object) {
 
     
     this._title = object.title || this.getTitleElement().innerText;
-    this.id = object.id || this.getId() || this.title;
+    this.id = object.id || this.id || this.title;
     this.z = 0;
-    // this.width = 200;
-    // this._width = 200;
-    // this.height = 100;
-    // this._height = 100;
     this.minWidth = 100;
     this.minHeight = 200;
-    this._isMinWidth = false;
-    this._isMinHeight = false;
+    
     this.buttons = [];
     this.originalBody = this.body;
     this.originalFrame = this.frame;
@@ -261,12 +246,6 @@ Dialog.prototype.initWithObject = function (object) {
     document.getElementById("applist").appendChild(this.createOpenButton());
     document.getElementById("metroapplist").appendChild(this.createOpenButton());
 
-    // this.verifyEjectCapability = function(){
-    //     //let canEject = false, e = 
-    //     return function(){try{return this.frame.contentDialog.document||this.frame.contentDocument!==null;}catch(e){return false}}();
-    //     //return canEject;
-    // }
-
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
@@ -275,7 +254,7 @@ Dialog.prototype.initWithObject = function (object) {
 
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
-    this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+    this.exchangeDialogMoveEvent = function (difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
         if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
     };
 
@@ -284,11 +263,7 @@ Dialog.prototype.initWithObject = function (object) {
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
-        console.log(this.id);
-        // log fart
-        // console.log(body);
         for (let index = 0; index < 8; index++) {
-            // console.log(target);
             const div = document.createElement("div");
             div.draggable = false, div.id = index + 1;
             const pointerDown = function (ev) {
@@ -451,7 +426,7 @@ Object.defineProperty(Dialog.prototype, "title", {
 });
 
 Object.defineProperty(Dialog.prototype, "id", {
-    get: function() { return this._id; },
+    get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
     set: function(id) {
         this._id = id;
         windows[id] = this;
@@ -473,12 +448,6 @@ Object.defineProperty(Dialog.prototype, "closeable", {
 
 Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
-// /**
-//  * @deprecated
-//  * @param {string} title 
-//  */
-// Dialog.prototype.setTitle = function (title) { return this.title = title; }
-// Dialog.prototype.getTitle = function () { return this.title; }
 Dialog.prototype.setId = function (id) { return this.id = id; }
 Dialog.prototype.getId = function () { return this.id; }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
@@ -492,9 +461,7 @@ Dialog.prototype.setClickOffset = function (x, y) {
     const rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
-Dialog.prototype.verifyEjectCapability = function () {
-    return !!(this.href);
-};
+Dialog.prototype.verifyEjectCapability = function () {return !!(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
     if (!this.application) return false;
     return this.application.src;
