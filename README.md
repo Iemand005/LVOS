@@ -1,4 +1,4 @@
 # LVOS
 
 Web OS
-[Open](https://github.com/Iemand005/LVOS)
+[Open](https://iemand005.github.io/LVOS/)
