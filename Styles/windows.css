@@ -272,6 +272,7 @@ article{
     transform-origin: center;
     background:     linear-gradient(0deg, #0000002b, #ffffff00);
     box-shadow: 0 1rem 6rem #000000a8;
+    backdrop-filter: blur(1rem);
 }
 
 .window[open] > content {
