@@ -61,11 +61,6 @@ function Dialog(object) {
     this.minWidth = 100;
     this.minHeight = 200;
 
-    // this.closeable = false;
-
-    // /** @type {string?} */
-    // this.href = null;
-    
     if (!object) return;
     const dialog = this;
 
@@ -197,8 +192,6 @@ Dialog.prototype.initWithObject = function (object) {
     if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
     else this.target.addEventListener("mousedown", windowActivationEvent);
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        // const dialogElement = getEventDialog(event);
-        // const dialog = windows[dialogElement.id];
         const rect = target.getClientRects()[0];
         const viewboxPosition = getViewboxPosition();
         const propeties = {
@@ -369,19 +362,13 @@ Object.defineProperty(Dialog.prototype, "closeable", {
 /** @type {Dialog} */
 let focusedDialog = null;
 Dialog.prototype.focus = function() {
-    if (focusedDialog !== null) {
+    if (focusedDialog !== null)
         focusedDialog.target.removeAttribute("focus");
-        console.log("removed focus from", focusedDialog.title);
-    }
     if (this.target) this.target.setAttribute("focus", true);
     focusedDialog = this;
 }
 Dialog.prototype.activate = function () {
-    // if (focusedDialog !== null) {
-        this.focus();
-    // }
-    // this.target.setAttribute("focus");
-    // focusedDialog = this;
+    this.focus();
     return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this);
 
 }
