@@ -151,7 +151,7 @@ main {
     font-size: 15px;
 }
 
-.window > content{
+.window > content {
     display: flex;
     flex-direction: column;
     pointer-events: none;
@@ -167,13 +167,16 @@ main {
     color: black;
 }
 
-.window[focus]{
-    filter: hue-rotate(10);
+.window > content {
     transition: filter 0.2s ease-in-out;
 }
 
-.window:not([focus]) {
-    filter: hue-rotate(100.1);
+.window[focus] > content {
+    filter: saturate(1);
+}
+
+.window:not([focus]) > content {
+    filter: saturate(0.6);
 }
 
 iframe{
