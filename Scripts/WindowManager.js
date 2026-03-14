@@ -243,7 +243,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) { this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get: function() { return this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
+    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
     set: function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
