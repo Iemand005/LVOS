@@ -236,9 +236,12 @@ Graphics.prototype.startRendering = function () {
 };
 
 Graphics.prototype.resize = function (width, height) {
-  this.canvas.width = width;
-  this.canvas.height = height;
+  const dpr = window.devicePixelRatio || 1;
+  this.canvas.width = width * dpr;
+  this.canvas.height = height * dpr;
   this.gl.viewport(0, 0, width, height);
+  // ctx.scale(dpr, dpr);
+  this.gl.scalef(dpr, dpr);
 };
 
 // export { drawScene };
@@ -319,13 +322,6 @@ const indices = [
   16, 17, 18, 16, 18, 19,   // right
   20, 21, 22, 20, 22, 23   // left
 ];
-
-// Now send the element array to GL
-
-// if (!this.buffers) return;
-
-// ith this code:
-// js
 
 const faceColors = [
   [1.0, 1.0, 1.0, 1.0], // Front face: white
