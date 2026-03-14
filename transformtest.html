@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Forces IE to use the latest rendering engine -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IE11 Transform Test</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            margin: 50px auto;
+            width: 200px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        /* The Box to Transform */
+        .box {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            background-color: #0078d7; /* Classic IE Blue */
+            color: white;
+            line-height: 100px;
+            font-weight: bold;
+            
+            /* IE9 fallback */
+            -ms-transform: rotate(15deg) translate(20px, 0);
+            /* IE10, IE11, and modern browsers */
+            transform: rotate(15deg) translate(20px, 0);
+            
+            /* Basic transition for hover effect */
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            -ms-transform: rotate(0deg) scale(1.1);
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .status-note {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Internet Explorer 11 Transform Showcase</h1>
+
+    <div class="container">
+        <div class="box">IE11</div>
+    </div>
+
+    <div class="status-note">
+        <p><strong>Testing Guide:</strong></p>
+        <p>If the blue box is tilted and moved to the right, your <strong>transform</strong> is working.</p>
+        <p>Hover over the box; it should straighten and grow slightly.</p>
+    </div>
+
+</body>
+</html>

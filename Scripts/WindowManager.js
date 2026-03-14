@@ -238,6 +238,8 @@ Object.defineProperty(Dialog.prototype, "x", {
      } }
 });
 
+const myThingie = document.
+
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) { if (typeof y == "number") this.target.style.top = toPixels(this._y = max(y, 0)); }
