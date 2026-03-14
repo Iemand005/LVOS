@@ -61,8 +61,8 @@ function Dialog(object) {
 
     // this.closeable = false;
 
-    /** @type {string?} */
-    this.href = null;
+    // /** @type {string?} */
+    // this.href = null;
     
     if (!object) return;
     const dialog = this;
@@ -184,7 +184,7 @@ function Dialog(object) {
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+        window.open(this.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
     });
 
     const buttons = target.getElementsByTagName("button");
@@ -321,7 +321,7 @@ Dialog.prototype.initWithObject = function (object) {
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+        window.open(this.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
     });
 
     const buttons = target.getElementsByTagName("button");
@@ -493,13 +493,12 @@ Dialog.prototype.setClickOffset = function (x, y) {
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function () {
-    try {
-        return this.frame.contentDialog.document || this.frame.contentDocument !== null;
-    } catch (e) {
-        console.error("Failed to uh eject button", e);
-        return false;
-    }
+    return !!(this.href);
 };
+Object.defineProperty(Dialog.prototype, "href", { get: function () {
+    if (!this.application) return false;
+    return this.application.src;
+}});
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
     const events = enable ? "auto" : "none";
