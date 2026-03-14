@@ -260,12 +260,12 @@ Object.defineProperty(Dialog.prototype, "x", {
         if (useTransform) {
             this.move(this._x, this._y);
             this.target.style.left = "0px";
-        }else
-        this.target.style.left = toPixels(this._x);
+        } else {
+            this.target.style.left = toPixels(this._x);
+            this.target.style.transform = "none";
+        }
      } }
 });
-
-// const myThingie = document.
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
@@ -273,22 +273,23 @@ Object.defineProperty(Dialog.prototype, "y", {
         if (typeof y !== "number") return;
         this._y = max(y, 0)
         if (useTransform) {
-                this.move(this._x, this._y);
-                this.target.style.top = "0px";
-            } else {
-                this.target.style.top = toPixels(this._y);;
-            }
+            this.move(this._x, this._y);
+            this.target.style.top = "0px";
+        } else {
+            this.target.style.top = toPixels(this._y);
+            this.target.style.transform = "none";
         }
-    });
+    }'
+});
     
-    Object.defineProperty(Dialog.prototype, "width", {
-        get: function() { return this._width; },
-        set: function(width) {
-            if (typeof width !== "number") return;
-                this.target.style.width = toPixels(this._width = max(width, this.minWidth));
-            
-            this._isMinWidth = this._width === this.minWidth;
-        }
+Object.defineProperty(Dialog.prototype, "width", {
+    get: function() { return this._width; },
+    set: function(width) {
+        if (typeof width !== "number") return;
+            this.target.style.width = toPixels(this._width = max(width, this.minWidth));
+        
+        this._isMinWidth = this._width === this.minWidth;
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
