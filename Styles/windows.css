@@ -51,7 +51,6 @@ main{
 
 .window{
     border-radius: 5px;
-    box-shadow: 0 1rem 6rem #000000a8;
     background-color: rgba(255, 255, 255, 255);
     -o-transform-origin: bottom left;
     -ms-transform-origin: bottom left;
@@ -265,19 +264,21 @@ article{
 
 .window[open]{
     pointer-events: auto;
-    backdrop-filter: blur(10px);
-    background:     linear-gradient(0deg, #0000002b, #ffffff00);
+    /* backdrop-filter: blur(10px); */
+    
 }
 
 .window > content {
     transform-origin: center;
+    background:     linear-gradient(0deg, #0000002b, #ffffff00);
+    box-shadow: 0 1rem 6rem #000000a8;
 }
 
-.widnow[open] > content {
+.window[open] > content {
     animation: opening 500ms ease-out forwards;
 }
 
-.widnow:not([open]) > content {
+.window:not([open]) > content {
     animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
 }
 
