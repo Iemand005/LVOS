@@ -392,17 +392,7 @@ button:hover{
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
     body[blur] .window > content{
         background-color: rgba(255, 255, 255, 0.267);
-    }
-}
-
-@supports (-webkit-backdrop-filter: none) {
-    body[blur] .window > content{ /* Moving the blur from the .window to the content to work around graphical bug in EdgeHTML 18 */
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
-    }
-}
-
-@supports (backdrop-filter: none){
-    body[blur] .window > content{
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
 }

@@ -83,7 +83,7 @@ function Dialog(object) {
     }
 
     
-    this.title = object.title || this.getTitle();
+    this._title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
     this.z = 0;
     this.width = 200;
@@ -303,6 +303,11 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return this._isMinWidth; }});
 Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { return this._isMinHeight; } });
 
+Object.defineProperty(Dialog.prototype, "title", {
+    get: function() { try { return this.getTitleElement().innerText } finally { return this._title; } },
+    set: function(title) { this.getTitleElement().innerText = this._title = title; }
+});
+
 Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
         /** @type {HTMLElement} */
@@ -312,9 +317,13 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
-Dialog.prototype.setTitle = function (title) { return this.getTitleElement().innerText = title; }
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
-Dialog.prototype.getTitle = function () { return this.getTitleElement().innerText; }
+/**
+ * @deprecated
+ * @param {string} title 
+ */
+Dialog.prototype.setTitle = function (title) { return this.title = title; }
+Dialog.prototype.getTitle = function () { return this.title; }
 Dialog.prototype.setId = function (id) { return windows[id] = this, this.target.setAttribute("id", id); }
 Dialog.prototype.getId = function () { return this.target.getAttribute("id"); }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
