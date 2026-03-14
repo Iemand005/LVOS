@@ -231,6 +231,7 @@ Object.defineProperty(Dialog.prototype, "x", {
         if (useTransform) {
             
             this.target.style.transform = "translateX(" + leftPixels + ")" ;
+            this.target.style.msTransform = "translateX(" + leftPixels + ")" ;
             this.target.style.left = "0px";
         }else
         this.target.style.left = leftPixels;
@@ -313,7 +314,10 @@ Dialog.prototype.getInnerRect = function () { return { top: this.target.offsetTo
 Dialog.prototype.getRect = function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
 Dialog.prototype.getButton = function (index) { return this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.open.bind(this), this.buttons[0] }
-Dialog.prototype.setClickOffset = function (x, y) { return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || this.target.offsetHeight, this.clickOffset.width = window.width || this.target.offsetWidth, this.clickOffset.top = this.target.offsetTop, this.clickOffset.left = this.target.offsetLeft, this.clickOffset.stats.reset(); }
+Dialog.prototype.setClickOffset = function (x, y) {
+    const rect = this.getRect();
+    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
+}
 Dialog.prototype.verifyEjectCapability = function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); }
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
