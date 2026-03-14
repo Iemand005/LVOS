@@ -66,14 +66,14 @@ function Dialog(object) {
         console.log(this.target.parentElement.nodeName === "TEMPLATE");
         if (this.target.parentElement.nodeName === "TEMPLATE") return;
         // this.title = object;
-        this.title = object.title;
+        // this.title = object.title;
     } else {
         this.target = createDialog();
         if (typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
         }
         this.frame = object.src;
-        this.title = this.setTitle(object.title);
+        this.title = object.title;
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
@@ -83,7 +83,7 @@ function Dialog(object) {
     }
 
     
-    this._title = object.title || this.getTitle();
+    this._title = object.title || this.getTitleElement().innerText;
     this.id = object.id || this.getId() || this.title;
     this.z = 0;
     this.width = 200;
@@ -304,8 +304,17 @@ Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return
 Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { return this._isMinHeight; } });
 
 Object.defineProperty(Dialog.prototype, "title", {
-    get: function() { try { return this.getTitleElement().innerText } finally { return this._title; } },
+    get: function() { return this._title; },
     set: function(title) { this.getTitleElement().innerText = this._title = title; }
+});
+
+Object.defineProperty(Dialog.prototype, "id", {
+    get: function() { return this._id; },
+    set: function(id) {
+        this._id = id;
+        windows[id] = this;
+        this.target.setAttribute("id", id);
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
@@ -324,8 +333,8 @@ Dialog.prototype.getTitleElement = function () { return this.head.querySelector(
  */
 Dialog.prototype.setTitle = function (title) { return this.title = title; }
 Dialog.prototype.getTitle = function () { return this.title; }
-Dialog.prototype.setId = function (id) { return windows[id] = this, this.target.setAttribute("id", id); }
-Dialog.prototype.getId = function () { return this.target.getAttribute("id"); }
+Dialog.prototype.setId = function (id) { return this.id = id; }
+Dialog.prototype.getId = function () { return this.id; }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
 Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
 Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
@@ -374,6 +383,20 @@ Dialog.prototype.openUrl = function (url) {
 Dialog.prototype.quit = function () { this.target.parentElement.removeChild(this.target); };
 Dialog.prototype.launch = function () {
     this.target = this.target = createDialog();
+    if(borderSection && !this.fixed) {
+        console.log(this.id);
+        for (let index = 0; index < 8; index++) {
+            const div = document.createElement("div");
+            div.draggable = false,
+            div.id = index + 1;
+            const pointerDown = function (ev) {
+                dragAction.set(ev.target.id);
+            };
+            if (supportsPointer) div.onpointerdown = pointerDown;
+            else div.onmousedown = pointerDown;
+            target.appendChild(div);
+        }
+    }
 }
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
