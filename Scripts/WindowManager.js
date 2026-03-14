@@ -228,7 +228,6 @@ Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") {
         this._x = max(x, 0)
-        console.log("Pixes:", leftPixels);
         if (useTransform) {
             this.move(this._x, this._y);
             this.target.style.left = "0px";
