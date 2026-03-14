@@ -77,28 +77,13 @@ function Dialog(object) {
         this.target = object;
         console.log(this.target.parentElement.nodeName === "TEMPLATE");
         if (this.target.parentElement.nodeName === "TEMPLATE") return;
-        // this.title = object;
-        // this.title = object.title;
     } else {
         /** @type {Application} */
         this.application = object;
-        // this.target = createDialog();
-        // if (typeof object.classes === 'object'){
-        //     object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
-        // }
-        // this.frame = object.src;
-        // this.title = object.title;
-        // this.id = object.id || this.title;
-        // this.fixed = object.fixed;
-        // this.scroll = object.scroll;
-        // if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-
-        // this.moveEvents = object.moveEvents || false;
     }
-
     
     this._title = object.title || this.getTitleElement().innerText;
-    // this.id = object.id || this.id || this.title;
+    this._id = object.id || this.id || this.title;
     this.buttons = [];
     this.originalBody = this.body;
     this.clickOffset = {
@@ -440,26 +425,7 @@ Dialog.prototype.quit = function () {
     else this.close();
  };
 Dialog.prototype.launch = function () {
-    // this.target = this.target = createDialog();
-    // const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
-    // if(borderSection && !this.fixed) {
-    //     console.log(this.id);
-    //     for (let index = 0; index < 8; index++) {
-    //         const div = document.createElement("div");
-    //         div.draggable = false,
-    //         div.id = index + 1;
-    //         const pointerDown = function (ev) {
-    //             dragAction.set(ev.target.id);
-    //         };
-    //         if (supportsPointer) div.onpointerdown = pointerDown;
-    //         else div.onmousedown = pointerDown;
-    //         target.appendChild(div);
-    //     }
-    // }
-
     if (!this.target) this.initWithObject(this.application);
-
-    
 
     this.open();
 }
