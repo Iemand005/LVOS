@@ -54,6 +54,8 @@ function Dialog(object) {
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
         this.target = object;
+        console.log(this.target.parentElement.nodeName === "TEMPLATE");
+        if (this.target.parentElement.nodeName === "TEMPLATE") return;
         // this.title = object;
         this.title = object.title;
     } else {
@@ -71,7 +73,6 @@ function Dialog(object) {
         this.moveEvents = object.moveEvents || false;
     }
 
-    console.log(this.target.parentElement);
     
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
@@ -299,7 +300,12 @@ Dialog.prototype.setClickOffset = function (x, y) { return this.clickOffset.x = 
 Dialog.prototype.verifyEjectCapability = function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); }
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
-    return this.target.style.pointerEvents = this.originalBody.style.pointerEvents = (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
+    const events = enable ? "auto" : "none";
+    if (this.target) this.target.style.pointerEvents = events;
+    if (this.originalBody) this.originalBody.style.pointerEvents = events;
+    if (this.frame || this.getFrame()) (this.frame || this.getFrame()).style.pointerEvents = events;
+    return events;
+    // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
 Dialog.prototype.toggleButton = function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); }
 Dialog.prototype.clearClickOffset = function () { this.clickOffset.clear(); }
