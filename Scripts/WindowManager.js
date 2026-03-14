@@ -245,16 +245,14 @@ Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) {
         if (typeof y !== "number") return;
-        const pixels = toPixels(this._y = max(y, 0));
-
         if (useTransform) {
                 // this.target.style.transform = "translate(" + pixels + ")" ;
-                this.move(this.x, this.y);
+                this.move(this._x, this._y);
                 this.target.style.top = "0px";
 
             } else {
 
-                this.target.style.top = pixels;
+                this.target.style.top = toPixels(this._y = max(y, 0));;
             }
         }
     });
@@ -353,9 +351,11 @@ Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windo
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); }
 Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); }
 Dialog.prototype.move = function (x, y) {
-    this._x = x, this._y = y;
     if (useTransform) {
+        this._x = x, this._y = y;
         this.target.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    } else {
+        this.x = x, this.y = y;
     }
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
