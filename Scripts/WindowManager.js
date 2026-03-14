@@ -21,10 +21,10 @@ let // Defining the default settings as let so we can modify them.
     canSave = true,
     IE11Booster = true,
     loadingOverlay = true,
-    flipped = false;
+    flipped = false,
+    useTransform = true;
 
 const supportsPointer = typeof PointerEvent !== "undefined";
-const useTransform = true;
 
 if (supportsPointer) console.log("Supports pointer events!");
 
@@ -120,72 +120,6 @@ function Dialog(object) {
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     document.getElementById("applist").appendChild(this.createOpenButton());
     document.getElementById("metroapplist").appendChild(this.createOpenButton());
-
-    // this.toggleCloseButton(true);
-    // this.toggleFullButton(true);
-    // if (this.verifyEjectCapability()) this.toggleEjectButton(true);
-
-    // this.synchronise = synchroniseDialogState.bind(this);
-
-    // this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
-
-    // this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-    //     if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
-    // };
-
-    // if (object.body) this.body.appendChild(object.body);
-
-    // const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
-
-    // if(borderSection && !this.fixed) {
-    //     for (let index = 0; index < 8; index++) {
-    //         const div = document.createElement("div");
-    //         div.draggable = false, div.id = index + 1;
-    //         const pointerDown = function (ev) {
-    //             dragAction.set(ev.target.id);
-    //         }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-    //         if (supportsPointer) div.onpointerdown = pointerDown;
-    //         else div.onmousedown = pointerDown;
-    //         target.appendChild(div);
-    //     }
-    // }
-
-    // body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
-    
-    // if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
-    // else this.target.addEventListener("mousedown", windowActivationEvent);
-    // this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-    //     const dialog = getEventDialog(event)
-    //     const rect = target.getClientRects()[0];
-    //     const viewboxPosition = getViewboxPosition();
-    //     const propeties = {
-    //         scrollbars: true,
-    //         resizable: true,
-    //         status: false,
-    //         location: false,
-    //         toolbar: false,
-    //         menubar: false,
-    //         width: rect.width,
-    //         height: rect.height,
-    //         left: rect.left + viewboxPosition.left,
-    //         top: rect.top + viewboxPosition.top
-    //     }
-
-    //     window.open(windows[dialog.id].href, windows[dialog.id].title, stringifyDialogProperties(propeties));
-    //     windows[dialog.id].quit();
-    // });
-
-    // const buttons = target.getElementsByTagName("button");
-    // buttons[windowButtons.close].addEventListener("click", function () {
-    //     dialog.close();
-    // }.bind(dialog));
-    // buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
-    // this.close();
-
-    // this.synchronise();
-
-    // windows[this.id] = this;
-
     this.initWithObject(object);
 }
 
