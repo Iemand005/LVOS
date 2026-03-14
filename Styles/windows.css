@@ -168,12 +168,12 @@ main {
 }
 
 .window[focus]{
-    filter: blur(0px);
-    transition: all 0.2s linear;
+    filter: hue-rotate(10);
+    transition: filter 0.2s ease-in-out;
 }
 
 .window:not([focus]) {
-    filter: blur(10px);
+    filter: hue-rotate(100.1);
 }
 
 iframe{
