@@ -32,7 +32,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
+      - name: Initialize public submodules only
+        run: |
+          git submodule sync
+          git submodule update --init Applications/FrostedColours
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
