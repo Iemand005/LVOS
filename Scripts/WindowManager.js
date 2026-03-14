@@ -30,6 +30,10 @@ function isDialog(element) {
     return element && element.classList && element.classList.contains("window");
 }
 
+function titlify(title) {
+    return title;
+}
+
 /**
  * @typedef {import('./ProvisionedApps.js').Application} Application
  */
@@ -66,6 +70,8 @@ function Dialog(object) {
 
         this.moveEvents = object.moveEvents || false;
     }
+
+    console.log(this.target.parentElement);
     
     this.title = object.title || this.getTitle();
     this.id = object.id || this.getId() || this.title;
@@ -127,14 +133,21 @@ function Dialog(object) {
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
-    if(borderSection && !this.fixed) for (let index = 0; index < 8; index++) {
-        const div = target.appendChild(document.createElement("div"));
-        div.draggable = false, div.id = index + 1;
-        const pointerDown = function (ev) {
-            dragAction.set(ev.target.id);
-        }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-        if (div.onpointerdown) div.onpointerdown = pointerDown;
-        else div.onmousedown = pointerDown;
+    if(borderSection && !this.fixed) {
+        console.log(this.id);
+        // log fart
+        // console.log(body);
+        for (let index = 0; index < 8; index++) {
+            console.log(target);
+            const div = document.createElement("div");
+            div.draggable = false, div.id = index + 1;
+            const pointerDown = function (ev) {
+                dragAction.set(ev.target.id);
+            }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+            if (div.onpointerdown) div.onpointerdown = pointerDown;
+            else div.onmousedown = pointerDown;
+            target.appendChild(div);
+        }
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
