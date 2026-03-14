@@ -338,13 +338,13 @@ Dialog.prototype.togglePointerEvents = function (enable) {
     return events;
     // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
-Dialog.prototype.toggleButton = function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); }
-Dialog.prototype.clearClickOffset = function () { this.clickOffset.clear(); }
-Dialog.prototype.toggleFullScreen = function (enable) { this.target.toggleAttribute("full", enable); }
-Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windowButtons.close, enable); }
-Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); }
-Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); }
-Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); }
+Dialog.prototype.toggleButton = function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); };
+Dialog.prototype.clearClickOffset = function () { this.clickOffset.clear(); };
+Dialog.prototype.toggleFullScreen = function (enable) { this.target.toggleAttribute("full", enable); };
+Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windowButtons.close, enable); };
+Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); };
+Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
+Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); };
 Dialog.prototype.move = function (x, y) {
     if (useTransform) {
         this._x = x, this._y = y;
@@ -360,7 +360,10 @@ Dialog.prototype.openUrl = function (url) {
     frameUrl.searchParams.set("url", url);
     this.frame.src = frameUrl.href;
     this.launch();
-},
+};
+
+Dialog.prototype.quit = function () { this.target.parentElement.removeChild(this.target); };
+
 Object.defineProperty(Dialog.prototype, "borderSize", {
     set: function (value) {
         this.content.style.padding = toPixels(value);
