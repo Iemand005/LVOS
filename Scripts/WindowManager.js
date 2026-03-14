@@ -59,7 +59,10 @@ function Dialog(object) {
     this.minWidth = 100;
     this.minHeight = 200;
 
-    this.cloasble = false;
+    // this.closeable = false;
+
+    /** @type {string?} */
+    this.href = null;
     
     if (!object) return;
     const dialog = this;
@@ -139,7 +142,7 @@ function Dialog(object) {
     };
 
     if (object.body) this.body.appendChild(object.body);
-    this.setTitle(this.title);//sun
+    // this.setTitle(this.title);//sun
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
@@ -160,7 +163,7 @@ function Dialog(object) {
         }
     }
 
-    body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
+    // body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
     if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
     else this.target.addEventListener("mousedown", windowActivationEvent);
@@ -207,7 +210,7 @@ Dialog.prototype.initWithObject = function (object) {
     } else {
         /** @type {Application} */
         this.application = object;
-        this.cloasble = true;
+        // this.closeable = true;
         this.target = createDialog();
         if (typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
@@ -277,7 +280,6 @@ Dialog.prototype.initWithObject = function (object) {
     };
 
     if (object.body) this.body.appendChild(object.body);
-    this.setTitle(this.title);//sun
 
     const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
@@ -465,14 +467,18 @@ Object.defineProperty(Dialog.prototype, "content", {
     }
 });
 
+Object.defineProperty(Dialog.prototype, "closeable", {
+    get: function() { return this.application != null; }
+});
+
 Dialog.prototype.activate = function () { return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this); }
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
-/**
- * @deprecated
- * @param {string} title 
- */
-Dialog.prototype.setTitle = function (title) { return this.title = title; }
-Dialog.prototype.getTitle = function () { return this.title; }
+// /**
+//  * @deprecated
+//  * @param {string} title 
+//  */
+// Dialog.prototype.setTitle = function (title) { return this.title = title; }
+// Dialog.prototype.getTitle = function () { return this.title; }
 Dialog.prototype.setId = function (id) { return this.id = id; }
 Dialog.prototype.getId = function () { return this.id; }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
@@ -486,7 +492,14 @@ Dialog.prototype.setClickOffset = function (x, y) {
     const rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
-Dialog.prototype.verifyEjectCapability = function () { return function () { try { return this.frame.contentDialog.document || this.frame.contentDocument !== null; } catch (e) { return false } }(); }
+Dialog.prototype.verifyEjectCapability = function () {
+    try {
+        return this.frame.contentDialog.document || this.frame.contentDocument !== null;
+    } catch (e) {
+        console.error("Failed to uh eject button", e);
+        return false;
+    }
+};
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
     const events = enable ? "auto" : "none";
@@ -520,7 +533,9 @@ Dialog.prototype.openUrl = function (url) {
     this.launch();
 };
 
-Dialog.prototype.quit = function () { this.target.parentElement.removeChild(this.target); };
+Dialog.prototype.quit = function () { if (this.closeable) this.target.parentElement.removeChild(this.target);
+    else this.close();
+ };
 Dialog.prototype.launch = function () {
     // this.target = this.target = createDialog();
     // const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
@@ -875,12 +890,13 @@ function contains(array, number){
     return Boolean(array.indexOf(number) + 1);
 }
 
+/**
+ * @param {Dialog} dialog 
+ * @deprecated
+ */
 function verifyEjectCapability(dialog){
-    try {
-        if (dialog.getElementsByTagName("iframe")[0].contentDialog.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
-    } catch (exception){
-        dialog.getElementsByTagName("button")[0].style.display = "none";
-    }
+    if (!dialog) return false;
+    dialog.verifyEjectCapability();
 }
 
 function toggleBlur(enabled){ // Does not work on Chrome!
