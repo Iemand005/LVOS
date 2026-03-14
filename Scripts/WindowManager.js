@@ -24,6 +24,7 @@ let // Defining the default settings as let so we can modify them.
     flipped = false;
 
 const supportsPointer = typeof PointerEvent !== "undefined";
+const useTransform = true;
 
 if (supportsPointer) console.log("Supports pointer events!");
 
@@ -223,7 +224,16 @@ Object.defineProperty(Dialog.prototype, "head", {
 
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
-    set: function(x) { if (typeof x == "number") this.target.style.left = toPixels(this._x = max(x, 0)); }
+    set: function(x) { if (typeof x == "number") {
+        const leftPixels = toPixels(this._x = max(x, 0));
+        console.log("Pixes:", leftPixels);
+        if (useTransform) {
+            
+            this.target.style.transform = "translateX(" + leftPixels + ")" ;
+            this.target.style.left = "0px";
+        }else
+        this.target.style.left = toPixels(this._x = max(x, 0));
+     } }
 });
 
 Object.defineProperty(Dialog.prototype, "y", {
@@ -320,8 +330,8 @@ Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windo
 Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); }
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); }
 Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); }
-Dialog.prototype.move = function (x, y) { this.target.style.left = (this.x = x) + "px", this.target.style.top = (this.y = y) + "px"; }
-Dialog.prototype.resize = function (width, height) { this.target.style.width = (this.width = width) + "px", this.target.style.height = (this.height = height) + "px", this.target.style.boxSizing = "border-box"; }
+Dialog.prototype.move = function (x, y) { this.x = x, this.y = y; }
+Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
 Dialog.prototype.openUrl = function (url) {
     const frameUrl = new URL(this.frame.src);
@@ -539,7 +549,7 @@ function windowDragEvent(event){
 
         dragAction.execute(dialog, dialog.clickOffset, difference);
 
-        console.log("moving")
+        // console.log("moving")
         
         if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
     } catch (ex) {
