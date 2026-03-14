@@ -501,7 +501,7 @@ function initializeDialogs() {
     
     dragAction.set(0);
     const dialogs = bodyCrawler.getAllDialogs();
-    dialogs.forEach(function(dialog){
+    dialogs.forEach(function (dialog) {
         windows[dialog.id] = new Dialog(dialog); 
     });
     //flip();
@@ -570,11 +570,11 @@ function disableDialogDrag() {
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for(let index in windows) windows[index].togglePointerEvents(false);
+    for (let index in windows) windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ() {
-    for(let window in windows) if(windows[window].z > topZ) topZ = windows[window].z;
+    for (let window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
 }
 
 function stringifyDialogProperties(properties){
@@ -599,8 +599,8 @@ function getViewboxPosition(){
  */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object.classList) return console.log(object);
-    if(["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object.classList && object.classList.contains("window"))) return object;
-    else if(object.target) return getObjectDialog(object.target);
+    if (["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object.classList && object.classList.contains("window"))) return object;
+    else if (object.target) return getObjectDialog(object.target);
     else return getObjectDialog(object.parentElement);
 }
 
@@ -610,7 +610,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterDialogTracking && event.clientX && event.clientY) try {
-        const window = document.elementsFromPoint(event.clientX, event.clientY).find(function(element){ return element.classList && element.classList.contains("window") });
+        const window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return element.classList && element.classList.contains("window") });
         return window;
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
@@ -637,7 +637,7 @@ function pixelsToCentimeters(pixels){
  * @returns number
  */
 function fromPixels(text){
-    if (text!=null) try{ return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
+    if (text != null) try { return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
     catch (ex) { return text }
     else return 0;
 }
@@ -658,7 +658,7 @@ function contains(array, number){
 
 function verifyEjectCapability(dialog){
     try {
-        if(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
+        if (dialog.getElementsByTagName("iframe")[0].contentDialog.location.href == null) dialog.getElementsByTagName("button")[0].style.display = "none";
     } catch (exception){
         dialog.getElementsByTagName("button")[0].style.display = "none";
     }
@@ -688,7 +688,7 @@ function saveDialogState(){
     if (canSave && localStorage) try {
         const windowState = {};
         for (let id in windows) {
-            if(windows[id]){
+            if (windows[id]){
                 windows[id].width = windows[id].target.clientWidth;
                 windows[id].height = windows[id].target.clientHeight;
                 windowState[id] = collectEssentialDialogData({}, windows[id]);
@@ -704,7 +704,7 @@ function saveDialogState(){
 function loadDialogState(){
     console.log("Loading window state.")
     if (canSave) try {
-        if(localStorage && localStorage.windowState){
+        if (localStorage && localStorage.windowState){
             const parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
             for (let window in parsedDialogs) try {
                 if (windows[window] && parsedDialogs[window]) collectEssentialDialogData(windows[window], parsedDialogs[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
@@ -740,7 +740,7 @@ function DialogBuilder(title, id){
     this.title = title;
     this.id = id;
     this.target;
-    this.createDialog = function() { return this.target = bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
+    this.createDialog = function () { return this.target = bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
 }
 
 function createDialog(){
@@ -748,7 +748,7 @@ function createDialog(){
 }
 
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
-    element.childNodes.forEach(function(child){
+    element.childNodes.forEach(function (child) {
         if (child.nodeName=="#comment") element.removeChild(child);
         else removeComments(child);
     });

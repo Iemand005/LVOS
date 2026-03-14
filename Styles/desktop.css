@@ -2,8 +2,8 @@
       /*/*
      /* *
      * *
-    * *     Desktop designs by Lasse
-    * *     Module 2 - 12/1/2024
+    * *     Desktop designs by Lasse (c) 2026
+    * *     LVOS - 12/1/2024
      * *
        * *
          * *
@@ -17,7 +17,8 @@
 html,
 body {
   margin: 0;
-  touch-action: none; 
+  touch-action: none;
+  overscroll-behavior: none;
 }
 #dock {
   position: absolute;
