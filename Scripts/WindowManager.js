@@ -225,14 +225,15 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") {
-        const leftPixels = toPixels(this._x = max(x, 0));
+        this._x = max(x, 0);
+        const leftPixels = toPixels(this._x);
         console.log("Pixes:", leftPixels);
         if (useTransform) {
             
             this.target.style.transform = "translateX(" + leftPixels + ")" ;
             this.target.style.left = "0px";
         }else
-        this.target.style.left = toPixels(this._x = max(x, 0));
+        this.target.style.left = leftPixels;
      } }
 });
 
