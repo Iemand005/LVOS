@@ -1,7 +1,7 @@
 
 /* General */
 
-html, body{
+html, body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100%;
@@ -10,23 +10,22 @@ html, body{
     transition: all 1s;
 }
 
-body > header, body > footer, header.hidden{
+body > header, body > footer, header.hidden {
     display: none;
 }
 
-html, body, main, main > section, main > section > section{
+html, body, main, main > section, main > section > section {
     overflow: hidden;
 }
 
-body{
+body {
     pointer-events: none;
-    /* transform: rotateY(180deg); */
     perspective: 1000px;
     background-color: black;
     background: radial-gradient(#333, black);
 }
 
-.window *, #desktop, #desktop img{
+.window *, #desktop, #desktop img {
     -moz-user-select: none;
     -moz-user-drag: none;
     -webkit-user-select: none;
@@ -41,7 +40,7 @@ body{
 
 /* Main */
 
-main{
+main {
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -49,7 +48,7 @@ main{
     perspective: 1000px;
 }
 
-.window{
+.window {
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 255);
     -o-transform-origin: bottom left;
@@ -73,7 +72,7 @@ main{
     color: black;
 }
 
-.window header{
+.window header {
     margin: 0;
     /*display: flex;*/
     pointer-events: none !important;

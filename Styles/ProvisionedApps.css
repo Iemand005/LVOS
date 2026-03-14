@@ -6,11 +6,11 @@
  *
 */
 
-form#applist{
+form#applist {
     flex-wrap: wrap;
 }
 
-form{
+form {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -25,7 +25,7 @@ form{
     height: 100%;
 }
 
-table{
+table {
     width: 100%;
 }
 
