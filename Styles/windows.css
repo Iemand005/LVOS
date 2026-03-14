@@ -277,8 +277,6 @@ article{
 
 .window[open]{
     pointer-events: auto;
-    /* backdrop-filter: blur(10px); */
-    
 }
 
 .window > content {
