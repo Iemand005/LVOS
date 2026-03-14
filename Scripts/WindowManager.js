@@ -353,16 +353,19 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
     this.resizeFunctions = [
         function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y },
         function(dialog, offset, difference){ 
-            // dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y
             dialog.top = offset.top + difference.y
          }, // Top?
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Rght
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Botom
         function(dialog, offset, difference){
-            // dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x;
             dialog.left = offset.left + difference.x;
          }, // Left
-        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },
+        function(dialog, offset, difference){
+            // dialog.x = offset.left + difference.x, dialog.width = offset.width - difference.x,
+            // dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y
+            dialog.top = offset.top + difference.y;
+            dialog.left = offset.left + difference.x;
+         }, // Top Left
         function(dialog, offset, difference){
             dialog.width = offset.width + difference.x,
             dialog.height = offset.height - difference.y
