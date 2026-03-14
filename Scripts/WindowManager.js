@@ -82,27 +82,25 @@ function Dialog(object) {
     } else {
         /** @type {Application} */
         this.application = object;
-        this.target = createDialog();
-        if (typeof object.classes === 'object'){
-            object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
-        }
-        this.frame = object.src;
-        this.title = object.title;
-        this.id = object.id || this.title;
-        this.fixed = object.fixed;
-        this.scroll = object.scroll;
-        if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+        // this.target = createDialog();
+        // if (typeof object.classes === 'object'){
+        //     object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
+        // }
+        // this.frame = object.src;
+        // this.title = object.title;
+        // this.id = object.id || this.title;
+        // this.fixed = object.fixed;
+        // this.scroll = object.scroll;
+        // if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
 
-        this.moveEvents = object.moveEvents || false;
+        // this.moveEvents = object.moveEvents || false;
     }
 
     
     this._title = object.title || this.getTitleElement().innerText;
-    this.id = object.id || this.id || this.title;
+    // this.id = object.id || this.id || this.title;
     this.buttons = [];
     this.originalBody = this.body;
-    this.originalFrame = this.frame;
-    this.originalContent = this.content;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
             start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
@@ -117,76 +115,78 @@ function Dialog(object) {
         clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
     };
 
-    if(!this.scroll) this.body.style.overflow = "hidden";
+    if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     document.getElementById("applist").appendChild(this.createOpenButton());
     document.getElementById("metroapplist").appendChild(this.createOpenButton());
 
-    this.toggleCloseButton(true);
-    this.toggleFullButton(true);
-    if (this.verifyEjectCapability()) this.toggleEjectButton(true);
+    // this.toggleCloseButton(true);
+    // this.toggleFullButton(true);
+    // if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.synchronise = synchroniseDialogState.bind(this);
+    // this.synchronise = synchroniseDialogState.bind(this);
 
-    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
+    // this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
-    this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
-    };
+    // this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+    //     if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
+    // };
 
-    if (object.body) this.body.appendChild(object.body);
+    // if (object.body) this.body.appendChild(object.body);
 
-    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    // const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
-    if(borderSection && !this.fixed) {
-        for (let index = 0; index < 8; index++) {
-            const div = document.createElement("div");
-            div.draggable = false, div.id = index + 1;
-            const pointerDown = function (ev) {
-                dragAction.set(ev.target.id);
-            }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-            if (supportsPointer) div.onpointerdown = pointerDown;
-            else div.onmousedown = pointerDown;
-            target.appendChild(div);
-        }
-    }
+    // if(borderSection && !this.fixed) {
+    //     for (let index = 0; index < 8; index++) {
+    //         const div = document.createElement("div");
+    //         div.draggable = false, div.id = index + 1;
+    //         const pointerDown = function (ev) {
+    //             dragAction.set(ev.target.id);
+    //         }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+    //         if (supportsPointer) div.onpointerdown = pointerDown;
+    //         else div.onmousedown = pointerDown;
+    //         target.appendChild(div);
+    //     }
+    // }
 
     // body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
-    if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
-    else this.target.addEventListener("mousedown", windowActivationEvent);
-    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        const dialog = getEventDialog(event)
-        const rect = target.getClientRects()[0];
-        const viewboxPosition = getViewboxPosition();
-        const propeties = {
-            scrollbars: true,
-            resizable: true,
-            status: false,
-            location: false,
-            toolbar: false,
-            menubar: false,
-            width: rect.width,
-            height: rect.height,
-            left: rect.left + viewboxPosition.left,
-            top: rect.top + viewboxPosition.top
-        }
+    // if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
+    // else this.target.addEventListener("mousedown", windowActivationEvent);
+    // this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
+    //     const dialog = getEventDialog(event)
+    //     const rect = target.getClientRects()[0];
+    //     const viewboxPosition = getViewboxPosition();
+    //     const propeties = {
+    //         scrollbars: true,
+    //         resizable: true,
+    //         status: false,
+    //         location: false,
+    //         toolbar: false,
+    //         menubar: false,
+    //         width: rect.width,
+    //         height: rect.height,
+    //         left: rect.left + viewboxPosition.left,
+    //         top: rect.top + viewboxPosition.top
+    //     }
 
-        window.open(windows[dialog.id].href, windows[dialog.id].title, stringifyDialogProperties(propeties));
-        windows[dialog.id].quit();
-    });
+    //     window.open(windows[dialog.id].href, windows[dialog.id].title, stringifyDialogProperties(propeties));
+    //     windows[dialog.id].quit();
+    // });
 
-    const buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", function () {
-        dialog.close();
-    }.bind(dialog));
-    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
-    this.close();
+    // const buttons = target.getElementsByTagName("button");
+    // buttons[windowButtons.close].addEventListener("click", function () {
+    //     dialog.close();
+    // }.bind(dialog));
+    // buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+    // this.close();
 
-    this.synchronise();
+    // this.synchronise();
 
-    windows[this.id] = this;
+    // windows[this.id] = this;
+
+    this.initWithObject(object);
 }
 
 Dialog.prototype.initWithObject = function (object) {
@@ -224,8 +224,6 @@ Dialog.prototype.initWithObject = function (object) {
     
     this.buttons = [];
     this.originalBody = this.body;
-    this.originalFrame = this.frame;
-    this.originalContent = this.content;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
             start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
@@ -335,10 +333,10 @@ Object.defineProperty(Dialog.prototype, "frame", {
     set: function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
-    get: function() { return this.content.children[1]; },
+    get: function() { return  this.content ? this.content.children[1] : null; },
 });
 Object.defineProperty(Dialog.prototype, "head", {
-    get: function() { return this.target.getElementsByTagName("header")[0]; },
+    get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
@@ -436,6 +434,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 
 Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
+        if (!this.target) return null;
         /** @type {HTMLElement} */
         const content = this.target.getElementsByTagName("content")[0];
         return content;
@@ -455,7 +454,7 @@ Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState
 Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
 Dialog.prototype.getInnerRect = function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
 Dialog.prototype.getRect = function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
-Dialog.prototype.getButton = function (index) { return this.head.getElementsByTagName("button")[index]; }
+Dialog.prototype.getButton = function (index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 Dialog.prototype.setClickOffset = function (x, y) {
     const rect = this.getRect();
