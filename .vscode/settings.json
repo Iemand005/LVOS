@@ -2,5 +2,7 @@
   "editor.tabSize": 2,
   "editor.indentSize": "tabSize",
   "chat.disableAIFeatures": true,
-  "editor.inlineSuggest.enabled": false,
+  "editor.inlineSuggest.enabled": true,
+  "intellicodeCompletions.language.javascript": true,
+  "intellicodeCompletions.loggingLevel": "ALL",
 }
