@@ -167,6 +167,15 @@ main {
     color: black;
 }
 
+.window[focus]{
+    filter: blur(0px);
+    transition: all 0.2s linear;
+}
+
+.window:not([focus]) {
+    filter: blur(10px);
+}
+
 iframe{
     border: 0;
 }
