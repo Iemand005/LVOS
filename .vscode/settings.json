@@ -1,4 +1,6 @@
 {
   "editor.tabSize": 2,
   "editor.indentSize": "tabSize",
+  "chat.disableAIFeatures": true,
+  "editor.inlineSuggest.enabled": false,
 }

@@ -252,7 +252,7 @@ XRGraphics.prototype = Object.create(Graphics.prototype);
 XRGraphics.prototype.constructor = XRGraphics;
 
 // export { drawScene };
-
+const hey = 
 const graphics = new Graphics(canvas);
 let gl = graphics.gl;
 graphics.clear();
