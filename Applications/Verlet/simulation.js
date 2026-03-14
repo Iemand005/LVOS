@@ -244,7 +244,7 @@ function Simulation(canvasRenderer){
         // console.log(this.canvas)
 
         this.clear = function(){
-            console.log(this.canvas.width)
+            // console.log(this.canvas.width)
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
         

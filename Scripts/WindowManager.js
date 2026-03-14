@@ -143,7 +143,7 @@ function Dialog(object) {
         // log fart
         // console.log(body);
         for (let index = 0; index < 8; index++) {
-            console.log(target);
+            // console.log(target);
             const div = document.createElement("div");
             div.draggable = false, div.id = index + 1;
             const pointerDown = function (ev) {
