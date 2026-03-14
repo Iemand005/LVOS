@@ -156,7 +156,9 @@ function Dialog(object) {
     }
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
-    this.target.addEventListener("mousedown", function (event) { if (isDialog(getEventDialog(event))) windowActivationEvent(event); });
+    
+    if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
+    else this.target.addEventListener("mousedown", windowActivationEvent);
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         const dialog = getEventDialog(event)
         const rect = target.getClientRects()[0];
@@ -476,7 +478,7 @@ function checkForFlip() {
         }, 500);
     }
 
-    if (false || window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
+    if (false && window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
         console.log("Switching to Mobile mode...");
         if (!flipped) {
             flipHandler(true);
@@ -510,11 +512,17 @@ function initializeDialogs() {
 // Normally we use const in for in loops!
 // I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
 
+/**
+ * 
+ * @param {MouseEvent | PointerEvent} event 
+ * @returns 
+ */
 function windowActivationEvent(event){
     /**
      * Activates the window on which the provided event was fired.
      */
     const dialog = getEventDialog(event);
+    if (!isDialog(dialog)) return console.warn("This is not a dialog");
     activeDialog = dialog.id;
     resizeDirection = 0;
     enableDialogDrag();
@@ -533,6 +541,8 @@ function windowDragEvent(event){
         const difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
         dragAction.execute(dialog, dialog.clickOffset, difference);
+
+        console.log("moving")
         
         if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
     } catch (ex) {
@@ -544,12 +554,12 @@ function windowDragEvent(event){
  * @param {boolean} enable 
  */
 function toggleDialogDragEventHandler(enable) {
-    if (enable) document.addEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
-    else document.removeEventListener(window.onpointermove ? "pointermove" : "mousemove", windowDragEvent);
+    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent);
+    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent);
 }
 
 function disableDialogDrag() {
-    if (flipped) return;
+    // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set(0);
     for (let index in windows) windows[index].togglePointerEvents(true);
