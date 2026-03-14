@@ -227,13 +227,13 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") {
-        const leftPixels = toPixels(this._x = max(x, 0));
+        this._x = max(x, 0)
         console.log("Pixes:", leftPixels);
         if (useTransform) {
             this.move(this._x, this._y);
             this.target.style.left = "0px";
         }else
-        this.target.style.left = leftPixels;
+        this.target.style.left = toPixels(this._x);
      } }
 });
 
@@ -243,11 +243,12 @@ Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) {
         if (typeof y !== "number") return;
+        this._y = max(y, 0)
         if (useTransform) {
                 this.move(this._x, this._y);
                 this.target.style.top = "0px";
             } else {
-                this.target.style.top = toPixels(this._y = max(y, 0));;
+                this.target.style.top = toPixels(this._y);;
             }
         }
     });
@@ -673,11 +674,11 @@ function fromPixels(text){
 
 function synchroniseDialogState(window){
     window = this || window;
-    if (window.x) window.target.style.left = toPixels(window.x);
-    if (window.y) window.target.style.top = toPixels(window.y);
+    if (window.x) window.x = window.x;
+    if (window.y) window.y = window.y;
     if (window.z) window.target.style.zIndex = window.z;
-    if (window.width) window.target.style.width = toPixels(window.width);
-    if (window.height) window.target.style.height = toPixels(window.height);
+    if (window.width) window.width = window.width;
+    if (window.height) window.height = window.height;
 }
 
 // Onderdeel van de aller eerste window move event handler.

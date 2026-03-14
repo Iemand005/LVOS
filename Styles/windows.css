@@ -60,6 +60,8 @@ main{
     margin: 0;
     padding: 0;
     z-index: 1;
+    top: 0px;
+    left: 0px;
     overflow: hidden;
     position: absolute;
     background: transparent;
