@@ -49,13 +49,20 @@ function titlify(title) {
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  */
 function Dialog(object) {
+    
     this._x = 0;
     this._y = 0;
     this._width = 0;
     this._height = 0;
+    
+    this.z = 0;
+    this.minWidth = 100;
+    this.minHeight = 200;
 
+    this.cloasble = false;
+    
     if (!object) return;
-    let dialog = this;
+    const dialog = this;
 
     /** @type {HTMLElement} */
     this.target = null;
@@ -68,6 +75,139 @@ function Dialog(object) {
         // this.title = object;
         // this.title = object.title;
     } else {
+        /** @type {Application} */
+        this.application = object;
+        this.target = createDialog();
+        if (typeof object.classes === 'object'){
+            object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
+        }
+        this.frame = object.src;
+        this.title = object.title;
+        this.id = this.setId(object.id || this.title);
+        this.fixed = object.fixed;
+        this.scroll = object.scroll;
+        if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+
+        this.moveEvents = object.moveEvents || false;
+    }
+
+    
+    this._title = object.title || this.getTitleElement().innerText;
+    this.id = object.id || this.getId() || this.title;
+    this._isMinWidth = false;
+    this._isMinHeight = false;
+    this.buttons = [];
+    this.originalBody = this.body;
+    this.originalFrame = this.frame;
+    this.originalContent = this.content;
+    this.clickOffset = {
+        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
+            start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
+            reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+            update: function(x, y){
+                this.last = Date.now();
+                this.position.x = x, this.position.y = y;
+                this.positions.push(this.position.clone());
+                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
+                this;return this; }
+        },
+        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
+    };
+
+    if(!this.scroll) this.body.style.overflow = "hidden";
+
+    // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
+    document.getElementById("applist").appendChild(this.createOpenButton());
+    document.getElementById("metroapplist").appendChild(this.createOpenButton());
+
+    // this.verifyEjectCapability = function(){
+    //     //let canEject = false, e = 
+    //     return function(){try{return this.frame.contentDialog.document||this.frame.contentDocument!==null;}catch(e){return false}}();
+    //     //return canEject;
+    // }
+
+    this.toggleCloseButton(true);
+    this.toggleFullButton(true);
+    if (this.verifyEjectCapability()) this.toggleEjectButton(true);
+
+    this.synchronise = synchroniseDialogState.bind(this);
+
+    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
+
+    this.exchangeDialogMoveEvent = function (difference){ // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+        if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
+    };
+
+    if (object.body) this.body.appendChild(object.body);
+    this.setTitle(this.title);//sun
+
+    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+
+    if(borderSection && !this.fixed) {
+        console.log(this.id);
+        // log fart
+        // console.log(body);
+        for (let index = 0; index < 8; index++) {
+            // console.log(target);
+            const div = document.createElement("div");
+            div.draggable = false, div.id = index + 1;
+            const pointerDown = function (ev) {
+                dragAction.set(ev.target.id);
+            }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+            if (supportsPointer) div.onpointerdown = pointerDown;
+            else div.onmousedown = pointerDown;
+            target.appendChild(div);
+        }
+    }
+
+    body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
+    
+    if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
+    else this.target.addEventListener("mousedown", windowActivationEvent);
+    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
+        const dialog = getEventDialog(event)
+        const rect = target.getClientRects()[0];
+        const viewboxPosition = getViewboxPosition();
+        const propeties = {
+            scrollbars: true,
+            resizable: true,
+            status: false,
+            location: false,
+            toolbar: false,
+            menubar: false,
+            width: rect.width,
+            height: rect.height,
+            left: rect.left + viewboxPosition.left,
+            top: rect.top + viewboxPosition.top
+        }
+
+        window.open(dialog.getElementsByTagName("iframe")[0].contentDialog.location.href, windows[dialog.id].title, stringifyDialogProperties(propeties) /*"scrollbars=yes,resizable=yes,status=no,location=yes,toolbar=no,menubar=no,width=10,height=10,left=100,top=100"*/);
+    });
+
+    const buttons = target.getElementsByTagName("button");
+    buttons[windowButtons.close].addEventListener("click", function () {
+        dialog.close();
+    }.bind(dialog));
+    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+    this.close();
+
+    this.synchronise();
+
+    windows[this.id] = this;
+}
+
+Dialog.prototype.initWithObject = function (object) {
+    if (!object) return;
+    let dialog = this;
+
+    if (object instanceof HTMLElement) {
+        if (!isDialog(object)) return console.warn("This is not a dialog element");
+        if (this.target.parentElement.nodeName === "TEMPLATE") return;
+        this.target = object;
+    } else {
+        /** @type {Application} */
+        this.application = object;
+        this.cloasble = true;
         this.target = createDialog();
         if (typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
@@ -86,10 +226,10 @@ function Dialog(object) {
     this._title = object.title || this.getTitleElement().innerText;
     this.id = object.id || this.getId() || this.title;
     this.z = 0;
-    this.width = 200;
-    this._width = 200;
-    this.height = 100;
-    this._height = 100;
+    // this.width = 200;
+    // this._width = 200;
+    // this.height = 100;
+    // this._height = 100;
     this.minWidth = 100;
     this.minHeight = 200;
     this._isMinWidth = false;
@@ -382,22 +522,34 @@ Dialog.prototype.openUrl = function (url) {
 
 Dialog.prototype.quit = function () { this.target.parentElement.removeChild(this.target); };
 Dialog.prototype.launch = function () {
-    this.target = this.target = createDialog();
-    if(borderSection && !this.fixed) {
-        console.log(this.id);
-        for (let index = 0; index < 8; index++) {
-            const div = document.createElement("div");
-            div.draggable = false,
-            div.id = index + 1;
-            const pointerDown = function (ev) {
-                dragAction.set(ev.target.id);
-            };
-            if (supportsPointer) div.onpointerdown = pointerDown;
-            else div.onmousedown = pointerDown;
-            target.appendChild(div);
-        }
-    }
+    // this.target = this.target = createDialog();
+    // const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    // if(borderSection && !this.fixed) {
+    //     console.log(this.id);
+    //     for (let index = 0; index < 8; index++) {
+    //         const div = document.createElement("div");
+    //         div.draggable = false,
+    //         div.id = index + 1;
+    //         const pointerDown = function (ev) {
+    //             dragAction.set(ev.target.id);
+    //         };
+    //         if (supportsPointer) div.onpointerdown = pointerDown;
+    //         else div.onmousedown = pointerDown;
+    //         target.appendChild(div);
+    //     }
+    // }
+
+    this.initWithObject(this.application);
+
+    
+
+    this.open();
 }
+
+Dialog.prototype.relaunch = function () {
+    this.quit();
+    this.launch();
+};
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
     set: function (value) {
@@ -756,8 +908,8 @@ function saveDialogState(){
         const windowState = {};
         for (let id in windows) {
             if (windows[id]){
-                windows[id].width = windows[id].target.clientWidth;
-                windows[id].height = windows[id].target.clientHeight;
+                // windows[id].width = windows[id].target.clientWidth;
+                // windows[id].height = windows[id].target.clientHeight;
                 windowState[id] = collectEssentialDialogData({}, windows[id]);
             }
         }
