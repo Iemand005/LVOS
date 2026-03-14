@@ -361,7 +361,7 @@ aside#charms form {
 @media (pointer: none), (pointer: coarse) {
 }
 
-@media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
+/* @media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
   #desktop {
     transform: rotateY(180deg) !important;
   }
@@ -375,7 +375,7 @@ aside#charms form {
     translate: none !important;
     opacity: 1 !important;
   }
-}
+} */
 
 @keyframes opensesame {
   from {
