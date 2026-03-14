@@ -230,9 +230,7 @@ Object.defineProperty(Dialog.prototype, "x", {
         const leftPixels = toPixels(this._x = max(x, 0));
         console.log("Pixes:", leftPixels);
         if (useTransform) {
-            
-            // this.target.style.transform = "translateX(" + leftPixels + ")" ;
-            // this.target.style.msTransform = "translateX(" + leftPixels + ")" ;
+            this.move(this._x, this._y);
             this.target.style.left = "0px";
         }else
         this.target.style.left = leftPixels;
@@ -246,12 +244,9 @@ Object.defineProperty(Dialog.prototype, "y", {
     set: function(y) {
         if (typeof y !== "number") return;
         if (useTransform) {
-                // this.target.style.transform = "translate(" + pixels + ")" ;
                 this.move(this._x, this._y);
                 this.target.style.top = "0px";
-
             } else {
-
                 this.target.style.top = toPixels(this._y = max(y, 0));;
             }
         }
@@ -388,7 +383,7 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
     this.execute = function(){};
     /** @type {DragFunction[]} */
     this.resizeFunctions = [
-        function(dialog, offset, difference){ dialog.x = offset.left + difference.x, dialog.y = offset.top + difference.y }, // Move
+        function(dialog, offset, difference){ dialog.move(offset.left + difference.x, offset.top + difference.y) }, // Move
         function(dialog, offset, difference){ dialog.top = offset.top + difference.y }, // Top
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
