@@ -69,15 +69,15 @@ function Dialog(object) {
         this.title = object.title;
     } else {
         this.target = createDialog();
+        if (typeof object.classes === 'object'){
+            object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
+        }
         this.frame = object.src;
         this.title = this.setTitle(object.title);
         this.id = this.setId(object.id || this.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-        if (typeof object.classes === 'object'){
-            object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
-        }
 
         this.moveEvents = object.moveEvents || false;
     }
@@ -363,6 +363,9 @@ Dialog.prototype.openUrl = function (url) {
 };
 
 Dialog.prototype.quit = function () { this.target.parentElement.removeChild(this.target); };
+Dialog.prototype.launch = function () {
+    this.target = this.target = createDialog();
+}
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
     set: function (value) {
