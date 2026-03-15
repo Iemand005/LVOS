@@ -129,6 +129,8 @@ Dialog.prototype.initWithObject = function (object) {
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
 
+        this.frame.setAttribute("allow", "fullscreen");
+
         this.moveEvents = object.moveEvents || false;
     }
 
