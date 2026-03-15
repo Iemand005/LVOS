@@ -1,0 +1,1 @@
+(New-Object -ComObject "InternetExplorer.Application").Visible = $true
