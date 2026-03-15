@@ -94,9 +94,7 @@ if (typeof URLSearchParams === "undefined") {
         return this._data.get(key);
     };
 
-    Object.defineProperty(URLSearchParams.prototype, 'size', {
-        /** @this {URLSearchParams} */
-        get: function () { return this._data.size; }});
+    Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
 // URLSearchParams.prototype.__defineGetter__('size', function() {
 //     return this._data.size;
 // });
