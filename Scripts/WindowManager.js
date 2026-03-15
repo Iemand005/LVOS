@@ -121,7 +121,7 @@ Dialog.prototype.initWithObject = function (object) {
         }
         this.frame = object.src;
         this.title = object.title;
-        this.id = this.setId(object.id || this.title);
+        this.id = object.id || this.title|| this.id;
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
@@ -132,7 +132,6 @@ Dialog.prototype.initWithObject = function (object) {
     
     this._title = object.title || this.getTitleElement().innerText;
     this.id = object.id || this.id || this.title;
-    this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
     
@@ -374,8 +373,6 @@ Dialog.prototype.activate = function () {
 
 }
 Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
-Dialog.prototype.setId = function (id) { return this.id = id; }
-Dialog.prototype.getId = function () { return this.id; }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
 Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
 Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
