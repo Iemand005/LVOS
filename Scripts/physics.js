@@ -21,19 +21,24 @@ Vector.prototype = {
 };
 
 function Vector3D(x, y, z) {
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
     if (typeof x === "number") {
-
-    } else {
-
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
+        this.x = x;
+        if (y == null && z == null) {
+            this.y = x;
+            this.z = x;
+        } else {
+            this.y = y;
+            this.z = z;
+        }
     }
 }
 
-function normalize(vector) {
-    if (vector)
-}
+// function normalize(vector) {
+//     if (vector)
+// }
 
 function Rectangle(x, y, width, height) {
     this.pos = this.position = new Vector(x, y);
