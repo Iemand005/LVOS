@@ -57,7 +57,7 @@ Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // No
 if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
 
 function find(callback) {
-    for (let index in this) if (this.hasOwnProperty(index)) if(callback(this[index], index, this)) return this[index];
+    for (let index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
 }
 
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
