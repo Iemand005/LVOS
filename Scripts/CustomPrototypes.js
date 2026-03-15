@@ -73,22 +73,41 @@ if (!String.prototype.repeat) String.prototype.repeat = function (e) {
     return result;
 }
 
-if (!URLSearchParams) window.URLSearchParams = {};
+if (typeof URLSearchParams === "undefined") {
+    window.URLSearchParams = function (search) {
+        const items = search.replace("?", "").split("&");
+        // const kv = items[0].split("=");
+        // const key = kv[0], value = kv[1];
+        this.kvCache = new Map();
+        const self = this;
+        items.forEach(function (item) {
+            const kv = item.split("=");
+            if (kv.length != 2) continue;
+            const key = kv[0];
+            const value = kv[1];
 
-function searchParams(params) {
-    try {
-        return new URL(window.location).searchParams;
-    } finally {
-        window.location.href.split("?")[0];
-        return {
-            search: params,
-            // searchParams: ,
-            get: function (key) {
+            self.kvCache.set(key, value);
+        });
+    };
 
-            }
-        }
-    }
+    URLSearchParams.prototype.get = function (key) {
+        return this.kvCache.get(key);
+    };
 }
+// function searchParams(params) {
+//     try {
+//         return new URL(window.location).searchParams;
+//     } finally {
+//         window.location.href.split("?")[0];
+//         return {
+//             search: params,
+//             // searchParams: ,
+//             get: function (key) {
+
+//             }
+//         }
+//     }
+// }
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
