@@ -82,7 +82,7 @@ if (typeof URLSearchParams === "undefined") {
         const self = this;
         items.forEach(function (item) {
             const kv = item.split("=");
-            if (kv.length != 2) continue;
+            if (kv.length != 2) return;
             const key = kv[0];
             const value = kv[1];
 
