@@ -35,8 +35,11 @@ function isDialog(element) {
     return element && element.classList && element.classList.contains("window");
 }
 
+/**
+ * @param {string} title 
+ */
 function titlify(title) {
-    return title;
+    return title.toLowerCase().split(" ").join("-");
 }
 
 /**
@@ -92,7 +95,7 @@ function Dialog(object) {
                 this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
                 this;return this; }
         },
-        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
+        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
     };
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
@@ -359,6 +362,15 @@ Object.defineProperty(Dialog.prototype, "closeable", {
     get: function() { return this.application != null; }
 });
 
+Object.defineProperty(Dialog.prototype, "borderSize", {
+    set: function (value) {
+        this.content.style.padding = toPixels(value);
+        this.content.style.border = toPixels(value);
+        this.content.style.borderRadius = toPixels(value);
+    },
+    get: function () { return fromPixels(this.content.style.padding); },
+});
+
 /** @type {Dialog} */
 let focusedDialog = null;
 Dialog.prototype.focus = function() {
@@ -409,9 +421,7 @@ Dialog.prototype.move = function (x, y) {
     if (useTransform) {
         this._x = x, this._y = y;
         this.target.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
-    } else {
-        this.x = x, this.y = y;
-    }
+    } else this.x = x, this.y = y;
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
@@ -439,15 +449,6 @@ Dialog.prototype.relaunch = function () {
     this.quit();
     this.launch();
 };
-
-Object.defineProperty(Dialog.prototype, "borderSize", {
-    set: function (value) {
-        this.content.style.padding = toPixels(value);
-        this.content.style.border = toPixels(value);
-        this.content.style.borderRadius = toPixels(value);
-    },
-    get: function () { return fromPixels(this.content.style.padding); },
-});
 
 /**
  * @typedef {{x: number, y: number}} Vector
