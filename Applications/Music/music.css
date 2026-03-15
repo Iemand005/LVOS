@@ -34,7 +34,7 @@ button#play {
     padding-bottom: 5px;
 }
 
-form{
+form {
     transition: all 300ms;
     position: fixed;
     /* background-color: rgba(0, 0, 0, 0.562); */
@@ -49,30 +49,30 @@ form{
     width: 100%;
 }
 
-body.full > form{
+body.full > form {
     opacity: 0;
 }
 
-body.full{
+body.full {
     cursor: none;
 }
 
-#playcontrols{
+#playcontrols {
     display: flex;
     align-content: center;
     align-items: center;
     justify-content: center;
 }
 
-#seek-output{
+#seek-output {
     width: 0;
     display: inline-block;
 }
 
-input[type=range], input[type=range]:focus::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-runnable-track, input[type=range]::-moz-range-track, input[type=range]::-ms-track{
+input[type=range], input[type=range]:focus::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-runnable-track, input[type=range]::-moz-range-track, input[type=range]::-ms-track {
     background: orange;
 }
 
-input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb{
+input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb {
     
 }

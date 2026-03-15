@@ -8,24 +8,24 @@ function AudioVisualiser(fftSize){
     this.elementSource = null;
     this.streamSource = null;
     this.source = null;
-    this.preInit();
+    
+    /** @type {AudioContext} */
+    this.context = AudioVisualiser._sharedContext;
+    this.analyser = this.context.createAnalyser();
+
     this.updateBinCount(fftSize);
     this._frequencyData = new Uint8Array(),
     this._timeDomainData = new Uint8Array()
 }
+
+AudioVisualiser._sharedContext = new AudioContext();
 
 AudioVisualiser.prototype.destroy = function () {
         this.analyser.disconnect();
     };
 
 AudioVisualiser.prototype.disconnectAnalyser = function () {
-        if (this.analyser && this.analyser.disconnect) this.analyser.disconnect();
-    };
-
-AudioVisualiser.prototype.preInit = function () {
-    if (!AudioVisualiser._sharedContext) AudioVisualiser._sharedContext = new AudioContext();
-    this.context = AudioVisualiser._sharedContext;
-    this.analyser = this.context.createAnalyser();
+    if (this.analyser && this.analyser.disconnect) this.analyser.disconnect();
 };
 
 AudioVisualiser.prototype.initialize = function (source) {
@@ -66,17 +66,19 @@ Object.defineProperty(AudioVisualiser, "sharedContext", {
     }
 });
 
-    Object.defineProperty(AudioVisualiser.prototype, "frequencyBinCount", {
+Object.defineProperty(AudioVisualiser.prototype, "frequencyBinCount", {
   get: function() {
         return this.analyser.frequencyBinCount;
     }
 });
-    Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
+
+Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
     get: function() {
         return this.analyser.getByteFrequencyData(this._frequencyData), this._frequencyData;
     },
 });
-    Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
+
+Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
     get: function() {
         return this.analyser.getByteTimeDomainData(this._timeDomainData), this._timeDomainData;
     }
