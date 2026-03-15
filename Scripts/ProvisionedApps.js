@@ -160,6 +160,13 @@ const applications = [
         src: "./Applications/GeodeWeb/login.html",
         hidden: true
     }
+    ,
+    {
+        title: "Level",
+        id: "level",
+        src: "./Applications/Level/level.html",
+        hidden: true
+    }
     // ,
     // {
     //     title: "Browser",

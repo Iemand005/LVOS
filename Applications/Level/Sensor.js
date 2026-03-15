@@ -6,8 +6,9 @@
 'use esnext';
 'use moz';
 
-if (ondevicemotion) {
+if (typeof ondevicemotion !== "undefined") {
   ondevicemotion = function(e) {
-    console.log("Acceleration:", e.acceleration, e.accelerationIncludingGravity);
+    // console.log("Acceleration:", e.acceleration, e.accelerationIncludingGravity);
+    Math.cos(e.x)
   }
 }

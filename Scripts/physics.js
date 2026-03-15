@@ -20,6 +20,21 @@ Vector.prototype = {
     clone: function () { return new Vector(this.x, this.y); }
 };
 
+function Vector3D(x, y, z) {
+    if (typeof x === "number") {
+
+    } else {
+
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+}
+
+function normalize(vector) {
+    if (vector)
+}
+
 function Rectangle(x, y, width, height) {
     this.pos = this.position = new Vector(x, y);
     this.width = width;
