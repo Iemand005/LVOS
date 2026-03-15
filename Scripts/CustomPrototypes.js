@@ -78,7 +78,7 @@ if (typeof URLSearchParams === "undefined") {
         const items = search.replace("?", "").split("&");
         // const kv = items[0].split("=");
         // const key = kv[0], value = kv[1];
-        this.kvCache = new Map();
+        this._data = new Map();
         const self = this;
         items.forEach(function (item) {
             const kv = item.split("=");
@@ -86,15 +86,20 @@ if (typeof URLSearchParams === "undefined") {
             const key = kv[0];
             const value = kv[1];
 
-            self.kvCache.set(key, value);
+            self._data.set(key, value);
         });
     };
 
     URLSearchParams.prototype.get = function (key) {
-        return this.kvCache.get(key);
+        return this._data.get(key);
     };
 
-    Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this.kvCache.size; }});
+    Object.defineProperty(URLSearchParams.prototype, 'size', {
+        /** @this {URLSearchParams} */
+        get: function () { return this._data.size; }});
+// URLSearchParams.prototype.__defineGetter__('size', function() {
+//     return this._data.size;
+// });
 }
 // function searchParams(params) {
 //     try {
