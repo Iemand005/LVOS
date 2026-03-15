@@ -28,10 +28,12 @@ ctx.globalAlpha = 0.1;
 
 function localFullscreen() {
     // document.body.requestFullscreen({navigationUI: ""});
-    document.body.requestFullscreen();
+    if (document.body.requestFullscreen) document.body.requestFullscreen();
+    else if (document.body.msRequestFullscreen) document.body.msRequestFullscreen();
 }
 
 fullscreen.onclick = function(){
+    localFullscreen();
     Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
 }
 
