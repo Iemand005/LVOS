@@ -94,7 +94,7 @@ if (typeof URLSearchParams === "undefined") {
         return this.kvCache.get(key);
     };
 
-    Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this.kvCache.length; }});
+    Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this.kvCache.size; }});
 }
 // function searchParams(params) {
 //     try {
