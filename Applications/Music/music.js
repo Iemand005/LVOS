@@ -26,7 +26,10 @@ const elements = [];
 
 ctx.globalAlpha = 0.1;
 
-const herman = document.getElementById("    ");
+function localFullscreen() {
+    // document.body.requestFullscreen({navigationUI: ""});
+    document.body.requestFullscreen();
+}
 
 fullscreen.onclick = function(){
     Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
