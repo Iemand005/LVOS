@@ -44,7 +44,7 @@ function setBorderSize(size) {
 }
 
 function hexToRGB(hex) {
-    if (typeof hex === 'undefined') return;
+    if (typeof hex === 'undefined' || !hex) return;
     /*const*/var int = parseInt(hex.replace('#', ''), 16);
     return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
 }

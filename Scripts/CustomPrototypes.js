@@ -22,7 +22,7 @@ if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
     return this;
 };
 
-if(!MutationObserver) MutationObserver = function(callback){
+if(typeof MutationObserver === "undefined") window.MutationObserver = function(callback){
     this.observe = function(element){
         element.addEventListener('DOMNodeInserted', callback, false);
     }
@@ -116,3 +116,10 @@ if (typeof URLSearchParams === "undefined") {
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(/*let*/var index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
+
+if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
+    // if (typeof point === "undefined")
+    //     point = document.createElement("div");
+    // point.style.position = "absolute";
+    console.log("Point", point);
+}
