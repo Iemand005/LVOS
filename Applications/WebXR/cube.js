@@ -1,14 +1,14 @@
-const canvas = document.getElementById("canvas");
+/*const*/var canvas = document.getElementById("canvas");
 
-const xrButton = document.getElementById('xr-button');
+/*const*/var xrButton = document.getElementById('xr-button');
 
-const vsSource =
+/*const*/var vsSource =
   "attribute vec4 aVertexPosition; attribute vec4 aVertexColor; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; varying lowp vec4 vColor; void main() { gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition; vColor = aVertexColor; }";
-const fsSource =
+/*const*/var fsSource =
   "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
 
 Graphics.prototype.loadShader = function (type, source) {
-  const shader = this.gl.createShader(type);
+  /*const*/var shader = this.gl.createShader(type);
   this.gl.shaderSource(shader, source);
   this.gl.compileShader(shader);
 
@@ -27,12 +27,12 @@ Graphics.prototype.loadShader = function (type, source) {
 };
 
 Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
-  const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
+  /*const*/var vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
+  /*const*/var fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
 
   // Create the shader program
 
-  const shaderProgram = this.gl.createProgram();
+  /*const*/var shaderProgram = this.gl.createProgram();
   this.gl.attachShader(shaderProgram, vertexShader);
   this.gl.attachShader(shaderProgram, fragmentShader);
   this.gl.linkProgram(shaderProgram);
@@ -79,28 +79,28 @@ Graphics.prototype.clear = function () {
 };
 
 Graphics.prototype.loadShaders = function (vsSource, fsSource) {
-  const gl = this.gl;
+  /*const*/var gl = this.gl;
   this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
 
-  const positionBuffer = gl.createBuffer();
+  /*const*/var positionBuffer = gl.createBuffer();
 
   // Select the positionBuffer as the one to apply buffer
   // operations to from here out.
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Now create an array of positions for the square.
-  const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
+  /*const*/var positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 };
 
-let squareRotation = 0.0;
-let deltaTime = 0;
-// let now = 0;
-let then = 0;
+/*let*/var squareRotation = 0.0;
+/*let*/var deltaTime = 0;
+// /*let*/var now = 0;
+/*let*/var then = 0;
 
 Graphics.prototype.drawScene = function (programInfo, deltaTime) {
-  const gl = this.gl;
+  /*const*/var gl = this.gl;
 
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -108,13 +108,13 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  const fov = 45;
+  /*const*/var fov = 45;
 
-  const fieldOfView = (fov * Math.PI) / 180; // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
-  const projectionMatrix = mat4.create();
+  /*const*/var fieldOfView = (fov * Math.PI) / 180; // in radians
+  /*const*/var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  /*const*/var zNear = 0.1;
+  /*const*/var zFar = 100.0;
+  /*const*/var projectionMatrix = mat4.create();
 
   // note: glMatrix always has the first argument
   // as the destination to receive the result.
@@ -123,7 +123,7 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  const modelViewMatrix = mat4.create();
+  /*const*/var modelViewMatrix = mat4.create();
 
   squareRotation += deltaTime;
   mat4.translate(
@@ -154,12 +154,12 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
   {
-    const numComponents = 3; // pull out 3 values per iteration (x, y, z)
-    const type = gl.FLOAT; // the data in the buffer is 32bit floats
-    const normalize = false; // don't normalize
-    const stride = 0; // how many bytes to get from one set of values to the next
+    /*const*/var numComponents = 3; // pull out 3 values per iteration (x, y, z)
+    /*const*/var type = gl.FLOAT; // the data in the buffer is 32bit floats
+    /*const*/var normalize = false; // don't normalize
+    /*const*/var stride = 0; // how many bytes to get from one set of values to the next
     // 0 = use type and numComponents above
-    const offset = 0; // how many bytes inside the buffer to start from
+    /*const*/var offset = 0; // how many bytes inside the buffer to start from
     if (!this.buffers) return;
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.position);
     gl.vertexAttribPointer(
@@ -173,11 +173,11 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
 
-  const numComponents = 4;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
+  /*const*/var numComponents = 4;
+  /*const*/var type = gl.FLOAT;
+  /*const*/var normalize = false;
+  /*const*/var stride = 0;
+  /*const*/var offset = 0;
   gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.color);
   gl.vertexAttribPointer(
     programInfo.attribLocations.vertexColor,
@@ -205,13 +205,13 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
   );
 
   {
-    // const offset = 0;
-    // const vertexCount = 4;
+    // /*const*/var offset = 0;
+    // /*const*/var vertexCount = 4;
     // gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
 
-    const vertexCount = 36;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
+    /*const*/var vertexCount = 36;
+    /*const*/var type = gl.UNSIGNED_SHORT;
+    /*const*/var offset = 0;
     gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   }
 };
@@ -252,13 +252,13 @@ XRGraphics.prototype = Object.create(Graphics.prototype);
 XRGraphics.prototype.constructor = XRGraphics;
 
 // export { drawScene };
-// const hey = 
-const graphics = new Graphics(canvas);
-let gl = graphics.gl;
+// /*const*/var hey = 
+/*const*/var graphics = new Graphics(canvas);
+/*let*/var gl = graphics.gl;
 graphics.clear();
 graphics.loadShaders(vsSource, fsSource);
 
-const programInfo = {
+/*const*/var programInfo = {
   program: graphics.shaderProgram,
   attribLocations: {
     vertexPosition: gl.getAttribLocation(
@@ -279,16 +279,16 @@ const programInfo = {
   },
 };
 
-const positionBuffer = gl.createBuffer();
+/*const*/var positionBuffer = gl.createBuffer();
 
 // Select the positionBuffer as the one to apply buffer
 // operations to from here out.
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // Now create an array of positions for the square.
-// const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];y
+// /*const*/var positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];y
 
-const positions = [
+/*const*/var positions = [
   // Front face
   -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
 
@@ -313,7 +313,7 @@ const positions = [
 // JavaScript array, then use it to fill the current buffer.
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-const indexBuffer = gl.createBuffer();
+/*const*/var indexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 // This array defines each face as two triangles, using the
@@ -321,7 +321,7 @@ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 // position.
 
 // prettier-ignore
-const indices = [
+/*const*/var indices = [
   0, 1, 2, 0, 2, 3,    // front
   4, 5, 6, 4, 6, 7,    // back
   8, 9, 10, 8, 10, 11,   // top
@@ -337,7 +337,7 @@ const indices = [
 // ith this code:
 // js
 
-const faceColors = [
+/*const*/var faceColors = [
   [1.0, 1.0, 1.0, 1.0], // Front face: white
   [1.0, 0.0, 0.0, 1.0], // Back face: red
   [0.0, 1.0, 0.0, 1.0], // Top face: green
@@ -348,19 +348,19 @@ const faceColors = [
 
 // Convert the array of colors into a table for all the vertices.
 
-let colors = [];
+/*let*/var colors = [];
 
-for (let cIndex in faceColors) {
+for (/*let*/var cIndex in faceColors) {
   // Repeat each color four times for the four vertices of the face
-  const c = faceColors[cIndex];
+  /*const*/var c = faceColors[cIndex];
   colors = colors.concat(c, c, c, c);
 }
 
-const colorBuffer = gl.createBuffer();
+/*const*/var colorBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-const buffers = {
+/*const*/var buffers = {
   position: positionBuffer,
   indices: indexBuffer,
   color: colorBuffer
@@ -375,19 +375,19 @@ gl.bufferData(
 
 graphics.buffers = buffers;
 
-const bounds = canvas.getBoundingClientRect();
+/*const*/var bounds = canvas.getBoundingClientRect();
 graphics.resize(bounds.width, bounds.height);
 graphics.startRendering();
 
 console.log(graphics);
 
 window.onresize = function (ev) {
-  const bounds = canvas.getBoundingClientRect();
+  /*const*/var bounds = canvas.getBoundingClientRect();
   graphics.resize(bounds.width, bounds.height);
 };
 
-let xrSession = null;
-let xrRefSpace = null;
+/*let*/var xrSession = null;
+/*let*/var xrRefSpace = null;
 
 function initXR() {
         // Is WebXR available on this UA?
@@ -427,7 +427,7 @@ function initXR() {
 
         // Create a WebGL context to render with, initialized to be compatible
         // with the XRDisplay we're presenting to.
-        let canvas = document.createElement('canvas');
+        /*let*/var canvas = document.createElement('canvas');
         gl = canvas.getContext('webgl', { xrCompatible: true });
 
         // Use the new WebGL context to create a XRWebGLLayer and set it as the
@@ -461,14 +461,14 @@ function initXR() {
 
       // Called every time the XRSession requests that a new frame be drawn.
       function onXRFrame(time, frame) {
-        let session = frame.session;
+        /*let*/var session = frame.session;
 
         // Inform the session that we're ready for the next frame.
         session.requestAnimationFrame(onXRFrame);
 
         // Get the XRDevice pose relative to the reference space we created
         // earlier.
-        let pose = frame.getViewerPose(xrRefSpace);
+        /*let*/var pose = frame.getViewerPose(xrRefSpace);
 
         // Getting the pose may fail if, for example, tracking is lost. So we
         // have to check to make sure that we got a valid pose before attempting
@@ -476,7 +476,7 @@ function initXR() {
         // framebuffer cleared, so tracking loss means the scene will simply
         // disappear.
         if (pose) {
-          let glLayer = session.renderState.baseLayer;
+          /*let*/var glLayer = session.renderState.baseLayer;
 
           // If we do have a valid pose, bind the WebGL layer's framebuffer,
           // which is where any content to be displayed on the XRDevice must be
@@ -496,8 +496,8 @@ function initXR() {
           // and draw them into the corresponding viewport here, but we're
           // keeping this sample slim so we're not bothering to draw any
           // geometry.
-          /*for (let view of pose.views) {
-            let viewport = glLayer.getViewport(view);
+          /*for (/*let*/var view of pose.views) {
+            /*let*/var viewport = glLayer.getViewport(view);
             gl.viewport(viewport.x, viewport.y,
                         viewport.width, viewport.height);
 

@@ -8,16 +8,16 @@
 'use esnext';
 'use moz';
 
-const video = document.getElementById("camera");
-const output = document.getElementById("picture");
-const takeVideo = document.getElementById("video");
-const takePhoto = document.getElementById("photo");
-const startButton = document.getElementById("start");
-const captureCard = document.createElement("canvas"); //document.getElementById("capture");
+/*const*/var video = document.getElementById("camera");
+/*const*/var output = document.getElementById("picture");
+/*const*/var takeVideo = document.getElementById("video");
+/*const*/var takePhoto = document.getElementById("photo");
+/*const*/var startButton = document.getElementById("start");
+/*const*/var captureCard = document.createElement("canvas"); //document.getElementById("capture");
 
-let recorder;
-let videoStream;
-let front = true;
+/*let*/var recorder;
+/*let*/var videoStream;
+/*let*/var front = true;
 
 function cameraAccepted(stream){
     video.srcObject = stream;
@@ -49,7 +49,7 @@ startButton.onclick = getCamera;
 
 takePhoto.onclick = ev => {
     ev.preventDefault();
-    const photo = getPhoto(video, video.videoWidth, video.videoHeight);
+    /*const*/var photo = getPhoto(video, video.videoWidth, video.videoHeight);
     console.log("foto", photo)
     output.setAttribute("src", photo);
 }

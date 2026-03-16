@@ -1,12 +1,12 @@
-// Canvas for physics simulation using Verlet integration methods (not finished but functional)
+// Canvas for physics simulation using Ver/*let*/var integration methods (not finished but functional)
 // Lasse © 2023
 // 30/12/2023
 
 'use strict';
 'use esnext';
 
-const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
+/*const*/var canvas = document.querySelector("canvas");
+/*const*/var ctx = canvas.getContext("2d");
 
 function drawCircle(ball){
     ctx.beginPath();
@@ -24,7 +24,7 @@ function renderFrame(balls){
 }
 
 function startEngine(){
-    const balls = new BallCollection(10);
+    /*const*/var balls = new BallCollection(10);
     window.setInterval(renderFrame, 1000, balls.balls);
 }
 

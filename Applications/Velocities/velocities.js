@@ -3,12 +3,12 @@
 'use strict';
 'use esnext';
 window.addEventListener('message', function (event) {
-    const stats = JSON.parse(event.data).data;
+    /*const*/var stats = JSON.parse(event.data).data;
     if(!stats) return;
     document.querySelector("output").innerText = "x: "+stats.difference.x + " y:" +stats.difference.y;
-    const canvas = document.querySelector("canvas");
-    const ctx = canvas.getContext("2d");
-    const width = window.innerWidth, height = 100;
+    /*const*/var canvas = document.querySelector("canvas");
+    /*const*/var ctx = canvas.getContext("2d");
+    /*const*/var width = window.innerWidth, height = 100;
 
     ctx.clearRect(0, 0, width, height);
     ctx.beginPath();

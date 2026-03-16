@@ -58,17 +58,17 @@ Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
  */
 Messenger.receive = function (callback, destroyWhenType) {
     /** @type {(this: Window, ev: MessageEvent<any>) => any} */
-    const messageListener = function (ev) {
+    /*const*/var messageListener = function (ev) {
         try {
             /** @type {Message} */
-            const data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
+            /*const*/var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
             
             if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id); break;
                 case "identify":
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
-                    const identity = { name: "LVOS" };
+                    /*const*/var identity = { name: "LVOS" };
                     Messenger.broadcast(ev.source, Messenger.types.identity,  identity);
                     break;
             }

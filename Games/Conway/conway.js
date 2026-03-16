@@ -9,26 +9,26 @@
 'use esnext';
 'use moz';
 
-const horizontalCellCount = 10;
-const verticalCellCount = 10;
-const cellSize = 10;
+/*const*/var horizontalCellCount = 10;
+/*const*/var verticalCellCount = 10;
+/*const*/var cellSize = 10;
 
-const conway = document.getElementById("conway");
-const physicsToggle = document.getElementById("physicsenabled");
-const speedSlider = document.getElementById("physicsspeed");
-const drawmethodCombobox = document.getElementById("drawmethod");
-const ctx = conway.getContext("2d");
+/*const*/var conway = document.getElementById("conway");
+/*const*/var physicsToggle = document.getElementById("physicsenabled");
+/*const*/var speedSlider = document.getElementById("physicsspeed");
+/*const*/var drawmethodCombobox = document.getElementById("drawmethod");
+/*const*/var ctx = conway.getContext("2d");
 
-const cells = initializeCells();
-const lastUpdatedPosition = {x:-1, y:-1};
-let updateMethod = 0;
-let mousedown = false;
+/*const*/var cells = initializeCells();
+/*const*/var lastUpdatedPosition = {x:-1, y:-1};
+/*let*/var updateMethod = 0;
+/*let*/var mousedown = false;
 
 function initializeCells(){ // Array.from bestaat nog niet niet in IE11. (y++ geeft als resultaat de waarde van y voor en ++y de waarde na het incrementeren.)
-    const cells = new Array(horizontalCellCount);
-    for (let x = 0; x < horizontalCellCount; x++) {
+    /*const*/var cells = new Array(horizontalCellCount);
+    for (/*let*/var x = 0; x < horizontalCellCount; x++) {
         cells[x] = new Array(verticalCellCount);
-        for (let y = 0; y < verticalCellCount; y++) cells[x][y] = {
+        for (/*let*/var y = 0; y < verticalCellCount; y++) cells[x][y] = {
             alive:false,
             position:{
                 x: x,
@@ -51,7 +51,7 @@ function initializeCells(){ // Array.from bestaat nog niet niet in IE11. (y++ ge
 }
 
 function iterateCells(delegate){ // Deze functie loopt door alle cellen. We voeren de delegatie functie uit. Om ervoor te zorgen dat wanneer de delegatie geen lege waarde terug geeft gebruiken we een "OR" operatie. We kunnen dit doen aangezien de "OR" operatie in JavaScript de eerste waarde teruggeeft die "truthy" is, null en undefined zijn namelijk "falsy", dus het origineel object word teruggegeven.
-    for (let y = 0; y < verticalCellCount; y++) for (let x = 0; x < horizontalCellCount; x++) cells[x][y] = delegate(cells[x][y], x, y) || cells[x][y];
+    for (/*let*/var y = 0; y < verticalCellCount; y++) for (/*let*/var x = 0; x < horizontalCellCount; x++) cells[x][y] = delegate(cells[x][y], x, y) || cells[x][y];
 }
 
 conway.onmousedown = function(event){ // Een andere manier om een enkele functie van hogere orde in te stellen als event handler.
@@ -67,12 +67,12 @@ function toggleCellEvent(event){
     mousedown = (event || window.event).buttons;
     //console.log(mousedown);
     if(mousedown){
-        const rect = conway.getClientRects()[0]; // Kan ook moet element.getCientBoundingRect() maar deze functie bestaat in IE11 niet.
-        const position = {x: Math.floor(((event.clientX - rect.left)/cellSize) / (rect.width / ctx.canvas.width)), y: Math.floor(((event.clientY - rect.top) / cellSize) / (rect.height / ctx.canvas.height))}; // De berekening tussen client rect en canvas rect heb ik toegevoegd voor het geval dat iemand de breedte op een percentage zet bijvoorbeeld, waardoor het canvas uitgerokken word. We willen natuurlijk dat de muispositie correct vertaald word in alle gevallen.
+        /*const*/var rect = conway.getClientRects()[0]; // Kan ook moet element.getCientBoundingRect() maar deze functie bestaat in IE11 niet.
+        /*const*/var position = {x: Math.floor(((event.clientX - rect.left)/cellSize) / (rect.width / ctx.canvas.width)), y: Math.floor(((event.clientY - rect.top) / cellSize) / (rect.height / ctx.canvas.height))}; // De berekening tussen client rect en canvas rect heb ik toegevoegd voor het geval dat iemand de breedte op een percentage zet bijvoorbeeld, waardoor het canvas uitgerokken word. We willen natuurlijk dat de muispositie correct vertaald word in alle gevallen.
         if(!(lastUpdatedPosition.x == position.x && lastUpdatedPosition.y === position.y)){ // Zo kan de laatste positie constant blijven en hoeven we ook geen kopie te maken. Als we de objecten van huidige en vorige positie gelijkstellen word het een objectverwijzing.
             lastUpdatedPosition.x = position.x;
             lastUpdatedPosition.y = position.y;
-            const cell = cells[position.x][position.y];
+            /*const*/var cell = cells[position.x][position.y];
             switch(updateMethod){
                 case 1:
                     mousedown === 2 ? cell.kill() : cell.spawn(); 
@@ -91,7 +91,7 @@ function toggleCellEvent(event){
 }
 
 function updateViewbox(){
-    const rect = conway.getClientRects()[0];
+    /*const*/var rect = conway.getClientRects()[0];
     ctx.canvas.width = rect.width;
     ctx.canvas.height = rect.height;
 }
@@ -110,7 +110,7 @@ function renderCells(){
 
 function applyPhysics(){
     iterateCells(function(cell, x, y){
-        const aliveNeighbours = getAliveNeighbourPositions(x, y);
+        /*const*/var aliveNeighbours = getAliveNeighbourPositions(x, y);
         cell.dead = aliveNeighbours.length > 3 || aliveNeighbours.length < 2;
         cell.born = aliveNeighbours.length === 3;
         return cell;
@@ -129,7 +129,7 @@ function getAliveNeighbourPositions(x, y){
 }
 
 function getNeighbouringPositions(x, y){
-    const offsets = [
+    /*const*/var offsets = [
         {x:-1, y:-1}, {x: 0, y:-1}, {x: 1, y:-1},
         {x:-1, y: 0},               {x: 1, y: 0},
         {x:-1, y: 1}, {x: 0, y: 1}, {x: 1, y: 1}
@@ -145,9 +145,9 @@ function cellAt(x, y){
     return cells[x][y];
 }
 
-let framerate = 60
+/*let*/var framerate = 60
 window.setInterval(renderCells, 1000/framerate);
-let physicsInterval;
+/*let*/var physicsInterval;
 
 physicsToggle.removeAttribute("checked");
 //physicsToggle.checked = false;

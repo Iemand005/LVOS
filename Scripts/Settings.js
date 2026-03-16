@@ -14,8 +14,8 @@ SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.s
 function setTheme(id) {
     if (typeof id === 'undefined') return;
     settings.set("theme", id);
-    for(let index in windows){
-        const window = windows[index];
+    for(/*let*/var index in windows){
+        /*const*/var window = windows[index];
         switch (id) {
             case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
                 break;
@@ -28,7 +28,7 @@ function setTheme(id) {
 }
 
 function toggleCharmsEvent(ev) {
-    const clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
+    /*const*/var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
     if (!isCharmsOpen() || clickedElement == charmsbutton || clickedElement == charmsbutton2) return;
 
     if(!(clickedElement == bodyCrawler.charms || bodyCrawler.charms.contains(clickedElement))) {
@@ -40,30 +40,30 @@ function toggleCharmsEvent(ev) {
 
 function setBorderSize(size) {
     settings.set("borderSize", size);
-    for (let index in windows) windows[index].borderSize = size;
+    for (/*let*/var index in windows) windows[index].borderSize = size;
 }
 
 function hexToRGB(hex) {
     if (typeof hex === 'undefined') return;
-    const int = parseInt(hex.replace('#', ''), 16);
+    /*const*/var int = parseInt(hex.replace('#', ''), 16);
     return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
 }
 
 function isColorDark(color) {
     if (typeof color === 'undefined') return;
-    const rgb = hexToRGB(color);
+    /*const*/var rgb = hexToRGB(color);
     return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
 }
 
 function setColor(color){
-    // const y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
-    // const c = y < 128 ? "black" : "white";
+    // /*const*/var y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
+    // /*const*/var c = y < 128 ? "black" : "white";
     if (typeof color === 'undefined') return;
     settings.set("color", elements.color.value = color);
     
-    const isWhite = isColorDark(color);
-    for(let index in windows){
-        const content = windows[index].target.getElementsByTagName("content")[0];
+    /*const*/var isWhite = isColorDark(color);
+    for(/*let*/var index in windows){
+        /*const*/var content = windows[index].target.getElementsByTagName("content")[0];
         content.style.backgroundColor = color;
         content.style.color = isWhite?"white":"black";
     }
@@ -71,8 +71,8 @@ function setColor(color){
 
 function setAccentColor(color) {
     settings.set("accentColor", elements.accent.value = color);
-    const isWhite = isColorDark(color);
-    const metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
+    /*const*/var isWhite = isColorDark(color);
+    /*const*/var metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
     metroStyle.backgroundColor = charmStyle.backgroundColor = color;
     metroStyle.color = charmStyle.color = isWhite?"white":"black";
     // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
@@ -91,9 +91,9 @@ function updateBlurState() {
 // toggleBlur(JSON.parse(settings.get("blur")));
 }
 
-const settings = new SettingsHandler();
+/*const*/var settings = new SettingsHandler();
 
-const elements = {
+/*const*/var elements = {
     desktop: document.getElementById("desktop"),
     color: document.getElementById("color"),
     accent: document.getElementById("accent"),
@@ -103,11 +103,11 @@ const elements = {
     dockAppList: document.getElementById("dockapplist")
 }
 
-const metroAppList = document.getElementById("metroapplist");
-const blurToggle = document.getElementById("blurtoggle");
-const reflectionToggle = document.getElementById("reflectiontoggle");
-const charmsbutton = applist.appendChild(document.createElement("button"));
-const charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+/*const*/var metroAppList = document.getElementById("metroapplist");
+/*const*/var blurToggle = document.getElementById("blurtoggle");
+/*const*/var reflectionToggle = document.getElementById("reflectiontoggle");
+/*const*/var charmsbutton = applist.appendChild(document.createElement("button"));
+/*const*/var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
 elements.dockAppList.appendChild(windows.browser.createOpenButton());
 

@@ -7,18 +7,18 @@
 'use esnext';
 
 
-const browser = windows.browser.target;//document.getElementById("browser");
-const browserform = windows.browser.originalBody;//document.getElementById("browserform");
-const browserframe = browser.getElementsByTagName("iframe")[0];
-const dockapplist = document.getElementById("dockapplist");
+/*const*/var browser = windows.browser.target;//document.getElementById("browser");
+/*const*/var browserform = windows.browser.originalBody;//document.getElementById("browserform");
+/*const*/var browserframe = browser.getElementsByTagName("iframe")[0];
+/*const*/var dockapplist = document.getElementById("dockapplist");
 
 dockapplist.appendChild(windows.browser.createOpenButton());
 dockapplist.appendChild(windows.console.createOpenButton());
 
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
-    let url = event.target.address.value;
-    let xhr = new XMLHttpRequest();
+    /*let*/var url = event.target.address.value;
+    /*let*/var xhr = new XMLHttpRequest();
     try{
         console.log("The browser is navigating to '" + url + "'");
         if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
@@ -29,8 +29,8 @@ browserform.addEventListener("submit", function(event){
         //  xhr.send();
 
         browserframe.src = url.href;
-        // const links = browserframe.document.getElementsByTagName("a");
-        // for (let link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
+        // /*const*/var links = browserframe.document.getElementsByTagName("a");
+        // for (/*let*/var link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
     } catch (e) {
         // if(e.code == )
         console.log(url, url.hostname)
@@ -59,7 +59,7 @@ browserform.addEventListener("submit", function(event){
 
 
 // Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
-const demo = { // More parameters will be added over time when I need them, you will probably find them as I start using the API instead of hard coding the applications.
+/*const*/var demo = { // More parameters will be added over time when I need them, you will probably find them as I start using the API instead of hard coding the applications.
     title: "demo", // The window title! These don't have to be unique.
     id: "demo", // !! Unique identifier !! Necessary to save, restore and identify the window / dialog in HTML and JavaScript. Duplicates end up giving unexpected behaviour when dragging windows around (the first occurency of given ID is selected from HTML and all code from duplicates is forwarded to this). A way to prevent these problems is by providing a check to see if an ID exists and if so, add a number to the ID (ex: demo1, demo2, demo3).
     src: "./Applications/Velocities.html", // The path to the HTML file. Inline HTML can be added later but making that work with scripts is excessive work.
@@ -84,7 +84,7 @@ const demo = { // More parameters will be added over time when I need them, you 
 
 // Working tests of my Window injection API.
 /** @type {Application[]} */
-const applications = [
+/*const*/var applications = [
     {
         title: "Calculator",
         id: "calculator",
@@ -177,7 +177,7 @@ const applications = [
 ]
 
 /** @type {Application[]} */
-const games = [
+/*const*/var games = [
     {
         title: "Conway",
         id: "conway",

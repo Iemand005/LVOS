@@ -1,15 +1,15 @@
 //  Cover flow
-// Lasse Lauwerys © 2024
+// Lasse Lauwerys ï¿½ 2024
 
 'use strict';
 'use esnext';
 'use moz';
 
-const oneDiv = document.querySelector("div");
-const allDivs = document.querySelectorAll("div");
+/*const*/var oneDiv = document.querySelector("div");
+/*const*/var allDivs = document.querySelectorAll("div");
 
 function fixZIndex(){
-    const rightHandDivs = document.querySelectorAll("div#active~div");
+    /*const*/var rightHandDivs = document.querySelectorAll("div#active~div");
     allDivs.forEach(function(elmeent, index){
         elmeent.style.zIndex = 0;
     });
@@ -20,7 +20,7 @@ function fixZIndex(){
 
 fixZIndex();
 
-let neededWidth = 0;
+/*let*/var neededWidth = 0;
 allDivs.forEach(function(element){
     fixZIndex();
     neededWidth += element.offsetWidth;
@@ -31,7 +31,7 @@ allDivs.forEach(function(element){
     });
 });
 
-const section = document.querySelector("section");
+/*const*/var section = document.querySelector("section");
 
 if (section) {
     document.querySelector("section").style.width = neededWidth;
@@ -47,12 +47,12 @@ function activateElement(element){
 }
 
 function scroll(ev){
-    const eyea = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
+    /*const*/var eyea = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2);
     console.log("ratte")
     if(eyea.tagName == "DIV") activateElement(eyea);
 }
 
-const flow = document.getElementsByClassName("coverflow")[0];
+/*const*/var flow = document.getElementsByClassName("coverflow")[0];
 document.querySelector(".coverflow").onscroll = scroll
 flow.onscroll = scroll;
 window.onscroll = scroll;

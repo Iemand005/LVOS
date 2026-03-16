@@ -1,10 +1,10 @@
 
 
 
-const bindConsole = false;
+/*const*/var bindConsole = false;
 
 
-const ConsoleOutType = {
+/*const*/var ConsoleOutType = {
     Input: -1,
     Return: 0,
     Log: 1,
@@ -14,9 +14,9 @@ const ConsoleOutType = {
 
 function initializeConsoleApplication(){
     if(!windows["console"]) return;
-    const consoleform = windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
-    const stdout = consoleform.stdout || consoleform.getElementsByTagName("output")[0];
-    const interceptConsole = function(){
+    /*const*/var consoleform = windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
+    /*const*/var stdout = consoleform.stdout || consoleform.getElementsByTagName("output")[0];
+    /*const*/var interceptConsole = function(){
         if(stdout.firstChild) stdout.removeChild(stdout.firstChild);
         stdout.appendChild(console.getHTML());
         consoleform.scrollTop = consoleform.scrollHeight;
@@ -64,14 +64,14 @@ function initializeConsoleApplication(){
     }
 
     console.getHTML = function(){
-        let output = document.createElement("table");
-        for (let index in console.results) {
-            const result = console.results[index];
-            const tableRow = document.createElement("tr");
-            const tableData = document.createElement("td");
-            for(let dataIndex in result.data){
-                const data = result.data[dataIndex];
-                const span = document.createElement("span");
+        /*let*/var output = document.createElement("table");
+        for (/*let*/var index in console.results) {
+            /*const*/var result = console.results[index];
+            /*const*/var tableRow = document.createElement("tr");
+            /*const*/var tableData = document.createElement("td");
+            for(/*let*/var dataIndex in result.data){
+                /*const*/var data = result.data[dataIndex];
+                /*const*/var span = document.createElement("span");
                 switch(result.type){
                     case ConsoleOutType.Input:
                         span.style.color = "black";

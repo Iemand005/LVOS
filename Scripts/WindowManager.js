@@ -11,10 +11,10 @@
 \*/
 
 'use strict'; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both destkop and Metro mode).
-'use esnext'; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of let and const.
-'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use let and const on those too.
+'use esnext'; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of /*let*/var and const.
+'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
-let // Defining the default settings as let so we can modify them.
+/*let*/var // Defining the default settings as /*let*/var so we can modify them.
     blur = false,
     reflections = true,
     fasterDialogTracking = true,
@@ -24,7 +24,7 @@ let // Defining the default settings as let so we can modify them.
     flipped = false,
     useTransform = true;
 
-const supportsPointer = typeof PointerEvent !== "undefined";
+/*const*/var supportsPointer = typeof PointerEvent !== "undefined";
 
 if (supportsPointer) console.log("Supports pointer events!");
 
@@ -65,7 +65,7 @@ function Dialog(object) {
     this.minHeight = 200;
 
     if (!object) return;
-    const dialog = this;
+    /*const*/var dialog = this;
 
     /** @type {HTMLElement} */
     this.target = null;
@@ -108,7 +108,7 @@ function Dialog(object) {
 
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
-    const dialog = this;
+    /*const*/var dialog = this;
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
@@ -176,13 +176,13 @@ Dialog.prototype.initWithObject = function (object) {
 
     if (object.body) this.body.appendChild(object.body);
 
-    const target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    /*const*/var target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
-        for (let index = 0; index < 8; index++) {
-            const div = document.createElement("div");
+        for (/*let*/var index = 0; index < 8; index++) {
+            /*const*/var div = document.createElement("div");
             div.draggable = false, div.id = index + 1;
-            const pointerDown = function (ev) {
+            /*const*/var pointerDown = function (ev) {
                 dragAction.set(ev.target.id);
             }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
             if (supportsPointer) div.onpointerdown = pointerDown;
@@ -196,9 +196,9 @@ Dialog.prototype.initWithObject = function (object) {
     if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
     else this.target.addEventListener("mousedown", windowActivationEvent);
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        const rect = target.getClientRects()[0];
-        const viewboxPosition = getViewboxPosition();
-        const propeties = {
+        /*const*/var rect = target.getClientRects()[0];
+        /*const*/var viewboxPosition = getViewboxPosition();
+        /*const*/var propeties = {
             scrollbars: true,
             resizable: true,
             status: false,
@@ -215,7 +215,7 @@ Dialog.prototype.initWithObject = function (object) {
         dialog.quit();
     });
 
-    const buttons = target.getElementsByTagName("button");
+    /*const*/var buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function () {
         dialog.close();
     }.bind(dialog));
@@ -304,7 +304,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
-        const difference  = this.top - top;
+        /*const*/var difference  = this.top - top;
         if (difference + this.height < this.minHeight) this.top = this.bottom - this.minHeight;
         else {
             this.y = top;
@@ -315,7 +315,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        const difference  = this.left - left;
+        /*const*/var difference  = this.left - left;
         if (difference + this.width < this.minWidth) this.left = this.right - this.minWidth;
         else {
             this.x = left;
@@ -355,7 +355,7 @@ Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
         if (!this.target) return null;
         /** @type {HTMLElement} */
-        const content = this.target.getElementsByTagName("content")[0];
+        /*const*/var content = this.target.getElementsByTagName("content")[0];
         return content;
     }
 });
@@ -374,7 +374,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 });
 
 /** @type {Dialog} */
-let focusedDialog = null;
+/*let*/var focusedDialog = null;
 Dialog.prototype.focus = function() {
     if (focusedDialog !== null)
         focusedDialog.target.removeAttribute("focus");
@@ -395,7 +395,7 @@ Dialog.prototype.getRect = function (index) { return index == null ? this.target
 Dialog.prototype.getButton = function (index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 Dialog.prototype.setClickOffset = function (x, y) {
-    const rect = this.getRect();
+    /*const*/var rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function () {return !!(this.href); };
@@ -405,7 +405,7 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 }});
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
-    const events = enable ? "auto" : "none";
+    /*const*/var events = enable ? "auto" : "none";
     if (this.target) this.target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
     if (this.frame || this.getFrame()) (this.frame || this.getFrame()).style.pointerEvents = events;
@@ -428,7 +428,7 @@ Dialog.prototype.move = function (x, y) {
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
 Dialog.prototype.openUrl = function (url) {
-    const frameUrl = new URL(this.frame.src);
+    /*const*/var frameUrl = new URL(this.frame.src);
     frameUrl.searchParams.set("url", url);
     this.frame.src = frameUrl.href;
     this.launch();
@@ -501,32 +501,32 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 /** @type {{[id:string]: Dialog}} */
-const windows = {};
-const windowButtons = {
+/*const*/var windows = {};
+/*const*/var windowButtons = {
     eject: 0,
     full: 1,
     close: 2
 };
-let activeDialog = null;
-let resizeDirection = 0;
-let topZ = 100;
-let bodyCrawler = new DocumentCrawler(document);
-let metroBodyOrigin;
-let timeout;
-let loaded = false;
-const dragAction = new DragAction();
-// let flipped = false;
+/*let*/var activeDialog = null;
+/*let*/var resizeDirection = 0;
+/*let*/var topZ = 100;
+/*let*/var bodyCrawler = new DocumentCrawler(document);
+/*let*/var metroBodyOrigin;
+/*let*/var timeout;
+/*let*/var loaded = false;
+/*const*/var dragAction = new DragAction();
+// /*let*/var flipped = false;
 
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     //console.log(data, type, source)    
-    const types = Messenger.types;
+    /*const*/var types = Messenger.types;
     if (source) {
         if (type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
                 bodyCrawler.overlay.ontransitionend = function () {
                     windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
-                    const oriurl = new URL(windows[source].frame.src);
+                    /*const*/var oriurl = new URL(windows[source].frame.src);
                     oriurl.searchParams.set("fullscreen", true);
                     windows[source].frame.src = oriurl.href;
                     bodyCrawler.overlay.ontransitionend = null;
@@ -572,7 +572,7 @@ function flipHandler(enabled){
 
 Messenger.receive(messageReceived);
 
-const toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
+/*const*/var toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
 
 toggleOverlay(loadingOverlay);
 
@@ -611,7 +611,7 @@ function initializeDialogs() {
     // if (document.ontouchend) document.ontouchend = disableDialogDrag;
     
     dragAction.set(0);
-    const dialogs = bodyCrawler.getAllDialogs();
+    /*const*/var dialogs = bodyCrawler.getAllDialogs();
     dialogs.forEach(function (dialog) {
         windows[dialog.id] = new Dialog(dialog); 
     });
@@ -620,8 +620,8 @@ function initializeDialogs() {
     loadDialogState();
 }
 
-// Normally we use const in for in loops!
-// I am using let for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use const because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
+// Normally we use /*const*/var in for in loops!
+// I am using /*let*/var for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use /*const*/var because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
 
 /**
  * 
@@ -632,12 +632,12 @@ function windowActivationEvent(event){
     /**
      * Activates the window on which the provided event was fired.
      */
-    const dialog = getEventDialog(event);
+    /*const*/var dialog = getEventDialog(event);
     if (!isDialog(dialog)) return console.warn("This is not a dialog");
     activeDialog = dialog.id;
     resizeDirection = 0;
     enableDialogDrag();
-    const mouse = {x: event.clientX || 0, y:  event.clientY || 0};
+    /*const*/var mouse = {x: event.clientX || 0, y:  event.clientY || 0};
     windows[activeDialog].setClickOffset(mouse.x, mouse.y);
     windows[activeDialog].activate();
     return dialog;
@@ -648,8 +648,8 @@ function windowActivationEvent(event){
  */
 function windowDragEvent(event){
     try {
-        const dialog = windows[activeDialog];
-        const difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
+        /*const*/var dialog = windows[activeDialog];
+        /*const*/var difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
         dragAction.execute(dialog, dialog.clickOffset, difference);
 
@@ -673,7 +673,7 @@ function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set(0);
-    for (let index in windows) windows[index].togglePointerEvents(true);
+    for (/*let*/var index in windows) windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
     if (windows[activeDialog])
         if (windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
@@ -681,11 +681,11 @@ function disableDialogDrag() {
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for (let index in windows) windows[index].togglePointerEvents(false);
+    for (/*let*/var index in windows) windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ() {
-    for (let window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
+    for (/*let*/var window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
 }
 
 function stringifyDialogProperties(properties){
@@ -721,7 +721,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterDialogTracking && event.clientX && event.clientY) try {
-        const window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return element.classList && element.classList.contains("window") });
+        /*const*/var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return element.classList && element.classList.contains("window") });
         return window;
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
@@ -798,8 +798,8 @@ function saveDialogState(){
     if (!loaded) return;
     console.log("Saving window state.");
     if (canSave && localStorage) try {
-        const windowState = {};
-        for (let id in windows) {
+        /*const*/var windowState = {};
+        for (/*let*/var id in windows) {
             if (windows[id]){
                 // windows[id].width = windows[id].target.clientWidth;
                 // windows[id].height = windows[id].target.clientHeight;
@@ -817,8 +817,8 @@ function loadDialogState(){
     console.log("Loading window state.")
     if (canSave) try {
         if (localStorage && localStorage.windowState){
-            const parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
-            for (let window in parsedDialogs) try {
+            /*const*/var parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
+            for (/*let*/var window in parsedDialogs) try {
                 if (windows[window] && parsedDialogs[window]) collectEssentialDialogData(windows[window], parsedDialogs[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
             } catch (ex) { fails.push(ex); }
             fails.forEach(console.error.bind(this, "Tailed to load a window!"));
@@ -832,13 +832,13 @@ function loadDialogState(){
 function exportDialogBodyToMetro(dialog){
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
     if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
-        const metro = bodyCrawler.getMetro();
+        /*const*/var metro = bodyCrawler.getMetro();
         if (metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
     }
 }
 
 function retrieveDialogBodyFromMetro(dialog){
-    const metroBody = bodyCrawler.getMetroBody();
+    /*const*/var metroBody = bodyCrawler.getMetroBody();
     if (!metroBody) return;
     if (dialog) dialog.content.appendChild(metroBody);
 }
@@ -890,7 +890,7 @@ function injectApplications(applications){
 }
 
 function closeApp(appId) {
-    const element = windows[appId].target;
+    /*const*/var element = windows[appId].target;
     element.parentElement.removeChild(element);
 }
 

@@ -1,4 +1,4 @@
-// Engine and physics for Verlet Störmer integration
+// Engine and physics for Ver/*let*/var Störmer integration
 // Lasse Lauwerys © 2023
 // 30/12/2023
 

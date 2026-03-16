@@ -4,8 +4,8 @@
 
 'use strict';
 'use esnext';
-const displayBuilder = new DisplayBuilder();
-const akka = displayBuilder.build();
+/*const*/var displayBuilder = new DisplayBuilder();
+/*const*/var akka = displayBuilder.build();
 document.body.appendChild(akka);
 
 document.getElementById("size").onchange = function () {

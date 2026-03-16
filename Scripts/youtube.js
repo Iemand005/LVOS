@@ -13,7 +13,7 @@ function YouTubeParser(url){
 
 YouTubeParser.prototype = {
     get embedURL() {
-        const url = new URL(this.url);
+        /*const*/var url = new URL(this.url);
         url.pathname = "/embed/" + url.searchParams.get("v");
         url.searchParams.delete("v");
         return url;

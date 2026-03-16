@@ -29,7 +29,7 @@ function tokenizeNumber(number){ // There are probably better ways to do this bu
  * These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " "
  * @type Array<Array<boolean>, 7>
  */
-const displayNumbers = [
+/*const*/var displayNumbers = [
     [true, true, true, false, true, true, true],
     [false, false, true, false, false, true, false],
     [true, false, true, true, true, false, true],
@@ -47,11 +47,11 @@ const displayNumbers = [
 DisplayBuilder.prototype = {
     number: 1,
     build: function(){
-        const display = document.createElement("div");
+        /*const*/var display = document.createElement("div");
         display.classList.add("segmentdisplay");
         if(this.singular) display.classList.add("singular");
-        classifier: for (let i = 0; i < 7; i++) {
-            const segment = display.appendChild(document.createElement("div"));
+        classifier: for (/*let*/var i = 0; i < 7; i++) {
+            /*const*/var segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
             if(this.singular) continue classifier; // Labelled for loop, similar to a goto command. CSS takes care of the styling automatically, so we don't need the rest anymore.
             if(i===0 || i===3 || i===6) segment.classList.add("segmentx");
@@ -93,7 +93,7 @@ DisplayBuilder.prototype = {
 function MultiDigitDisplayBuilder(digits, number, singleSided){
     this.displays = [];
     this.digits = digits
-    for (let i = 0; i < this.digits; i++) {
+    for (/*let*/var i = 0; i < this.digits; i++) {
         this.displays.push(new DisplayBuilder(number, i, singleSided));
     }    
 }
@@ -105,7 +105,7 @@ MultiDigitDisplayBuilder.prototype = {
         });
     },
     update: function(number){
-        const max = "9".repeat(this.digits);
+        /*const*/var max = "9".repeat(this.digits);
         this.displays.forEach(function(display, index){
             display.update(max > number ? tokenizeNumber(number)[index] : 9);
         });

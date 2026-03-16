@@ -1,16 +1,16 @@
 // Lasse Lauwerys
 // 6/01/2024
-// Physics simulation with Verlet Störmer integration
+// Physics simulation with Ver/*let*/var Störmer integration
 // Integration methods: Euiler, Mid-Point, Runga Kutta (4), Verlet
-// Benefit of Verlet over Euler: Verlet is reversable.
+// Benefit of Ver/*let*/var over Euler: Ver/*let*/var is reversable.
 
 'use strict'
 
 // Switch between canvas and html for rendering the objects. Canvas looks smoother as it interpolates the pixels with floating point position, while html aligns the elements to the display pixels.
-const canvasRenderer = true;
-const flipY = false;
-const framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
-const frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
+/*const*/var canvasRenderer = true;
+/*const*/var flipY = false;
+/*const*/var framerate = 60//60//60; // Target framerate, used as time slot for the physics simulation in case frame skip is disabled and as the rate at which to run the update method.
+/*const*/var frameskip = false; // Setting frame skip to true gives a more accurate simulation but can cause the timing to become offset if rendering a frame takes longer than normal which upon collision between the previous and current frame can cause extra velocity to be added..
 function Verlet(position, pinned){
     if(!position) position = new Vector;
     this.positions = [position.clone(), position.clone()];
@@ -18,7 +18,7 @@ function Verlet(position, pinned){
     this.pinned = pinned || false;
 }
 
-const boundaries = {
+/*const*/var boundaries = {
     top: 0,
     left: 0,
     right: document.body.clientWidth,
@@ -27,7 +27,7 @@ const boundaries = {
 
 function resizeBoundaries(){
     console.log('resized!');
-    const rect = document.body.getBoundingClientRect();
+    /*const*/var rect = document.body.getBoundingClientRect();
     boundaries.right = rect.width, boundaries.bottom = rect.height;
 }
 
@@ -42,15 +42,15 @@ Verlet.prototype = {
     //pinned: false,
     integrate: function(){
         if(this.pinned) return;
-        const time = this.dt*this.dt;
-        const friction = 0.05;
-        //const knots = this.positions.shift();
+        /*const*/var time = this.dt*this.dt;
+        /*const*/var friction = 0.05;
+        ///*const*/var knots = this.positions.shift();
         //console.log(this.position, this.oldPosition)
         //if(this.position == this.oldPosition) console.error("akkbar WTFFFFFFFFFFFFFFFFFF!?!?");
         //if(this.positions[0].y == this.positions[1].y /*|| this.positions[0].x == this.positions[1].x*/) console.error("WTFFFFFFFFFFFFFFFFFF!?!?");
-        //const kak = this.position.product(new Vector(2-friction, 2-friction)).difference(knots.product(new Vector(1-friction, 1-friction))).sum(this.acceleration.product(new Vector(time, time)));
-        const oldPosition = this.position.clone();
-        const difference = this.position.difference(this.oldPosition)//.product(new Vector(1-friction, 1-friction)));
+        ///*const*/var kak = this.position.product(new Vector(2-friction, 2-friction)).difference(knots.product(new Vector(1-friction, 1-friction))).sum(this.acceleration.product(new Vector(time, time)));
+        /*const*/var oldPosition = this.position.clone();
+        /*const*/var difference = this.position.difference(this.oldPosition)//.product(new Vector(1-friction, 1-friction)));
         this.position.add(new Vector(Math.min(Math.max(difference.x, -this.maxSpeed), this.maxSpeed), Math.min(Math.max(difference.y, -this.maxSpeed), this.maxSpeed)));
         this.position.add(this.acceleration.product(new Vector(time, time)));
 
@@ -64,7 +64,7 @@ Verlet.prototype = {
         this.integrate();
     },
     integrateVelocity: function(){
-        const time = 1;
+        /*const*/var time = 1;
         //this.positions.push(this.position.clone().mul(new Vector(2,2)).sub(this.positions.shift()).add(this.acceleration.clone().mul(new Vector(time*time, time*time))));
     },
 
@@ -72,7 +72,7 @@ Verlet.prototype = {
         return this.dt = null;
     },
     bounce: function(origin, direction){
-        const vel = this.position.difference(this.oldPosition), diffY = this.position.y - y;
+        /*const*/var vel = this.position.difference(this.oldPosition), diffY = this.position.y - y;
         
         this.position.y = y;
         
@@ -94,7 +94,7 @@ Verlet.prototype = {
 }
 
 function Ball(x, y, radius){
-    this.verlet = new Verlet(new Vector(x, y));
+    this.ver/*let*/var = new Verlet(new Vector(x, y));
     this.update = this.verlet.update.bind(this.verlet);
     this.radius = this.rad = radius || 10;
     this.color = "red";
@@ -125,7 +125,7 @@ function toPx(value){
     return Math.round(value) + "px";
 }
 
-const bounce = false;
+/*const*/var bounce = false;
 
 Ball.prototype = {
     resolveCollisions: function(){
@@ -134,16 +134,16 @@ Ball.prototype = {
         else if (this.position.x > boundaries.right - this.radius) this.position.x = 2*(boundaries.right-this.radius )- (this.position.x), this.oldPosition.x = bounce? 2*(boundaries.right-this.radius ) - (this.oldPosition.x ): this.position.x;//, this.oldPosition.y = boundaries.bottom - this.radius;
         if (this.position.y > boundaries.bottom - this.radius) this.position.y = 2*(boundaries.bottom-this.radius )- (this.position.y), this.oldPosition.y = bounce? 2*(boundaries.bottom-this.radius ) - (this.oldPosition.y ): this.position.y;//, this.oldPosition.y = boundaries.bottom - this.radius;
         else if (this.position.y < this.radius) this.position.y = 2*this.radius - this.position.y, this.oldPosition.y = bounce? 2*this.radius - this.oldPosition.y: this.position.y;//, this.oldPosition.y = boundaries.bottom - this.radius;
-        collision: for (let i in simulation.objects) {
-            const object = simulation.objects[i];
+        collision: for (/*let*/var i in simulation.objects) {
+            /*const*/var object = simulation.objects[i];
             if(this==object) break collision;
-            const dx = this.position.x - object.position.x;
-            const dy = this.position.y - object.position.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            const depth = this.radius*2 - dist;
+            /*const*/var dx = this.position.x - object.position.x;
+            /*const*/var dy = this.position.y - object.position.y;
+            /*const*/var dist = Math.sqrt(dx*dx + dy*dy);
+            /*const*/var depth = this.radius*2 - dist;
             if (depth > 0) {
                 //console.log("collided!", depth)
-                const fac = 1 / (dist||0.1) * depth * 0.5;
+                /*const*/var fac = 1 / (dist||0.1) * depth * 0.5;
                 if(!this.pinned){
                     this.position.x += dx*fac;
                     this.position.y += dy*fac;
@@ -196,15 +196,15 @@ function random(min, max){
     return Math.random()* (max-min) + min;
 }
 
-const canvas = document.getElementById("box");
-const ctx = canvas.getContext("2d");
+/*const*/var canvas = document.getElementById("box");
+/*const*/var ctx = canvas.getContext("2d");
 
 
 function Simulation(canvasRenderer){
     this.objects = [];
     this.boundaries = new Rectangle(boundaries.left, boundaries.top, boundaries.right, boundaries.bottom);
     console.log(this.boundaries)
-    const quadTree = this.quadTree = new QuadTree(this.boundaries, 4);
+    /*const*/var quadTree = this.quadTree = new QuadTree(this.boundaries, 4);
     quadTree.updateDraw();
     
     if(canvasRenderer){
@@ -212,11 +212,11 @@ function Simulation(canvasRenderer){
         this.canvas = canvas;
 
         document.body.appendChild(this.canvas);
-        const ctx = this.ctx = this.canvas.getContext("2d");
+        /*const*/var ctx = this.ctx = this.canvas.getContext("2d");
         // 5
         this.rescale = function(){
             // console.log(this.canvas)
-            const bounds = this.canvas.getBoundingClientRect();
+            /*const*/var bounds = this.canvas.getBoundingClientRect();
             this.canvas.width = bounds.width;
             this.canvas.height = bounds.height;
         }.bind(this);
@@ -231,7 +231,7 @@ function Simulation(canvasRenderer){
             ctx.arc(scalePixels(this.pos.x), flipY ? canvas.height - scalePixels(this.pos.y): scalePixels(this.pos.y), scalePixels(this.rad), 0, 2*Math.PI);
             ctx.fill();
             
-            const border = true;
+            /*const*/var border = true;
             if(border) {
                 ctx.strokeStyle = "black";
                 ctx.stroke();
@@ -257,7 +257,7 @@ function Simulation(canvasRenderer){
         }
         Ball.prototype.draw = function(){
             if(!this.element) if(!this.initialize()) return;
-            const style = this.element.style;
+            /*const*/var style = this.element.style;
             style.height = toPx(scalePixels(this.diameter));
             style.width = toPx(scalePixels(this.diameter));
             style.borderRadius = toPx(scalePixels(this.rad));
@@ -276,11 +276,11 @@ function Simulation(canvasRenderer){
     }
 }
 
-const updateEvent = new Event("update");
+/*const*/var updateEvent = new Event("update");
 
 Simulation.prototype.update = function(){
     this.clear();
-    const quadTree = this.quadTree;
+    /*const*/var quadTree = this.quadTree;
     if(quadTree.draw) quadTree.draw();
     document.dispatchEvent(updateEvent);
     this.quadTree.reset();
@@ -306,7 +306,7 @@ QuadTree.prototype.updateDraw = function(){
             ctx.beginPath();
             ctx.rect(0, 0, canvas.width, canvas.height)
             ctx.fill();
-            const borderColor = true;
+            /*const*/var borderColor = true;
             if(borderColor) {
                 ctx.strokeStyle = "black";
                 ctx.stroke();
@@ -340,14 +340,14 @@ QuadTree.prototype.drawChildren = function(){
     }
 }
 
-const simulation = new Simulation(canvasRenderer);
+/*const*/var simulation = new Simulation(canvasRenderer);
 
 
-const b = new Ball(40, 400, 10);
+/*const*/var b = new Ball(40, 400, 10);
 b.acceleration.y = 3000.81//9.81;
 b.verlet.pinned = true;
 
-//const mousePosition = new Vector;
+///*const*/var mousePosition = new Vector;
 document.onmousemove = function(ev){
     b.position.x = b.oldPosition.x = ev.clientX;
     b.position.y = b.oldPosition.y = ev.clientY;
@@ -359,13 +359,13 @@ simulation.objects.push(b);
 simulation.start(framerate);
 
 
-ballcount: for (let index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
-for (let index = 0; index < 100; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
+ballcount: for (/*let*/var index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
+for (/*let*/var index = 0; index < 100; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
 //console.log(ballcount);
 
-// const simulation2 = new Simulation(canvasRenderer);
+// /*const*/var simulation2 = new Simulation(canvasRenderer);
 
-// const b2 = new Ball(20, 4, 10);
+// /*const*/var b2 = new Ball(20, 4, 10);
 // b2.acceleration.y = 90.81//9.81;
 
 // simulation2.objects.push(b2);

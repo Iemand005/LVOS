@@ -5,24 +5,24 @@
 'use esnext';
 'use moz';
 
-const frequencies = 128;
+/*const*/var frequencies = 128;
 
-const micButton = document.getElementById("mic");
-const virtualAudio = document.createElement("audio");
-const file = document.getElementById("file");
-const audio = document.getElementsByTagName("audio")[0];
-const visualiser = document.getElementById("visualiser");
-const ctx = visualiser.getContext("2d");
-const fullscreen = document.getElementById("fullscreen");
-const volume = document.getElementById("volume");
-const seek = document.getElementById("seek");
-const play = document.getElementById("play");
-const options = document.getElementById("options");
-const seekOutput = document.getElementById("seek-output");
-const volumeOutput = document.getElementById("volume-output");
-const fft = document.getElementById("fft");
-const visualiserOption = document.getElementById("style");
-const elements = [];
+/*const*/var micButton = document.getElementById("mic");
+/*const*/var virtualAudio = document.createElement("audio");
+/*const*/var file = document.getElementById("file");
+/*const*/var audio = document.getElementsByTagName("audio")[0];
+/*const*/var visualiser = document.getElementById("visualiser");
+/*const*/var ctx = visualiser.getContext("2d");
+/*const*/var fullscreen = document.getElementById("fullscreen");
+/*const*/var volume = document.getElementById("volume");
+/*const*/var seek = document.getElementById("seek");
+/*const*/var play = document.getElementById("play");
+/*const*/var options = document.getElementById("options");
+/*const*/var seekOutput = document.getElementById("seek-output");
+/*const*/var volumeOutput = document.getElementById("volume-output");
+/*const*/var fft = document.getElementById("fft");
+/*const*/var visualiserOption = document.getElementById("style");
+/*const*/var elements = [];
 
 ctx.globalAlpha = 0.1;
 
@@ -37,11 +37,11 @@ fullscreen.onclick = function(){
     Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
 }
 
-let audioVisualiser;
-let circular = true;
-let clear = false;
-const colorBuffer = [0, 0];
-const valueBuffer = new Array(30);
+/*let*/var audioVisualiser;
+/*let*/var circular = true;
+/*let*/var clear = false;
+/*const*/var colorBuffer = [0, 0];
+/*const*/var valueBuffer = new Array(30);
 
 function animateFrame(audioVisualiser, time){
 
@@ -56,32 +56,32 @@ function animateFrame(audioVisualiser, time){
     }
     refresh();
     //seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
-    const width = ctx.canvas.width = visualiser.clientWidth;
-    const height = ctx.canvas.height = visualiser.clientHeight;
+    /*const*/var width = ctx.canvas.width = visualiser.clientWidth;
+    /*const*/var height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
 
-    const freqData = audioVisualiser.frequencyData;
-    const timeData = audioVisualiser.timeDomainData;
-    const count = timeData.length;
+    /*const*/var freqData = audioVisualiser.frequencyData;
+    /*const*/var timeData = audioVisualiser.timeDomainData;
+    /*const*/var count = timeData.length;
     
-    let cX = width/2;
-    let cY = height/2;
-    const hue = time/321;
-    const a = 70;
+    /*let*/var cX = width/2;
+    /*let*/var cY = height/2;
+    /*const*/var hue = time/321;
+    /*const*/var a = 70;
     ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
     ctx.fill();
     if(visualiserOption.selectedIndex){
-        let rad = 0, inc = Math.PI*2*(1/count);
+        /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
-        for(let index in timeData){
-            const amp = parseInt(timeData[index]);
+        for(/*let*/var index in timeData){
+            /*const*/var amp = parseInt(timeData[index]);
 
-            const a = parseInt(freqData[index]);
+            /*const*/var a = parseInt(freqData[index]);
 
-            const x = (amp) * Math.cos(rad) + cX;
-            const y = (amp) * Math.sin(rad) + cY;
+            /*const*/var x = (amp) * Math.cos(rad) + cX;
+            /*const*/var y = (amp) * Math.sin(rad) + cY;
             ctx.beginPath();
 
             ctx.fillStyle = "hsl(" + hue + ",100%,"+ a/255*100 +"%)";
@@ -92,11 +92,11 @@ function animateFrame(audioVisualiser, time){
 
             rad += inc;
         }
-    } else for(let index in freqData){
+    } else for(/*let*/var index in freqData){
     ctx.beginPath();
 
-        const amp = parseInt(freqData[index]);
-        const x = parseInt(index) * (width/count);
+        /*const*/var amp = parseInt(freqData[index]);
+        /*const*/var x = parseInt(index) * (width/count);
         ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
         ctx.fill();
@@ -151,7 +151,7 @@ volume.oninput = function(ev){
     audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
 }
 
-let timeout;
+/*let*/var timeout;
 function autoHideControls(){
     document.body.classList.remove("full");
     clearTimeout(timeout);
@@ -165,9 +165,9 @@ if(new URL(window.location).searchParams && new URL(window.location).searchParam
 }
 
 function refresh(){
-    const m = parseInt(audio.currentTime/60);
-    const s = parseInt(audio.currentTime%60);
-    const ms = parseInt(audio.currentTime%1/0.01);
-    const text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
+    /*const*/var m = parseInt(audio.currentTime/60);
+    /*const*/var s = parseInt(audio.currentTime%60);
+    /*const*/var ms = parseInt(audio.currentTime%1/0.01);
+    /*const*/var text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     seekOutput.innerText = text;
 }

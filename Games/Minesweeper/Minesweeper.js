@@ -5,7 +5,7 @@
 
 'use strict';
 
-const // Declaring the constant variables.
+/*const*/var // Declaring the constant variables.
     width = 10, height = 10,
     quickReveal = true,
     singleSidedDisplay = true,
@@ -38,7 +38,7 @@ const // Declaring the constant variables.
     mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
-let isGameOver = false,
+/*let*/var isGameOver = false,
     isGameWon = false,
     mousedown = false,
     gameStarted = false,
@@ -64,7 +64,7 @@ Tile.prototype = {
         if(this.revealed) return 0;
         if(!gameStarted) gameStarted = true, activateTimer();
         this.revealed = true;
-        const remaining = countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
+        /*const*/var remaining = countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
 
         classes.add("revealed");
         this.disable();
@@ -73,13 +73,13 @@ Tile.prototype = {
             this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
         }
         else this.button.innerText = !isGameWon?signs.exploded:signs.correct, gameOver();
-        if(neighbourCount == 0) for(let neighbour in neighbours) neighbours[neighbour].reveal();
+        if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) neighbours[neighbour].reveal();
         return neighbourCount;
     },
     getNeighbours: function(){
-        const neighbours = new Array();
-        for (let i = 0; i < 9; i++) {
-            const x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
+        /*const*/var neighbours = new Array();
+        for (/*let*/var i = 0; i < 9; i++) {
+            /*const*/var x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
             if((!(x == this.position.x && y == this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
         }
         return neighbours;
@@ -100,7 +100,7 @@ Tile.prototype = {
     enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); },
     quickReveal: function(){
         if(quickReveal){
-            const neighbours = this.getNeighbours();
+            /*const*/var neighbours = this.getNeighbours();
             if(this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour){neighbour.reveal();});
         }
     },
@@ -112,12 +112,12 @@ function startGame(){
     isGameOver = false;
     setEmoji();
     while(table.firstChild) table.removeChild(table.firstChild); // Clear the table
-    for (let y = 0; y < height; y++) {
+    for (/*let*/var y = 0; y < height; y++) {
         tiles[y] = new Array();
-        const row = document.createElement("tr");
+        /*const*/var row = document.createElement("tr");
         table.appendChild(row);
-        for (let x = 0; x < width; x++) {
-            const button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
+        for (/*let*/var x = 0; x < width; x++) {
+            /*const*/var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
             row.appendChild(document.createElement("td")).appendChild(button);
             button.classList.add("mine");
             tile.generate();
@@ -139,7 +139,7 @@ function startGame(){
 
             button.onclick = function(ev){
                 if(ev.button == 0 && tile.isClickAllowed()){
-                    const neighbours = tile.reveal();
+                    /*const*/var neighbours = tile.reveal();
                     if(!tile.mine) button.innerText = neighbours;
                     else gameOver();
                 } else ev.preventDefault();
@@ -165,9 +165,9 @@ Messenger.onHostBeingLVOS(function () {
 });
 
 function quickRevealEvent(ev) {
-    const element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
+    /*const*/var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
     if(element) {
-        const tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
+        /*const*/var tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
         if(tile && tile.flagged!=1) tile.quickReveal();
     }
 }
@@ -199,7 +199,7 @@ function countBombs(){
 }
 
 function activateTimer(){
-    let timer = 0;
+    /*let*/var timer = 0;
     displays[1].update(timer++);
     timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
 }
@@ -210,7 +210,7 @@ function stopTimer(reset){
 }
 
 if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
-for(let i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
+for(/*let*/var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 
 body.ondblclick = quickRevealEvent;
 body.ontouchend = quickRevealEvent;

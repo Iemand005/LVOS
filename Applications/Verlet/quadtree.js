@@ -15,7 +15,7 @@ QuadTree.prototype = {
     southwest: null,
     southeast: null,
     divide: function(){
-        const w = this.boundary.width/2, h = this.boundary.height/2, x1 = this.boundary.x, y1 = this.boundary.y, x2 = this.boundary.x + w, y2 = this.boundary.y + h;
+        /*const*/var w = this.boundary.width/2, h = this.boundary.height/2, x1 = this.boundary.x, y1 = this.boundary.y, x2 = this.boundary.x + w, y2 = this.boundary.y + h;
         this.northeast = new QuadTree(new Rectangle(x2, y1, w, h), this.capacity);
         this.northwest = new QuadTree(new Rectangle(x1, y1, w, h), this.capacity);
         this.southeast = new QuadTree(new Rectangle(x2, y2, w, h), this.capacity);

@@ -1,18 +1,18 @@
-const citatesContainer = document.getElementById("citates");
-const citateStore = "citates";
+/*const*/var citatesContainer = document.getElementById("citates");
+/*const*/var citateStore = "citates";
 
 function injectCitate(citate, form){
     storeCitate(citate);
     if(form == null) form = document.querySelector("form");
-    let result = "Success!";
+    /*let*/var result = "Success!";
     try{
         console.log(citate);
         //Reguliere expressie met i om ook hoofdletters te detekteren. && in plaats van & zorgt ervoor dat de statement niet beide nakijkt als een vals aangeeft.
         if (!/[a-z]/.test(citate.title)) throw {message: "Titel is niet ingevult!"};
         if (!/[a-z]/.test(citate.message)) throw {message: "Bericht is niet ingevult!"};
-        const citateTemplateTag = citatesContainer.getElementsByTagName("template")[0];
+        /*const*/var citateTemplateTag = citatesContainer.getElementsByTagName("template")[0];
         
-        let citateTemplate;
+        /*let*/var citateTemplate;
 
         if (citateTemplateTag.content != null) citateTemplate = citateTemplateTag.content.children[0];
         else citateTemplate = citateTemplateTag.children[0]; // Voor Internet Explorer!
@@ -44,9 +44,9 @@ function createCitate(title, message, author){
 }
 
 function submitCitate(form){
-    const citate = createCitate(form.title.value, form.message.value, form.author.value);
+    /*const*/var citate = createCitate(form.title.value, form.message.value, form.author.value);
     injectCitate(form.title.value, form.message.value, form.author.value, form);
-    const citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
+    /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
     citates.push(citate);
     localStorage.setItem(citateStore, JSON.stringify(citates));
 
@@ -64,7 +64,7 @@ function storeCitate(citate){
 
 function loadCitates(){
     try{
-        const citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
+        /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
         JSON.stringify(citates);
         //citates = removeDuplicateCitates(citates);
         return citates;
@@ -74,7 +74,7 @@ function loadCitates(){
     }
 }
 
-const citates = loadCitates();
+/*const*/var citates = loadCitates();
 
 democitate = new Citate("Geert", "Geert eet graag beren", "Lasse")
 injectCitate(democitate)

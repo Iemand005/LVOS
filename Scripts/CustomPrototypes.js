@@ -18,7 +18,7 @@ if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute
 
 // This one was a little bit more difficult to get working right but I tested most values like numbers, null, true, false, undefined and it all gave the same results as the Array.fill method in Chrome does so I expect this polyfill to work the same for my applications.
 if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
-    for (let index = typeof from !== 'undefined' ? Number(from) : 0; index < Number(typeof to !== 'undefined' ? to : this.length); index++) this[index] = value;
+    for (/*let*/var index = typeof from !== 'undefined' ? Number(from) : 0; index < Number(typeof to !== 'undefined' ? to : this.length); index++) this[index] = value;
     return this;
 };
 
@@ -37,11 +37,11 @@ function CompatibilityChecker(){
 
 
 function forEach(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
-    for (let index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+    for (/*let*/var index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this);
 }
 
 function forForEach(callback) {
-    for (let index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+    for (/*let*/var index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
 }
 
 
@@ -57,7 +57,7 @@ Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // No
 if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
 
 function find(callback) {
-    for (let index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
+    for (/*let*/var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
 }
 
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
@@ -68,23 +68,23 @@ if (!navigator.getUserMedia) navigator.getUserMedia = navigator.webkitGetUserMed
 // I tested this one with "String.prototype.repeat.bind("hey", 2)()", this gives me the same result with polyfill as the native code!
 if (!String.prototype.repeat) String.prototype.repeat = function (e) {
     if (typeof this === 'undefined') throw new TypeError("String.prototype.repeat called on null or undefined"); // To correspond to String.prototype.repeat.bind(null, undefined)() in Google Chrome
-    let result = "";
-    for (let i = 0; i < e; i++) result += this;
+    /*let*/var result = "";
+    for (/*let*/var i = 0; i < e; i++) result += this;
     return result;
 }
 
 if (typeof URLSearchParams === "undefined") {
     window.URLSearchParams = function (search) {
-        const items = search.replace("?", "").split("&");
-        // const kv = items[0].split("=");
-        // const key = kv[0], value = kv[1];
+        /*const*/var items = search.replace("?", "").split("&");
+        // /*const*/var kv = items[0].split("=");
+        // /*const*/var key = kv[0], value = kv[1];
         this._data = new Map();
-        const self = this;
+        /*const*/var self = this;
         items.forEach(function (item) {
-            const kv = item.split("=");
+            /*const*/var kv = item.split("=");
             if (kv.length != 2) return;
-            const key = kv[0];
-            const value = kv[1];
+            /*const*/var key = kv[0];
+            /*const*/var value = kv[1];
 
             self._data.set(key, value);
         });
@@ -115,4 +115,4 @@ if (typeof URLSearchParams === "undefined") {
 // }
 
 // // Kan ook in één lijn met arrowfunctie maar dit heeft geen nut aangezien arrowfuncties in Internet Explorer zowieso niet ondersteund worden. Aangepast this object kan ook niet met arrow functie door gebrek aan bindingsfunctionaliteit.
-// if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(let index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
+// if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(/*let*/var index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }

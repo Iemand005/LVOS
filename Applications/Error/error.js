@@ -5,10 +5,10 @@
 'use esnext';
 'use moz';
 
-const reasoningElement = document.getElementById("reason");
+/*const*/var reasoningElement = document.getElementById("reason");
 if (typeof URLSearchParams !== "undefined") {
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const message = urlSearchParams.get("message");
+  /*const*/var urlSearchParams = new URLSearchParams(window.location.search);
+  /*const*/var message = urlSearchParams.get("message");
   reasoningElement.innerText = message;
   document.getElementById("code").innerText = urlSearchParams.get("code");
   document.getElementById("errormessage").innerText = urlSearchParams.get("errormessage");
