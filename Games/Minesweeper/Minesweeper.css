@@ -8,9 +8,9 @@
 
 html, body, button:disabled {
     margin: 0px;
-    -webkit-user-select: none;
-    user-select: none;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 body {
@@ -45,7 +45,8 @@ button:disabled {
 
 table {
     border-spacing: 0;
-    kerning:auto;
+    kerning: auto;
+    margin: auto;
 }
 
 td {

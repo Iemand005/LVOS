@@ -5,8 +5,7 @@
 
 'use strict';
 
-var // Declaring the options.
-    width = 2, height = 1,
+var width = 10, height = 13,
     quickReveal = true,
     singleSidedDisplay = true,
     showBombInsteadOfCheckmark = true,
@@ -38,7 +37,7 @@ var // Declaring the options.
     mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
-/*let*/var isGameOver = false,
+var isGameOver = false,
     isGameWon = false,
     mousedown = false,
     gameStarted = false,

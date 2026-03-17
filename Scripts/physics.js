@@ -36,6 +36,13 @@ function Vector3D(x, y, z) {
     }
 }
 
+Vector3D.prototype.normalize = function () {
+    var thing = this.x + this.y + this.z;
+    this.x /= thing;
+    this.y /= thing;
+    this.z /= thing;
+}
+
 // function normalize(vector) {
 //     if (vector)
 // }
