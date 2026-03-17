@@ -631,13 +631,12 @@ function initializeDialogs() {
  */
 function windowActivationEvent(event, dialog){
     console.log("Activating window");
-    /*const*/var dialog = dialog || getEventDialog(event);
-    if (!isDialog(dialog)) return console.warn("This is not a dialog");
+    if (!dialog) dialog = getEventDialog(event);
+    // if (!isDialog(dialog)) return console.warn("This is not a dialog");
     activeDialog = dialog.id;
     resizeDirection = 0;
     enableDialogDrag();
-    /*const*/var mouse = {x: event.clientX || 0, y:  event.clientY || 0};
-    windows[activeDialog].setClickOffset(mouse.x, mouse.y);
+    windows[activeDialog].setClickOffset(event.clientX || 0, event.clientY || 0);
     windows[activeDialog].activate();
     return dialog;
 }
