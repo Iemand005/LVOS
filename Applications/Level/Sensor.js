@@ -18,7 +18,7 @@ function drawHorizon(roll, pitch) {
     
     ctx.rotate(roll);
     
-    var pitchOffset = pitch * 100; 
+    var pitchOffset = pitch * horizon.height - horizon.height / 2; 
 
     ctx.beginPath();
     ctx.fillStyle = "green";
@@ -41,18 +41,15 @@ if (typeof ondevicemotion !== "undefined") {
      
     var roll = Math.atan2(acceleration.x, acceleration.z);
     var pitch = acceleration.y;
-    // console.log("Roll:", roll, pitch);/
-
-    // var rollDeg = roll * (180 / Math.PI);
-    // var pitchDeg = pitch * (180 / Math.PI);
 
     drawHorizon(roll, pitch);
-
-    // horizon.style.transform = horizon.style.webkitTransform = "rotateX(" + pitchDeg + "deg) rotateY(" + rollDeg + "deg)";
   }
 }
 
-onresize = function(ev) {
+function resize() {
   horizon.width = horizon.clientWidth;
   horizon.height = horizon.clientHeight;
 }
+
+onresize = resize;
+resize();
