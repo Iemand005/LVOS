@@ -193,8 +193,8 @@ Dialog.prototype.initWithObject = function (object) {
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
-    if (supportsPointer) this.target.addEventListener("pointerdown", windowActivationEvent);
-    else this.target.addEventListener("mousedown", windowActivationEvent);
+    if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, this) });
+    else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, this) });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         /*const*/var rect = target.getClientRects()[0];
         /*const*/var viewboxPosition = getViewboxPosition();
@@ -630,7 +630,7 @@ function initializeDialogs() {
  * @returns 
  */
 function windowActivationEvent(event, dialog){
-    console.log("Activating window");
+    console.log("Activating window", dialog);
     if (!dialog) dialog = getEventDialog(event);
     // if (!isDialog(dialog)) return console.warn("This is not a dialog");
     activeDialog = dialog.id;
