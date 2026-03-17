@@ -205,7 +205,7 @@ browserform.addEventListener("submit", function(event){
     },
 ]
 
-var loadApps = false;
+var loadApps = true;
 if (loadApps) {
     injectApplications(applications);
     injectApplications(games);

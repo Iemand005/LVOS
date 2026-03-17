@@ -14,8 +14,8 @@
 'use esnext'; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of /*let*/var and const.
 'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
-/*let*/var // Defining the default settings as /*let*/var so we can modify them.
-    blur = false,
+// Modifiable settings
+var blur = false,
     reflections = true,
     fasterDialogTracking = true,
     canSave = true,
