@@ -57,7 +57,7 @@ main {
     -webkit-transform-origin: bottom left;
     transform-origin: center;
     margin: 0;
-    padding: 5px;
+    padding: 0;
     z-index: 1;
     top: 0px;
     left: 0px;
@@ -96,8 +96,11 @@ main {
     transition: all 700ms ease-out;
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     position: absolute;
+    -webkit-box-orient: horizontal;
     flex-direction: row;
     top: 0;
     right: 0;
@@ -153,14 +156,14 @@ main {
 
 .window > content {
     display: -webkit-box;
-    -webkit-box-orient: vertical;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
     flex-direction: column;
     pointer-events: none;
     border-radius: inherit;
     border: 1px solid #0000007d;
-    padding: 0;
+    padding: 5px;
     box-sizing: border-box;
     width: inherit;
     height: inherit;
@@ -250,7 +253,9 @@ article {
 .window > content > article{
     border: inherit;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
+    -webkit-box-flex: 1;
+    flex: 1;
     overflow: auto;
     box-sizing: border-box;
     pointer-events: auto;
@@ -258,6 +263,12 @@ article {
     z-index: 1;
     transition: inherit;
     /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
+}
+
+.window > content > article * {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+    flex: 1;
 }
 
 .window > content > article > *, .window > content > article > iframe {
