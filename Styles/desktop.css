@@ -164,6 +164,10 @@ section#desktop[flipped] article#metrobody {
   animation: forwards 1s ease-in flip;
 }
 
+#desktop:not([flipped]) #metroapplist {
+  display: none;
+}
+
 #desktop[flipped] > #windows {
   animation: forwards 1s ease-in flip;
 }

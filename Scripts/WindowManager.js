@@ -50,8 +50,9 @@ function titlify(title) {
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ * @param {boolean} create
  */
-function Dialog(object) {
+function Dialog(object, create) {
     
     this._x = 0;
     this._y = 0;
@@ -59,12 +60,13 @@ function Dialog(object) {
     this._height = 0;
     this._isMinWidth = false;
     this._isMinHeight = false;
-
+    
     this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
-
+    
     if (!object) return;
+    if (!create) create = false;
     /*const*/var dialog = this;
 
     /** @type {HTMLElement} */
@@ -103,7 +105,7 @@ function Dialog(object) {
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     document.getElementById("applist").appendChild(this.createOpenButton());
     document.getElementById("metroapplist").appendChild(this.createOpenButton());
-    this.initWithObject(object);
+    if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 
 Dialog.prototype.initWithObject = function (object) {
