@@ -2,5 +2,14 @@
   "editor.tabSize": 2,
   "editor.indentSize": "tabSize",
   "chat.disableAIFeatures": true,
-  "editor.inlineSuggest.enabled": true
+  "editor.inlineSuggest.enabled": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.log": true,
+    "**/.vs": true,
+  }
 }
