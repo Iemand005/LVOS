@@ -22,7 +22,7 @@
     IE11Booster = true,
     loadingOverlay = true,
     flipped = false,
-    useTransform = true;
+    useTransform = false;
 
 /*const*/var supportsPointer = typeof PointerEvent !== "undefined";
 
@@ -624,15 +624,14 @@ function initializeDialogs() {
 // I am using /*let*/var for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use /*const*/var because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
 
 /**
- * 
+ * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event 
+ * @param {Dialog} dialog 
  * @returns 
  */
-function windowActivationEvent(event){
-    /**
-     * Activates the window on which the provided event was fired.
-     */
-    /*const*/var dialog = getEventDialog(event);
+function windowActivationEvent(event, dialog){
+    console.log("Activating window");
+    /*const*/var dialog = dialog || getEventDialog(event);
     if (!isDialog(dialog)) return console.warn("This is not a dialog");
     activeDialog = dialog.id;
     resizeDirection = 0;
@@ -665,8 +664,8 @@ function windowDragEvent(event){
  * @param {boolean} enable 
  */
 function toggleDialogDragEventHandler(enable) {
-    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent);
-    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent);
+    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Starting drag");
+    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Stoppinge drag");
 }
 
 function disableDialogDrag() {
@@ -721,7 +720,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterDialogTracking && event.clientX && event.clientY) try {
-        /*const*/var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return element.classList && element.classList.contains("window") });
+        /*const*/var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return isDialog(element); });
         return window;
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
