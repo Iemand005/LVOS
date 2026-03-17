@@ -6,7 +6,31 @@
 'use esnext';
 'use moz';
 
+/** @type {HTMLCanvasElement} */
 var horizon = document.getElementById("horizon");
+var ctx = horizon.getContext('2d');
+
+function drawHorizon(roll, pitch) {
+    ctx.clearRect(0, 0, horizon.width, horizon.height);
+
+    ctx.save();
+    ctx.translate(horizon.width / 2, horizon.height / 2);
+    
+    ctx.rotate(roll);
+    
+    var pitchOffset = pitch * 100; 
+
+    ctx.beginPath();
+    ctx.fillStyle = "green";
+    // ctx.lineWidth = 5;
+    ctx.moveTo(-horizon.width, pitchOffset);
+    ctx.lineTo(horizon.width, pitchOffset);
+    ctx.lineTo(horizon.width, horizon.height);
+    ctx.lineTo(-horizon.width, horizon.height);
+    ctx.fill();
+
+    ctx.restore();
+}
 
 if (typeof ondevicemotion !== "undefined") {
   ondevicemotion = function(e) {
@@ -16,12 +40,19 @@ if (typeof ondevicemotion !== "undefined") {
     // console.log("Acceleration norma:", acceleration);
      
     var roll = Math.atan2(acceleration.x, acceleration.z);
-    var pitch = -acceleration.y;
-    console.log("Roll:", roll, pitch);
+    var pitch = acceleration.y;
+    // console.log("Roll:", roll, pitch);/
 
-    var rollDeg = roll * (180 / Math.PI);
-    var pitchDeg = pitch * (180 / Math.PI);
+    // var rollDeg = roll * (180 / Math.PI);
+    // var pitchDeg = pitch * (180 / Math.PI);
 
-    horizon.style.transform = horizon.style.webkitTransform = "rotateX(" + pitchDeg + "deg) rotateY(" + rollDeg + "deg)";
+    drawHorizon(roll, pitch);
+
+    // horizon.style.transform = horizon.style.webkitTransform = "rotateX(" + pitchDeg + "deg) rotateY(" + rollDeg + "deg)";
   }
+}
+
+onresize = function(ev) {
+  horizon.width = horizon.clientWidth;
+  horizon.height = horizon.clientHeight;
 }
