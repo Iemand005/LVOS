@@ -43,10 +43,6 @@ Vector3D.prototype.normalize = function () {
     this.z /= thing;
 }
 
-// function normalize(vector) {
-//     if (vector)
-// }
-
 function Rectangle(x, y, width, height) {
     this.pos = this.position = new Vector(x, y);
     this.width = width;
