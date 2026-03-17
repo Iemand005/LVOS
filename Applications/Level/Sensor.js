@@ -6,14 +6,22 @@
 'use esnext';
 'use moz';
 
+var horizon = document.getElementById("horizon");
+
 if (typeof ondevicemotion !== "undefined") {
   ondevicemotion = function(e) {
-    // console.log("Acceleration:", e.acceleration, e.accelerationIncludingGravity);
-    // Math.cos(e.x)
-    // console.log("ee", e.accelerationIncludingGravity);
-    var acceleration = new Vector3D(e.accelerationIncludingGravity.x, e.accelerationIncludingGravity.y, e.accelerationIncludingGravity.z);
-    console.log(" ae", acceleration)
+    var g = e.accelerationIncludingGravity;
+    var acceleration = new Vector3D(g.x, g.y, g.z);
     acceleration.normalize();
-    console.log("Acceleration norma:", acceleration);
+    // console.log("Acceleration norma:", acceleration);
+     
+    var roll = Math.atan2(acceleration.x, acceleration.z);
+    var pitch = -acceleration.y;
+    console.log("Roll:", roll, pitch);
+
+    var rollDeg = roll * (180 / Math.PI);
+    var pitchDeg = pitch * (180 / Math.PI);
+
+    horizon.style.transform = horizon.style.webkitTransform = "rotateX(" + pitchDeg + "deg) rotateY(" + rollDeg + "deg)";
   }
 }
