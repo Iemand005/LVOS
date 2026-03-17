@@ -37,7 +37,7 @@ function Graphics2D(element) {
 function drawHorizon(roll, pitch) {
   var w = horizon.width, h = horizon.height;
 
-  const pOffset = pitch * 5;
+  const pixelOffset = pitch * 5;
 
   ctx.clearRect(0, 0, w, h);
   ctx.save();
@@ -46,10 +46,7 @@ function drawHorizon(roll, pitch) {
   ctx.rotate(roll * Math.PI / 180);
 
   ctx.fillStyle = "green";
-  ctx.fillRect(-w * 2, -h * 2 - pOffset, w * 4, h * 2);
-
-  ctx.fillStyle = "lightblue";
-  ctx.fillRect(-w * 2, 0 - pOffset, w * 4, h * 2);
+  ctx.fillRect(-w * 2, -h * 2 - pixelOffset, w * 4, h * 2);
 
   ctx.restore();
 
