@@ -145,3 +145,16 @@ window.ondrop = document.ondrop = function(ev){
 }
 
 loadSettings();
+
+function downloadObjectAsJson(exportObj, exportName) {
+    var dataStr = JSON.stringify(exportObj);
+    var dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataUri);
+    downloadAnchorNode.setAttribute("download", exportName + ".json");
+    
+    document.body.appendChild(downloadAnchorNode);     
+    downloadAnchorNode.click();
+    document.body.removeChild(downloadAnchorNode);
+}
