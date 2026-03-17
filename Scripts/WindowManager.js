@@ -22,7 +22,7 @@
     IE11Booster = true,
     loadingOverlay = true,
     flipped = false,
-    useTransform = false;
+    useTransform = true;
 
 /*const*/var supportsPointer = typeof PointerEvent !== "undefined";
 
@@ -423,6 +423,7 @@ Dialog.prototype.move = function (x, y) {
     if (useTransform) {
         this._x = x, this._y = y;
         this.target.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+        this.target.style.webkitTransform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     } else this.x = x, this.y = y;
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
