@@ -116,42 +116,44 @@ function startGame(){
     for (var y = 0; y < height; y++) {
         tiles[y] = new Array();
         var row = table.appendChild(document.createElement("tr"));
-        for (var x = 0; x < width; x++) {
-            var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
-            row.appendChild(document.createElement("td")).appendChild(button);
-            button.classList.add("mine");
-            tile.generate();
+        for (var x = 0; x < width; x++) (
+            function(x, y) {
+                var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
+                row.appendChild(document.createElement("td")).appendChild(button);
+                button.classList.add("mine");
+                tile.generate();
 
-            button.onmouseover = tile.enableVisual.bind(tile);
-            button.onmouseout = tile.disableVisual.bind(tile);
-            button.ondblclick = new Function;
+                button.onmouseover = tile.enableVisual.bind(tile);
+                button.onmouseout = tile.disableVisual.bind(tile);
+                button.ondblclick = new Function;
 
-            button.onmousedown = function(ev){
-                if(!isGameOver) setEmoji(icons.scared);
-                if(!tile.isClickAllowed()) ev.preventDefault();
-                if(tile.mousedown = !ev.button) tile.enableVisual();
+                button.onmousedown = function(ev){
+                    if(!isGameOver) setEmoji(icons.scared);
+                    if(!tile.isClickAllowed()) ev.preventDefault();
+                    if(tile.mousedown = !ev.button) tile.enableVisual();
+                };
+
+                button.onmouseup = function(){
+                    tile.mousedown = false;
+                    tile.disableVisual();
+                };
+
+                console.log("Adding click: " + button.id);
+
+                button.onclick = function(ev){
+                    if(ev.button == 0 && tile.isClickAllowed()){
+                        var neighbours = tile.reveal();
+                        if(!tile.mine) button.innerText = neighbours;
+                        else gameOver();
+                    } else ev.preventDefault();
+                };
+
+                button.oncontextmenu = function(ev){
+                    ev.preventDefault();
+                    tile.toggleFlag();
+                };
             }
-
-            button.onmouseup = function(){
-                tile.mousedown = false;
-                tile.disableVisual();
-            }
-
-            console.log("Adding click: " + button.id);
-
-            button.addEventListener("click", function(ev){
-                if(ev.button == 0 && tile.isClickAllowed()){
-                    var neighbours = tile.reveal();
-                    if(!tile.mine) button.innerText = neighbours;
-                    else gameOver();
-                } else ev.preventDefault();
-            });
-
-            button.oncontextmenu = function(ev){
-                ev.preventDefault();
-                tile.toggleFlag();
-            }
-        }
+        )(x, y);
     }
 
     displays[0].update(bombCount = countBombs());
