@@ -20,19 +20,22 @@ function Graphics(element) {
       ? document.getElementById(element)
       : document.createElement("canvas")
     ));
-  // if () {
-  //   this.canvas = element;
-  // } else if (typeof element == "string") {
-  //   this.canvas = document.getElementById(element);
-  // }
 }
 
 /**
  * @param {string | HTMLCanvasElement} elementId 
  */
 function Graphics2D(element) {
-
+  Graphics.call(this, element);
+  this.ctx = this.canvas.getContext("2d");
 }
+
+// Graphics2D.prototype.__proto__ = Graphics.prototype;
+// Graphics2D.constru
+Graphics2D.prototype = Object.create(Graphics.prototype);
+Graphics2D.prototype.constructor = Graphics;
+
+var graphics = new Graphics2D("horizon");
 
 function drawHorizon(roll, pitch) {
   var w = horizon.width, h = horizon.height;
