@@ -57,7 +57,7 @@ main {
     -webkit-transform-origin: bottom left;
     transform-origin: center;
     margin: 0;
-    padding: 0;
+    padding: 5px;
     z-index: 1;
     top: 0px;
     left: 0px;
@@ -65,7 +65,6 @@ main {
     position: absolute;
     background: transparent;
     border: none;
-    padding: 0;
     transition: all 500ms ease-in-out, top 0, left 0, width 0, height 0;
     transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! */
@@ -143,6 +142,7 @@ main {
     font-size: 0px;
     border: none;
     margin: 0;
+    display: none;
 }
 
 .window header > h1{
@@ -152,12 +152,15 @@ main {
 }
 
 .window > content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
     pointer-events: none;
     border-radius: inherit;
     border: 1px solid #0000007d;
-    padding: 5px;
+    padding: 0;
     box-sizing: border-box;
     width: inherit;
     height: inherit;
@@ -231,7 +234,7 @@ article {
 
 
 .window:not([open]){
-    display: block; /* The display attribute is set to none by default */
+    display: none; /* The display attribute is set to none by default */
     z-index: -1000;
     /*pointer-events: none !important;*/
 }

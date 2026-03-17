@@ -205,8 +205,11 @@ browserform.addEventListener("submit", function(event){
     },
 ]
 
-injectApplications(applications);
-injectApplications(games);
+var loadApps = false;
+if (loadApps) {
+    injectApplications(applications);
+    injectApplications(games);
+}
 
 dockapplist.appendChild(windows.browser.createOpenButton());
 dockapplist.appendChild(windows.console.createOpenButton());
