@@ -10,6 +10,21 @@
 var horizon = document.getElementById("horizon");
 var ctx = horizon.getContext('2d');
 
+function Graphics(element) {
+  if (element instanceof HTMLCanvasElement) {
+    this.canvas = element;
+  } else if (typeof element == "string") {
+    this.canvas = document.getElementById(element);
+  }
+}
+
+/**
+ * @param {string | HTMLCanvasElement} elementId 
+ */
+function Graphics2D(element) {
+
+}
+
 function drawHorizon(roll, pitch) {
     ctx.clearRect(0, 0, horizon.width, horizon.height);
 
