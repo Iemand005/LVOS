@@ -60,6 +60,9 @@ function Dialog(object, create) {
     this._height = 0;
     this._isMinWidth = false;
     this._isMinHeight = false;
+
+    /** @type {Window?} */
+    this._popupWindow = null;
     
     this.z = 0;
     this.minWidth = 100;
@@ -213,7 +216,7 @@ Dialog.prototype.initWithObject = function (object) {
             top: rect.top + viewboxPosition.top
         }
 
-        window.open(dialog.href, dialog.title, stringifyDialogProperties(propeties));
+        this._popupWindow = window.open(dialog.href, dialog.title, stringifyDialogProperties(propeties));
         dialog.quit();
     });
 
@@ -373,6 +376,10 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
         this.content.style.borderRadius = toPixels(value);
     },
     get: function () { return fromPixels(this.content.style.padding); },
+});
+
+Object.defineProperty(Dialog.prototype, "popup", {
+    get: function() { return this._popupWindow; }
 });
 
 /** @type {Dialog} */
