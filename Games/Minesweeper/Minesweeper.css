@@ -68,54 +68,48 @@ article {
     margin-bottom: 10px;
 }
 
-output {
-    width: 100%;
-    border-style: solid;
-    border-width: 2px;
-}
-
-button.n0{
+button.n0 {
     color: transparent;
 }
 
-button.n1{
+button.n1 {
     color: blue;
 }
 
-button.n2{
+button.n2 {
     color: green;
 }
 
-button.n3{
+button.n3 {
     color: red;
 }
 
-button.n4{
+button.n4 {
     color: darkblue;
 }
 
-button.n5{
+button.n5 {
     color: darkred;
 }
 
-button.n6{
+button.n6 {
     color: darkcyan;
 }
 
-button.n7{
+button.n7 {
     color: black;
 }
 
-button.n8{
+button.n8 {
     color: darkgray;
 }
 
-article, section, table, button{
+article, section, table, button {
     border-style: solid;
     border-width: 3px;
 }
 
-button:active:not(:disabled):not(.mine), button.active, table, article, output{
+button:active:not(:disabled):not(.mine), button.active, table, article, output {
     border-top-color: darkgray;
     border-left-color: darkgray;
     border-right-color: rgb(231, 231, 231);
@@ -129,21 +123,22 @@ section, button, articlen button {
     border-bottom-color: darkgray;
 }
 
-body, section, article, button{
+body, section, article, button {
     background-color: lightgray;
 }
 
-.revealed{
+.revealed {
     font-size: 16px;
 }
 
-output{
+output {
+    width: 100%;
+    border-style: solid;
+    border-width: 2px;
     color: red;
     border-width: 1px;
+    display: -webkit-box;
     display: flex; /*¨¨Fixes bug in Internet Explorer that causes a weird padding on top of the output content. **/
-    /* text-align: center;
-    vertical-align: center;
-    line-height: 46px; */
     background-color: #3e0000;
     background: radial-gradient( circle at 2px 2px, #000 1px, #3e0000 2px ) 0 0 / 4px 5px;
     background: radial-gradient( circle at 2px 2px, #640000 0px, #3e0000 2px ) 0 0 / 2px 2px;
@@ -151,20 +146,26 @@ output{
     width: 80px;
 }
 
-article > button{
+article > button {
     font-size: 18px;
     padding: 15px;
     box-sizing: border-box;
 }
 
-article.original > button{
+article.original {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: justify;
+}
+
+article.original > button {
     width: 28px;
     height: 28px;
     font-size: 15px;
     padding: 0;
 }
 
-article.original > output{
+article.original > output {
     width: 44px;
     height: 28px;
 }
