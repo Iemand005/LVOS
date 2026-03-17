@@ -45,13 +45,15 @@ function drawHorizon(roll, pitch) {
   ctx.rotate(roll + Math.PI);
     
   // var pitchPixels = (pitch / (Math.PI / 2)) * (h / 2);
-  var pitchOffset = (pitch / Math.PI) * horizon.height - h/2; 
+  var pitchOffset = -(pitch / Math.PI) * h; 
+
+  var pitchPixels = (pitch / Math.PI) * h;
 
   ctx.beginPath();
   ctx.fillStyle = "green";
 
   var size = Math.max(horizon.width, horizon.height) * 4;
-  ctx.rect(-size / 2, pitchOffset, size, size);
+  ctx.rect(-size / 2, pitchPixels, size, size);
   ctx.fill();
 
   ctx.restore();
