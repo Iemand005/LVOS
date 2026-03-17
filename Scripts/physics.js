@@ -40,11 +40,15 @@ function Vector3D(x, y, z) {
     }
 }
 
+Vector3D.prototype.div = function (amount) {
+    this.x /= amount, this.y /= amount, this.z /= amount;
+    return this;
+}
+
 Vector3D.prototype.normalize = function () {
-    var thing = this.x + this.y + this.z;
-    this.x /= thing;
-    this.y /= thing;
-    this.z /= thing;
+    var sum = this.x + this.y + this.z;
+    this.div(sum);
+    return this;
 }
 
 function Rectangle(x, y, width, height) {

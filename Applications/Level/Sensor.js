@@ -22,7 +22,6 @@ function drawHorizon(roll, pitch) {
 
     ctx.beginPath();
     ctx.fillStyle = "green";
-    // ctx.lineWidth = 5;
     ctx.moveTo(-horizon.width, pitchOffset);
     ctx.lineTo(horizon.width, pitchOffset);
     ctx.lineTo(horizon.width, horizon.height);
@@ -37,7 +36,6 @@ if (typeof ondevicemotion !== "undefined") {
     var g = e.accelerationIncludingGravity;
     var acceleration = new Vector3D(g.x, g.y, g.z);
     acceleration.normalize();
-    // console.log("Acceleration norma:", acceleration);
      
     var roll = Math.atan2(acceleration.x, acceleration.z);
     var pitch = acceleration.y;
