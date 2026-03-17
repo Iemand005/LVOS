@@ -44,16 +44,16 @@ function drawHorizon(roll, pitch) {
   ctx.translate(w / 2, h / 2);
   ctx.rotate(roll);
 
-  var pitchOffset = (pitch / Math.PI) * (h * 2);
-
-  ctx.beginPath();
-  ctx.fillStyle = "skyblue";
-  ctx.arc(0, pitchOffset - size, size, 0, Math.PI * 2);
-  ctx.fill();
+  var pitchOffset = (pitch / (Math.PI / 2)) * (h / 2);
 
   ctx.beginPath();
   ctx.fillStyle = "green";
   ctx.arc(0, pitchOffset + size, size, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.fillStyle = "skyblue";
+  ctx.arc(0, pitchOffset - size, size, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
@@ -72,11 +72,12 @@ if (typeof ondevicemotion !== "undefined") {
     if (!g || g.x === null) return;
      
     var roll = Math.atan2(g.x, g.y);
-    var pitch = Math.atan2(g.z, Math.sqrt(g.x * g.x + g.y * g.y));
+    var pitch = Math.atan2(-g.z, Math.sqrt(g.x * g.x + g.y * g.y));
 
     drawHorizon(roll, pitch);
   }
 }
+
 
 function resize() {
   horizon.width = horizon.clientWidth;
