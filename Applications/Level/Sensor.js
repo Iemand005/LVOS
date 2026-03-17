@@ -1,5 +1,5 @@
  // Sensors
-//  Lasse Lauwerys (2026) c
+//  Lasse Lauwerys (c) 2026
 
 
 'use strict';
@@ -35,34 +35,37 @@ function Graphics2D(element) {
 }
 
 function drawHorizon(roll, pitch) {
-    ctx.clearRect(0, 0, horizon.width, horizon.height);
+  var w = horizon.width, h = horizon.height;
+  var diag = Math.sqrt(w * w + h * h);
 
-    ctx.save();
-    ctx.translate(horizon.width / 2, horizon.height / 2);
+  ctx.clearRect(0, 0, w, h);
+  ctx.save();
+
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate(roll + Math.PI);
     
-    ctx.rotate(roll);
-    
-    var pitchOffset = pitch * horizon.height - horizon.height / 2; 
+  // var pitchPixels = (pitch / (Math.PI / 2)) * (h / 2);
+  var pitchOffset = (pitch / Math.PI) * horizon.height - h/2; 
 
-    ctx.beginPath();
-    ctx.fillStyle = "green";
-    ctx.moveTo(-horizon.width, pitchOffset);
-    ctx.lineTo(horizon.width, pitchOffset);
-    ctx.lineTo(horizon.width, horizon.height);
-    ctx.lineTo(-horizon.width, horizon.height);
-    ctx.fill();
+  ctx.beginPath();
+  ctx.fillStyle = "green";
 
-    ctx.restore();
+  var size = Math.max(horizon.width, horizon.height) * 4;
+  ctx.rect(-size / 2, pitchOffset, size, size);
+  ctx.fill();
+
+  ctx.restore();
 }
 
 if (typeof ondevicemotion !== "undefined") {
   ondevicemotion = function(e) {
     var g = e.accelerationIncludingGravity;
-    var acceleration = new Vector3D(g.x, g.y, g.z);
-    acceleration.normalize();
+    if (!g) return;
      
-    var roll = Math.atan2(acceleration.x, acceleration.z);
-    var pitch = acceleration.y;
+    var roll = Math.atan2(g.x, g.y);
+    // var pitch = acceleration.y;
+
+    var pitch = Math.atan2(g.z, g.y );
 
     drawHorizon(roll, pitch);
   }
