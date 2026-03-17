@@ -11,11 +11,20 @@ var horizon = document.getElementById("horizon");
 var ctx = horizon.getContext('2d');
 
 function Graphics(element) {
-  if (element instanceof HTMLCanvasElement) {
-    this.canvas = element;
-  } else if (typeof element == "string") {
-    this.canvas = document.getElementById(element);
-  }
+  /** @type {HTMLCanvasElement?} */
+  this.canvas = (
+    element instanceof HTMLCanvasElement
+    ? element
+    : (
+      typeof element == "string"
+      ? document.getElementById(element)
+      : document.createElement("canvas")
+    ));
+  // if () {
+  //   this.canvas = element;
+  // } else if (typeof element == "string") {
+  //   this.canvas = document.getElementById(element);
+  // }
 }
 
 /**
