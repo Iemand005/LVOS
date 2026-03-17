@@ -45,28 +45,14 @@ function drawHorizon(roll, pitch) {
   ctx.translate(w / 2, h / 2);
   ctx.rotate(roll * Math.PI / 180);
 
-  ctx.fillStyle = "#3498db";
+  ctx.fillStyle = "green";
   ctx.fillRect(-w * 2, -h * 2 - pOffset, w * 4, h * 2);
 
-  ctx.fillStyle = "#8b4513";
+  ctx.fillStyle = "lightblue";
   ctx.fillRect(-w * 2, 0 - pOffset, w * 4, h * 2);
-
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(-w, -pOffset);
-  ctx.lineTo(w, -pOffset);
-  ctx.stroke();
 
   ctx.restore();
 
-  ctx.strokeStyle = "yellow";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 40, h / 2);
-  ctx.lineTo(w / 2 - 10, h / 2);
-  ctx.moveTo(w / 2 + 10, h / 2);
-  ctx.lineTo(w / 2 + 40, h / 2);
   ctx.stroke();
 }
 
@@ -75,7 +61,7 @@ function handleMotion(e) {
   if (!g || g.x === null) return;
   var x = g.x, y = g.y, z = g.z;
 
-  const pitch = Math.atan2(-z, Math.sqrt(x * x + y * y)) * (180 / Math.PI);
+  const pitch = Math.atan2(z, Math.sqrt(x * x + y * y)) * (180 / Math.PI);
   const roll = Math.atan2(x, y) * (180 / Math.PI);
 
   drawHorizon(roll, pitch);
