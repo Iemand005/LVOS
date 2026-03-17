@@ -5,8 +5,8 @@
 
 'use strict';
 
-/*const*/var // Declaring the constant variables.
-    width = 10, height = 10,
+var // Declaring the options.
+    width = 2, height = 1,
     quickReveal = true,
     singleSidedDisplay = true,
     showBombInsteadOfCheckmark = true,
@@ -18,7 +18,7 @@
     button = document.querySelector("article>button"),
     rect = body.getBoundingClientRect(),
 
-    signs = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
+    icons = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
         bomb: "💣",
         exploded: "💥",
         correct: "✔",
@@ -72,7 +72,7 @@ Tile.prototype = {
             if(remaining==0) gameOver(true);
             this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
         }
-        else this.button.innerText = !isGameWon?signs.exploded:signs.correct, gameOver();
+        else this.button.innerText = !isGameWon?icons.exploded:icons.correct, gameOver();
         console.log("Neighbours: ", neighbours);
         if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) neighbours[neighbour].reveal();
         return neighbourCount;
@@ -95,7 +95,7 @@ Tile.prototype = {
     getUnflaggedNeighbouringNotMines: function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine && neighbour.flagged != 1 }); },
     countUnflaggedNeighbouringNotMines: function(neighbours){ return this.getUnflaggedNeighbouringnotMines(neighbours).length; },
     toggleDisabled: function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled"); },
-    toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),signs.flag):(displays[0].update(++bombCount),signs.unknown):signs.none; },
+    toggleFlag: function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; },
     disableVisual: function(){ this.button.classList.remove("active"); },
     isClickAllowed: function(){ return this.flagged != 1; },
     enableVisual: function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); },
@@ -113,12 +113,11 @@ function startGame(){
     isGameOver = false;
     setEmoji();
     while(table.firstChild) table.removeChild(table.firstChild); // Clear the table
-    for (/*let*/var y = 0; y < height; y++) {
+    for (var y = 0; y < height; y++) {
         tiles[y] = new Array();
-        /*const*/var row = document.createElement("tr");
-        table.appendChild(row);
-        for (/*let*/var x = 0; x < width; x++) {
-            /*const*/var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
+        var row = table.appendChild(document.createElement("tr"));
+        for (var x = 0; x < width; x++) {
+            var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
             row.appendChild(document.createElement("td")).appendChild(button);
             button.classList.add("mine");
             tile.generate();
@@ -128,7 +127,7 @@ function startGame(){
             button.ondblclick = new Function;
 
             button.onmousedown = function(ev){
-                if(!isGameOver) setEmoji(signs.scared);
+                if(!isGameOver) setEmoji(icons.scared);
                 if(!tile.isClickAllowed()) ev.preventDefault();
                 if(tile.mousedown = !ev.button) tile.enableVisual();
             }
@@ -138,13 +137,15 @@ function startGame(){
                 tile.disableVisual();
             }
 
-            button.onclick = function(ev){
+            console.log("Adding click: " + button.id);
+
+            button.addEventListener("click", function(ev){
                 if(ev.button == 0 && tile.isClickAllowed()){
-                    /*const*/var neighbours = tile.reveal();
+                    var neighbours = tile.reveal();
                     if(!tile.mine) button.innerText = neighbours;
                     else gameOver();
                 } else ev.preventDefault();
-            }
+            });
 
             button.oncontextmenu = function(ev){
                 ev.preventDefault();
@@ -188,7 +189,7 @@ function gameOver(won){
 }
 
 function setEmoji(emoji){
-    button.innerText=isGameOver?isGameWon?signs.won:signs.dead:emoji?emoji:signs.alive;
+    button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 }
 
 function countRemainingFields(){
@@ -218,10 +219,10 @@ body.ontouchend = quickRevealEvent;
 button.onclick = startGame.bind();
 window.onmessage = sendDesiredSize;
 document.ondblclick = quickRevealEvent;
-document.onmousedown = setEmoji.bind(this, !isGameOver?signs.scared:signs.dead);
+document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
 document.onmouseup = function(ev){
     ev.preventDefault();
-    if(!isGameOver) setEmoji(signs.alive);
+    if(!isGameOver) setEmoji(icons.alive);
     lineartiles.forEach(function(tile){ tile.mousedown = false; });
     return false;
 }
