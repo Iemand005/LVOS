@@ -74,12 +74,9 @@ function handleMotion(e) {
   var g = e.accelerationIncludingGravity;
   if (!g || g.x === null) return;
   var x = g.x, y = g.y, z = g.z;
-    
-  // var roll = Math.atan2(g.x, g.y);
-  // var pitch = Math.atan2(-g.z, Math.sqrt(g.x * g.x + g.y * g.y));
 
-  const pitch = Math.atan2(y, Math.sqrt(x * x + z * z)) * (180 / Math.PI);
-  const roll = Math.atan2(-x, z) * (180 / Math.PI);
+  const pitch = Math.atan2(-z, Math.sqrt(x * x + y * y)) * (180 / Math.PI);
+  const roll = Math.atan2(x, y) * (180 / Math.PI);
 
   drawHorizon(roll, pitch);
 }
