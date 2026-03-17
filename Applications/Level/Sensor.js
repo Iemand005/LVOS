@@ -44,16 +44,16 @@ function drawHorizon(roll, pitch) {
   ctx.translate(w / 2, h / 2);
   ctx.rotate(roll);
 
-  var pitchOffset = (pitch / (Math.PI / 2)) * (h / 2);
+  var pitchOffset = -(pitch / (Math.PI / 2)) * (h / 2);
 
   ctx.beginPath();
   ctx.fillStyle = "skyblue";
-  ctx.arc(0, pitchOffset + size, size, 0, Math.PI * 2);
+  ctx.arc(0, pitchOffset - size, size, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
   ctx.fillStyle = "green";
-  ctx.arc(0, pitchOffset - size, size, 0, Math.PI * 2);
+  ctx.arc(0, pitchOffset + size, size, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
@@ -69,6 +69,9 @@ function drawHorizon(roll, pitch) {
   ctx.lineWidth = 3;
   ctx.moveTo(w / 2 - 20, h / 2);
   ctx.lineTo(w / 2 + 20, h / 2);
+  ctx.stroke();
+  
+  ctx.beginPath();
   ctx.moveTo(w / 2, h / 2 - 20);
   ctx.lineTo(w / 2, h / 2 + 20);
   ctx.stroke();
