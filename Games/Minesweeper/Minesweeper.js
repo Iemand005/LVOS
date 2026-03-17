@@ -73,6 +73,7 @@ Tile.prototype = {
             this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
         }
         else this.button.innerText = !isGameWon?signs.exploded:signs.correct, gameOver();
+        console.log("Neighbours: ", neighbours);
         if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) neighbours[neighbour].reveal();
         return neighbourCount;
     },
