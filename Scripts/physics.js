@@ -46,9 +46,7 @@ Vector3D.prototype.div = function (amount) {
 }
 
 Vector3D.prototype.normalize = function () {
-    var sum = this.x + this.y + this.z;
-    this.div(sum);
-    return this;
+    return this.div(this.x + this.y + this.z);
 }
 
 function Rectangle(x, y, width, height) {
