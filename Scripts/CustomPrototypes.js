@@ -78,9 +78,17 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
   };
 
 // if (!Console.prototype.log)
-if (!console) {
+if (typeof console == "undefined") {
     console = {
-        log: function(message) {}
+        log: function(message) {
+            // alert(message);
+        },
+        warn: function(message) {
+            alert(message);
+        },
+        error: function(message) {
+            alert(message, true);
+        }
     }
 }
 

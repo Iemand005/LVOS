@@ -74,7 +74,7 @@ Tile.prototype = {
         }
         else this.button.textContent = !isGameWon?icons.exploded:icons.correct, gameOver();
         console.log("Neighbours: ", neighbours);
-        if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {};
+        if(neighbourCount == 0) for(var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {};
         return neighbourCount;
     },
     getNeighbours: function(){
@@ -136,7 +136,7 @@ Minesweeper.prototype.startGame = function () {
 
                 button.onmouseover = tile.enableVisual.bind(tile);
                 button.onmouseout = tile.disableVisual.bind(tile);
-                button.ondblclick = new Function;
+                button.ondblclick = function (ev) { alert("hey"); };
 
                 button.onmousedown = function(ev){
                     if(!isGameOver) setEmoji(icons.scared);
@@ -243,20 +243,10 @@ try {
     for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
     
     
-    document.body.ondblclick = quickRevealEvent;
-    document.body.ontouchend = quickRevealEvent;
     window.onmessage = sendDesiredSize;
-    document.ondblclick = quickRevealEvent;
-    document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
-document.onmouseup = function(ev){
-    ev.preventDefault();
-    if(!isGameOver) setEmoji(icons.alive);
-    lineartiles.forEach(function(tile){ tile.mousedown = false; });
-    return false;
-}
-
-mutationObserver.observe(document.body, {childList: true});
-
+    
+    mutationObserver.observe(document.body, {childList: true});
+    
 } catch(ex) {
     // console.log(ex);
 }
@@ -268,6 +258,17 @@ function load() {
     minesweeper.startGame();
     var button = document.querySelector("button");
     button.onclick = function () { minesweeper.startGame(); };
+    
+    document.body.ondblclick = quickRevealEvent;
+    document.body.ontouchend = quickRevealEvent;
+    document.ondblclick = quickRevealEvent;
+    document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
+    document.onmouseup = function(ev) {
+        ev.preventDefault();
+        if(!isGameOver) setEmoji(icons.alive);
+        lineartiles.forEach(function(tile){ tile.mousedown = false; });
+        return false;
+    }
 }
 
 window.addEventListener("load", load, false);
