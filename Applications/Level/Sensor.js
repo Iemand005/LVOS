@@ -10,7 +10,11 @@
 var horizon = document.getElementById("horizon");
 var ctx = horizon.getContext('2d');
 
-function Graphics(element) {
+/**
+ * @constructor
+ * @param {HTMLCanvasElement | string | null} element 
+ */
+function GraphicsBase(element) {
   /** @type {HTMLCanvasElement?} */
   this.canvas = (
     element instanceof HTMLCanvasElement
@@ -20,25 +24,42 @@ function Graphics(element) {
       ? document.getElementById(element)
       : document.createElement("canvas")
     ));
+  
+  this.canvas.onresize = function () {
+    var bounds = canvas.getBoundingClientRect();
+    graphics.resize(bounds.width, bounds.height);
+  }
+}
+
+GraphicsBase.prototype.resize = function (width, height) {
+  this.canvas.width = width;
+  this.canvas.height = height;
+}
+
+GraphicsBase.prototype.getContext = function (type) {
+  return this.canvas.getContext();
 }
 
 /**
- * @param {string | HTMLCanvasElement} elementId 
+ * @constructor
+ * @extends {GraphicsBase}
+ * @param {string | HTMLCanvasElement | null} element 
  */
 function Graphics2D(element) {
-  Graphics.call(this, element);
-  this.ctx = this.canvas.getContext("2d");
+  GraphicsBase.call(this, element);
+  this.ctx = this.getContext("2d");
 }
 
 // Graphics2D.prototype.__proto__ = Graphics.prototype;
 // Graphics2D.constru
-Graphics2D.prototype = Object.create(Graphics.prototype);
-Graphics2D.prototype.constructor = Graphics;
+Graphics2D.prototype = Object.create(GraphicsBase.prototype);
+Graphics2D.prototype.constructor = GraphicsBase;
 
 var graphics = new Graphics2D("horizon");
 
 function drawHorizon(roll, pitch) {
   var w = horizon.width, h = horizon.height;
+  var ctx = graphics.ctx;
 
   const pixelOffset = pitch * 5;
 
