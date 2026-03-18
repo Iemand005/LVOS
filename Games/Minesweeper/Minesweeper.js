@@ -70,9 +70,9 @@ Tile.prototype = {
         this.disable();
         if(!this.mine) {
             if(remaining==0) gameOver(true);
-            this.button.innerText = neighbourCount, classes.add('n' + neighbourCount);
+            this.button.textContent = neighbourCount, classes.add('n' + neighbourCount);
         }
-        else this.button.innerText = !isGameWon?icons.exploded:icons.correct, gameOver();
+        else this.button.textContent = !isGameWon?icons.exploded:icons.correct, gameOver();
         console.log("Neighbours: ", neighbours);
         if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) neighbours[neighbour].reveal();
         return neighbourCount;
@@ -188,6 +188,8 @@ function quickRevealEvent(ev) {
     }
 }
 
+Minesweeper.prototype.quickRevealEvent = quickRevealEvent;
+
 function randomNumberBetween(start, end){
     return (Math.random()*(end - start)) + start;
 }
@@ -218,6 +220,9 @@ function countRemainingFields() {
 function countBombs() {
     return lineartiles.filter(function(tile){ return tile.mine }).length;
 }
+
+Minesweeper.prototype.countBombs = countBombs;
+Minesweeper.prototype.countRemainingFields = countRemainingFields;
 
 function activateTimer() {
     var timer = 0;

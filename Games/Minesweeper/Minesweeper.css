@@ -86,7 +86,7 @@ button.n6 { color: darkcyan; }
 button.n7 { color: black; }
 button.n8 { color: darkgray; }
 
-button.n0 { background-color: transparent; }
+/* button.n0 { background-color: transparent; }
 button.n1 { background-color: blue; }
 button.n2 { background-color: green; }
 button.n3 { background-color: red; }
@@ -94,7 +94,7 @@ button.n4 { background-color: darkblue; }
 button.n5 { background-color: darkred; }
 button.n6 { background-color: darkcyan; }
 button.n7 { background-color: black; }
-button.n8 { background-color: darkgray; }
+button.n8 { background-color: darkgray; } */
 
 div, form, table, button {
     border-style: solid;
