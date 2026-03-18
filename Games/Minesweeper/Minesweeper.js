@@ -211,21 +211,21 @@ function setEmoji(emoji) {
     }
 }
 
-function countRemainingFields(){
+function countRemainingFields() {
     return lineartiles.filter(function(tile){return !tile.mine && !tile.revealed}).length;
 }
 
-function countBombs(){
+function countBombs() {
     return lineartiles.filter(function(tile){ return tile.mine }).length;
 }
 
-function activateTimer(){
+function activateTimer() {
     var timer = 0;
     displays[1].update(timer++);
     timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
 }
 
-function stopTimer(reset){
+function stopTimer(reset) {
     if(reset) displays[1].update(0);
     window.clearInterval(timerInterval);
 }
