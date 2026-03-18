@@ -6,8 +6,9 @@ function Tetris() {
 
 Tetris.prototype.init = function() {
   document.body.appendChild(this.table);
-  alert("Table" + this.table);
 };
+
+Tetris.prototype.render = function()
 
 var tetris = new Tetris();
 
