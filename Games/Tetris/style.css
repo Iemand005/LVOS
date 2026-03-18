@@ -1,1 +1,49 @@
 
+td {
+  background-color: red;
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+  width: 30px;
+  height: 30px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Orange Ricky (L), Blue Ricky (J), Cleveland Z (Z), Rhode Island Z (S), Hero (I), Teewee (T), and Smashboy*/
+.hero {
+    background-color: #00ffff;
+}
+
+/* Smashboy (O) - Yellow */
+.smashboy {
+    background-color: #ffff00;
+}
+
+/* Teewee (T) - Purple */
+.teewee {
+    background-color: #aa00ff;
+}
+
+/* Rhode Island Z (S) - Green */
+.rhode-island-z {
+    background-color: #00ff00;
+}
+
+/* Cleveland Z (Z) - Red */
+.cleveland-z {
+    background-color: #ff0000;
+}
+
+/* Blue Ricky (J) - Blue */
+.blue-ricky {
+    background-color: #0000ff;
+}
+
+/* Orange Ricky (L) - Orange */
+.orange-ricky {
+    background-color: #ffaa00;
+}
