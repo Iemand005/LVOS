@@ -56,7 +56,7 @@ if (!Object.defineProperty) Object.defineProperty = function(obj, key, funcs) {
 }
 
 if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
-    return document.getElementsByTagName(selector)[0];
+    return document.getElementsByTagName(selector);
 }
 
 if (!document.querySelector) document.querySelector = function(selector) {

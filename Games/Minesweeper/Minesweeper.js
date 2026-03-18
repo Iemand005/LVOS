@@ -112,7 +112,7 @@ function startGame(){
     isGameWon = false;
     isGameOver = false;
     setEmoji();
-    while(table.firstChild) table.removeChild(table.firstChild); // Clear the table
+    while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
     for (var y = 0; y < height; y++) {
         tiles[y] = new Array();
         var row = table.appendChild(document.createElement("tr"));
@@ -124,7 +124,7 @@ function startGame(){
 
                     button.classList.add("mine");
                 } catch(ex) {
-                    alert(ex.message);
+                    // alert(ex.message);
                 }
                 tile.generate();
 
@@ -195,8 +195,13 @@ function gameOver(won){
     stopTimer();
 }
 
-function setEmoji(emoji){
-    button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
+function setEmoji(emoji) {
+    try {
+        
+        button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
+    } catch (ex) {
+
+    }
 }
 
 function countRemainingFields(){
@@ -244,6 +249,8 @@ mutationObserver.observe(body, {childList: true});
 
 stopTimer(true);
 startGame();
+
+// document.addEventListener("load", startGame);
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222    666666
