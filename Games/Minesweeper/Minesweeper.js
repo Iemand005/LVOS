@@ -10,11 +10,8 @@ var width = 10, height = 13,
     singleSidedDisplay = true,
     showBombInsteadOfCheckmark = true;
 
-var body = document.body;
-var form = document.querySelector("section"),
-    table = document.querySelector("table"),
-    outputs = document.getElementsByTagName("output"),
-    button = document.querySelector("button"),
+// var body = document.body;
+var
     // rect = document.body.getBoundingClientRect(),
     rect = {x: 10, y: 10, width: 10, height: 10},
 
@@ -64,7 +61,7 @@ Tile.prototype = {
         if(this.revealed) return 0;
         if(!gameStarted) gameStarted = true, activateTimer();
         this.revealed = true;
-        /*const*/var remaining = countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
+        var remaining = countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
 
         classes.add("revealed");
         this.disable();
@@ -108,10 +105,12 @@ Tile.prototype = {
 }
 
 function startGame(){
+    // alert("Startin game");
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;
     setEmoji();
+    var table = document.querySelector("table");
     while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
     for (var y = 0; y < height; y++) {
         tiles[y] = new Array();
@@ -166,6 +165,7 @@ function startGame(){
 }
 
 function sendDesiredSize(){
+    var form = document.querySelector("section");
     // Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 }
 
@@ -197,7 +197,7 @@ function gameOver(won){
 
 function setEmoji(emoji) {
     try {
-        
+        var button = document.querySelector("button");
         button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
     } catch (ex) {
 
@@ -224,12 +224,13 @@ function stopTimer(reset){
 }
 
 try {
+    var outputs = document.getElementsByTagName("output");var button = document.querySelector("button");
     if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
     for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
 
 
-body.ondblclick = quickRevealEvent;
-body.ontouchend = quickRevealEvent;
+document.body.ondblclick = quickRevealEvent;
+document.body.ontouchend = quickRevealEvent;
 button.onclick = startGame.bind();
 window.onmessage = sendDesiredSize;
 document.ondblclick = quickRevealEvent;
@@ -241,16 +242,19 @@ document.onmouseup = function(ev){
     return false;
 }
 
-mutationObserver.observe(body, {childList: true});
+mutationObserver.observe(document.body, {childList: true});
 
 } catch(ex) {
     // console.log(ex);
 }
 
 stopTimer(true);
-startGame();
+// startGame();
 
-// document.addEventListener("load", startGame);
+// document.addEventListener("load", function (ev) {
+//     startGame();
+// });
+window.addEventListener("load", startGame, false);
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222    666666
