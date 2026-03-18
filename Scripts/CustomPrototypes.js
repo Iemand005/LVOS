@@ -55,8 +55,12 @@ if (!Object.defineProperty) Object.defineProperty = function(obj, key, funcs) {
     if (funcs.set) obj.constructor.__defineSetter__(key, funcs.set);
 }
 
+if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
+    return document.getElementsByTagName(selector)[0];
+}
+
 if (!document.querySelector) document.querySelector = function(selector) {
-    return document.getElementsByTagName(selector);
+    return document.querySelectorAll(selector)[0];
 }
 
 // if (!document.body.getBoundingClientRect) document.body.getBoundingClientRect = function() {}

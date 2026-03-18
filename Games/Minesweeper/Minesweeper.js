@@ -12,9 +12,9 @@ var width = 10, height = 13,
 
 var body = document.body;
 var form = document.querySelector("section"),
-    table = document.createElement("table"),
+    table = document.querySelector("table"),
     outputs = document.getElementsByTagName("output"),
-    button = document.querySelector("article>button"),
+    button = document.querySelector("button"),
     // rect = document.body.getBoundingClientRect(),
     rect = {x: 10, y: 10, width: 10, height: 10},
 
@@ -236,7 +236,6 @@ document.onmouseup = function(ev){
     return false;
 }
 
-form.appendChild(table);
 mutationObserver.observe(body, {childList: true});
 
 } catch(ex) {
