@@ -74,7 +74,7 @@ Tile.prototype = {
         }
         else this.button.textContent = !isGameWon?icons.exploded:icons.correct, gameOver();
         console.log("Neighbours: ", neighbours);
-        if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) neighbours[neighbour].reveal();
+        if(neighbourCount == 0) for(/*let*/var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {};
         return neighbourCount;
     },
     getNeighbours: function(){

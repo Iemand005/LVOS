@@ -76,7 +76,7 @@ div {
     margin-bottom: 10px;
 }
 
-button.n0 { color: transparent; }
+button.n0 { color: lightgray; }
 button.n1 { color: blue; }
 button.n2 { color: green; }
 button.n3 { color: red; }
