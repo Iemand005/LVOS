@@ -120,7 +120,12 @@ function startGame(){
             function(x, y) {
                 var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
                 row.appendChild(document.createElement("td")).appendChild(button);
-                button.classList.add("mine");
+                try {
+
+                    button.classList.add("mine");
+                } catch(ex) {
+                    alert(ex.message);
+                }
                 tile.generate();
 
                 button.onmouseover = tile.enableVisual.bind(tile);
@@ -161,7 +166,7 @@ function startGame(){
 }
 
 function sendDesiredSize(){
-    Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
+    // Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 }
 
 // Messenger.onHostBeingLVOS(function () {

@@ -73,6 +73,13 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
     };
   };
 
+// if (!Console.prototype.log)
+if (!console) {
+    console = {
+        log: function(message) {}
+    }
+}
+
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
 
