@@ -84,12 +84,31 @@ if (!console) {
     }
 }
 
-if (!("classList" in document.documentElement)) Object.defineProperty(HTMLElement.prototype, "classList", { get: function() {
+if (!("classList" in document.documentElement)) HTMLElement.prototype.__defineGetter__("classList", function() {
     var self = this;
     return {
-
+        classes: self.className.split(" "),
+        add: function(className) {
+                if (!this.contains(className)) {
+                    self.className += (self.className ? " " : "") + className;
+                }
+            },
+            remove: function(className) {
+                var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                self.className = self.className.replace(reg, ' ').replace(/^\s+|\s+$/g, "");
+            },
+            contains: function(className) {
+                return new RegExp('(\\s|^)' + className + '(\\s|$)').test(self.className);
+            },
+            toggle: function(className) {
+                if (this.contains(className)) {
+                    this.remove(className);
+                } else {
+                    this.add(className);
+                }
+            }
     };
-}});
+});
 
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
