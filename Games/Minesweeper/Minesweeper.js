@@ -5,7 +5,7 @@
 
 'use strict';
 
-var width = 10, height = 13,
+var width = 12, height = 13,
     quickReveal = true,
     singleSidedDisplay = true,
     showBombInsteadOfCheckmark = true;
