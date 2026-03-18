@@ -112,6 +112,7 @@ function Minesweeper() {
 }
 
 Minesweeper.prototype.startGame = function () {
+    document.querySelector("form").addEventListener("submit", function (ev) { ev.preventDefault(); }, false );
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;
@@ -171,7 +172,7 @@ Minesweeper.prototype.startGame = function () {
 };
 
 function sendDesiredSize(){
-    var form = document.querySelector("section");
+    var form = document.querySelector("form");
     // Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 }
 
@@ -203,7 +204,7 @@ function gameOver(won){
 
 function setEmoji(emoji) {
     try {
-        var button = document.querySelector("button");
+        var button = document.querySelector("div").querySelector("button");
         button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
     } catch (ex) {
 
@@ -229,18 +230,19 @@ function stopTimer(reset) {
     window.clearInterval(timerInterval);
 }
 
+var minesweeper = new Minesweeper();
+
 try {
-    var outputs = document.getElementsByTagName("output");var button = document.querySelector("button");
+    var outputs = document.getElementsByTagName("output");
     if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
     for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
-
-
-document.body.ondblclick = quickRevealEvent;
-document.body.ontouchend = quickRevealEvent;
-button.onclick = startGame.bind();
-window.onmessage = sendDesiredSize;
-document.ondblclick = quickRevealEvent;
-document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
+    
+    
+    document.body.ondblclick = quickRevealEvent;
+    document.body.ontouchend = quickRevealEvent;
+    window.onmessage = sendDesiredSize;
+    document.ondblclick = quickRevealEvent;
+    document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
 document.onmouseup = function(ev){
     ev.preventDefault();
     if(!isGameOver) setEmoji(icons.alive);
@@ -256,10 +258,11 @@ mutationObserver.observe(document.body, {childList: true});
 
 stopTimer(true);
 
-var minesweeper = new Minesweeper();
 
 function load() {
     minesweeper.startGame();
+    var button = document.querySelector("button");
+    button.onclick = function () { minesweeper.startGame(); };
 }
 
 window.addEventListener("load", load, false);
