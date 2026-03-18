@@ -42,10 +42,18 @@ var isGameOver = false,
     timerInterval = 0,
     bombCount = 0;
 
+/**
+ * 
+ * @param {HTMLButtonElement} button 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {boolean} mine 
+ */
 function Tile(button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
     this.enable = this.toggleDisabled.bind(this, true);
     this.mine = mine || false;
+    /** @type {HTMLButtonElement?} */
     this.button = button;
     this.flagged = false;
     this.position = { x: x, y: y };
@@ -105,7 +113,6 @@ Tile.prototype = {
 }
 
 function startGame(){
-    // alert("Startin game");
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;

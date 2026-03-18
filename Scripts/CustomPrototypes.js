@@ -49,10 +49,10 @@ function forForEach(callback) {
 if(!Array.prototype.forEach) Array.prototype.forEach = forForEach;
 if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forForEach;
 
-if (!Object.defineProperty) Object.defineProperty = function(obj, key, funcs) {
-    if (!funcs) return;
-    if (funcs.get) obj.constructor.__defineGetter__(key, funcs.get);
-    if (funcs.set) obj.constructor.__defineSetter__(key, funcs.set);
+if (!Object.defineProperty) Object.defineProperty = function(obj, key, descriptor) {
+    if (!descriptor) return;
+    if (descriptor.get) obj.constructor.__defineGetter__(key, descriptor.get);
+    if (descriptor.set) obj.constructor.__defineSetter__(key, descriptor.set);
 }
 
 if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
@@ -83,6 +83,13 @@ if (!console) {
         log: function(message) {}
     }
 }
+
+if (!("classList" in document.documentElement)) Object.defineProperty(HTMLElement.prototype, "classList", { get: function() {
+    var self = this;
+    return {
+
+    };
+}});
 
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
