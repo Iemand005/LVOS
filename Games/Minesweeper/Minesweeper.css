@@ -47,11 +47,20 @@ table {
     border-spacing: 0;
     kerning: auto;
     margin: auto;
+    border-collapse: collapse;
 }
 
 td {
     padding: 0;
     margin: 0;
+    border-collapse: collapse;
+    line-height: 0; 
+
+}
+
+tr {
+    /* dis */
+    border-collapse: collapse;
 }
 
 section, article {
