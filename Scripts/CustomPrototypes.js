@@ -37,17 +37,27 @@ function CompatibilityChecker(){
 
 
 function forEach(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
-    for (/*let*/var index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+    for (var index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
 }
 
 function forForEach(callback) {
-    for (/*let*/var index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+    for (var index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
 }
 
 
 // Deze is niet volledig, ik moet nog de thisArguments toevoegen, wat ook afhangt van de stricte modus. Ik gebruik hier wel hasOwnProperty om te verifiëren dat we geen sleutels binnen krijgen die niet in ons object bestaan (gebeurt normaal niet).
 if(!Array.prototype.forEach) Array.prototype.forEach = forForEach;
 if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forForEach;
+
+if (!Object.defineProperty) Object.defineProperty = function(obj, key, funcs) {
+    if (!funcs) return;
+    if (funcs.get) obj.constructor.__defineGetter__(key, funcs.get);
+    if (funcs.set) obj.constructor.__defineSetter__(key, funcs.set);
+}
+
+if (!document.querySelector) document.querySelector = function(selector) {
+    return document.getElementsByTagName(selector);
+}
 
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
@@ -57,7 +67,7 @@ Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // No
 if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
 
 function find(callback) {
-    for (/*let*/var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
+    for (var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
 }
 
 if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
