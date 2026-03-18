@@ -61,7 +61,7 @@ tr {
     border-collapse: collapse;
 }
 
-section, article {
+form, article {
     padding: 10px;
 }
 
@@ -76,43 +76,27 @@ article {
     margin-bottom: 10px;
 }
 
-button.n0 {
-    color: transparent;
-}
+button.n0 { color: transparent; }
+button.n1 { color: blue; }
+button.n2 { color: green; }
+button.n3 { color: red; }
+button.n4 { color: darkblue; }
+button.n5 { color: darkred; }
+button.n6 { color: darkcyan; }
+button.n7 { color: black; }
+button.n8 { color: darkgray; }
 
-button.n1 {
-    color: blue;
-}
+button.n0 { background-color: transparent; }
+button.n1 { background-color: blue; }
+button.n2 { background-color: green; }
+button.n3 { background-color: red; }
+button.n4 { background-color: darkblue; }
+button.n5 { background-color: darkred; }
+button.n6 { background-color: darkcyan; }
+button.n7 { background-color: black; }
+button.n8 { background-color: darkgray; }
 
-button.n2 {
-    color: green;
-}
-
-button.n3 {
-    color: red;
-}
-
-button.n4 {
-    color: darkblue;
-}
-
-button.n5 {
-    color: darkred;
-}
-
-button.n6 {
-    color: darkcyan;
-}
-
-button.n7 {
-    color: black;
-}
-
-button.n8 {
-    color: darkgray;
-}
-
-article, section, table, button {
+article, form, table, button {
     border-style: solid;
     border-width: 3px;
 }
@@ -124,14 +108,14 @@ button:active:not(:disabled):not(.mine), button.active, table, article, output {
     border-bottom-color: rgb(231, 231, 231);
 }
 
-section, button, articlen button {
+form, button, articlen button {
     border-top-color: rgb(231, 231, 231);
     border-left-color: rgb(231, 231, 231);
     border-right-color: darkgray;
     border-bottom-color: darkgray;
 }
 
-body, section, article, button {
+body, form, article, button {
     background-color: lightgray;
 }
 
@@ -176,4 +160,15 @@ article.original > button {
 article.original > output {
     width: 44px;
     height: 28px;
+}
+
+form, article, header, footer, output {
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+output {
+    display: -moz-inline-box; /* Netscape 9's version of inline-block */
+    display: inline-block;
 }

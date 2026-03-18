@@ -112,7 +112,11 @@ Tile.prototype = {
     },
 }
 
-function startGame(){
+function Minesweeper() {
+
+}
+
+Minesweeper.prototype.startGame = function () {
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;
@@ -169,7 +173,7 @@ function startGame(){
 
     displays[0].update(bombCount = countBombs());
     sendDesiredSize();
-}
+};
 
 function sendDesiredSize(){
     var form = document.querySelector("section");
@@ -261,7 +265,14 @@ stopTimer(true);
 // document.addEventListener("load", function (ev) {
 //     startGame();
 // });
-window.addEventListener("load", startGame, false);
+
+var minesweeper = new Minesweeper();
+
+function load() {
+    minesweeper.startGame();
+}
+
+window.addEventListener("load", load, false);
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222    666666
