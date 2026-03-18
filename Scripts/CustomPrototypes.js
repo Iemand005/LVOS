@@ -59,6 +59,15 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.getElementsByTagName(selector);
 }
 
+// if (!document.body.getBoundingClientRect) document.body.getBoundingClientRect = function() {}
+
+// Function.prototype.bind =
+if (!Function.prototype.bind) Function.prototype.bind = function(thisArg, fn) {
+    return function(fn) {
+        return this.apply(thisArg, fn);
+    }
+}
+
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
 Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
 

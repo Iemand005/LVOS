@@ -8,14 +8,15 @@
 var width = 10, height = 13,
     quickReveal = true,
     singleSidedDisplay = true,
-    showBombInsteadOfCheckmark = true,
+    showBombInsteadOfCheckmark = true;
 
-    body = document.body,
-    form = document.querySelector("section"),
+var body = document.body;
+var form = document.querySelector("section"),
     table = document.createElement("table"),
     outputs = document.getElementsByTagName("output"),
     button = document.querySelector("article>button"),
-    rect = body.getBoundingClientRect(),
+    // rect = document.body.getBoundingClientRect(),
+    rect = {x: 10, y: 10, width: 10, height: 10},
 
     icons = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
         bomb: "💣",
@@ -163,9 +164,9 @@ function sendDesiredSize(){
     Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 }
 
-Messenger.onHostBeingLVOS(function () {
-    console.log("My host is LVOS!!");
-});
+// Messenger.onHostBeingLVOS(function () {
+//     console.log("My host is LVOS!!");
+// });
 
 function quickRevealEvent(ev) {
     /*const*/var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
@@ -202,7 +203,7 @@ function countBombs(){
 }
 
 function activateTimer(){
-    /*let*/var timer = 0;
+    var timer = 0;
     displays[1].update(timer++);
     timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
 }
@@ -212,8 +213,10 @@ function stopTimer(reset){
     window.clearInterval(timerInterval);
 }
 
-if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
-for(/*let*/var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
+try {
+    if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
+    for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
+
 
 body.ondblclick = quickRevealEvent;
 body.ontouchend = quickRevealEvent;
@@ -230,6 +233,10 @@ document.onmouseup = function(ev){
 
 form.appendChild(table);
 mutationObserver.observe(body, {childList: true});
+
+} catch(ex) {
+    // console.log(ex);
+}
 
 stopTimer(true);
 startGame();
