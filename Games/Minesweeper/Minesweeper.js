@@ -10,12 +10,7 @@ var width = 10, height = 13,
     singleSidedDisplay = true,
     showBombInsteadOfCheckmark = true;
 
-// var body = document.body;
-var
-    // rect = document.body.getBoundingClientRect(),
-    rect = {x: 10, y: 10, width: 10, height: 10},
-
-    icons = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
+var icons = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
         bomb: "💣",
         exploded: "💥",
         correct: "✔",
@@ -260,11 +255,6 @@ mutationObserver.observe(document.body, {childList: true});
 }
 
 stopTimer(true);
-// startGame();
-
-// document.addEventListener("load", function (ev) {
-//     startGame();
-// });
 
 var minesweeper = new Minesweeper();
 
