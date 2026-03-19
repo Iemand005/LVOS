@@ -27,15 +27,24 @@ Tetris.prototype.createGrid = function(width, height) {
 }
 
 /**
- * @typedef {"hero" | "rickey"} TetrominoType
+ * @typedef {"hero" | "rickey" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
  */
+
+const hero = [
+  [1, 1],
+  [1, 1]
+];
+
+const 
 
 /**
  * 
- * @param {*} type 
+ * @param {TetrominoType} type 
  */
 Tetris.prototype.spawn = function(type) {
-
+  switch (type) {
+    case "hero":
+  }
 }
 
 var tetris = new Tetris();
