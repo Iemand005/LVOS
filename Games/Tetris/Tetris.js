@@ -30,12 +30,14 @@ Tetris.prototype.createGrid = function(width, height) {
  * @typedef {"hero" | "rickey" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
  */
 
-const hero = [
+var
+hero = [
   [1, 1],
   [1, 1]
-];
-
-const 
+],
+smashboy = [
+  
+]
 
 /**
  * 
