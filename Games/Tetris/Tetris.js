@@ -8,7 +8,7 @@ function Tetris() {
 Tetris.prototype.init = function() {
   document.body.appendChild(this.table);
 
-  this.createGrid(2, 2);
+  this.createGrid(10, 2);
 };
 
 Tetris.prototype.createGrid = function(width, height) {
@@ -18,12 +18,23 @@ Tetris.prototype.createGrid = function(width, height) {
 
     for (var x = 0; x < width; x++) {
       var data = row.appendChild(document.createElement("td"));
-      // data.textContent = "hey";
       data.classList.add("hero");
     }
 
     this.rows.push(row);
   }
+
+}
+
+/**
+ * @typedef {"hero" | "rickey"} TetrominoType
+ */
+
+/**
+ * 
+ * @param {*} type 
+ */
+Tetris.prototype.spawn = function(type) {
 
 }
 
