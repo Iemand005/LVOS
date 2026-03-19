@@ -27,7 +27,7 @@ Tetris.prototype.createGrid = function(width, height) {
 }
 
 /**
- * @typedef {"hero" | "rickey" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
+ * @typedef {"hero" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
  */
 
 var
@@ -36,17 +36,51 @@ hero = [
   [1, 1]
 ],
 smashboy = [
-  
+
 ]
 
 /**
- * 
+ * @param {TetrominoType} type 
+ */
+Tetris.prototype.getTetrominoLayout = function(type) {
+  switch (type) {
+    case "hero": return [
+      [1, 1],
+      [1, 1]
+    ];
+    case "teewee": return [
+      [0, 1, 0],
+      [1, 1, 1]
+    ];
+    case "smashboy": return [
+      
+    ];
+    case "blue-ricky": return [
+      [1, 0],
+      [1, 0],
+      [1, 1]
+    ];
+    case "cleveland-z": return [
+      [1, 1, 0],
+      [0, 1, 1]
+    ];
+    case "orange-ricky": return [
+      [0, 1],
+      [0, 1],
+      [1, 1]
+    ];
+    case "rhode-island-z": return [
+      [0, 1, 1],
+      [1, 1, 0]
+    ];
+  }
+};
+
+/**
  * @param {TetrominoType} type 
  */
 Tetris.prototype.spawn = function(type) {
-  switch (type) {
-    case "hero":
-  }
+  var layout = this.getTetrominoLayout();
 }
 
 var tetris = new Tetris();
