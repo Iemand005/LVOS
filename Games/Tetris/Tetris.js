@@ -83,7 +83,7 @@ Tetris.prototype.spawn = function(type) {
     
     const row = layout[i];
     
-    
+    alert(row);
   }
 }
 
