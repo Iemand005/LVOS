@@ -45,15 +45,15 @@ smashboy = [
 Tetris.prototype.getTetrominoLayout = function(type) {
   switch (type) {
     case "hero": return [
-      [1, 1],
-      [1, 1]
+      [1, 1, 1, 1]
     ];
     case "teewee": return [
       [0, 1, 0],
       [1, 1, 1]
     ];
     case "smashboy": return [
-      
+      [1, 1],
+      [1, 1]
     ];
     case "blue-ricky": return [
       [1, 0],
