@@ -77,6 +77,14 @@ Tetris.prototype.spawn = function(type) {
   //   const element = array[index];
     
   // }
+
+  for (var i in layout) {
+    if (!Object.hasOwn(layout, i)) continue;
+    
+    const row = layout[i];
+    
+    
+  }
 }
 
 var tetris = new Tetris();
