@@ -979,6 +979,12 @@ function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
     image.src = url;
     image.setAttribute("srcBlur", blurredUrl);
+
+    var wallpaper = getWallpaper();
+    Array.from(wallpaper.children).forEach(function(wallpaperChild) {
+        wallpaper.removeChild(wallpaperChild);
+    });
+    wallpaper.appendChild(image);
 }
 
 enableMica();
