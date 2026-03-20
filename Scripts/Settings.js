@@ -144,6 +144,11 @@ window.ondrop = document.ondrop = function(ev){
     console.log(ev);
 }
 
+document.body.ondragover = function(ev) { e.preventDefault(); console.log ("okdi")}
+document.body.ondrop = function(e) {
+    e.preventDefault();
+}
+
 loadSettings();
 
 function downloadObjectAsJson(exportObj, exportName) {
