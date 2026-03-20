@@ -457,7 +457,7 @@ Dialog.prototype.move = function (x, y) {
         /** @type {HTMLElement} */
         var backdrop = this.target.getElementsByClassName("mica")[0];
         var wallpaper = document.getElementById("wallpaper").children[0];
-        translateElement(backdrop, -this._x + wallpaper.clientLeft, -this._y + wallpaper.clientTop);
+        translateElement(backdrop, -this._x, -this._y);
         
         backdrop.style.width = toPixels(wallpaper.clientWidth);
         backdrop.style.height = toPixels(wallpaper.clientHeight);
@@ -502,7 +502,7 @@ Dialog.prototype.injectMica = function () {
     var wallpaper = document.getElementById("wallpaper");
     var image = wallpaper.children[0].cloneNode(true);
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    image.classList.add("mica");
+    // image.classList.add("mica");
     clip.appendChild(image);
     this.move(this.x, this.y);
 }
