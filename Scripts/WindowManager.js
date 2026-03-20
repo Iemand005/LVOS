@@ -700,6 +700,16 @@ function windowActivationEvent(event, dialog){
 var ticking = false;
 
 /**
+ * @param {Vector} difference 
+ */
+function handleWindowDrag(difference) {
+    var difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
+
+    dragAction.execute(dialog, dialog.clickOffset, difference);
+    if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
+}
+
+/**
  * @param {PointerEvent | MouseEvent} event 
  */
 function windowDragEvent(event){
@@ -707,11 +717,8 @@ function windowDragEvent(event){
         if (ticking) return;
         window.requestAnimationFrame(function() {
             var dialog = windows[activeDialog];
-            var difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
-            dragAction.execute(dialog, dialog.clickOffset, difference);
-
-            if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
+            
 
             ticking = false;
         });
