@@ -19,7 +19,7 @@ body {
   margin: 0;
   touch-action: none;
   overscroll-behavior: none;
-  background-color: red;
+  background-color: darkred;
 }
 #dock {
   position: absolute;

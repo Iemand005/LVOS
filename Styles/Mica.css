@@ -19,4 +19,5 @@
   height: 100%;
   position: absolute;
   overflow: hidden;
+  border-radius: inherit;
 }

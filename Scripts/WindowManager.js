@@ -478,6 +478,7 @@ Dialog.prototype.quit = function () {
  };
 Dialog.prototype.launch = function () {
     if (!this.target) this.initWithObject(this.application);
+    if (this.mica) this.injectMica();
 
     this.open();
 }
@@ -488,6 +489,7 @@ Dialog.prototype.relaunch = function () {
 };
 
 Dialog.prototype.injectMica = function () {
+    if (this.micaElement) return;
     var wallpaper = document.getElementById("wallpaper");
     var image = wallpaper.children[0].cloneNode(true);
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];

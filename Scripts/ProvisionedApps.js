@@ -211,9 +211,13 @@ if (loadApps) {
     injectApplications(games);
 }
 
-dockapplist.appendChild(windows.browser.createOpenButton());
-dockapplist.appendChild(windows.console.createOpenButton());
-dockapplist.appendChild(windows.music.createOpenButton());
+try {
+    dockapplist.appendChild(windows.browser.createOpenButton());
+    dockapplist.appendChild(windows.console.createOpenButton());
+    dockapplist.appendChild(windows.music.createOpenButton());
+} catch(ex) {
+    console.warn(ex.message);
+}
 
 
 toggleReflections(true);
