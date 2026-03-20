@@ -1017,7 +1017,6 @@ window.addEventListener("dragover", function(e) {
 
 window.addEventListener("drop", function(e) {
   e.preventDefault();
-  // Handle your drop logic here
   var files = e.dataTransfer.files;
   if (files.length > 0) {
      console.log("File dropped anywhere in window:", files[0].name);
@@ -1028,9 +1027,9 @@ window.addEventListener("drop", function(e) {
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targetting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
- *    \  Chromium 118 (That means Chrome, Edge Chromium, Brave, Opera, ...)
+ *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
  *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11
- *  /  Chrome 48
- * /  EdgeHTML 18 (Edge Legacy)
+ *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
+ *  /  Pale Moon 34
+ * /  Safari 5+ (Windows and Mac OS X)
 \*/
