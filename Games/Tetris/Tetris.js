@@ -86,9 +86,13 @@ Tetris.prototype.spawn = function(type) {
       // alert(block + "x: " + x + "y: " +y);
       console.log(tetris.rows[y][x])
       if (block) tetris.rows[y][x].classList.add(type);
-    })
-  })
-}
+    });
+  });
+};
+
+Tetris.prototype.update = function() {
+  
+};
 
 var tetris = new Tetris();
 
