@@ -502,7 +502,7 @@ Dialog.prototype.injectMica = function () {
     var wallpaper = document.getElementById("wallpaper");
     var image = wallpaper.children[0].cloneNode(true);
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    // image.classList.add("mica");
+    image.classList.add("mica");
     clip.appendChild(image);
     this.move(this.x, this.y);
 }

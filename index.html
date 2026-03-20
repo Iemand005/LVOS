@@ -62,7 +62,7 @@
                             </article><!-- Adding a wrapper aound this allows the corners inside the window to be rounded too, in a similar way done on Windows 11. We can do it without wrapping with overflow hidden but that results in the scroll bars being rendered over top which looks ugly. Rounded corners also appear to break the experimental blur support on EdgeHTML 18 when a scrollbar appears as the blur layer then gets rendered to the screen after the border causing it to show a jagged inside lining of the quarter circle. I can't find any mentions of the bug online as it's a weird edge case (pun intended). Turns out, Edge Legacy is not the only browser that has problems here. Chrome has a very similar bug but it disappears upon resize (tested in Chrome 118), that would mean Edge Chromium, Opera, Brave and all other Chromium browsers likely have this weird effect too. I will thus not be implementing this! -->
                             <!-- This is the non-client area! -->
                         </content><!-- This unnecessary wrapping that is only here for EdgeHTML and WebView 1 compatibility. -->
-                        <span class="backdrop-clip mica"></span>
+                        <span class="backdrop-clip"></span>
                             <!-- This is also the non-client area. Primarily reserved for the borders. -->
                     </div>
                 </template><!-- The client area in graphical user interface design refers to the area of the window where the user's content should be placed. The non-client area is for managing the window itself. -->
