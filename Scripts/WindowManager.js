@@ -23,6 +23,7 @@ var blur = false,
     loadingOverlay = true,
     flipped = false,
     useTransform = true;
+    updateRateLimit = true;
 
 /*const*/var supportsPointer = typeof PointerEvent !== "undefined";
 
@@ -696,19 +697,25 @@ function windowActivationEvent(event, dialog){
     return dialog;
 }
 
+var ticking = false;
+
 /**
  * @param {PointerEvent | MouseEvent} event 
  */
 function windowDragEvent(event){
     try {
-        /*const*/var dialog = windows[activeDialog];
-        /*const*/var difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
+        if (ticking) return;
+        window.requestAnimationFrame(function() {
+            var dialog = windows[activeDialog];
+            var difference = { x: event.clientX - dialog.clickOffset.x, y: event.clientY - dialog.clickOffset.y };
 
-        dragAction.execute(dialog, dialog.clickOffset, difference);
+            dragAction.execute(dialog, dialog.clickOffset, difference);
 
-        // console.log("moving")
-        
-        if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
+            if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
+
+            ticking = false;
+        });
+        ticking = true;
     } catch (ex) {
         console.error(ex);
     }
