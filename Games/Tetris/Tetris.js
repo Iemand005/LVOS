@@ -73,28 +73,12 @@ Tetris.prototype.getTetrominoLayout = function(type) {
 Tetris.prototype.spawn = function(type) {
   var layout = this.getTetrominoLayout(type);
 
-  // for (let index = 0; index < array.length; index++) {
-  //   const element = array[index];
-    
-  // }
+  var startX = 0, startY = 0;
 
-  // for (var i in layout) {
-  //   if (!layout.hasOwnProperty(i)) continue;
-  //   var row = layout[i];
-    
-  //   // alert(row);
+  layout.forEach(function (row, x) {
+    row.forEach(function (block, y) {
+      alert(block + "x: " + x + "y: " +y);
 
-  //   for (var j in layout) {
-  //     if (!row.hasOwnProperty(j)) continue;
-  //     var block = row[j];
-      
-  //     alert(block);
-  //   }
-  // }
-
-  layout.forEach(function (row) {
-    row.forEach(function (block) {
-      alert(block);
     })
   })
 }
