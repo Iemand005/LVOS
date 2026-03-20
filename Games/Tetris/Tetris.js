@@ -85,7 +85,7 @@ Tetris.prototype.spawn = function(type) {
     row.forEach(function (block, x) {
       // alert(block + "x: " + x + "y: " +y);
       console.log(tetris.rows[y][x])
-      tetris.rows[y][x].classList.add("hero");
+      if (block) tetris.rows[y][x].classList.add(type);
     })
   })
 }
