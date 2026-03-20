@@ -194,6 +194,13 @@ if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
     console.log("Point", point);
 }
 
+if (!Array.from) Array.from = function (arr) {
+    var newArr = [];
+    for (var i = 0; i < array.length; i++)
+        newArr.push(array[i]);
+    return newArr;
+}
+
 (function() {
     var lastTime = 0;
 

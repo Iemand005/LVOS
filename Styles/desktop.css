@@ -126,6 +126,7 @@ body:not([blur]) .window > article {
   top: 0;
   z-index: -10000;
   background-color: red;
+  -webkit-user-drag: element;
 }
 
 #wallpaper > * {
