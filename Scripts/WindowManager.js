@@ -949,15 +949,17 @@ function closeApp(appId) {
 
 function enableMica() {
     var wallpaper = getWallpaper();
-    wallpaper.addEventListener("resize", function(ev) {
+    window.addEventListener("resize", function(ev) {
         for (var id in windows) {
             if (!(Object.hasOwn(windows, id) && window[id])) continue;
             var dialog = windows[id];
-            if (dialog.isOpen)
+            // if (dialog.isOpen)
                 dialog.resize(dialog.width, dialog.height);
         }
     });
 }
+
+enableMica();
 
 initializeDialogs();
 toggleReflections(reflections);
