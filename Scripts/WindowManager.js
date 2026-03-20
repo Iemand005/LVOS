@@ -998,6 +998,8 @@ enableMica();
 initializeDialogs();
 toggleReflections(reflections);
 
+applyWallpaperImage("file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg", "file:///C:/Users/Lasse/Downloads/fox-blur.jpg");
+
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targetting 36 and up.
