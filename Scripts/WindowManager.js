@@ -388,8 +388,10 @@ Object.defineProperty(Dialog.prototype, "popup", {
 
 Object.defineProperty(Dialog.prototype, "micaElement", {
     get: function() {
-        var elem = this.target.getElementsByClassName("backdrop-clip")[0].children[0];
-        if ( elem instanceof HTMLElement) return elem;
+        try {
+            var clip = this.target.getElementsByClassName("backdrop-clip")[0].children[0];
+            if (clip instanceof HTMLElement) return clip;
+        } catch(ex) { console.log(ex.message) }
         return null;
     }
 });
@@ -426,7 +428,7 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 }});
 Dialog.prototype.togglePointerEvents = function (enable) {
     if (enable == null) enable = this.target.style.pointerEvents == "none";
-    /*const*/var events = enable ? "auto" : "none";
+    var events = enable ? "auto" : "none";
     if (this.target) this.target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
     if (this.frame || this.getFrame()) (this.frame || this.getFrame()).style.pointerEvents = events;
@@ -454,14 +456,15 @@ Dialog.prototype.move = function (x, y) {
     if (this.mica) {
         /** @type {HTMLElement} */
         var backdrop = this.target.getElementsByClassName("mica")[0];
-        var wallpaper = document.getElementById("wallpaper");
-        translateElement(backdrop, -this._x, -this._y);
+        var wallpaper = document.getElementById("wallpaper").children[0];
+        translateElement(backdrop, -this._x + wallpaper.clientLeft, -this._y + wallpaper.clientTop);
+        
         backdrop.style.width = toPixels(wallpaper.clientWidth);
         backdrop.style.height = toPixels(wallpaper.clientHeight);
     }
 }
-Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
-Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
+Dialog.prototype.resize = function (width, height) { this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
+Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
 Dialog.prototype.openUrl = function (url) {
     /*const*/var frameUrl = new URL(this.frame.src);
     frameUrl.searchParams.set("url", url);
@@ -487,6 +490,12 @@ Dialog.prototype.relaunch = function () {
     this.quit();
     this.launch();
 };
+
+function getWallpaper() {
+    // var wallpaper = document.createElement()
+    var wallpaper = document.getElementById("wallpaper");
+    return wallpaper;
+}
 
 Dialog.prototype.injectMica = function () {
     if (this.micaElement) return;
@@ -934,8 +943,20 @@ function injectApplications(applications){
 }
 
 function closeApp(appId) {
-    /*const*/var element = windows[appId].target;
+    var element = windows[appId].target;
     element.parentElement.removeChild(element);
+}
+
+function enableMica() {
+    var wallpaper = getWallpaper();
+    wallpaper.addEventListener("resize", function(ev) {
+        for (var id in windows) {
+            if (!(Object.hasOwn(windows, id) && window[id])) continue;
+            var dialog = windows[id];
+            if (dialog.isOpen)
+                dialog.resize(dialog.width, dialog.height);
+        }
+    });
 }
 
 initializeDialogs();

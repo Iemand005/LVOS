@@ -69,6 +69,7 @@ main {
     transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! Well shit... I need this to be hidden, but the backdrop  swhadow isn't applied to this anymroe anywais weait... hm shit. I need this. */
     color: black;
+    box-sizing: border-box;
 }
 
 .window header {
