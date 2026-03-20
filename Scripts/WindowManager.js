@@ -502,6 +502,13 @@ Dialog.prototype.injectMica = function () {
     if (this.micaElement) return;
     var wallpaper = document.getElementById("wallpaper");
     var image = wallpaper.children[0].cloneNode(true);
+    if (image instanceof HTMLImageElement) {
+        var blurredUrl = image.getAttribute("blurred-src");
+        if (blurredUrl) {
+            console.log("Found blurred version: " + blurredUrl);
+            image.src = blurredUrl;
+        }
+    }
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     image.classList.add("mica");
     clip.appendChild(image);
@@ -969,8 +976,7 @@ function enableMica() {
         for (var id in windows) {
             if (!(Object.hasOwn(windows, id) && window[id])) continue;
             var dialog = windows[id];
-            // if (dialog.isOpen)
-                dialog.resize(dialog.width, dialog.height);
+            dialog.resize(dialog.width, dialog.height);
         }
     });
 }
@@ -978,7 +984,7 @@ function enableMica() {
 function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
     image.src = url;
-    image.setAttribute("srcBlur", blurredUrl);
+    if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
     var wallpaper = getWallpaper();
     Array.from(wallpaper.children).forEach(function(wallpaperChild) {
