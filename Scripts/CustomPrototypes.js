@@ -5,12 +5,12 @@
 'use strict';
 'use esnext';
 
-if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute){
+if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
     this.setAttribute(attribute, null);
 };
 
 // Bug fix, "force === null" --> "typeof force === 'undefined'".
-if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force){
+if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force) {
     if (typeof force === 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
     else this.removeAttribute(attribute);
     return !force;
@@ -22,7 +22,7 @@ if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
     return this;
 };
 
-if(typeof MutationObserver === "undefined") window.MutationObserver = function(callback){
+if(typeof MutationObserver === "undefined") window.MutationObserver = function(callback) {
     this.observe = function(element){
         element.addEventListener('DOMNodeInserted', callback, false);
     }
@@ -35,19 +35,20 @@ function CompatibilityChecker(){
     }
 }
 
+if (!Object.hasOwn) Object.hasOwn = function(obj, key) { obj.hasOwnProperty(key); };
 
-function forEach(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
-    for (var index in this) if (this.hasOwnProperty(index)) callback(this[index], index, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
+function forEachIn(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
+    for (var i in this) if (Object.hasOwn(this, i)) callback(this[i], i, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
 }
 
-function forForEach(callback) {
-    for (var index = 0; index < this.length; index++) if (this.hasOwnProperty(index)) callback(this[index], index, this);
+function forEachIndexed(callback) {
+    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback(this[i], i, this);
 }
 
 
 // Deze is niet volledig, ik moet nog de thisArguments toevoegen, wat ook afhangt van de stricte modus. Ik gebruik hier wel hasOwnProperty om te verifiëren dat we geen sleutels binnen krijgen die niet in ons object bestaan (gebeurt normaal niet).
-if(!Array.prototype.forEach) Array.prototype.forEach = forForEach;
-if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forForEach;
+if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
+if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
 
 if (!Object.defineProperty) Object.defineProperty = function(obj, key, descriptor) {
     if (!descriptor) return;
@@ -119,7 +120,7 @@ if (!("classList" in document.documentElement)) HTMLElement.prototype.__defineGe
 });
 
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
-Object.defineProperty(Object.prototype, 'forEach', { value:  forForEach}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
+Object.defineProperty(Object.prototype, 'forEach', { value:  forEachIndexed}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
 
 //HTMLCollection.prototype.forEach = forForEach;
 

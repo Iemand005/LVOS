@@ -78,19 +78,25 @@ Tetris.prototype.spawn = function(type) {
     
   // }
 
-  for (var i in layout) {
-    if (!layout.hasOwnProperty(i)) continue;
-    var row = layout[i];
+  // for (var i in layout) {
+  //   if (!layout.hasOwnProperty(i)) continue;
+  //   var row = layout[i];
     
-    // alert(row);
+  //   // alert(row);
 
-    for (var j in layout) {
-      if (!row.hasOwnProperty(j)) continue;
-      var block = row[j];
+  //   for (var j in layout) {
+  //     if (!row.hasOwnProperty(j)) continue;
+  //     var block = row[j];
       
+  //     alert(block);
+  //   }
+  // }
+
+  layout.forEach(function (row) {
+    row.forEach(function (block) {
       alert(block);
-    }
-  }
+    })
+  })
 }
 
 var tetris = new Tetris();
