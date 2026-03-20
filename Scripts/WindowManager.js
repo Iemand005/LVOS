@@ -717,14 +717,14 @@ function handleWindowDrag(newX, hewY) {
  */
 function windowDragEvent(event){
     try {
-        if (ticking) return;
-        window.requestAnimationFrame(function() {
-            
-            handleWindowDrag(event.clientX, event.clientY);
-
-            ticking = false;
-        });
-        ticking = true;
+        if (updateRateLimit) {
+            if (ticking) return;
+            window.requestAnimationFrame(function() {
+                handleWindowDrag(event.clientX, event.clientY);
+                ticking = false;
+            });
+            ticking = true;
+        } else handleWindowDrag(event.clientX, event.clientY);
     } catch (ex) {
         console.error(ex);
     }
