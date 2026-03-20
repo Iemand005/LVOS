@@ -276,34 +276,26 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") {
-        this._x = max(x, 0)
-        if (useTransform) {
-            this.move(this._x, this._y);
-            this.target.style.left = "0px";
-            if (this.mica) {
-                var micaElement = windows["calculator"].target.getElementsByClassName("mica")[0];
-                var backdrop = micaElement;
-                translateElement(backdrop, -this._x, -this._y);
-            }
-        } else {
-            this.target.style.left = toPixels(this._x);
-            this.target.style.transform = "none";
+
+        this._x = max(x, 0);
+
+        this.move(this._x, this._y);
+        
+        if (this.mica) {
+            var micaElement = windows["calculator"].target.getElementsByClassName("mica")[0];
+            var backdrop = micaElement;
+            translateElement(backdrop, -this._x, -this._y);
         }
      } }
-});
+}); 
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
-    set: function(y) {
-        if (typeof y !== "number") return;
-        this._y = max(y, 0)
-        if (useTransform) {
-            this.move(this._x, this._y);
-            this.target.style.top = "0px";
-        } else {
-            this.target.style.top = toPixels(this._y);
-            this.target.style.transform = "none";
-        }
+    set: function(y) { if (typeof y !== "number") return;
+
+        this._y = max(y, 0);
+
+        this.move(this._x, this._y);
     }
 });
     
@@ -445,8 +437,15 @@ Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windo
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
 Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); };
 Dialog.prototype.move = function (x, y) {
-    if (useTransform) translateElement(this.target, this._x = x, this._y = y);
-    else this.x = x, this.y = y;
+    this._x = x, this._y = y;
+    if (useTransform) {
+        this.target.style.left = "0px";
+        translateElement(this.target, this._x, this._y);
+    } else {
+        this.target.style.transform = "none";
+        this.target.style.left = toPixels(this._x);
+        this.target.style.top = toPixels(this._y);
+    }
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
