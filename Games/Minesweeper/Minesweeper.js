@@ -172,13 +172,19 @@ Minesweeper.prototype.startGame = function () {
 };
 
 function sendDesiredSize(){
-    var form = document.querySelector("form");
-    // Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
+    try {
+        var form = document.querySelector("form");
+        Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
+    } catch(ex) {
+        console.log("Failed to post desired size", ex);
+    }
 }
 
-// Messenger.onHostBeingLVOS(function () {
-//     console.log("My host is LVOS!!");
-// });
+try {
+    Messenger.onHostBeingLVOS(function () {
+        console.log("My host is LVOS!!");
+    });
+} catch(ex) {}
 
 function quickRevealEvent(ev) {
     /*const*/var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);

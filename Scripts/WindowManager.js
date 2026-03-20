@@ -22,10 +22,10 @@ var blur = false,
     IE11Booster = true,
     loadingOverlay = true,
     flipped = false,
-    useTransform = true,
+    useTransform = false,
     updateRateLimit = true;
 
-/*const*/var supportsPointer = typeof PointerEvent !== "undefined";
+var supportsPointer = typeof PointerEvent !== "undefined";
 
 if (supportsPointer) console.log("Supports pointer events!");
 
@@ -973,6 +973,12 @@ function enableMica() {
                 dialog.resize(dialog.width, dialog.height);
         }
     });
+}
+
+function applyWallpaperImage(url, blurredUrl) {
+    var image = document.createElement("img");
+    image.src = url;
+    image.setAttribute("srcBlur", blurredUrl);
 }
 
 enableMica();
