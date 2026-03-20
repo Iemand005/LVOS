@@ -196,7 +196,7 @@ if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
 
 if (!Array.from) Array.from = function (array) {
     var newArray = [];
-    for (var i = 0; i < array.length; i++)
+    for (var i = 0; i < array && array.length; i++)
         newArray.push(array[i]);
     return newArray;
 }
