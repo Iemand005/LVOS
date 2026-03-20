@@ -280,12 +280,6 @@ Object.defineProperty(Dialog.prototype, "x", {
         this._x = max(x, 0);
 
         this.move(this._x, this._y);
-        
-        if (this.mica) {
-            var micaElement = windows["calculator"].target.getElementsByClassName("mica")[0];
-            var backdrop = micaElement;
-            translateElement(backdrop, -this._x, -this._y);
-        }
      } }
 }); 
 
@@ -446,6 +440,15 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.left = toPixels(this._x);
         this.target.style.top = toPixels(this._y);
     }
+
+    if (this.mica) {
+        /** @type {HTMLElement} */
+        var backdrop = this.target.getElementsByClassName("mica")[0];
+        var wallpaper = document.getElementById("wallpaper");
+        translateElement(backdrop, -this._x, -this._y);
+        backdrop.style.width = toPixels(wallpaper.clientWidth);
+        backdrop.style.height = toPixels(wallpaper.clientHeight);
+    }
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
@@ -473,6 +476,14 @@ Dialog.prototype.relaunch = function () {
     this.quit();
     this.launch();
 };
+
+Dialog.prototype.injectMica = function () {
+    var wallpaper = document.getElementById("wallpaper");
+    var image = wallpaper.children[0].cloneNode(true);
+    var clip = this.target.getElementsByClassName("backdrop-clip")[0];
+    image.classList.add("mica");
+    clip.appendChild(image);
+}
 
 /**
  * @typedef {{x: number, y: number}} Vector
