@@ -706,7 +706,7 @@ var ticking = false;
 function handleWindowDrag(newX, hewY) {
     var dialog = windows[activeDialog];
 
-    var difference = { x: position.x - dialog.clickOffset.x, y: position.y - dialog.clickOffset.y };
+    var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
     if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
