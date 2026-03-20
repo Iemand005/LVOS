@@ -499,20 +499,23 @@ function getWallpaper() {
 }
 
 Dialog.prototype.injectMica = function () {
-    if (this.micaElement) return;
-    var wallpaper = document.getElementById("wallpaper");
-    var image = wallpaper.children[0].cloneNode(true);
-    if (image instanceof HTMLImageElement) {
-        var blurredUrl = image.getAttribute("blurred-src");
-        if (blurredUrl) {
-            console.log("Found blurred version: " + blurredUrl);
-            image.src = blurredUrl;
+    try {
+        if (this.micaElement) return;
+        var wallpaper = document.getElementById("wallpaper");
+        var image = wallpaper.children[0].cloneNode(true);
+        if (image instanceof HTMLImageElement) {
+            var blurredUrl = image.getAttribute("blurred-src");
+            if (blurredUrl) {
+                console.log("Found blurred version: " + blurredUrl);
+                image.src = blurredUrl;
+            }
         }
-    }
-    var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    image.classList.add("mica");
-    clip.appendChild(image);
-    this.move(this.x, this.y);
+        var clip = this.target.getElementsByClassName("backdrop-clip")[0];
+        if (!clip) return;
+        image.classList.add("mica");
+        clip.appendChild(image);
+        this.move(this.x, this.y);
+    } catch(ex) { console.warn(ex); }
 }
 
 /**
