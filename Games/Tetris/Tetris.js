@@ -5,6 +5,7 @@
 
 function Tetris() {
   this.table = document.createElement("table");
+  /** @type {HTMLElement[][]} */
   this.rows = [];
   this.blocks = [];
 }
@@ -19,13 +20,16 @@ Tetris.prototype.createGrid = function(width, height) {
   
   for (var y = 0; y < height; y++) {
     var row = this.table.appendChild(document.createElement("tr"));
+    /** @type {HTMLElement[]} */
+    var rowData = [];
 
     for (var x = 0; x < width; x++) {
       var data = row.appendChild(document.createElement("td"));
       // data.classList.add("hero");
+      rowData.push(data);
     }
 
-    this.rows.push(row);
+    this.rows.push(rowData);
   }
 
 }
@@ -75,10 +79,13 @@ Tetris.prototype.spawn = function(type) {
 
   var startX = 0, startY = 0;
 
+  var tetris = this;
+
   layout.forEach(function (row, y) {
     row.forEach(function (block, x) {
-      alert(block + "x: " + x + "y: " +y);
-
+      // alert(block + "x: " + x + "y: " +y);
+      console.log(tetris.rows[y][x])
+      tetris.rows[y][x].classList.add("hero");
     })
   })
 }
