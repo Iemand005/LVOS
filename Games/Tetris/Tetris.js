@@ -81,8 +81,8 @@ Tetris.prototype.spawn = function(type) {
 
   var tetris = this;
 
-  layout.forEach(function (row, y) {
-    row.forEach(function (block, x) {
+  layout.forEach(function(row, y) {
+    row.forEach(function(block, x) {
       // alert(block + "x: " + x + "y: " +y);
       console.log(tetris.rows[y][x])
       if (block) tetris.rows[y][x].classList.add(type);
