@@ -68,6 +68,8 @@ function Dialog(object, create) {
     this.minWidth = 100;
     this.minHeight = 200;
     this.mica = true;
+    // /** @type {HTMLElement} */
+    // this.micaElement = true;
     
     if (!object) return;
     if (!create) create = false;
@@ -384,6 +386,14 @@ Object.defineProperty(Dialog.prototype, "popup", {
     get: function() { return this._popupWindow; }
 });
 
+Object.defineProperty(Dialog.prototype, "micaElement", {
+    get: function() {
+        var elem = this.target.getElementsByClassName("backdrop-clip")[0].children[0];
+        if ( elem instanceof HTMLElement) return elem;
+        return null;
+    }
+});
+
 /** @type {Dialog} */
 /*let*/var focusedDialog = null;
 Dialog.prototype.focus = function() {
@@ -483,6 +493,7 @@ Dialog.prototype.injectMica = function () {
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     image.classList.add("mica");
     clip.appendChild(image);
+    this.move(this.x, this.y);
 }
 
 /**
