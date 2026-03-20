@@ -75,8 +75,8 @@ Tetris.prototype.spawn = function(type) {
 
   var startX = 0, startY = 0;
 
-  layout.forEach(function (row, x) {
-    row.forEach(function (block, y) {
+  layout.forEach(function (row, y) {
+    row.forEach(function (block, x) {
       alert(block + "x: " + x + "y: " +y);
 
     })
