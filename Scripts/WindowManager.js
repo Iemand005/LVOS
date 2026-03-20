@@ -67,6 +67,7 @@ function Dialog(object, create) {
     this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
+    this.mica = true;
     
     if (!object) return;
     if (!create) create = false;
@@ -246,6 +247,16 @@ function min(a, b) {
     }
 }
 
+/**
+ * @param {HTMLElement} element 
+ * @param {number} x 
+ * @param {number} y 
+ */
+function translateElement(element, x, y) {
+    element.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    element.style.webkitTransform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+}
+
 // Dialog.prototype. = {
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return this.target.hasAttribute("open"); },
@@ -269,6 +280,11 @@ Object.defineProperty(Dialog.prototype, "x", {
         if (useTransform) {
             this.move(this._x, this._y);
             this.target.style.left = "0px";
+            if (this.mica) {
+                var micaElement = windows["calculator"].target.getElementsByClassName("mica")[0];
+                var backdrop = micaElement;
+                translateElement(backdrop, -this._x, -this._y);
+            }
         } else {
             this.target.style.left = toPixels(this._x);
             this.target.style.transform = "none";
@@ -429,11 +445,8 @@ Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windo
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
 Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); };
 Dialog.prototype.move = function (x, y) {
-    if (useTransform) {
-        this._x = x, this._y = y;
-        this.target.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
-        this.target.style.webkitTransform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
-    } else this.x = x, this.y = y;
+    if (useTransform) translateElement(this.target, this._x = x, this._y = y);
+    else this.x = x, this.y = y;
 }
 Dialog.prototype.resize = function (width, height) { this.width = width, this.height = height, this.target.style.boxSizing = "border-box"; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null, this.body.style.boxSizing = "content-box"; }
@@ -517,13 +530,13 @@ DocumentCrawler.prototype = {
     full: 1,
     close: 2
 };
-/*let*/var activeDialog = null;
-/*let*/var resizeDirection = 0;
-/*let*/var topZ = 100;
-/*let*/var bodyCrawler = new DocumentCrawler(document);
-/*let*/var metroBodyOrigin;
-/*let*/var timeout;
-/*let*/var loaded = false;
+var activeDialog = null;
+var resizeDirection = 0;
+var topZ = 100;
+var bodyCrawler = new DocumentCrawler(document);
+var metroBodyOrigin;
+var timeout;
+var loaded = false;
 /*const*/var dragAction = new DragAction();
 // /*let*/var flipped = false;
 
