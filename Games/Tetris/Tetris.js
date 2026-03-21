@@ -149,7 +149,7 @@ Tetris.prototype.remove = function(tetromino) {
 Tetromino.prototype.forEachBlock = function(callback) {
   this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      callback.bind(this, y);
+      callback.call(this, block, x, y);
     }, this);
   }, this);
 }
