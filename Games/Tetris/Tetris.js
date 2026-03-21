@@ -189,34 +189,24 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  * @param {number} y 
  */
 Tetromino.prototype.move = function(x, y) {
-  // if (!this.canMoveTo(x, y)) return;
   this.tetris.remove(this);
   var oldX = this.x, oldY = this.y;
   this._x = x;
   this._y = y;
-  var succes= this.tetris.add(this)
-  if (!succes) {
+  var ok = this.tetris.add(this);
+  if (!ok) {
     this._x = oldX, this._y = oldY;
     this.tetris.add(this);
   }
-  return succes;
+  return ok;
 };
 
 Tetromino.prototype.fall = function() {
   return this.move(this.x, this.y + 1);
 };
 
-/**
- * @param {number} x 
- * @param {number} y 
- */
-Tetris.prototype.moveFalling = function(x, y) {
-  this.move(this.fallingTetromino, x, y);
-}
-
 Tetris.prototype.update = function() {
-  // tetris.moveFalling(0, this.fallingTetromino.x + 1);succes
-  var success = this.fallingTetromino.move()
+  return this.fallingTetromino.fall();
 };
 
 var tetris = new Tetris();
