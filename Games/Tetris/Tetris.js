@@ -67,22 +67,12 @@ Object.defineProperty(Tetromino.prototype, "tetris", {
 
 Object.defineProperty(Tetromino.prototype, "x", {
   get: function() { return this._x; },
-  set: function(x) {
-    this.move(x, this.y);
-    // if (this.canMoveTo(this._x, x))
-    //   this._x = x;
-  }
-
+  set: function(x) { this.move(x, this.y); }
 });
 
 Object.defineProperty(Tetromino.prototype, "y", {
   get: function() { return this._y; },
-  set: function(y) {
-    this.move(this.x, y);
-    // if (this.canMoveTo(this._x, y))
-    //   this._y = y;
-  }
-
+  set: function(y) { this.move(this.x, y); }
 });
 
 function Tetris() {
