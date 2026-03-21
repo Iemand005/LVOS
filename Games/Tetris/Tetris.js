@@ -2,9 +2,68 @@
 /**
  * @typedef {"hero" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
  */
+
+
 /**
- * @typedef {{type: TetrominoType, x: number, y: number}} Tetromino
+ * @param {Tetris} tetris 
+ * @param {TetrominoType} type 
+ * @param {number} x 
+ * @param {number} y 
  */
+function Tetromino(tetris, type, x, y) {
+  this._tetris = tetris;
+  this.type = type;
+
+  this.x = x;
+  this.y = y;
+}
+
+/**
+ * @param {TetrominoType} type 
+ */
+function getTetrominoTypeLayout(type) {
+  switch (type) {
+    case "hero": return [
+      [1, 1, 1, 1]
+    ];
+    case "teewee": return [
+      [0, 1, 0],
+      [1, 1, 1]
+    ];
+    case "smashboy": return [
+      [1, 1],
+      [1, 1]
+    ];
+    case "blue-ricky": return [
+      [1, 0],
+      [1, 0],
+      [1, 1]
+    ];
+    case "cleveland-z": return [
+      [1, 1, 0],
+      [0, 1, 1]
+    ];
+    case "orange-ricky": return [
+      [0, 1],
+      [0, 1],
+      [1, 1]
+    ];
+    case "rhode-island-z": return [
+      [0, 1, 1],
+      [1, 1, 0]
+    ];
+  }
+}
+
+Object.defineProperty(Tetromino.prototype, "layout", {
+  get: function() {
+    return getTetrominoTypeLayout(this.type);
+  }
+});
+
+Object.defineProperty(Tetromino.prototype, "tetris", {
+  get: function() { return this._tetris; }
+});
 
 function Tetris() {
   this.table = document.createElement("table");
@@ -37,43 +96,6 @@ Tetris.prototype.createGrid = function(width, height) {
   }
 
 }
-
-/**
- * @param {TetrominoType} type 
- */
-Tetris.prototype.getTetrominoTypeLayout = function(type) {
-  switch (type) {
-    case "hero": return [
-      [1, 1, 1, 1]
-    ];
-    case "teewee": return [
-      [0, 1, 0],
-      [1, 1, 1]
-    ];
-    case "smashboy": return [
-      [1, 1],
-      [1, 1]
-    ];
-    case "blue-ricky": return [
-      [1, 0],
-      [1, 0],
-      [1, 1]
-    ];
-    case "cleveland-z": return [
-      [1, 1, 0],
-      [0, 1, 1]
-    ];
-    case "orange-ricky": return [
-      [0, 1],
-      [0, 1],
-      [1, 1]
-    ];
-    case "rhode-island-z": return [
-      [0, 1, 1],
-      [1, 1, 0]
-    ];
-  }
-};
 
 /**
  * @param {Tetromino} tetromino
@@ -119,9 +141,8 @@ Tetris.prototype.add = function(tetromino) {
  * @param {Tetromino} tetromino 
  */
 Tetris.prototype.remove = function(tetromino) {
-  var layout = this.getTetrominoLayout(tetromino);
   var tetris = this;
-  layout.forEach(function(row, y) {
+  tetromino.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.remove(tetromino.type);
     });
@@ -129,15 +150,13 @@ Tetris.prototype.remove = function(tetromino) {
 };
 
 /**
- * @param {Tetromino} tetromino 
  * @param {number} newX 
  * @param {number} newY 
  */
-Tetris.prototype.canMoveTo = function(tetromino, newX, newY) {
-  this.remove(tetromino);
-  var layout = this.getTetrominoTypeLayout(tetromino.type);
-  var tetris = this;
-  layout.forEach(function(row, y) {
+Tetromino.prototype.canMoveTo = function(newX, newY) {
+  this.tetris.remove(this);
+  var tetris = this.tetris;
+  this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) {
         var length = tetris.rows[y + newY][x + newY].classList.length;
@@ -153,15 +172,14 @@ Tetris.prototype.canMoveTo = function(tetromino, newX, newY) {
 };
 
 /**
- * @param {Tetromino} tetromino 
  * @param {number} x 
  * @param {number} y 
  */
-Tetris.prototype.move = function(tetromino, x, y) {
-  this.remove(tetromino);
+Tetromino.prototype.move = function(x, y) {
+  this.tetris.remove(this);
   tetromino.x = x;
   tetromino.y = y;
-  this.add(tetromino);
+  this.tetris.add(this);
 };
 
 /**
@@ -173,8 +191,7 @@ Tetris.prototype.moveFalling = function(x, y) {
 }
 
 Tetris.prototype.update = function() {
-  var tetromino = this.fallingTetromino;
-  tetris.moveFalling(0, tetromino.x + 1);
+  tetris.moveFalling(0, this.fallingTetromino.x + 1);
 };
 
 var tetris = new Tetris();
