@@ -1,13 +1,18 @@
 
-/**
- * @typedef {"hero" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
- */
-
+/** @type {{ readonly [K in string]: K }} */
 var TetrominoTypes = {
   hero: "hero",
   smashboy: "smashboy",
   teewee: "teewee",
-}
+  rhodeIslandZ: "rhode-island-z",
+  clevelandZ: "cleveland-z",
+  blueRicky: "blue-ricky",
+  orangeRicky: "orange-ricky"
+};
+
+/**
+ * @typedef {typeof TetrominoTypes[keyof typeof TetrominoTypes]} TetrominoType
+ */
 
 /**
  * @param {Tetris} tetris 
