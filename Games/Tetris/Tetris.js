@@ -68,8 +68,8 @@ Object.defineProperty(Tetromino.prototype, "tetris", {
 Object.defineProperty(Tetromino.prototype, "x", {
   get: function() { return this._x; },
   set: function(x) {
-    if (!this.canMoveTo(this._x, this._y)) return;
-    this._x = x;
+    if (this.canMoveTo(this._x, x))
+      this._x = x;
   }
 
 });
@@ -77,8 +77,8 @@ Object.defineProperty(Tetromino.prototype, "x", {
 Object.defineProperty(Tetromino.prototype, "y", {
   get: function() { return this._y; },
   set: function(y) {
-    if (!this.canMoveTo(this._x, this._y)) return;
-    this._y = y;
+    if (this.canMoveTo(this._x, y))
+      this._y = y;
   }
 
 });
@@ -156,6 +156,17 @@ Tetris.prototype.remove = function(tetromino) {
 };
 
 /**
+ * @param {(block: number, x: number, y: number)} callback 
+ */
+Tetromino.prototype.forEachBlock = function(callback) {
+  this.layout.forEach(function(row, y) {
+    row.forEach(function(block, x) {
+      callback(block, x, y);
+    });
+  });
+}
+
+/**
  * @param {number} newX 
  * @param {number} newY 
  */
@@ -175,7 +186,7 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   });
   this.add(tetromino);
   return true;
-};
+};  
 
 /**
  * @param {number} x 
