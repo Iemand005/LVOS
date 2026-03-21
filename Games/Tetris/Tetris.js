@@ -138,10 +138,8 @@ Tetris.prototype.add = function(tetromino) {
  */
 Tetris.prototype.remove = function(tetromino) {
   var tetris = this;
-  tetromino.layout.forEach(function(row, y) {
-    row.forEach(function(block, x) {
+  tetromino.forEachBlock(function(block, x, y) {
       if (block) tetris.rows[y + this.y][x + this.x].classList.remove(this.type);
-    });
   });
 };
 
@@ -152,7 +150,7 @@ Tetromino.prototype.forEachBlock = function(callback) {
   this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       callback.call(this, block, x, y);
-    });
+    }, this);
   }, this);
 }
 
