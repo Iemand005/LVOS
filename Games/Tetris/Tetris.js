@@ -133,10 +133,7 @@ Tetris.prototype.add = function(tetromino) {
       if (element.classList.length) throw new Error("Tried to move into occupied block");
       element.classList.add(this.type);
     });
-  } catch(ex) {
-    console.log(ex);
-    return false;
-  }
+  } catch(ex) { return false; }
   return true;
 };
 
