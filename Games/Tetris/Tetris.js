@@ -173,7 +173,8 @@ Tetris.prototype.moveFalling = function(x, y) {
 }
 
 Tetris.prototype.update = function() {
-  tetris.move(tetris.fallingTetromino, 0, 1)
+  var tetromino = this.fallingTetromino;
+  tetris.moveFalling(0, tetromino.x + 1);
 };
 
 var tetris = new Tetris();
