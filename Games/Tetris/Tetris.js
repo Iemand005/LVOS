@@ -127,7 +127,6 @@ Tetris.prototype.spawn = function(type) {
  * @param {Tetromino} tetromino 
  */
 Tetris.prototype.add = function(tetromino) {
-  var tetris = this;
   try {
     tetromino.forEachElement(function(element) {
       if (element.classList.length) throw new Error("Tried to move into occupied block");
@@ -195,10 +194,16 @@ Tetromino.prototype.move = function(x, y) {
   var oldX = this.x, oldY = this.y;
   this._x = x;
   this._y = y;
-  if (!this.tetris.add(this)) {
+  var succes= this.tetris.add(this)
+  if (!succes) {
     this._x = oldX, this._y = oldY;
     this.tetris.add(this);
   }
+  return succes;
+};
+
+Tetromino.prototype.fall = function() {
+  return this.move(this.x, this.y + 1);
 };
 
 /**
@@ -210,7 +215,8 @@ Tetris.prototype.moveFalling = function(x, y) {
 }
 
 Tetris.prototype.update = function() {
-  tetris.moveFalling(0, this.fallingTetromino.x + 1);
+  // tetris.moveFalling(0, this.fallingTetromino.x + 1);succes
+  var success = this.fallingTetromino.move()
 };
 
 var tetris = new Tetris();
