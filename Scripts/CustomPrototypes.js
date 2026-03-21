@@ -41,8 +41,13 @@ function forEachIn(callback) { // hasOwnProperty has been deprecated and replace
     for (var i in this) if (Object.hasOwn(this, i)) callback(this[i], i, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
 }
 
-function forEachIndexed(callback) {
-    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback(this[i], i, this);
+/**
+ * 
+ * @param {(any item, index: number, T:this)} callback 
+ * @param {*} thisArg 
+ */
+function forEachIndexed(callback, thisArg) {
+    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback.bind(thisArg, this[i], i, this);
 }
 
 

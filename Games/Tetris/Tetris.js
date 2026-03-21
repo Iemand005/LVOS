@@ -65,6 +65,24 @@ Object.defineProperty(Tetromino.prototype, "tetris", {
   get: function() { return this._tetris; }
 });
 
+Object.defineProperty(Tetromino.prototype, "x", {
+  get: function() { return this._x; },
+  set: function(x) {
+    if (!this.canMoveTo(this._x, this._y)) return;
+    this._x = x;
+  }
+
+});
+
+Object.defineProperty(Tetromino.prototype, "y", {
+  get: function() { return this._y; },
+  set: function(y) {
+    if (!this.canMoveTo(this._x, this._y)) return;
+    this._y = y;
+  }
+
+});
+
 function Tetris() {
   this.table = document.createElement("table");
   /** @type {HTMLElement[][]} */
@@ -96,41 +114,29 @@ Tetris.prototype.createGrid = function(width, height) {
   }
 
 }
-
-/**
- * @param {Tetromino} tetromino
- */
-Tetris.prototype.getTetrominoLayout = function(tetromino) {
-  return this.getTetrominoTypeLayout(tetromino.type);
-}
-
 /**
  * @param {TetrominoType} type 
  */
 Tetris.prototype.spawn = function(type) {
   var startX = 0, startY = 0;
 
-  var tetromino = { type: type, x: startX, y: startY };
-  var layout = this.getTetrominoTypeLayout(type);
+  // if (this.fallingTetromino) throw new Error("A tetromino is already falling.");
+  this.fallingTetromino = new Tetromino(this, type, startX, startY);
   
   var tetris = this;
-  
-  layout.forEach(function(row, y) {
+  this.fallingTetromino.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) tetris.rows[y][x].classList.add(type);
     });
   });
-  if (this.fallingTetromino) throw new Error("A tetromino is already falling.");
-  this.fallingTetromino = tetromino;
 };
 
 /**
  * @param {Tetromino} tetromino 
  */
 Tetris.prototype.add = function(tetromino) {
-  var layout = this.getTetrominoLayout(tetromino);
   var tetris = this;
-  layout.forEach(function(row, y) {
+  tetromino.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.add(tetromino.type);
     });
@@ -177,8 +183,8 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  */
 Tetromino.prototype.move = function(x, y) {
   this.tetris.remove(this);
-  tetromino.x = x;
-  tetromino.y = y;
+  this.x = x;
+  this.y = y;
   this.tetris.add(this);
 };
 
