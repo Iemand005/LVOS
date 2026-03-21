@@ -217,7 +217,7 @@ Tetromino.prototype.fall = function() {
 Tetris.prototype.update = function() {
   var ok = this.fallingTetromino.fall();
   if (!ok) {
-    this.spawn()
+    this.spawnRandom();
   }
 };
 
