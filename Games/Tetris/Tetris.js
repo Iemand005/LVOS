@@ -7,15 +7,15 @@
 /**
  * @param {Tetris} tetris 
  * @param {TetrominoType} type 
- * @param {number} x 
- * @param {number} y 
+ * @param {number?} x 
+ * @param {number?} y 
  */
 function Tetromino(tetris, type, x, y) {
   this._tetris = tetris;
   this.type = type;
 
-  this.x = x;
-  this.y = y;
+  this.x = x || 0;
+  this.y = y || 0;
 }
 
 /**
