@@ -132,8 +132,8 @@ Tetris.prototype.canMoveTo = function(tetromino, newX, newY) {
       if (block) {
         var length = tetris.rows[y + newY][x + newY].classList.length;
         if (length) {
-  this.add(tetromino);
-return false;
+          this.add(tetromino);
+          return false;
         } 
       }
     });
