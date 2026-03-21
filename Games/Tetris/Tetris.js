@@ -178,18 +178,19 @@ Tetromino.prototype.forEachElement = function(callback) {
 Tetromino.prototype.canMoveTo = function(newX, newY) {
   this.tetris.remove(this);
   var tetris = this.tetris;
+  var tetromino = this;
   this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) {
         var length = tetris.rows[y + newY][x + newY].classList.length;
         if (length) {
-          this.add(tetromino);
+          tetris.add(tetromino);
           return false;
         } 
       }
     });
   });
-  this.add(tetromino);
+  this.tetris.add(this);
   return true;
 };  
 
@@ -198,6 +199,8 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  * @param {number} y 
  */
 Tetromino.prototype.move = function(x, y) {
+  
+  if (!this.canMoveTo(x, y)) return false;
   this.tetris.remove(this);
   var oldX = this.x, oldY = this.y;
   this._x = x;
