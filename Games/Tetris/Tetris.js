@@ -226,7 +226,7 @@ Tetris.prototype.update = function() {
   }
 };
 
-Tetris.prototype.randomtetromino = function() {
+Tetris.prototype.randomTetromino = function() {
   var keys = [];
   for (var key in TetrominoTypes) {
     keys[keys.length] = key;
@@ -237,6 +237,10 @@ Tetris.prototype.randomtetromino = function() {
   var randomType = TetrominoTypes[randomKey];
 
   return new Tetromino(this, randomType);
+}
+
+Tetris.prototype.spawnRandom = function() {
+  this.spawn(this.randomTetromino());
 }
 
 var tetris = new Tetris();
