@@ -146,8 +146,8 @@ Tetris.prototype.remove = function(tetromino) {
 /**
  * @param {(this: Tetromino, block: boolean, x: number, y: number)} callback 
  */
-Tetromino.prototype.forEachBlock = function(callback, thisArg) {
-  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, thisArg || this);
+Tetromino.prototype.forEachBlock = function(callback) {
+  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
 }
 
 /**
@@ -155,8 +155,8 @@ Tetromino.prototype.forEachBlock = function(callback, thisArg) {
  */
 Tetromino.prototype.forEachElement = function(callback) {
   this.forEachBlock(function(block, x, y) {
-      if (block) callback(tetris.rows[y + this.y][x + this.x]);
-  }, this);
+      if (block) callback.call(this, tetris.rows[y + this.y][x + this.x]);
+  });
 }
 
 /**
