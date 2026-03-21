@@ -129,12 +129,7 @@ Tetris.prototype.spawn = function(type) {
   // if (this.fallingTetromino) throw new Error("A tetromino is already falling.");
   this.fallingTetromino = new Tetromino(this, type, startX, startY);
   
-  var tetris = this;
-  this.fallingTetromino.layout.forEach(function(row, y) {
-    row.forEach(function(block, x) {
-      if (block) tetris.rows[y][x].classList.add(type);
-    });
-  });
+  this.add(this.fallingTetromino);
 };
 
 /**
@@ -226,7 +221,7 @@ Tetris.prototype.update = function() {
   }
 };
 
-Tetris.prototype.randomTetromino = function() {
+Tetris.prototype.randomTetrominoType = function() {
   var keys = [];
   for (var key in TetrominoTypes) {
     keys[keys.length] = key;
@@ -236,11 +231,11 @@ Tetris.prototype.randomTetromino = function() {
   /** @type {TetrominoType} */
   var randomType = TetrominoTypes[randomKey];
 
-  return new Tetromino(this, randomType);
+  return randomType;
 }
 
 Tetris.prototype.spawnRandom = function() {
-  this.spawn(this.randomTetromino());
+  this.spawn(this.randomTetrominoType());
 }
 
 var tetris = new Tetris();
