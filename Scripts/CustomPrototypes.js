@@ -98,24 +98,23 @@ if (!("classList" in document.documentElement)) HTMLElement.prototype.__defineGe
     return {
         classes: self.className.split(" "),
         add: function(className) {
-                if (!this.contains(className)) {
-                    self.className += (self.className ? " " : "") + className;
-                }
-            },
-            remove: function(className) {
-                var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-                self.className = self.className.replace(reg, ' ').replace(/^\s+|\s+$/g, "");
-            },
-            contains: function(className) {
-                return new RegExp('(\\s|^)' + className + '(\\s|$)').test(self.className);
-            },
-            toggle: function(className) {
-                if (this.contains(className)) {
-                    this.remove(className);
-                } else {
-                    this.add(className);
-                }
-            }
+            if (!this.contains(className))
+                self.className += (self.className ? " " : "") + className;
+        },
+        remove: function(className) {
+            var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+            self.className = self.className.replace(reg, ' ').replace(/^\s+|\s+$/g, "");
+        },
+        contains: function(className) {
+            return new RegExp('(\\s|^)' + className + '(\\s|$)').test(self.className);
+        },
+        toggle: function(className) {
+            if (this.contains(className)) this.remove(className);
+            else this.add(className);
+        },
+        get length() {
+            return self.className.split(" ").length;
+        }
     };
 });
 
