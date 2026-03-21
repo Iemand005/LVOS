@@ -14,8 +14,8 @@ function Tetromino(tetris, type, x, y) {
   this._tetris = tetris;
   this.type = type;
 
-  this.x = x || 0;
-  this.y = y || 0;
+  this._x = x || 0;
+  this._y = y || 0;
 }
 
 /**
@@ -186,8 +186,9 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  */
 Tetromino.prototype.move = function(x, y) {
   this.tetris.remove(this);
-  this.x = x;
-  this.y = y;
+  // if (!this.canMoveTo(x, y)) return;
+  this._x = x;
+  this._y = y;
   this.tetris.add(this);
 };
 
