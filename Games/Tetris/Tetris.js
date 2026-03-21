@@ -128,9 +128,16 @@ Tetris.prototype.spawn = function(type) {
  */
 Tetris.prototype.add = function(tetromino) {
   var tetris = this;
-  tetromino.forEachBlock(function(block, x, y) {
-    if (block) tetris.rows[y + this.y][x + this.x].classList.add(this.type);
-  });
+  try {
+    tetromino.forEachElement(function(element) {
+      if (element.classList.length) throw new Error("Tried to move into occupied block");
+      element.classList.add(this.type);
+    });
+  } catch(ex) {
+    console.log(ex);
+    return false;
+  }
+  return true;
 };
 
 /**
@@ -186,11 +193,15 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  * @param {number} y 
  */
 Tetromino.prototype.move = function(x, y) {
-  this.tetris.remove(this);
   // if (!this.canMoveTo(x, y)) return;
+  this.tetris.remove(this);
+  var oldX = this.x, oldY = this.y;
   this._x = x;
   this._y = y;
-  this.tetris.add(this);
+  if (!this.tetris.add(this)) {
+    this._x = oldX, this._y = oldY;
+    this.tetris.add(this);
+  }
 };
 
 /**
