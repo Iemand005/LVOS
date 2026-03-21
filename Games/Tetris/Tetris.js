@@ -128,10 +128,8 @@ Tetris.prototype.spawn = function(type) {
  */
 Tetris.prototype.add = function(tetromino) {
   var tetris = this;
-  tetromino.layout.forEach(function(row, y) {
-    row.forEach(function(block, x) {
-      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.add(tetromino.type);
-    });
+  tetromino.forEachBlock(function(block, x, y) {
+    if (block) tetris.rows[y + this.y][x + this.x].classList.add(this.type);
   });
 };
 
@@ -142,20 +140,20 @@ Tetris.prototype.remove = function(tetromino) {
   var tetris = this;
   tetromino.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.remove(tetromino.type);
+      if (block) tetris.rows[y + this.y][x + this.x].classList.remove(this.type);
     });
   });
 };
 
 /**
- * @param {(block: number, x: number, y: number)} callback 
+ * @param {(this: Tetromino, block: number, x: number, y: number)} callback 
  */
 Tetromino.prototype.forEachBlock = function(callback) {
   this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      callback(block, x, y);
+      callback.call(this, block, x, y);
     });
-  });
+  }, this);
 }
 
 /**
