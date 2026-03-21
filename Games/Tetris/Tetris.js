@@ -10,8 +10,8 @@ function Tetris() {
   this.table = document.createElement("table");
   /** @type {HTMLElement[][]} */
   this.rows = [];
-
-  this.fallingTetromino = 
+  /** @type {Tetromino} */
+  this.fallingTetromino = null;
 }
 
 Tetris.prototype.init = function() {
@@ -41,7 +41,7 @@ Tetris.prototype.createGrid = function(width, height) {
 /**
  * @param {TetrominoType} type 
  */
-Tetris.prototype.getTetrominoLayout = function(type) {
+Tetris.prototype.getTetrominoTypeLayout = function(type) {
   switch (type) {
     case "hero": return [
       [1, 1, 1, 1]
@@ -76,31 +76,41 @@ Tetris.prototype.getTetrominoLayout = function(type) {
 };
 
 /**
+ * @param {Tetromino} tetromino
+ */
+Tetris.prototype.getTetrominoLayout = function(tetromino) {
+  return this.getTetrominoTypeLayout(tetromino.type);
+}
+
+/**
  * @param {TetrominoType} type 
  */
 Tetris.prototype.spawn = function(type) {
-  var layout = this.getTetrominoLayout(type);
-
   var startX = 0, startY = 0;
 
+  var tetromino = { type: type, x: startX, y: startY };
+  var layout = this.getTetrominoTypeLayout(type);
+  
   var tetris = this;
-
+  
   layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
       if (block) tetris.rows[y][x].classList.add(type);
     });
   });
+  if (this.fallingTetromino) throw new Error("A tetromino is already falling.");
+  this.fallingTetromino = tetromino;
 };
 
 /**
  * @param {Tetromino} tetromino 
  */
 Tetris.prototype.add = function(tetromino) {
-  var layout = this.getTetrominoLayout(tetromino.type);
+  var layout = this.getTetrominoLayout(tetromino);
   var tetris = this;
   layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.add(type);
+      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.add(tetromino.type);
     });
   });
 };
@@ -109,11 +119,11 @@ Tetris.prototype.add = function(tetromino) {
  * @param {Tetromino} tetromino 
  */
 Tetris.prototype.remove = function(tetromino) {
-  var layout = this.getTetrominoLayout(tetromino.type);
+  var layout = this.getTetrominoLayout(tetromino);
   var tetris = this;
   layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.remove(type);
+      if (block) tetris.rows[y + tetromino.y][x + tetromino.x].classList.remove(tetromino.type);
     });
   });
 };
@@ -125,7 +135,7 @@ Tetris.prototype.remove = function(tetromino) {
  */
 Tetris.prototype.canMoveTo = function(tetromino, newX, newY) {
   this.remove(tetromino);
-  var layout = this.getTetrominoLayout(tetromino.type);
+  var layout = this.getTetrominoTypeLayout(tetromino.type);
   var tetris = this;
   layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
@@ -154,8 +164,16 @@ Tetris.prototype.move = function(tetromino, x, y) {
   this.add(tetromino);
 };
 
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
+Tetris.prototype.moveFalling = function(x, y) {
+  this.move(this.fallingTetromino, x, y);
+}
+
 Tetris.prototype.update = function() {
-  
+  tetris.move(tetris.fallingTetromino, 0, 1)
 };
 
 var tetris = new Tetris();
