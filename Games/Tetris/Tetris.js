@@ -144,14 +144,19 @@ Tetris.prototype.remove = function(tetromino) {
 };
 
 /**
- * @param {(this: Tetromino, block: number, x: number, y: number)} callback 
+ * @param {(this: Tetromino, block: boolean, x: number, y: number)} callback 
  */
 Tetromino.prototype.forEachBlock = function(callback) {
-  this.layout.forEach(function(row, y) {
-    row.forEach(function(block, x) {
-      callback.call(this, block, x, y);
-    }, this);
-  }, this);
+  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
+}
+
+/**
+ * @param {(tis: Tetromino, element: HTMLElement)} callback 
+ */
+Tetromino.prototype.forEachElement = function(callback) {
+  tetromino.forEachBlock(function(block, x, y) {
+      if (block) callback(tetris.rows[y + this.y][x + this.x]);
+  });
 }
 
 /**
