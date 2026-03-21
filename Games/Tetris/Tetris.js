@@ -1,5 +1,9 @@
 
-/** @type {{ readonly [K in string]: K }} */
+/**
+ * @typedef {"hero" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky"} TetrominoType
+ */
+
+/** @type {{[type: string]: TetrominoType}} */
 var TetrominoTypes = {
   hero: "hero",
   smashboy: "smashboy",
@@ -10,9 +14,9 @@ var TetrominoTypes = {
   orangeRicky: "orange-ricky"
 };
 
-/**
- * @typedef {typeof TetrominoTypes[keyof typeof TetrominoTypes]} TetrominoType
- */
+// /**
+//  * @typedef {TetrominoTypes} TetrominoType
+//  */
 
 /**
  * @param {Tetris} tetris 
@@ -221,6 +225,19 @@ Tetris.prototype.update = function() {
     this.spawn()
   }
 };
+
+Tetris.prototype.randomtetromino = function() {
+  var keys = [];
+  for (var key in TetrominoTypes) {
+    keys[keys.length] = key;
+  }
+
+  var randomKey = keys[Math.floor(Math.random() * keys.length)];
+  /** @type {TetrominoType} */
+  var randomType = TetrominoTypes[randomKey];
+
+  return new Tetromino(this, randomType);
+}
 
 var tetris = new Tetris();
 
