@@ -3,6 +3,11 @@
  * @typedef {"hero" | "smashboy" | "teewee" | "rhode-island-z" | "cleveland-z" | "blue-ricky" | "orange-ricky" } TetrominoType
  */
 
+var TetrominoTypes = {
+  hero: "hero",
+  smashboy: "smashboy",
+  teewee: "teewee",
+}
 
 /**
  * @param {Tetris} tetris 
@@ -206,7 +211,10 @@ Tetromino.prototype.fall = function() {
 };
 
 Tetris.prototype.update = function() {
-  return this.fallingTetromino.fall();
+  var ok = this.fallingTetromino.fall();
+  if (!ok) {
+    this.spawn()
+  }
 };
 
 var tetris = new Tetris();
