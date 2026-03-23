@@ -182,8 +182,8 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   try {
     this.layout.forEach(function(row, y) {
       row.forEach(function(block, x) {
-        if (block && tetris.rows[y + newY] && tetris.rows[y + newY][x + newY]) {
-          var element = tetris.rows[y + newY][x + newY];
+        if (block) {
+          var element = tetris.rows[newY][newY];
           var length = element.classList.length;
           console.log(element, y, newX, newY, length);
           if (length) {
