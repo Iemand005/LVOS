@@ -270,3 +270,12 @@ document.addEventListener("keydown", function(ev) {
     case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
   }
 });
+
+// window.set
+// setTimeout(function() {
+
+// });
+
+setInterval(function() {
+  console.log("i");
+}, 1000);
