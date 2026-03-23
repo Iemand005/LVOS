@@ -81,12 +81,12 @@ Object.defineProperty(Tetromino.prototype, "tetris", {
 
 Object.defineProperty(Tetromino.prototype, "x", {
   get: function() { return this._x; },
-  set: function(x) { this.move(x, this.y); }
+  set: function(x) { this.moveTo(x, this.y); }
 });
 
 Object.defineProperty(Tetromino.prototype, "y", {
   get: function() { return this._y; },
-  set: function(y) { this.move(this.x, y); }
+  set: function(y) { this.moveTo(this.x, y); }
 });
 
 function Tetris() {
@@ -206,7 +206,7 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  * @param {number} x 
  * @param {number} y 
  */
-Tetromino.prototype.move = function(x, y) {
+Tetromino.prototype.moveTo = function(x, y) {
   
   if (!this.canMoveTo(x, y)) return false;
   this.tetris.remove(this);
@@ -227,8 +227,12 @@ Tetromino.prototype.move = function(x, y) {
 };
 
 Tetromino.prototype.fall = function() {
-  return this.move(this.x, this.y + 1);
+  return this.moveTo(this.x, this.y + 1);
 };
+
+Tetromino.prototype.moveLeft = function() { this.x -= 1; }
+
+Tetromino.prototype.moveRight = function() { this.x += 1; }
 
 Tetris.prototype.update = function() {
   var ok = this.fallingTetromino.fall();
@@ -259,3 +263,10 @@ var tetris = new Tetris();
 window.addEventListener("load", function(ev) {
   tetris.init();
 }, false);
+
+document.addEventListener("keydown", function(ev) {
+  switch (ev.key) {
+    case "ArrowLeft": tetris.fallingTetromino.moveLeft(); break;
+    case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
+  }
+});
