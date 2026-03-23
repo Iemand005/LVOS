@@ -164,15 +164,13 @@ Tetromino.prototype.forEachBlock = function(callback) {
 
 /**
  * @param {(this: Tetromino, element: HTMLElement)} callback 
- * @param {number} targetX
- * @param {number} targetY
+ * @param {number?} targetX
+ * @param {number?} targetY
  */
 Tetromino.prototype.forEachElement = function(callback, targetX, targetY) {
-  if (typeof targetX === "undefined") targetX = this.x;
-  if (typeof targetY === "undefined") targetY = this.y;
   this.forEachBlock(function(block, x, y) {
     console.log(y, targetY, x, targetX);
-      if (block) callback.call(this, tetris.rows[y + targetY][x + targetX]);
+      if (block) callback.call(this, tetris.rows[y + (targetY || this.y)][x + (targetX || this.x)]);
   });
 }
 
