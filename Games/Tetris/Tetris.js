@@ -69,13 +69,15 @@ function getTetrominoTypeLayout(type) {
   }
 }
 
-Tetromino.prototype.getRotatedLayout = function() {
-  this.forEachBlock(function(block, x, y) {
-
-  })
+Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  layout[0].map((val, index) => layout.map(row => row[index]).reverse())
-}
+  for (let i = 0; i < rotation; i++) {
+    
+    
+    layout = layout[0].map((val, index) => layout.map(row => row[index]).reverse());
+  }
+  return layout;
+};
 
 Object.defineProperty(Tetromino.prototype, "layout", {
   get: function() {
