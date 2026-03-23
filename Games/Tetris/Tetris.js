@@ -34,9 +34,8 @@ function Tetromino(tetris, type, x, y) {
 
 /**
  * @param {TetrominoType} type 
- * @param {number} roration
  */
-function getTetrominoTypeLayout(type, roration) {
+function getTetrominoTypeLayout(type) {
   switch (type) {
     case "hero": return [
       [1, 1, 1, 1]
@@ -68,6 +67,14 @@ function getTetrominoTypeLayout(type, roration) {
       [1, 1, 0]
     ];
   }
+}
+
+Tetromino.prototype.getRotatedLayout = function() {
+  this.forEachBlock(function(block, x, y) {
+
+  })
+  var layout = getTetrominoTypeLayout(this.type);
+  layout[0].map((val, index) => layout.map(row => row[index]).reverse())
 }
 
 Object.defineProperty(Tetromino.prototype, "layout", {
