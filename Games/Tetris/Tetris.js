@@ -179,18 +179,26 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
-  this.layout.forEach(function(row, y) {
-    row.forEach(function(block, x) {
-      if (block && tetris.rows[y + newY] && tetris.rows[y + newY][x + newY]) {
-        var length = tetris.rows[y + newY][x + newY].classList.length;
-        if (length) {
-          tetris.add(tetromino);
-          return false;
-        } 
-      }
-      return false;
+  try {
+    this.layout.forEach(function(row, y) {
+      row.forEach(function(block, x) {
+        if (block && tetris.rows[y + newY] && tetris.rows[y + newY][x + newY]) {
+          var element = tetris.rows[y + newY][x + newY];
+          var length = element.classList.length;
+          console.log(element, y, newX, newY, length);
+          if (length) {
+            tetris.add(tetromino);
+            throw new Error("No length" + block + "oki");
+          } 
+        }
+        // throw new Error("Uhm");
+      });
     });
-  });
+  } catch(ex) {
+    console.log(ex);
+    return false;
+  }
+
   this.tetris.add(this);
   return true;
 };  
