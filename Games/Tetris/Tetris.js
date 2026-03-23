@@ -95,6 +95,8 @@ function Tetris() {
   this.rows = [];
   /** @type {Tetromino} */
   this.fallingTetromino = null;
+
+  this.intervalId = -1;
 }
 
 Tetris.prototype.init = function() {
@@ -258,6 +260,14 @@ Tetris.prototype.spawnRandom = function() {
   this.spawn(this.randomTetrominoType());
 }
 
+Tetris.prototype.start = function() {
+  var tetris = this;
+  this.intervalId = setInterval(function() {
+    console.log("i");
+    tetris.update();
+  }, 1000);
+}
+
 var tetris = new Tetris();
 
 window.addEventListener("load", function(ev) {
@@ -276,6 +286,3 @@ document.addEventListener("keydown", function(ev) {
 
 // });
 
-setInterval(function() {
-  console.log("i");
-}, 1000);
