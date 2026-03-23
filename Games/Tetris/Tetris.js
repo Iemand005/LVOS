@@ -179,13 +179,14 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
+  var ok = true;
   try {
     this.layout.forEach(function(row, y) {
       row.forEach(function(block, x) {
         if (block) {
-          var element = tetris.rows[newY][newY];
+          var element = tetris.rows[y + newY][x  +newX];
           var length = element.classList.length;
-          console.log(element, y, newX, newY, length);
+          console.log(element, x, y, newX, newY, length);
           if (length) {
             tetris.add(tetromino);
             throw new Error("No length" + block + "oki");
@@ -196,11 +197,11 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
     });
   } catch(ex) {
     console.log(ex);
-    return false;
+    ok = false;
   }
 
   this.tetris.add(this);
-  return true;
+  return ok;
 };  
 
 /**
