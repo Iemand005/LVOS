@@ -34,8 +34,9 @@ function Tetromino(tetris, type, x, y) {
 
 /**
  * @param {TetrominoType} type 
+ * @param {number} roration
  */
-function getTetrominoTypeLayout(type) {
+function getTetrominoTypeLayout(type, roration) {
   switch (type) {
     case "hero": return [
       [1, 1, 1, 1]
@@ -215,26 +216,19 @@ Tetromino.prototype.moveTo = function(x, y) {
   this._x = x;
   this._y = y;
   return this.tetris.add(this);
-
-
-  // var oldX = this.x, oldY = this.y;
-  // this._x = x;
-  // this._y = y;
-  // var ok = this.tetris.add(this);
-  // if (!ok) {
-  //   this._x = oldX, this._y = oldY;
-  //   this.tetris.add(this);
-  // }
-  // return ok;
 };
 
 Tetromino.prototype.fall = function() {
   return this.moveTo(this.x, this.y + 1);
 };
 
-Tetromino.prototype.moveLeft = function() { this.x -= 1; }
+Tetromino.prototype.moveLeft = function() { this.x -= 1; };
 
-Tetromino.prototype.moveRight = function() { this.x += 1; }
+Tetromino.prototype.moveRight = function() { this.x += 1; };
+
+Tetromino.prototype.rotateLeft = function() {
+
+};
 
 Tetris.prototype.update = function() {
   var ok = this.fallingTetromino.fall();
@@ -286,9 +280,3 @@ document.addEventListener("keydown", function(ev) {
     case "ArrowDown": tetris.fallingTetromino.y += 1; break;
   }
 });
-
-// window.set
-// setTimeout(function() {
-
-// });
-
