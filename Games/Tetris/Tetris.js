@@ -30,6 +30,8 @@ function Tetromino(tetris, type, x, y) {
 
   this._x = x || 0;
   this._y = y || 0;
+
+  this.rotation = 0;
 }
 
 /**
@@ -71,14 +73,14 @@ function getTetrominoTypeLayout(type) {
 
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  for (let i = 0; i < rotation; i++)
+  for (let i = 0; i < (rotation || this.rotation); i++)
     layout = layout[0].map((val, index) => layout.map(row => row[index]).reverse());
   return layout;
 };
 
 Object.defineProperty(Tetromino.prototype, "layout", {
   get: function() {
-    return getTetrominoTypeLayout(this.type);
+    return this.getRotatedLayout();
   }
 });
 
