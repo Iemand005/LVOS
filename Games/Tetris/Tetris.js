@@ -164,10 +164,14 @@ Tetromino.prototype.forEachBlock = function(callback) {
 
 /**
  * @param {(this: Tetromino, element: HTMLElement)} callback 
+ * @param {number} targetX
+ * @param {number} targetY
  */
-Tetromino.prototype.forEachElement = function(callback) {
+Tetromino.prototype.forEachElement = function(callback, targetX, targetY) {
+  if (targetX === null) targetX = this.x;
+  if (targetY === null) targetY = this.y;
   this.forEachBlock(function(block, x, y) {
-      if (block) callback.call(this, tetris.rows[y + this.y][x + this.x]);
+      if (block) callback.call(this, tetris.rows[y + targetY][x + targetX]);
   });
 }
 
@@ -181,20 +185,15 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   var tetromino = this;
   var ok = true;
   try {
-    this.layout.forEach(function(row, y) {
-      row.forEach(function(block, x) {
-        if (block) {
-          var element = tetris.rows[y + newY][x  +newX];
-          var length = element.classList.length;
-          console.log(element, x, y, newX, newY, length);
-          if (length) {
-            tetris.add(tetromino);
-            throw new Error("No length" + block + "oki");
-          } 
-        }
-        // throw new Error("Uhm");
-      });
-    });
+    console.log(newX, newY);
+    this.forEachElement(function(element, x, y) {
+      var length = element.classList.length;
+      console.log(element, x, y, length);
+      if (length) {
+        tetris.add(tetromino);
+        throw new Error("No length" + block + "oki");
+      } 
+    }, newX, newY);
   } catch(ex) {
     console.log(ex);
     ok = false;
