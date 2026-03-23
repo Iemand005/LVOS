@@ -181,13 +181,14 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
   var tetromino = this;
   this.layout.forEach(function(row, y) {
     row.forEach(function(block, x) {
-      if (block) {
+      if (block && tetris.rows[y + newY] && tetris.rows[y + newY][x + newY]) {
         var length = tetris.rows[y + newY][x + newY].classList.length;
         if (length) {
           tetris.add(tetromino);
           return false;
         } 
       }
+      return false;
     });
   });
   this.tetris.add(this);
@@ -202,15 +203,20 @@ Tetromino.prototype.move = function(x, y) {
   
   if (!this.canMoveTo(x, y)) return false;
   this.tetris.remove(this);
-  var oldX = this.x, oldY = this.y;
   this._x = x;
   this._y = y;
-  var ok = this.tetris.add(this);
-  if (!ok) {
-    this._x = oldX, this._y = oldY;
-    this.tetris.add(this);
-  }
-  return ok;
+  return this.tetris.add(this);
+
+
+  // var oldX = this.x, oldY = this.y;
+  // this._x = x;
+  // this._y = y;
+  // var ok = this.tetris.add(this);
+  // if (!ok) {
+  //   this._x = oldX, this._y = oldY;
+  //   this.tetris.add(this);
+  // }
+  // return ok;
 };
 
 Tetromino.prototype.fall = function() {
