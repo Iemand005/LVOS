@@ -18,6 +18,10 @@ var TetrominoTypes = {
 //  * @typedef {TetrominoTypes} TetrominoType
 //  */
 
+function idk(n) {
+  return (4 + (n % 4)) % 4;
+}
+
 /**
  * @param {Tetris} tetris 
  * @param {TetrominoType} type 
@@ -73,7 +77,8 @@ function getTetrominoTypeLayout(type) {
 
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  for (let i = 0; i < (rotation || this.rotation); i++)
+  var limited= idk(rotation || this.rotation);
+  for (let i = 0; i < limited; i++)
     layout = layout[0].map((val, index) => layout.map(row => row[index]).reverse());
   return layout;
 };
@@ -235,7 +240,9 @@ Tetromino.prototype.moveLeft = function() { this.x -= 1; };
 Tetromino.prototype.moveRight = function() { this.x += 1; };
 
 Tetromino.prototype.rotateLeft = function() {
-
+  this.tetris.remove(this);
+  this.rotation += 1;
+  return this.tetris.add(this);
 };
 
 Tetris.prototype.update = function() {
