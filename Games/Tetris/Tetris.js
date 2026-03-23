@@ -141,7 +141,7 @@ Tetris.prototype.add = function(tetromino) {
       if (element.classList.length) throw new Error("Tried to move into occupied block");
       element.classList.add(this.type);
     });
-  } catch(ex) { return false; }
+  } catch(ex) { console.log(ex); return false; }
   return true;
 };
 
@@ -168,9 +168,10 @@ Tetromino.prototype.forEachBlock = function(callback) {
  * @param {number} targetY
  */
 Tetromino.prototype.forEachElement = function(callback, targetX, targetY) {
-  if (targetX === null) targetX = this.x;
-  if (targetY === null) targetY = this.y;
+  if (typeof targetX === "undefined") targetX = this.x;
+  if (typeof targetY === "undefined") targetY = this.y;
   this.forEachBlock(function(block, x, y) {
+    console.log(y, targetY, x, targetX);
       if (block) callback.call(this, tetris.rows[y + targetY][x + targetX]);
   });
 }
