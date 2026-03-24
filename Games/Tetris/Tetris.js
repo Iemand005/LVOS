@@ -157,7 +157,7 @@ Tetris.prototype.spawn = function(type) {
 
   this.fallingTetromino = new Tetromino(this, type, startX, startY);
   
-  this.add(this.fallingTetromino);
+  return this.add(this.fallingTetromino);
 };
 
 /**
@@ -274,8 +274,9 @@ Tetromino.prototype.rotateRight = function() {
 Tetris.prototype.update = function() {
   var ok = this.fallingTetromino.fall();
   if (!ok) {
-    this.spawnRandom();
+    ok = this.spawnRandom();
   }
+  return ok;
 };
 
 Tetris.prototype.randomTetrominoType = function() {
@@ -292,7 +293,7 @@ Tetris.prototype.randomTetrominoType = function() {
 }
 
 Tetris.prototype.spawnRandom = function() {
-  this.spawn(this.randomTetrominoType());
+  return this.spawn(this.randomTetrominoType());
 }
 
 Tetris.prototype.start = function() {
@@ -300,7 +301,7 @@ Tetris.prototype.start = function() {
   var tetris = this;
   this.intervalId = setInterval(function() {
     console.log("i");
-    tetris.update();
+    if (!tetris.update()) console.warn("Dead.");
   }, 1000);
 }
 
@@ -319,5 +320,6 @@ window.addEventListener("keydown", function(ev) {
     case "ArrowLeft": tetris.fallingTetromino.moveLeft(); break;
     case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
     case "ArrowDown": tetris.fallingTetromino.y += 1; break;
+    case "ArrowUp": tetris.fallingTetromino.rotateLeft(); break;
   }
 }, false);
