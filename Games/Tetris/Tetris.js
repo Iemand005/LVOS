@@ -301,7 +301,10 @@ Tetris.prototype.start = function() {
   var tetris = this;
   this.intervalId = setInterval(function() {
     console.log("i");
-    if (!tetris.update()) console.warn("Dead.");
+    if (!tetris.update()) {
+      console.warn("Dead.");
+      clearInterval(this.intervalId);
+    }
   }, 1000);
 }
 
