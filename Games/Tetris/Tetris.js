@@ -44,8 +44,6 @@ function Tetromino(tetris, type, x, y) {
   this._y = y || 0;
 
   this._rotation = 0;
-
-  this.speed = 1000;
 }
 
 /**
@@ -126,6 +124,8 @@ function Tetris() {
   this.fallingTetromino = null;
 
   this.intervalId = -1;
+
+  this.speed = 1000;
 }
 
 Tetris.prototype.init = function() {
@@ -298,8 +298,9 @@ Tetris.prototype.spawnRandom = function() {
   return this.spawn(this.randomTetrominoType());
 }
 
-/** @this {Tetris} */
+// /** @this {Tetris} */
 Tetris.prototype.start = function() {
+  
   this.spawnRandom();
   this.intervalId = setInterval(function(/** @type {Tetris} */tetris) {
     console.log("i");
