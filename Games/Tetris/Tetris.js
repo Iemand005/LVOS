@@ -157,6 +157,7 @@ Tetris.prototype.spawn = function(type) {
 Tetris.prototype.add = function(tetromino) {
   try {
     tetromino.forEachElement(function(element) {
+      console.log(element.classList + " e " + element.classList.length);
       if (element.classList.length) throw new Error("Tried to move into occupied block");
       element.classList.add(this.type);
     });
@@ -178,10 +179,7 @@ Tetris.prototype.remove = function(tetromino) {
  * @param {(this: Tetromino, block: boolean, x: number, y: number)} callback 
  */
 Tetromino.prototype.forEachBlock = function(callback) {
-  var a = this.layout;
-  alert("Layouhour" + a);
-  var layout = this.getRotatedLayout();
-  layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
+  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
 }
 
 /**

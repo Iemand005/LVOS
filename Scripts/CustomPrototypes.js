@@ -90,18 +90,19 @@ if (typeof console == "undefined") {
             alert(message);
         },
         warn: function(message) {
-            alert(message);
+            alert("Warning: " + message);
         },
         error: function(message) {
-            alert(message, true);
+            alert("Error: " + message, true);
         }
     }
 }
 
 if (!("classList" in document.documentElement)) HTMLElement.prototype.__defineGetter__("classList", function() {
+    /** @type {HTMLElement} */
     var self = this;
     return {
-        classes: self.className.split(" "),
+        get classes() { return self.className.split(" ").filter(function(value) { return value.length; }); },
         add: function(className) {
             if (!this.contains(className))
                 self.className += (self.className ? " " : "") + className;
@@ -118,7 +119,7 @@ if (!("classList" in document.documentElement)) HTMLElement.prototype.__defineGe
             else this.add(className);
         },
         get length() {
-            return self.className.split(" ").length;
+            return this.classes.length;
         }
     };
 });
