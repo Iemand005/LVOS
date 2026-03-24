@@ -87,7 +87,7 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
 if (typeof console == "undefined") {
     console = {
         log: function(message) {
-            alert(message);
+            // alert(message);
         },
         warn: function(message) {
             alert("Warning: " + message);

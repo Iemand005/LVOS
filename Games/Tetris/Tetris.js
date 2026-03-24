@@ -77,17 +77,14 @@ function getTetrominoTypeLayout(type) {
 
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  alert("Laout" + layout);
   var limitedRot = idk(rotation || this.rotation);
   for (var i = 0; i < limitedRot; i++)
     layout = layout[0].map(function(val, index) { return layout.map(function(row) { return row[index] }).reverse(); });
-  alert("layout 2" + layout);
   return layout;
 };
 
 Object.defineProperty(Tetromino.prototype, "layout", {
   get: function() {
-    alert("hi");
     return this.getRotatedLayout();
   }
 });
@@ -145,7 +142,6 @@ Tetris.prototype.createGrid = function(width, height) {
 Tetris.prototype.spawn = function(type) {
   var startX = 0, startY = 0;
 
-  // if (this.fallingTetromino) throw new Error("A tetromino is already falling.");
   this.fallingTetromino = new Tetromino(this, type, startX, startY);
   
   this.add(this.fallingTetromino);
@@ -228,12 +224,13 @@ Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
  * @param {number} y 
  */
 Tetromino.prototype.moveTo = function(x, y) {
-  
-  if (!this.canMoveTo(x, y)) return false;
-  this.tetris.remove(this);
-  this._x = x;
-  this._y = y;
-  return this.tetris.add(this);
+  var ok = this.canMoveTo(x, y);
+  if (ok) {
+    this._x = x;
+    this._y = y;
+  }
+  this.tetris.add(this);
+  return ok;
 };
 
 Tetromino.prototype.fall = function() {
