@@ -298,9 +298,8 @@ Tetris.prototype.spawnRandom = function() {
   return this.spawn(this.randomTetrominoType());
 }
 
-// /** @this {Tetris} */
 Tetris.prototype.start = function() {
-  
+
   this.spawnRandom();
   this.intervalId = setInterval(function(/** @type {Tetris} */tetris) {
     console.log("i");
