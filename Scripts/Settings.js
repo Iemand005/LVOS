@@ -109,7 +109,7 @@ function updateBlurState() {
 /*const*/var charmsbutton = applist.appendChild(document.createElement("button"));
 /*const*/var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
-elements.dockAppList.appendChild(windows.browser.createOpenButton());
+if (windows.browser) elements.dockAppList.appendChild(windows.browser.createOpenButton());
 
 bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 bodyCrawler.theme.onchange = function () { setTheme(this.selectedIndex); };
