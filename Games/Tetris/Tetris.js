@@ -185,11 +185,18 @@ Tetromino.prototype.forEachBlock = function(callback) {
 }
 
 /**
- * @param {(this: Tetromino, element: HTMLElement) => void} callback 
- * @param {number?} targetX
- * @param {number?} targetY
+ * @param {(this: Tetromino, element: HTMLElement) => void} callback
  */
-Tetromino.prototype.forEachElement = function(callback, targetX = 0, targetY = 0) {
+Tetromino.prototype.forEachElement = function(callback) {
+  this.forEachElementAt(callback, this.x, this.y);
+}
+
+/**
+ * @param {(this: Tetromino, element: HTMLElement) => void} callback 
+ * @param {number | undefined} targetX
+ * @param {number | undefined} targetY
+ */
+Tetromino.prototype.forEachElementAt = function(callback, targetX, targetY) {
   this.forEachBlock(function(block, x, y) {
     console.log(y, targetY, x, targetX);
       if (block) callback.call(this, tetris.rows[y + (targetY || this.y)][x + (targetX || this.x)]);
@@ -199,21 +206,19 @@ Tetromino.prototype.forEachElement = function(callback, targetX = 0, targetY = 0
 /**
  * @param {number} newX 
  * @param {number} newY 
- * @param {boolean} restore
  */
-Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
+Tetromino.prototype.canMoveTo = function(newX, newY) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
   var ok = true;
   try {
     console.log(newX, newY);
-    this.forEachElement(function(element, x, y) {
+    this.forEachElementAt(function(element) {
       var length = element.classList.length;
-      // console.log(element, x, y, length);
       if (length) {
         tetris.add(tetromino);
-        throw new Error("No length" + block + "oki");
+        throw new Error("No length" + element + "oki");
       } 
     }, newX, newY);
   } catch(ex) {
@@ -221,9 +226,18 @@ Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
     ok = false;
   }
 
-  if (restore) this.tetris.add(this);
   return ok;
-};  
+};
+
+/**
+ * @param {number} newX 
+ * @param {number} newY 
+ */
+Tetromino.prototype.canMoveToAndRestore = function(newX, newY) {
+  var ok = this.canMoveTo(newX, newY);
+  this.tetris.add(this);
+  return ok;
+}; 
 
 /**
  * @param {number} x 
