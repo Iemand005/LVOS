@@ -290,9 +290,8 @@ Tetris.prototype.update = function() {
 
 Tetris.prototype.randomTetrominoType = function() {
   var keys = [];
-  for (var key in TetrominoTypes) {
+  for (var key in TetrominoTypes)
     keys[keys.length] = key;
-  }
 
   var randomKey = keys[Math.floor(Math.random() * keys.length)];
   /** @type {TetrominoType} */
