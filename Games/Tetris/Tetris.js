@@ -328,7 +328,6 @@ window.addEventListener("load", function(ev) {
 
 window.addEventListener("keydown", function(ev) {
   if (!tetris.fallingTetromino) return;
-  /** @ignore */
   switch (ev.key || getKeyName(ev.keyCode)) {
     case "ArrowLeft": tetris.fallingTetromino.moveLeft(); break;
     case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
