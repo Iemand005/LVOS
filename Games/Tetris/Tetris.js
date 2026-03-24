@@ -77,14 +77,17 @@ function getTetrominoTypeLayout(type) {
 
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
+  alert("Laout" + layout);
   var limitedRot = idk(rotation || this.rotation);
   for (var i = 0; i < limitedRot; i++)
     layout = layout[0].map(function(val, index) { return layout.map(function(row) { return row[index] }).reverse(); });
+  alert("layout 2" + layout);
   return layout;
 };
 
 Object.defineProperty(Tetromino.prototype, "layout", {
   get: function() {
+    alert("hi");
     return this.getRotatedLayout();
   }
 });
@@ -175,7 +178,10 @@ Tetris.prototype.remove = function(tetromino) {
  * @param {(this: Tetromino, block: boolean, x: number, y: number)} callback 
  */
 Tetromino.prototype.forEachBlock = function(callback) {
-  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
+  var a = this.layout;
+  alert("Layouhour" + a);
+  var layout = this.getRotatedLayout();
+  layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
 }
 
 /**
