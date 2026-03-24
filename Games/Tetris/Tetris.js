@@ -22,11 +22,7 @@ var KeyNames = {
   32: "Space"
 };
 
-// /**
-//  * @typedef {TetrominoTypes} TetrominoType
-//  */
-
-function idk(n) {
+function constraintRotation(n) {
   return (4 + (n % 4)) % 4;
 }
 
@@ -46,9 +42,7 @@ function Tetromino(tetris, type, x, y) {
   this._rotation = 0;
 }
 
-/**
- * @param {TetrominoType} type 
- */
+/** @param {TetrominoType} type */
 function getTetrominoTypeLayout(type) {
   switch (type) {
     case "hero": return [
@@ -85,7 +79,7 @@ function getTetrominoTypeLayout(type) {
 
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  var limitedRot = idk(rotation || this.rotation);
+  var limitedRot = constraintRotation(rotation || this.rotation);
   for (var i = 0; i < limitedRot; i++)
     layout = layout[0].map(function(val, index) { return layout.map(function(row) { return row[index] }).reverse(); });
   return layout;
@@ -141,11 +135,8 @@ Tetris.prototype.createGrid = function(width, height) {
     /** @type {HTMLElement[]} */
     var rowData = [];
 
-    for (var x = 0; x < width; x++) {
-      var data = row.appendChild(document.createElement("td"));
-      // data.classList.add("hero");
-      rowData.push(data);
-    }
+    for (var x = 0; x < width; x++)
+      rowData.push(row.appendChild(document.createElement("td")));
 
     this.rows.push(rowData);
   }
@@ -187,16 +178,16 @@ Tetris.prototype.remove = function(tetromino) {
 };
 
 /**
- * @param {(this: Tetromino, block: boolean, x: number, y: number)} callback 
+ * @param {(this: Tetromino, block: boolean, x: number, y: number) => void} callback 
  */
 Tetromino.prototype.forEachBlock = function(callback) {
-  this.layout.forEach(function(row, y) { row.forEach(function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
+  this.layout.forEach(/** @this {Tetromino} */function(row, y) { row.forEach(/** @this {Tetromino} */function(block, x) { callback.call(this, !!block, x, y); }, this); }, this);
 }
 
 /**
- * @param {(this: Tetromino, element: HTMLElement)} callback 
- * @param {number?} targetX
- * @param {number?} targetY
+ * @param {(this: Tetromino, element: HTMLElement) => void} callback 
+ * @param {number | undefined} targetX
+ * @param {number | undefined} targetY
  */
 Tetromino.prototype.forEachElement = function(callback, targetX, targetY) {
   this.forEachBlock(function(block, x, y) {
