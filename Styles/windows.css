@@ -78,9 +78,9 @@ main {
     pointer-events: none !important;
     justify-content: space-between;
     padding: 10px;
-    border: inherit;
-    border-style: none;
-    border-width: inherit;
+    /* border: inherit; */
+    /* border-style: none; */
+    border-width: 0px;
     border-color: inherit;
     color: black;
 }
@@ -107,10 +107,11 @@ main {
     right: 0;
     overflow: hidden;
     pointer-events: auto;
-    /*border: 1px solid black;*/
+    /* border: 1px solid black; */
     border: inherit;
     border-width: inherit;
     border-color: inherit;
+    border-style: solid;
 }
 
 .window header button {
