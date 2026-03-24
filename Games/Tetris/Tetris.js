@@ -298,8 +298,7 @@ Tetris.prototype.spawnRandom = function() {
 
 Tetris.prototype.start = function() {
   this.spawnRandom();
-  // var tetris = this;
-  this.intervalId = setInterval(function(tetris) {
+  this.intervalId = setInterval(function(/** @type {Tetris} */tetris) {
     console.log("i");
     if (!tetris.update()) {
       console.warn("Dead.");
