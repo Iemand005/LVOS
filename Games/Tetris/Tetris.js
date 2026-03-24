@@ -264,8 +264,9 @@ Tetromino.prototype.fall = function() {
 };
 
 Tetromino.prototype.moveLeft = function() { this.x -= 1; };
-
 Tetromino.prototype.moveRight = function() { this.x += 1; };
+Tetromino.prototype.rotateLeft = function() { this.rotation -= 1; };
+Tetromino.prototype.rotateRight = function() { this.rotation += 1; };
 
 /** @param {number} amount */
 Tetromino.prototype.rotateTo = function(amount) {
@@ -274,23 +275,10 @@ Tetromino.prototype.rotateTo = function(amount) {
   return this.tetris.add(this);
 }
 
-Tetromino.prototype.rotateLeft = function() {
-  // return this.rotateBy(this.rotation )
-  this.rotation += 1;
-};
-
-Tetromino.prototype.rotateRight = function() {
-  // this.tetris.remove(this);
-  this.rotation -= 1;
-  // return this.tetris.add(this);
-};
 
 Tetris.prototype.update = function() {
-  if (!this.fallingTetromino) return false;
-  var ok = this.fallingTetromino.fall();
-  if (!ok) {
-    ok = this.spawnRandom();
-  }
+  var ok = this.fallingTetromino && this.fallingTetromino.fall();
+  if (!ok) ok = this.spawnRandom();
   return ok;
 };
 
