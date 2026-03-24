@@ -298,14 +298,14 @@ Tetris.prototype.spawnRandom = function() {
 
 Tetris.prototype.start = function() {
   this.spawnRandom();
-  var tetris = this;
-  this.intervalId = setInterval(function() {
+  // var tetris = this;
+  this.intervalId = setInterval(function(tetris) {
     console.log("i");
     if (!tetris.update()) {
       console.warn("Dead.");
-      clearInterval(this.intervalId);
+      clearInterval(tetris.intervalId);
     }
-  }, 1000);
+  }, 1000, tetris);
 }
 
 var tetris = new Tetris();
