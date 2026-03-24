@@ -14,6 +14,16 @@ var TetrominoTypes = {
   orangeRicky: "orange-ricky"
 };
 
+var Keys = {
+    LEFT:  37,
+    UP:    38,
+    RIGHT: 39,
+    DOWN:  40,
+    SPACE: 32,
+    ENTER: 13,
+    ESC:   27
+};
+
 // /**
 //  * @typedef {TetrominoTypes} TetrominoType
 //  */
@@ -290,7 +300,7 @@ window.addEventListener("load", function(ev) {
   }, false);
 }, false);
 
-document.addEventListener("keydown", function(ev) {
+window.addEventListener("keydown", function(ev) {
   switch (ev.key) {
     case "ArrowLeft": tetris.fallingTetromino.moveLeft(); break;
     case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
