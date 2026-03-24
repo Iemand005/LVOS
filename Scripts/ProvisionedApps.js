@@ -168,14 +168,19 @@ browserform.addEventListener("submit", function(event){
         id: "level",
         src: "./Applications/Level/level.html",
         hidden: true
+    },
+    {
+        title: "Browser",
+        id: "browser",
+        src: "./Applications/Browser/index.html",
+        hidden: true
+    },
+    {
+        title: "MPTool",
+        id: "mptool",
+        src: "./Applications/MPTool/index.html",
+        hidden: true
     }
-    // ,
-    // {
-    //     title: "Browser",
-    //     id: "browser",
-    //     src: "./Applications/Browser/index.html",
-    //     hidden: true
-    // }
 ]
 
 /** @type {Application[]} */
