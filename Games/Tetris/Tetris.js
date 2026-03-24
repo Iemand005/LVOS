@@ -197,8 +197,9 @@ Tetromino.prototype.forEachElement = function(callback, targetX, targetY) {
 /**
  * @param {number} newX 
  * @param {number} newY 
+ * @param {boolean} restore
  */
-Tetromino.prototype.canMoveTo = function(newX, newY) {
+Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
@@ -207,7 +208,7 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
     console.log(newX, newY);
     this.forEachElement(function(element, x, y) {
       var length = element.classList.length;
-      console.log(element, x, y, length);
+      // console.log(element, x, y, length);
       if (length) {
         tetris.add(tetromino);
         throw new Error("No length" + block + "oki");
@@ -218,7 +219,7 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
     ok = false;
   }
 
-  this.tetris.add(this);
+  if (restore) this.tetris.add(this);
   return ok;
 };  
 
