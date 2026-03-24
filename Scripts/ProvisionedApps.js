@@ -7,10 +7,12 @@
 'use esnext';
 
 
-/*const*/var browser = windows.browser.target;//document.getElementById("browser");
-/*const*/var browserform = windows.browser.originalBody;//document.getElementById("browserform");
-/*const*/var browserframe = browser.getElementsByTagName("iframe")[0];
-/*const*/var dockapplist = document.getElementById("dockapplist");
+var dockapplist = document.getElementById("dockapplist");
+
+if (windows.browser) {
+var browser = windows.browser.target;//document.getElementById("browser");
+var browserform = windows.browser.originalBody;//document.getElementById("browserform");
+var browserframe = browser.getElementsByTagName("iframe")[0];
 
 dockapplist.appendChild(windows.browser.createOpenButton());
 dockapplist.appendChild(windows.console.createOpenButton());
@@ -56,7 +58,7 @@ browserform.addEventListener("submit", function(event){
         }
     }
 });
-
+}
 
 // Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
 /*const*/var demo = { // More parameters will be added over time when I need them, you will probably find them as I start using the API instead of hard coding the applications.

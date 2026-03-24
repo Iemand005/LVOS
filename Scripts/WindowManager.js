@@ -567,8 +567,8 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 /** @type {{[id:string]: Dialog}} */
-/*const*/var windows = {};
-/*const*/var windowButtons = {
+var windows = {};
+var windowButtons = {
     eject: 0,
     full: 1,
     close: 2
