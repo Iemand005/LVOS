@@ -285,7 +285,7 @@ window.addEventListener("load", function(ev) {
   var startButton = document.getElementById("start-button");
   startButton.addEventListener("click", function() {
     tetris.start();
-  });
+  }, false);
 }, false);
 
 document.addEventListener("keydown", function(ev) {
@@ -294,4 +294,4 @@ document.addEventListener("keydown", function(ev) {
     case "ArrowRight": tetris.fallingTetromino.moveRight(); break;
     case "ArrowDown": tetris.fallingTetromino.y += 1; break;
   }
-});
+}, false);
