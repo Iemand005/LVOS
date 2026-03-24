@@ -78,7 +78,7 @@ function getTetrominoTypeLayout(type) {
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
   var limitedRot = idk(rotation || this.rotation);
-  for (let i = 0; i < limitedRot; i++)
+  for (var i = 0; i < limitedRot; i++)
     layout = layout[0].map((val, index) => layout.map(row => row[index]).reverse());
   return layout;
 };
