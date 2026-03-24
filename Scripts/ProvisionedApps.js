@@ -44,6 +44,8 @@ browserform.addEventListener("submit", function(event){
             }
         }
 
+        if (!(e instanceof Error)) return console.log(e);
+
         console.error(e.code);
         url = new URL("./Applications/Error/error.html", window.location.href);
         url.searchParams.set("errormessage", e.message);

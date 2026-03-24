@@ -163,7 +163,7 @@ main {
     flex-direction: column;
     pointer-events: none;
     border-radius: inherit;
-    border: 1px solid #0000007d;
+    border: 1px solid #0000005c;
     padding: 5px;
     box-sizing: border-box;
     width: inherit;
@@ -172,12 +172,10 @@ main {
     background-color: orange;
     transition: inherit;
     color: black;
-
     transform-origin: center;
     background:     linear-gradient(0deg, #0000002b, #ffffff00);
     box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(1rem);
-    
     transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
