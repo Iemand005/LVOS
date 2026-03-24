@@ -57,8 +57,8 @@ if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
 
 if (!Object.defineProperty) Object.defineProperty = function(obj, key, descriptor) {
     if (!descriptor) return;
-    if (descriptor.get) obj.constructor.__defineGetter__(key, descriptor.get);
-    if (descriptor.set) obj.constructor.__defineSetter__(key, descriptor.set);
+    if (descriptor.get) obj.__defineGetter__(key, descriptor.get);
+    if (descriptor.set) obj.__defineSetter__(key, descriptor.set);
 }
 
 if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
