@@ -22,6 +22,7 @@ var KeyNames = {
   32: "Space"
 };
 
+/** @param {number} n */
 function constraintRotation(n) {
   return (4 + (n % 4)) % 4;
 }
@@ -77,17 +78,18 @@ function getTetrominoTypeLayout(type) {
   }
 }
 
+/** @param {number} rotation */
 Tetromino.prototype.getRotatedLayout = function(rotation) {
   var layout = getTetrominoTypeLayout(this.type);
-  var limitedRot = constraintRotation(rotation || this.rotation);
+  var limitedRot = constraintRotation(rotation);
   for (var i = 0; i < limitedRot; i++)
-    layout = layout[0].map(function(val, index) { return layout.map(function(row) { return row[index] }).reverse(); });
+    layout = layout[0].map(function(_, index) { return layout.map(function(row) { return row[index] }).reverse(); });
   return layout;
 };
 
 Object.defineProperty(Tetromino.prototype, "layout", {
   get: function() {
-    return this.getRotatedLayout();
+    return this.getRotatedLayout(this.rotation);
   }
 });
 
@@ -114,7 +116,7 @@ function Tetris() {
   this.table = document.createElement("table");
   /** @type {HTMLElement[][]} */
   this.rows = [];
-  /** @type {Tetromino} */
+  /** @type {Tetromino?} */
   this.fallingTetromino = null;
 
   this.intervalId = -1;
@@ -128,6 +130,10 @@ Tetris.prototype.init = function() {
   this.createGrid(6, 10);
 };
 
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
 Tetris.prototype.createGrid = function(width, height) {
   
   for (var y = 0; y < height; y++) {
@@ -207,7 +213,7 @@ Tetromino.prototype.forEachElementAt = function(callback, targetX, targetY) {
  * @param {number} newX 
  * @param {number} newY 
  */
-Tetromino.prototype.canMoveTo = function(newX, newY) {
+Tetromino.prototype.canMoveToQuick = function(newX, newY) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
@@ -233,8 +239,8 @@ Tetromino.prototype.canMoveTo = function(newX, newY) {
  * @param {number} newX 
  * @param {number} newY 
  */
-Tetromino.prototype.canMoveToAndRestore = function(newX, newY) {
-  var ok = this.canMoveTo(newX, newY);
+Tetromino.prototype.canMoveTo = function(newX, newY) {
+  var ok = this.canMoveToQuick(newX, newY);
   this.tetris.add(this);
   return ok;
 }; 
@@ -244,7 +250,7 @@ Tetromino.prototype.canMoveToAndRestore = function(newX, newY) {
  * @param {number} y 
  */
 Tetromino.prototype.moveTo = function(x, y) {
-  var ok = this.canMoveTo(x, y);
+  var ok = this.canMoveToQuick(x, y);
   if (ok) {
     this._x = x;
     this._y = y;
@@ -261,6 +267,7 @@ Tetromino.prototype.moveLeft = function() { this.x -= 1; };
 
 Tetromino.prototype.moveRight = function() { this.x += 1; };
 
+/** @param {number} amount */
 Tetromino.prototype.rotateTo = function(amount) {
   this.tetris.remove(this);
   this._rotation = amount;
@@ -279,6 +286,7 @@ Tetromino.prototype.rotateRight = function() {
 };
 
 Tetris.prototype.update = function() {
+  if (!this.fallingTetromino) return false;
   var ok = this.fallingTetromino.fall();
   if (!ok) {
     ok = this.spawnRandom();
@@ -319,7 +327,7 @@ var tetris = new Tetris();
 window.addEventListener("load", function(ev) {
   tetris.init();
   var startButton = document.getElementById("start-button");
-  startButton.addEventListener("click", function() {
+  if (startButton) startButton.addEventListener("click", function() {
     tetris.start();
   }, false);
 }, false);
