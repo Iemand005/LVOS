@@ -94,7 +94,7 @@ Verlet.prototype = {
 }
 
 function Ball(x, y, radius){
-    this.ver/*let*/var = new Verlet(new Vector(x, y));
+    this.verlet = new Verlet(new Vector(x, y));
     this.update = this.verlet.update.bind(this.verlet);
     this.radius = this.rad = radius || 10;
     this.color = "red";
