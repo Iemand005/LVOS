@@ -44,6 +44,8 @@ function Tetromino(tetris, type, x, y) {
   this._y = y || 0;
 
   this._rotation = 0;
+
+  this.speed = 1000;
 }
 
 /**
@@ -296,6 +298,7 @@ Tetris.prototype.spawnRandom = function() {
   return this.spawn(this.randomTetrominoType());
 }
 
+/** @this {Tetris} */
 Tetris.prototype.start = function() {
   this.spawnRandom();
   this.intervalId = setInterval(function(/** @type {Tetris} */tetris) {
@@ -304,7 +307,7 @@ Tetris.prototype.start = function() {
       console.warn("Dead.");
       clearInterval(tetris.intervalId);
     }
-  }, 1000, tetris);
+  }, this.speed, tetris);
 }
 
 var tetris = new Tetris();
