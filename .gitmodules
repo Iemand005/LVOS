@@ -4,3 +4,6 @@
 [submodule "Applications/FrostedColours"]
 	path = Applications/FrostedColours
 	url = https://github.com/Iemand005/FrostedColours.git
+[submodule "Applications/MPTool"]
+	path = Applications/MPTool
+	url = https://github.com/Iemand005/MPTool.git
