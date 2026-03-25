@@ -513,6 +513,7 @@ Dialog.prototype.injectMica = function () {
         var clip = this.target.getElementsByClassName("backdrop-clip")[0];
         if (!clip) return;
         clip.appendChild(image);
+        // this.target.classList.add("mica");
         this.move(this.x, this.y);
     } catch(ex) { console.warn(ex); }
 }
