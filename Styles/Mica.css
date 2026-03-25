@@ -30,3 +30,12 @@
   z-index: -1;
   pointer-events: none !important;
 }
+
+.mica article {
+  border: none;
+}
+
+.mica article > * {
+  border: none;
+  
+}
