@@ -15,7 +15,7 @@
   height: 100%;
 }
 
-.mica {
+backdrop-clip > * {
   filter: blur(10px);
 }
 
@@ -37,5 +37,5 @@
 
 .mica article > * {
   border: none;
-  
+
 }
