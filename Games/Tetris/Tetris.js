@@ -218,8 +218,9 @@ Tetromino.prototype.forEachElementAt = function(callback, targetX, targetY) {
 /**
  * @param {number} newX 
  * @param {number} newY 
+ * @param {boolean} [restore]
  */
-Tetromino.prototype.canMoveToQuick = function(newX, newY) {
+Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
   this.tetris.remove(this);
   var tetris = this.tetris;
   var tetromino = this;
@@ -238,25 +239,16 @@ Tetromino.prototype.canMoveToQuick = function(newX, newY) {
     ok = false;
   }
 
+  if (restore) this.tetris.add(this);
+
   return ok;
 };
-
-/**
- * @param {number} newX 
- * @param {number} newY 
- */
-Tetromino.prototype.canMoveTo = function(newX, newY) {
-  var ok = this.canMoveToQuick(newX, newY);
-  this.tetris.add(this);
-  return ok;
-}; 
-
 /**
  * @param {number} x 
  * @param {number} y 
  */
 Tetromino.prototype.moveTo = function(x, y) {
-  var ok = this.canMoveToQuick(x, y);
+  var ok = this.canMoveTo(x, y, true);
   if (ok) {
     this._x = x;
     this._y = y;
