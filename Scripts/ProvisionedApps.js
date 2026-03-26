@@ -14,9 +14,6 @@ var browser = windows.browser.target;//document.getElementById("browser");
 var browserform = windows.browser.originalBody;//document.getElementById("browserform");
 var browserframe = browser.getElementsByTagName("iframe")[0];
 
-dockapplist.appendChild(windows.browser.createOpenButton());
-dockapplist.appendChild(windows.console.createOpenButton());
-
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
     /*let*/var url = event.target.address.value;
@@ -206,6 +203,8 @@ if (loadApps) {
 
 try {
     if (dockapplist) {
+        dockapplist.appendChild(windows.browser.createOpenButton());
+        dockapplist.appendChild(windows.console.createOpenButton());
         dockapplist.appendChild(windows.browser.createOpenButton());
         dockapplist.appendChild(windows.console.createOpenButton());
         dockapplist.appendChild(windows.music.createOpenButton());

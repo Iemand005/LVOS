@@ -2,4 +2,4 @@ class Dialog {
   resize(width: number, height: number): void;
 }
 
-export = Dialog;
+export = Dialog;7

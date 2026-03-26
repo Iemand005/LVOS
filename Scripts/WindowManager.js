@@ -86,13 +86,14 @@ function Dialog(object, create) {
         if (titleElement) this._title = titleElement.innerText;
     }
     this._id = object.id || this.id || this.title;
+    /** @type {HTMLButtonElement[]} */
     this.buttons = [];
     this.originalBody = this.body;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
             start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
             reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-            update: function(x, y){
+            update: function(/** @type {number}*/x, /** @type {number}*/y){
                 this.last = Date.now();
                 this.position.x = x, this.position.y = y;
                 this.positions.push(this.position.clone());
@@ -115,7 +116,6 @@ function Dialog(object, create) {
  */
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
-    /*const*/var dialog = this;
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
@@ -126,7 +126,7 @@ Dialog.prototype.initWithObject = function (object) {
         // this.closeable = true;
         this.target = createDialog();
         if (object.classes && typeof object.classes === 'object'){
-            object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
+            object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
         // this.frame = object.src;
         // this.title = object.title;
@@ -145,23 +145,23 @@ Dialog.prototype.initWithObject = function (object) {
     this.minWidth = 100;
     this.minHeight = 200;
     
-    this.buttons = [];
+    // this.buttons = [];
     this.originalBody = this.body;
-    this.clickOffset = {
-        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-            start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
-            reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-            update: function(x, y){
-                this.last = Date.now();
-                this.position.x = x, this.position.y = y;
-                this.positions.push(this.position.clone());
-                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-                this;return this; }
-        },
-        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
-    };
+    // this.clickOffset = {
+    //     x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
+    //         start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
+    //         reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+    //         update: function(x, y){
+    //             this.last = Date.now();
+    //             this.position.x = x, this.position.y = y;
+    //             this.positions.push(this.position.clone());
+    //             this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
+    //             this;return this; }
+    //     },
+    //     clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
+    // };
 
-    if(!this.scroll) this.body.style.overflow = "hidden";
+    if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
     document.getElementById("applist").appendChild(this.createOpenButton());
@@ -175,13 +175,14 @@ Dialog.prototype.initWithObject = function (object) {
 
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
+    var self = this;
     this.exchangeDialogMoveEvent = function (difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if (difference) this.messageFrame("windowMove", dialog.clickOffset.stats.update(difference.x, difference.y));
+        if (difference) this.messageFrame("windowMove", self.clickOffset.stats.update(difference.x, difference.y));
     };
 
-    if (object.body) this.body.appendChild(object.body);
+    // if (object.body) this.body.appendChild(object.body);
 
-    /*const*/var target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    var target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
         for (/*let*/var index = 0; index < 8; index++) {
@@ -280,7 +281,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
     set: function(url) { if (this.body) this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
-    get: function() { return  this.content ? this.content.children[1] : null; },
+    get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
 });
 Object.defineProperty(Dialog.prototype, "head", {
     get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
@@ -414,7 +415,7 @@ Dialog.prototype.activate = function () {
     return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this);
 
 }
-Dialog.prototype.getTitleElement = function () { return this.head.querySelector("h1"); }
+Dialog.prototype.getTitleElement = function () { return this.head && this.head.querySelector("h1"); }
 Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
 Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
 Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
@@ -464,19 +465,21 @@ Dialog.prototype.move = function (x, y) {
     }
 
     if (this.mica && useTransform) {
-        /** @type {HTMLElement} */
         var backdrop = this.target.getElementsByClassName("mica")[0];
-        var wallpaper = document.getElementById("wallpaper").children[0];
+        var wallpaperP = document.getElementById("wallpaper");
+        if (!wallpaperP) return;
+        var wallpaper = wallpaperP.children[0];
+        if (!(backdrop instanceof HTMLElement) || !wallpaper) return;
         translateElement(backdrop, -this._x, -this._y);
         
         backdrop.style.width = toPixels(wallpaper.clientWidth);
         backdrop.style.height = toPixels(wallpaper.clientHeight);
     }
 }
-// /**
-//  * @param {number} width 
-//  * @param {number} height 
-//  */
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
 Dialog.prototype.resize = function (width, height) { this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
 Dialog.prototype.openUrl = function (url) {
@@ -790,11 +793,12 @@ function stringifyDialogProperties(properties){
 }
 
 /**
- * @param {HTMLElement} target 
- * @returns HTMLElement
+ * @param {HTMLElement?} target 
  */
 function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
-    return target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];//&&&&&&&&&&&&&;
+    if (!target) return null;
+    var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
+    return body instanceof HTMLElement ? body : null;
 }
 
 function getViewboxPosition(){
