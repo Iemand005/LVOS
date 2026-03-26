@@ -516,7 +516,7 @@ function getWallpaper() {
 
 Dialog.prototype.injectMica = function () {
     try {
-        if (this.micaElement) return;
+        if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
         var image = wallpaper.children[0].cloneNode(true);
@@ -573,9 +573,9 @@ function DocumentCrawler(document){
 }
 
 DocumentCrawler.prototype = {
-    getMetro: function(){ return this.document.getElementById("metrobody") },
-    getDesktop: function(){ return this.document.getElementById("desktop") },
-    getMetroBody: function(){ return this.getMetro().firstChild },
+    getMetro: function(){ return this.document.getElementById("metrobody"); },
+    getDesktop: function(){ return this.document.getElementById("desktop"); },
+    getMetroBody: function(){ var metro = this.getMetro(); return metro && metro.firstChild; },
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getDialogsContainer: function(){ return this.document.getElementById("windows") },
     get overlay(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
@@ -594,6 +594,7 @@ var windowButtons = {
     full: 1,
     close: 2
 };
+/** @type {Dialog?} */
 var activeDialog = null;
 var resizeDirection = 0;
 var topZ = 100;
