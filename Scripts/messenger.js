@@ -44,33 +44,24 @@ LVMessenger.broadcast = function (target, type, message, id){
 }
 
 /**
- * @param {MessageType} type 
- * @param {*} message 
- * @param {HTMLIFrameElement} iFrame 
- */
-LVMessenger.prototype.broadcastToChild = function (type, message, iFrame) {
-    if (!iFrame.contentWindow) return;
-    LVMessenger.broadcast(iFrame.contentWindow, type, message);
-};
-
-/**
  * @param {(type:MessageType,data:*,id:string?)=>void} callback
  * @param {MessageType} [destroyWhenType]
  */
 LVMessenger.receive = function (callback, destroyWhenType) {
     /** @type {(this: Window, ev: MessageEvent<any>) => any} */
-    /*const*/var messageListener = function (ev) {
+    var messageListener = function (ev) {
         try {
-            /** @type {Message} */
-            /*const*/var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
+            /** @type {LVMessage} */
+            var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
             
             if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id); break;
                 case "identify":
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
-                    /*const*/var identity = { name: "LVOS" };
-                    LVMessenger.broadcast(ev.source, LVMessenger.types.identity,  identity);
+                    var identity = { name: "LVOS" };
+                    if (ev.source instanceof Window)
+                        LVMessenger.broadcast(ev.source, LVMessenger.types.identity,  identity);
                     break;
             }
             // else console.warn("Missing data property", data);
@@ -78,9 +69,6 @@ LVMessenger.receive = function (callback, destroyWhenType) {
         } catch (ex) {
             console.warn("Error decoding data", ev.data, ex);
         }
-
-
-        // if (destroy) 
     };
 
     window.addEventListener("message", messageListener);
@@ -89,13 +77,22 @@ LVMessenger.receive = function (callback, destroyWhenType) {
 };
 
 
-
+/**
+ * @param {MessageType} type 
+ * @param {LVMessage} [message]
+ * @param {*} [id]
+ */
 LVMessenger.broadcastToParent = function (type, message, id) {
-    LVMessenger.broadcast(window.top, type, message, id);
+    if (window.top) LVMessenger.broadcast(window.top, type, message, id);
 };
 
-LVMessenger.broadcastToChild = LVMessenger.broadcastChild = function (type, message, iFrame) {
-    LVMessenger.broadcast(iFrame.contentWindow, type, message);
+/**
+ * @param {MessageType} type 
+ * @param {LVMessage} message 
+ * @param {HTMLIFrameElement} iFrame 
+ */
+LVMessenger.broadcastToChild = function (type, message, iFrame) {
+    if (iFrame.contentWindow) LVMessenger.broadcast(iFrame.contentWindow, type, message);
 };
 
 /** @param {()=>void} callback */
