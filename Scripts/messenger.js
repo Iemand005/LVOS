@@ -1,4 +1,4 @@
-  // iFrame <-> mainFrame Messenger
+  // iFrame <-> mainFrame LVMessenger
  // Lasse Lauwerys (c) 2026
 // 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS -> patch 01/02/2026, don't parse if not a string, did other stuff ya kno -> patch 08/03/2026, remove duplicate function
 
@@ -6,10 +6,10 @@
 'use esnext';
 'use moz';
 
-function Messenger(){
+function LVMessenger(){
 }
 
-Messenger.types = {
+LVMessenger.types = {
     open: "open",
     windowSize: "windowSize",
     launchOverlay: "launchOverlay",
@@ -19,7 +19,7 @@ Messenger.types = {
     identity: "identity"
 };
 
-/** @typedef {keyof typeof Messenger.types} MessageType */
+/** @typedef {keyof typeof LVMessenger.types} MessageType */
 
 /**
  * @typedef Identity
@@ -27,19 +27,19 @@ Messenger.types = {
  */
 
 /**
- * @typedef Message
+ * @typedef LVMessage
  * @prop {MessageType} type
  * @prop {*} data
  * @prop {string} id
  */
 
 /**
- * @param {HTMLIFrameElement} target 
+ * @param {Window} target 
  * @param {MessageType} type 
  * @param {*} message 
- * @param {*} id 
+ * @param {*} [id] 
  */
-Messenger.broadcast = function (target, type, message, id){
+LVMessenger.broadcast = function (target, type, message, id){
     if(target) target.postMessage(JSON.stringify({type: type, data: message, id: id}), '*');
 }
 
@@ -48,15 +48,16 @@ Messenger.broadcast = function (target, type, message, id){
  * @param {*} message 
  * @param {HTMLIFrameElement} iFrame 
  */
-Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
-    Messenger.broadcast(iFrame.contentWindow, type, message);
+LVMessenger.prototype.broadcastToChild = function (type, message, iFrame) {
+    if (!iFrame.contentWindow) return;
+    LVMessenger.broadcast(iFrame.contentWindow, type, message);
 };
 
 /**
  * @param {(type:MessageType,data:*,id:string?)=>void} callback
- * @param {MessageType?} destroyWhenType
+ * @param {MessageType} [destroyWhenType]
  */
-Messenger.receive = function (callback, destroyWhenType) {
+LVMessenger.receive = function (callback, destroyWhenType) {
     /** @type {(this: Window, ev: MessageEvent<any>) => any} */
     /*const*/var messageListener = function (ev) {
         try {
@@ -69,7 +70,7 @@ Messenger.receive = function (callback, destroyWhenType) {
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
                     /*const*/var identity = { name: "LVOS" };
-                    Messenger.broadcast(ev.source, Messenger.types.identity,  identity);
+                    LVMessenger.broadcast(ev.source, LVMessenger.types.identity,  identity);
                     break;
             }
             // else console.warn("Missing data property", data);
@@ -89,18 +90,18 @@ Messenger.receive = function (callback, destroyWhenType) {
 
 
 
-Messenger.broadcastToParent = function (type, message, id) {
-    Messenger.broadcast(window.top, type, message, id);
+LVMessenger.broadcastToParent = function (type, message, id) {
+    LVMessenger.broadcast(window.top, type, message, id);
 };
 
-Messenger.broadcastToChild = Messenger.broadcastChild = function (type, message, iFrame) {
-    Messenger.broadcast(iFrame.contentWindow, type, message);
+LVMessenger.broadcastToChild = LVMessenger.broadcastChild = function (type, message, iFrame) {
+    LVMessenger.broadcast(iFrame.contentWindow, type, message);
 };
 
 /** @param {()=>void} callback */
-Messenger.onHostBeingLVOS = function (callback) {
-    Messenger.receive(function(type, data) {
+LVMessenger.onHostBeingLVOS = function (callback) {
+    LVMessenger.receive(function(type, data) {
         if (type === "identity" && data.name == "LVOS") callback();
     }, "identity");
-    Messenger.broadcastToParent(Messenger.types.identify);
+    LVMessenger.broadcastToParent(LVMessenger.types.identify);
 }

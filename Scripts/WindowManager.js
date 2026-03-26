@@ -423,7 +423,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function () {
     this.focus();
-    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(Messenger.types.open), activeDialog = this.id, swapMetroBody(this);
+    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialog = this.id, swapMetroBody(this);
 
 }
 Dialog.prototype.getTitleElement = function () { return this.head && this.head.querySelector("h1"); }
@@ -458,7 +458,7 @@ Dialog.prototype.toggleFullScreen = function (enable) { this.target.toggleAttrib
 Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windowButtons.close, enable); };
 Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); };
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
-Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); };
+Dialog.prototype.messageFrame = function (type, message) { LVMessenger.broadcastToChild(type, message, this.frame); };
 /**
  * @param {number} x 
  * @param {number} y 
@@ -625,14 +625,14 @@ var loaded = false;
  * @param {string} source 
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-    var types = Messenger.types;
+    var types = LVMessenger.types;
     if (source) {
         if (type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
                 if (!bodyCrawler.overlay) break;
                 bodyCrawler.overlay.ontransitionend = function () {
-                    windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
+                    windows[source].messageFrame(LVMessenger.types.prepareToLaunchOverlay);
                     var oriurl = new URL(windows[source].frame.src);
                     oriurl.searchParams.set("fullscreen", String(true));
                     windows[source].frame.src = oriurl.href;
@@ -687,7 +687,7 @@ function flipHandler(enabled){
     return flipped = enabled;
 }
 
-Messenger.receive(messageReceived);
+LVMessenger.receive(messageReceived);
 
 var toggleOverlay = bodyCrawler.overlay ? bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open") : function() { console.warn("Overlay wasn't found on initialization."); }; // The force attribute gets automatically forwarded!
 

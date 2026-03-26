@@ -34,7 +34,7 @@ function localFullscreen() {
 
 fullscreen.onclick = function(){
     localFullscreen();
-    Messenger.broadcastToParent(Messenger.types.launchOverlay, "", "music");
+    LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
 }
 
 /*let*/var audioVisualiser;

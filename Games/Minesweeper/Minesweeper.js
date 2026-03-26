@@ -174,14 +174,14 @@ Minesweeper.prototype.startGame = function () {
 function sendDesiredSize(){
     try {
         var form = document.querySelector("form");
-        Messenger.broadcastToParent(Messenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
+        LVMessenger.broadcastToParent(LVMessenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
     } catch(ex) {
         console.log("Failed to post desired size", ex);
     }
 }
 
 try {
-    Messenger.onHostBeingLVOS(function () {
+    LVMessenger.onHostBeingLVOS(function () {
         console.log("My host is LVOS!!");
     });
 } catch(ex) {}
