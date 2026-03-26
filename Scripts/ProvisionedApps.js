@@ -12,12 +12,17 @@ var dockapplist = document.getElementById("dockapplist");
 if (windows.browser) {
 var browser = windows.browser.target;//document.getElementById("browser");
 var browserform = windows.browser.originalBody;//document.getElementById("browserform");
+
+if (browser && browserform) {
 var browserframe = browser.getElementsByTagName("iframe")[0];
 
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
-    /*let*/var url = event.target.address.value;
-    /*let*/var xhr = new XMLHttpRequest();
+    // if (!event.target && !(event instanceof HTMLFormControlsCollection)) return;
+    /** @ignore */
+    // @ts-ignore
+    var url = event.target.address.value;
+    var xhr = new XMLHttpRequest();
     try{
         console.log("The browser is navigating to '" + url + "'");
         if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
@@ -41,7 +46,8 @@ browserform.addEventListener("submit", function(event){
             }
         }
 
-        if (!(e instanceof Error)) return console.log(e);
+        // if (!(e instanceof Error)) return console.log(e);
+        if (!(e instanceof WebTransportError)) return console.log(e);
 
         console.error(e.code);
         url = new URL("./Applications/Error/error.html", window.location.href);
@@ -57,6 +63,7 @@ browserform.addEventListener("submit", function(event){
         }
     }
 });
+}
 }
 
 // Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
@@ -210,7 +217,8 @@ try {
         dockapplist.appendChild(windows.music.createOpenButton());
     }
 } catch(ex) {
-    console.warn(ex.message);
+    if (ex instanceof Error)
+        console.warn(ex.message);
 }
 
 

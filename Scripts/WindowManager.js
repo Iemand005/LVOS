@@ -74,18 +74,20 @@ function Dialog(object, create) {
 
     /** @type {HTMLElement?} */
     this.target = null;
-
+    var id = "";
     if (!(object instanceof HTMLElement)) {
         /** @type {Application?} */
         this.application = object;
+        id = object.id || object.title;
     }
     
     if (object.title) this._title = object.title;
     else {
         var titleElement = this.getTitleElement();
         if (titleElement) this._title = titleElement.innerText;
+        id = this.id || this.title || "";
     }
-    this._id = object.id || this.id || this.title;
+    this._id = id;
     /** @type {HTMLButtonElement[]} */
     this.buttons = [];
     this.originalBody = this.body;
@@ -140,7 +142,7 @@ Dialog.prototype.initWithObject = function (object) {
     }
 
     
-    this._title = object.title || this.getTitleElement().innerText;
+    // this._title = object.title || this.getTitleElement().innerText;
     this._id = object.id || this.title || "";
     this.minWidth = 100;
     this.minHeight = 200;
@@ -202,9 +204,9 @@ Dialog.prototype.initWithObject = function (object) {
     if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, this) });
     else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, this) });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
-        /*const*/var rect = target.getClientRects()[0];
-        /*const*/var viewboxPosition = getViewboxPosition();
-        /*const*/var propeties = {
+        var rect = target.getClientRects()[0];
+        var viewboxPosition = getViewboxPosition();
+        var propeties = {
             scrollbars: true,
             resizable: true,
             status: false,
@@ -217,20 +219,20 @@ Dialog.prototype.initWithObject = function (object) {
             top: rect.top + viewboxPosition.top
         }
 
-        this._popupWindow = window.open(dialog.href, dialog.title, stringifyDialogProperties(propeties));
-        dialog.quit();
+        this._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
+        self.quit();
     });
 
-    /*const*/var buttons = target.getElementsByTagName("button");
+    var buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function () {
-        dialog.close();
-    }.bind(dialog));
-    buttons[windowButtons.full].addEventListener("click", function(){dialog.toggleFullScreen()});
+        self.close();
+    }.bind(self));
+    buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
     this.close();
 
     this.synchronise();
 
-    windows[this.id] = this;
+    if (this.id) windows[this.id] = this;
 }
 
 /**

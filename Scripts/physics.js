@@ -2,20 +2,33 @@
 // Lasse Lauwerys © 2023
 // 30/12/2023
 
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
 function Vector(x, y){
     this.x = x || 0;
     this.y = y || 0;
 }
 
 Vector.prototype = {
+    /** @param {Vector} vector */
     add: function (vector) { return this.x += vector.x, this.y += vector.y, this; },
+    /** @param {Vector} vector */
     sub: function (vector) { return this.x -= vector.x, this.y -= vector.y, this; },
+    /** @param {Vector} vector */
     mul: function (vector) { return this.x *= vector.x, this.y *= vector.y, this; },
+    /** @param {Vector} vector */
     div: function (vector) { return this.x /= vector.x, this.y /= vector.y, this; },
+    /** @param {Vector} vector */
     sum: function (vector) { return new Vector(this.x + vector.x, this.y + vector.y); },
+    /** @param {Vector} vector */
     difference: function (vector) { return new Vector(this.x - vector.x, this.y - vector.y); },
+    /** @param {Vector} vector */
     product: function (vector) { return new Vector(this.x * vector.x, this.y * vector.y); },
+    /** @param {Vector} vector */
     quotient: function (vector) { return new Vector(this.x / vector.x, this.y / vector.y); },
+    /** @param {Vector} vector */
     set: function (vector) { return this.x = vector.x, this.y = vector.y, this; },
     clone: function () { return new Vector(this.x, this.y); }
 };
@@ -40,6 +53,7 @@ function Vector3D(x, y, z) {
     }
 }
 
+/** @param {number} amount */
 Vector3D.prototype.div = function (amount) {
     this.x /= amount, this.y /= amount, this.z /= amount;
     return this;
@@ -49,13 +63,20 @@ Vector3D.prototype.normalize = function () {
     return this.div(this.x + this.y + this.z);
 }
 
+/**
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} width 
+ * @param {number} height 
+ */
 function Rectangle(x, y, width, height) {
-    this.pos = this.position = new Vector(x, y);
+    this.position = new Vector(x, y);
     this.width = width;
     this.height = height;
 }
 
 Rectangle.prototype = {
+    /** @param {Vector} vector */
     contains: function (vector) {
         return vector.x >= this.position.x && vector.y >= this.position.y && vector.x < this.position.x + this.width && vector.y < this.position.y + this.height;
     },
