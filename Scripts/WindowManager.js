@@ -454,7 +454,7 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.top = toPixels(this._y);
     }
 
-    if (this.mica) {
+    if (this.mica && useTransform) {
         /** @type {HTMLElement} */
         var backdrop = this.target.getElementsByClassName("mica")[0];
         var wallpaper = document.getElementById("wallpaper").children[0];
@@ -502,6 +502,7 @@ Dialog.prototype.injectMica = function () {
     try {
         if (this.micaElement) return;
         var wallpaper = document.getElementById("wallpaper");
+        if (!wallpaper) return;
         var image = wallpaper.children[0].cloneNode(true);
         if (image instanceof HTMLImageElement) {
             var blurredUrl = image.getAttribute("blurred-src");
@@ -522,7 +523,7 @@ Dialog.prototype.injectMica = function () {
  * @typedef {{x: number, y: number}} Vector
  */
 /**
- * @typedef {(dialog: Dialog, offset: DOMRect, difference)=>void} DragFunction
+ * @typedef {(dialog: Dialog, offset: DOMRect, difference: Vector)=>void} DragFunction
  */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
@@ -531,7 +532,7 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
     this.execute = function(){};
     /** @type {DragFunction[]} */
     this.resizeFunctions = [
-        function(dialog, offset, difference){ dialog.move(offset.left + difference.x, offset.top + difference.y) }, // Move
+        function(dialog, offset, difference){ dialog.move(offset.left + difference.x, offset.top + difference.y); console.log("Moving") }, // Move
         function(dialog, offset, difference){ dialog.top = offset.top + difference.y }, // Top
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
@@ -543,10 +544,14 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
     ];
 }
 
-DragAction.prototype = {
-    set: function(direction) { this.execute = this.resizeFunctions[direction || 0] || new Function }
-}
+/**
+ * @param {number} direction 
+ */
+DragAction.prototype.set = function(direction) { this.execute = this.resizeFunctions[direction || 0] || new Function };
 
+/**
+ * @param {HTMLDocument} document 
+ */
 function DocumentCrawler(document){
     this.document = document;
 }
