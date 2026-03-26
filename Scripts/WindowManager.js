@@ -74,19 +74,21 @@ function Dialog(object, create) {
 
     /** @type {HTMLElement?} */
     this.target = null;
-    var id = "";
-    if (!(object instanceof HTMLElement)) {
-        /** @type {Application?} */
+    var id = object.id;
+
+    /** @type {Application?} */
+    this.application = null;
+    if (!(object instanceof HTMLElement))
         this.application = object;
-        id = object.id || object.title;
-    }
-    
+
+    if (!id) id = object.title;
     if (object.title) this._title = object.title;
     else {
         var titleElement = this.getTitleElement();
         if (titleElement) this._title = titleElement.innerText;
-        id = this.id || this.title || "";
+        if (!id) id = this.id || this.title || "";
     }
+    
     this._id = id;
     /** @type {HTMLButtonElement[]} */
     this.buttons = [];
@@ -995,22 +997,15 @@ function getDialogTemplate(){
     return (content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
 
-// Class to build dialogs that can be passed to the Dialog insertion API. Not finished, window construction objects have to be designed and built by hand for now!
-function DialogBuilder(title, id){
-    this.title = title;
-    this.id = id;
-    this.target;
-    this.createDialog = function () { return this.target = bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true))); };
-}
-
 function createDialog(){
     return bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
 }
 
+/** @param {HTMLElement} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function (child) {
         if (child.nodeName=="#comment") element.removeChild(child);
-        else removeComments(child);
+        else if (child instanceof HTMLElement) removeComments(child);
     });
     return element;
 }
@@ -1019,51 +1014,63 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @param {boolean} force 
  */
 function toggleCharms(force){
-    return document.getElementById("charms").classList.toggle("open", force);
+    var charms = document.getElementById("charms");
+    return charms && charms.classList.toggle("open", force);
 }
 
 function isCharmsOpen() {
-    return document.getElementById("charms").classList.contains("open");
+    var charms = document.getElementById("charms");
+    return charms && charms.classList.contains("open");
 }
 
+/** @param {Application} application */
 function injectApplication(application){
     loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     loadDialogState();
 }
 
+/** @param {Application} app  */
 function loadApp(app) {
     windows[demo.id] = new Dialog(app);
 }
 
+/** @param {Application[]} applications  */
 function injectApplications(applications){
     applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
     loadDialogState();
 }
 
+/** @param {string} appId  */
 function closeApp(appId) {
     var element = windows[appId].target;
-    element.parentElement.removeChild(element);
+    if (element && element.parentElement)
+        element.parentElement.removeChild(element);
 }
 
 function enableMica() {
     var wallpaper = getWallpaper();
     window.addEventListener("resize", function(ev) {
         for (var id in windows) {
-            if (!(Object.hasOwn(windows, id) && window[id])) continue;
+            if (!(windows.hasOwnProperty(id))) continue;
             var dialog = windows[id];
-            dialog.resize(dialog.width, dialog.height);
+            if (dialog) dialog.resize(dialog.width, dialog.height);
         }
     });
 }
 
+/**
+ * @param {string} url 
+ * @param {string} blurredUrl 
+ */
 function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
     image.src = url;
     if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
     var wallpaper = getWallpaper();
+    if (!wallpaper) return;
     Array.from(wallpaper.children).forEach(function(wallpaperChild) {
-        wallpaper.removeChild(wallpaperChild);
+        if (wallpaper) wallpaper.removeChild(wallpaperChild);
     });
     wallpaper.appendChild(image);
 }
@@ -1075,12 +1082,10 @@ toggleReflections(reflections);
 
 applyWallpaperImage("file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg", "file:///C:/Users/Lasse/Downloads/fox-blur.jpg");
 
-// var window = getDesktop();
 var wallpaper = getWallpaper();
-
-wallpaper.ondragover = function(ev) { e.preventDefault(); console.log ("okdi")}
-wallpaper.ondrop = function(e) {
-    e.preventDefault();
+if (wallpaper) {
+    wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")}
+    wallpaper.ondrop = function(ev) { ev.preventDefault(); }
 }
 
 window.addEventListener("dragover", function(e) {
@@ -1089,6 +1094,7 @@ window.addEventListener("dragover", function(e) {
 
 window.addEventListener("drop", function(e) {
   e.preventDefault();
+  if (!e.dataTransfer) return;
   var files = e.dataTransfer.files;
   if (files.length > 0) {
      console.log("File dropped anywhere in window:", files[0].name);
