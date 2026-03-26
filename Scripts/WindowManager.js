@@ -524,9 +524,9 @@ Dialog.prototype.resizeBody = function(width, height) { if (this.body) this.body
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
-    var frameUrl = new URL(this.frame.src);
-    frameUrl.searchParams.set("url", url);
-    this.frame.src = frameUrl.href;
+    // var frameUrl = new URL(this.frame.src);
+    // frameUrl.searchParams.set("url", url);
+    this.frame.src = url;
     this.launch();
 };
 
