@@ -212,7 +212,7 @@ Dialog.prototype.initWithObject = function (object) {
         }
     }
 
-    body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
+    body.addEventListener("load", function (event) { try { self.verifyEjectCapability(); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
     if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
     else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, this) });
@@ -232,7 +232,7 @@ Dialog.prototype.initWithObject = function (object) {
             top: rect.top + viewboxPosition.top
         }
 
-        this._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
+        if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
         self.quit();
     });
 
@@ -459,9 +459,9 @@ Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
-Dialog.prototype.verifyEjectCapability = function() {return !!(this.href); };
+Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
-    if (!this.application) return false;
+    if (!this.application) return null;
     return this.application.src;
 }});
 /** @param {boolean} enable */
@@ -474,13 +474,25 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     return events;
     // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
-Dialog.prototype.toggleButton = function(buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); };
-Dialog.prototype.clearClickOffset = function() { this.clickOffset.clear(); };
-Dialog.prototype.toggleFullScreen = function(enable) { this.target.toggleAttribute("full", enable); };
+/**
+ * @param {number} buttonId 
+ * @param {boolean} enable 
+ */
+Dialog.prototype.toggleButton = function(buttonId, enable) { var button = this.getButton(buttonId); return button && button.toggleAttribute("disabled", !enable); };
+Dialog.prototype.clearClickOffset = function() { this.clickOffset && this.clickOffset.clear(); };
+/** @param {boolean} enable */
+Dialog.prototype.toggleFullScreen = function(enable) { if (this.target) this.target.toggleAttribute("full", enable); };
+/** @param {boolean} enable */
 Dialog.prototype.toggleCloseButton = function(enable) { this.toggleButton(windowButtons.close, enable); };
+/** @param {boolean} enable */
 Dialog.prototype.toggleEjectButton = function(enable) { this.toggleButton(windowButtons.eject, enable); };
+/** @param {boolean} enable */
 Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowButtons.full, enable); };
-Dialog.prototype.messageFrame = function(type, message) { LVMessenger.broadcastToChild(type, message, this.frame); };
+/**
+ * @param {MessageType} type 
+ * @param {*} message 
+ */
+Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMessenger.broadcastToChild(type, message, this.frame); };
 /**
  * @param {number} x 
  * @param {number} y 
