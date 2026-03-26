@@ -1,9 +1,5 @@
-interface Dialog {
+class Dialog {
   resize(width: number, height: number): void;
 }
 
-interface DialogConstructor {
-    new (): Dialog;
-}
-
-export declare const Dialog: DialogConstructor;
+export = Dialog;
