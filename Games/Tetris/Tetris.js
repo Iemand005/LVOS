@@ -243,6 +243,7 @@ Tetromino.prototype.canMoveTo = function(newX, newY, restore) {
 
   return ok;
 };
+
 /**
  * @param {number} x 
  * @param {number} y 
