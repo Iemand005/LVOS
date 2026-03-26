@@ -300,7 +300,8 @@ Object.defineProperty(Dialog.prototype, "src", {
     get: function() { return this._src; },
     set: function(url) {
         var frame = this.frame;
-        if (frame) frame.src = url; }
+        if (frame) frame.src = url;
+    }
 });
 Object.defineProperty(Dialog.prototype, "body", {
     get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
