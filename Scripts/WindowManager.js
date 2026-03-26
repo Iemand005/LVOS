@@ -448,11 +448,14 @@ Dialog.prototype.activate = function () {
 
 }
 Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
-Dialog.prototype.toggleTitlebar = function(force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
+/** @param {boolean} force */
+Dialog.prototype.toggleTitlebar = function(force) { return this.head && !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
 Dialog.prototype.open = function() { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
 Dialog.prototype.close = function() { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
-Dialog.prototype.getInnerRect = function() { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-Dialog.prototype.getRect = function(index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
+Dialog.prototype.getInnerRect = function() { if (this.target) return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+/** @param {number} index */
+Dialog.prototype.getRect = function(index) { if (this.target) return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
+/** @param {number} index */
 Dialog.prototype.getButton = function(index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 Dialog.prototype.setClickOffset = function(x, y) {
