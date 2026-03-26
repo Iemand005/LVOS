@@ -472,10 +472,10 @@ Dialog.prototype.move = function (x, y) {
         backdrop.style.height = toPixels(wallpaper.clientHeight);
     }
 }
-/**
- * @param {number} width 
- * @param {number} height 
- */
+// /**
+//  * @param {number} width 
+//  * @param {number} height 
+//  */
 Dialog.prototype.resize = function (width, height) { this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
 Dialog.prototype.openUrl = function (url) {

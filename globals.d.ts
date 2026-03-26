@@ -16,6 +16,6 @@ interface Application {
   classes?: string[]
 }
 
-interface Dialog {
-  resize(width: number, height: number);
+declare class Dialog {
+  resize(width: number, height: number): void;
 }
