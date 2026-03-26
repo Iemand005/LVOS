@@ -173,7 +173,10 @@ Dialog.prototype.initWithObject = function (object) {
     this.toggleFullButton(true);
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.synchronise = synchroniseDialogState.bind(this);
+    // this.synchronise = synchroniseDialogState.bind(this);
+    this.synchronise = function(dialog) {
+
+    }
 
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
@@ -956,11 +959,11 @@ function loadDialogState(){
     console.log("Loading window state.")
     if (canSave) try {
         if (localStorage && localStorage.windowState){
-            /*const*/var parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
-            for (/*let*/var window in parsedDialogs) try {
+            var parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
+            for (var window in parsedDialogs) try {
                 if (windows[window] && parsedDialogs[window]) collectEssentialDialogData(windows[window], parsedDialogs[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
             } catch (ex) { fails.push(ex); }
-            fails.forEach(console.error.bind(this, "Tailed to load a window!"));
+            fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
             updateTopZ();
         }
     } catch (exception) {
@@ -974,22 +977,22 @@ function loadDialogState(){
 function exportDialogBodyToMetro(dialog){
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
     if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
-        /*const*/var metro = bodyCrawler.getMetro();
+        var metro = bodyCrawler.getMetro();
         if (metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
     }
 }
 
-/**
- * @param {Dialog} dialog 
- */
-function retrieveDialogBodyFromMetro(dialog){
-    /*const*/var metroBody = bodyCrawler.getMetroBody();
+Dialog.prototype.retrieveBodyFromMetro = function() {
+    var metroBody = bodyCrawler.getMetroBody();
     if (!metroBody) return;
-    if (dialog) dialog.content.appendChild(metroBody);
+    if (this.content) this.content.appendChild(metroBody);
 }
 
 function getDialogTemplate(){
-    return (document.querySelector("template").content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
+    var template = document.querySelector("template");
+    if (!template) return null;
+    var content = template.content;
+    return (content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
 
 // Class to build dialogs that can be passed to the Dialog insertion API. Not finished, window construction objects have to be designed and built by hand for now!
