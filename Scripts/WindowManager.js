@@ -43,6 +43,7 @@ function titlify(title) {
     return title.toLowerCase().split(" ").join("-");
 }
 
+// <reference path="./Dialog.d.ts" />
 /**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys

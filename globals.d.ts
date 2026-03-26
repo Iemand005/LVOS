@@ -15,7 +15,3 @@ interface Application {
   moveEvents?: boolean,
   classes?: string[]
 }
-
-declare class Dialog {
-  resize(width: number, height: number): void;
-}
