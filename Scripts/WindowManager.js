@@ -54,6 +54,7 @@ function Dialog(object, create) {
     
     this._x = 0;
     this._y = 0;
+    this._z = 0;
     this._width = 0;
     this._height = 0;
     this._isMinWidth = false;
@@ -62,7 +63,6 @@ function Dialog(object, create) {
     /** @type {Window?} */
     this._popupWindow = null;
     
-    this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
     this.mica = true;
@@ -298,6 +298,13 @@ Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) { if (typeof y !== "number") return;
         this.move(this._x, y);
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "z", {
+    get: function() { return this._z; },
+    set: function(z) { if (typeof z !== "number") return;
+        this._z = z;
     }
 });
     
@@ -601,7 +608,8 @@ var topZ = 100;
 var bodyCrawler = new DocumentCrawler(document);
 /** @type {string?} */
 var metroBodyOrigin;
-var timeout;
+
+var timeout = -1;
 var loaded = false;
 /*const*/var dragAction = new DragAction();
 // /*let*/var flipped = false;
@@ -624,9 +632,10 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                     var oriurl = new URL(windows[source].frame.src);
                     oriurl.searchParams.set("fullscreen", String(true));
                     windows[source].frame.src = oriurl.href;
+                    if (!bodyCrawler.overlay) return;
                     bodyCrawler.overlay.ontransitionend = null;
                     bodyCrawler.overlay.requestFullscreen();
-                    bodyCrawler.overlay.appendChild(windows[source].body);
+                    bodyCrawler.overlay.appendChild(windows[source].body.node);
                     window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 };
                 bodyCrawler.overlay.classList.toggle("open");
@@ -676,11 +685,13 @@ function flipHandler(enabled){
 
 Messenger.receive(messageReceived);
 
-var toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
+var toggleOverlay = bodyCrawler.overlay ? bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open") : function() { console.warn("Overlay wasn't found on initialization."); }; // The force attribute gets automatically forwarded!
 
 toggleOverlay(loadingOverlay);
 
-if (loadingOverlay) document.getElementById("desktop").ontransitionend = checkForFlip;
+var desktopElement = document.getElementById("desktop");
+
+if (loadingOverlay && desktopElement) desktopElement.ontransitionend = checkForFlip;
 function checkForFlip() {
 
     if (!loaded) {
@@ -870,18 +881,16 @@ function fromPixels(text){
     else return 0;
 }
 
-function synchroniseDialogState(window){
-    window = this || window;
-    if (window.x) window.x = window.x;
-    if (window.y) window.y = window.y;
-    if (window.z) window.target.style.zIndex = window.z;
-    if (window.width) window.width = window.width;
-    if (window.height) window.height = window.height;
-}
-
-// Onderdeel van de aller eerste window move event handler.
-function contains(array, number){
-    return Boolean(array.indexOf(number) + 1);
+/**
+ * @param {Dialog} dialog 
+ */
+function synchroniseDialogState(dialog){
+    dialog = this || dialog;
+    if (dialog.x) dialog.x = dialog.x;
+    if (dialog.y) dialog.y = dialog.y;
+    if (dialog.z) dialog.target.style.zIndex = dialog.z;
+    if (dialog.width) dialog.width = dialog.width;
+    if (dialog.height) dialog.height = dialog.height;
 }
 
 /**
@@ -893,16 +902,23 @@ function verifyEjectCapability(dialog){
     dialog.verifyEjectCapability();
 }
 
+/**
+ * @param {boolean} enabled 
+ */
 function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.toggleAttribute("blur");
     else document.body.toggleAttribute("blur", enabled);
     settings.set("blur", enabled);
 }
 
+
 function collectEssentialDialogData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
     return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
+/**
+ * @param {*} exception 
+ */
 function handleStorageException(exception){
     console.error(exception);
     console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
@@ -946,6 +962,9 @@ function loadDialogState(){
     } else console.error("Storage access is disabled for this session!");
 }
 
+/**
+ * @param {Dialog} dialog 
+ */
 function exportDialogBodyToMetro(dialog){
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
     if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
@@ -954,6 +973,9 @@ function exportDialogBodyToMetro(dialog){
     }
 }
 
+/**
+ * @param {Dialog} dialog 
+ */
 function retrieveDialogBodyFromMetro(dialog){
     /*const*/var metroBody = bodyCrawler.getMetroBody();
     if (!metroBody) return;
@@ -984,6 +1006,9 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     return element;
 }
 
+/**
+ * @param {boolean} force 
+ */
 function toggleCharms(force){
     return document.getElementById("charms").classList.toggle("open", force);
 }
