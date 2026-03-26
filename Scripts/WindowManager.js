@@ -141,7 +141,7 @@ Dialog.prototype.initWithObject = function (object) {
 
     
     this._title = object.title || this.getTitleElement().innerText;
-    this.id = object.id || this.id || this.title;
+    this._id = object.id || this.title || "";
     this.minWidth = 100;
     this.minHeight = 200;
     
@@ -361,7 +361,11 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { retur
 
 Object.defineProperty(Dialog.prototype, "title", {
     get: function() { return this._title; },
-    set: function(title) { this.getTitleElement().innerText = this._title = title; }
+    set: function(title) {
+        this._title = title;
+        var titleElement = this.getTitleElement();
+        if (titleElement) titleElement.innerHTML = title;
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "id", {
@@ -369,16 +373,15 @@ Object.defineProperty(Dialog.prototype, "id", {
     set: function(id) {
         this._id = id;
         windows[id] = this;
-        this.target.setAttribute("id", id);
+        if (this.target) this.target.setAttribute("id", id);
     }
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
         if (!this.target) return null;
-        /** @type {HTMLElement} */
-        /*const*/var content = this.target.getElementsByTagName("content")[0];
-        return content;
+        var content = this.target.getElementsByTagName("content")[0];
+        if (content instanceof HTMLElement) return content;
     }
 });
 
@@ -388,6 +391,7 @@ Object.defineProperty(Dialog.prototype, "closeable", {
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
     set: function (value) {
+        if (!this.content) return;
         this.content.style.padding = toPixels(value);
         this.content.style.border = toPixels(value);
         this.content.style.borderRadius = toPixels(value);
