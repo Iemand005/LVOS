@@ -44,10 +44,6 @@ function titlify(title) {
 }
 
 /**
- * @typedef {import('./ProvisionedApps.js').Application} Application
- */
-
-/**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
@@ -114,7 +110,7 @@ function Dialog(object, create) {
 }
 
 /**
- * @param {HTMLElement | Application} object 
+ * @param {HTMLElement | Application | null} object 
  */
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
@@ -280,7 +276,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    set: function(url) { this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
+    set: function(url) { if (this.body) this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
     get: function() { return  this.content ? this.content.children[1] : null; },
@@ -292,29 +288,23 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") {
-
-        this._x = max(x, 0);
-
-        this.move(this._x, this._y);
+        this.move(x, this._y);
      } }
 }); 
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) { if (typeof y !== "number") return;
-
-        this._y = max(y, 0);
-
-        this.move(this._x, this._y);
+        this.move(this._x, y);
     }
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
     get: function() { return this._width; },
     set: function(width) {
-        if (typeof width !== "number") return;
-            this.target.style.width = toPixels(this._width = max(width, this.minWidth));
-        
+        if (typeof width !== "number" || !this.target) return;
+
+        this.target.style.width = toPixels(this._width = max(width, this.minWidth));
         this._isMinWidth = this._width === this.minWidth;
     }
 });
@@ -461,7 +451,7 @@ Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastTo
  * @param {number} y 
  */
 Dialog.prototype.move = function (x, y) {
-    this._x = x, this._y = y;
+    this._x = max(x, 0), this._y = max(y, 0);
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
@@ -482,6 +472,10 @@ Dialog.prototype.move = function (x, y) {
         backdrop.style.height = toPixels(wallpaper.clientHeight);
     }
 }
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
 Dialog.prototype.resize = function (width, height) { this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
 Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
 Dialog.prototype.openUrl = function (url) {
@@ -493,7 +487,7 @@ Dialog.prototype.openUrl = function (url) {
 
 Dialog.prototype.quit = function () {
     if (this.closeable) {
-        this.target.parentElement.removeChild(this.target);
+        if (this.target && this.target.parentElement) this.target.parentElement.removeChild(this.target);
         this.target = null;
     }
     else this.close();
