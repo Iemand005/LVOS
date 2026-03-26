@@ -48,7 +48,7 @@ function titlify(title) {
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
- * @param {boolean?} create
+ * @param {boolean} [create]
  */
 function Dialog(object, create) {
     
