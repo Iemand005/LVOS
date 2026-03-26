@@ -206,7 +206,7 @@ Dialog.prototype.initWithObject = function (object) {
 
     body.addEventListener("load", function (event) { try { verifyEjectCapability(getEventDialog(event)); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
-    if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, this) });
+    if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
     else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, this) });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         var rect = target.getClientRects()[0];
