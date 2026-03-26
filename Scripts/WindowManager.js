@@ -295,7 +295,6 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || this.body && this.body.appendChild(document.createElement("iframe")); },
-    // set: function(url) { if (this.body) this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "src", {
     get: function() { return this._src; },
