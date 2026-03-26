@@ -312,23 +312,17 @@ Object.defineProperty(Dialog.prototype, "head", {
 
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
-    set: function(x) { if (typeof x == "number") {
-        this.move(x, this._y);
-     } }
+    set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
-    set: function(y) { if (typeof y !== "number") return;
-        this.move(this._x, y);
-    }
+    set: function(y) { if (typeof y == "number") this.move(this._x, y); }
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
     get: function() { return this._z; },
-    set: function(z) { if (typeof z !== "number") return;
-        this._z = z;
-    }
+    set: function(z) { if (typeof z == "number") this._z = z; }
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
