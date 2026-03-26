@@ -192,10 +192,10 @@ Dialog.prototype.initWithObject = function (object) {
     var target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
-        for (/*let*/var index = 0; index < 8; index++) {
-            /*const*/var div = document.createElement("div");
+        for (var index = 0; index < 8; index++) {
+            var div = document.createElement("div");
             div.draggable = false, div.id = index + 1;
-            /*const*/var pointerDown = function (ev) {
+            var pointerDown = function (ev) {
                 dragAction.set(ev.target.id);
             }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
             if (supportsPointer) div.onpointerdown = pointerDown;
