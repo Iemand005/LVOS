@@ -455,39 +455,40 @@ Dialog.prototype.activate = function () {
     return this.target.style.zIndex = this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialog = this.id, swapMetroBody(this);
 
 }
-Dialog.prototype.getTitleElement = function () { return this.head && this.head.querySelector("h1"); }
-Dialog.prototype.toggleTitlebar = function (force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
-Dialog.prototype.open = function () { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
-Dialog.prototype.close = function () { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
-Dialog.prototype.getInnerRect = function () { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-Dialog.prototype.getRect = function (index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
-Dialog.prototype.getButton = function (index) { return this.head && this.head.getElementsByTagName("button")[index]; }
-Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
-Dialog.prototype.setClickOffset = function (x, y) {
+Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
+Dialog.prototype.toggleTitlebar = function(force) { return !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
+Dialog.prototype.open = function() { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
+Dialog.prototype.close = function() { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
+Dialog.prototype.getInnerRect = function() { return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+Dialog.prototype.getRect = function(index) { return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
+Dialog.prototype.getButton = function(index) { return this.head && this.head.getElementsByTagName("button")[index]; }
+Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
+Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
-Dialog.prototype.verifyEjectCapability = function () {return !!(this.href); };
+Dialog.prototype.verifyEjectCapability = function() {return !!(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
     if (!this.application) return false;
     return this.application.src;
 }});
-Dialog.prototype.togglePointerEvents = function (enable) {
-    if (enable == null) enable = this.target.style.pointerEvents == "none";
+/** @param {boolean} enable */
+Dialog.prototype.togglePointerEvents = function(enable) {
+    if (enable == null && this.target) enable = this.target.style.pointerEvents == "none";
     var events = enable ? "auto" : "none";
     if (this.target) this.target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
-    if (this.frame || this.getFrame()) (this.frame || this.getFrame()).style.pointerEvents = events;
+    if (this.frame) this.frame.style.pointerEvents = events;
     return events;
     // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
-Dialog.prototype.toggleButton = function (buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); };
-Dialog.prototype.clearClickOffset = function () { this.clickOffset.clear(); };
-Dialog.prototype.toggleFullScreen = function (enable) { this.target.toggleAttribute("full", enable); };
-Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windowButtons.close, enable); };
-Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); };
-Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
-Dialog.prototype.messageFrame = function (type, message) { LVMessenger.broadcastToChild(type, message, this.frame); };
+Dialog.prototype.toggleButton = function(buttonId, enable) { return this.getButton(buttonId).toggleAttribute("disabled", !enable); };
+Dialog.prototype.clearClickOffset = function() { this.clickOffset.clear(); };
+Dialog.prototype.toggleFullScreen = function(enable) { this.target.toggleAttribute("full", enable); };
+Dialog.prototype.toggleCloseButton = function(enable) { this.toggleButton(windowButtons.close, enable); };
+Dialog.prototype.toggleEjectButton = function(enable) { this.toggleButton(windowButtons.eject, enable); };
+Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowButtons.full, enable); };
+Dialog.prototype.messageFrame = function(type, message) { LVMessenger.broadcastToChild(type, message, this.frame); };
 /**
  * @param {number} x 
  * @param {number} y 
