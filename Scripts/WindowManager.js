@@ -62,6 +62,9 @@ function Dialog(object, create) {
 
     /** @type {Window?} */
     this._popupWindow = null;
+
+    /** @type {string?} */
+    this._src = null;
     
     this.minWidth = 100;
     this.minHeight = 200;
@@ -110,8 +113,12 @@ function Dialog(object, create) {
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    document.getElementById("applist").appendChild(this.createOpenButton());
-    document.getElementById("metroapplist").appendChild(this.createOpenButton());
+    
+    var applist = document.getElementById("applist");
+    if (applist) applist.appendChild(this.createOpenButton());
+    
+    var metroapplist = document.getElementById("metroapplist");
+    if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 
@@ -132,8 +139,8 @@ Dialog.prototype.initWithObject = function (object) {
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
-        // this.frame = object.src;
-        // this.title = object.title;
+        this.src = object.src;
+        this.title = object.title;
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
@@ -284,8 +291,14 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
-    set: function(url) { if (this.body) this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
+    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || this.body && this.body.appendChild(document.createElement("iframe")); },
+    // set: function(url) { if (this.body) this.body.appendChild(document.createElement("iframe")), this.frame.src = url; }
+});
+Object.defineProperty(Dialog.prototype, "src", {
+    get: function() { return this._src; },
+    set: function(url) {
+        var frame = this.frame;
+        if (frame) frame.src = url; }
 });
 Object.defineProperty(Dialog.prototype, "body", {
     get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
@@ -498,12 +511,18 @@ Dialog.prototype.move = function (x, y) {
  * @param {number} width 
  * @param {number} height 
  */
-Dialog.prototype.resize = function (width, height) { this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
-Dialog.prototype.resizeBody = function (width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
-Dialog.prototype.openUrl = function (url) {
-    /*const*/var frameUrl = new URL(this.frame.src);
+Dialog.prototype.resize = function(width, height) { if (this.body) this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
+Dialog.prototype.resizeBody = function(width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
+/** @param {string} url */
+Dialog.prototype.openUrl = function(url) {
+    if (!this.frame) return;
+    var frameUrl = new URL(this.frame.src);
     frameUrl.searchParams.set("url", url);
-    this.frame.src = frameUrl.href;
+    if (this.frame) this.frame.src = frameUrl.href;
     this.launch();
 };
 
