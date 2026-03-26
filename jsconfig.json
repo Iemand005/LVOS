@@ -5,5 +5,5 @@
     "lib": ["ES5", "DOM"],
     "checkJs": true
   },
-  "include": ["types/**/*"]
+  // "include": ["types/**/*"]
 }
