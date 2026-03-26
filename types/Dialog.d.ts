@@ -2,7 +2,8 @@ interface Dialog {
   resize(width: number, height: number): void;
 }
 
-declare var Dialog: {
-    prototype: Dialog;
+interface DialogConstructor {
     new (): Dialog;
-};
+}
+
+export declare const Dialog: DialogConstructor;
