@@ -6,6 +6,9 @@
 'use esnext';
 'use moz';
 
+function Messenger(){
+}
+
 Messenger.types = {
     open: "open",
     windowSize: "windowSize",
@@ -30,9 +33,6 @@ Messenger.types = {
  * @prop {string} id
  */
 
-function Messenger(){
-}
-
 /**
  * @param {HTMLIFrameElement} target 
  * @param {MessageType} type 
@@ -54,7 +54,7 @@ Messenger.prototype.broadcastToChild = function (type, message, iFrame) {
 
 /**
  * @param {(type:MessageType,data:*,id:string?)=>void} callback
- * @param {MessageType} destroyWhenType
+ * @param {MessageType?} destroyWhenType
  */
 Messenger.receive = function (callback, destroyWhenType) {
     /** @type {(this: Window, ev: MessageEvent<any>) => any} */

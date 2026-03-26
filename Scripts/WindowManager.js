@@ -48,7 +48,7 @@ function titlify(title) {
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
- * @param {boolean} create
+ * @param {boolean?} create
  */
 function Dialog(object, create) {
     
@@ -594,28 +594,35 @@ var windowButtons = {
     full: 1,
     close: 2
 };
-/** @type {Dialog?} */
+/** @type {string?} */
 var activeDialog = null;
 var resizeDirection = 0;
 var topZ = 100;
 var bodyCrawler = new DocumentCrawler(document);
+/** @type {string?} */
 var metroBodyOrigin;
 var timeout;
 var loaded = false;
 /*const*/var dragAction = new DragAction();
 // /*let*/var flipped = false;
 
+/**
+ * 
+ * @param {MessageType} type 
+ * @param {any} data 
+ * @param {string} source 
+ */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-    //console.log(data, type, source)    
-    /*const*/var types = Messenger.types;
+    var types = Messenger.types;
     if (source) {
         if (type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
+                if (!bodyCrawler.overlay) break;
                 bodyCrawler.overlay.ontransitionend = function () {
                     windows[source].messageFrame(Messenger.types.prepareToLaunchOverlay);
-                    /*const*/var oriurl = new URL(windows[source].frame.src);
-                    oriurl.searchParams.set("fullscreen", true);
+                    var oriurl = new URL(windows[source].frame.src);
+                    oriurl.searchParams.set("fullscreen", String(true));
                     windows[source].frame.src = oriurl.href;
                     bodyCrawler.overlay.ontransitionend = null;
                     bodyCrawler.overlay.requestFullscreen();
@@ -625,8 +632,9 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                 bodyCrawler.overlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
-                    bodyCrawler.overlay.appendChild(windows[source].body);
-                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
+                if (!bodyCrawler.overlay) break;
+                bodyCrawler.overlay.appendChild(windows[source].body);
+                window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 break;
         }
         console.log("Received message " + type);
@@ -640,18 +648,26 @@ function swapMetroBody(){
 }
 
 function restoreMetroBody(){
-    retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
+    if (metroBodyOrigin) retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
 }
 
 function activeDialogToMetro(){
-    exportDialogBodyToMetro(windows[activeDialog]);
+    if (activeDialog) exportDialogBodyToMetro(windows[activeDialog]);
 }
 
+/**
+ * @param {boolean} enable 
+ */
 function flip(enable){
-    bodyCrawler.getDesktop().toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
-    flipHandler(bodyCrawler.getDesktop().classList.toggle("flipped", enable));
+    var desktop = bodyCrawler.getDesktop();
+    if (!desktop) return;
+    desktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(desktop.classList.toggle("flipped", enable));
 }
 
+/**
+ * @param {boolean} enabled 
+ */
 function flipHandler(enabled){
     toggleCharms(false);
     swapMetroBody();
@@ -660,7 +676,7 @@ function flipHandler(enabled){
 
 Messenger.receive(messageReceived);
 
-/*const*/var toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
+var toggleOverlay = bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open"); // The force attribute gets automatically forwarded!
 
 toggleOverlay(loadingOverlay);
 
@@ -699,8 +715,9 @@ function initializeDialogs() {
     // if (document.ontouchend) document.ontouchend = disableDialogDrag;
     
     dragAction.set(0);
-    /*const*/var dialogs = bodyCrawler.getAllDialogs();
-    dialogs.forEach(function (dialog) {
+    var dialogs = bodyCrawler.getAllDialogs();
+    Array.from(dialogs).forEach(function (dialog) {
+        if (!(dialog instanceof HTMLElement)) return;
         windows[dialog.id] = new Dialog(dialog); 
     });
     //flip();
@@ -776,7 +793,7 @@ function disableDialogDrag() {
     dragAction.set(0);
     for (/*let*/var index in windows) windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (windows[activeDialog])
+    if (activeDialog && windows[activeDialog])
         if (windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
 }
 
@@ -789,6 +806,9 @@ function updateTopZ() {
     for (/*let*/var window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
 }
 
+/**
+ * @param {*} properties 
+ */
 function stringifyDialogProperties(properties){
     return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
 }
@@ -808,7 +828,6 @@ function getViewboxPosition(){
 
 /**
  * @param {HTMLElement} object 
- * @returns HTMLElement
  */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object.classList) return console.log(object);
@@ -819,7 +838,6 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 
 /**
  * @param {Event} event 
- * @returns HTMLElement
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterDialogTracking && event.clientX && event.clientY) try {
@@ -831,7 +849,6 @@ function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij
 
 /**
  * @param {number} value 
- * @returns string
  */
 function toPixels(value) {
     return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
@@ -839,7 +856,6 @@ function toPixels(value) {
 
 /**
  * @param {number} pixels 
- * @returns number
  */
 function pixelsToCentimeters(pixels){
     return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
@@ -847,7 +863,6 @@ function pixelsToCentimeters(pixels){
 
 /**
  * @param {string} text 
- * @returns number
  */
 function fromPixels(text){
     if (text != null) try { return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
