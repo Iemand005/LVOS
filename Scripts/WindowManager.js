@@ -139,8 +139,9 @@ Dialog.prototype.initWithObject = function (object) {
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
-        this.src = object.src;
-        this.title = object.title;
+        // this.src = object.src;
+        this.openUrl(object.src);
+        this.setTitle(object.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
@@ -190,8 +191,9 @@ Dialog.prototype.initWithObject = function (object) {
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
     var self = this;
+    /** @param {Vector} difference */
     this.exchangeDialogMoveEvent = function (difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if (difference) this.messageFrame("windowMove", self.clickOffset.stats.update(difference.x, difference.y));
+        if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.stats.update(difference.x, difference.y));
     };
 
     // if (object.body) this.body.appendChild(object.body);
@@ -201,9 +203,10 @@ Dialog.prototype.initWithObject = function (object) {
     if(borderSection && !this.fixed) {
         for (var index = 0; index < 8; index++) {
             var div = document.createElement("div");
-            div.draggable = false, div.id = index + 1;
+            div.draggable = false, div.id = String(index + 1);
+            /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
             var pointerDown = function (ev) {
-                dragAction.set(ev.target.id);
+                if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
             }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
             if (supportsPointer) div.onpointerdown = pointerDown;
             else div.onmousedown = pointerDown;
@@ -382,11 +385,16 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { retur
 Object.defineProperty(Dialog.prototype, "title", {
     get: function() { return this._title; },
     set: function(title) {
-        this._title = title;
-        var titleElement = this.getTitleElement();
-        if (titleElement) titleElement.innerHTML = title;
+        this.setTitle(title);
     }
 });
+
+/** @param {string} title */
+Dialog.prototype.setTitle = function(title) {
+    this._title = title;
+    var titleElement = this.getTitleElement();
+    if (titleElement) titleElement.innerHTML = title;
+};
 
 Object.defineProperty(Dialog.prototype, "id", {
     get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
@@ -416,7 +424,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
         this.content.style.border = toPixels(value);
         this.content.style.borderRadius = toPixels(value);
     },
-    get: function () { return fromPixels(this.content.style.padding); },
+    get: function () { return this.content && fromPixels(this.content.style.padding); },
 });
 
 Object.defineProperty(Dialog.prototype, "popup", {
@@ -426,19 +434,20 @@ Object.defineProperty(Dialog.prototype, "popup", {
 Object.defineProperty(Dialog.prototype, "micaElement", {
     get: function() {
         try {
+            if (!this.target) return;
             var clip = this.target.getElementsByClassName("backdrop-clip")[0].children[0];
             if (clip instanceof HTMLElement) return clip;
-        } catch(ex) { console.log(ex.message) }
+        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
         return null;
     }
 });
 
-/** @type {Dialog} */
-/*let*/var focusedDialog = null;
+/** @type {Dialog?} */
+var focusedDialog = null;
 Dialog.prototype.focus = function() {
-    if (focusedDialog !== null)
+    if (focusedDialog !== null && focusedDialog.target)
         focusedDialog.target.removeAttribute("focus");
-    if (this.target) this.target.setAttribute("focus", true);
+    if (this.target) this.target.setAttribute("focus", String(true));
     focusedDialog = this;
 }
 Dialog.prototype.activate = function () {
@@ -455,7 +464,7 @@ Dialog.prototype.getRect = function (index) { return index == null ? this.target
 Dialog.prototype.getButton = function (index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function () { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 Dialog.prototype.setClickOffset = function (x, y) {
-    /*const*/var rect = this.getRect();
+    var rect = this.getRect();
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function () {return !!(this.href); };
@@ -522,7 +531,7 @@ Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
     var frameUrl = new URL(this.frame.src);
     frameUrl.searchParams.set("url", url);
-    if (this.frame) this.frame.src = frameUrl.href;
+    this.frame.src = frameUrl.href;
     this.launch();
 };
 
