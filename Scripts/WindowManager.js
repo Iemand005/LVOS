@@ -69,8 +69,6 @@ function Dialog(object, create) {
     this.minWidth = 100;
     this.minHeight = 200;
     this.mica = true;
-    // /** @type {HTMLElement} */
-    // this.micaElement = true;
     
     if (!object) return;
     if (!create) create = false;
@@ -557,6 +555,7 @@ function getWallpaper() {
 
 Dialog.prototype.injectMica = function () {
     try {
+        if (!useTransform) return;
         if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
