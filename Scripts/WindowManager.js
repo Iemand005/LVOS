@@ -74,22 +74,20 @@ function Dialog(object, create) {
     
     if (!object) return;
     if (!create) create = false;
-    /*const*/var dialog = this;
 
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement?} */
     this.target = null;
 
-    if (object instanceof HTMLElement) {
-        if (!isDialog(object)) return console.warn("This is not a dialog element");
-        this.target = object;
-        console.log(this.target.parentElement.nodeName === "TEMPLATE");
-        if (this.target.parentElement.nodeName === "TEMPLATE") return;
-    } else {
-        /** @type {Application} */
+    if (!(object instanceof HTMLElement)) {
+        /** @type {Application?} */
         this.application = object;
     }
     
-    this._title = object.title || this.getTitleElement().innerText;
+    if (object.title) this._title = object.title;
+    else {
+        var titleElement = this.getTitleElement();
+        if (titleElement) this._title = titleElement.innerText;
+    }
     this._id = object.id || this.id || this.title;
     this.buttons = [];
     this.originalBody = this.body;
@@ -115,25 +113,26 @@ function Dialog(object, create) {
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 
+/**
+ * @param {HTMLElement | Application} object 
+ */
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
     /*const*/var dialog = this;
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
-        if (this.target.parentElement.nodeName === "TEMPLATE") return;
         this.target = object;
+        if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
     } else {
-        /** @type {Application} */
         this.application = object;
         // this.closeable = true;
         this.target = createDialog();
         if (typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target.classList.add(someclass); }, dialog); // We can't use class since it's a keyword!!
         }
-        this.frame = object.src;
-        this.title = object.title;
-        this.id = object.id || this.title|| this.id;
+        // this.frame = object.src;
+        // this.title = object.title;
         this.fixed = object.fixed;
         this.scroll = object.scroll;
         if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
@@ -236,18 +235,22 @@ Dialog.prototype.initWithObject = function (object) {
     windows[this.id] = this;
 }
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ */
 function max(a, b) {
-    if (typeof a == "number" && typeof b == "number") {
-        if (a > b) return a;
-        else return b;
-    }
+    if (a > b) return a;
+    else return b;
 }
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ */
 function min(a, b) {
-    if (typeof a == "number" && typeof b == "number") {
-        if (a < b) return a;
-        else return b;
-    }
+    if (a < b) return a;
+    else return b;
 }
 
 /**
@@ -260,10 +263,20 @@ function translateElement(element, x, y) {
     element.style.webkitTransform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
 }
 
+/**
+ * @param {HTMLElement} element 
+ * @param {number} width
+ * @param {number} height
+ */
+function translateElement(element, width, height) {
+    element.style.width = toPixels(width);
+    element.style.height = toPixels(height);
+}
+
 // Dialog.prototype. = {
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return this.target.hasAttribute("open"); },
-    set: function(force) { this.target.toggleAttribute("open", force), this.activate(); }
+    get: function() { return this.target && this.target.hasAttribute("open"); },
+    set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || document.createElement("iframe"); },
@@ -308,7 +321,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
-    set: function(height) { if (typeof height == "number") this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
+    set: function(height) { if (typeof height == "number" && this.target) this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
 });
 
 Object.defineProperty(Dialog.prototype, "top", {
@@ -443,8 +456,13 @@ Dialog.prototype.toggleCloseButton = function (enable) { this.toggleButton(windo
 Dialog.prototype.toggleEjectButton = function (enable) { this.toggleButton(windowButtons.eject, enable); };
 Dialog.prototype.toggleFullButton = function (enable) { this.toggleButton(windowButtons.full, enable); };
 Dialog.prototype.messageFrame = function (type, message) { Messenger.broadcastToChild(type, message, this.frame); };
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
 Dialog.prototype.move = function (x, y) {
     this._x = x, this._y = y;
+    if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
         translateElement(this.target, this._x, this._y);
