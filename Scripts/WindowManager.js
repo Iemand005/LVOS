@@ -30,7 +30,7 @@ var supportsPointer = typeof PointerEvent !== "undefined";
 if (supportsPointer) console.log("Supports pointer events!");
 
 /**
- * @param {HTMLElement} element 
+ * @param {Element} element 
  */
 function isDialog(element) {
     return element && element.classList && element.classList.contains("window");
@@ -444,7 +444,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function () {
     this.focus();
-    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialog = this.id, swapMetroBody(this);
+    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, swapMetroBody(this);
 
 }
 Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
@@ -650,6 +650,8 @@ var windowButtons = {
     close: 2
 };
 /** @type {string?} */
+var activeDialogId = null;
+/** @type {Dialog?} */
 var activeDialog = null;
 var resizeDirection = 0;
 var topZ = 100;
@@ -676,21 +678,25 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
             case types.launchOverlay:
                 if (!bodyCrawler.overlay) break;
                 bodyCrawler.overlay.ontransitionend = function () {
-                    windows[source].messageFrame(LVMessenger.types.prepareToLaunchOverlay);
-                    var oriurl = new URL(windows[source].frame.src);
-                    oriurl.searchParams.set("fullscreen", String(true));
-                    windows[source].frame.src = oriurl.href;
+                    var dialog = windows[source];
+                    dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
+                    if (dialog.frame) {
+                        var oriurl = new URL(dialog.frame.src);
+                        oriurl.searchParams.set("fullscreen", String(true));
+                        dialog.frame.src = oriurl.href;
+                    }
                     if (!bodyCrawler.overlay) return;
                     bodyCrawler.overlay.ontransitionend = null;
                     bodyCrawler.overlay.requestFullscreen();
-                    bodyCrawler.overlay.appendChild(windows[source].body.node);
+                    if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
                     window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 };
                 bodyCrawler.overlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
                 if (!bodyCrawler.overlay) break;
-                bodyCrawler.overlay.appendChild(windows[source].body);
+                var dialog = windows[source];
+                if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
                 window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 break;
         }
@@ -709,7 +715,7 @@ function restoreMetroBody() {
 }
 
 function activeDialogToMetro() {
-    if (activeDialog) exportDialogBodyToMetro(windows[activeDialog]);
+    if (activeDialogId) exportDialogBodyToMetro(windows[activeDialogId]);
 }
 
 /**
@@ -789,18 +795,18 @@ function initializeDialogs() {
 /**
  * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event 
- * @param {Dialog} dialog 
+ * @param {Dialog | HTMLElement} dialog 
  * @returns 
  */
 function windowActivationEvent(event, dialog){
     console.log("Activating window", dialog);
     if (!dialog) dialog = getEventDialog(event);
-    // if (!isDialog(dialog)) return console.warn("This is not a dialog");
-    activeDialog = dialog.id;
+    activeDialogId = dialog.id;
+    activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
-    windows[activeDialog].setClickOffset(event.clientX || 0, event.clientY || 0);
-    windows[activeDialog].activate();
+    windows[activeDialogId].setClickOffset(event.clientX || 0, event.clientY || 0);
+    windows[activeDialogId].activate();
     return dialog;
 }
 
@@ -811,7 +817,8 @@ var ticking = false;
  * @param {number} hewY 
  */
 function handleWindowDrag(newX, hewY) {
-    var dialog = windows[activeDialog];
+    if (!activeDialogId) return;
+    var dialog = windows[activeDialogId];
 
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
@@ -851,8 +858,8 @@ function disableDialogDrag() {
     dragAction.set(0);
     for (/*let*/var index in windows) windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (activeDialog && windows[activeDialog])
-        if (windows[activeDialog].moveEvents) windows[activeDialog].exchangeDialogMouseUpEvent();
+    if (activeDialogId && windows[activeDialogId])
+        if (windows[activeDialogId].moveEvents) windows[activeDialogId].exchangeDialogMouseUpEvent();
 }
 
 function enableDialogDrag(){
@@ -885,22 +892,22 @@ function getViewboxPosition(){
 }
 
 /**
- * @param {HTMLElement} object 
+ * @param {HTMLElement | Event | null} object 
  */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
-    if (!object.classList) return console.log(object);
-    if (["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object.classList && object.classList.contains("window"))) return object;
-    else if (object.target) return getObjectDialog(object.target);
-    else return getObjectDialog(object.parentElement);
+    if (!object) return console.log(object);
+    if (object instanceof HTMLElement && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object instanceof HTMLElement && object.classList && object.classList.contains("window"))) return object;
+    else if (object instanceof Event && object.target instanceof HTMLElement) return getObjectDialog(object.target);
+    else if (object instanceof HTMLElement) return getObjectDialog(object.parentElement);
 }
 
 /**
- * @param {Event} event 
+ * @param {MouseEvent | PointerEvent} event 
  */
 function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
     if (fasterDialogTracking && event.clientX && event.clientY) try {
-        /*const*/var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return isDialog(element); });
-        return window;
+        var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return isDialog(element); });
+        if (window instanceof HTMLElement) return window;
     } catch (ex) { console.error(ex) }
     return getObjectDialog(event);
 }
@@ -923,8 +930,12 @@ function pixelsToCentimeters(pixels){
  * @param {string} text 
  */
 function fromPixels(text){
-    if (text != null) try { return typeof text === 'number' ? text : parseInt(text.replace("px", '')) }
-    catch (ex) { return text }
+    if (text != null) try {
+        return typeof text === 'number' ? text : parseInt(text.replace("px", ''))
+    } catch (ex) {
+        console.warn("Failed to parse pixels:", ex);
+        return 0;
+    }
     else return 0;
 }
 
@@ -958,7 +969,12 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     settings.set("blur", enabled);
 }
 
-
+/**
+ * 
+ * @param {Dialog} target 
+ * @param {Dialog} source 
+ * @returns 
+ */
 function collectEssentialDialogData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
     return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
@@ -978,14 +994,10 @@ function saveDialogState(){
     if (!loaded) return;
     console.log("Saving window state.");
     if (canSave && localStorage) try {
-        /*const*/var windowState = {};
-        for (/*let*/var id in windows) {
-            if (windows[id]){
-                // windows[id].width = windows[id].target.clientWidth;
-                // windows[id].height = windows[id].target.clientHeight;
+        var windowState = {};
+        for (var id in windows)
+            if (windows[id])
                 windowState[id] = collectEssentialDialogData({}, windows[id]);
-            }
-        }
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch (exception) {
@@ -1034,10 +1046,12 @@ function getDialogTemplate(){
 }
 
 function createDialog(){
-    return bodyCrawler.getDialogsContainer().appendChild(removeComments(getDialogTemplate().cloneNode(true)));
+    var container = bodyCrawler.getDialogsContainer();
+    var template = getDialogTemplate();
+    if (container && template) return container.appendChild(removeComments(template.cloneNode(true)));
 }
 
-/** @param {HTMLElement} element */
+/** @param {Element | Node} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function (child) {
         if (child.nodeName=="#comment") element.removeChild(child);
