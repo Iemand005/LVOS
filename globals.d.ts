@@ -15,3 +15,12 @@ interface Application {
   moveEvents?: boolean,
   classes?: string[]
 }
+
+interface DialogStaet {
+  title: string;
+  x: number;
+  y: number;
+  z: number;
+  width: number;
+  height: number;
+}

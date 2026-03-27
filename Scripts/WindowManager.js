@@ -73,7 +73,7 @@ function Dialog(object, create) {
     if (!object) return;
     if (!create) create = false;
 
-    /** @type {HTMLElement?} */
+    /** @type {Element?} */
     this.target = null;
     var id = object.id;
 
@@ -196,7 +196,9 @@ Dialog.prototype.initWithObject = function (object) {
 
     // if (object.body) this.body.appendChild(object.body);
 
-    var target = this.target, body = getDialogBody(target), borderSection = target.getElementsByTagName("section")[0];
+    var target = this.target;
+    var body = getDialogBody(target)
+    var borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
         for (var index = 0; index < 8; index++) {
@@ -990,6 +992,13 @@ function handleStorageException(exception){
     canSave = false;
 }
 
+function getWindowState() {
+    /** @type {DialogStaet} */
+    var state = {
+        title:
+    }
+}
+
 function saveDialogState(){
     if (!loaded) return;
     console.log("Saving window state.");
@@ -1011,7 +1020,10 @@ function loadDialogState(){
         if (localStorage && localStorage.windowState){
             var parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
             for (var window in parsedDialogs) try {
-                if (windows[window] && parsedDialogs[window]) collectEssentialDialogData(windows[window], parsedDialogs[window]).synchronise(); // I made the collect function return the target so we can write this in one line.
+                if (windows[window] && parsedDialogs[window]) {
+                    var data = collectEssentialDialogData(windows[window], parsedDialogs[window]);
+                    data.synchronise(); // I made the collect function return the target so we can write this in one line.
+                }
             } catch (ex) { fails.push(ex); }
             fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
             updateTopZ();
@@ -1045,13 +1057,15 @@ function getDialogTemplate(){
     return (content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
 
-function createDialog(){
+function createDialog() {
     var container = bodyCrawler.getDialogsContainer();
     var template = getDialogTemplate();
-    if (container && template) return container.appendChild(removeComments(template.cloneNode(true)));
+    if (!template) return;
+    var clone = template.cloneNode(true);
+    if (container && clone instanceof Element) return container.appendChild(removeComments(clone));
 }
 
-/** @param {Element | Node} element */
+/** @param {Element} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function (child) {
         if (child.nodeName=="#comment") element.removeChild(child);
@@ -1103,7 +1117,7 @@ function enableMica() {
         for (var id in windows) {
             if (!(windows.hasOwnProperty(id))) continue;
             var dialog = windows[id];
-            if (dialog) dialog.resize(dialog.width, dialog.height);
+            if (dialog) dialog.resize(dialog.width || dialog.minWidth, dialog.height || dialog.minHeight); // TODO: Why does it say width can be null?? it should return minheight probably always if undefned really but it cant reraly be that righte
         }
     });
 }
