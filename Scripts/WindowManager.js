@@ -988,6 +988,16 @@ Dialog.prototype.getWindowState = function() {
     return state;
 }
 
+/** @param {DialogState} state */
+Dialog.prototype.loadWindowState = function(state) {
+    this.title = state.title;
+    this.x = state.x;
+    this.y = state.y;
+    this.z = state.z;
+    this.width = state.width;   
+    this.height = state.height;
+}
+
 function saveDialogState(){
     if (!loaded) return;
     console.log("Saving window state.");
