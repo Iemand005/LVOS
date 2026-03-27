@@ -149,27 +149,10 @@ Dialog.prototype.initWithObject = function (object) {
         this.moveEvents = object.moveEvents || false;
     }
 
-    
-    // this._title = object.title || this.getTitleElement().innerText;
-    this._id = object.id || this.title || "";
     this.minWidth = 100;
     this.minHeight = 200;
     
-    // this.buttons = [];
     this.originalBody = this.body;
-    // this.clickOffset = {
-    //     x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-    //         start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
-    //         reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-    //         update: function(x, y){
-    //             this.last = Date.now();
-    //             this.position.x = x, this.position.y = y;
-    //             this.positions.push(this.position.clone());
-    //             this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-    //             this;return this; }
-    //     },
-    //     clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet.
-    // };
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
@@ -197,7 +180,7 @@ Dialog.prototype.initWithObject = function (object) {
     // if (object.body) this.body.appendChild(object.body);
 
     var target = this.target;
-    var body = getDialogBody(target)
+    var body = getDialogBody(target);
     var borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
@@ -322,7 +305,7 @@ Object.defineProperty(Dialog.prototype, "y", {
 
 Object.defineProperty(Dialog.prototype, "z", {
     get: function() { return this._z; },
-    set: function(z) { if (typeof z == "number") this._z = z; }
+    set: function(z) { if (typeof z == "number") { this._z = z; if (this.target instanceof HTMLElement) this.target.style.zIndex = String(z); } }
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
@@ -858,7 +841,7 @@ function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set(0);
-    for (/*let*/var index in windows) windows[index].togglePointerEvents(true);
+    for (var index in windows) windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
     if (activeDialogId && windows[activeDialogId])
         if (windows[activeDialogId].moveEvents) windows[activeDialogId].exchangeDialogMouseUpEvent();
@@ -866,11 +849,11 @@ function disableDialogDrag() {
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for (/*let*/var index in windows) windows[index].togglePointerEvents(false);
+    for (var index in windows) windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ() {
-    for (/*let*/var window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
+    for (var window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
 }
 
 /**
@@ -881,7 +864,7 @@ function stringifyDialogProperties(properties){
 }
 
 /**
- * @param {HTMLElement?} target 
+ * @param {Element?} target 
  */
 function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     if (!target) return null;
@@ -992,21 +975,28 @@ function handleStorageException(exception){
     canSave = false;
 }
 
-function getWindowState() {
-    /** @type {DialogStaet} */
+Dialog.prototype.getWindowState = function() {
+    /** @type {DialogState} */
     var state = {
-        title:
+        title: this.title || this.id || "uhm what",
+        x: this.x,
+        y: this.y,
+        z: this.z || 0,
+        width: this.width || this.minHeight,
+        height: this.height || this.minWidth,
     }
+    return state;
 }
 
 function saveDialogState(){
     if (!loaded) return;
     console.log("Saving window state.");
     if (canSave && localStorage) try {
+        /** @type {{[key: string]: DialogState}} */
         var windowState = {};
         for (var id in windows)
             if (windows[id])
-                windowState[id] = collectEssentialDialogData({}, windows[id]);
+                windowState[id] = windows[id].getWindowState();
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch (exception) {
@@ -1060,9 +1050,10 @@ function getDialogTemplate(){
 function createDialog() {
     var container = bodyCrawler.getDialogsContainer();
     var template = getDialogTemplate();
-    if (!template) return;
+    if (!template) return null;
     var clone = template.cloneNode(true);
     if (container && clone instanceof Element) return container.appendChild(removeComments(clone));
+    return null;
 }
 
 /** @param {Element} element */

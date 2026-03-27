@@ -16,7 +16,7 @@ interface Application {
   classes?: string[]
 }
 
-interface DialogStaet {
+interface DialogState {
   title: string;
   x: number;
   y: number;
