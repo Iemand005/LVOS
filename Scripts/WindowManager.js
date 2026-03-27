@@ -979,8 +979,8 @@ Dialog.prototype.getWindowState = function() {
     /** @type {DialogState} */
     var state = {
         title: this.title || this.id || "uhm what",
-        x: this.x,
-        y: this.y,
+        x: this.x || 0,
+        y: this.y || 0,
         z: this.z || 0,
         width: this.width || this.minHeight,
         height: this.height || this.minWidth,
