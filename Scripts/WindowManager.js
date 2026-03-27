@@ -22,7 +22,7 @@ var blur = false,
     IE11Booster = true,
     loadingOverlay = true,
     flipped = false,
-    useTransform = false,
+    useTransform = true,
     updateRateLimit = true;
 
 var supportsPointer = typeof PointerEvent !== "undefined";
