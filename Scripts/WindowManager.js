@@ -493,7 +493,7 @@ Dialog.prototype.toggleEjectButton = function(enable) { this.toggleButton(window
 Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowButtons.full, enable); };
 /**
  * @param {MessageType} type 
- * @param {*} message 
+ * @param {*} [message] 
  */
 Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMessenger.broadcastToChild(type, message, this.frame); };
 /**
@@ -533,7 +533,7 @@ Dialog.prototype.resize = function(width, height) { if (this.body) this.body.sty
  * @param {number} width 
  * @param {number} height 
  */
-Dialog.prototype.resizeBody = function(width, height) { if (this.body) this.body.style.boxSizing = "content-box", this.body.style.width = (this.width = width) + "px", this.body.style.height = (this.height = height) + "px", this.target.style.width = null, this.target.style.height = null; }
+Dialog.prototype.resizeBody = function(width, height) { if (this.body && this.target) this.body.style.boxSizing = "content-box", this.body.style.width = toPixels(this.width = width), this.body.style.height = toPixels(this.height = height), this.target.style.width = "", this.target.style.height = ""; }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
@@ -656,7 +656,7 @@ var topZ = 100;
 var bodyCrawler = new DocumentCrawler(document);
 /** @type {string?} */
 var metroBodyOrigin;
-
+/** @type {number} */
 var timeout = -1;
 var loaded = false;
 /*const*/var dragAction = new DragAction();
@@ -698,17 +698,17 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
     }
 }
 
-function swapMetroBody(){
+function swapMetroBody() {
     if (!flipped) return;
     restoreMetroBody();
     activeDialogToMetro();
 }
 
-function restoreMetroBody(){
-    if (metroBodyOrigin) retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
+function restoreMetroBody() {
+    // if (metroBodyOrigin) retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
 }
 
-function activeDialogToMetro(){
+function activeDialogToMetro() {
     if (activeDialog) exportDialogBodyToMetro(windows[activeDialog]);
 }
 
@@ -765,8 +765,7 @@ function checkForFlip() {
     }
 };
 
-window.onresize = checkForFlip();
-//felse loaded = true;
+window.onresize = checkForFlip;
 
 function initializeDialogs() {
     if (typeof onpointerup !== "undefined") document.onpointerup = disableDialogDrag;
