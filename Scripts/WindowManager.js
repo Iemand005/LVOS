@@ -73,7 +73,7 @@ function Dialog(object, create) {
     if (!object) return;
     if (!create) create = false;
 
-    /** @type {Element?} */
+    /** @type {HTMLElement?} */
     this.target = null;
     var id = object.id;
 
@@ -490,6 +490,7 @@ Dialog.prototype.move = function (x, y) {
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
+        this.target.style.top = "0px";
         translateElement(this.target, this._x, this._y);
     } else {
         this.target.style.transform = "none";
