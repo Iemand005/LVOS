@@ -1044,8 +1044,9 @@ function handleStorageException(exception){
 }
 
 Dialog.prototype.getWindowState = function() {
-    var a = 10;
-    this.x = a;
+    // var a = 10;
+    // this.x = a;
+    // this.x = 10;
     /** @type {DialogState} */
     var state = {
         title: this.title || this.id || "uhm what",
@@ -1062,10 +1063,10 @@ Dialog.prototype.getWindowState = function() {
 /** @param {DialogState} state */
 Dialog.prototype.loadWindowState = function(state) {
     var a = 10 + state.x;
-    this.x = a;
+    // this.x = a;
     return;
     this.title = state.title;
-    // this.x = state.x;   
+    this.x = state.x;   
     this.y = state.y;
     this.z = state.z;
     this.width = state.width;   
