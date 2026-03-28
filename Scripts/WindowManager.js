@@ -1000,7 +1000,7 @@ Dialog.prototype.loadWindowState = function(state) {
     this.height = state.height;
 }
 
-function saveDialogState(){
+function saveDialogState() {
     if (!loaded) return;
     console.log("Saving window state.");
     if (canSave && localStorage) try {
@@ -1016,23 +1016,18 @@ function saveDialogState(){
     }
 }
 
-function loadDialogState(){
+function loadDialogState() {
     console.log("Loading window state.")
     if (canSave) try {
-        if (localStorage && localStorage.windowState){
-            /** @type {{[key: string]: DialogState}} */
-            var windowStates = JSON.parse(localStorage.windowState), fails = [];
-            for (var id in windowStates) try {
-                var dialog = windows[id], windowState = windowStates[id];
-                if (!(dialog && windowState)) continue;// console.log("Can't load uh" + id + "");
-
-                windows[id].loadWindowState(windowState);
-                // var data = collectEssentialDialogData(windows[id], windowState[id]);
-                // data.synchronise(); // I made the collect function return the target so we can write this in one line.
-            } catch (ex) { fails.push(ex); }
-            fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
-            updateTopZ();
-        }
+        if (!localStorage || !localStorage.windowState) return;
+        /** @type {{[key: string]: DialogState}} */
+        var windowStates = JSON.parse(localStorage.windowState), fails = [];
+        for (var id in windowStates) try {
+            if (windows[id] && windowStates[id])
+                windows[id].loadWindowState(windowStates[id]);
+        } catch (ex) { fails.push(ex); }
+        fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
+        updateTopZ();
     } catch (exception) {
         handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
@@ -1041,7 +1036,7 @@ function loadDialogState(){
 /**
  * @param {Dialog} dialog 
  */
-function exportDialogBodyToMetro(dialog){
+function exportDialogBodyToMetro(dialog) {
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
     if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
         var metro = bodyCrawler.getMetro();
