@@ -1167,9 +1167,15 @@ function injectApplication(application){
     loadDialogState();
 }
 
+/** @param {Application} app */
+WindowManager.prototype.loadApp = function(app) {
+    this._windows[app.id] = new Dialog(app);
+};
+
 /** @param {Application} app  */
 function loadApp(app) {
-    windowManager.windows[demo.id] = new Dialog(app);
+    // windowManager.windows[app.id] = new Dialog(app);
+    windowManager.loadApp(app);
 }
 
 /** @param {Application[]} applications  */
