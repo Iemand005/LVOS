@@ -100,6 +100,7 @@ WindowManager.prototype.loadState = function() {
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  * @param {boolean} [create]
+ * @property {number} x
  */
 function Dialog(object, create) {
     
@@ -356,7 +357,6 @@ Object.defineProperty(Dialog.prototype, "thing", {
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
-    /** @returns {number} */
     get: function() { return this._x; },
     /** @param {number} x */
     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
@@ -1044,10 +1044,12 @@ function handleStorageException(exception){
 }
 
 Dialog.prototype.getWindowState = function() {
+    var a = 10;
+    this.x = a;
     /** @type {DialogState} */
     var state = {
         title: this.title || this.id || "uhm what",
-        x: this.x || 0,
+        x: this.x,
         y: this.y || 0,
         z: this.z || 0,
         width: this.width || this.minHeight,
@@ -1059,9 +1061,11 @@ Dialog.prototype.getWindowState = function() {
 
 /** @param {DialogState} state */
 Dialog.prototype.loadWindowState = function(state) {
+    var a = 10 + state.x;
+    this.x = a;
     return;
     this.title = state.title;
-    // this.x = state.x;
+    // this.x = state.x;   
     this.y = state.y;
     this.z = state.z;
     this.width = state.width;   
