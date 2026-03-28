@@ -279,15 +279,14 @@ Dialog.prototype.initWithObject = function (object) {
         if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
         self.quit();
     });
-    }
+    
     var buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function () {
         self.close();
     }.bind(self));
     buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
     this.close();
-
-    this.synchronise();
+}
 
     if (this.id) windowManager.windows[this.id] = this;
 }
@@ -527,17 +526,17 @@ Dialog.prototype.togglePointerEvents = function(enable) {
 }
 /**
  * @param {number} buttonId 
- * @param {boolean} enable 
+ * @param {boolean} [enable]
  */
 Dialog.prototype.toggleButton = function(buttonId, enable) { var button = this.getButton(buttonId); return button && button.toggleAttribute("disabled", !enable); };
 Dialog.prototype.clearClickOffset = function() { this.clickOffset && this.clickOffset.clear(); };
-/** @param {boolean} enable */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function(enable) { if (this.target) this.target.toggleAttribute("full", enable); };
-/** @param {boolean} enable */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function(enable) { this.toggleButton(windowButtons.close, enable); };
-/** @param {boolean} enable */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleEjectButton = function(enable) { this.toggleButton(windowButtons.eject, enable); };
-/** @param {boolean} enable */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowButtons.full, enable); };
 /**
  * @param {MessageType} type 
@@ -603,7 +602,7 @@ Dialog.prototype.quit = function () {
     else this.close();
  };
 Dialog.prototype.launch = function () {
-    if (!this.target) this.initWithObject(this.application);
+    if (!this.target && this.application) this.initWithObject(this.application);
     if (this.mica) this.injectMica();
 
     this.open();
