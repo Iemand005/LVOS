@@ -351,10 +351,13 @@ Object.defineProperty(Dialog.prototype, "head", {
     get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
 });
 
-/** @type {number} */
+Object.defineProperty(Dialog.prototype, "thing", {
+    get: function() { return this._x; },
+});
+
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
-    set: function(x) { if (typeof x == "number") this.move(x, this._y); }
+    // set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
 /** @type {number} */
@@ -415,10 +418,6 @@ Object.defineProperty(Dialog.prototype, "left", {
 Object.defineProperty(Dialog.prototype, "right", {
     get: function() { return this.x + this.width; },
     set: function(right) { this.width = right - this.x; }
-});
-
-Object.defineProperty(Dialog.prototype, "thing", {
-    get: function() { return this._x; },
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
