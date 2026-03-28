@@ -556,8 +556,8 @@ Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMess
  * @param {number?} [y]
  */
 Dialog.prototype.move = function (x, y) {
-    if (typeof x === "undefined" || y === null) x = this.x;
-    if (typeof y === "undefined") y = this.y;
+    if (typeof x === "undefined" || x === null) x = this.x;
+    if (typeof y === "undefined" || y === null) y = this.y;
     this._x = max(x, 0), this._y = max(y, 0);
     if (!this.target) return;
     if (useTransform) {
