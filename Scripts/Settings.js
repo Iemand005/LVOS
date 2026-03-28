@@ -91,9 +91,9 @@ function updateBlurState() {
 // toggleBlur(JSON.parse(settings.get("blur")));
 }
 
-/*const*/var settings = new SettingsHandler();
+var settings = new SettingsHandler();
 
-/*const*/var elements = {
+var elements = {
     desktop: document.getElementById("desktop"),
     color: document.getElementById("color"),
     accent: document.getElementById("accent"),
@@ -103,11 +103,11 @@ function updateBlurState() {
     dockAppList: document.getElementById("dockapplist")
 }
 
-/*const*/var metroAppList = document.getElementById("metroapplist");
-/*const*/var blurToggle = document.getElementById("blurtoggle");
-/*const*/var reflectionToggle = document.getElementById("reflectiontoggle");
-/*const*/var charmsbutton = applist.appendChild(document.createElement("button"));
-/*const*/var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+var metroAppList = document.getElementById("metroapplist");
+var blurToggle = document.getElementById("blurtoggle");
+var reflectionToggle = document.getElementById("reflectiontoggle");
+var charmsbutton = applist.appendChild(document.createElement("button"));
+var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
 if (windows.browser) elements.dockAppList.appendChild(windows.browser.createOpenButton());
 

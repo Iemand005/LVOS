@@ -15,7 +15,7 @@
 'use moz';  // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
 // Modifiable settings
-var blur = false,
+var useBlur = false,
     reflections = false,
     fasterDialogTracking = true,
     canSave = true,
@@ -98,6 +98,8 @@ function ClickOffset() {
     this.y = 0;
     this.height = 0;
     this.width = 0;
+    this.top = 0;
+    this.left = 0;
     this.start = {x: 0, y: 0};
     this.stats = {
         start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
@@ -521,7 +523,7 @@ Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(doc
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.stats.reset();
+    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
