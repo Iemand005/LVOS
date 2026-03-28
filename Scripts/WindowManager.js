@@ -351,11 +351,13 @@ Object.defineProperty(Dialog.prototype, "head", {
     get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
 });
 
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
     set: function(y) { if (typeof y == "number") this.move(this._x, y); }
@@ -366,6 +368,7 @@ Object.defineProperty(Dialog.prototype, "z", {
     set: function(z) { if (typeof z == "number") { this._z = z; if (this.target instanceof HTMLElement) this.target.style.zIndex = String(z); } }
 });
     
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "width", {
     get: function() { return this._width; },
     set: function(width) {
@@ -376,15 +379,18 @@ Object.defineProperty(Dialog.prototype, "width", {
     }
 });
 
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
     set: function(height) { if (typeof height == "number" && this.target) this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
 });
 
+
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
-        var difference  = this.top - top;
+        var difference  = this.y - top;
         if (difference + this.height < this.minHeight) this.top = this.bottom - this.minHeight;
         else {
             this.y = top;
@@ -392,10 +398,12 @@ Object.defineProperty(Dialog.prototype, "top", {
         }
     }
 });
+
+/** @type {number} */
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        var difference  = this.left - left;
+        var difference  = this.x - left;
         if (difference + this.width < this.minWidth) this.left = this.right - this.minWidth;
         else {
             this.x = left;
