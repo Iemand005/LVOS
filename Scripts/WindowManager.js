@@ -23,7 +23,7 @@ var useBlur = false,
     loadingOverlay = true,
     flipped = false,
     useTransform = true,
-    updateRateLimit = true;
+    updateRateLimit = false;
 
 var supportsPointer = typeof PointerEvent !== "undefined";
 
@@ -580,7 +580,7 @@ Dialog.prototype.move = function(x, y) {
     }
 
     if (this.mica && useTransform) {
-        var backdrop = this.target.getElementsByClassName("mica")[0];
+        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
         var wallpaper = wallpaperP.children[0];
@@ -604,8 +604,6 @@ Dialog.prototype.resizeBody = function(width, height) { if (this.body && this.ta
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
-    // var frameUrl = new URL(this.frame.src);
-    // frameUrl.searchParams.set("url", url);
     this.frame.src = url;
     this.launch();
 };
@@ -630,9 +628,7 @@ Dialog.prototype.relaunch = function() {
 };
 
 function getWallpaper() {
-    // var wallpaper = document.createElement()
-    var wallpaper = document.getElementById("wallpaper");
-    return wallpaper;
+    return document.getElementById("wallpaper");
 }
 
 Dialog.prototype.injectMica = function() {
