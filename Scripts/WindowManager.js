@@ -46,8 +46,6 @@ function titlify(title) {
 function WindowManager() {
     /** @type {DialogMap} */
     this._windows = {};
-
-    
 }
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
@@ -94,6 +92,26 @@ WindowManager.prototype.loadState = function() {
         handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
 }
+
+function ClickOffset() {
+    this.x = 0;
+    this.y = 0;
+    this.height = 0;
+    this.width = 0;
+    this.start = {x: 0, y: 0};
+    this.stats = {
+        start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
+        reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+        update: function(/** @type {number}*/x, /** @type {number}*/y){
+            this.last = Date.now();
+            this.position.x = x, this.position.y = y;
+            this.positions.push(this.position.clone());
+            this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
+            this;return this; }
+    };
+};
+
+ClickOffset.prototype.clear = function() { this.x = 0, this.y = 0; }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
 /**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
@@ -146,19 +164,7 @@ function Dialog(object, create) {
     /** @type {HTMLButtonElement[]} */
     this.buttons = [];
     this.originalBody = this.body;
-    this.clickOffset = {
-        x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
-            reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-            update: function(/** @type {number}*/x, /** @type {number}*/y){
-                this.last = Date.now();
-                this.position.x = x, this.position.y = y;
-                this.positions.push(this.position.clone());
-                this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-                this;return this; }
-        },
-        clear: function () { this.x = 0, this.y = 0; } // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
-    };
+    this.clickOffset = new ClickOffset;
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
@@ -372,7 +378,6 @@ Object.defineProperty(Dialog.prototype, "z", {
     set: function(z) { if (typeof z == "number") { this._z = z; if (this.target instanceof HTMLElement) this.target.style.zIndex = String(z); } }
 });
     
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "width", {
     get: function() { return this._width; },
     set: function(width) {
@@ -383,14 +388,12 @@ Object.defineProperty(Dialog.prototype, "width", {
     }
 });
 
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
     set: function(height) { if (typeof height == "number" && this.target) this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
 });
 
 
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
@@ -403,7 +406,6 @@ Object.defineProperty(Dialog.prototype, "top", {
     }
 });
 
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
@@ -519,7 +521,7 @@ Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(doc
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
+    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
@@ -551,7 +553,7 @@ Dialog.prototype.toggleEjectButton = function(enable) { this.toggleButton(window
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowButtons.full, enable); };
 /**
- * @param {MessageType} type 
+ * @param {MessageType | string} type 
  * @param {*} [message] 
  */
 Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMessenger.broadcastToChild(type, message, this.frame); };
@@ -657,7 +659,7 @@ Dialog.prototype.injectMica = function () {
 //  * @typedef {{x: number, y: number}} Vector
 //  */
 /**
- * @typedef {(dialog: Dialog, offset: DOMRect, difference: Vector)=>void} DragFunction
+ * @typedef {(dialog: Dialog, offset: ClickOffset, difference: Vector)=>void} DragFunction
  */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.

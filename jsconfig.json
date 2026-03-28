@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "ignoreDeprecations": "6.0",
-    "lib": ["ES5", "DOM"],
+    "target": "es5",
+    "lib": ["es2015", "DOM"],
     "checkJs": true
   },
   // "include": ["types/**/*"]

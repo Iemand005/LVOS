@@ -37,7 +37,7 @@ LVMessenger.types = {
 
 /**
  * @param {Window} target 
- * @param {MessageType} type 
+ * @param {MessageType | string} type 
  * @param {*} message 
  * @param {*} [id] 
  */
@@ -80,7 +80,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
 
 
 /**
- * @param {MessageType} type 
+ * @param {MessageType | string} type 
  * @param {LVMessage} [message]
  * @param {*} [id]
  */
@@ -89,7 +89,7 @@ LVMessenger.broadcastToParent = function (type, message, id) {
 };
 
 /**
- * @param {MessageType} type 
+ * @param {MessageType | string} type 
  * @param {LVMessage} message 
  * @param {HTMLIFrameElement} iFrame 
  */
