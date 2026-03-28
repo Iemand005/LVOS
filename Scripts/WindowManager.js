@@ -661,7 +661,7 @@ Dialog.prototype.injectMica = function () {
 //  * @typedef {{x: number, y: number}} Vector
 //  */
 /**
- * @typedef {(dialog: Dialog, offset: ClickOffset, difference: Vector)=>void} DragFunction
+ * @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction
  */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
