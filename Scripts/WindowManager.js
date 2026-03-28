@@ -501,7 +501,7 @@ Dialog.prototype.focus = function() {
     if (this.target) this.target.setAttribute("focus", String(true));
     focusedDialog = this;
 }
-Dialog.prototype.activate = function () {
+Dialog.prototype.activate = function() {
     this.focus();
     return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, swapMetroBody();
 }
@@ -510,7 +510,7 @@ Dialog.prototype.getTitleElement = function() { return this.head && this.head.qu
 Dialog.prototype.toggleTitlebar = function(force) { return this.head && !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
 Dialog.prototype.open = function() { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
 Dialog.prototype.close = function() { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
-Dialog.prototype.getInnerRect = function() { if (this.target) return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetRight, bottom: this.target.offsetBottom, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+Dialog.prototype.getInnerRect = function() { if (this.target) return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetLeft + this.target.offsetWidth, bottom: this.target.offsetTop + this.target.offsetHeight, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
 /** @param {number} index */
 Dialog.prototype.getRect = function(index) { if (this.target) return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
 /** @param {number} index */
@@ -563,7 +563,7 @@ Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMess
  * @param {number?} [x]
  * @param {number?} [y]
  */
-Dialog.prototype.move = function (x, y) {
+Dialog.prototype.move = function(x, y) {
     if (typeof x === "undefined" || x === null) x = this.x;
     if (typeof y === "undefined" || y === null) y = this.y;
     this._x = max(typeof x === "undefined" || x === null ? this.x : x, 0),
@@ -610,21 +610,21 @@ Dialog.prototype.openUrl = function(url) {
     this.launch();
 };
 
-Dialog.prototype.quit = function () {
+Dialog.prototype.quit = function() {
     if (this.closeable) {
         if (this.target && this.target.parentElement) this.target.parentElement.removeChild(this.target);
         this.target = null;
     }
     else this.close();
  };
-Dialog.prototype.launch = function () {
+Dialog.prototype.launch = function() {
     if (!this.target && this.application) this.initWithObject(this.application);
     if (this.mica) this.injectMica();
 
     this.open();
 }
 
-Dialog.prototype.relaunch = function () {
+Dialog.prototype.relaunch = function() {
     this.quit();
     this.launch();
 };
@@ -635,7 +635,7 @@ function getWallpaper() {
     return wallpaper;
 }
 
-Dialog.prototype.injectMica = function () {
+Dialog.prototype.injectMica = function() {
     try {
         if (!useTransform) return;
         if (this.micaElement || !this.target) return;
