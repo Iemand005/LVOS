@@ -1071,36 +1071,11 @@ Dialog.prototype.loadWindowState = function(state) {
 }
 
 function saveDialogState() {
-    if (!loaded) return;
-    console.log("Saving window state.");
-    if (canSave && localStorage) try {
-        /** @type {{[key: string]: DialogState}} */
-        var windowState = {};
-        for (var id in windows)
-            if (windowManager.windows[id])
-                windowState[id] = windowManager.windows[id].getWindowState();
-        localStorage.setItem("windowState", JSON.stringify(windowState));
-        // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
-    } catch (exception) {
-        handleStorageException(exception);
-    }
+    windowManager.saveState();
 }
 
 function loadDialogState() {
-    console.log("Loading window state.")
-    if (canSave) try {
-        if (!localStorage || !localStorage.windowState) return;
-        /** @type {{[key: string]: DialogState}} */
-        var windowStates = JSON.parse(localStorage.windowState), fails = [];
-        for (var id in windowStates) try {
-            if (windowManager.windows[id] && windowStates[id])
-                windowManager.windows[id].loadWindowState(windowStates[id]);
-        } catch (ex) { fails.push(ex); }
-        fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
-        updateTopZ();
-    } catch (exception) {
-        handleStorageException(exception);
-    } else console.error("Storage access is disabled for this session!");
+    windowManager.loadState();
 }
 
 /**
@@ -1194,8 +1169,8 @@ function closeApp(appId) {
 function enableMica() {
     var wallpaper = getWallpaper();
     window.addEventListener("resize", function(ev) {
-        for (var id in windows) {
-            if (!(windows.hasOwnProperty(id))) continue;
+        for (var id in windowManager.windows) {
+            if (!(windowManager.windows.hasOwnProperty(id))) continue;
             var dialog = windowManager.windows[id];
             if (dialog) dialog.resize(dialog.width || dialog.minWidth, dialog.height || dialog.minHeight); // TODO: Why does it say width can be null?? it should return minheight probably always if undefned really but it cant reraly be that righte
         }
