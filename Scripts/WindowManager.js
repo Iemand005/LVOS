@@ -499,7 +499,7 @@ Dialog.prototype.getInnerRect = function() { if (this.target) return { top: this
 Dialog.prototype.getRect = function(index) { if (this.target) return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
 /** @param {number} index */
 Dialog.prototype.getButton = function(index) { return this.head && this.head.getElementsByTagName("button")[index]; }
-Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
+Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title || "", this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 /**
  * @param {number} x 
  * @param {number} y 
