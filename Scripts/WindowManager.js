@@ -16,7 +16,7 @@
 
 // Modifiable settings
 var useBlur = false,
-    useMica = false,
+    useMica = true,
     reflections = false,
     fasterDialogTracking = true,
     canSave = true,
@@ -364,6 +364,8 @@ Object.defineProperty(Dialog.prototype, "mica", {
     get: function() { return this._mica; },
     set: function(mica) {
         this._mica = mica;
+        if (mica) this.injectMica();
+        else this.removeMica();
     }
 });
 
@@ -618,13 +620,14 @@ Dialog.prototype.quit = function() {
         this.target = null;
     }
     else this.close();
- };
+};
+
 Dialog.prototype.launch = function() {
     if (!this.target && this.application) this.initWithObject(this.application);
     if (this.mica) this.injectMica();
 
     this.open();
-}
+};
 
 Dialog.prototype.relaunch = function() {
     this.quit();
@@ -652,10 +655,16 @@ Dialog.prototype.injectMica = function() {
         var clip = this.target.getElementsByClassName("backdrop-clip")[0];
         if (!clip) return;
         clip.appendChild(image);
-        // this.target.classList.add("mica");
-        this.move(this.x, this.y);
+        this.move();
     } catch(ex) { console.warn(ex); }
-}
+};
+
+Dialog.prototype.removeMica = function() {
+    var clip = this.target.getElementsByClassName("backdrop-clip")[0];
+    if (!clip) return;
+    clip.removeChild(clip.children[0]);
+    // this.move();
+};
 
 // /**
 //  * @typedef {{x: number, y: number}} Vector

@@ -144,9 +144,9 @@ window.ondrop = document.ondrop = function(ev){
     console.log(ev);
 }
 
-document.body.ondragover = function(ev) { e.preventDefault(); console.log ("okdi")}
-document.body.ondrop = function(e) {
-    e.preventDefault();
+document.body.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")}
+document.body.ondrop = function(ev) {
+    ev.preventDefault();
 }
 
 loadSettings();
@@ -155,11 +155,11 @@ function downloadObjectAsJson(exportObj, exportName) {
     var dataStr = JSON.stringify(exportObj);
     var dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
 
-    var downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataUri);
-    downloadAnchorNode.setAttribute("download", exportName + ".json");
+    var a = document.createElement('a');
+    a.setAttribute("href", dataUri);
+    a.setAttribute("download", exportName + ".json");
     
-    document.body.appendChild(downloadAnchorNode);     
-    downloadAnchorNode.click();
-    document.body.removeChild(downloadAnchorNode);
+    document.body.appendChild(a);     
+    a.click();
+    document.body.removeChild(a);
 }
