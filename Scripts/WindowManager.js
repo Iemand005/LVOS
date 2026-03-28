@@ -43,6 +43,46 @@ function titlify(title) {
     return title.toLowerCase().split(" ").join("-");
 }
 
+function WindowManager() {
+    /** @type {{[id:string]: Dialog}} */
+    this.windows = {};
+
+    
+}
+
+WindowManager.prototype.saveDialogState = function() {
+        if (!loaded) return;
+        console.log("Saving window state.");
+        if (canSave && localStorage) try {
+            /** @type {{[key: string]: DialogState}} */
+            var windowState = {};
+            for (var id in windows)
+                if (windows[id])
+                    windowState[id] = windows[id].getWindowState();
+            localStorage.setItem("windowState", JSON.stringify(windowState));
+            // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
+        } catch (exception) {
+            handleStorageException(exception);
+        }
+    }
+
+    WindowManager.prototype.loadDialogState = function() {
+        console.log("Loading window state.")
+        if (canSave) try {
+            if (!localStorage || !localStorage.windowState) return;
+            /** @type {{[key: string]: DialogState}} */
+            var windowStates = JSON.parse(localStorage.windowState), fails = [];
+            for (var id in windowStates) try {
+                if (windows[id] && windowStates[id])
+                    windows[id].loadWindowState(windowStates[id]);
+            } catch (ex) { fails.push(ex); }
+            fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
+            updateTopZ();
+        } catch (exception) {
+            handleStorageException(exception);
+        } else console.error("Storage access is disabled for this session!");
+    }
+
 // <reference path="./Dialog.d.ts" />
 /**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
