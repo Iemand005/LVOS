@@ -44,18 +44,24 @@ function titlify(title) {
 }
 
 function WindowManager() {
-    /** @type {{[id:string]: Dialog}} */
+    /** @type {DialogMap} */
     this._windows = {};
 
     
 }
 
-/**  @typedef {} WindowsState */
+/**  @typedef {{[key: string]: DialogState}} DesktopState */
+/**  @typedef {{[id:string]: Dialog}} DialogMap */
 
 Object.defineProperties(WindowManager.prototype, {
     windows: { get: function() { return this._windows; } },
-    state: { get: function() { 
-
+    state: { get: function() {
+        /** @type {DesktopState} */ 
+        var state = {};
+        for (var id in windows)
+            if (windows[id])
+                state[id] = windows[id].getWindowState();
+        return state;
     }}
 });
 
@@ -68,8 +74,7 @@ WindowManager.prototype.saveState = function() {
             for (var id in windows)
                 if (windows[id])
                     windowState[id] = windows[id].getWindowState();
-            localStorage.setItem("windowState", JSON.stringify(windowState));
-            // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
+            localStorage.setItem("windowState", JSON.stringify(this.state));
         } catch (exception) {
             handleStorageException(exception);
         }
