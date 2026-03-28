@@ -418,7 +418,7 @@ Object.defineProperty(Dialog.prototype, "right", {
 });
 
 Object.defineProperty(Dialog.prototype, "thing", {
-    get: function() { return 10x1; },
+    get: function() { return this._x; },
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
