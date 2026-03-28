@@ -55,25 +55,28 @@ function WindowManager() {
 
 Object.defineProperties(WindowManager.prototype, {
     windows: { get: function() { return this._windows; } },
-    state: { get: function() {
-        /** @type {DesktopState} */ 
-        var state = {};
-        for (var id in windows)
-            if (windows[id])
-                state[id] = windows[id].getWindowState();
-        return state;
-    }}
+    state: {
+        get: function() {
+            /** @type {DesktopState} */ 
+            var state = {};
+            for (var id in windows)
+                if (windows[id])
+                    state[id] = windows[id].getWindowState();
+            return state;
+        }
+    }
 });
+
+// Object.defineProperty(WindowManager.prototype, "state", {
+//     get: function() {
+//         this.
+//     }
+// })
 
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
         console.log("Saving window state.");
         if (canSave && localStorage) try {
-            /** @type {{[key: string]: DialogState}} */
-            var windowState = {};
-            for (var id in windows)
-                if (windows[id])
-                    windowState[id] = windows[id].getWindowState();
             localStorage.setItem("windowState", JSON.stringify(this.state));
         } catch (exception) {
             handleStorageException(exception);
