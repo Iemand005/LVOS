@@ -16,6 +16,7 @@
 
 // Modifiable settings
 var useBlur = false,
+    useMica = false,
     reflections = false,
     fasterDialogTracking = true,
     canSave = true,
@@ -140,7 +141,7 @@ function Dialog(object, create) {
     
     this.minWidth = 100;
     this.minHeight = 200;
-    this.mica = true;
+    this._mica = useMica;
     
     if (!object) return;
     if (!create) create = false;
@@ -359,8 +360,11 @@ Object.defineProperty(Dialog.prototype, "head", {
     get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
 });
 
-Object.defineProperty(Dialog.prototype, "thing", {
-    get: function() { return this._x; },
+Object.defineProperty(Dialog.prototype, "mica", {
+    get: function() { return this._mica; },
+    set: function(mica) {
+        this._mica = mica;
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
