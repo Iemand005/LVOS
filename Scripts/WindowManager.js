@@ -133,7 +133,8 @@ Dialog.prototype.initWithObject = function (object) {
     } else {
         this.application = object;
         // this.closeable = true;
-        this.target = createDialog();
+        var newDialog = createDialog();
+        this.target = newDialog;
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
@@ -1019,12 +1020,15 @@ function loadDialogState(){
     console.log("Loading window state.")
     if (canSave) try {
         if (localStorage && localStorage.windowState){
-            var parsedDialogs = JSON.parse(localStorage.windowState), fails = [];
-            for (var window in parsedDialogs) try {
-                if (windows[window] && parsedDialogs[window]) {
-                    var data = collectEssentialDialogData(windows[window], parsedDialogs[window]);
-                    data.synchronise(); // I made the collect function return the target so we can write this in one line.
-                }
+            /** @type {{[key: string]: DialogState}} */
+            var windowStates = JSON.parse(localStorage.windowState), fails = [];
+            for (var id in windowStates) try {
+                var dialog = windows[id], windowState = windowStates[id];
+                if (!(dialog && windowState)) continue;// console.log("Can't load uh" + id + "");
+
+                windows[id].loadWindowState(windowState);
+                // var data = collectEssentialDialogData(windows[id], windowState[id]);
+                // data.synchronise(); // I made the collect function return the target so we can write this in one line.
             } catch (ex) { fails.push(ex); }
             fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
             updateTopZ();
@@ -1063,7 +1067,10 @@ function createDialog() {
     var template = getDialogTemplate();
     if (!template) return null;
     var clone = template.cloneNode(true);
-    if (container && clone instanceof Element) return container.appendChild(removeComments(clone));
+    if (container && clone instanceof Element) {
+        var dialogElement = container.appendChild(removeComments(clone));
+        if (dialogElement instanceof HTMLElement) return dialogElement;
+    }
     return null;
 }
 
