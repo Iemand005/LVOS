@@ -43,12 +43,8 @@ function titlify(title) {
     return title.toLowerCase().split(" ").join("-");
 }
 
-/**
- * @property {DialogMap} _windows
- * @property {DialogMap} windows
- */
 function WindowManager() {
-    // /** @type {DialogMap} */
+    /** @type {DialogMap} */
     this._windows = {};
 
     
@@ -57,37 +53,20 @@ function WindowManager() {
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 
-Object.defineProperties(WindowManager.prototype, {
-    windows: {
-        // /** @this {WindowManager} */
-        get: function() { return this._windows; } },
-    state: {
-        /** @this {WindowManager} */
-        get: function() {
-            /** @type {DesktopState} */ 
-            var state = {};
-            for (var id in this.windows)
-                if (this.windows[id])
-                    state[id] = this.windows[id].getWindowState();
-            return state;
-        }
-    }
+Object.defineProperty(WindowManager.prototype, "windows", {
+    get: function() { return this._windows; }
 });
 
-// Object.defineProperty(WindowManager.prototype, "windows", {
-//     get: function() { return this._windows; }
-// });
-
-// Object.defineProperty(WindowManager.prototype, "state", {
-//     get: function() {
-//         /** @type {DesktopState} */ 
-//         var state = {};
-//         for (var id in this.windows)
-//             if (this.windows[id])
-//                 state[id] = this.windows[id].getWindowState();
-//         return state;
-//     }
-// });
+Object.defineProperty(WindowManager.prototype, "state", {
+    get: function() {
+        /** @type {DesktopState} */ 
+        var state = {};
+        for (var id in this.windows)
+            if (this.windows[id])
+                state[id] = this.windows[id].getWindowState();
+        return state;
+    }
+});
 
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
@@ -116,7 +95,6 @@ WindowManager.prototype.loadState = function() {
     } else console.error("Storage access is disabled for this session!");
 }
 
-// <reference path="./Dialog.d.ts" />
 /**
  * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
  * @author Lasse Lauwerys
@@ -216,9 +194,10 @@ Dialog.prototype.initWithObject = function (object) {
         this.setTitle(object.title);
         this.fixed = object.fixed;
         this.scroll = object.scroll;
-        if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-
-        this.frame.setAttribute("allow", "fullscreen");
+        if (this.frame) {
+            if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+            this.frame.setAttribute("allow", "fullscreen");
+        }
 
         this.moveEvents = object.moveEvents || false;
     }
@@ -231,8 +210,10 @@ Dialog.prototype.initWithObject = function (object) {
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    document.getElementById("applist").appendChild(this.createOpenButton());
-    document.getElementById("metroapplist").appendChild(this.createOpenButton());
+    var applist = document.getElementById("applist");
+    if (applist) applist.appendChild(this.createOpenButton());
+    var metroapplist = document.getElementById("metroapplist");
+    if (metroapplist) metroapplist.appendChild(this.createOpenButton());
 
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
