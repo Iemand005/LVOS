@@ -917,8 +917,10 @@ function disableDialogDrag() {
     dragAction.set();
     for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (activeDialogId && windowManager.windows[activeDialogId] && (typeof windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent !== "undefined") && windowManager.windows[activeDialogId].moveEvents)
-        windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
+    if (activeDialogId && windowManager.windows[activeDialogId] && windowManager.windows[activeDialogId].moveEvents) {
+        var func = windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent;
+        if (func) func();
+    }
 }
 
 function enableDialogDrag(){
