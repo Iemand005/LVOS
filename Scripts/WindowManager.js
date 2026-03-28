@@ -916,7 +916,7 @@ function disableDialogDrag() {
     for (var index in windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
     if (activeDialogId && windowManager.windows[activeDialogId])
-        if (windowManager.windows[activeDialogId].moveEvents) windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
+        if (windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent && windowManager.windows[activeDialogId].moveEvents) windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
 }
 
 function enableDialogDrag(){
@@ -925,7 +925,7 @@ function enableDialogDrag(){
 }
 
 function updateTopZ() {
-    for (var window in windows) if (windowManager.windows[window].z > topZ) topZ = windowManager.windows[window].z;
+    for (var window in windowManager.windows) if (windowManager.windows[window].z || 0 > topZ) topZ = windowManager.windows[window].z || 0;
 }
 
 /**
@@ -998,18 +998,6 @@ function fromPixels(text){
 
 /**
  * @param {Dialog} dialog 
- */
-function synchroniseDialogState(dialog){
-    dialog = this || dialog;
-    if (dialog.x) dialog.x = dialog.x;
-    if (dialog.y) dialog.y = dialog.y;
-    if (dialog.z) dialog.target.style.zIndex = dialog.z;
-    if (dialog.width) dialog.width = dialog.width;
-    if (dialog.height) dialog.height = dialog.height;
-}
-
-/**
- * @param {Dialog} dialog 
  * @deprecated
  */
 function verifyEjectCapability(dialog){
@@ -1024,16 +1012,6 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.toggleAttribute("blur");
     else document.body.toggleAttribute("blur", enabled);
     settings.set("blur", enabled);
-}
-
-/**
- * 
- * @param {Dialog} target 
- * @param {Dialog} source 
- * @returns 
- */
-function collectEssentialDialogData(target, source){ // By using the same function to exchange data in and out of the local storage we can modify what parameters we want to save on the fly.
-    return target.isOpen = source.isOpen, target.z = source.z, target.x = fromPixels(source.x), target.y = fromPixels(source.y), target.width = fromPixels(source.width), target.height = fromPixels(source.height), target;
 }
 
 /**
