@@ -336,7 +336,7 @@ function translateElement(element, x, y) {
  * @param {number} width
  * @param {number} height
  */
-function translateElement(element, width, height) {
+function scaleElement(element, width, height) {
     element.style.width = toPixels(width);
     element.style.height = toPixels(height);
 }

@@ -2,8 +2,8 @@
 'use strict';
 'use esnext';
 /*const*/var body = document.querySelector("body");
-/*for (/*let*/var index = 0; index < 0; index++) {
-    /*const*/var button = document.createElement("button");
+/*for (var index = 0; index < 0; index++) {
+    /var button = document.createElement("button");
     button.id = index;
     body.appendChild(button);
 }*/
@@ -13,8 +13,8 @@
 
 document.querySelector("form").onsubmit = function(event){
     event.preventDefault();
-    /*let*/var result = 0;
-    for (/*let*/var key in inputs) {
+    var result = 0;
+    for (var key in inputs) {
         result += inputs[key];
     }
     display()
@@ -34,9 +34,9 @@ function display(message){
     output.innerText = message;//inputs.join("");
 }
 
-/*for (/*let*/var button in buttons) {
+/*for (var button in buttons) {
     buttons[button].addEventListener("click", function(event){
-        /*const*/var number = event.target.id;
+        var number = event.target.id;
         output.innerText += number;
     });
 }*/
