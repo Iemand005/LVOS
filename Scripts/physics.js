@@ -3,8 +3,8 @@
 // 30/12/2023
 
 /**
- * @param {number} x 
- * @param {number} y 
+ * @param {number} [x]
+ * @param {number} [y]
  */
 function Vector(x, y){
     this.x = x || 0;

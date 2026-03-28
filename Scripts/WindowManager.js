@@ -96,7 +96,7 @@ function Dialog(object, create) {
     this.originalBody = this.body;
     this.clickOffset = {
         x: 0, y: 0, height: 0, width: 0, start: {x: 0, y: 0}, stats: {
-            start: 0, last: 0, positions: [new Vector()], position: new Vector(), lastPosition: new Vector(), difference: new Vector(),
+            start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
             reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
             update: function(/** @type {number}*/x, /** @type {number}*/y){
                 this.last = Date.now();
@@ -576,9 +576,9 @@ Dialog.prototype.injectMica = function () {
     } catch(ex) { console.warn(ex); }
 }
 
-/**
- * @typedef {{x: number, y: number}} Vector
- */
+// /**
+//  * @typedef {{x: number, y: number}} Vector
+//  */
 /**
  * @typedef {(dialog: Dialog, offset: DOMRect, difference: Vector)=>void} DragFunction
  */
