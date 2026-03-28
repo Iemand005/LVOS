@@ -68,6 +68,26 @@ Object.defineProperty(WindowManager.prototype, "state", {
     }
 });
 
+Object.defineProperties(WindowManager.prototype, {
+    wawa: {
+        get: function() {
+            return 10;
+        }
+    }
+})
+
+// windowManager.
+
+/** @type {WindowManager & { x: number, y: number }} */
+const proto = WindowManager.prototype;
+
+Object.defineProperties(proto, {
+    x: { get: function() { return 10; } },
+    y: { get: function() { return 10; } }
+});
+
+// windowManager.
+
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
         console.log("Saving window state.");
@@ -1044,9 +1064,6 @@ function handleStorageException(exception){
 }
 
 Dialog.prototype.getWindowState = function() {
-    // var a = 10;
-    // this.x = a;
-    // this.x = 10;
     /** @type {DialogState} */
     var state = {
         title: this.title || this.id || "uhm what",
@@ -1062,9 +1079,6 @@ Dialog.prototype.getWindowState = function() {
 
 /** @param {DialogState} state */
 Dialog.prototype.loadWindowState = function(state) {
-    var a = 10 + state.x;
-    // this.x = a;
-    return;
     this.title = state.title;
     this.x = state.x;   
     this.y = state.y;
