@@ -172,7 +172,7 @@ function Dialog(object, create) {
 }
 
 /**
- * @param {HTMLElement | Application | null} object 
+ * @param {HTMLElement | Application} [object] 
  */
 Dialog.prototype.initWithObject = function (object) {
     if (!object) return;
