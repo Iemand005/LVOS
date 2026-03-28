@@ -1,13 +1,13 @@
-interface Meow {
+interface MeowT {
   readonly rawr: number;
   test: number;
 }
 
 /**
- * @this Meow
- * @param this 
+ * @this MeowT
+ * @param {MeowT} this 
  */
-function Meow(this: Meow) {
+function Meow(this) {
   // /** @type {number} */
   this._test = 10;
 }
