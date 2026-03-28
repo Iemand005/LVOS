@@ -16,7 +16,7 @@
 
 // Modifiable settings
 var blur = false,
-    reflections = true,
+    reflections = false,
     fasterDialogTracking = true,
     canSave = true,
     IE11Booster = true,
@@ -53,22 +53,22 @@ function WindowManager() {
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 
-Object.defineProperties(WindowManager.prototype, {
-    "windows": {
-        /** @this {WindowManager} */
-        get: function() { return this._windows; } },
-    state: {
-        /** @this {WindowManager} */
-        get: function() {
-            /** @type {DesktopState} */ 
-            var state = {};
-            for (var id in windows)
-                if (windowManager.windows[id])
-                    state[id] = this.windowManager.windows[id].getWindowState();
-            return state;
-        }
-    }
-});
+// Object.defineProperties(WindowManager.prototype, {
+//     "windows": {
+//         /** @this {WindowManager} */
+//         get: function() { return this._windows; } },
+//     state: {
+//         /** @this {WindowManager} */
+//         get: function() {
+//             /** @type {DesktopState} */ 
+//             var state = {};
+//             for (var id in this.windows)
+//                 if (windowManager.windows[id])
+//                     state[id] = this.windowManager.windows[id].getWindowState();
+//             return state;
+//         }
+//     }
+// });
 
 Object.defineProperty(WindowManager.prototype, "windows", {
     get: function() { return this._windows; }
@@ -78,9 +78,9 @@ Object.defineProperty(WindowManager.prototype, "state", {
     get: function() {
         /** @type {DesktopState} */ 
         var state = {};
-        for (var id in windows)
+        for (var id in this.windows)
             if (windowManager.windows[id])
-                state[id] = this.windowManager.windows[id].getWindowState();
+                state[id] = this.windows[id].getWindowState();
         return state;
     }
 });
@@ -698,7 +698,7 @@ DocumentCrawler.prototype = {
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-/** @type {{[id:string]: Dialog}} */
+// /** @type {{[id:string]: Dialog}} */
 // var windows = {};
 var windowManager = new WindowManager;
 var windowButtons = {
