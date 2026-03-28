@@ -235,15 +235,15 @@ Dialog.prototype.initWithObject = function (object) {
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
     // this.synchronise = synchroniseDialogState.bind(this);
-    this.synchronise = function(dialog) {
+    // this.synchronise = function(dialog) {
 
-    }
+    // }
 
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
     var self = this;
-    /** @param {Vector} difference */
-    this.exchangeDialogMoveEvent = function (difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+    /** @param {Position} difference */
+    this.exchangeDialogMoveEvent = function(difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
         if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.stats.update(difference.x, difference.y));
     };
 
@@ -251,6 +251,7 @@ Dialog.prototype.initWithObject = function (object) {
 
     var target = this.target;
     var body = getDialogBody(target);
+    if (target && body) {
     var borderSection = target.getElementsByTagName("section")[0];
 
     if(borderSection && !this.fixed) {
@@ -267,11 +268,14 @@ Dialog.prototype.initWithObject = function (object) {
         }
     }
 
-    body.addEventListener("load", function (event) { try { self.verifyEjectCapability(); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
+    body.addEventListener("load", function (event) { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
+
+
     
-    if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
-    else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
-    this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
+    if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
+    else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
+    target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
+        if (!target) return;
         var rect = target.getClientRects()[0];
         var viewboxPosition = getViewboxPosition();
         var propeties = {
@@ -290,7 +294,7 @@ Dialog.prototype.initWithObject = function (object) {
         if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
         self.quit();
     });
-
+    }
     var buttons = target.getElementsByTagName("button");
     buttons[windowButtons.close].addEventListener("click", function () {
         self.close();
@@ -370,7 +374,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
-    set: function(y) { if (typeof y == "number") this.move(this._x, y); }
+    set: function(y) { if (typeof y == "number") this.move(this._x, y); return y; }
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
@@ -518,7 +522,7 @@ Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(doc
  */
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
-    if (!this.clickOffset) return;
+    if (!this.clickOffset || !rect) return;
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
@@ -884,11 +888,11 @@ function handleWindowDrag(newX, hewY) {
     if (!activeDialogId) return;
     var dialog = windowManager.windows[activeDialogId];
     if (!dialog.clickOffset) return;
-
+    /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
-    if(dialog.moveEvents) dialog.exchangeDialogMoveEvent(difference);
+    if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
 /**

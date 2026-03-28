@@ -25,3 +25,8 @@ interface DialogState {
   height: number;
   open: boolean;
 }
+
+interface Position {
+  x: number;
+  y: number;
+}
