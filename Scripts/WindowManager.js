@@ -859,7 +859,7 @@ function initializeDialogs() {
  */
 function windowActivationEvent(event, dialog){
     console.log("Activating window", dialog);
-    if (!dialog) dialog = getEventDialog(event);
+    // if (!dialog) dialog = getEventDialog(event);
     activeDialogId = dialog.id;
     activeDialog = dialog;
     resizeDirection = 0;
@@ -917,8 +917,8 @@ function disableDialogDrag() {
     dragAction.set();
     for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (activeDialogId && windowManager.windows[activeDialogId])
-        if (windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent && windowManager.windows[activeDialogId].moveEvents) windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
+    if (activeDialogId && windowManager.windows[activeDialogId] && (typeof windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent !== "undefined") && windowManager.windows[activeDialogId].moveEvents)
+        windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
 }
 
 function enableDialogDrag(){
