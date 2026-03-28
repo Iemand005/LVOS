@@ -270,7 +270,7 @@ Dialog.prototype.initWithObject = function (object) {
     body.addEventListener("load", function (event) { try { self.verifyEjectCapability(); } catch (exception) { target.getElementsByTagName("button")[0].style.display = "none"; }});
     
     if (supportsPointer) this.target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
-    else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, this) });
+    else this.target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
     this.target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event){
         var rect = target.getClientRects()[0];
         var viewboxPosition = getViewboxPosition();
@@ -512,8 +512,13 @@ Dialog.prototype.getRect = function(index) { if (this.target) return index == nu
 /** @param {number} index */
 Dialog.prototype.getButton = function(index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title, this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
+    if (!this.clickOffset) return;
     return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
@@ -854,13 +859,13 @@ function initializeDialogs() {
 /**
  * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event 
- * @param {Dialog | HTMLElement} dialog 
+ * @param {Dialog} dialog 
  * @returns 
  */
 function windowActivationEvent(event, dialog){
     console.log("Activating window", dialog);
-    // if (!dialog) dialog = getEventDialog(event);
     activeDialogId = dialog.id;
+    if (!activeDialogId) return;
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
@@ -878,6 +883,7 @@ var ticking = false;
 function handleWindowDrag(newX, hewY) {
     if (!activeDialogId) return;
     var dialog = windowManager.windows[activeDialogId];
+    if (!dialog.clickOffset) return;
 
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
@@ -1038,6 +1044,7 @@ Dialog.prototype.getWindowState = function() {
         z: this.z || 0,
         width: this.width || this.minHeight,
         height: this.height || this.minWidth,
+        open: this.isOpen || false,
     }
     return state;
 }
@@ -1050,6 +1057,7 @@ Dialog.prototype.loadWindowState = function(state) {
     this.z = state.z;
     this.width = state.width;   
     this.height = state.height;
+    if (state.open) this.launch();
 }
 
 function saveDialogState() {

@@ -23,4 +23,5 @@ interface DialogState {
   z: number;
   width: number;
   height: number;
+  open: boolean;
 }
