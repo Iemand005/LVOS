@@ -63,18 +63,27 @@ Object.defineProperties(WindowManager.prototype, {
             /** @type {DesktopState} */ 
             var state = {};
             for (var id in windows)
-                if (windows[id])
-                    state[id] = this.windows[id].getWindowState();
+                if (windowManager.windows[id])
+                    state[id] = this.windowManager.windows[id].getWindowState();
             return state;
         }
     }
 });
 
+Object.defineProperty(WindowManager.prototype, "windows", {
+    get: function() { return this._windows; }
+});
+
 Object.defineProperty(WindowManager.prototype, "state", {
     get: function() {
-        this.
+        /** @type {DesktopState} */ 
+        var state = {};
+        for (var id in windows)
+            if (windowManager.windows[id])
+                state[id] = this.windowManager.windows[id].getWindowState();
+        return state;
     }
-})
+});
 
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
@@ -93,8 +102,8 @@ WindowManager.prototype.loadState = function() {
         /** @type {{[key: string]: DialogState}} */
         var windowStates = JSON.parse(localStorage.windowState), fails = [];
         for (var id in windowStates) try {
-            if (windows[id] && windowStates[id])
-                windows[id].loadWindowState(windowStates[id]);
+            if (windowManager.windows[id] && windowStates[id])
+                windowManager.windows[id].loadWindowState(windowStates[id]);
         } catch (ex) { fails.push(ex); }
         fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
         updateTopZ();
@@ -291,7 +300,7 @@ Dialog.prototype.initWithObject = function (object) {
 
     this.synchronise();
 
-    if (this.id) windows[this.id] = this;
+    if (this.id) windowManager.windows[this.id] = this;
 }
 
 /**
@@ -438,7 +447,7 @@ Object.defineProperty(Dialog.prototype, "id", {
     get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
     set: function(id) {
         this._id = id;
-        windows[id] = this;
+        windowManager.windows[id] = this;
         if (this.target) this.target.setAttribute("id", id);
     }
 });
@@ -690,7 +699,8 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 /** @type {{[id:string]: Dialog}} */
-var windows = {};
+// var windows = {};
+var windowManager = new WindowManager;
 var windowButtons = {
     eject: 0,
     full: 1,
@@ -720,12 +730,12 @@ var dragAction = new DragAction();
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     var types = LVMessenger.types;
     if (source) {
-        if (type === types.windowSize) windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
                 if (!bodyCrawler.overlay) break;
                 bodyCrawler.overlay.ontransitionend = function () {
-                    var dialog = windows[source];
+                    var dialog = windowManager.windows[source];
                     dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
                     if (dialog.frame) {
                         var oriurl = new URL(dialog.frame.src);
@@ -742,7 +752,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                 break;
             case types.readyToLaunchOverlay:
                 if (!bodyCrawler.overlay) break;
-                var dialog = windows[source];
+                var dialog = windowManager.windows[source];
                 if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
                 window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 break;
@@ -758,11 +768,11 @@ function swapMetroBody() {
 }
 
 function restoreMetroBody() {
-    // if (metroBodyOrigin) retrieveDialogBodyFromMetro(windows[metroBodyOrigin]);
+    // if (metroBodyOrigin) retrieveDialogBodyFromMetro(windowManager.windows[metroBodyOrigin]);
 }
 
 function activeDialogToMetro() {
-    if (activeDialogId) exportDialogBodyToMetro(windows[activeDialogId]);
+    if (activeDialogId) exportDialogBodyToMetro(windowManager.windows[activeDialogId]);
 }
 
 /**
@@ -829,7 +839,7 @@ function initializeDialogs() {
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
         if (!(dialog instanceof HTMLElement)) return;
-        windows[dialog.id] = new Dialog(dialog); 
+        windowManager.windows[dialog.id] = new Dialog(dialog); 
     });
     //flip();
     checkForFlip();
@@ -852,8 +862,8 @@ function windowActivationEvent(event, dialog){
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
-    windows[activeDialogId].setClickOffset(event.clientX || 0, event.clientY || 0);
-    windows[activeDialogId].activate();
+    windowManager.windows[activeDialogId].setClickOffset(event.clientX || 0, event.clientY || 0);
+    windowManager.windows[activeDialogId].activate();
     return dialog;
 }
 
@@ -865,7 +875,7 @@ var ticking = false;
  */
 function handleWindowDrag(newX, hewY) {
     if (!activeDialogId) return;
-    var dialog = windows[activeDialogId];
+    var dialog = windowManager.windows[activeDialogId];
 
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
@@ -903,19 +913,19 @@ function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set();
-    for (var index in windows) windows[index].togglePointerEvents(true);
+    for (var index in windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (activeDialogId && windows[activeDialogId])
-        if (windows[activeDialogId].moveEvents) windows[activeDialogId].exchangeDialogMouseUpEvent();
+    if (activeDialogId && windowManager.windows[activeDialogId])
+        if (windowManager.windows[activeDialogId].moveEvents) windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
 }
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for (var index in windows) windows[index].togglePointerEvents(false);
+    for (var index in windows) windowManager.windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ() {
-    for (var window in windows) if (windows[window].z > topZ) topZ = windows[window].z;
+    for (var window in windows) if (windowManager.windows[window].z > topZ) topZ = windowManager.windows[window].z;
 }
 
 /**
@@ -1067,8 +1077,8 @@ function saveDialogState() {
         /** @type {{[key: string]: DialogState}} */
         var windowState = {};
         for (var id in windows)
-            if (windows[id])
-                windowState[id] = windows[id].getWindowState();
+            if (windowManager.windows[id])
+                windowState[id] = windowManager.windows[id].getWindowState();
         localStorage.setItem("windowState", JSON.stringify(windowState));
         // localStorage.windowState = JSON.stringify(windowState); // I had apparently used the wrong syntax by accident but this way of getting and setting works too for some reason. It's probably supposed to work this way too but I don't know what the correct way is.
     } catch (exception) {
@@ -1083,8 +1093,8 @@ function loadDialogState() {
         /** @type {{[key: string]: DialogState}} */
         var windowStates = JSON.parse(localStorage.windowState), fails = [];
         for (var id in windowStates) try {
-            if (windows[id] && windowStates[id])
-                windows[id].loadWindowState(windowStates[id]);
+            if (windowManager.windows[id] && windowStates[id])
+                windowManager.windows[id].loadWindowState(windowStates[id]);
         } catch (ex) { fails.push(ex); }
         fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
         updateTopZ();
@@ -1159,18 +1169,18 @@ function injectApplication(application){
 
 /** @param {Application} app  */
 function loadApp(app) {
-    windows[demo.id] = new Dialog(app);
+    windowManager.windows[demo.id] = new Dialog(app);
 }
 
 /** @param {Application[]} applications  */
 function injectApplications(applications){
-    applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windows[demo.id] = new Dialog(application));
+    applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     loadDialogState();
 }
 
 /** @param {string} appId  */
 function closeApp(appId) {
-    var element = windows[appId].target;
+    var element = windowManager.windows[appId].target;
     if (element && element.parentElement)
         element.parentElement.removeChild(element);
 }
@@ -1180,7 +1190,7 @@ function enableMica() {
     window.addEventListener("resize", function(ev) {
         for (var id in windows) {
             if (!(windows.hasOwnProperty(id))) continue;
-            var dialog = windows[id];
+            var dialog = windowManager.windows[id];
             if (dialog) dialog.resize(dialog.width || dialog.minWidth, dialog.height || dialog.minHeight); // TODO: Why does it say width can be null?? it should return minheight probably always if undefned really but it cant reraly be that righte
         }
     });

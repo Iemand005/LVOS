@@ -15,7 +15,7 @@ function setTheme(id) {
     if (typeof id === 'undefined') return;
     settings.set("theme", id);
     for(/*let*/var index in windows){
-        /*const*/var window = windows[index];
+        /*const*/var window = windowManager.windows[index];
         switch (id) {
             case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
                 break;
@@ -40,7 +40,7 @@ function toggleCharmsEvent(ev) {
 
 function setBorderSize(size) {
     settings.set("borderSize", size);
-    for (/*let*/var index in windows) windows[index].borderSize = size;
+    for (/*let*/var index in windows) windowManager.windows[index].borderSize = size;
 }
 
 function hexToRGB(hex) {
@@ -63,7 +63,7 @@ function setColor(color){
     
     /*const*/var isWhite = isColorDark(color);
     for(/*let*/var index in windows){
-        /*const*/var content = windows[index].target.getElementsByTagName("content")[0];
+        /*const*/var content = windowManager.windows[index].target.getElementsByTagName("content")[0];
         content.style.backgroundColor = color;
         content.style.color = isWhite?"white":"black";
     }

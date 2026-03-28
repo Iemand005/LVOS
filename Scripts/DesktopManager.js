@@ -22,7 +22,7 @@ function toggleReflections(force){
     if(force === null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
     if(reflecitons) {
-        for (/*let*/var windowId in windows) reflector.reflect(windows[windowId].target);
+        for (/*let*/var windowId in windows) reflector.reflect(windowManager.windows[windowId].target);
         //for (/*let*/var index in applistItems) reflector.reflect(applistItems[index]);
         reflector.reflect(applistItems);
     }

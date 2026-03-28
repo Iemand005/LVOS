@@ -13,8 +13,8 @@
 }
 
 function initializeConsoleApplication(){
-    if(!windows["console"]) return;
-    /*const*/var consoleform = windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
+    if(!windowManager.windows["console"]) return;
+    /*const*/var consoleform = windowManager.windows["console"].originalBody;//consoleElement.getElementsByTagName("form")[0];
     /*const*/var stdout = consoleform.stdout || consoleform.getElementsByTagName("output")[0];
     /*const*/var interceptConsole = function(){
         if(stdout.firstChild) stdout.removeChild(stdout.firstChild);
