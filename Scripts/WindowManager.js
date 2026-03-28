@@ -417,6 +417,10 @@ Object.defineProperty(Dialog.prototype, "right", {
     set: function(right) { this.width = right - this.x; }
 });
 
+Object.defineProperty(Dialog.prototype, "thing", {
+    get: function() { return 10x1; },
+});
+
 Object.defineProperty(Dialog.prototype, "bottom", {
     get: function() { return this.y + this.height; },
     set: function(bottom) { this.height = bottom - this.y; }
