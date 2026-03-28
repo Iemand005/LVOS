@@ -356,7 +356,10 @@ Object.defineProperty(Dialog.prototype, "thing", {
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
+    /** @returns {number} */
     get: function() { return this._x; },
+    /** @param {number} x */
+    set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
 // Object.defineProperty(Dialog.prototype, "x", {
@@ -367,6 +370,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 /** @type {number} */
 Object.defineProperty(Dialog.prototype, "y", {
+    /** @returns {number} */
     get: function() { return this._y; },
     set: function(y) { if (typeof y == "number") this.move(this._x, y); }
 });
@@ -1055,8 +1059,9 @@ Dialog.prototype.getWindowState = function() {
 
 /** @param {DialogState} state */
 Dialog.prototype.loadWindowState = function(state) {
+    return;
     this.title = state.title;
-    this.x = state.x;
+    // this.x = state.x;
     this.y = state.y;
     this.z = state.z;
     this.width = state.width;   
