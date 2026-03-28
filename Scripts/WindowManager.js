@@ -120,7 +120,7 @@ WindowManager.prototype.loadState = function() {
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  * @param {boolean} [create]
- * @property {number} x
+ * @property {number} xe
  */
 function Dialog(object, create) {
     
@@ -1237,6 +1237,9 @@ window.addEventListener("drop", function(e) {
      console.log("File dropped anywhere in window:", files[0].name);
   }
 }, false);
+
+// var dialgo = new Dialog(null);
+// dialgo.xe
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
