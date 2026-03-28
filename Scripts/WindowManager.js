@@ -54,24 +54,27 @@ function WindowManager() {
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 
 Object.defineProperties(WindowManager.prototype, {
-    windows: { get: function() { return this._windows; } },
+    "windows": {
+        /** @this {WindowManager} */
+        get: function() { return this._windows; } },
     state: {
+        /** @this {WindowManager} */
         get: function() {
             /** @type {DesktopState} */ 
             var state = {};
             for (var id in windows)
                 if (windows[id])
-                    state[id] = windows[id].getWindowState();
+                    state[id] = this.windows[id].getWindowState();
             return state;
         }
     }
 });
 
-// Object.defineProperty(WindowManager.prototype, "state", {
-//     get: function() {
-//         this.
-//     }
-// })
+Object.defineProperty(WindowManager.prototype, "state", {
+    get: function() {
+        this.
+    }
+})
 
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
