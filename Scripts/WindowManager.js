@@ -552,10 +552,12 @@ Dialog.prototype.toggleFullButton = function(enable) { this.toggleButton(windowB
  */
 Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMessenger.broadcastToChild(type, message, this.frame); };
 /**
- * @param {number} x 
- * @param {number} y 
+ * @param {number?} [x]
+ * @param {number?} [y]
  */
 Dialog.prototype.move = function (x, y) {
+    if (typeof x === "undefined" || y === null) x = this.x;
+    if (typeof y === "undefined") y = this.y;
     this._x = max(x, 0), this._y = max(y, 0);
     if (!this.target) return;
     if (useTransform) {
@@ -913,7 +915,7 @@ function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set();
-    for (var index in windows) windowManager.windows[index].togglePointerEvents(true);
+    for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
     if (activeDialogId && windowManager.windows[activeDialogId])
         if (windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent && windowManager.windows[activeDialogId].moveEvents) windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent();
@@ -921,7 +923,7 @@ function disableDialogDrag() {
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for (var index in windows) windowManager.windows[index].togglePointerEvents(false);
+    for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(false);
 }
 
 function updateTopZ() {
