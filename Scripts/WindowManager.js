@@ -391,7 +391,7 @@ Object.defineProperty(Dialog.prototype, "top", {
             this.height += difference;
         }
     }
-});
+});                                                                                                                                                                                     ¿´Ç MN B   MNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNKI9UUUU999JJ
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
