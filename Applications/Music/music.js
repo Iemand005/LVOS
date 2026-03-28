@@ -151,11 +151,11 @@ volume.oninput = function(ev){
     audio.volume = (this.value>100?100:this.value<0?0:this.value)/100;
 }
 
-/*let*/var timeout;
+/*let*/var timeoute;
 function autoHideControls(){
     document.body.classList.remove("full");
-    clearTimeout(timeout);
-    timeout = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
+    clearTimeout(timeoute);
+    timeoute = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
 console.error("Implement the URL replacement for older browsers!")

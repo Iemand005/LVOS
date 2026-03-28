@@ -304,12 +304,12 @@ Dialog.prototype.initWithObject = function (object) {
 }
 
 /**
- * @param {number} a 
- * @param {number} b 
+ * @param {number} [a] 
+ * @param {number} [b] 
  */
 function max(a, b) {
-    if (a > b) return a;
-    else return b;
+    if (a || 0 > (b || 0)) return a || 0;
+    else return b|| 0;
 }
 
 /**
@@ -396,7 +396,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
-        /*const*/var difference  = this.top - top;
+        var difference  = this.top - top;
         if (difference + this.height < this.minHeight) this.top = this.bottom - this.minHeight;
         else {
             this.y = top;
@@ -407,7 +407,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        /*const*/var difference  = this.left - left;
+        var difference  = this.left - left;
         if (difference + this.width < this.minWidth) this.left = this.right - this.minWidth;
         else {
             this.x = left;
@@ -499,8 +499,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function () {
     this.focus();
-    return this.target.style.zIndex = this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, swapMetroBody(this);
-
+    return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, swapMetroBody();
 }
 Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
 /** @param {boolean} force */
@@ -558,7 +557,8 @@ Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMess
 Dialog.prototype.move = function (x, y) {
     if (typeof x === "undefined" || x === null) x = this.x;
     if (typeof y === "undefined" || y === null) y = this.y;
-    this._x = max(x, 0), this._y = max(y, 0);
+    this._x = max(typeof x === "undefined" || x === null ? this.x : x, 0),
+    this._y = max(y, 0);
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
@@ -717,11 +717,11 @@ var topZ = 100;
 var bodyCrawler = new DocumentCrawler(document);
 /** @type {string?} */
 var metroBodyOrigin;
-/** @type {number} */
-var timeout = -1;
 var loaded = false;
 var dragAction = new DragAction();
 // /*let*/var flipped = false;
+/** @type {number} */
+var timeout = -1;
 
 /**
  * 
