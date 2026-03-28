@@ -601,9 +601,9 @@ function DragAction(){ // This looks less elegant than checking on mouse move bu
 }
 
 /**
- * @param {number} direction 
+ * @param {number} [direction] 
  */
-DragAction.prototype.set = function(direction) { this.execute = this.resizeFunctions[direction || 0] || new Function };
+DragAction.prototype.set = function(direction) { this.execute = this.resizeFunctions[direction || 0] || function(){console.log("bleed mself sdry")} };
 
 /**
  * @param {HTMLDocument} document 
@@ -646,7 +646,7 @@ var metroBodyOrigin;
 /** @type {number} */
 var timeout = -1;
 var loaded = false;
-/*const*/var dragAction = new DragAction();
+var dragAction = new DragAction();
 // /*let*/var flipped = false;
 
 /**
@@ -840,7 +840,7 @@ function toggleDialogDragEventHandler(enable) {
 function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
-    dragAction.set(0);
+    dragAction.set();
     for (var index in windows) windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
     if (activeDialogId && windows[activeDialogId])
