@@ -357,8 +357,13 @@ Object.defineProperty(Dialog.prototype, "thing", {
 
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x; },
-    // set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
+
+// Object.defineProperty(Dialog.prototype, "x", {
+//     get: function() { return this._x; },
+//     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
+// }); 
+
 
 /** @type {number} */
 Object.defineProperty(Dialog.prototype, "y", {
