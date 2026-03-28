@@ -43,8 +43,12 @@ function titlify(title) {
     return title.toLowerCase().split(" ").join("-");
 }
 
+/**
+ * @property {DialogMap} _windows
+ * @property {DialogMap} windows
+ */
 function WindowManager() {
-    /** @type {DialogMap} */
+    // /** @type {DialogMap} */
     this._windows = {};
 
     
@@ -53,37 +57,37 @@ function WindowManager() {
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 
-// Object.defineProperties(WindowManager.prototype, {
-//     "windows": {
-//         /** @this {WindowManager} */
-//         get: function() { return this._windows; } },
-//     state: {
-//         /** @this {WindowManager} */
-//         get: function() {
-//             /** @type {DesktopState} */ 
-//             var state = {};
-//             for (var id in this.windows)
-//                 if (windowManager.windows[id])
-//                     state[id] = this.windowManager.windows[id].getWindowState();
-//             return state;
-//         }
-//     }
-// });
-
-Object.defineProperty(WindowManager.prototype, "windows", {
-    get: function() { return this._windows; }
-});
-
-Object.defineProperty(WindowManager.prototype, "state", {
-    get: function() {
-        /** @type {DesktopState} */ 
-        var state = {};
-        for (var id in this.windows)
-            if (windowManager.windows[id])
-                state[id] = this.windows[id].getWindowState();
-        return state;
+Object.defineProperties(WindowManager.prototype, {
+    windows: {
+        // /** @this {WindowManager} */
+        get: function() { return this._windows; } },
+    state: {
+        /** @this {WindowManager} */
+        get: function() {
+            /** @type {DesktopState} */ 
+            var state = {};
+            for (var id in this.windows)
+                if (this.windows[id])
+                    state[id] = this.windows[id].getWindowState();
+            return state;
+        }
     }
 });
+
+// Object.defineProperty(WindowManager.prototype, "windows", {
+//     get: function() { return this._windows; }
+// });
+
+// Object.defineProperty(WindowManager.prototype, "state", {
+//     get: function() {
+//         /** @type {DesktopState} */ 
+//         var state = {};
+//         for (var id in this.windows)
+//             if (this.windows[id])
+//                 state[id] = this.windows[id].getWindowState();
+//         return state;
+//     }
+// });
 
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
@@ -374,7 +378,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 Object.defineProperty(Dialog.prototype, "y", {
     get: function() { return this._y; },
-    set: function(y) { if (typeof y == "number") this.move(this._x, y); return y; }
+    set: function(y) { if (typeof y == "number") this.move(this._x, y); }
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
