@@ -68,26 +68,6 @@ Object.defineProperty(WindowManager.prototype, "state", {
     }
 });
 
-Object.defineProperties(WindowManager.prototype, {
-    wawa: {
-        get: function() {
-            return 10;
-        }
-    }
-})
-
-// windowManager.
-
-/** @type {WindowManager & { x: number, y: number }} */
-const proto = WindowManager.prototype;
-
-Object.defineProperties(proto, {
-    x: { get: function() { return 10; } },
-    y: { get: function() { return 10; } }
-});
-
-// windowManager.
-
 WindowManager.prototype.saveState = function() {
         if (!loaded) return;
         console.log("Saving window state.");
@@ -350,7 +330,6 @@ function scaleElement(element, width, height) {
     element.style.height = toPixels(height);
 }
 
-// Dialog.prototype. = {
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return this.target && this.target.hasAttribute("open"); },
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
@@ -382,13 +361,6 @@ Object.defineProperty(Dialog.prototype, "x", {
     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
-// Object.defineProperty(Dialog.prototype, "x", {
-//     get: function() { return this._x; },
-//     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
-// }); 
-
-
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "y", {
     /** @returns {number} */
     get: function() { return this._y; },
@@ -1233,13 +1205,9 @@ window.addEventListener("drop", function(e) {
   e.preventDefault();
   if (!e.dataTransfer) return;
   var files = e.dataTransfer.files;
-  if (files.length > 0) {
+  if (files.length > 0)
      console.log("File dropped anywhere in window:", files[0].name);
-  }
 }, false);
-
-// var dialgo = new Dialog(null);
-// dialgo.xe
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
