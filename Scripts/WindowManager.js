@@ -45,12 +45,21 @@ function titlify(title) {
 
 function WindowManager() {
     /** @type {{[id:string]: Dialog}} */
-    this.windows = {};
+    this._windows = {};
 
     
 }
 
-WindowManager.prototype.saveDialogState = function() {
+/**  @typedef {} WindowsState */
+
+Object.defineProperties(WindowManager.prototype, {
+    windows: { get: function() { return this._windows; } },
+    state: { get: function() { 
+
+    }}
+});
+
+WindowManager.prototype.saveState = function() {
         if (!loaded) return;
         console.log("Saving window state.");
         if (canSave && localStorage) try {
@@ -66,22 +75,22 @@ WindowManager.prototype.saveDialogState = function() {
         }
     }
 
-    WindowManager.prototype.loadDialogState = function() {
-        console.log("Loading window state.")
-        if (canSave) try {
-            if (!localStorage || !localStorage.windowState) return;
-            /** @type {{[key: string]: DialogState}} */
-            var windowStates = JSON.parse(localStorage.windowState), fails = [];
-            for (var id in windowStates) try {
-                if (windows[id] && windowStates[id])
-                    windows[id].loadWindowState(windowStates[id]);
-            } catch (ex) { fails.push(ex); }
-            fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
-            updateTopZ();
-        } catch (exception) {
-            handleStorageException(exception);
-        } else console.error("Storage access is disabled for this session!");
-    }
+WindowManager.prototype.loadState = function() {
+    console.log("Loading window state.")
+    if (canSave) try {
+        if (!localStorage || !localStorage.windowState) return;
+        /** @type {{[key: string]: DialogState}} */
+        var windowStates = JSON.parse(localStorage.windowState), fails = [];
+        for (var id in windowStates) try {
+            if (windows[id] && windowStates[id])
+                windows[id].loadWindowState(windowStates[id]);
+        } catch (ex) { fails.push(ex); }
+        fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
+        updateTopZ();
+    } catch (exception) {
+        handleStorageException(exception);
+    } else console.error("Storage access is disabled for this session!");
+}
 
 // <reference path="./Dialog.d.ts" />
 /**
