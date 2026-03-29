@@ -14,14 +14,14 @@ function Reflector(element) {
 
 Reflector.prototype.reflect = function (target) {
     try {
-        /*const*/var reflection = target.cloneNode(true);
+        var reflection = target.cloneNode(true);
         reflection.id += "reflection";
         this.clones.push(reflection);
         this.element.appendChild(reflection);
 
         this.observer = new MutationObserver(function (mutations) {
             mutations.forEach(function(mutation) {
-                if (mutation.type === "attributes") {
+                if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
                     reflection.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));
                     reflection.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
                     reflection.style.width = mutation.target.style.width;

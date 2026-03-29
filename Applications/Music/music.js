@@ -5,24 +5,30 @@
 'use esnext';
 'use moz';
 
-/*const*/var frequencies = 128;
+{
+var frequencies = 128;
 
-/*const*/var micButton = document.getElementById("mic");
-/*const*/var virtualAudio = document.createElement("audio");
-/*const*/var file = document.getElementById("file");
-/*const*/var audio = document.getElementsByTagName("audio")[0];
-/*const*/var visualiser = document.getElementById("visualiser");
-/*const*/var ctx = visualiser.getContext("2d");
-/*const*/var fullscreen = document.getElementById("fullscreen");
-/*const*/var volume = document.getElementById("volume");
-/*const*/var seek = document.getElementById("seek");
-/*const*/var play = document.getElementById("play");
-/*const*/var options = document.getElementById("options");
-/*const*/var seekOutput = document.getElementById("seek-output");
-/*const*/var volumeOutput = document.getElementById("volume-output");
-/*const*/var fft = document.getElementById("fft");
-/*const*/var visualiserOption = document.getElementById("style");
-/*const*/var elements = [];
+var micButton = document.getElementById("mic");
+var virtualAudio = document.createElement("audio");
+var file = document.getElementById("file");
+var audio = document.getElementsByTagName("audio")[0];
+var visualiser = document.getElementById("visualiser");
+var ctx = visualiser instanceof HTMLCanvasElement ? visualiser.getContext("2d") : null;
+var fullscreen = document.getElementById("fullscreen");
+var volume = document.getElementById("volume");
+var seek = document.getElementById("seek");
+var play = document.getElementById("play");
+var options = document.getElementById("options");
+var seekOutput = document.getElementById("seek-output");
+var volumeOutput = document.getElementById("volume-output");
+var fft = document.getElementById("fft");
+var visualiserOption = document.getElementById("style");
+var elements = [];
+var audioVisualiser;
+var circular = true;
+var clear = false;
+var colorBuffer = [0, 0];
+var valueBuffer = new Array(30);
 
 ctx.globalAlpha = 0.1;
 
@@ -37,11 +43,6 @@ fullscreen.onclick = function(){
     LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
 }
 
-/*let*/var audioVisualiser;
-/*let*/var circular = true;
-/*let*/var clear = false;
-/*const*/var colorBuffer = [0, 0];
-/*const*/var valueBuffer = new Array(30);
 
 function animateFrame(audioVisualiser, time){
 
@@ -170,4 +171,5 @@ function refresh(){
     /*const*/var ms = parseInt(audio.currentTime%1/0.01);
     /*const*/var text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     seekOutput.innerText = text;
+}
 }

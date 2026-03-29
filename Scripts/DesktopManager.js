@@ -6,25 +6,27 @@
 'use strict';
 'use esnext';
 
-/*const*/var applist = document.getElementById("applist");
+var applist = document.getElementById("applist");
 
 applist.addEventListener("submit", function(event){ event.preventDefault(); });
 
-/*let*/var reflecitons = false;
+var reflecitons = false;
 
-/*const*/var windowr = document.getElementById("windows");
-/*const*/var dock = document.getElementById("dock");
-/*const*/var reflectionr = document.getElementById("reflection");
-/*const*/var reflector = new Reflector(document.getElementById("reflection"));
-/*const*/var applistItems = document.getElementById("dockapplist");
+var windowr = document.getElementById("windows");
+var dock = document.getElementById("dock");
+var reflectionr = document.getElementById("reflection");
+var reflector = new Reflector(document.getElementById("reflection"));
+var applistItems = document.getElementById("dockapplist");
 
 function toggleReflections(force){
     if(force === null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
     if(reflecitons) {
-        for (/*let*/var windowId in windows) reflector.reflect(windowManager.windows[windowId].target);
-        //for (/*let*/var index in applistItems) reflector.reflect(applistItems[index]);
-        reflector.reflect(applistItems);
+        windowManager.forEachWindow(function(dialog) {
+            reflector.reflect(dialog.target);
+        });
+        // for (var windowId in windowManager.windows) reflector.reflect(windowManager.windows[windowId].target);
+        // reflector.reflect(applistItems);
     }
     else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
 }
