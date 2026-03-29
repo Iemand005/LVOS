@@ -1132,8 +1132,11 @@ function loadApp(app) {
     windowManager.loadApp(app);
 }
 
-/** @param {Application[]} applications  */
+/** @typedef {Application[]} ApplicationArray */
+
+/** @param {ApplicationArray | ApplicationArray[]} applications  */
 function injectApplications(applications){
+    arguments
     applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
 }
