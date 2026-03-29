@@ -509,7 +509,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function() {
     this.focus();
-    return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, swapMetroBody();
+    return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 }
 Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
 /** @param {boolean} force */
@@ -792,7 +792,7 @@ function restoreMetroBody() {
 }
 
 function activeDialogToMetro() {
-    if (activeDialogId) exportDialogBodyToMetro(windowManager.windows[activeDialogId]);
+    if (activeDialog) activeDialog.exportDialogBodyToMetro();
 }
 
 /**
@@ -875,15 +875,15 @@ function initializeDialogs() {
  * @param {Dialog} dialog 
  * @returns 
  */
-function windowActivationEvent(event, dialog){
+function windowActivationEvent(event, dialog) {
     console.log("Activating window", dialog);
     activeDialogId = dialog.id;
     if (!activeDialogId) return;
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
-    windowManager.windows[activeDialogId].setClickOffset(event.clientX || 0, event.clientY || 0);
-    windowManager.windows[activeDialogId].activate();
+    activeDialog.setClickOffset(event.clientX || 0, event.clientY || 0);
+    activeDialog.activate();
     return dialog;
 }
 
@@ -895,7 +895,7 @@ var ticking = false;
  */
 function handleWindowDrag(newX, hewY) {
     if (!activeDialogId) return;
-    var dialog = windowManager.windows[activeDialogId];
+    var dialog = activeDialog;
     if (!dialog.clickOffset) return;
     /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
@@ -936,8 +936,8 @@ function disableDialogDrag() {
     dragAction.set();
     for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(true);
     if (canSave) saveDialogState();
-    if (activeDialogId && windowManager.windows[activeDialogId] && windowManager.windows[activeDialogId].moveEvents) {
-        var func = windowManager.windows[activeDialogId].exchangeDialogMouseUpEvent;
+    if (activeDialog && activeDialog && activeDialog.moveEvents) {
+        var func = activeDialog.exchangeDialogMouseUpEvent;
         if (func) func();
     }
 }
@@ -1081,15 +1081,12 @@ function loadDialogState() {
     windowManager.loadState();
 }
 
-/**
- * @param {Dialog} dialog 
- */
-function exportDialogBodyToMetro(dialog) {
+
+Dialog.prototype.exportDialogBodyToMetro = function() {
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
-    if (dialog){ // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
-        var metro = bodyCrawler.getMetro();
-        if (metro && dialog.body) metroBodyOrigin = dialog.id, metro.appendChild(dialog.body);
-    }
+    // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
+    var metro = bodyCrawler.getMetro();
+    if (metro && this.body) metroBodyOrigin = this.id, metro.appendChild(this.body);
 }
 
 Dialog.prototype.retrieveBodyFromMetro = function() {
