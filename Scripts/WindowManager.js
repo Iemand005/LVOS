@@ -47,6 +47,9 @@ function titlify(title) {
 function WindowManager() {
     /** @type {DialogMap} */
     this._windows = {};
+
+    /** @type {DesktopState?} */
+    this._windowStates = null;
 }
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
@@ -54,6 +57,17 @@ function WindowManager() {
 
 Object.defineProperty(WindowManager.prototype, "windows", {
     get: function() { return this._windows; }
+});
+
+Object.defineProperty(WindowManager.prototype, "windowStates", {
+    get: function() {
+        if (!this._windowStates) try {
+            this._windowStates = JSON.parse(localStorage.windowState);
+        } catch(ex) { if (ex instanceof Error) console.log(console.error(ex.message);
+        )}
+        return this._windowStates;
+
+    }
 });
 
 Object.defineProperty(WindowManager.prototype, "state", {
@@ -82,7 +96,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
     console.log("Loading window state.")
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
-        /** @type {{[key: string]: DialogState}} */
+        /** @type {DesktopState} */
         var windowStates = JSON.parse(localStorage.windowState);
         if (dialog) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
         else {
