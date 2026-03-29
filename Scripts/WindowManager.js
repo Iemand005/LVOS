@@ -681,15 +681,9 @@ Dialog.prototype.removeMica = function() {
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
     clip.removeChild(clip.children[0]);
-    // this.move();
 };
 
-// /**
-//  * @typedef {{x: number, y: number}} Vector
-//  */
-/**
- * @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction
- */
+/** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
 function DragAction() { // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers! Rawr.

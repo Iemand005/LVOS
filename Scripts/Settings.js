@@ -151,15 +151,22 @@ document.body.ondrop = function(ev) {
 
 loadSettings();
 
-function downloadObjectAsJson(exportObj, exportName) {
-    var dataStr = JSON.stringify(exportObj);
-    var dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+/**
+ * @param {*} object 
+ * @param {string} [fileName] 
+ */
+function downloadObject(object, fileName) {
+    var uri = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(object));
 
     var a = document.createElement('a');
-    a.setAttribute("href", dataUri);
-    a.setAttribute("download", exportName + ".json");
+    a.setAttribute("href", uri);
+    a.setAttribute("download", fileName || "öbject" + ".json");
     
     document.body.appendChild(a);     
     a.click();
     document.body.removeChild(a);
+}
+
+function downloadSettings() {
+    downloadObject(localStorage);
 }
