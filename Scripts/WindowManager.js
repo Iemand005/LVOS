@@ -174,7 +174,12 @@ function Dialog(object, create) {
 
     /** @type {string?} */
     this._src = null;
+
+    // Object.defineProperty(Dialog.prototype, "x", {get: function () { return this._x;}});
     
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
     this._mica = useMica;
