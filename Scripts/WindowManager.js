@@ -627,10 +627,10 @@ Dialog.prototype.move = function(x, y) {
     }
 }
 /**
- * @param {number} width 
- * @param {number} height 
+ * @param {number} [width]
+ * @param {number} [height]
  */
-Dialog.prototype.resize = function(width, height) { if (this.body) this.body.style.boxSizing = "border-box", this.width = width, this.height = height; }
+Dialog.prototype.resize = function(width, height) { if (this.body) this.body.style.boxSizing = "border-box", this.width = width || this.width, this.height = height || this.height; }
 /**
  * @param {number} width 
  * @param {number} height 
@@ -878,14 +878,10 @@ function initializeDialogs() {
     windowManager.loadState();
 }
 
-// Normally we use /*const*/var in for in loops!
-// I am using /*let*/var for Internet Explorer 11 and other old browsers that create one instance of the looping variable and assign a new value to the same variable instead of creating a new one every time. This can cause problems if we use /*const*/var because you can't assign to a const! It also limits us from using that variable in the loop for "higher order" functions, also known as delegates or callbacks, since the same variable gets modified on these browsers.
-
 /**
  * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event 
  * @param {Dialog} dialog 
- * @returns 
  */
 function windowActivationEvent(event, dialog) {
     console.log("Activating window", dialog);
@@ -934,9 +930,7 @@ function windowDragEvent(event){
     }
 }
 
-/**
- * @param {boolean} enable 
- */
+/** @param {boolean} enable */
 function toggleDialogDragEventHandler(enable) {
     if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Starting drag");
     else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Stoppinge drag");
@@ -1002,11 +996,8 @@ function pixelsToCentimeters(pixels){
 function fromPixels(text){
     if (text != null) try {
         return typeof text === 'number' ? text : parseInt(text.replace("px", ''))
-    } catch (ex) {
-        console.warn("Failed to parse pixels:", ex);
-        return 0;
-    }
-    else return 0;
+    } catch (ex) { console.warn("Failed to parse pixels:", ex); }
+    return 0;
 }
 
 /** @param {boolean} enabled */
@@ -1028,10 +1019,10 @@ function handleStorageException(exception){
 Dialog.prototype.getWindowState = function() {
     /** @type {DialogState} */
     var state = {
-        title: this.title || this.id || "uhm what",
+        title: this.title || this.id,
         x: this.x,
-        y: this.y || 0,
-        z: this.z || 0,
+        y: this.y,
+        z: this.z,
         width: this.width || this.minHeight,
         height: this.height || this.minWidth,
         open: this.isOpen || false,
@@ -1125,10 +1116,13 @@ Dialog.prototype.kill = function() {
 };
 
 /** @param {string} appId  */
+WindowManager.prototype.closeApp = function(appId) {
+    windowManager.windows[appId].kill();
+};
+
+/** @param {string} appId  */
 function closeApp(appId) {
-    var element = windowManager.windows[appId].target;
-    if (element && element.parentElement)
-        element.parentElement.removeChild(element);
+    windowManager.closeApp(appId);
 }
 
 function enableMica() {
