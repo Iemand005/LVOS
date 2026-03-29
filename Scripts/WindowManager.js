@@ -77,7 +77,7 @@ WindowManager.prototype.saveState = function() {
         }
     }
 
-WindowManager.prototype.loadState = function() {
+WindowManager.prototype.loadState = function() { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
     console.log("Loading window state.")
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
@@ -236,11 +236,6 @@ Dialog.prototype.initWithObject = function (object) {
     this.toggleFullButton(true);
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    // this.synchronise = synchroniseDialogState.bind(this);
-    // this.synchronise = function(dialog) {
-
-    // }
-
     this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
     var self = this;
@@ -270,10 +265,8 @@ Dialog.prototype.initWithObject = function (object) {
         }
     }
 
-    body.addEventListener("load", function (event) { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
+    body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
 
-
-    
     if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
     else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
     target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
@@ -518,11 +511,11 @@ Dialog.prototype.activate = function() {
     this.focus();
     return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 }
-Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); }
+Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); };
 /** @param {boolean} force */
-Dialog.prototype.toggleTitlebar = function(force) { return this.head && !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); }
-Dialog.prototype.open = function() { return this.isOpen = true, saveDialogState(), this.isOpen; }, // Open, save, return if it's opened or not
-Dialog.prototype.close = function() { return this.isOpen = false, saveDialogState(), this.isOpen/* this.target.removeAttribute("open")*/; }
+Dialog.prototype.toggleTitlebar = function(force) { return this.head && !this.head.classList.toggle("hidden", typeof force !== 'undefined' ? !force : undefined); };
+Dialog.prototype.open = function() { return this.isOpen = true, windowManager.saveState(), this.isOpen; }; // Open, save, return if it's opened or not
+Dialog.prototype.close = function() { return this.isOpen = false, windowManager.saveState(), this.isOpen; };
 Dialog.prototype.getInnerRect = function() { if (this.target) return { top: this.target.offsetTop, left: this.target.offsetLeft, right: this.target.offsetLeft + this.target.offsetWidth, bottom: this.target.offsetTop + this.target.offsetHeight, width: this.target.offsetWidth, height: this.target.offsetHeight }; }, // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
 /** @param {number} index */
 Dialog.prototype.getRect = function(index) { if (this.target) return index == null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index]; }
@@ -681,7 +674,7 @@ Dialog.prototype.removeMica = function() {
  */
 
 // This was another test to check performance. It's basically an older version of the drag calculator which updates the positions at average 0.1-0.5ms in Chrome on my laptop. This method turns out to be faster for IE11 than it is for Chrome on the same computer. I left it in for performance reasons because it works so well, this lets us boost window dragging for older browsers.
-function DragAction(){ // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers!
+function DragAction() { // This looks less elegant than checking on mouse move but if we simply define the function in advance we save quite a lot of performance by doing the resize method calculations in advance instead on every mouse move tick. I also intentionally split the code up again so we do have duplicate code but in this case it's far more efficient to do 1 function call with 0 if statements than doing 16 function calls with 3 * 6 + 2 if statements for each direction on every mousemove event! Even the visually pleasing but technically sluggish method works relatively smoothly on modern browsers, it gets quite horrible once reflections and blur are enabled, these effects are done by native code in the browser and we can't optimise that so I did my best to make this as efficient as I could come up with. Performance is absolutely necessary because we want the window dragging to feel instantaneous, lag is absolutely not tolerated even on slow hardware and deprecated browsers! Rawr.
     /** @type {DragFunction} */
     this.execute = function(){};
     /** @type {DragFunction[]} */
@@ -725,8 +718,6 @@ DocumentCrawler.prototype = {
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-// /** @type {{[id:string]: Dialog}} */
-// var windows = {};
 var windowManager = new WindowManager;
 var windowButtons = {
     eject: 0,
@@ -870,7 +861,7 @@ function initializeDialogs() {
     });
     //flip();
     checkForFlip();
-    loadDialogState();
+    windowManager.loadState();
 }
 
 // Normally we use /*const*/var in for in loops!
@@ -889,7 +880,7 @@ function windowActivationEvent(event, dialog) {
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
-    activeDialog.setClickOffset(event.clientX || 0, event.clientY || 0);
+    activeDialog.setClickOffset(event.clientX, event.clientY);
     activeDialog.activate();
     return dialog;
 }
@@ -941,21 +932,22 @@ function disableDialogDrag() {
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set();
-    for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(true);
-    if (canSave) saveDialogState();
-    if (activeDialog && activeDialog && activeDialog.moveEvents) {
-        var func = activeDialog.exchangeDialogMouseUpEvent;
-        if (func) func();
-    }
+    windowManager.toggleDragging(false);
+    windowManager.saveState();
+    if (!(activeDialog && activeDialog.moveEvents)) return;
+    
+    var func = activeDialog.exchangeDialogMouseUpEvent;
+    if (func) func();
 }
 
 function enableDialogDrag(){
-    toggleDialogDragEventHandler(true);
-    windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(false); });
+    windowManager.toggleDragging(true);
 }
 
+/** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
     windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
+    toggleDialogDragEventHandler(enabled);
 }
 
 function updateTopZ() {
@@ -993,17 +985,6 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 }
 
 /**
- * @param {MouseEvent | PointerEvent} event 
- */
-function getEventDialog(event) { // Hier is dus die alternatieve modus, maar hij lijkt soms last te hebben op IE11.
-    if (fasterDialogTracking && event.clientX && event.clientY) try {
-        var window = document.elementsFromPoint(event.clientX, event.clientY).find(function (element) { return isDialog(element); });
-        if (window instanceof HTMLElement) return window;
-    } catch (ex) { console.error(ex) }
-    return getObjectDialog(event);
-}
-
-/**
  * @param {number} value 
  */
 function toPixels(value) {
@@ -1028,15 +1009,6 @@ function fromPixels(text){
         return 0;
     }
     else return 0;
-}
-
-/**
- * @param {Dialog} dialog 
- * @deprecated
- */
-function verifyEjectCapability(dialog){
-    if (!dialog) return false;
-    dialog.verifyEjectCapability();
 }
 
 /**
@@ -1083,15 +1055,6 @@ Dialog.prototype.loadWindowState = function(state) {
     this.height = state.height;
     if (state.open) this.launch();
 }
-
-function saveDialogState() {
-    windowManager.saveState();
-}
-
-function loadDialogState() {
-    windowManager.loadState();
-}
-
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
     if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
@@ -1150,7 +1113,7 @@ function isCharmsOpen() {
 /** @param {Application} application */
 function injectApplication(application){
     loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
-    loadDialogState();
+    windowManager.loadState();
 }
 
 /** @param {Application} app */
@@ -1167,7 +1130,7 @@ function loadApp(app) {
 /** @param {Application[]} applications  */
 function injectApplications(applications){
     applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
-    loadDialogState();
+    windowManager.loadState();
 }
 
 /** @param {string} appId  */
