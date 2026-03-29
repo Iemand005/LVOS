@@ -8,12 +8,12 @@ function Test() {
 
 Object.defineProperty(Test.prototype, "x", {
     get: function() { return this._x; },
-    set: function(x) { return this._x = x; }
+    set: function(x) { this._x = x; }
 });
 
 Object.defineProperty(Test.prototype, "y", {
     get: function() { return this._y; },
-    set: function(y) { if (typeof y === "number") return this._y = y; }
+    set: function(y) { this._y = y; }
 });
 
 Test.prototype.read = function() {

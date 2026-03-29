@@ -3,14 +3,5 @@
   "editor.indentSize": "tabSize",
   "chat.disableAIFeatures": true,
   "editor.inlineSuggest.enabled": true,
-  // "files.exclude": {
-  //   "**/.git": true,
-  //   "**/.svn": true,
-  //   "**/.hg": true,
-  //   "**/.DS_Store": true,
-  //   "**/Thumbs.db": true,
-  //   "**/*.log": true,
-  //   "**/.vs": true,
-  //   "**/*.vbs": false
-  // }
+  "js/ts.tsdk.path": "C:\\Users\\Lasse\\AppData\\Roaming\\npm\\node_modules\\typescript\\lib"
 }

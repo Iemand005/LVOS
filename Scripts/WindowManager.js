@@ -175,11 +175,6 @@ function Dialog(object, create) {
     /** @type {string?} */
     this._src = null;
 
-    // Object.defineProperty(Dialog.prototype, "x", {get: function () { return this._x;}});
-    
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
     this.minWidth = 100;
     this.minHeight = 200;
     this._mica = useMica;
@@ -694,6 +689,7 @@ Dialog.prototype.injectMica = function() {
 };
 
 Dialog.prototype.removeMica = function() {
+    if (!this.target) return;
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
     clip.removeChild(clip.children[0]);
@@ -819,6 +815,7 @@ function activeDialogToMetro() {
  * @param {boolean} enable 
  */
 function flip(enable){
+    if (!bodyCrawler.desktop) return;
     bodyCrawler.desktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
     flipHandler(bodyCrawler.desktop.classList.toggle("flipped", enable));
 }
@@ -1032,8 +1029,6 @@ Dialog.prototype.getWindowState = function() {
         height: this.height || this.minWidth,
         open: this.isOpen || false,
     }
-    /** @type {number} */
-    var a = this.x;
     return state;
 }
 
