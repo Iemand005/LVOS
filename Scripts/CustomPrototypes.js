@@ -43,16 +43,17 @@ function CompatibilityChecker(){
     }
 }
 
-if (!Object.hasOwn) Object.hasOwn = function(obj, key) { obj.hasOwnProperty(key); };
+if (!Object.hasOwn) Object.hasOwn = function(o, v) { return o.hasOwnProperty(v); };
 
 function forEachIn(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
     for (var i in this) if (Object.hasOwn(this, i)) callback(this[i], i, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
 }
 
 /**
- * 
- * @param {(any item, index: number, T:this)} callback 
- * @param {*} thisArg 
+ * @template {any} T
+ * @extends {any}
+ * @param {(item: any, index: number, self: ThisType<T>)=>void} callback 
+ * @param {T} thisArg 
  */
 function forEachIndexed(callback, thisArg) {
     for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback.bind(thisArg, this[i], i, this);
