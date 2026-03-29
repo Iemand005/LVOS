@@ -703,21 +703,16 @@ function DragAction() { // This looks less elegant than checking on mouse move b
     ];
 }
 
-/**
- * @param {number} [direction] 
- */
+/** @param {number} [direction] */
 DragAction.prototype.set = function(direction) { this.execute = this.resizeFunctions[direction || 0] || function(){console.log("bleed mself sdry")} };
 
-/**
- * @param {HTMLDocument} document 
- */
+/** @param {HTMLDocument} document */
 function DocumentCrawler(document){
     this.document = document;
 }
 
 DocumentCrawler.prototype = {
     getMetro: function(){ return this.document.getElementById("metrobody"); },
-    getDesktop: function(){ return this.document.getElementById("desktop"); },
     getMetroBody: function(){ var metro = this.getMetro(); return metro && metro.firstChild; },
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getDialogsContainer: function(){ return this.document.getElementById("windows") },
@@ -731,6 +726,8 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager;
+var bodyCrawler = new DocumentCrawler(document);
+var dragAction = new DragAction;
 var windowButtons = {
     eject: 0,
     full: 1,
@@ -742,12 +739,9 @@ var activeDialogId = null;
 var activeDialog = null;
 var resizeDirection = 0;
 var topZ = 100;
-var bodyCrawler = new DocumentCrawler(document);
 /** @type {string?} */
 var metroBodyOrigin;
 var loaded = false;
-var dragAction = new DragAction();
-// /*let*/var flipped = false;
 /** @type {number} */
 var timeout = -1;
 
@@ -809,10 +803,8 @@ function activeDialogToMetro() {
  * @param {boolean} enable 
  */
 function flip(enable){
-    var desktop = bodyCrawler.getDesktop();
-    if (!desktop) return;
-    desktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
-    flipHandler(desktop.classList.toggle("flipped", enable));
+    bodyCrawler.desktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(bodyCrawler.desktop.classList.toggle("flipped", enable));
 }
 
 /**
@@ -863,11 +855,10 @@ window.onresize = checkForFlip;
 function initializeDialogs() {
     if (typeof onpointerup !== "undefined") document.onpointerup = disableDialogDrag;
     else document.onmouseup = disableDialogDrag;
-    // if (document.ontouchend) document.ontouchend = disableDialogDrag;
     
     dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
-    Array.from(dialogs).forEach(function (dialog) {
+    Array.from(dialogs).forEach(function(dialog) {
         if (!(dialog instanceof HTMLElement)) return;
         windowManager.windows[dialog.id] = new Dialog(dialog); 
     });

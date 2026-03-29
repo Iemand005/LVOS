@@ -208,13 +208,18 @@ if (loadApps) {
     injectApplications(games);
 }
 
+/** @param {Application} app */
+function dockApp(app) {
+    dockapplist.appendChild(app.createOpenButton());
+}
+
 try {
     if (dockapplist) {
-        dockapplist.appendChild(windows.browser.createOpenButton());
-        dockapplist.appendChild(windows.console.createOpenButton());
-        dockapplist.appendChild(windows.browser.createOpenButton());
-        dockapplist.appendChild(windows.console.createOpenButton());
-        dockapplist.appendChild(windows.music.createOpenButton());
+        dockapplist.appendChild(windowManager.windows.browser.createOpenButton());
+        dockapplist.appendChild(windowManager.windows.console.createOpenButton());
+        dockapplist.appendChild(windowManager.windows.browser.createOpenButton());
+        dockapplist.appendChild(windowManager.windows.console.createOpenButton());
+        dockapplist.appendChild(windowManager.windows.music.createOpenButton());
     }
 } catch(ex) {
     if (ex instanceof Error)
