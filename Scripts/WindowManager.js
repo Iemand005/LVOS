@@ -62,11 +62,11 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 Object.defineProperty(WindowManager.prototype, "windowStates", {
     get: function() {
         if (!this._windowStates) try {
-            this._windowStates = JSON.parse(localStorage.windowState);
-        } catch(ex) { if (ex instanceof Error) console.log(console.error(ex.message);
-        )}
+            /** @type {DesktopState} */
+            var windowStates = JSON.parse(localStorage.windowState);
+            this._windowStates = windowStates;
+        } catch(ex) { if (ex instanceof Error) console.error(ex.message); }
         return this._windowStates;
-
     }
 });
 
@@ -96,8 +96,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
     console.log("Loading window state.")
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
-        /** @type {DesktopState} */
-        var windowStates = JSON.parse(localStorage.windowState);
+        var windowStates = this.windowStates;
         if (dialog) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
         else {
             var fails = [];
