@@ -119,6 +119,17 @@ WindowManager.prototype.forEachWindow = function(callback) {
     for (var id in this.windows) callback(this.windows[id], id);
 }
 
+/** @param {Application} app */
+WindowManager.prototype.loadApp = function(app) {
+    this._windows[app.id] = new Dialog(app);
+};
+
+/** @param {boolean} enabled */
+WindowManager.prototype.toggleDragging = function(enabled) {
+    windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
+    toggleDialogDragEventHandler(enabled);
+}
+
 function ClickOffset() {
     this.x = 0;
     this.y = 0;
@@ -947,28 +958,18 @@ function enableDialogDrag(){
     windowManager.toggleDragging(true);
 }
 
-/** @param {boolean} enabled */
-WindowManager.prototype.toggleDragging = function(enabled) {
-    windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
-    toggleDialogDragEventHandler(enabled);
-}
-
 /** @param {number} [newZ]  */
 function updateTopZ(newZ) {
     if (newZ) if (newZ > topZ) topZ = newZ;
     else windowManager.forEachWindow(function(dialog) { if (dialog.z > topZ) topZ = dialog.z; });
 }
 
-/**
- * @param {*} properties 
- */
+/** @param {*} properties */
 function stringifyDialogProperties(properties){
     return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
 }
 
-/**
- * @param {Element?} target 
- */
+/** @param {Element?} target */
 function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     if (!target) return null;
     var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
@@ -979,9 +980,7 @@ function getViewboxPosition(){
     return { left: window.screenLeft, top: window.screenTop }
 }
 
-/**
- * @param {HTMLElement | Event | null} object 
- */
+/** @param {HTMLElement | Event | null} object */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object) return console.log(object);
     if (object instanceof HTMLElement && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object instanceof HTMLElement && object.classList && object.classList.contains("window"))) return object;
@@ -989,23 +988,17 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
     else if (object instanceof HTMLElement) return getObjectDialog(object.parentElement);
 }
 
-/**
- * @param {number} value 
- */
+/** @param {number} value */
 function toPixels(value) {
     return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
 }
 
-/**
- * @param {number} pixels 
- */
+/** @param {number} pixels */
 function pixelsToCentimeters(pixels){
     return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
 }
 
-/**
- * @param {string} text 
- */
+/** @param {string} text */
 function fromPixels(text){
     if (text != null) try {
         return typeof text === 'number' ? text : parseInt(text.replace("px", ''))
@@ -1016,18 +1009,14 @@ function fromPixels(text){
     else return 0;
 }
 
-/**
- * @param {boolean} enabled 
- */
+/** @param {boolean} enabled */
 function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.toggleAttribute("blur");
     else document.body.toggleAttribute("blur", enabled);
     settings.set("blur", enabled);
 }
 
-/**
- * @param {*} exception 
- */
+/** @param {*} exception */
 function handleStorageException(exception){
     console.error(exception);
     console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
@@ -1121,23 +1110,12 @@ function injectApplication(application){
     windowManager.loadState();
 }
 
-/** @param {Application} app */
-WindowManager.prototype.loadApp = function(app) {
-    this._windows[app.id] = new Dialog(app);
-};
 
-/** @param {Application} app  */
-function loadApp(app) {
-    windowManager.loadApp(app);
-}
 
 /** @param {...Application[]} arguments */
 function injectApplications(){
-    for (let i = 0; i < arguments.length; i++) {
-        /** @type {Application[]} */
-        var apps = arguments[i];
-        apps.forEach(windowManager.loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
-    }
+    for (let i = 0; i < arguments.length; i++)
+        arguments[i].forEach(windowManager.loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
 }
 
