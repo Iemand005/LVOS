@@ -63,8 +63,8 @@ function forEachIndexed(callbackfn, thisArg) {
 if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
 if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
 
-if (!Object.defineProperty) Object.defineProperty = function(opl, key, attributes) {
-    if (!attributes) return;
+if (!Object.defineProperty) Object.defineProperty = function(o, key, attributes) {
+    if (!attributes || !(o instanceof Object)) return;
     if (attributes.get) o.__defineGetter__(key, attributes.get);
     if (attributes.set) o.__defineSetter__(key, attributes.set);
 }
@@ -88,7 +88,7 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
     return function() {
       var finalArgs = args.concat(slice.call(arguments));
       return fn.apply(thisArg, finalArgs);
-    };
+    };  
   };
 
 // if (!Console.prototype.log)
@@ -101,7 +101,7 @@ if (typeof console == "undefined") {
             alert("Warning: " + message);
         },
         error: function(message) {
-            alert("Error: " + message, true);
+            alert("Error: " + message);
         }
     }
 }

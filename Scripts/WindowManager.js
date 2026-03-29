@@ -904,7 +904,7 @@ var ticking = false;
 function handleWindowDrag(newX, hewY) {
     if (!activeDialogId) return;
     var dialog = activeDialog;
-    if (!dialog.clickOffset) return;
+    if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
@@ -1027,6 +1027,8 @@ Dialog.prototype.getWindowState = function() {
         height: this.height || this.minWidth,
         open: this.isOpen || false,
     }
+    /** @type {number} */
+    var a = this.x;
     return state;
 }
 
