@@ -1117,7 +1117,7 @@ function isCharmsOpen() {
 
 /** @param {Application} application */
 function injectApplication(application){
-    loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
+    windowManager.loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
     windowManager.loadState();
 }
 
@@ -1128,16 +1128,16 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {Application} app  */
 function loadApp(app) {
-    // windowManager.windows[app.id] = new Dialog(app);
     windowManager.loadApp(app);
 }
 
-/** @typedef {Application[]} ApplicationArray */
-
-/** @param {ApplicationArray | ApplicationArray[]} applications  */
-function injectApplications(applications){
-    arguments
-    applications.forEach(loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
+/** @param {...Application[]} arguments */
+function injectApplications(){
+    for (let i = 0; i < arguments.length; i++) {
+        /** @type {Application[]} */
+        var apps = arguments[i];
+        apps.forEach(windowManager.loadApp); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
+    }
     windowManager.loadState();
 }
 
