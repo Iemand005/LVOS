@@ -16,7 +16,7 @@
 
 // Modifiable settings
 var useBlur = false,
-    useMica = true,
+    useMica = false,
     reflections = false,
     fasterDialogTracking = true,
     canSave = true,
