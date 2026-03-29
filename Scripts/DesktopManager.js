@@ -1,7 +1,7 @@
 /**
  * @author Lasse Lauwerys
- * @version 1.0.0
- * @copyright Lasse Lauwerys © 2023
+ * @version 1.0.1
+ * @copyright Lasse Lauwerys © 2026
  */
 'use strict';
 'use esnext';
@@ -21,12 +21,6 @@ var applistItems = document.getElementById("dockapplist");
 function toggleReflections(force){
     if(force === null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
-    if(reflecitons) {
-        windowManager.forEachWindow(function(dialog) {
-            reflector.reflect(dialog.target);
-        });
-        // for (var windowId in windowManager.windows) reflector.reflect(windowManager.windows[windowId].target);
-        // reflector.reflect(applistItems);
-    }
+    if(reflecitons) windowManager.forEachWindow(function(dialog) { reflector.reflect(dialog.target); });
     else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
 }
