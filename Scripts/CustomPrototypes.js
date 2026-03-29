@@ -51,12 +51,11 @@ function forEachIn(callback) { // hasOwnProperty has been deprecated and replace
 
 /**
  * @template T
- * @template U
- * @param {(this: U, item: T, index: number, array: T[])=>void} callback 
- * @param {U} thisArg
+ * @param {(value: T, key: number, array: T[]) => void} callbackfn 
+ * @param {any} thisArg
  */
-function forEachIndexed(callback, thisArg) {
-    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback.bind(thisArg, this[i], i, this);
+function forEachIndexed(callbackfn, thisArg) {
+    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callbackfn.bind(thisArg, this[i], i, this);
 }
 
 
@@ -64,10 +63,10 @@ function forEachIndexed(callback, thisArg) {
 if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
 if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
 
-if (!Object.defineProperty) Object.defineProperty = function(obj, key, descriptor) {
-    if (!descriptor) return;
-    if (descriptor.get) obj.__defineGetter__(key, descriptor.get);
-    if (descriptor.set) obj.__defineSetter__(key, descriptor.set);
+if (!Object.defineProperty) Object.defineProperty = function(opl, key, attributes) {
+    if (!attributes) return;
+    if (attributes.get) o.__defineGetter__(key, attributes.get);
+    if (attributes.set) o.__defineSetter__(key, attributes.set);
 }
 
 if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
