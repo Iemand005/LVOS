@@ -94,6 +94,13 @@ WindowManager.prototype.loadState = function() {
     } else console.error("Storage access is disabled for this session!");
 }
 
+/** @typedef {(dialog: Dialog, id: string)=>void} WindowCallback */
+
+/** @param {WindowCallback} callback */
+WindowManager.prototype.forEachWindow = function(callback) {
+    for (var id in this.windows) callback(this.windows[id], id);
+}
+
 function ClickOffset() {
     this.x = 0;
     this.y = 0;
@@ -944,11 +951,15 @@ function disableDialogDrag() {
 
 function enableDialogDrag(){
     toggleDialogDragEventHandler(true);
-    for (var index in windowManager.windows) windowManager.windows[index].togglePointerEvents(false);
+    windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(false); });
+}
+
+WindowManager.prototype.toggleDragging = function(enabled) {
+    windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
 }
 
 function updateTopZ() {
-    for (var window in windowManager.windows) if (windowManager.windows[window].z || 0 > topZ) topZ = windowManager.windows[window].z || 0;
+    windowManager.forEachWindow(function(dialog) { if (dialog.z > topZ) topZ = dialog.z; });
 }
 
 /**
