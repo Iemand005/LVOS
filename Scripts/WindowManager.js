@@ -1119,6 +1119,11 @@ function injectApplications() {
     windowManager.loadState();
 }
 
+Dialog.prototype.kill = function() {
+    var parent = this.target && this.target.parentElement;
+    if (parent) parent.removeChild(element);
+};
+
 /** @param {string} appId  */
 function closeApp(appId) {
     var element = windowManager.windows[appId].target;
