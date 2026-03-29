@@ -50,10 +50,10 @@ function forEachIn(callback) { // hasOwnProperty has been deprecated and replace
 }
 
 /**
- * @template {any} T
- * @extends {any}
- * @param {(item: any, index: number, self: ThisType<T>)=>void} callback 
- * @param {T} thisArg 
+ * @template T
+ * @template U
+ * @param {(this: U, item: T, index: number, array: T[])=>void} callback 
+ * @param {U} thisArg
  */
 function forEachIndexed(callback, thisArg) {
     for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callback.bind(thisArg, this[i], i, this);
