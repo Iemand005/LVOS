@@ -116,7 +116,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 
 /** @param {WindowCallback} callback */
 WindowManager.prototype.forEachWindow = function(callback) {
-    for (var id in this.windows) callback(this.windows[id], id);
+    for (var id in this.windows) if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
 }
 
 /** @param {Application} app */
@@ -1104,11 +1104,6 @@ function isCharmsOpen() {
     return charms && charms.classList.contains("open");
 }
 
-/** @param {...Application[]} arguments */
-WindowManager.prototype.injectApps = function() {
-
-}
-
 /** @param {Application} application */
 function injectApplication(application) {
     windowManager.loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
@@ -1133,12 +1128,10 @@ function closeApp(appId) {
 
 function enableMica() {
     var wallpaper = getWallpaper();
-    window.addEventListener("resize", function(ev) {
-        for (var id in windowManager.windows) {
-            if (!(windowManager.windows.hasOwnProperty(id))) continue;
-            var dialog = windowManager.windows[id];
-            if (dialog) dialog.resize(dialog.width || dialog.minWidth, dialog.height || dialog.minHeight); // TODO: Why does it say width can be null?? it should return minheight probably always if undefned really but it cant reraly be that righte
-        }
+    window.addEventListener("resize", function() {
+        windowManager.forEachWindow(function(window) {
+            window.resize(window.width, window.height);
+        });
     });
 }
 
