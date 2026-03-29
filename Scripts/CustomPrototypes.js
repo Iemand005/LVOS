@@ -23,9 +23,17 @@ if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
 };
 
 if(typeof MutationObserver === "undefined") window.MutationObserver = function(callback) {
-    this.observe = function(element){
-        element.addEventListener('DOMNodeInserted', callback, false);
+    /**
+     * @param {Node} target
+     * @param {MutationObserverInit} [options]
+     */
+    this.observe = function(target, options){
+        target.addEventListener('DOMNodeInserted', callback, false);
     }
+    /** @type {} */
+    this.disconnect = function(target, options) {}
+    /** @returns {MutationRecord[]} */
+    this.takeRecords = function() { return []; }
 };
 
 function CompatibilityChecker(){

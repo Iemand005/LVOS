@@ -23,7 +23,7 @@ var seekOutput = document.getElementById("seek-output");
 var volumeOutput = document.getElementById("volume-output");
 var fft = document.getElementById("fft");
 var visualiserOption = document.getElementById("style");
-var elements = [];
+let elements = [];
 var audioVisualiser;
 var circular = true;
 var clear = false;

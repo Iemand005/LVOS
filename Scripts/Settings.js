@@ -45,34 +45,33 @@ function setBorderSize(size) {
 
 function hexToRGB(hex) {
     if (typeof hex === 'undefined' || !hex) return;
-    /*const*/var int = parseInt(hex.replace('#', ''), 16);
+    var int = parseInt(hex.replace('#', ''), 16);
     return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
 }
 
 function isColorDark(color) {
     if (typeof color === 'undefined') return;
-    /*const*/var rgb = hexToRGB(color);
+    var rgb = hexToRGB(color);
     return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
 }
 
 function setColor(color){
-    // /*const*/var y = 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
-    // /*const*/var c = y < 128 ? "black" : "white";
-    if (typeof color === 'undefined') return;
+    if (typeof color === 'undefined' || !(elements.color instanceof HTMLInputElement)) return;
     settings.set("color", elements.color.value = color);
     
-    /*const*/var isWhite = isColorDark(color);
-    for(/*let*/var index in windows){
-        /*const*/var content = windowManager.windows[index].target.getElementsByTagName("content")[0];
+    var isWhite = isColorDark(color);
+    for(var index in windows){
+        var content = windowManager.windows[index].target.getElementsByTagName("content")[0];
+        if (!(content instanceof HTMLElement)) continue;
         content.style.backgroundColor = color;
-        content.style.color = isWhite?"white":"black";
+        content.style.color = isWhite ? "white" : "black";
     }
 }
 
 function setAccentColor(color) {
     settings.set("accentColor", elements.accent.value = color);
-    /*const*/var isWhite = isColorDark(color);
-    /*const*/var metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
+    var isWhite = isColorDark(color);
+    var metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
     metroStyle.backgroundColor = charmStyle.backgroundColor = color;
     metroStyle.color = charmStyle.color = isWhite?"white":"black";
     // document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
