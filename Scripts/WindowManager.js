@@ -68,27 +68,32 @@ Object.defineProperty(WindowManager.prototype, "state", {
 });
 
 WindowManager.prototype.saveState = function() {
-        if (!loaded) return;
-        console.log("Saving window state.");
-        if (canSave && localStorage) try {
-            localStorage.setItem("windowState", JSON.stringify(this.state));
-        } catch (exception) {
-            handleStorageException(exception);
-        }
+    if (!loaded) return;
+    console.log("Saving window state.");
+    if (canSave && localStorage) try {
+        localStorage.setItem("windowState", JSON.stringify(this.state));
+    } catch (exception) {
+        handleStorageException(exception);
     }
+}
 
-WindowManager.prototype.loadState = function() { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
+/** @param {Dialog} [dialog] */
+WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
     console.log("Loading window state.")
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
         /** @type {{[key: string]: DialogState}} */
-        var windowStates = JSON.parse(localStorage.windowState), fails = [];
-        for (var id in windowStates) try {
-            if (windowManager.windows[id] && windowStates[id])
-                windowManager.windows[id].loadWindowState(windowStates[id]);
-        } catch (ex) { fails.push(ex); }
-        fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
-        updateTopZ();
+        var windowStates = JSON.parse(localStorage.windowState);
+        if (dialog) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
+        else {
+            var fails = [];
+            for (var id in windowStates) try {
+                if (windowManager.windows[id] && windowStates[id])
+                    windowManager.windows[id].loadWindowState(windowStates[id]);
+            } catch (ex) { fails.push(ex); }
+            fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
+            updateTopZ();
+        }
     } catch (exception) {
         handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
@@ -950,8 +955,10 @@ WindowManager.prototype.toggleDragging = function(enabled) {
     toggleDialogDragEventHandler(enabled);
 }
 
-function updateTopZ() {
-    windowManager.forEachWindow(function(dialog) { if (dialog.z > topZ) topZ = dialog.z; });
+/** @param {number} [newZ]  */
+function updateTopZ(newZ) {
+    if (newZ) if (newZ > topZ) topZ = newZ;
+    else windowManager.forEachWindow(function(dialog) { if (dialog.z > topZ) topZ = dialog.z; });
 }
 
 /**
