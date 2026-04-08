@@ -110,7 +110,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
         var windowStates = this.windowStates;
-        if (dialog) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
+        if (dialog && dialog.id) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
         else {
             var fails = [];
             for (var id in windowStates) try {
@@ -570,8 +570,8 @@ Dialog.prototype.getRect = function(index) { if (this.target) return index == nu
 Dialog.prototype.getButton = function(index) { return this.head && this.head.getElementsByTagName("button")[index]; }
 Dialog.prototype.createOpenButton = function() { return this.buttons.unshift(document.createElement("button")), this.buttons[0].innerText = this.title || "", this.buttons[0].onclick = this.launch.bind(this), this.buttons[0] }
 /**
- * @param {number} x 
- * @param {number} y 
+ * @param {number} x
+ * @param {number} y
  */
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
@@ -1147,10 +1147,13 @@ function enableMica() {
 }
 
 /** @param {boolean} enabled */
+WindowManager.prototype.toggleMica = function(enabled) {
+    windowManager.forEachWindow(function(window) { window.mica = enabled; });
+}
+
+/** @param {boolean} enabled */
 function toggleMica(enabled) {
-    windowManager.forEachWindow(function(window) {
-        window.mica = enabled;
-    });
+    windowManager.toggleMica(enabled);
 }
 
 /**

@@ -216,7 +216,8 @@ if (loadApps) {
 
 /** @param {Dialog} dialog */
 function dockApp(dialog) {
-    dockapplist.appendChild(dialog.createOpenButton());
+    if (dockapplist)
+        dockapplist.appendChild(dialog.createOpenButton());
 }
 
 try {
