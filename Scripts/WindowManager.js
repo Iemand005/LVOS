@@ -1141,8 +1141,8 @@ function toggleMica(enabled) {
 }
 
 /**
- * @param {string} url 
- * @param {string} blurredUrl 
+ * @param {string} url
+ * @param {string} blurredUrl
  */
 function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
