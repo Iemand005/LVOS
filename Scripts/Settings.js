@@ -52,6 +52,7 @@ function hexToRGB(hex) {
 function isColorDark(color) {
     if (typeof color === 'undefined') return;
     var rgb = hexToRGB(color);
+    if (!rgb) return false;
     return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
 }
 
@@ -61,7 +62,9 @@ function setColor(color){
     
     var isWhite = isColorDark(color);
     for(var index in windows){
-        var content = windowManager.windows[index].target.getElementsByTagName("content")[0];
+        var dialog = windowManager.windows[index];
+        if (!dialog) continue;
+        var content = dialog.target.getElementsByTagName("content")[0];
         if (!(content instanceof HTMLElement)) continue;
         content.style.backgroundColor = color;
         content.style.color = isWhite ? "white" : "black";

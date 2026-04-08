@@ -8,10 +8,10 @@
 
 
 var dockapplist = document.getElementById("dockapplist");
-
-if (windows.browser) {
-var browser = windows.browser.target;//document.getElementById("browser");
-var browserform = windows.browser.originalBody;//document.getElementById("browserform");
+// var windows = windowManager.windows;
+if (windowManager && windowManager.windows.browser) {
+var browser = windowManager.windows.browser.target;//document.getElementById("browser");
+var browserform = windowManager.windows.browser.originalBody;//document.getElementById("browserform");
 
 if (browser && browserform) {
 var browserframe = browser.getElementsByTagName("iframe")[0];
