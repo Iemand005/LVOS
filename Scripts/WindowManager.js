@@ -220,8 +220,10 @@ function Dialog(object, create) {
 /**
  * @param {HTMLElement | Application} object
  */
-Dialog.prototype.initWithObject = function (object) {
+Dialog.prototype.initWithObject = function(object) {
     if (!object) return;
+
+    var dialog = this;
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
@@ -296,7 +298,7 @@ Dialog.prototype.initWithObject = function (object) {
         }
 
         target.addEventListener("animationend", function (ev) {
-            if (ev.animationName == "closing") this.kill
+            if (ev.animationName == "closing") dialog.kill();
         }, false);
 
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
