@@ -258,10 +258,10 @@ Dialog.prototype.initWithObject = function(object) {
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
     // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    var applist = document.getElementById("applist");
-    if (applist) applist.appendChild(this.createOpenButton());
-    var metroapplist = document.getElementById("metroapplist");
-    if (metroapplist) metroapplist.appendChild(this.createOpenButton());
+    // var applist = document.getElementById("applist");
+    // if (applist) applist.appendChild(this.createOpenButton());
+    // var metroapplist = document.getElementById("metroapplist");
+    // if (metroapplist) metroapplist.appendChild(this.createOpenButton());
 
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
@@ -337,6 +337,8 @@ Dialog.prototype.initWithObject = function(object) {
 
     if (this.id) windowManager.windows[this.id] = this;
 
+    this.move();
+    this.resize();
 }
 
 /**
@@ -378,7 +380,7 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer()?.contains(this.target) ? true : false; },
+    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer()?.contains(this.target)); },
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
@@ -649,7 +651,7 @@ Dialog.prototype.resizeBody = function(width, height) { if (this.body && this.ta
 Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
     this.frame.src = url;
-    this.launch();
+    // this.launch();
 };
 
 Dialog.prototype.quit = function() {
