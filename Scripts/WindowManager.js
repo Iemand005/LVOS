@@ -656,13 +656,6 @@ Dialog.prototype.quit = function() {
     this.close();
 };
 
-Dialog.prototype.kill = function() {
-    if (this.closeable) {
-        if (this.target && this.target.parentElement) this.target.parentElement.removeChild(this.target);
-        this.target = null;
-    }
-}
-
 Dialog.prototype.launch = function() {
     if (!this.target && this.application) this.initWithObject(this.application);
     if (this.mica) this.injectMica();
@@ -1126,7 +1119,7 @@ function injectApplications() {
 
 Dialog.prototype.kill = function() {
     var parent = this.target && this.target.parentElement;
-    if (parent) parent.removeChild(element);
+    if (parent) parent.removeChild(this.target);
 };
 
 /** @param {string} appId  */
