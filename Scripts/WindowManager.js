@@ -342,27 +342,29 @@ Dialog.prototype.initWithObject = function(object) {
 }
 
 /**
- * @param {number} [a] 
- * @param {number} [b] 
+ * @param {number} [a]
+ * @param {number} [b]
  */
 function max(a, b) {
-    if ((a || 0) > (b || 0)) return a || 0;
-    else return b|| 0;
+    if (!a) a = 0;
+    if (!b) b = 0;
+    return a > b ? a : b;
 }
 
 /**
- * @param {number} a 
- * @param {number} b 
+ * @param {number} [a]
+ * @param {number} [b]
  */
 function min(a, b) {
-    if (a < b) return a;
-    else return b;
+    if (!a) a = 0;
+    if (!b) b = 0;
+    return a < b ? a : b;
 }
 
 /**
- * @param {HTMLElement} element 
- * @param {number} x 
- * @param {number} y 
+ * @param {HTMLElement} element
+ * @param {number} x
+ * @param {number} y
  */
 function translateElement(element, x, y) {
     element.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
