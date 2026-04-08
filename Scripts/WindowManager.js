@@ -298,7 +298,8 @@ Dialog.prototype.initWithObject = function(object) {
         }
 
         target.addEventListener("animationend", function (ev) {
-            if (ev.animationName == "closing") dialog.kill();
+            if (ev.animationName == "closing")
+                dialog.kill.apply(dialog);
         }, false);
 
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
