@@ -51,6 +51,7 @@ function WindowManager() {
     /** @type {DesktopState?} */
     this._windowStates = null;
 
+    this._isBlurEnabled = true;
     this._isMicaEnabled = false;
 }
 
@@ -81,6 +82,11 @@ Object.defineProperty(WindowManager.prototype, "state", {
                 state[id] = this.windows[id].getWindowState();
         return state;
     }
+});
+
+Object.defineProperty(WindowManager.prototype, "isBlueEnabled", {
+    get: function() { return this._isBlurEnabled; },
+    set: function(value) { if (typeof value === "boolean") this._isBlurEnabled = value; }
 });
 
 Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
