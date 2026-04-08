@@ -1128,12 +1128,16 @@ function closeApp(appId) {
 }
 
 function enableMica() {
-    var wallpaper = getWallpaper();
     window.addEventListener("resize", function() {
         windowManager.forEachWindow(function(window) {
             window.resize(window.width, window.height);
         });
     });
+}
+
+/** param {boolean} enabled */
+function toggleMica(enabled) {
+
 }
 
 /**
