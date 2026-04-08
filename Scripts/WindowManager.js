@@ -342,24 +342,16 @@ Dialog.prototype.initWithObject = function(object) {
 }
 
 /**
- * @param {number} [a]
- * @param {number} [b]
+ * @param {number} a
+ * @param {number} b
  */
-function max(a, b) {
-    if (!a) a = 0;
-    if (!b) b = 0;
-    return a > b ? a : b;
-}
+function max(a, b) { return a > b ? a : b; }
 
 /**
- * @param {number} [a]
- * @param {number} [b]
+ * @param {number} a
+ * @param {number} b
  */
-function min(a, b) {
-    if (!a) a = 0;
-    if (!b) b = 0;
-    return a < b ? a : b;
-}
+function min(a, b) { return a < b ? a : b; }
 
 /**
  * @param {HTMLElement} element
@@ -372,7 +364,7 @@ function translateElement(element, x, y) {
 }
 
 /**
- * @param {HTMLElement} element 
+ * @param {HTMLElement} element
  * @param {number} width
  * @param {number} height
  */
@@ -612,10 +604,9 @@ Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMess
  * @param {number?} [y]
  */
 Dialog.prototype.move = function(x, y) {
-    if (typeof x === "undefined" || x === null) x = this.x;
-    if (typeof y === "undefined" || y === null) y = this.y;
-    this._x = max(typeof x === "undefined" || x === null ? this.x : x, 0),
-    this._y = max(y, 0);
+    if (typeof x === "undefined" || x === null) x = this.x || 0;
+    if (typeof y === "undefined" || y === null) y = this.y || 0;
+    this._x = max(x, 0), this._y = max(y, 0);
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
