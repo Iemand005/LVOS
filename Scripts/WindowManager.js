@@ -644,12 +644,15 @@ Dialog.prototype.openUrl = function(url) {
 };
 
 Dialog.prototype.quit = function() {
+    this.close();
+};
+
+Dialog.prototype.kill = function() {
     if (this.closeable) {
         if (this.target && this.target.parentElement) this.target.parentElement.removeChild(this.target);
         this.target = null;
     }
-    else this.close();
-};
+}
 
 Dialog.prototype.launch = function() {
     if (!this.target && this.application) this.initWithObject(this.application);
