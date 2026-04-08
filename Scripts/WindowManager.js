@@ -691,7 +691,7 @@ Dialog.prototype.injectMica = function() {
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    if (!clip) return;
+    if (!clip || !clip.children.length) return;
     clip.removeChild(clip.children[0]);
 };
 
