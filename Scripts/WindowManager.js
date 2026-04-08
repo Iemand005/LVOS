@@ -278,56 +278,62 @@ Dialog.prototype.initWithObject = function (object) {
     var target = this.target;
     var body = getDialogBody(target);
     if (target && body) {
-    var borderSection = target.getElementsByTagName("section")[0];
 
-    if(borderSection && !this.fixed) {
-        for (var index = 0; index < 8; index++) {
-            var div = document.createElement("div");
-            div.draggable = false, div.id = String(index + 1);
-            /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
-            var pointerDown = function (ev) {
-                if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
-            }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-            if (supportsPointer) div.onpointerdown = pointerDown;
-            else div.onmousedown = pointerDown;
-            target.appendChild(div);
+        var borderSection = target.getElementsByTagName("section")[0];
+
+        if(borderSection && !this.fixed) {
+            for (var index = 0; index < 8; index++) {
+                var div = document.createElement("div");
+                div.draggable = false, div.id = String(index + 1);
+                /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
+                var pointerDown = function (ev) {
+                    if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
+                }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+                if (supportsPointer) div.onpointerdown = pointerDown;
+                else div.onmousedown = pointerDown;
+                target.appendChild(div);
+            }
         }
+
+        target.addEventListener("animationend", function (ev) {
+            if (ev.animationName == "closing") this.kill
+        }, false);
+
+        body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
+
+        if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
+        else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
+        target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
+            if (!target) return;
+            var rect = target.getClientRects()[0];
+            var viewboxPosition = getViewboxPosition();
+            var propeties = {
+                scrollbars: true,
+                resizable: true,
+                status: false,
+                location: false,
+                toolbar: false,
+                menubar: false,
+                width: rect.width,
+                height: rect.height,
+                left: rect.left + viewboxPosition.left,
+                top: rect.top + viewboxPosition.top
+            }
+
+            if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
+            self.quit();
+        });
+        
+        var buttons = target.getElementsByTagName("button");
+        buttons[windowButtons.close].addEventListener("click", function () {
+            self.close();
+        }.bind(self));
+        buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
+        this.close();
     }
 
-    body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
-
-    if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
-    else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
-    target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
-        if (!target) return;
-        var rect = target.getClientRects()[0];
-        var viewboxPosition = getViewboxPosition();
-        var propeties = {
-            scrollbars: true,
-            resizable: true,
-            status: false,
-            location: false,
-            toolbar: false,
-            menubar: false,
-            width: rect.width,
-            height: rect.height,
-            left: rect.left + viewboxPosition.left,
-            top: rect.top + viewboxPosition.top
-        }
-
-        if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
-        self.quit();
-    });
-    
-    var buttons = target.getElementsByTagName("button");
-    buttons[windowButtons.close].addEventListener("click", function () {
-        self.close();
-    }.bind(self));
-    buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
-    this.close();
-}
-
     if (this.id) windowManager.windows[this.id] = this;
+
 }
 
 /**

@@ -236,8 +236,8 @@ article {
 }
 
 
-.window:not([open]){
-    display: none; /* The display attribute is set to none by default */
+.window:not([open]) {
+    /*display: none; /* The display attribute is set to none by default */
     z-index: -1000;
     /*pointer-events: none !important;*/
 }
