@@ -378,7 +378,7 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return this.target && this.target.hasAttribute("open"); },
+    get: function() { return this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer()?.contains(this.target) ? true : false; },
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
@@ -657,7 +657,7 @@ Dialog.prototype.quit = function() {
 };
 
 Dialog.prototype.launch = function() {
-    if (!this.target && this.application) this.initWithObject(this.application);
+    if (!this.isOpen && this.application) this.initWithObject(this.application);
     if (this.mica) this.injectMica();
 
     this.open();
