@@ -1119,7 +1119,7 @@ function injectApplications() {
 
 Dialog.prototype.kill = function() {
     var parent = this.target && this.target.parentElement;
-    if (parent) parent.removeChild(this.target);
+    if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
 
 /** @param {string} appId  */
