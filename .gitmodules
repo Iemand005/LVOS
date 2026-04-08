@@ -7,3 +7,6 @@
 [submodule "Applications/MPTool"]
 	path = Applications/MPTool
 	url = https://github.com/Iemand005/MPTool.git
+[submodule "Applications/StereogramMaker"]
+	path = Applications/StereogramMaker
+	url = https://github.com/Iemand005/StereogramMaker

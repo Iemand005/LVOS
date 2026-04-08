@@ -5,7 +5,7 @@
 /*const*/var fsSource =
   "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
 
-Graphics.prototype.loadShader = function (type, source) {
+Graphics3D.prototype.loadShader = function (type, source) {
   /*const*/var shader = this.gl.createShader(type);
   this.gl.shaderSource(shader, source);
   this.gl.compileShader(shader);
@@ -24,7 +24,7 @@ Graphics.prototype.loadShader = function (type, source) {
   return shader;
 };
 
-Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
+Graphics3D.prototype.initShaderProgram = function (vsSource, fsSource) {
   /*const*/var vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
   /*const*/var fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
 
@@ -51,7 +51,7 @@ Graphics.prototype.initShaderProgram = function (vsSource, fsSource) {
 /**
  * @param {HTMLCanvasElement} canvas
  */
-function Graphics(canvas) {
+function Graphics3D(canvas) {
   /* @type {HTMLCanvasElement} */
   this.canvas = canvas;
   this.gl = canvas.getContext("webgl");
@@ -72,11 +72,11 @@ function Graphics(canvas) {
   this.onrender = function () {};
 }
 
-Graphics.prototype.clear = function () {
+Graphics3D.prototype.clear = function () {
   this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 };
 
-Graphics.prototype.loadShaders = function (vsSource, fsSource) {
+Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
   /*const*/var gl = this.gl;
   this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
 
@@ -97,7 +97,7 @@ Graphics.prototype.loadShaders = function (vsSource, fsSource) {
 // /*let*/var now = 0;
 /*let*/var then = 0;
 
-Graphics.prototype.drawScene = function (programInfo, deltaTime) {
+Graphics3D.prototype.drawScene = function (programInfo, deltaTime) {
   /*const*/var gl = this.gl;
 
   gl.clearDepth(1.0); // Clear everything
@@ -218,7 +218,7 @@ Graphics.prototype.drawScene = function (programInfo, deltaTime) {
 
 // };
 
-Graphics.prototype.render = function (now) {
+Graphics3D.prototype.render = function (now) {
   now *= 0.001; // convert to seconds
   deltaTime = now - then;
   then = now;
@@ -228,14 +228,14 @@ Graphics.prototype.render = function (now) {
   this.drawScene(programInfo, deltaTime);
   // squareRotation += deltaTime;
 
-  requestAnimationFrame(Graphics.prototype.render.bind(this));
+  requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics.prototype.startRendering = function () {
-  requestAnimationFrame(Graphics.prototype.render.bind(this));
+Graphics3D.prototype.startRendering = function () {
+  requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics.prototype.resize = function (width, height) {
+Graphics3D.prototype.resize = function (width, height) {
   /*const*/var dpr = window.devicePixelRatio || 1;
   this.canvas.width = width * dpr;
   this.canvas.height = height * dpr;
@@ -246,7 +246,7 @@ Graphics.prototype.resize = function (width, height) {
 
 // export { drawScene };
 
-/*const*/var graphics = new Graphics(canvas);
+/*const*/var graphics = new Graphics3D(canvas);
 /*const*/var gl = graphics.gl;
 graphics.clear();
 graphics.loadShaders(vsSource, fsSource);
