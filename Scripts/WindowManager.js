@@ -50,6 +50,8 @@ function WindowManager() {
 
     /** @type {DesktopState?} */
     this._windowStates = null;
+
+    this._isMicaEnabled = false;
 }
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
@@ -79,6 +81,11 @@ Object.defineProperty(WindowManager.prototype, "state", {
                 state[id] = this.windows[id].getWindowState();
         return state;
     }
+});
+
+Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
+    get: function() { return this._isMicaEnabled; },
+    set: function(value) { if (typeof value === "boolean") this._isMicaEnabled = value; }
 });
 
 WindowManager.prototype.saveState = function() {
