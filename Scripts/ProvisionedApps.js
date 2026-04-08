@@ -170,6 +170,12 @@ var applications = [
         id: "mptool",
         src: "./Applications/MPTool/index.html",
         hidden: true
+    },
+    {
+        title: "Autostereograms",
+        id: "stereograms",
+        src: "./Applications/StereogramMaker/index.html",
+        hidden: true
     }
 ]
 
