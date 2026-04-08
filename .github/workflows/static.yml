@@ -37,6 +37,7 @@ jobs:
         run: |
           git submodule sync
           git submodule update --init Applications/FrostedColours
+          git submodule update --init Applications/StereogramMaker
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
