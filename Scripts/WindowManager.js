@@ -691,8 +691,8 @@ Dialog.prototype.injectMica = function() {
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    if (!clip || !clip.children.length) return;
-    clip.removeChild(clip.children[0]);
+    if (clip && clip.children.length)
+        clip.removeChild(clip.children[0]);
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
