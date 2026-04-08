@@ -1128,16 +1128,16 @@ function closeApp(appId) {
 }
 
 function enableMica() {
-    window.addEventListener("resize", function() {
-        windowManager.forEachWindow(function(window) {
-            window.resize(window.width, window.height);
-        });
-    });
+    window.addEventListener("resize", windowManager.forEachWindow.bind(windowManager, function(window) {
+        window.resize(window.width, window.height);
+    }));
 }
 
-/** param {boolean} enabled */
+/** @param {boolean} enabled */
 function toggleMica(enabled) {
-
+    windowManager.forEachWindow(function(window) {
+        window.mica = enabled;
+    });
 }
 
 /**
