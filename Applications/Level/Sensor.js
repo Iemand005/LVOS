@@ -37,7 +37,7 @@ GraphicsBase.prototype.resize = function (width, height) {
 }
 
 GraphicsBase.prototype.getContext = function (type) {
-  return this.canvas.getContext();
+  return this.canvas.getContext(type);
 }
 
 /**
