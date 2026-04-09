@@ -19,3 +19,6 @@
 [submodule "Applications/Cube/WebGraphics"]
 	path = Applications/Cube/WebGraphics
 	url = https://github.com/Iemand005/WebGraphics
+[submodule "Scripts/WebGraphics"]
+	path = Scripts/WebGraphics
+	url = https://github.com/Iemand005/WebGraphics
