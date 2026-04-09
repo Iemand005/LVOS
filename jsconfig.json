@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": ["ES2015", "DOM"],
     "checkJs": true
   },
   "include": [
-    "path/to/the/ONE/folder/you/want/to/keep/**/*",
-    "main-logic-folder/**/*"
+    "./Scripts/WebGraphics",
   ],
   "exclude": [
-    "**/WebGraphics",
-    "node_modules"
+    "Applications/**/WebGraphics",
   ]
 }
