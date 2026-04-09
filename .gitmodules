@@ -13,3 +13,9 @@
 [submodule "Applications/Level/WebGraphics"]
 	path = Applications/Level/WebGraphics
 	url = https://github.com/Iemand005/WebGraphics
+[submodule "Applications/RenderDonkey/WebGraphics"]
+	path = Applications/RenderDonkey/WebGraphics
+	url = https://github.com/Iemand005/WebGraphics
+[submodule "Applications/Cube/WebGraphics"]
+	path = Applications/Cube/WebGraphics
+	url = https://github.com/Iemand005/WebGraphics
