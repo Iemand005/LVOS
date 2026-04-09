@@ -10,3 +10,6 @@
 [submodule "Applications/StereogramMaker"]
 	path = Applications/StereogramMaker
 	url = https://github.com/Iemand005/StereogramMaker
+[submodule "Applications/Level/WebGraphics"]
+	path = Applications/Level/WebGraphics
+	url = https://github.com/Iemand005/WebGraphics
