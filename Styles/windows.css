@@ -292,13 +292,6 @@ article > * {
     overflow: auto;
 }
 
-section#desktop {
-    height: 100%;
-    width: 100%;
-    background-color: orange;
-    z-index: -100;
-}
-
 .acrylic {
     background-color: rgba(0, 0, 0, 0.507);
     backdrop-filter: blur(8px);

@@ -61,16 +61,16 @@ body:not([blur]) .window > article {
 }
 
 #desktop {
-  background-color: orange;
   bottom: 0;
   position: absolute;
   height: 100%;
+  width: 100%;
+  z-index: -1000;
   pointer-events: none;
   overflow: visible;
   transform-style: preserve-3d;
   transition: all 1000ms ease-in-out;
   transition: all 600ms ease-out;
-  width: 100%;
   -webkit-user-drop: element;
 }
 
@@ -371,6 +371,14 @@ aside#charms form {
   align-items: flex-start;
   justify-content: space-evenly;
   height: fit-content;
+}
+
+.transparent #wallpaper {
+  display: none;
+}
+
+.transparent {
+  background: transparent;
 }
 
 @media (pointer: none), (pointer: coarse) {
