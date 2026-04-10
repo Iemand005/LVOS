@@ -350,8 +350,7 @@ Dialog.prototype.initWithObject = function(object) {
 
     if (this.id) windowManager.windows[this.id] = this;
 
-    this.move();
-    this.resize();
+    this.update();
 }
 
 /**
@@ -419,13 +418,13 @@ Object.defineProperty(Dialog.prototype, "mica", {
 Object.defineProperty(Dialog.prototype, "x", {
     get: function() { return this._x * window.innerWidth; },
     /** @param {number} x */
-    set: function(x) { if (typeof x == "number") this.move(x, this._y); }
+    set: function(x) { if (typeof x == "number") this.move(x, this.y); }
 }); 
 
 Object.defineProperty(Dialog.prototype, "y", {
     /** @returns {number} */
     get: function() { return this._y * window.innerHeight; },
-    set: function(y) { if (typeof y == "number") this.move(this._x, y); }
+    set: function(y) { if (typeof y == "number") this.move(this.x, y); }
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
@@ -1132,6 +1131,11 @@ Dialog.prototype.kill = function() {
     if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
 
+Dialog.prototype.update = function() {
+    window.move();
+    window.resize();
+};
+
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
     windowManager.windows[appId].kill();
@@ -1144,8 +1148,7 @@ function closeApp(appId) {
 
 function enableMica() {
     window.addEventListener("resize", windowManager.forEachWindow.bind(windowManager, function(window) {
-        window.resize();
-        window.move();
+        window.update();
     }));
 }
 
