@@ -653,7 +653,7 @@ Dialog.prototype.resize = function(width, height) { if (this.body) this.body.sty
  * @param {number} width 
  * @param {number} height 
  */
-Dialog.prototype.resizeBody = function(width, height) { if (this.body && this.target) this.body.style.boxSizing = "content-box", this.body.style.width = toPixels(this.width = width), this.body.style.height = toPixels(this.height = height), this.target.style.width = "", this.target.style.height = ""; }
+Dialog.prototype.resizeBody = function(width, height) { if (this.body && this.target) this.body.style.boxSizing = "content-box", this.body.style.flex = "unset", this.body.style.width = toPixels(width), this.body.style.height = toPixels(height), this.target.style.width = null, this.target.style.height = null, this.width = this.getRect().width, this.height = this.getRect().height, this.body.style.boxSizing = null, this.body.style.flex = null; }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
     if (!this.frame) return;
