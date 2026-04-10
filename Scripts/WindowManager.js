@@ -417,14 +417,14 @@ Object.defineProperty(Dialog.prototype, "mica", {
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
-    get: function() { return this._x; },
+    get: function() { return this._x * window.innerWidth; },
     /** @param {number} x */
     set: function(x) { if (typeof x == "number") this.move(x, this._y); }
 }); 
 
 Object.defineProperty(Dialog.prototype, "y", {
     /** @returns {number} */
-    get: function() { return this._y; },
+    get: function() { return this._y * window.innerHeight; },
     set: function(y) { if (typeof y == "number") this.move(this._x, y); }
 });
 
@@ -619,7 +619,9 @@ Dialog.prototype.messageFrame = function(type, message) { if (this.frame) LVMess
 Dialog.prototype.move = function(x, y) {
     if (typeof x === "undefined" || x === null) x = this.x || 0;
     if (typeof y === "undefined" || y === null) y = this.y || 0;
-    this._x = max(x, 0), this._y = max(y, 0);
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    this._x = windowWidth / max(x, 0), this._y = windowHeight / max(y, 0);
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
