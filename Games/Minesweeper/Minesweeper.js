@@ -84,20 +84,20 @@ Tile.prototype.getNeighbours = function(){
     }
     return neighbours;
 };
-Tile.prototype.countNeighbouringMines = function(){ return this.getNeighbouringMines().length; },
-Tile.prototype.getNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine }); },
-Tile.prototype.iterateNeighbours = function(neighbours, filter){ return (neighbours || this.getNeighbours()).filter(filter); },
-Tile.prototype.getFlaggedNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged == 1 }); },
-Tile.prototype.countFlaggedNeighbouringMines = function(neighbours){ return this.getFlaggedNeighbouringMines(neighbours).length; },
-Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged != 1 }); },
-Tile.prototype.countUnflaggedNeighbouringMines = function(neighbours){ return this.getUnflaggedNeighbouringMines(neighbours).length; },
-Tile.prototype.getUnflaggedNeighbouringNotMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine && neighbour.flagged != 1 }); },
-Tile.prototype.countUnflaggedNeighbouringNotMines = function(neighbours){ return this.getUnflaggedNeighbouringnotMines(neighbours).length; },
-Tile.prototype.toggleDisabled = function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled"); },
-Tile.prototype.toggleFlag = function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; },
-Tile.prototype.disableVisual = function(){ this.button.classList.remove("active"); },
-Tile.prototype.isClickAllowed = function(){ return this.flagged != 1; },
-Tile.prototype.enableVisual = function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); },
+Tile.prototype.countNeighbouringMines = function(){ return this.getNeighbouringMines().length; };
+Tile.prototype.getNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine }); };
+Tile.prototype.iterateNeighbours = function(neighbours, filter){ return (neighbours || this.getNeighbours()).filter(filter); };
+Tile.prototype.getFlaggedNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged == 1 }); };
+Tile.prototype.countFlaggedNeighbouringMines = function(neighbours){ return this.getFlaggedNeighbouringMines(neighbours).length; };
+Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged != 1 }); };
+Tile.prototype.countUnflaggedNeighbouringMines = function(neighbours){ return this.getUnflaggedNeighbouringMines(neighbours).length; };
+Tile.prototype.getUnflaggedNeighbouringNotMines = function(neighbours){ return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine && neighbour.flagged != 1 }); };
+Tile.prototype.countUnflaggedNeighbouringNotMines = function(neighbours){ return this.getUnflaggedNeighbouringnotMines(neighbours).length; };
+Tile.prototype.toggleDisabled = function(enabled){ if(enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled"); };
+Tile.prototype.toggleFlag = function(enabled){if(!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; };
+Tile.prototype.disableVisual = function(){ this.button.classList.remove("active"); };
+Tile.prototype.isClickAllowed = function(){ return this.flagged != 1; };
+Tile.prototype.enableVisual = function(){ if(this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); };
 Tile.prototype.quickReveal = function(){
     if(quickReveal){
         /*const*/var neighbours = this.getNeighbours();
