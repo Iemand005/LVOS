@@ -246,7 +246,7 @@ try {
     mutationObserver.observe(document.body, {childList: true});
     
 } catch(ex) {
-    // console.log(ex);
+    console.log(ex);
 }
 
 stopTimer(true);
