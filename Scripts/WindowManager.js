@@ -240,17 +240,16 @@ Dialog.prototype.initWithObject = function(object) {
 
     if (object instanceof HTMLElement) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
-        this.target = object;
         if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
+        this.target = object;
+        this.setTitle(this.getTitleElement().textContent || this.id);
     } else {
         this.application = object;
         // this.closeable = true;
         var newDialog = createDialog();
         this.target = newDialog;
-        if (object.classes && typeof object.classes === 'object'){
+        if (object.classes && typeof object.classes === 'object')
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
-        }
-        // this.src = object.src;
         this.openUrl(object.src);
         this.setTitle(object.title);
         this.fixed = object.fixed;
