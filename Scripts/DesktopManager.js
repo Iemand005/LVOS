@@ -24,3 +24,12 @@ function toggleReflections(force){
     if(reflecitons) windowManager.forEachWindow(function(dialog) { reflector.reflect(dialog.target); });
     else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
 }
+
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'F11') {
+    event.preventDefault();
+    console.log("F11 captured! Custom action goes here.");
+    
+    document.documentElement.requestFullscreen();
+  }
+});
