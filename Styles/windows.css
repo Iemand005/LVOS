@@ -414,14 +414,14 @@ button:hover {
 }
 
 @media (prefers-color-scheme: dark) {
-  .window {
+  .window, section > button {
     /* background-color: #1a1a1a; */
     color: white;
   }
 }
 
 @media (prefers-color-scheme: light) {
-  .window {
+  .window, section > button {
     color: black;
   }
 }
