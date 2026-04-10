@@ -865,7 +865,7 @@ function checkForFlip() {
         timeout = setTimeout(function () {
             toggleOverlay(!(!loaded ? (loaded = true) : false));
             updateBlurState();
-        }, 500);
+        }, 0);
     }
 
     if (false && window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
