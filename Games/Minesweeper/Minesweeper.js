@@ -147,8 +147,6 @@ Minesweeper.prototype.startGame = function () {
                     tile.disableVisual();
                 };
 
-                console.log("Adding click: " + button.id);
-
                 button.onclick = function(ev){
                     if(ev.button == 0 && tile.isClickAllowed()){
                         var neighbours = tile.reveal();
@@ -174,7 +172,7 @@ function sendDesiredSize(){
         var form = document.querySelector("form");
         LVMessenger.broadcastToParent(LVMessenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
     } catch(ex) {
-        console.log("Failed to post desired size", ex);
+        console.error("Failed to post desired size", ex);
     }
 }
 
@@ -194,11 +192,11 @@ function quickRevealEvent(ev) {
 
 Minesweeper.prototype.quickRevealEvent = quickRevealEvent;
 
-function randomNumberBetween(start, end){
+function randomNumberBetween(start, end) {
     return (Math.random()*(end - start)) + start;
 }
 
-function gameOver(won){
+function gameOver(won) {
     if(isGameOver) return;
     isGameWon = won, isGameOver = true;
     displays[0].update(0);
