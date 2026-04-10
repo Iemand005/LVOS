@@ -486,7 +486,7 @@ Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function() { return
 Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function() { return this._isMinHeight; } });
 
 Object.defineProperty(Dialog.prototype, "title", {
-    get: function() { return this._title; },
+    get: function() { return this._title || this.getTitleElement().textContent || this.id; },
     set: function(title) {
         this.setTitle(title);
     }
