@@ -68,7 +68,7 @@ main {
     transition: all 500ms ease-in-out, top 0, left 0, width 0, height 0;
     transition: border-radius 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! Well shit... I need this to be hidden, but the backdrop  swhadow isn't applied to this anymroe anywais weait... hm shit. I need this. */
-    color: black;
+    /* color: black; */
     box-sizing: border-box;
 }
 
@@ -82,7 +82,7 @@ main {
     /* border-style: none; */
     border-width: 0px;
     border-color: inherit;
-    color: black;
+    /* color: black; */
 }
 
 .window header, .window header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
@@ -172,7 +172,7 @@ main {
     overflow: hidden;
     background-color: orange;
     transition: inherit;
-    color: black;
+    /* color: black; */
     transform-origin: center;
     background:     linear-gradient(0deg, #0000002b, #ffffff00);
     box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.4);
@@ -411,4 +411,17 @@ button:hover {
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
+}
+
+@media (prefers-color-scheme: dark) {
+  .window {
+    /* background-color: #1a1a1a; */
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .window {
+    color: black;
+  }
 }
