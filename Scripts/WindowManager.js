@@ -772,12 +772,11 @@ var loaded = false;
 var timeout = -1;
 
 /**
- * 
  * @param {MessageType} type 
  * @param {any} data 
  * @param {string} source 
  */
-function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
+function messageReceived(type, data, source) { // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     var types = LVMessenger.types;
     if (source) {
         var dialog = windowManager.windows[source];
@@ -816,6 +815,9 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
     }
 }
 
+window.__LVMessengerReceive = messageReceived;
+LVMessenger.receive(messageReceived);
+
 function swapMetroBody() {
     if (!flipped) return;
     restoreMetroBody();
@@ -847,8 +849,6 @@ function flipHandler(enabled){
     swapMetroBody();
     return flipped = enabled;
 }
-
-LVMessenger.receive(messageReceived);
 
 var toggleOverlay = bodyCrawler.overlay ? bodyCrawler.overlay.classList.toggle.bind(bodyCrawler.overlay.classList, "open") : function() { console.warn("Overlay wasn't found on initialization."); }; // The force attribute gets automatically forwarded!
 

@@ -86,6 +86,13 @@ LVMessenger.receive = function (callback, destroyWhenType) {
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
     var target = window.parent && window.parent !== window ? window.parent : window.top;
+    if (target && typeof target.__LVMessengerReceive === "function") {
+        try {
+            target.__LVMessengerReceive(type, message, id);
+        } catch (ex) {
+            console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
+        }
+    }
     if (target) LVMessenger.broadcast(target, type, message, id);
 };
 
