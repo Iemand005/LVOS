@@ -780,12 +780,17 @@ var timeout = -1;
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     var types = LVMessenger.types;
     if (source) {
-        if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        var dialog = windowManager.windows[source];
+        if (!dialog) {
+            console.warn("Received message for unknown window source:", source, type, data);
+            return;
+        }
+        if (type === types.windowSize && dialog) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
                 if (!bodyCrawler.overlay) break;
                 bodyCrawler.overlay.ontransitionend = function () {
-                    var dialog = windowManager.windows[source];
+                    dialog = windowManager.windows[source];
                     dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
                     if (dialog.frame) {
                         var oriurl = new URL(dialog.frame.src);
@@ -802,7 +807,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                 break;
             case types.readyToLaunchOverlay:
                 if (!bodyCrawler.overlay) break;
-                var dialog = windowManager.windows[source];
+                dialog = windowManager.windows[source];
                 if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
                 window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
                 break;
