@@ -38,12 +38,13 @@ var isGameOver = false,
     bombCount = 0;
 
 /**
+ * @param {Minesweeper} minesweeper
  * @param {HTMLButtonElement} button
  * @param {number} x
  * @param {number} y
  * @param {boolean} mine
  */
-function Tile(button, x, y, mine){
+function Tile(minesweeper, button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
     this.enable = this.toggleDisabled.bind(this, true);
     this.mine = mine || false;
@@ -53,6 +54,7 @@ function Tile(button, x, y, mine){
     this.position = { x: x, y: y };
     this.revealed = false;
     this.mousedown = false;
+    this.minesweeper = minesweeper;
 }
 
 Tile.prototype.generate = function() { // This generates the mines, the algorithm can also be modified to generate a specified amount of mines instead of random.
@@ -63,7 +65,7 @@ Tile.prototype.reveal = function() {
     if (this.revealed) return 0;
     if (!gameStarted) gameStarted = true, activateTimer();
     this.revealed = true;
-    var remaining = this.countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
+    var remaining = this.minesweeper.countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
 
     classes.add("revealed");
     this.disable();
@@ -76,6 +78,7 @@ Tile.prototype.reveal = function() {
     if (neighbourCount == 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {};
     return neighbourCount;
 };
+
 Tile.prototype.getNeighbours = function() {
     var neighbours = [];
     for (var i = 0; i < 9; i++) {
@@ -122,7 +125,7 @@ Minesweeper.prototype.startGame = function () {
         var row = table.appendChild(document.createElement("tr"));
         for (var x = 0; x < width; x++) (
             function(x, y) {
-                var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(button, x, y);
+                var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(this, button, x, y);
                 row.appendChild(document.createElement("td")).appendChild(button);
                 try {
 
