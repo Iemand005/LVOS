@@ -1,10 +1,10 @@
 
 
 
-/*const*/var bindConsole = false;
+var bindConsole = true;
 
 
-/*const*/var ConsoleOutType = {
+var ConsoleOutType = {
     Input: -1,
     Return: 0,
     Log: 1,
@@ -64,14 +64,14 @@ function initializeConsoleApplication(){
     }
 
     console.getHTML = function(){
-        /*let*/var output = document.createElement("table");
-        for (/*let*/var index in console.results) {
-            /*const*/var result = console.results[index];
-            /*const*/var tableRow = document.createElement("tr");
-            /*const*/var tableData = document.createElement("td");
-            for(/*let*/var dataIndex in result.data){
-                /*const*/var data = result.data[dataIndex];
-                /*const*/var span = document.createElement("span");
+        var output = document.createElement("table");
+        for (var index in console.results) {
+            var result = console.results[index];
+            var tableRow = document.createElement("tr");
+            var tableData = document.createElement("td");
+            for(var dataIndex in result.data){
+                var data = result.data[dataIndex];
+                var span = document.createElement("span");
                 switch(result.type){
                     case ConsoleOutType.Input:
                         span.style.color = "black";

@@ -237,7 +237,7 @@ var minesweeper = new Minesweeper();
 
 try {
     var outputs = document.getElementsByTagName("output");
-    if(singleSidedDisplay) document.getElementsByTagName("article")[0].classList.toggle("original", singleSidedDisplay);
+    if(singleSidedDisplay) outputs[0].parentElement.classList.toggle("original", singleSidedDisplay);
     for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
     
     
