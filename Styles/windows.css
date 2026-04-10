@@ -321,6 +321,10 @@ button:hover {
     background-color: rgba(153, 153, 153, 0.219);
 }
 
+[blur] button {
+    backdrop-filter: blur(10px);
+}
+
 /* Resize grabbers */
 
 .window > div:nth-of-type(odd) {
@@ -414,14 +418,13 @@ button:hover {
 }
 
 @media (prefers-color-scheme: dark) {
-  .window, section > button {
-    /* background-color: #1a1a1a; */
+  .window, button {
     color: white;
   }
 }
 
 @media (prefers-color-scheme: light) {
-  .window, section > button {
+  .window, button {
     color: black;
   }
 }
