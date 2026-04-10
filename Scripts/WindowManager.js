@@ -1132,8 +1132,8 @@ Dialog.prototype.kill = function() {
 };
 
 Dialog.prototype.update = function() {
-    window.move();
-    window.resize();
+    this.move();
+    this.resize();
 };
 
 /** @param {string} appId  */
