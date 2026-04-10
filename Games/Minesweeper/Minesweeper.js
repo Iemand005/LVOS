@@ -119,13 +119,14 @@ Minesweeper.prototype.startGame = function () {
     isGameOver = false;
     setEmoji();
     var table = document.querySelector("table");
+    var self = this;
     while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
     for (var y = 0; y < height; y++) {
         tiles[y] = new Array();
         var row = table.appendChild(document.createElement("tr"));
         for (var x = 0; x < width; x++) (
             function(x, y) {
-                var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(this, button, x, y);
+                var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(self, button, x, y);
                 row.appendChild(document.createElement("td")).appendChild(button);
                 try {
 
