@@ -76,8 +76,8 @@ Tile.prototype.reveal = function() {
     if (neighbourCount == 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {};
     return neighbourCount;
 };
-Tile.prototype.getNeighbours = function(){
-    var neighbours = new Array();
+Tile.prototype.getNeighbours = function() {
+    var neighbours = [];
     for (var i = 0; i < 9; i++) {
         var x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
         if((!(x == this.position.x && y == this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
