@@ -621,16 +621,16 @@ Dialog.prototype.move = function(x, y) {
     if (typeof y === "undefined" || y === null) y = this.y || 0;
     var windowWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
-    this._x = windowWidth / max(x, 0), this._y = windowHeight / max(y, 0);
+    this._x = max(x, 0) / windowWidth, this._y = max(y, 0) / windowHeight;
     if (!this.target) return;
     if (useTransform) {
         this.target.style.left = "0px";
         this.target.style.top = "0px";
-        translateElement(this.target, this._x, this._y);
+        translateElement(this.target, this.x, this.y);
     } else {
         this.target.style.transform = "none";
-        this.target.style.left = toPixels(this._x);
-        this.target.style.top = toPixels(this._y);
+        this.target.style.left = toPixels(this.x);
+        this.target.style.top = toPixels(this.y);
     }
 
     if (this.mica && useTransform) {
@@ -1144,7 +1144,8 @@ function closeApp(appId) {
 
 function enableMica() {
     window.addEventListener("resize", windowManager.forEachWindow.bind(windowManager, function(window) {
-        window.resize(window.width, window.height);
+        window.resize();
+        window.move();
     }));
 }
 
