@@ -637,7 +637,7 @@ Dialog.prototype.move = function(x, y) {
         if (!wallpaperP) return;
         var wallpaper = wallpaperP.children[0];
         if (!(backdrop instanceof HTMLElement) || !wallpaper) return;
-        translateElement(backdrop, -this._x, -this._y);
+        translateElement(backdrop, -this.x, -this.y);
         
         backdrop.style.width = toPixels(wallpaper.clientWidth);
         backdrop.style.height = toPixels(wallpaper.clientHeight);
@@ -865,7 +865,7 @@ function checkForFlip() {
         timeout = setTimeout(function () {
             toggleOverlay(!(!loaded ? (loaded = true) : false));
             updateBlurState();
-        }, 0);
+        }, 500);
     }
 
     if (false && window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
