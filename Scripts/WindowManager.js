@@ -1380,16 +1380,15 @@ function getViewboxPosition() {
 function getObjectDialog(object) {
   // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
   if (!object) return console.log(object);
-  if (
-    (object instanceof HTMLElement &&
-      ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) != -1) ||
-    (object.classList && object.classList.contains("window"))
-  )
-    return object;
-  else if (object instanceof Event && object.target instanceof HTMLElement)
-    return getObjectDialog(object.target);
-  else if (object instanceof HTMLElement)
+  if (object instanceof HTMLElement) {
+    if (
+      ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) != -1 ||
+      (object.classList && object.classList.contains("window"))
+    )
+      return object;
     return getObjectDialog(object.parentElement);
+  } else if (object instanceof Event && object.target instanceof HTMLElement)
+    return getObjectDialog(object.target);
 }
 
 /** @param {number} value */
