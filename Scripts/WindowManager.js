@@ -1383,9 +1383,7 @@ function getObjectDialog(object) {
   if (
     (object instanceof HTMLElement &&
       ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) != -1) ||
-    (object instanceof HTMLElement &&
-      object.classList &&
-      object.classList.contains("window"))
+    (object.classList && object.classList.contains("window"))
   )
     return object;
   else if (object instanceof Event && object.target instanceof HTMLElement)
