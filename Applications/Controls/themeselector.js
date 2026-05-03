@@ -1,5 +1,6 @@
 
 function ThemeSelector() {
+  this.themes = {};
   this.themeables = [];
 }
 
