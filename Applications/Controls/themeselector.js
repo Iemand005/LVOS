@@ -4,7 +4,9 @@ function ThemeSelector() {
   this.themeables = [];
 }
 
-ThemeSelector.prototype.register = function register(selector) {
-  document.querySelector(selector).addEventListener("click", this.)
-  this.themeables.push(selector);
+/**
+ * @param {HTMLElement} element 
+ */
+ThemeSelector.prototype.register = function register(element) {
+  this.themeables.push(element);
 };
