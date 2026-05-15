@@ -103,7 +103,7 @@ WindowManager.prototype.saveState = function() {
 	} catch (exception) {
 		handleStorageException(exception);
 	}
-}
+};
 
 /** @param {Dialog} [dialog] */
 WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that

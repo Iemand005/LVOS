@@ -1,4 +1,9 @@
 {
   "browser": true,
-  "devel": true
+  "devel": true,
+
+  "-W058": true,
+  "globals": {
+    "Vector": true
+  }
 }
