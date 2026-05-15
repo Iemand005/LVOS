@@ -4,6 +4,5 @@
   "editor.insertSpaces": false,
   "chat.disableAIFeatures": true,
   "editor.inlineSuggest.enabled": true,
-  "js/ts.tsdk.path": "C:\\Users\\Lasse\\AppData\\Roaming\\npm\\node_modules\\typescript\\lib",
   "cSpell.words": ["devel"]
 }
