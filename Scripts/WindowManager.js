@@ -106,7 +106,7 @@ WindowManager.prototype.saveState = function() {
 
 /** @param {Dialog} [dialog] */
 WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
-    console.log("Loading window state.")
+    console.log("Loading window state.");
     if (canSave) try {
         if (!localStorage || !localStorage.windowState) return;
         var windowStates = this.windowStates;
@@ -1049,10 +1049,10 @@ Dialog.prototype.getWindowState = function() {
 /** @param {DialogState} state */
 Dialog.prototype.loadWindowState = function(state) {
     this.title = state.title;
-    this.x = state.x;   
+    this.x = state.x;
     this.y = state.y;
     this.z = state.z;
-    this.width = state.width;   
+    this.width = state.width;
     this.height = state.height;
     if (state.open) this.launch();
 }
