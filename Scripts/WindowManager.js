@@ -97,8 +97,9 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 WindowManager.prototype.saveState = function() {
     if (!loaded) return;
     console.log("Saving window state.");
-    if (canSave && localStorage) try {
-        localStorage.setItem("windowState", JSON.stringify(this.state));
+    try {
+		if (canSave && localStorage)
+			localStorage.setItem("windowState", JSON.stringify(this.state));
     } catch (exception) {
         handleStorageException(exception);
     }
