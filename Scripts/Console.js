@@ -10,16 +10,16 @@ var ConsoleOutType = {
 
 function initializeConsoleApplication() {
   if (!windowManager.windows["console"]) return;
-  var consoleform = windowManager.windows["console"].originalBody; //consoleElement.getElementsByTagName("form")[0];
+  var consoleForm = windowManager.windows["console"].originalBody; //consoleElement.getElementsByTagName("form")[0];
   var stdout =
-    consoleform.stdout || consoleform.getElementsByTagName("output")[0];
+    consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
   var interceptConsole = function() {
     if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
     stdout.appendChild(console.getHTML());
-    consoleform.scrollTop = consoleform.scrollHeight;
+    consoleForm.scrollTop = consoleForm.scrollHeight;
   };
 
-  consoleform.addEventListener("submit", function(event) {
+  consoleForm.addEventListener("submit", function(event) {
     event.preventDefault();
     try {
       console.results.push({
@@ -36,12 +36,12 @@ function initializeConsoleApplication() {
     interceptConsole();
   });
 
-  console.results = new Array();
+  console.results = [];
 
   // We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
   if (bindConsole) {
     console.standardLog = console.log.bind(console);
-    console.logs = new Array();
+    console.logs = [];
     console.log = function() {
       console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
       console.results.push({ type: ConsoleOutType.Log, data: arguments });
@@ -49,7 +49,7 @@ function initializeConsoleApplication() {
     };
 
     console.standardWarning = console.error.bind(console);
-    console.warnings = new Array();
+    console.warnings = [];
     console.warn = function() {
       console.standardWarning.apply(console, arguments);
       console.results.push({ type: ConsoleOutType.Warn, data: arguments });
@@ -66,12 +66,12 @@ function initializeConsoleApplication() {
   }
 
   console.getHTML = function() {
-    /*let*/ var output = document.createElement("table");
-    for (/*let*/ var index in console.results) {
+    var output = document.createElement("table");
+    for (var index in console.results) {
       var result = console.results[index];
       var tableRow = document.createElement("tr");
       var tableData = document.createElement("td");
-      for (/*let*/ var dataIndex in result.data) {
+      for (var dataIndex in result.data) {
         var data = result.data[dataIndex];
         var span = document.createElement("span");
         switch (result.type) {
