@@ -123,7 +123,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
     } catch (exception) {
         handleStorageException(exception);
     } else console.error("Storage access is disabled for this session!");
-}
+};
 
 /** @typedef {(dialog: Dialog, id: string)=>void} WindowCallback */
 
@@ -141,7 +141,7 @@ WindowManager.prototype.loadApp = function(app) {
 WindowManager.prototype.toggleDragging = function(enabled) {
     windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
     toggleDialogDragEventHandler(enabled);
-}
+};
 
 function ClickOffset() {
     this.x = 0;
