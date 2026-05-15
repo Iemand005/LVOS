@@ -387,7 +387,7 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer()?.contains(this.target)); },
+    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
