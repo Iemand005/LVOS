@@ -150,7 +150,7 @@ function ClickOffset() {
     this.width = 0;
     this.top = 0;
     this.left = 0;
-    this.start = {x: 0, y: 0};
+    this.start = { x: 0, y: 0 };
     this.stats = {
         start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
         reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
@@ -159,9 +159,10 @@ function ClickOffset() {
             this.position.x = x, this.position.y = y;
             this.positions.push(this.position.clone());
             this.difference = (this.lastPosition = this.positions.shift()).clone().sub(this.position);
-            this;return this; }
+            return this;
+        }
     };
-};
+}
 
 ClickOffset.prototype.clear = function() { this.x = 0, this.y = 0; }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
