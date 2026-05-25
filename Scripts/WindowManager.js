@@ -1159,7 +1159,12 @@ function toggleMica(enabled) {
 }
 
 function removeWallpaper() {
-	
+	var wallpaper = getWallpaper();
+	if (!wallpaper) return;
+	Array.from(wallpaper.children).forEach(function(wallpaperChild) {
+		if (wallpaper) wallpaper.removeChild(wallpaperChild);
+	});
+	return wallpaper;
 }
 
 /**
@@ -1174,12 +1179,9 @@ function applyWallpaperImage(url, blurredUrl) {
 	image.src = url;
 	if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
-	var wallpaper = getWallpaper();
-	if (!wallpaper) return;
-	Array.from(wallpaper.children).forEach(function(wallpaperChild) {
-		if (wallpaper) wallpaper.removeChild(wallpaperChild);
-	});
-	wallpaper.appendChild(image);
+	image.onload = function () {
+		removeWallpaper().appendChild(image);
+	};
 }
 
 enableMica();
