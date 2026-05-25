@@ -897,7 +897,7 @@ function initializeDialogs() {
 	}
 	// Array.from(dialogs).forEach(function(dialog) {
 	// 	if (!(dialog instanceof HTMLElement)) return;
-	// 	windowManager.windows[dialog.id] = new Dialog(dialog);
+	// 	windowMana<ger.windows[dialog.id] = new Dialog(dialog);
 	// });
 	//flip();
 	checkForFlip();
