@@ -4,3 +4,7 @@ html, body, .fullscreen {
     height: 100%;
     margin: 0;
 }
+
+iframe {
+    border: none;
+}
