@@ -36,7 +36,7 @@ window.addEventListener('keydown', (event) => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('./Scripts/sw.js')
       .then((reg) => console.log('Service Worker geregistreerd!', reg))
       .catch((err) => console.error('Registratie mislukt:', err));
   });
