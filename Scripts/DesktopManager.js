@@ -18,14 +18,14 @@ var reflectionr = document.getElementById("reflection");
 var reflector = new Reflector(document.getElementById("reflection"));
 var applistItems = document.getElementById("dockapplist");
 
-function toggleReflections(force){
+function toggleReflections(force) {
     if(force === null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
     if(reflecitons) windowManager.forEachWindow(function(dialog) { reflector.reflect(dialog.target); });
     else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
 }
 
-window.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', function(event) {
   if (event.key === 'F11') {
     event.preventDefault();
     console.log("F11 captured! Custom action goes here.");
@@ -35,9 +35,9 @@ window.addEventListener('keydown', (event) => {
 });
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', function() {
     navigator.serviceWorker.register('./Scripts/sw.js')
-      .then((reg) => console.log('Service Worker geregistreerd!', reg))
-      .catch((err) => console.error('Registratie mislukt:', err));
+      .then(function(reg) { console.log('Service Worker geregistreerd!', reg)})
+      .catch(function(err) { console.error('Registratie mislukt:', err) });
   });
 }
