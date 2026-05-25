@@ -33,3 +33,11 @@ window.addEventListener('keydown', (event) => {
     document.documentElement.requestFullscreen();
   }
 });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((reg) => console.log('Service Worker geregistreerd!', reg))
+      .catch((err) => console.error('Registratie mislukt:', err));
+  });
+}
