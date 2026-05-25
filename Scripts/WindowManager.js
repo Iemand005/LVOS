@@ -1173,13 +1173,10 @@ function removeWallpaper() {
  */
 function applyWallpaperImage(url, blurredUrl) {
 	var image = document.createElement("img");
-	image.onerror = function () {
-
-	};
 	image.src = url;
 	if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
-	image.onload = function () {
+	image.onload = function() {
 		removeWallpaper().appendChild(image);
 	};
 }
