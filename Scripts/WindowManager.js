@@ -1158,12 +1158,19 @@ function toggleMica(enabled) {
 	windowManager.toggleMica(enabled);
 }
 
+function removeWallpaper() {
+	
+}
+
 /**
  * @param {string} url
  * @param {string} blurredUrl
  */
 function applyWallpaperImage(url, blurredUrl) {
 	var image = document.createElement("img");
+	image.onerror = function () {
+
+	};
 	image.src = url;
 	if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
