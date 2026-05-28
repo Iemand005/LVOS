@@ -95,6 +95,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 });
 
 WindowManager.prototype.saveState = function() {
+	return;
 	if (!loaded) return;
 	console.log("Saving window state.");
 	try {
