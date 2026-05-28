@@ -813,6 +813,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 }
 
 function swapMetroBody() {
+	// return; // TOTO PHIX
 	if (!flipped) return;
 	restoreMetroBody();
 	activeDialogToMetro();
