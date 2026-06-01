@@ -1,6 +1,6 @@
 {
-  "name": "Mijn JavaScript App",
-  "short_name": "Mijn App",
+  "name": "LVOS",
+  "short_name": "LVOS",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
