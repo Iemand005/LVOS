@@ -405,7 +405,7 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer()?.contains(this.target)); },
+    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
@@ -1225,7 +1225,7 @@ function injectApplication(application) {
 
 /** @param {...Application[]} arguments */
 function injectApplications() {
-    for (let i = 0; i < arguments.length; i++)
+    for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
 }
