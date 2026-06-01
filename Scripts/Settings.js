@@ -11,7 +11,7 @@ function SettingsHandler() { // First class declarations, then the functions and
 SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
-function setTheme(id) {
+function setThemeOld(id) {
     if (typeof id === 'undefined') return;
     settings.set("theme", id);
     for(/*let*/var index in windows){
@@ -114,7 +114,7 @@ var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("but
 if (windowManager.windows.browser) elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
 
 bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-bodyCrawler.theme.onchange = function () { setTheme(this.selectedIndex); };
+bodyCrawler.theme.onchange = function () { setThemeOld(this.selectedIndex); };
 reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
 blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
 elements.resetAccent.onclick = setAccentColor.bind(this, "");
