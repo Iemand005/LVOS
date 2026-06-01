@@ -21,6 +21,7 @@ function loadScript(url, callback) {
 
 var scriptSrc = document.currentScript.src;
 var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
-console.log("Currently in", scriptDir);
+var stylePath = scriptDir + "../Styles/general.css";
+console.log("Currently in", scriptDir, "wanna load css in", scriptDir + "../Styles/general.css");
 
-loadStyleSheet("");
+loadStyleSheet(stylePath);
