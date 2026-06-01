@@ -281,7 +281,7 @@ article {
     transition: left 300ms ease-in-out;
     transition: right 300ms ease-in-out;
     transition: bottom 300ms ease-in-out; */
-    transition: width 300ms ease-in-out, height 300ms ease-in-out;
+    transition: width 300ms ease-in-out, height 300ms ease-in-out, transform 300ms ease-in-out;
     /* transition: height 300ms ease-in-out !important;
     transition: transform 300ms ease-in-out !important;
     transition: border-radius 300ms ease-in-out !important; */
