@@ -176,6 +176,12 @@ var applications = [
         id: "stereograms",
         src: "./Applications/StereogramMaker/index.html",
         hidden: true
+    },
+    {
+        title: "Metronome",
+        id: "cyanide.metronome",
+        src: "./Applications/Cyanide/metronome/index.html",
+        hidden: true
     }
 ]
 

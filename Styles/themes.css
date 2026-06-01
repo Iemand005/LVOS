@@ -1,7 +1,7 @@
 
 /* .window themes */
 
-.window.rounded-corners{
+.window.rounded-corners {
     border-radius: 10px !important;
 }
 
@@ -9,6 +9,20 @@
     border-radius: 5px;
 }
 
-.window.sharp-corners{
+.window.sharp-corners {
     border-radius: 0px !important;
+}
+
+.default-theme .window > content > article {
+    border: inherit;
+
+}
+
+.default-theme .window > content > article > iframe {
+    background-color: rgba(0, 0, 0, 0.267);
+    box-shadow: inset 0px 0px 10px black;
+}
+
+.default-theme .window {
+    background-color: white;
 }
