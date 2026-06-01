@@ -29,6 +29,75 @@ var supportsPointer = typeof PointerEvent !== "undefined";
 
 if (supportsPointer) console.log("Supports pointer events!");
 
+var nativeInteractionSuppressionDepth = 0;
+var nativeInteractionStyles = null;
+
+/**
+ * @param {Event?} event
+ */
+function cancelDomEvent(event) {
+	if (!event) return false;
+	if (typeof event.preventDefault === "function") event.preventDefault();
+	event.returnValue = false;
+	if (typeof event.stopPropagation === "function") event.stopPropagation();
+	event.cancelBubble = true;
+	return false;
+}
+
+/**
+ * Safari 5 on Windows is especially sensitive to native drag/selection starting
+ * while we are moving or resizing a dialog. Suppress those browser behaviors
+ * only during active window interactions.
+ *
+ * @param {boolean} enable
+ */
+function toggleNativeInteractionSuppression(enable) {
+	var root = document.documentElement;
+	var body = document.body;
+	if (!root) return;
+
+	if (enable) {
+		if (nativeInteractionSuppressionDepth++ > 0) return;
+		nativeInteractionStyles = {
+			rootUserSelect: root.style.userSelect,
+			rootWebkitUserSelect: root.style.webkitUserSelect,
+			rootUserDrag: root.style.webkitUserDrag,
+			bodyUserSelect: body && body.style ? body.style.userSelect : "",
+			bodyWebkitUserSelect: body && body.style ? body.style.webkitUserSelect : "",
+			bodyUserDrag: body && body.style ? body.style.webkitUserDrag : ""
+		};
+		root.style.userSelect = "none";
+		root.style.webkitUserSelect = "none";
+		root.style.webkitUserDrag = "none";
+		if (body) {
+			body.style.userSelect = "none";
+			body.style.webkitUserSelect = "none";
+			body.style.webkitUserDrag = "none";
+		}
+		document.addEventListener("dragstart", cancelDomEvent, true);
+		document.addEventListener("selectstart", cancelDomEvent, true);
+		return;
+	}
+
+	if (nativeInteractionSuppressionDepth > 0) nativeInteractionSuppressionDepth--;
+	if (nativeInteractionSuppressionDepth > 0) return;
+
+	document.removeEventListener("dragstart", cancelDomEvent, true);
+	document.removeEventListener("selectstart", cancelDomEvent, true);
+
+	if (nativeInteractionStyles) {
+		root.style.userSelect = nativeInteractionStyles.rootUserSelect;
+		root.style.webkitUserSelect = nativeInteractionStyles.rootWebkitUserSelect;
+		root.style.webkitUserDrag = nativeInteractionStyles.rootUserDrag;
+		if (body) {
+			body.style.userSelect = nativeInteractionStyles.bodyUserSelect;
+			body.style.webkitUserSelect = nativeInteractionStyles.bodyWebkitUserSelect;
+			body.style.webkitUserDrag = nativeInteractionStyles.bodyUserDrag;
+		}
+		nativeInteractionStyles = null;
+	}
+}
+
 /**
  * @param {Element} element
  */
@@ -150,6 +219,7 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
+	// toggleNativeInteractionSuppression(enabled);
 	windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
 	toggleDialogDragEventHandler(enabled);
 };
@@ -316,7 +386,9 @@ Dialog.prototype.initWithObject = function(object) {
                 div.draggable = false, div.id = String(index + 1);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
+                    cancelDomEvent(ev);
                     if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
+                    windowActivationEvent(ev, self);
                 }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
                 if (supportsPointer) div.onpointerdown = pointerDown;
                 else div.onmousedown = pointerDown;
@@ -328,6 +400,8 @@ Dialog.prototype.initWithObject = function(object) {
             if (ev.animationName == "closing")
                 dialog.kill.apply(dialog);
         }, false);
+        target.addEventListener("dragstart", cancelDomEvent, false);
+        target.addEventListener("selectstart", cancelDomEvent, false);
 
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
 
@@ -991,10 +1065,11 @@ function initializeDialogs() {
     
     dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
-    Array.from(dialogs).forEach(function(dialog) {
-        if (!(dialog instanceof HTMLElement)) return;
-        windowManager.windows[dialog.id] = new Dialog(dialog); 
-    });
+    // TODO: again
+    // Array.from(dialogs).forEach(function(dialog) {
+    //     if (!(dialog instanceof HTMLElement)) return;
+    //     windowManager.windows[dialog.id] = new Dialog(dialog); 
+    // });
     //flip();
     checkForFlip();
     windowManager.loadState();
@@ -1006,6 +1081,7 @@ function initializeDialogs() {
  * @param {Dialog} dialog
  */
 function windowActivationEvent(event, dialog) {
+    cancelDomEvent(event);
     console.log("Activating window", dialog);
     activeDialogId = dialog.id;
     if (!activeDialogId) return;
@@ -1039,6 +1115,7 @@ function handleWindowDrag(newX, hewY) {
  */
 function windowDragEvent(event){
     try {
+        cancelDomEvent(event);
         if (updateRateLimit) {
             if (ticking) return;
             window.requestAnimationFrame(function() {
