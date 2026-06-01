@@ -1288,9 +1288,7 @@ function toggleMica(enabled) {
 function removeWallpaper() {
 	var wallpaper = getWallpaper();
 	if (!wallpaper) return;
-	Array.from(wallpaper.children).forEach(function(wallpaperChild) {
-		if (wallpaper) wallpaper.removeChild(wallpaperChild);
-	});
+	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
 	return wallpaper;
 }
 
@@ -1305,9 +1303,7 @@ function applyWallpaperImage(url, blurredUrl) {
 
     var wallpaper = getWallpaper();
     if (!wallpaper) return;
-    Array.from(wallpaper.children).forEach(function(wallpaperChild) {
-        if (wallpaper) wallpaper.removeChild(wallpaperChild);
-    });
+    while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
     wallpaper.appendChild(image);
 }
 

@@ -207,9 +207,10 @@ if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
     console.log("Point", point);
 }
 
-if (!Array.from) Array.from = function (array) {
+if (typeof Array.from !== "function") Array.from = function (array) {
     var newArray = [];
-    for (var i = 0; i < array && array.length; i++)
+    if (!array || typeof array.length !== "number") return newArray;
+    for (var i = 0; i < array.length; i++)
         newArray.push(array[i]);
     return newArray;
 }
