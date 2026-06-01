@@ -207,12 +207,23 @@ if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
     console.log("Point", point);
 }
 
-if (typeof Array.from !== "function") Array.from = function (array) {
-    var newArray = [];
-    if (!array || typeof array.length !== "number") return newArray;
-    for (var i = 0; i < array.length; i++)
-        newArray.push(array[i]);
-    return newArray;
+if (typeof Array.from !== "function") {
+    var arrayFromPolyfill = function (arrayLike) {
+        var newArray = [];
+        if (!arrayLike || typeof arrayLike.length !== "number") return newArray;
+        for (var i = 0; i < arrayLike.length; i++) newArray.push(arrayLike[i]);
+        return newArray;
+    };
+
+    try {
+        Object.defineProperty(Array, "from", {
+            value: arrayFromPolyfill,
+            configurable: true,
+            writable: true
+        });
+    } catch (ex) {
+        Array.from = arrayFromPolyfill;
+    }
 }
 
 (function() {
