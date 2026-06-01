@@ -49,7 +49,6 @@ main {
 }
 
 .window {
-    border-radius: 5px;
     background-color: rgba(255, 255, 255, 255);
     -o-transform-origin: bottom left;
     -ms-transform-origin: bottom left;
@@ -163,7 +162,8 @@ main {
     -webkit-box-orient: vertical;
     flex-direction: column;
     pointer-events: none;
-    border-radius: inherit;
+    /* border-radius: inherit; */
+    border-radius: 5px;
     border: 1px solid #0000005c;
     padding: 5px;
     box-sizing: border-box;
@@ -276,8 +276,8 @@ article {
     vertical-align: bottom;
 }
 
-.window {
-    transition: all 1s linear;
+.window content, .window {
+    transition: all 200ms ease-in-out;
 }
 
 .window[full] {
@@ -291,7 +291,7 @@ article {
 }
 
 .window[full] content {
-    border-radius: 0 !important;
+    border-radius: 0px !important;
 }
 
 article > * {

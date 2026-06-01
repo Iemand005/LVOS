@@ -23,8 +23,12 @@
     box-shadow: inset 0px 0px 10px black;
 }
 
-.default-theme .window {
+.default-theme .window content {
     background-color: white;
+}
+
+.windows-11 .window content {
+
 }
 
 .windows-11 .window content {
