@@ -19,8 +19,8 @@ function loadScript(url, callback) {
   document.head.appendChild(script);
 }
 
-const currentScript = document.currentScript.src;
+var scriptSrc = document.currentScript.src;
 var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
-console.log("Currently in", currentScript);
+console.log("Currently in", scriptDir);
 
 loadStyleSheet("");
