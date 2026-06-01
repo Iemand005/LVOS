@@ -276,6 +276,10 @@ article {
     vertical-align: bottom;
 }
 
+.window {
+    transition: all 1s linear;
+}
+
 .window[full] {
     top: 0 !important;
     left: 0 !important;
@@ -283,7 +287,11 @@ article {
     bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    transform: none !important  ;
+    transform: none !important;
+}
+
+.window[full] content {
+    border-radius: 0 !important;
 }
 
 article > * {
