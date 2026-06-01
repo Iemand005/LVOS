@@ -33,3 +33,7 @@ window.addEventListener('keydown', (event) => {
     document.documentElement.requestFullscreen();
   }
 });
+
+function setTheme(theme) {
+  document.body.classList.add(theme);
+}
