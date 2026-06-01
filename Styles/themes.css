@@ -45,3 +45,21 @@
 .windows-11 .window article {
     background-color: rgb(25, 25, 25);
 }
+
+@media (prefers-color-scheme: dark) {
+
+    .windows-11 .window content {
+        background-color: rgb(32, 32, 32);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.267);
+    }
+
+    .windows-11 .window header section {
+        border-radius: 0;
+        background-color: unset;
+    }
+
+    .windows-11 .window article {
+        background-color: rgb(25, 25, 25);
+    }
+}
