@@ -1007,11 +1007,11 @@ function initializeDialogs() {
     
     dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
-    // TODO: again
-    // Array.from(dialogs).forEach(function(dialog) {
-    //     if (!(dialog instanceof HTMLElement)) return;
-    //     windowManager.windows[dialog.id] = new Dialog(dialog); 
-    // });
+    for (var i = 0; dialogs && i < dialogs.length; i++) {
+        var dialog = dialogs[i];
+        if (!(dialog instanceof HTMLElement)) continue;
+        windowManager.windows[dialog.id] = new Dialog(dialog);
+    }
     //flip();
     checkForFlip();
     windowManager.loadState();
