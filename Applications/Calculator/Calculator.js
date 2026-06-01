@@ -7,9 +7,9 @@
     button.id = index;
     body.appendChild(button);
 }*/
-/*const*/var buttons = document.getElementsByTagName("input");
-/*const*/var output = document.querySelector("output");
-/*const*/var inputs = [];
+var buttons = document.getElementsByTagName("input");
+var output = document.querySelector("output");
+var inputs = [];
 
 document.querySelector("form").onsubmit = function(event){
     event.preventDefault();
@@ -21,7 +21,7 @@ document.querySelector("form").onsubmit = function(event){
 }
 
 
-for (/*let*/var i = 0; i < 10; i++) {
+for (var i = 0; i < 10; i++) {
     // document.getElementById(i).onclick = function(event){
     //     ///*const*/var number = event.target.id;
     //     inputs.push(i);
