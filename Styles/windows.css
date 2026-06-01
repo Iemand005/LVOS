@@ -277,7 +277,15 @@ article {
 }
 
 .window content, .window {
-    transition: all 200ms ease-in-out;
+    /* transition: top 300ms ease-in-out;
+    transition: left 300ms ease-in-out;
+    transition: right 300ms ease-in-out;
+    transition: bottom 300ms ease-in-out; */
+    transition: width, height 300ms ease-in-out;
+    /* transition: height 300ms ease-in-out !important;
+    transition: transform 300ms ease-in-out !important;
+    transition: border-radius 300ms ease-in-out !important; */
+    /* transition: all 300ms ease-in-out; */
 }
 
 .window[full] {
