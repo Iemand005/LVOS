@@ -1,7 +1,8 @@
 {
-  "editor.tabSize": 2,
+  "editor.tabSize": 4,
   "editor.indentSize": "tabSize",
+  "editor.insertSpaces": false,
   "chat.disableAIFeatures": false,
   "editor.inlineSuggest.enabled": true,
-  "js/ts.tsdk.path": "C:\\Users\\Lasse\\AppData\\Roaming\\npm\\node_modules\\typescript\\lib"
+  "cSpell.words": ["devel"]
 }
