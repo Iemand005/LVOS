@@ -22,3 +22,6 @@
 [submodule "Scripts/WebGraphics"]
 	path = Scripts/WebGraphics
 	url = https://github.com/Iemand005/WebGraphics
+[submodule "Applications/Cyanide"]
+	path = Applications/Cyanide
+	url = https://github.com/cyanide-again/lvos.git
