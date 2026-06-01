@@ -27,6 +27,7 @@
     background-color: white;
 }
 
-.windows-11 {
-    
+.windows-11 .window {
+    background-color: rgb(32, 32, 32);
+
 }
