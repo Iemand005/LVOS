@@ -29,9 +29,6 @@ var supportsPointer = typeof PointerEvent !== "undefined";
 
 if (supportsPointer) console.log("Supports pointer events!");
 
-var nativeInteractionSuppressionDepth = 0;
-var nativeInteractionStyles = null;
-
 /**
  * @param {Event?} event
  */
@@ -42,60 +39,6 @@ function cancelDomEvent(event) {
 	if (typeof event.stopPropagation === "function") event.stopPropagation();
 	event.cancelBubble = true;
 	return false;
-}
-
-/**
- * Safari 5 on Windows is especially sensitive to native drag/selection starting
- * while we are moving or resizing a dialog. Suppress those browser behaviors
- * only during active window interactions.
- *
- * @param {boolean} enable
- */
-function toggleNativeInteractionSuppression(enable) {
-	var root = document.documentElement;
-	var body = document.body;
-	if (!root) return;
-
-	if (enable) {
-		if (nativeInteractionSuppressionDepth++ > 0) return;
-		nativeInteractionStyles = {
-			rootUserSelect: root.style.userSelect,
-			rootWebkitUserSelect: root.style.webkitUserSelect,
-			rootUserDrag: root.style.webkitUserDrag,
-			bodyUserSelect: body && body.style ? body.style.userSelect : "",
-			bodyWebkitUserSelect: body && body.style ? body.style.webkitUserSelect : "",
-			bodyUserDrag: body && body.style ? body.style.webkitUserDrag : ""
-		};
-		root.style.userSelect = "none";
-		root.style.webkitUserSelect = "none";
-		root.style.webkitUserDrag = "none";
-		if (body) {
-			body.style.userSelect = "none";
-			body.style.webkitUserSelect = "none";
-			body.style.webkitUserDrag = "none";
-		}
-		document.addEventListener("dragstart", cancelDomEvent, true);
-		document.addEventListener("selectstart", cancelDomEvent, true);
-		return;
-	}
-
-	if (nativeInteractionSuppressionDepth > 0) nativeInteractionSuppressionDepth--;
-	if (nativeInteractionSuppressionDepth > 0) return;
-
-	document.removeEventListener("dragstart", cancelDomEvent, true);
-	document.removeEventListener("selectstart", cancelDomEvent, true);
-
-	if (nativeInteractionStyles) {
-		root.style.userSelect = nativeInteractionStyles.rootUserSelect;
-		root.style.webkitUserSelect = nativeInteractionStyles.rootWebkitUserSelect;
-		root.style.webkitUserDrag = nativeInteractionStyles.rootUserDrag;
-		if (body) {
-			body.style.userSelect = nativeInteractionStyles.bodyUserSelect;
-			body.style.webkitUserSelect = nativeInteractionStyles.bodyWebkitUserSelect;
-			body.style.webkitUserDrag = nativeInteractionStyles.bodyUserDrag;
-		}
-		nativeInteractionStyles = null;
-	}
 }
 
 /**
@@ -219,7 +162,6 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
-	// toggleNativeInteractionSuppression(enabled);
 	windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
 	toggleDialogDragEventHandler(enabled);
 };
