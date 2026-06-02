@@ -7,7 +7,7 @@ const fsSource =
 
 const camera = new Camera();
 
-Graphics3D.prototype.render = function (now) {
+Graphics3D.prototype.render = function(now) {
   now *= 0.001; // convert to seconds
   deltaTime = now - then;
   then = now;
@@ -19,11 +19,11 @@ Graphics3D.prototype.render = function (now) {
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics3D.prototype.startRendering = function () {
+Graphics3D.prototype.startRendering = function() {
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics3D.prototype.handleResize = function (width, height) {
+Graphics3D.prototype.handleResize = function(width, height) {
   const dpr = window.devicePixelRatio || 1;
   this.canvas.width = width * dpr;
   this.canvas.height = height * dpr;
