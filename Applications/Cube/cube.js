@@ -54,19 +54,22 @@ Graphics3D.prototype.initShaderProgram = function (vsSource, fsSource) {
 function Graphics3D(canvas) {
   /* @type {HTMLCanvasElement} */
   this.canvas = canvas;
-  this.gl = canvas.getContext("webgl");
-  this.ie11 = false;
+  this.gl =
+    canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  this.ie11 = !!this.gl && !!canvas.getContext("experimental-webgl");
+
   if (!this.gl) {
-    this.gl = canvas.getContext("experimental-webgl");
-    if (this.gl) this.ie11 = true;
+    alert("This demo requires WebGL, which is not available in this browser.");
+    return;
   }
 
-  this.gl.clearColor(0, 0, 0, 0);
+  this.gl.clearColor(0, 0, 0, 1);
+  this.gl.viewport(0, 0, canvas.width, canvas.height);
 
   this.buffers = {
-    position: [],
-    indices: [],
-    color: []
+    position: null,
+    indices: null,
+    color: null
   };
 
   this.onrender = function () {};
@@ -77,19 +80,7 @@ Graphics3D.prototype.clear = function () {
 };
 
 Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
-  /*const*/var gl = this.gl;
   this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
-
-  /*const*/var positionBuffer = gl.createBuffer();
-
-  // Select the positionBuffer as the one to apply buffer
-  // operations to from here out.
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-  // Now create an array of positions for the square.
-  /*const*/var positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
-
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 };
 
 /*let*/var squareRotation = 0.0;
@@ -112,42 +103,41 @@ Graphics3D.prototype.drawScene = function (programInfo, deltaTime) {
   /*const*/var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
   /*const*/var zNear = 0.1;
   /*const*/var zFar = 100.0;
-  ///*const*/var projectionMatrix = mat4.create();
+  /*const*/var projectionMatrix = mat4.create();
 
   // note: glMatrix always has the first argument
   // as the destination to receive the result.
-  // gl.gM
-  //mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+  mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  ///*const*/var modelViewMatrix = mat4.create();
+  /*const*/var modelViewMatrix = mat4.create();
 
-  //squareRotation += deltaTime;
-  //mat4.translate(
-  //  modelViewMatrix, // destination matrix
-  //  modelViewMatrix, // matrix to translate
-  //  [-0.0, 0.0, -6.0]
-  //); // amount to translate
+  squareRotation += deltaTime;
+  mat4.translate(
+    modelViewMatrix, // destination matrix
+    modelViewMatrix, // matrix to translate
+    [0.0, 0.0, -6.0]
+  ); // amount to translate
 
-  //mat4.rotate(
-  //  modelViewMatrix, // destination matrix
-  //  modelViewMatrix, // matrix to rotate
-  //  squareRotation, // amount to rotate in radians
-  //  [0, 0, 1]
-  //); // axis to rotate around (Z)
-  //mat4.rotate(
-  //  modelViewMatrix, // destination matrix
-  //  modelViewMatrix, // matrix to rotate
-  //  squareRotation * 0.7, // amount to rotate in radians
-  //  [0, 1, 0]
-  //); // axis to rotate around (Y)
-  //mat4.rotate(
-  //  modelViewMatrix, // destination matrix
-  //  modelViewMatrix, // matrix to rotate
-  //  squareRotation * 0.3, // amount to rotate in radians
-  //  [1, 0, 0]
-  //); // axis to rotate around (X)
+  mat4.rotate(
+    modelViewMatrix, // destination matrix
+    modelViewMatrix, // matrix to rotate
+    squareRotation, // amount to rotate in radians
+    [0, 0, 1]
+  ); // axis to rotate around (Z)
+  mat4.rotate(
+    modelViewMatrix, // destination matrix
+    modelViewMatrix, // matrix to rotate
+    squareRotation * 0.7, // amount to rotate in radians
+    [0, 1, 0]
+  ); // axis to rotate around (Y)
+  mat4.rotate(
+    modelViewMatrix, // destination matrix
+    modelViewMatrix, // matrix to rotate
+    squareRotation * 0.3, // amount to rotate in radians
+    [1, 0, 0]
+  ); // axis to rotate around (X)
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -191,22 +181,18 @@ Graphics3D.prototype.drawScene = function (programInfo, deltaTime) {
   gl.useProgram(programInfo.program);
 
   // Set the shader uniforms
-  //gl.uniformMatrix4fv(
-  //  programInfo.uniformLocations.projectionMatrix,
-  //  false,
-  //  projectionMatrix
-  //);
-  //gl.uniformMatrix4fv(
-  //  programInfo.uniformLocations.modelViewMatrix,
-  //  false,
-  //  modelViewMatrix
-  //);
+  gl.uniformMatrix4fv(
+    programInfo.uniformLocations.projectionMatrix,
+    false,
+    projectionMatrix
+  );
+  gl.uniformMatrix4fv(
+    programInfo.uniformLocations.modelViewMatrix,
+    false,
+    modelViewMatrix
+  );
 
   {
-    // /*const*/var offset = 0;
-    // /*const*/var vertexCount = 4;
-    // gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
-
     /*const*/var vertexCount = 36;
     /*const*/var type = gl.UNSIGNED_SHORT;
     /*const*/var offset = 0;
