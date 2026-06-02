@@ -6,6 +6,8 @@
 'use strict';
 'use esnext';
 
+/** @typedef Dialog import */
+
 var applist = document.getElementById("applist");
 
 applist.addEventListener("submit", function(event){ event.preventDefault(); });
@@ -35,6 +37,7 @@ window.addEventListener('keydown', function(event) {
       break;
     case "F10":
       event.preventDefault();
+      /** @type {Dialog} */
       var c = windows["console"];
       c.open();
     c.maximize();
