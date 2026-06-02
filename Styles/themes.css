@@ -46,14 +46,25 @@
     padding: 0;
 }
 
+.windows-11 .window header {
+    align-content: center;
+}
+
+.windows-11 .window header h1 {
+    margin-left: 5px;
+}
+
 .windows-11 .window header section {
     border-radius: 0;
     background-color: unset;
-    height: 100%;
 }
 
-.windows-11 .window header button, .windows-11 .window header section {
-    height: 100%;
+.windows-11 .window header button,
+.windows-11 .window header section,
+.windows-11 .window header {
+    height: 32px;
+    box-sizing: border-box;
+    padding: 0;
 }
 
 .windows-11 .window article > * {
