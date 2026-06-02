@@ -1308,10 +1308,12 @@ function closeApp(appId) {
 }
 
 function enableMica() {
-    window.addEventListener("resize", windowManager.forEachWindow.bind(windowManager, function(window) {
-        window.resize(window.width, window.height);
-    }));
-}
+  window.addEventListener(
+    "resize",
+    windowManager.forEachWindow.bind(windowManager, function (window) {
+      window.update();
+    })
+  );
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleMica = function(enabled) {
