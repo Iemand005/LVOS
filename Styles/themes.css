@@ -28,7 +28,7 @@
 }
 
 .mica .window content {
-    background-color: unset;
+    background-color: transparent;
 }
 
 .windows-11 .window header button {
