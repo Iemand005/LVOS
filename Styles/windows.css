@@ -430,11 +430,15 @@ button:hover {
     body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
-        backdrop-filter: saturate(150%) blur(10px) !important;
+        backdrop-filter: saturate(150%) blur(20px) !important;
     }
 
     body.blur .window > content > *, body.blur .window > content > article > * {
         background: none;
+    }
+
+    body.blur .window header button {
+        backdrop-filter: unset;
     }
 }
 
