@@ -101,9 +101,8 @@ Graphics3D.prototype.render = function (now) {
   deltaTime = now - then;
   then = now;
 
-  // console.log(this);
-  // console.log(deltaTime);
-  camera.rotation.x += deltaTime;
+  camera.rotation.x += deltaTime * 10;
+  camera.rotation.y += deltaTime * 5;
   this.drawScene(programInfo, deltaTime, camera);
   // squareRotation += deltaTime;
 
