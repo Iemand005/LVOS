@@ -1046,8 +1046,13 @@ function checkForFlip() {
 window.onresize = checkForFlip;
 
 function initializeDialogs() {
-    if (typeof onpointerup !== "undefined") document.onpointerup = disableDialogDrag;
-    else document.onmouseup = disableDialogDrag;
+    if (supportsPointer) {
+        document.onpointerup = disableDialogDrag;
+        window.onpointerup = disableDialogDrag;
+    } else {
+        document.onmouseup = disableDialogDrag;
+        window.onmouseup = disableDialogDrag;
+    }
     
     dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
