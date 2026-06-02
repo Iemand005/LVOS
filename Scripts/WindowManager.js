@@ -858,19 +858,15 @@ Dialog.prototype.injectMica = function() {
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
         var image = null;
-        if (wallpaper.children[0] instanceof HTMLImageElement) {
+        if (supportsObjectFit && wallpaper.children[0] instanceof HTMLImageElement) {
             image = wallpaper.children[0].cloneNode(true);
             image.removeAttribute("style");
+            image.className = "mica-backdrop";
+            if (blurredSrc) image.src = blurredSrc;
         } else {
             image = document.createElement("img");
-            image.src = wallpaperSrc;
-            if (blurredSrc) image.setAttribute("blurred-src", blurredSrc);
-        }
-
-        image.className = "mica-backdrop";
-
-        if (blurredSrc) {
-            image.src = blurredSrc;
+            image.className = "mica-backdrop legacy-wallpaper-image";
+            image.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
         }
 
         clip.appendChild(image);
@@ -1375,7 +1371,13 @@ function removeWallpaper() {
  */
 function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
-    image.src = url;
+    if (supportsObjectFit) {
+        image.src = url;
+        image.className = "wallpaper-image";
+    } else {
+        image.className = "wallpaper-image legacy-wallpaper-image";
+        image.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+    }
     if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
     var wallpaper = getWallpaper();
@@ -1388,11 +1390,8 @@ function applyWallpaperImage(url, blurredUrl) {
     if (supportsObjectFit) {
         wallpaper.classList.remove("legacy-wallpaper");
         wallpaper.style.backgroundImage = "";
-        image.style.display = "block";
     } else {
         wallpaper.classList.add("legacy-wallpaper");
-        wallpaper.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-        image.style.display = "none";
     }
     wallpaper.appendChild(image);
 }
