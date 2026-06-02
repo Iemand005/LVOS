@@ -49,6 +49,11 @@
 .windows-11 .window header section {
     border-radius: 0;
     background-color: unset;
+    height: 100%;
+}
+
+.windows-11 .window header button, .windows-11 .window header section {
+    height: 100%;
 }
 
 .windows-11 .window article > * {
