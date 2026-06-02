@@ -1360,6 +1360,7 @@ WindowManager.prototype.toggleMica = function(enabled) {
     else window.removeEventListener("resize", micaHandler);
     document.body.classList.toggle("mica", enabled);
     windowManager.forEachWindow(function(window) { window.mica = enabled; });
+    this.isMicaEnabled = true;
 }
 
 /** @param {boolean} enabled */
