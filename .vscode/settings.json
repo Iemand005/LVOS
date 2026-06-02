@@ -4,5 +4,8 @@
   "editor.insertSpaces": false,
   "chat.disableAIFeatures": false,
   "editor.inlineSuggest.enabled": true,
+  "files.associations": {
+    "*.hta": "html"
+  },
   "cSpell.words": ["devel"]
 }
