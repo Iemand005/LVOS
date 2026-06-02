@@ -5,95 +5,6 @@ const vsSource =
 const fsSource =
   "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
 
-
-// Graphics3D.prototype.loadShader = function (type, source) {
-//   const shader = this.gl.createShader(type);
-//   this.gl.shaderSource(shader, source);
-//   this.gl.compileShader(shader);
-
-//   // See if it compiled successfully
-
-//   if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-//     alert(
-//       "An error occurred compiling the shaders: " +
-//         this.gl.getShaderInfoLog(shader)
-//     );
-//     this.gl.deleteShader(shader);
-//     return null;
-//   }
-
-//   return shader;
-// };
-
-// Graphics3D.prototype.initShaderProgram = function (vsSource, fsSource) {
-//   const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
-//   const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
-
-//   // Create the shader program
-
-//   const shaderProgram = this.gl.createProgram();
-//   this.gl.attachShader(shaderProgram, vertexShader);
-//   this.gl.attachShader(shaderProgram, fragmentShader);
-//   this.gl.linkProgram(shaderProgram);
-
-//   // If creating the shader program failed, alert
-
-//   if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
-//     alert(
-//       "Unable to initialize the shader program: " +
-//         this.gl.getProgramInfoLog(shaderProgram)
-//     );
-//     return null;
-//   }
-
-//   return shaderProgram;
-// };
-
-// /**
-//  * @param {HTMLCanvasElement} canvas
-//  */
-// function Graphics3D(canvas) {
-//   /* @type {HTMLCanvasElement} */
-//   this.canvas = canvas;
-//   this.gl =
-//     canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-//   this.ie11 = !!this.gl && !!canvas.getContext("experimental-webgl");
-
-//   if (!this.gl) {
-//     alert("This demo requires WebGL, which is not available in this browser.");
-//     return;
-//   }
-
-//   this.gl.clearColor(0, 0, 0, 0);
-//   this.gl.viewport(0, 0, canvas.width, canvas.height);
-
-//   this.buffers = {
-//     position: null,
-//     indices: null,
-//     color: null
-//   };
-
-//   this.onrender = function () {};
-// }
-
-// Graphics3D.prototype.clear = function () {
-//   this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-// };
-
-// Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
-//   this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
-// };
-
-// let squareRotation = 0.0;
-// let deltaTime = 0;
-// // let now = 0;
-// let then = 0;
-
-
-// // Graphics.prototype.render = function () {
-
-// // };
-
 const camera = new Camera();
 
 Graphics3D.prototype.render = function (now) {
@@ -104,7 +15,6 @@ Graphics3D.prototype.render = function (now) {
   camera.rotation.x += deltaTime * 10;
   camera.rotation.y += deltaTime * 5;
   this.drawScene(programInfo, deltaTime, camera);
-  // squareRotation += deltaTime;
 
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
@@ -121,9 +31,6 @@ Graphics3D.prototype.handleResize = function (width, height) {
   // ctx.scale(dpr, dpr);
   if (this.gl.scale) this.gl.scale(dpr, dpr);
 };
-
-
-// export { drawScene };
 
 const graphics = new Graphics3D(canvas);
 const gl = graphics.gl;
@@ -192,7 +99,6 @@ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 // indices into the vertex array to specify each triangle's
 // position.
 
-// prettier-ignore
 const indices = [
   0, 1, 2, 0, 2, 3,    // front
   4, 5, 6, 4, 6, 7,    // back
