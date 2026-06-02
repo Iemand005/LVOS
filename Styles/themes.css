@@ -43,6 +43,7 @@
     background-color: rgb(32, 32, 32);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.267);
+    padding: 0;
 }
 
 .windows-11 .window header section {
@@ -50,8 +51,8 @@
     background-color: unset;
 }
 
-.windows-11 .window article {
-    background-color: rgb(25, 25, 25);
+.windows-11 .window article > * {
+    background-color: rgb(240, 240, 240);
 }
 
 @media (prefers-color-scheme: dark) {
