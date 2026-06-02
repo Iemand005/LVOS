@@ -6,7 +6,7 @@
 'use strict';
 'use esnext';
 
-/** @typedef Dialog import */
+/** @typedef {import(./WindowManager.js).Dialog} Dialog */
 
 var applist = document.getElementById("applist");
 
@@ -40,8 +40,8 @@ window.addEventListener('keydown', function(event) {
       /** @type {Dialog} */
       var c = windows["console"];
       c.open();
-    c.maximize();
-    break;
+      c.maximize();
+      break;
   }
 });
 
