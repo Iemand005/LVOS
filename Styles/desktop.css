@@ -48,11 +48,11 @@ body {
   opacity: 0.4;
 }
 
-body[blur] #reflection {
+body.blur #reflection {
   filter: blur(2px);
 }
 
-body:not([blur]) .window > article {
+body:not(.blur) .window > article {
   backdrop-filter: none;
 }
 

@@ -85,12 +85,12 @@ main {
     /* color: black; */
 }
 
-.window header, .window header section{ /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
+.window header, .window header section { /* I want to forward the borders to the children so there is no visible border in case there aren't any visible buttons. Applying border to button wrapper would cause a 2px black line to remain. */
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
 }
 
-.window header section{
+.window header section {
     -webkit-transition: all 700ms ease-out;
     -moz-transition: all 700ms ease-out;
     -o-transition: all 700ms ease-out;
@@ -338,7 +338,7 @@ button:hover {
     background-color: rgba(153, 153, 153, 0.219);
 }
 
-[blur] button {
+.blur button {
     backdrop-filter: blur(10px);
 }
 
@@ -427,10 +427,14 @@ button:hover {
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
-    body[blur] .window > content{
+    body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);
         -webkit-backdrop-filter: saturate(150%) blur(10px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
         backdrop-filter: saturate(150%) blur(10px) !important;
+    }
+
+    body.blue .window > content > *, body.blue .window > content > article > * {
+        background: none;
     }
 }
 
