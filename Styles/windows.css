@@ -433,7 +433,7 @@ button:hover {
         backdrop-filter: saturate(150%) blur(10px) !important;
     }
 
-    body.blue .window > content > *, body.blue .window > content > article > * {
+    body.blur .window > content > *, body.blur .window > content > article > * {
         background: none;
     }
 }
