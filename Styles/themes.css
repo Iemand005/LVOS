@@ -36,11 +36,11 @@
 }
 
 .windows-11 button {
-    /* background-color: white;
-     */
-     background-color: rgb(253, 253, 253);
-     border-color: rgb(208, 208, 208);
-     border-bottom-color: rgb(186, 186, 186);
+    background-color: rgb(253, 253, 253);
+    border-color: rgb(208, 208, 208);
+    border-bottom-color: rgb(186, 186, 186);
+    border-radius: 4px;
+    border-width: 1px;
 }
 
 .windows-11 .window {
