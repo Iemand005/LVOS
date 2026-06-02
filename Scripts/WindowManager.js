@@ -969,6 +969,7 @@ var toggleOverlay = bodyCrawler.overlay
     }; // The force attribute gets automatically forwarded!
 
 toggleOverlay(loadingOverlay);
+checkForFlip();
 
 var desktopElement = document.getElementById("desktop");
 
@@ -979,8 +980,9 @@ function checkForFlip() {
     if (!loaded) {
         //I'll s'
         console.log("th I'll set the timeoutrat");
-        clearTimeout(timeout); // I don't know why it works with the timeout set to 0 unless if the 3 repeated animation events actually get called in less than 1ms. I guess it's handy since we want it to load as fast as possible;
+        if (timeout !== -1) return;
         timeout = setTimeout(function () {
+            timeout = -1;
             toggleOverlay(!(!loaded ? (loaded = true) : false));
             updateBlurState();
         }, 500);
