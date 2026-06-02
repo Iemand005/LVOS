@@ -121,7 +121,12 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
     return this._isMicaEnabled;
   },
   set: function (value) {
-    if (typeof value === "boolean") this._isMicaEnabled = value;
+    if (typeof value !== "boolean") return;
+    if (value) window.addEventListener("resize", micaHandler);
+    else window.removeEventListener("resize", micaHandler);
+    document.body.classList.toggle("mica", value);
+    windowManager.forEachWindow(function(window) { window.mica = value; });
+    this._isMicaEnabled = value;
   }
 });
 
@@ -1356,10 +1361,6 @@ function enableMica() {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleMica = function(enabled) {
-    if (enabled) window.addEventListener("resize", micaHandler);
-    else window.removeEventListener("resize", micaHandler);
-    document.body.classList.toggle("mica", enabled);
-    windowManager.forEachWindow(function(window) { window.mica = enabled; });
     this.isMicaEnabled = true;
 }
 
