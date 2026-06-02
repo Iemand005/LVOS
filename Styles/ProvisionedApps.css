@@ -23,6 +23,7 @@ form {
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    min-height: 0;
 }
 
 table {
@@ -48,4 +49,11 @@ input {
 
 #stdin {
     text-align: left;
+    flex: 0 0 auto;
+}
+
+#stdout {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
 }

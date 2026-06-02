@@ -19,7 +19,7 @@ function initializeConsoleApplication() {
   var interceptConsole = function() {
     if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
     stdout.appendChild(console.getHTML());
-    consoleForm.scrollTop = consoleForm.scrollHeight;
+    stdout.scrollTop = stdout.scrollHeight;
   };
 
   consoleForm.addEventListener("submit", function(event) {

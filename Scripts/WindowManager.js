@@ -723,33 +723,36 @@ Dialog.prototype.messageFrame = function (type, message) {
  * @param {number?} [x]
  * @param {number?} [y]
  */
-Dialog.prototype.move = function(x, y) {
-    if (typeof x === "undefined" || x === null) x = this.x || 0;
-    if (typeof y === "undefined" || y === null) y = this.y || 0;
-    this._x = max(x, 0), this._y = max(y, 0);
-    if (!this.target) return;
-    if (useTransform) {
-        this.target.style.left = "0px";
-        this.target.style.top = "0px";
-        translateElement(this.target, this._x, this._y);
-    } else {
-        this.target.style.transform = "none";
-        this.target.style.left = toPixels(this._x);
-        this.target.style.top = toPixels(this._y);
-    }
+Dialog.prototype.move = function (x, y) {
+  if (typeof x === "undefined" || x === null) x = this.x || 0;
+  if (typeof y === "undefined" || y === null) y = this.y || 0;
+  var windowWidth = window.innerWidth;
+  var windowHeight = window.innerHeight;
+  (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
+  if (!this.target) return;
+  if (useTransform) {
+    this.target.style.left = "0px";
+    this.target.style.top = "0px";
+    translateElement(this.target, this.x, this.y);
+  } else {
+    this.target.style.transform = "none";
+    this.target.style.left = toPixels(this.x);
+    this.target.style.top = toPixels(this.y);
+  }
 
-    if (this.mica && useTransform) {
-        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
-        var wallpaperP = document.getElementById("wallpaper");
-        if (!wallpaperP) return;
-        var wallpaper = wallpaperP.children[0];
-        if (!(backdrop instanceof HTMLElement) || !wallpaper) return;
-        translateElement(backdrop, -this._x, -this._y);
-        
-        backdrop.style.width = toPixels(wallpaper.clientWidth);
-        backdrop.style.height = toPixels(wallpaper.clientHeight);
-    }
-}
+  if (this.mica && useTransform) {
+    var backdrop =
+      this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
+    var wallpaperP = document.getElementById("wallpaper");
+    if (!wallpaperP) return;
+    var wallpaper = wallpaperP.children[0];
+    if (!(backdrop instanceof HTMLElement) || !wallpaper) return;
+    translateElement(backdrop, -this.x, -this.y);
+
+    backdrop.style.width = toPixels(wallpaper.clientWidth);
+    backdrop.style.height = toPixels(wallpaper.clientHeight);
+  }
+};
 /**
  * @param {number} [width]
  * @param {number} [height]
