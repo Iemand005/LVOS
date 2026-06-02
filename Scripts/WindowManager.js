@@ -578,15 +578,15 @@ Object.defineProperty(Dialog.prototype, "title", {
         return this.id;
     },
     set: function(title) {
-        this.setTitle(title);
+        this._title = title;
+        var titleElement = this.getTitleElement();
+        if (titleElement) titleElement.innerHTML = title;
     }
 });
 
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
-    this._title = title;
-    var titleElement = this.getTitleElement();
-    if (titleElement) titleElement.innerHTML = title;
+    this.title = title;
 };
 
 Object.defineProperty(Dialog.prototype, "id", {
