@@ -165,9 +165,10 @@ WindowManager.prototype.forEachWindow = function (callback) {
     if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
 };
 
-/** @param {Application} app */
+/** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
 	this._windows[app.id] = new Dialog(app);
+    this._windows[app.id].mica = this.isMicaEnabled;
 };
 
 /** @param {boolean} enabled */
@@ -224,7 +225,7 @@ function Dialog(object, create) {
     /** @type {string?} */
     this._src = null;
 
-    this.minWidth = 100;
+    this.minWidth = 200;
     this.minHeight = 200;
     this._mica = useMica;
     
@@ -1085,7 +1086,8 @@ function initializeDialogs() {
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
         if (dialog instanceof HTMLElement)
-          windowManager.windows[dialog.id] = new Dialog(dialog);
+          windowManager.loadApp(dialog);
+        
     });
     //flip();
     checkForFlip();
