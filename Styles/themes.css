@@ -35,6 +35,14 @@
     background-color: transparent !important;
 }
 
+.windows-11 button {
+    /* background-color: white;
+     */
+     background-color: rgb(253, 253, 253);
+     border-color: rgb(208, 208, 208);
+     border-bottom-color: rgb(186, 186, 186);
+}
+
 .windows-11 .window {
     color: black;
 }
@@ -56,9 +64,8 @@
 
 .windows-11 .window header h1 {
     margin-left: 10px;
-    /* textf
-     */
-     font-size: 10px;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .windows-11 .window header section {
