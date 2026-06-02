@@ -1406,7 +1406,7 @@ function applyWallpaperImage(url, blurredUrl) {
     wallpaper.appendChild(image);
 }
 
-enableMica();
+// enableMica();
 
 initializeDialogs();
 toggleReflections(reflections);

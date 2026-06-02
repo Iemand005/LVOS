@@ -53,11 +53,10 @@ function startLevel() {
 }
 
 function resize() {
-  horizon.width = horizon.clientWidth;
-  horizon.height = horizon.clientHeight;
+  graphics.resize();
 }
 
-onresize = resize;
+onresize = function() { requestAnimationFrame(resize); };
 resize();
 
 startLevel();
