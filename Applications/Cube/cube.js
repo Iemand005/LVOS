@@ -103,7 +103,8 @@ Graphics3D.prototype.render = function (now) {
 
   // console.log(this);
   // console.log(deltaTime);
-  this.drawScene(programInfo, deltaTime,camera );
+  camera.rotation.x += deltaTime;
+  this.drawScene(programInfo, deltaTime, camera);
   // squareRotation += deltaTime;
 
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
