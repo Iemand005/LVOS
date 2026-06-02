@@ -623,7 +623,9 @@ Object.defineProperty(Dialog.prototype, "micaElement", {
     get: function() {
         try {
             if (!this.target) return;
-            var clip = this.target.getElementsByClassName("backdrop-clip")[0].children[0];
+            var clipElem = this.target.getElementsByClassName("backdrop-clip");
+            if (!clipElem.length) return;
+            var clip = clipElem[0].children[0];
             if (clip instanceof HTMLElement) return clip;
         } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
         return null;

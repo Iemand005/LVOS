@@ -28,7 +28,11 @@
 }
 
 .mica .window content {
-    background-color: transparent;
+    background-color: transparent !important;
+}
+
+.mica .window article {
+    background-color: transparent !important;
 }
 
 .windows-11 .window header button {
