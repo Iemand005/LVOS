@@ -1070,9 +1070,6 @@ function windowActivationEvent(event, dialog) {
     enableDialogDrag();
     activeDialog.setClickOffset(event.clientX, event.clientY);
     activeDialog.activate();
-    if (activeDialog.target && typeof activeDialog.target.setCapture === "function") {
-        try { activeDialog.target.setCapture(true); } catch (ex) { if (ex instanceof Error) console.warn(ex.message); }
-    }
     return dialog;
 }
 
@@ -1120,9 +1117,6 @@ function toggleDialogDragEventHandler(enable) {
 
 function disableDialogDrag() {
     // if (flipped) return;
-    if (activeDialog && activeDialog.target && typeof activeDialog.target.releaseCapture === "function") {
-        try { activeDialog.target.releaseCapture(); } catch (ex) { if (ex instanceof Error) console.warn(ex.message); }
-    }
     toggleDialogDragEventHandler(false);
     dragAction.set();
     windowManager.toggleDragging(false);
