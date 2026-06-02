@@ -1314,6 +1314,7 @@ function enableMica() {
       window.update();
     })
   );
+}
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleMica = function(enabled) {
