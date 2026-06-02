@@ -31,6 +31,11 @@ var supportsPointer = Boolean(
     (navigator.pointerEnabled || navigator.msPointerEnabled) &&
     typeof PointerEvent !== "undefined"
 );
+var supportsObjectFit = Boolean(
+    document.documentElement &&
+    document.documentElement.style &&
+    typeof document.documentElement.style.objectFit !== "undefined"
+);
 
 if (supportsPointer) console.log("Supports pointer events!");
 
@@ -1355,6 +1360,13 @@ function applyWallpaperImage(url, blurredUrl) {
     var wallpaper = getWallpaper();
     if (!wallpaper) return;
     while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+    if (supportsObjectFit) {
+        wallpaper.classList.remove("legacy-wallpaper");
+        wallpaper.style.backgroundImage = "";
+    } else {
+        wallpaper.classList.add("legacy-wallpaper");
+        wallpaper.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+    }
     wallpaper.appendChild(image);
 }
 

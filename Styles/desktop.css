@@ -128,6 +128,9 @@ body:not([blur]) .window > article {
   top: 0;
   z-index: -10000;
   background-color: red;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
   -webkit-user-drag: none;
   -webkit-user-select: none;
   user-select: none;
@@ -138,17 +141,11 @@ body:not([blur]) .window > article {
   height: 100%;
 }
 
-/* IE11 and older Safari don't support object-fit reliably, so emulate cover for image wallpapers. */
-#wallpaper > img {
-  width: auto;
-  height: auto;
-  min-width: 100%;
-  min-height: 100%;
+#wallpaper.legacy-wallpaper > img {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
 }
 
 article#metrobody {
