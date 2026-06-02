@@ -138,6 +138,19 @@ body:not([blur]) .window > article {
   height: 100%;
 }
 
+/* IE11 and older Safari don't support object-fit reliably, so emulate cover for image wallpapers. */
+#wallpaper > img {
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
 article#metrobody {
   pointer-events: none !important;
 }
