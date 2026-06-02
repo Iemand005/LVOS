@@ -6,204 +6,95 @@ const fsSource =
   "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
 
 
-Graphics3D.prototype.loadShader = function (type, source) {
-  const shader = this.gl.createShader(type);
-  this.gl.shaderSource(shader, source);
-  this.gl.compileShader(shader);
+// Graphics3D.prototype.loadShader = function (type, source) {
+//   const shader = this.gl.createShader(type);
+//   this.gl.shaderSource(shader, source);
+//   this.gl.compileShader(shader);
 
-  // See if it compiled successfully
+//   // See if it compiled successfully
 
-  if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-    alert(
-      "An error occurred compiling the shaders: " +
-        this.gl.getShaderInfoLog(shader)
-    );
-    this.gl.deleteShader(shader);
-    return null;
-  }
+//   if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
+//     alert(
+//       "An error occurred compiling the shaders: " +
+//         this.gl.getShaderInfoLog(shader)
+//     );
+//     this.gl.deleteShader(shader);
+//     return null;
+//   }
 
-  return shader;
-};
-
-Graphics3D.prototype.initShaderProgram = function (vsSource, fsSource) {
-  const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
-
-  // Create the shader program
-
-  const shaderProgram = this.gl.createProgram();
-  this.gl.attachShader(shaderProgram, vertexShader);
-  this.gl.attachShader(shaderProgram, fragmentShader);
-  this.gl.linkProgram(shaderProgram);
-
-  // If creating the shader program failed, alert
-
-  if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
-    alert(
-      "Unable to initialize the shader program: " +
-        this.gl.getProgramInfoLog(shaderProgram)
-    );
-    return null;
-  }
-
-  return shaderProgram;
-};
-
-/**
- * @param {HTMLCanvasElement} canvas
- */
-function Graphics3D(canvas) {
-  /* @type {HTMLCanvasElement} */
-  this.canvas = canvas;
-  this.gl =
-    canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  this.ie11 = !!this.gl && !!canvas.getContext("experimental-webgl");
-
-  if (!this.gl) {
-    alert("This demo requires WebGL, which is not available in this browser.");
-    return;
-  }
-
-  this.gl.clearColor(0, 0, 0, 0);
-  this.gl.viewport(0, 0, canvas.width, canvas.height);
-
-  this.buffers = {
-    position: null,
-    indices: null,
-    color: null
-  };
-
-  this.onrender = function () {};
-}
-
-Graphics3D.prototype.clear = function () {
-  this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-};
-
-Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
-  this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
-};
-
-let squareRotation = 0.0;
-let deltaTime = 0;
-// let now = 0;
-let then = 0;
-
-Graphics3D.prototype.drawScene = function (programInfo, deltaTime) {
-  const gl = this.gl;
-
-  gl.clearDepth(1.0); // Clear everything
-  gl.enable(gl.DEPTH_TEST); // Enable depth testing
-  gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  const fov = 45;
-
-  const fieldOfView = (fov * Math.PI) / 180; // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
-  const projectionMatrix = mat4.create();
-
-  // note: glMatrix always has the first argument
-  // as the destination to receive the result.
-  mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
-  // Set the drawing position to the "identity" point, which is
-  // the center of the scene.
-  const modelViewMatrix = mat4.create();
-
-  squareRotation += deltaTime;
-  mat4.translate(
-    modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to translate
-    [0.0, 0.0, -6.0]
-  ); // amount to translate
-
-  mat4.rotate(
-    modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to rotate
-    squareRotation, // amount to rotate in radians
-    [0, 0, 1]
-  ); // axis to rotate around (Z)
-  mat4.rotate(
-    modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to rotate
-    squareRotation * 0.7, // amount to rotate in radians
-    [0, 1, 0]
-  ); // axis to rotate around (Y)
-  mat4.rotate(
-    modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to rotate
-    squareRotation * 0.3, // amount to rotate in radians
-    [1, 0, 0]
-  ); // axis to rotate around (X)
-
-  // Tell WebGL how to pull out the positions from the position
-  // buffer into the vertexPosition attribute.
-  {
-    const numComponents = 3; // pull out 3 values per iteration (x, y, z)
-    const type = gl.FLOAT; // the data in the buffer is 32bit floats
-    const normalize = false; // don't normalize
-    const stride = 0; // how many bytes to get from one set of values to the next
-    // 0 = use type and numComponents above
-    const offset = 0; // how many bytes inside the buffer to start from
-    if (!this.buffers) return;
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.position);
-    gl.vertexAttribPointer(
-      programInfo.attribLocations.vertexPosition,
-      numComponents,
-      type,
-      normalize,
-      stride,
-      offset
-    );
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-  }
-
-  const numComponents = 4;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.color);
-  gl.vertexAttribPointer(
-    programInfo.attribLocations.vertexColor,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
-  );
-  gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
-
-  // Tell WebGL to use our program when drawing
-  gl.useProgram(programInfo.program);
-
-  // Set the shader uniforms
-  gl.uniformMatrix4fv(
-    programInfo.uniformLocations.projectionMatrix,
-    false,
-    projectionMatrix
-  );
-  gl.uniformMatrix4fv(
-    programInfo.uniformLocations.modelViewMatrix,
-    false,
-    modelViewMatrix
-  );
-
-  {
-    const vertexCount = 36;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
-    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
-  }
-};
-
-// Graphics.prototype.render = function () {
-
+//   return shader;
 // };
+
+// Graphics3D.prototype.initShaderProgram = function (vsSource, fsSource) {
+//   const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vsSource);
+//   const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fsSource);
+
+//   // Create the shader program
+
+//   const shaderProgram = this.gl.createProgram();
+//   this.gl.attachShader(shaderProgram, vertexShader);
+//   this.gl.attachShader(shaderProgram, fragmentShader);
+//   this.gl.linkProgram(shaderProgram);
+
+//   // If creating the shader program failed, alert
+
+//   if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
+//     alert(
+//       "Unable to initialize the shader program: " +
+//         this.gl.getProgramInfoLog(shaderProgram)
+//     );
+//     return null;
+//   }
+
+//   return shaderProgram;
+// };
+
+// /**
+//  * @param {HTMLCanvasElement} canvas
+//  */
+// function Graphics3D(canvas) {
+//   /* @type {HTMLCanvasElement} */
+//   this.canvas = canvas;
+//   this.gl =
+//     canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+//   this.ie11 = !!this.gl && !!canvas.getContext("experimental-webgl");
+
+//   if (!this.gl) {
+//     alert("This demo requires WebGL, which is not available in this browser.");
+//     return;
+//   }
+
+//   this.gl.clearColor(0, 0, 0, 0);
+//   this.gl.viewport(0, 0, canvas.width, canvas.height);
+
+//   this.buffers = {
+//     position: null,
+//     indices: null,
+//     color: null
+//   };
+
+//   this.onrender = function () {};
+// }
+
+// Graphics3D.prototype.clear = function () {
+//   this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+// };
+
+// Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
+//   this.shaderProgram = this.initShaderProgram(vsSource, fsSource);
+// };
+
+// let squareRotation = 0.0;
+// let deltaTime = 0;
+// // let now = 0;
+// let then = 0;
+
+
+// // Graphics.prototype.render = function () {
+
+// // };
+
+const camera = new Camera();
 
 Graphics3D.prototype.render = function (now) {
   now *= 0.001; // convert to seconds
@@ -212,7 +103,7 @@ Graphics3D.prototype.render = function (now) {
 
   // console.log(this);
   // console.log(deltaTime);
-  this.drawScene(programInfo, deltaTime);
+  this.drawScene(programInfo, deltaTime,camera );
   // squareRotation += deltaTime;
 
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
@@ -231,13 +122,6 @@ Graphics3D.prototype.handleResize = function (width, height) {
   if (this.gl.scale) this.gl.scale(dpr, dpr);
 };
 
-Graphics3D.prototype.resize = function (width, height) {
-  // requestAnimationFrame(this.handleResize.bind)
-  // var dpr = window.devicePixelRatio || 1;
-  // this.canvas.width = width * dpr;
-  // this.canvas.height = height * dpr;
-  // requestAnimationFrame(Graphics3D.prototype.handleResize.bind(this, width, height));
-};
 
 // export { drawScene };
 
