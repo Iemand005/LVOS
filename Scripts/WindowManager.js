@@ -1402,8 +1402,9 @@ function removeWallpaper() {
 /**
  * @param {string} url
  * @param {string} blurredUrl
+ * @param {()=>void | null} onError
  */
-function applyWallpaperImage(url, blurredUrl) {
+function applyWallpaperImage(url, blurredUrl, onError) {
     var image = document.createElement("img");
     image.onerror = function () {
         console.warn("Failed to load wallpaper image!");
@@ -1418,16 +1419,18 @@ function applyWallpaperImage(url, blurredUrl) {
     }
     if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
-    var wallpaper = getWallpaper();
-    if (!wallpaper) return;
-    while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
-    wallpaper.setAttribute("data-wallpaper-src", url);
-    if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
-    else wallpaper.removeAttribute("data-blurred-src");
-
-    wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
-    wallpaper.style.backgroundImage = "";
-    wallpaper.appendChild(image);
+    image.onload = function() {
+        var wallpaper = getWallpaper();
+        if (!wallpaper) return;
+        while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+        wallpaper.setAttribute("data-wallpaper-src", url);
+        if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
+        else wallpaper.removeAttribute("data-blurred-src");
+    
+        wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
+        wallpaper.style.backgroundImage = "";
+        wallpaper.appendChild(image);
+    };
 }
 
 // enableMica();
