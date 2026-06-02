@@ -740,7 +740,7 @@ Dialog.prototype.move = function (x, y) {
     this.target.style.top = toPixels(this.y);
   }
 
-  if (this.mica && useTransform) {
+  if (this.mica && useTransform) try {
     var backdrop =
       this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
     var wallpaperP = document.getElementById("wallpaper");
@@ -751,7 +751,7 @@ Dialog.prototype.move = function (x, y) {
 
     backdrop.style.width = toPixels(wallpaper.clientWidth);
     backdrop.style.height = toPixels(wallpaper.clientHeight);
-  }
+  } catch(ex) {}
 };
 /**
  * @param {number} [width]

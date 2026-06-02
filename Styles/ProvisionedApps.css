@@ -47,6 +47,25 @@ input {
     flex-direction: column-reverse; /* I decided to flip it around instead of making it scroll because scrolling gives problem on some browsers. To avoid wasting time, I'm thus applying flex to the table. */
 }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    #stdout > table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #stdout > table tr {
+        display: table-row;
+        width: 100%;
+    }
+
+    #stdout > table td {
+        display: table-cell;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 #stdin {
     text-align: left;
     flex: 0 0 auto;
