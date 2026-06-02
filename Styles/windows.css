@@ -440,6 +440,11 @@ button:hover {
     body.blur .window header button {
         backdrop-filter: unset;
     }
+
+    .blur #dock {
+        background: linear-gradient(0deg, #b2b2b2, #73737329);
+        backdrop-filter: blur(10px);
+    }
 }
 
 @media (prefers-color-scheme: dark) {

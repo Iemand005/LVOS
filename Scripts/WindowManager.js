@@ -1405,6 +1405,9 @@ function removeWallpaper() {
  */
 function applyWallpaperImage(url, blurredUrl) {
     var image = document.createElement("img");
+    image.onerror = function () {
+        console.warn("Failed to load wallpaper image!");
+    };
     if (supportsObjectFit) {
         image.src = url;
         image.className = "wallpaper-image";
@@ -1433,7 +1436,7 @@ initializeDialogs();
 toggleReflections(reflections);
 
 applyWallpaperImage(
-  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
+  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplashe.jpg",
   "file:///C:/Users/Lasse/Downloads/fox-blur.jpg"
 );
 
