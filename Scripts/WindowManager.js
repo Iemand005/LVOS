@@ -1248,8 +1248,8 @@ function fromPixels(text){
 
 /** @param {boolean} enabled */
 function toggleBlur(enabled){ // Does not work on Chrome!
-    if (enabled == null) document.body.toggleAttribute("blur");
-    else document.body.toggleAttribute("blur", enabled);
+    if (enabled == null) document.body.classList.toggle("blur");
+    else document.body.classList.toggle("blur", enabled);
     settings.set("blur", enabled);
 }
 
