@@ -685,6 +685,9 @@ Dialog.prototype.clearClickOffset = function () {
 Dialog.prototype.toggleFullScreen = function (enable) {
   if (this.target) this.target.toggleAttribute("full", enable);
 };
+Dialog.prototype.maximize = function () {
+  this.toggleFullScreen(true);
+};
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function (enable) {
   this.toggleButton(windowButtons.close, enable);
