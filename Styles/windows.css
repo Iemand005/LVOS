@@ -170,7 +170,7 @@ main {
     width: inherit;
     height: inherit;
     overflow: hidden;
-    background-color: orange;
+    /* background-color: orange; */
     transition: inherit;
     /* color: black; */
     transform-origin: center;
