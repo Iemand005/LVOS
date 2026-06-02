@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>LVOS</title>
+    <script>
+        // IE11: enable styling/recognition of unknown <content> elements
+        // and ensure the console window is interactive even if JS initialization fails.
+        document.createElement('content');
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                var consoleWindow = document.getElementById('console');
+                if (consoleWindow) {
+                    consoleWindow.setAttribute('open', '');
+                    var content = consoleWindow.getElementsByTagName('content')[0];
+                    if (content) content.style.pointerEvents = 'auto';
+                    var input = consoleWindow.querySelector('#stdin');
+                    if (input) input.tabIndex = 0;
+                }
+            } catch (e) { /* silent */ }
+        });
+    </script>
     <link rel="stylesheet" href="./Styles/windows.css">
     <link rel="stylesheet" href="./Styles/ProvisionedApps.css">
     <link rel="stylesheet" href="./Styles/desktop.css">

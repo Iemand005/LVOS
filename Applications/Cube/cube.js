@@ -23,15 +23,6 @@ Graphics3D.prototype.startRendering = function() {
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics3D.prototype.handleResize = function(width, height) {
-  const dpr = window.devicePixelRatio || 1;
-  this.canvas.width = width * dpr;
-  this.canvas.height = height * dpr;
-  this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-  // ctx.scale(dpr, dpr);
-  if (this.gl.scale) this.gl.scale(dpr, dpr);
-};
-
 const graphics = new Graphics3D(canvas);
 const gl = graphics.gl;
 graphics.clear();

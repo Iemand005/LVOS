@@ -571,7 +571,12 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", {
 });
 
 Object.defineProperty(Dialog.prototype, "title", {
-    get: function() { return this._title; },
+    get: function() {
+        if (this._title) return this._title;
+        var titleElement = this.getTitleElement();
+        if (titleElement && titleElement.innerHTML) return titleElement.innerHTML; 
+        return this.id;
+    },
     set: function(title) {
         this.setTitle(title);
     }
