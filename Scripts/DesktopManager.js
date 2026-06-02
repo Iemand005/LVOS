@@ -35,8 +35,10 @@ window.addEventListener('keydown', function(event) {
       break;
     case "F10":
       event.preventDefault();
-      const consoleWindow = windows["console"];
-      consoleWindow.open();
+      var c = windows["console"];
+      c.open();
+    c.maximize();
+    break;
   }
 });
 
