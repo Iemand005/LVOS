@@ -244,7 +244,7 @@ function Graphics3D(canvas) {
     return;
   }
 
-  this.gl.clearColor(0, 0, 0, 1);
+  this.gl.clearColor(0, 0, 0, 0);
   this.gl.viewport(0, 0, canvas.width, canvas.height);
 
   this.buffers = {
