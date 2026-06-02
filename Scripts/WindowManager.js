@@ -1112,6 +1112,22 @@ function initializeDialogs() {
  * @param {Dialog} dialog
  */
 function windowActivationEvent(event, dialog) {
+    // If the event originated from an interactive element, don't start a drag
+    try {
+        var node = event && (event.target || event.srcElement);
+        var isInteractive = false;
+        while (node && node.nodeType === 1) {
+            var tn = (node.tagName || "").toLowerCase();
+            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
+            if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
+            node = node.parentElement;
+        }
+        if (isInteractive) {
+            try { dialog.focus(); } catch (e) {}
+            return dialog;
+        }
+    } catch (ex) { /* ignore */ }
+
     cancelDomEvent(event);
     console.log("Activating window", dialog);
     activeDialogId = dialog.id;
