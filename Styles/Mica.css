@@ -15,10 +15,6 @@
   height: 100%;
 }
 
-backdrop-clip > * {
-  filter: blur(10px);
-}
-
 .backdrop-clip {
   top: 0;
   left: 0;
@@ -29,6 +25,10 @@ backdrop-clip > * {
   border-radius: inherit;
   z-index: -1;
   pointer-events: none !important;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  filter: blur(10px);
 }
 
 .mica article {

@@ -842,17 +842,14 @@ Dialog.prototype.injectMica = function() {
         if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
-        var image = wallpaper.children[0].cloneNode(true);
-        if (image instanceof HTMLImageElement) {
-            var blurredUrl = image.getAttribute("blurred-src");
-            if (blurredUrl) {
-                console.log("Found blurred version: " + blurredUrl);
-                image.src = blurredUrl;
-            }
-        }
+        var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
+        var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var clip = this.target.getElementsByClassName("backdrop-clip")[0];
         if (!clip) return;
-        clip.appendChild(image);
+        clip.style.backgroundImage = blurredSrc ? "url('" + blurredSrc.replace(/'/g, "\\'") + "')" : "url('" + wallpaperSrc.replace(/'/g, "\\'") + "')";
+        clip.style.backgroundPosition = "center center";
+        clip.style.backgroundRepeat = "no-repeat";
+        clip.style.backgroundSize = "cover";
         this.move();
     } catch(ex) { console.warn(ex); }
 };
@@ -860,8 +857,9 @@ Dialog.prototype.injectMica = function() {
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
-    if (clip && clip.children.length)
-        clip.removeChild(clip.children[0]);
+    if (!clip) return;
+    clip.style.backgroundImage = "";
+    while (clip.firstChild) clip.removeChild(clip.firstChild);
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
@@ -1360,12 +1358,18 @@ function applyWallpaperImage(url, blurredUrl) {
     var wallpaper = getWallpaper();
     if (!wallpaper) return;
     while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+    wallpaper.setAttribute("data-wallpaper-src", url);
+    if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
+    else wallpaper.removeAttribute("data-blurred-src");
+
     if (supportsObjectFit) {
         wallpaper.classList.remove("legacy-wallpaper");
         wallpaper.style.backgroundImage = "";
+        image.style.display = "block";
     } else {
         wallpaper.classList.add("legacy-wallpaper");
         wallpaper.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+        image.style.display = "none";
     }
     wallpaper.appendChild(image);
 }

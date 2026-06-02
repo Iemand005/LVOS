@@ -136,12 +136,21 @@ body:not([blur]) .window > article {
   user-select: none;
 }
 
+#wallpaper.legacy-wallpaper > img {
+  display: none;
+}
+
 #wallpaper > * {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+#wallpaper,
+.backdrop-clip {
+  overflow: hidden;
 }
 
 #wallpaper > img,
