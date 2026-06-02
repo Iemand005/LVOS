@@ -858,11 +858,16 @@ Dialog.prototype.injectMica = function() {
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
         var image = null;
-        if (supportsObjectFit && wallpaper.children[0] instanceof HTMLImageElement) {
+        if (wallpaper.children[0] instanceof HTMLImageElement) {
             image = wallpaper.children[0].cloneNode(true);
-            image.removeAttribute("style");
-            image.className = "mica-backdrop";
-            if (blurredSrc) image.src = blurredSrc;
+            if (supportsObjectFit) {
+                image.removeAttribute("style");
+                image.className = "mica-backdrop";
+                if (blurredSrc) image.src = blurredSrc;
+            } else {
+                image.className = "mica-backdrop legacy-wallpaper-image";
+                image.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
+            }
         } else {
             image = document.createElement("img");
             image.className = "mica-backdrop legacy-wallpaper-image";
@@ -1339,17 +1344,18 @@ function closeApp(appId) {
     windowManager.closeApp(appId);
 }
 
+var micaHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
+    window.update();
+});
+
 function enableMica() {
-  window.addEventListener(
-    "resize",
-    windowManager.forEachWindow.bind(windowManager, function (window) {
-      window.update();
-    })
-  );
+    windowManager.toggleMica(true);
 }
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleMica = function(enabled) {
+    if (enabled) window.addEventListener("resize", micaHandler);
+    else window.removeEventListener("resize", micaHandler);
     windowManager.forEachWindow(function(window) { window.mica = enabled; });
 }
 
@@ -1376,6 +1382,7 @@ function applyWallpaperImage(url, blurredUrl) {
         image.className = "wallpaper-image";
     } else {
         image.className = "wallpaper-image legacy-wallpaper-image";
+        image.removeAttribute("src");
         image.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
     }
     if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
@@ -1387,12 +1394,8 @@ function applyWallpaperImage(url, blurredUrl) {
     if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
     else wallpaper.removeAttribute("data-blurred-src");
 
-    if (supportsObjectFit) {
-        wallpaper.classList.remove("legacy-wallpaper");
-        wallpaper.style.backgroundImage = "";
-    } else {
-        wallpaper.classList.add("legacy-wallpaper");
-    }
+    wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
+    wallpaper.style.backgroundImage = "";
     wallpaper.appendChild(image);
 }
 
