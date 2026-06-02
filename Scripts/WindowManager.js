@@ -772,12 +772,21 @@ Dialog.prototype.move = function (x, y) {
       this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
     var wallpaperP = document.getElementById("wallpaper");
     if (!wallpaperP) return;
-    var wallpaper = wallpaperP.children[0];
-    if (!(backdrop instanceof HTMLElement) || !wallpaper) return;
+    var wallpaperImage = wallpaperP.children[0];
+    if (!(backdrop instanceof HTMLElement) || !wallpaperImage) return;
     translateElement(backdrop, -this.x, -this.y);
 
-    backdrop.style.width = toPixels(wallpaper.clientWidth);
-    backdrop.style.height = toPixels(wallpaper.clientHeight);
+    var wallpaperWidth =
+      wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth
+        ? wallpaperImage.clientWidth
+        : wallpaperP.clientWidth;
+    var wallpaperHeight =
+      wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight
+        ? wallpaperImage.clientHeight
+        : wallpaperP.clientHeight;
+
+    backdrop.style.width = toPixels(wallpaperWidth);
+    backdrop.style.height = toPixels(wallpaperHeight);
   } catch(ex) {}
 };
 /**
@@ -846,10 +855,25 @@ Dialog.prototype.injectMica = function() {
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var clip = this.target.getElementsByClassName("backdrop-clip")[0];
         if (!clip) return;
-        clip.style.backgroundImage = blurredSrc ? "url('" + blurredSrc.replace(/'/g, "\\'") + "')" : "url('" + wallpaperSrc.replace(/'/g, "\\'") + "')";
-        clip.style.backgroundPosition = "center center";
-        clip.style.backgroundRepeat = "no-repeat";
-        clip.style.backgroundSize = "cover";
+        while (clip.firstChild) clip.removeChild(clip.firstChild);
+
+        var image = null;
+        if (wallpaper.children[0] instanceof HTMLImageElement) {
+            image = wallpaper.children[0].cloneNode(true);
+            image.removeAttribute("style");
+        } else {
+            image = document.createElement("img");
+            image.src = wallpaperSrc;
+            if (blurredSrc) image.setAttribute("blurred-src", blurredSrc);
+        }
+
+        image.className = "mica-backdrop";
+
+        if (blurredSrc) {
+            image.src = blurredSrc;
+        }
+
+        clip.appendChild(image);
         this.move();
     } catch(ex) { console.warn(ex); }
 };
@@ -858,7 +882,6 @@ Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
-    clip.style.backgroundImage = "";
     while (clip.firstChild) clip.removeChild(clip.firstChild);
 };
 

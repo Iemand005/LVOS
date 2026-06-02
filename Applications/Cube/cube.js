@@ -402,13 +402,21 @@ Graphics3D.prototype.startRendering = function () {
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-Graphics3D.prototype.resize = function (width, height) {
+Graphics3D.prototype.handleResize = function (width, height) {
   /*const*/var dpr = window.devicePixelRatio || 1;
   this.canvas.width = width * dpr;
   this.canvas.height = height * dpr;
   this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
   // ctx.scale(dpr, dpr);
   if (this.gl.scale) this.gl.scale(dpr, dpr);
+};
+
+Graphics3D.prototype.resize = function (width, height) {
+  // requestAnimationFrame(this.handleResize.bind)
+  // var dpr = window.devicePixelRatio || 1;
+  // this.canvas.width = width * dpr;
+  // this.canvas.height = height * dpr;
+  // requestAnimationFrame(Graphics3D.prototype.handleResize.bind(this, width, height));
 };
 
 // export { drawScene };
@@ -536,5 +544,7 @@ console.log(graphics);
 
 window.onresize = function (ev) {
   /*const*/var bounds = canvas.getBoundingClientRect();
+
+
   graphics.resize(bounds.width, bounds.height);
 };

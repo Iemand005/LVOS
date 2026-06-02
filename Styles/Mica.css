@@ -25,9 +25,22 @@
   border-radius: inherit;
   z-index: -1;
   pointer-events: none !important;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+}
+
+.backdrop-clip > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  max-height: none;
+  transform: none;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
   filter: blur(10px);
 }
 
