@@ -26,11 +26,16 @@ function toggleReflections(force) {
 }
 
 window.addEventListener('keydown', function(event) {
-  if (event.key === 'F11') {
-    event.preventDefault();
-    console.log("F11 captured! Custom action goes here.");
-    
-    document.documentElement.requestFullscreen();
+  switch (event.key) {
+    case "F11":
+      event.preventDefault();
+      console.log("F11 captured! Custom action goes here.");
+      
+      document.documentElement.requestFullscreen();
+      break;
+    case "F10":
+      event.preventDefault();
+      windows["console"].open();
   }
 });
 
