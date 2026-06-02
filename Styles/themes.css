@@ -35,12 +35,16 @@
     background-color: transparent !important;
 }
 
+.windows-11 .window {
+    color: black;
+}
+
 .windows-11 .window header button {
     background: transparent;
 }
 
 .windows-11 .window content {
-    background-color: rgb(32, 32, 32);
+    background-color: rgb(243, 243, 243);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.267);
     padding: 0;
@@ -51,7 +55,10 @@
 }
 
 .windows-11 .window header h1 {
-    margin-left: 5px;
+    margin-left: 10px;
+    /* textf
+     */
+     font-size: 10px;
 }
 
 .windows-11 .window header section {
@@ -62,7 +69,7 @@
 .windows-11 .window header button,
 .windows-11 .window header section,
 .windows-11 .window header {
-    height: 32px;
+    height: 30px;
     box-sizing: border-box;
     padding: 0;
 }
