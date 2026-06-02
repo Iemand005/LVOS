@@ -118,12 +118,12 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
 	console.log("Saving window state.");
-	// try {
-	// 	if (canSave && localStorage)
-	// 		localStorage.setItem("windowState", JSON.stringify(this.state));
-	// } catch (exception) {
-	// 	handleStorageException(exception);
-	// }
+	try {
+		if (canSave && typeof localStorage !== "undefined")
+			localStorage.setItem("windowState", JSON.stringify(this.state));
+	} catch (exception) {
+		handleStorageException(exception);
+	}
 };
 
 /** @param {Dialog} [dialog] */
@@ -425,13 +425,23 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || this.body && this.body.appendChild(document.createElement("iframe")); },
+    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
 });
+/**
+ * @param {boolean} [create]
+ * @returns {HTMLIFrameElement?}
+ */
+Dialog.prototype.getOrCreateFrame = function(create) {
+    var frame = this.frame;
+    if (frame || !create || !this.body) return frame;
+    return this.body.appendChild(document.createElement("iframe"));
+};
 Object.defineProperty(Dialog.prototype, "src", {
     get: function() { return this._src; },
     set: function(url) {
-        var frame = this.frame;
+        var frame = this.getOrCreateFrame(true);
         if (frame) frame.src = url;
+        this._src = url;
     }
 });
 Object.defineProperty(Dialog.prototype, "body", {
@@ -666,7 +676,8 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     var events = enable ? "auto" : "none";
     if (this.target) this.target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
-    if (this.frame) this.frame.style.pointerEvents = events;
+    var frame = this.frame;
+    if (frame) frame.style.pointerEvents = events;
     return events;
     // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
@@ -705,7 +716,8 @@ Dialog.prototype.toggleFullButton = function (enable) {
  * @param {*} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
-  if (this.frame) LVMessenger.broadcastToChild(type, message, this.frame);
+  var frame = this.frame;
+  if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 /**
  * @param {number?} [x]
@@ -767,8 +779,10 @@ Dialog.prototype.resizeBody = function (width, height) {
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
-    if (!this.frame) return;
-    this.frame.src = url;
+    var frame = this.getOrCreateFrame(true);
+    if (!frame) return;
+    frame.src = url;
+    this._src = url;
     // this.launch();
 };
 
