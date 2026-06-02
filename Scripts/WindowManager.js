@@ -25,7 +25,12 @@ var useBlur = false,
 	useTransform = true,
 	updateRateLimit = false;
 
-var supportsPointer = typeof PointerEvent !== "undefined";
+// HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
+var supportsPointer = Boolean(
+    typeof navigator !== "undefined" &&
+    (navigator.pointerEnabled || navigator.msPointerEnabled) &&
+    typeof PointerEvent !== "undefined"
+);
 
 if (supportsPointer) console.log("Supports pointer events!");
 
