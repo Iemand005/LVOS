@@ -1,5 +1,5 @@
 
-/** @typedef "ChromeFS"  */
+/** @typedef "WebKitFS"  */
 
 function probeAllStorage() {
   return {
