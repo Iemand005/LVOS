@@ -166,6 +166,7 @@ function handleWallpaperDrop(ev) {
     ev.preventDefault();
     ev.stopPropagation();
     elements.desktop.style.opacity = null;
+
     
     if (!ev.dataTransfer || !ev.dataTransfer.files) return;
     
@@ -175,8 +176,10 @@ function handleWallpaperDrop(ev) {
         // Only process image files
         if (!file.type.match(/^image\//)) continue;
         
+        var reader = new FileReader();
+        var objectUrl = reader.readAsDataURL(file); ;
         // Create object URL for display
-        var objectUrl = URL.createObjectURL(file);
+        // var objectUrl = URL.createObjectURL(file);
         
         try {
             if (typeof applyWallpaperImage === 'function') {
