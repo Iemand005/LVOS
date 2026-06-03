@@ -122,13 +122,20 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
   },
   set: function (value) {
     if (typeof value !== "boolean") return;
-    if (value) window.addEventListener("resize", micaHandler);
-    else window.removeEventListener("resize", micaHandler);
     document.body.classList.toggle("mica", value);
     windowManager.forEachWindow(function(window) { window.mica = value; });
     this._isMicaEnabled = value;
   }
 });
+
+Object.defineProperty(WindowManager.prototype, "isWindowUpdateEnabled", {
+    get: function() {}
+    ,
+    set: function(value) {
+        if (value) window.addEventListener("resize", micaHandler);
+        else window.removeEventListener("resize", micaHandler);
+    }
+})
 
 WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
