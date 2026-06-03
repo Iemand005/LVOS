@@ -39,20 +39,22 @@ function OmniFS() {
 /**
  * @param {StorageAPI} api 
  */
-OmniFS.prototype.init = function(api) {
+OmniFS.prototype.init = function (api) {
 	var self = this;
 
-	if (api == "WebKitFS") {
-		if (!window.webkitRequestFileSystem)
-		  return reject('webkitRequestFileSystem not supported here.');
-		
-		window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function(fs) {
-		  webkitFs = fs;
-		}, reject);
-	}
+	return new Promise(function (resolve, reject) {
+		if (api == "WebKitFS") {
+			if (!window.webkitRequestFileSystem)
+			return reject('webkitRequestFileSystem not supported here.');
+			
+			window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function(fs) {
+			webkitFs = fs;
+			}, reject);
+		}
+	});
 };
 
-OmniFS.prototype.writeToChromeLegacyFS = function(fileName, textData) {
+OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
   return new Promise(function (resolve, reject) {
     if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
@@ -74,7 +76,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function(fileName, textData) {
   });
 }
 
-OmniFS.prototype.readFromChromeLegacyFS = function(fileName) {
+OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
   return new Promise(function(resolve, reject) {
     // Check if the legacy API exists
     if (!window.webkitRequestFileSystem) {
