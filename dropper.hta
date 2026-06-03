@@ -6,9 +6,22 @@
     <hta:application id="oApp" applicationname="DropFix" scroll="no" windowstate="normal" />
     <style>
         html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+        iframe#appFrame {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            width:100%;
+            height:100%;
+            border:none;
+        }
         #dropLayer {
             position:absolute;
-            inset:0;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
             z-index:9999;
             background:rgba(0,0,0,0.25);
             color:white;
@@ -18,12 +31,13 @@
             font-size:20px;
             font-family:sans-serif;
             pointer-events:auto;
+            text-align:center;
         }
     </style>
 </head>
 <body ondragenter="alert('body ondragenter')" ondragover="event.preventDefault();" ondrop="alert('body ondrop'); event.preventDefault();">
 
-    <iframe id="appFrame" src="index.html" style="width:100%; height:100%; border:none;"></iframe>
+    <iframe id="appFrame" src="index.html"></iframe>
     <div id="dropLayer">Drop file here</div>
 
     <script>
