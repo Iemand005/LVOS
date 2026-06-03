@@ -44,7 +44,9 @@ function OmniFS() {
 OmniFS.prototype.init = function (api) {
 	var self = this;
 
-	this.apis.indexOf(api) !== -1 && this.apis.push(api);
+	if (this.apis.indexOf(api) !== -1) return;
+	
+	this.apis.push(api);
 
 	return new Promise(function (resolve, reject) {
 		if (api == "WebKitFS") {
