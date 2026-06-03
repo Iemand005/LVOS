@@ -2,45 +2,30 @@
 <html>
 <head>
     <meta http-equiv="x-ua-compatible" content="IE=edge">
-    <title>My Drop-Enabled App</title>
+    <title>LVOS</title>
     <hta:application id="oApp" applicationname="DropFix" scroll="no" windowstate="normal" />
     <style>
         html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
     </style>
+    <script defer>
+		wb.RegisterAsDropTarget = true; 
+		
+		wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
+		
+		wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+			
+			if (URL.indexOf("index.html") === -1) {
+				wb.Document.parentWindow.handleDroppedFilePath(URL);
+				window.external.bubbleCancel = true; 
+			}
+		};
+    </script>
 </head>
 <body>
-
-    <!-- The ActiveX container handles the OS drag communication -->
     <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="width:100%; height:100%;">
         <param name="RegisterAsBrowser" value="1">
         <param name="RegisterAsDropTarget" value="1">
     </object>
 
-    <script>
-        window.onload = function() {
-            wb.RegisterAsDropTarget = true; 
-            
-            // Navigate to your working content page
-            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
-            
-            // Catch the silent navigation attempt triggered by dropping a file
-            wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
-                
-                // If the path doesn't point to our UI file, a file was dropped!
-                if (URL.indexOf("index.html") === -1) {
-                    
-                    // 1. Hard stop the browser component from going white
-                    // In COM Automation interfaces, we modify the property by mapping its state
-                    wb.Document.parentWindow.handleDroppedFilePath(URL);
-                    
-                    // 2. Clear out the navigation pointer stack
-                    // Workaround to assign Cancel by reference in JScript:
-                    // JScript primitive parameters are passed by value, so we must invoke 
-                    // a direct control method or map to the active window execution thread
-                    window.external.bubbleCancel = true; 
-                }
-            };
-        };
-    </script>
 </body>
 </html>
