@@ -307,13 +307,17 @@ article {
     transition: unset;
 } */
 
-.window {
-    animation: exitFullscreen 0.4s ease-out forwards;
+.window.animating {
+    transition: all 1s ease-in-out;
 }
 
 .window[full] {
-    animation: goFullscreen 0.4s ease-out forwards;
-    animation-fill-mode: forwards;
+    top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        background-color: red;
 }
 
 .window[full] content {
@@ -336,12 +340,7 @@ article {
 
 @keyframes exitFullscreen {
     from {
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        border-radius: 0 !important;
-        background-color: red;
+        
     }
     to {
 
