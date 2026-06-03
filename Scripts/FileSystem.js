@@ -1,5 +1,5 @@
 
-/** @typedef StorageAPI "WebKitFS"  */
+/** @typedef {"WebKitFS"} StorageAPI */
 
 function probeAllStorage() {
   return {
@@ -30,18 +30,16 @@ function probeAllStorage() {
 console.log("Detected Browser Capabilities:", probeAllStorage());
 
 /**
- * 
  * @param {StorageAPI} api 
- * @returns 
  */
 function FileSystem(api) {
 	if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
     }
 
-    const size = 5 * 1024 * 1024;
+    this.webkitSize = 5 * 1024 * 1024;
     
-    window.webkitRequestFileSystem(window.TEMPORARY, size, function(fs) {
+    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
       fs.root.getFile(fileName, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
           
@@ -61,10 +59,8 @@ FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
     if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
     }
-
-    const size = 5 * 1024 * 1024;
     
-    window.webkitRequestFileSystem(window.TEMPORARY, size, function(fs) {
+    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
       fs.root.getFile(fileName, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
           
@@ -86,10 +82,8 @@ FileSystem.prototype.readFromChromeLegacyFS = function(fileName) {
     if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
     }
-
-    var size = 5 * 1024 * 1024;
     
-    window.webkitRequestFileSystem(window.TEMPORARY, size, function(fs) {
+    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
       
       fs.root.getFile(fileName, { create: false }, function(fileEntry) {
         
