@@ -278,20 +278,17 @@ article {
 }
 
 .window.animating {
-    transition: all 1s ease-in-out;
+    transition: width 200ms ease-in-out;
 }
 
 .window.fullscreen {
     top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        border-radius: 0 !important;
-        background-color: red;
-}
-
-.window[full] content {
-    /* border-radius: 0 !important; */
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    background-color: red;
+    transform: none !important;
 }
 
 article > * {
