@@ -31,51 +31,7 @@
     <!-- <meta property="og:image" content="https://yourwebsite.com" /> -->
     <meta name="theme-color" content="#43b581" />
 </head>
-<body class="transparente"  ondragenter="return false;" ondragover="return false;" ondrop="return false;">
-    <div id="dropzone">Drop your file directly here</div>
-
-    <script>
-        // 1. Kill everything globally via Javascript for double insurance
-        var killEvent = function(e) {
-            e = e || window.event;
-            if (e.preventDefault) e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-            return false;
-        };
-
-        window.addEventListener("dragenter", killEvent, false);
-        window.addEventListener("dragover", killEvent, false);
-        window.addEventListener("drop", killEvent, false);
-        document.addEventListener("drop", killEvent, false);
-
-        // 2. Safely capture the file inside the specific dropzone div element
-        var dropzone = document.getElementById("dropzone");
-
-        dropzone.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            e.returnValue = false;
-        }, false);
-
-        dropzone.addEventListener("drop", function(e) {
-            // Prevent execution bubble up to the body/window
-            e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-            e.cancelBubble = true;
-
-            // Access the file tracking data cleanly
-            var files = e.dataTransfer.files;
-            if (files && files.length > 0) {
-                var file = files[0];
-                dropzone.innerHTML = "Processing: " + file.name;
-                
-                // Trigger your Base64 FileReader or file workflow safely here!
-                console.log("File detected successfully without crash.");
-            }
-            return false;
-        }, false);
-    </script>
+<body class="transparente">
     <header></header>
     <main>
 
