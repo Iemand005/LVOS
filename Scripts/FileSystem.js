@@ -1,5 +1,5 @@
 
-/** @typedef "WebKitFS"  */
+/** @typedef  "WebKitFS" {StorageAPI} */
 
 function probeAllStorage() {
   return {
@@ -29,7 +29,12 @@ function probeAllStorage() {
 
 console.log("Detected Browser Capabilities:", probeAllStorage());
 
-function FileSystem() {
+/**
+ * 
+ * @param {StorageAPI} api 
+ * @returns 
+ */
+function FileSystem(api) {
 	if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
     }
