@@ -278,7 +278,7 @@ article {
 }
 
 .window.animating {
-    transition: width 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
 }
 
 .window.fullscreen {
@@ -287,8 +287,8 @@ article {
     width: 100% !important;
     height: 100% !important;
     border-radius: 0 !important;
-    background-color: red;
     transform: none !important;
+    z-index: 9999 !important;
 }
 
 article > * {
