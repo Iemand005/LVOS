@@ -16,35 +16,25 @@
         <param name="RegisterAsDropTarget" value="1">
     </object>
 
-    <script>
-        window.onload = function() {
-            wb.RegisterAsDropTarget = true; 
+    <script for="wb" event="BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel)">
+        // 1. Check if the URL is trying to break out to a local dropped file path
+		alert("moo!")
+        if (URL.indexOf("app_content.html") === -1) {
             
-            // Navigate to your working content page
-            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
+            // 2. Safely tell the underlying ActiveX component to STOP navigating
+            // In IE scripting, changing the "Cancel" parameter requires passing true
+            Cancel.value = true; 
             
-            // Catch the silent navigation attempt triggered by dropping a file
-            wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
-
-				setTimeout(function() {
-        alert("DEBUG:\nAttempting to navigate to:\n" + URL);
-    }, 10);
-                
-                // If the path doesn't point to our UI file, a file was dropped!
-                if (URL.indexOf("index.html") === -1) {
-                    
-                    // 1. Hard stop the browser component from going white
-                    // In COM Automation interfaces, we modify the property by mapping its state
+            // 3. Send the file path directly to the iframe UI
+            try {
+                wb.Document.parentWindow.handleDroppedFilePath(URL);
+            } catch(e) {
+                // If the UI document isn't fully loaded yet, wait slightly
+                setTimeout(function() {
                     wb.Document.parentWindow.handleDroppedFilePath(URL);
-                    
-                    // 2. Clear out the navigation pointer stack
-                    // Workaround to assign Cancel by reference in JScript:
-                    // JScript primitive parameters are passed by value, so we must invoke 
-                    // a direct control method or map to the active window execution thread
-                    window.external.bubbleCancel = true; 
-                }
-            };
-        };
+                }, 100);
+            }
+        }
     </script>
 </body>
 </html>
