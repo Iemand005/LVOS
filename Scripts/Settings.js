@@ -91,7 +91,7 @@ function loadSettings() {
 
 function updateBlurState() {
     var a = settings.get("blur");
-toggleBlur(JSON.parse(a));
+    toggleBlur(JSON.parse(a));
 }
 
 var settings = new SettingsHandler();
