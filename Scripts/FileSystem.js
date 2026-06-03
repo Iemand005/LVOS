@@ -29,16 +29,19 @@ function probeAllStorage() {
 
 console.log("Detected Browser Capabilities:", probeAllStorage());
 
+
+function OmniFS() {
+	
+	this.webkitSize = 5 * 1024 * 1024;
+	this.webkitFs = null;
+}
+
 /**
  * @param {StorageAPI} api 
  */
-function OmniFS(api) {
-	
-	this.webkitSize = 5 * 1024 * 1024;
-}
-
-OmniFS.prototype.init = function() {
+OmniFS.prototype.init = function(api) {
 	var self = this;
+	
 	if (api == "WebKitFS") {
 		if (!window.webkitRequestFileSystem) {
 		  return reject('webkitRequestFileSystem not supported here.');
