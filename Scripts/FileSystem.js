@@ -1,0 +1,6 @@
+
+/** @typedef ""  */
+
+function FileSystem() {
+
+}
