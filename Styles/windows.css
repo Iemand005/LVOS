@@ -307,24 +307,22 @@ article {
     transition: unset;
 } */
 
+.window {
+    animation: exitFullscreen 0.4s ease-out forwards;
+}
+
 .window[full] {
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 9999 !important;
-    border-radius: 0 !important;
     animation: goFullscreen 0.4s ease-out forwards;
     animation-fill-mode: forwards;
 }
 
 .window[full] content {
-    border-radius: 0 !important;
+    /* border-radius: 0 !important; */
 }
 
 @keyframes goFullscreen {
     from {
-        /* start from the current state */
+
     }
     to {
         top: 0 !important;
@@ -332,6 +330,21 @@ article {
         width: 100% !important;
         height: 100% !important;
         border-radius: 0 !important;
+        background-color: red;
+    }
+}
+
+@keyframes exitFullscreen {
+    from {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        background-color: red;
+    }
+    to {
+
     }
 }
 
