@@ -58,8 +58,6 @@ main {
     margin: 0;
     padding: 0;
     z-index: 1;
-    top: 0px;
-    left: 0px;
     overflow: hidden;
     position: absolute;
     background: transparent;
@@ -313,7 +311,7 @@ article {
     position: fixed !important;
     z-index: 9999 !important;
     
-    animation: goFullscreen 0.4s ease-out forwards;
+    animation: goFullscreen 1s ease-out alternate;
 }
 
 .window[full] content {
@@ -322,6 +320,12 @@ article {
 
 @keyframes goFullscreen {
     from {
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        width: auto;
+        height: auto;
     }
     to {
         top: 0 !important;
