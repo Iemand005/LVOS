@@ -10,8 +10,14 @@
             position:absolute;
             inset:0;
             z-index:9999;
-            background:rgba(0,0,0,0.05);
+            background:rgba(0,0,0,0.25);
+            color:white;
             display:none;
+            align-items:center;
+            justify-content:center;
+            font-size:20px;
+            font-family:sans-serif;
+            pointer-events:auto;
         }
     </style>
 </head>
@@ -79,15 +85,22 @@
             appFrame = document.getElementById('appFrame');
 
             if (dropLayer) {
+                dropLayer.addEventListener('dragenter', showDropLayer, false);
                 dropLayer.addEventListener('dragover', showDropLayer, false);
                 dropLayer.addEventListener('drop', onDropFile, false);
                 dropLayer.addEventListener('dragleave', hideDropLayer, false);
             }
 
+            window.addEventListener('dragenter', showDropLayer, false);
             window.addEventListener('dragover', showDropLayer, false);
             window.addEventListener('drop', onDropFile, false);
+
+            document.body.addEventListener('dragenter', showDropLayer, false);
             document.body.addEventListener('dragover', showDropLayer, false);
             document.body.addEventListener('drop', onDropFile, false);
+            appFrame.addEventListener('dragenter', showDropLayer, false);
+            appFrame.addEventListener('dragover', showDropLayer, false);
+            appFrame.addEventListener('drop', onDropFile, false);
         };
     </script>
 </body>
