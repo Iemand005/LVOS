@@ -49,3 +49,7 @@ output, button, input[type=button] {
   border-radius: 5px;
   border: 1px solid #ffffff70;
 }
+
+button, input[type=button] {
+  border: none;
+}
