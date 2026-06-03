@@ -1,5 +1,5 @@
 
-/** @typedef ""  */
+/** @typedef "ChromeFS"  */
 
 function probeAllStorage() {
   return {
@@ -68,6 +68,38 @@ FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
           
           const blob = new Blob([textData], { type: 'text/plain' });
           fileWriter.write(blob);
+          
+        }, reject);
+      }, reject);
+    }, reject);
+  });
+}
+
+FileSystem.prototype.readFromChromeLegacyFS = function(fileName) {
+  return new Promise(function(resolve, reject) {
+    // Check if the legacy API exists
+    if (!window.webkitRequestFileSystem) {
+      return reject('webkitRequestFileSystem not supported here.');
+    }
+
+    var size = 5 * 1024 * 1024;
+    
+    window.webkitRequestFileSystem(window.TEMPORARY, size, function(fs) {
+      
+      fs.root.getFile(fileName, { create: false }, function(fileEntry) {
+        
+        fileEntry.file(function(file) {
+          var reader = new FileReader();
+
+          reader.onloadend = function() {
+            resolve(this.result);
+          };
+
+          reader.onerror = function(e) {
+            reject(e);
+          };
+
+          reader.readAsText(file);
           
         }, reject);
       }, reject);
