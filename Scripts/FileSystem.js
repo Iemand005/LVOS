@@ -34,6 +34,8 @@ function OmniFS() {
 	
 	this.webkitSize = 5 * 1024 * 1024;
 	this.webkitFs = null;
+
+	this.apis = [];
 }
 
 /**
@@ -41,6 +43,8 @@ function OmniFS() {
  */
 OmniFS.prototype.init = function (api) {
 	var self = this;
+
+	this.apis.indexOf(api) !== -1 && this.apis.push(api);
 
 	return new Promise(function (resolve, reject) {
 		if (api == "WebKitFS") {
