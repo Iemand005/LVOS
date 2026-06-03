@@ -177,22 +177,26 @@ function handleWallpaperDrop(ev) {
         if (!file.type.match(/^image\//)) continue;
         
         var reader = new FileReader();
-        var objectUrl = reader.readAsDataURL(file); ;
+        reader.onload = function(e) {
+            var objectUrl = e.target.result; 
+
+            try {
+                if (typeof applyWallpaperImage === 'function') {
+                    applyWallpaperImage(objectUrl, null, function() {
+                        console.warn("Failed to apply dropped wallpaper image");
+                    });
+
+                    saveWallpaperToCache(file);
+                }
+            } catch (ex) {
+                console.error("Error applying wallpaper:", ex);
+                URL.revokeObjectURL(objectUrl);
+            }
+        };
+        reader.readAsDataURL(file); ;
         // Create object URL for display
         // var objectUrl = URL.createObjectURL(file);
         
-        try {
-            if (typeof applyWallpaperImage === 'function') {
-                applyWallpaperImage(objectUrl, null, function() {
-                    console.warn("Failed to apply dropped wallpaper image");
-                });
-                // Save blob to IndexedDB
-                saveWallpaperToCache(file);
-            }
-        } catch (ex) {
-            console.error("Error applying wallpaper:", ex);
-            URL.revokeObjectURL(objectUrl);
-        }
         break; // Only use the first image
     }
 }
