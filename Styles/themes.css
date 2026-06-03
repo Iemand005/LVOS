@@ -87,6 +87,10 @@
 
 @media (prefers-color-scheme: dark) {
 
+    .windows-11 .window {
+        color: white;
+    }
+
     .windows-11 .window content {
         background-color: rgb(32, 32, 32);
         border: 1px solid rgba(255, 255, 255, 0.267);

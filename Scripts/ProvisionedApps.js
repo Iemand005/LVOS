@@ -188,6 +188,11 @@ var applications = [
         id: "cyanide.metronome",
         src: "./Applications/Cyanide/metronome/index.html",
         hidden: true
+    }, 
+    {
+      title: "daedalOS",
+      id: "daedal",
+      src: "https://dustinbrett.com/"
     }
 ]
 
