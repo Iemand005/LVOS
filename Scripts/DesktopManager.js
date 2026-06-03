@@ -81,30 +81,28 @@ document.body.ondragover = window.ondragover = function(ev) {
  * Initialize IndexedDB for wallpaper storage.
  */
 var wallpaperDB = null;
-function initWallpaperDB() {
-    if (wallpaperDB) return Promise.resolve(wallpaperDB);
+function initWallpaperDB(onSuccess, onFailure) {
+    if (wallpaperDB) onSuccess(wallpaperDB);
     
-    return new Promise(function(resolve, reject) {
-        var request = indexedDB.open('LVOSWallpaperDB', 1);
-        
-        request.onerror = function() {
-            console.warn("IndexedDB failed to open:", request.error);
-            reject(request.error);
-        };
-        
-        request.onsuccess = function() {
-            wallpaperDB = request.result;
-            console.log("IndexedDB opened successfully");
-            resolve(wallpaperDB);
-        };
-        
-        request.onupgradeneeded = function(event) {
-            var db = event.target.result;
-            if (!db.objectStoreNames.contains('wallpapers')) {
-                db.createObjectStore('wallpapers', { keyPath: 'id' });
-            }
-        };
-    });
+    var request = indexedDB.open('LVOSWallpaperDB', 1);
+    
+    request.onerror = function() {
+        console.warn("IndexedDB failed to open:", request.error);
+        onFailure(request.error);
+    };
+    
+    request.onsuccess = function() {
+        wallpaperDB = request.result;
+        console.log("IndexedDB opened successfully");
+        onSuccess(wallpaperDB);
+    };
+    
+    request.onupgradeneeded = function(event) {
+        var db = event.target.result;
+        if (!db.objectStoreNames.contains('wallpapers')) {
+            db.createObjectStore('wallpapers', { keyPath: 'id' });
+        }
+    };
 }
 
 /**
@@ -117,7 +115,7 @@ function saveWallpaperToCache(blob) {
         return;
     }
     
-    initWallpaperDB().then(function(db) {
+    initWallpaperDB(function(db) {
         var transaction = db.transaction(['wallpapers'], 'readwrite');
         var store = transaction.objectStore('wallpapers');
         var request = store.put({ id: 'current', blob: blob, timestamp: Date.now() });
@@ -129,7 +127,7 @@ function saveWallpaperToCache(blob) {
         request.onerror = function() {
             console.warn("Failed to save wallpaper to IndexedDB:", request.error);
         };
-    }).catch(function(err) {
+    }, function(err) {
         console.warn("Failed to access IndexedDB:", err);
     });
 }
