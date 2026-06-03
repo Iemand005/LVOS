@@ -74,12 +74,14 @@ function WindowManager() {
 
 	this._isBlurEnabled = true;
 	this._isMicaEnabled = false;
-    this._isWindowUpdatesEnabled = false;
+    this._isWindowUpdatesEnabled = false;   
+}
 
-    this.resizeHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
+WindowManager.prototype.init = function() {
+    this.resizeHandler = this.forEachWindow.bind(windowManager, function (window) {
         window.update();
     });
-}
+};
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
@@ -960,6 +962,7 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager();
+windowManager.init();
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler(document);
 var dragAction = new DragAction();
