@@ -21,13 +21,17 @@
             wb.RegisterAsDropTarget = true; 
             
             // Navigate to your working content page
-            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "app_content.html");
+            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
             
             // Catch the silent navigation attempt triggered by dropping a file
             wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+
+				setTimeout(function() {
+        alert("DEBUG:\nAttempting to navigate to:\n" + URL);
+    }, 10);
                 
                 // If the path doesn't point to our UI file, a file was dropped!
-                if (URL.indexOf("app_content.html") === -1) {
+                if (URL.indexOf("index.html") === -1) {
                     
                     // 1. Hard stop the browser component from going white
                     // In COM Automation interfaces, we modify the property by mapping its state
