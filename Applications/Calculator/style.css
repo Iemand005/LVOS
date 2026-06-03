@@ -6,10 +6,10 @@ html, body {
 }
 
 form {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 table, input {
@@ -19,7 +19,7 @@ table, input {
 }
 
 table {
-  padding: 10px;
+  padding: 5px;
 }
 
 tbody, tr {
@@ -38,7 +38,9 @@ td {
 }
 
 output {
-  padding: 10px;
-  /* padding-bottom: 10px; */
-  padding-bottom: 0;
+  margin: 10px;
+  margin-bottom: 0;
+  padding: 5px;
+  background-color: gray;
+  border-radius: 5px;
 }
