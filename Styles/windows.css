@@ -312,6 +312,7 @@ article {
     width: 100% !important;
     height: 100% !important;
     z-index: 9999 !important;
+    transform: translate(0px, 0px) !important;
     animation: goFullscreen 0.4s ease-out forwards;
 }
 
