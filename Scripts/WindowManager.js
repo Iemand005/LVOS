@@ -1439,7 +1439,7 @@ initializeDialogs();
 toggleReflections(reflections);
 
 applyWallpaperImage(
-  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplashe.jpg",
+  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
   "file:///C:/Users/Lasse/Downloads/fox-blur.jpg"
 );
 
