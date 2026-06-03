@@ -1409,15 +1409,6 @@ function applyWallpaperImage(url, blurredUrl, onError) {
     image.onerror = function () {
         console.warn("Failed to load wallpaper image!");
     };
-    if (supportsObjectFit) {
-        image.src = url;
-        image.className = "wallpaper-image";
-    } else {
-        image.className = "wallpaper-image legacy-wallpaper-image";
-        image.removeAttribute("src");
-        image.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-    }
-    if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
     image.onload = function() {
         var wallpaper = getWallpaper();
@@ -1431,6 +1422,18 @@ function applyWallpaperImage(url, blurredUrl, onError) {
         wallpaper.style.backgroundImage = "";
         wallpaper.appendChild(image);
     };
+
+    if (supportsObjectFit) {
+        image.src = url;
+        image.className = "wallpaper-image";
+    } else {
+        image.className = "wallpaper-image legacy-wallpaper-image";
+        image.removeAttribute("src");
+        image.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+        image.onload();
+    }
+    if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
+
 }
 
 // enableMica();
