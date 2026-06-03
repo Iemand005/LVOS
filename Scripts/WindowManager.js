@@ -78,7 +78,9 @@ function WindowManager() {
 }
 
 WindowManager.prototype.init = function() {
-    this.resizeHandler = this.forEachWindow.bind(windowManager, Dialog.prototype.update.bind());
+    this.resizeHandler = this.forEachWindow.bind(windowManager, function (window) { window.update(); });
+    // this.resizeHandler = this.forEachWindow.bind(windowManager, Function.prototype.call.bind(Dialog.prototype.update));
+    // this.resizeHandler = this.forEachWindow.bind(windowManager, Dialog.prototype.update.call);
 };
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
