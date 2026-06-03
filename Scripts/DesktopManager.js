@@ -107,15 +107,17 @@ function initWallpaperDB(onSuccess, onFailure) {
 }
 
 /**
- * Store wallpaper image blob to IndexedDB.
+ * Store wallpaper image blob to IndexedDB, with localStorage fallback.
  * @param {Blob} blob
+ * @param {string} dataUrl - Optional data URL representation of the blob
  */
-function saveWallpaperToCache(blob) {
+function saveWallpaperToCache(blob, dataUrl) {
     if (!(blob instanceof Blob)) {
         console.warn("Invalid blob provided to saveWallpaperToCache");
         return;
     }
     
+    // Try IndexedDB first
     initWallpaperDB(function(db) {
         var transaction = db.transaction(['wallpapers'], 'readwrite');
         var store = transaction.objectStore('wallpapers');
@@ -126,15 +128,33 @@ function saveWallpaperToCache(blob) {
         };
         
         request.onerror = function() {
-            console.warn("Failed to save wallpaper to IndexedDB:", request.error);
+            console.warn("Failed to save wallpaper to IndexedDB, falling back to localStorage:", request.error);
+            // Fall back to localStorage if IndexedDB fails
+            if (dataUrl && typeof settings !== 'undefined' && settings.storage) {
+                try {
+                    settings.set('wallpaperImage', dataUrl);
+                    console.log("Wallpaper saved to localStorage as fallback");
+                } catch (ex) {
+                    console.warn("Failed to save wallpaper to localStorage:", ex.message);
+                }
+            }
         };
     }, function(err) {
-        console.warn("Failed to access IndexedDB:", err);
+        console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
+        // Fall back to localStorage if IndexedDB is unavailable
+        if (dataUrl && typeof settings !== 'undefined' && settings.storage) {
+            try {
+                settings.set('wallpaperImage', dataUrl);
+                console.log("Wallpaper saved to localStorage as fallback");
+            } catch (ex) {
+                console.warn("Failed to save wallpaper to localStorage:", ex.message);
+            }
+        }
     });
 }
 
 /**
- * Load wallpaper from IndexedDB cache if available.
+ * Load wallpaper from IndexedDB cache or localStorage fallback.
  */
 function loadWallpaperFromCache() {
     initWallpaperDB(function(db) {
@@ -148,15 +168,36 @@ function loadWallpaperFromCache() {
                 var objectUrl = URL.createObjectURL(result.blob);
                 console.log("Loading cached wallpaper from IndexedDB");
                 applyWallpaperImage(objectUrl, null);
+            } else {
+                // Try localStorage fallback if IndexedDB is empty
+                loadWallpaperFromLocalStorage();
             }
         };
         
         request.onerror = function() {
-            console.warn("Failed to load wallpaper from IndexedDB:", request.error);
+            console.warn("Failed to load wallpaper from IndexedDB, trying localStorage fallback:", request.error);
+            loadWallpaperFromLocalStorage();
         };
     }, function(err) {
-        console.warn("Failed to access IndexedDB:", err);
+        console.warn("Failed to access IndexedDB, trying localStorage fallback:", err);
+        loadWallpaperFromLocalStorage();
     });
+}
+
+/**
+ * Load wallpaper from localStorage as fallback.
+ */
+function loadWallpaperFromLocalStorage() {
+    if (typeof settings === 'undefined' || !settings.storage) return;
+    try {
+        var cachedWallpaper = settings.get('wallpaperImage');
+        if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+            console.log("Loading cached wallpaper from localStorage");
+            applyWallpaperImage(cachedWallpaper, null);
+        }
+    } catch (ex) {
+        console.warn("Failed to load wallpaper from localStorage:", ex.message);
+    }
 }
 
 /**
@@ -179,25 +220,22 @@ function handleWallpaperDrop(ev) {
         
         var reader = new FileReader();
         reader.onload = function(e) {
-            var objectUrl = e.target.result; 
+            var dataUrl = e.target.result;
 
             try {
                 if (typeof applyWallpaperImage === 'function') {
-                    applyWallpaperImage(objectUrl, null, function() {
+                    applyWallpaperImage(dataUrl, null, function() {
                         console.warn("Failed to apply dropped wallpaper image");
                     });
 
-                    saveWallpaperToCache(file);
+                    // Save to IndexedDB with localStorage fallback
+                    saveWallpaperToCache(file, dataUrl);
                 }
             } catch (ex) {
                 console.error("Error applying wallpaper:", ex);
-                URL.revokeObjectURL(objectUrl);
             }
         };
-        reader.readAsDataURL(file); ;
-        // Create object URL for display
-        // var objectUrl = URL.createObjectURL(file);
-        
+        reader.readAsDataURL(file);
         break; // Only use the first image
     }
 }
