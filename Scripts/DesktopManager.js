@@ -136,7 +136,7 @@ function saveWallpaperToCache(blob) {
  * Load wallpaper from IndexedDB cache if available.
  */
 function loadWallpaperFromCache() {
-    initWallpaperDB().then(function(db) {
+    initWallpaperDB(function(db) {
         var transaction = db.transaction(['wallpapers'], 'readonly');
         var store = transaction.objectStore('wallpapers');
         var request = store.get('current');
@@ -153,7 +153,7 @@ function loadWallpaperFromCache() {
         request.onerror = function() {
             console.warn("Failed to load wallpaper from IndexedDB:", request.error);
         };
-    }).catch(function(err) {
+    }, function(err) {
         console.warn("Failed to access IndexedDB:", err);
     });
 }
