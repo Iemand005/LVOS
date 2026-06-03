@@ -136,8 +136,8 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
     get: function() { return this._isWindowUpdatesEnabled; },
     set: function(value) {
-        if (value) window.addEventListener("resize", micaHandler);
-        else window.removeEventListener("resize", micaHandler);
+        if (value) window.addEventListener("resize", this.micaHandler);
+        else window.removeEventListener("resize", this.micaHandler);
         this._isWindowUpdatesEnabled = value;
     }
 })
