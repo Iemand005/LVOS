@@ -74,6 +74,11 @@ function WindowManager() {
 
 	this._isBlurEnabled = true;
 	this._isMicaEnabled = false;
+    this._isWindowUpdatesEnabled = false;
+
+    this.micaHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
+        window.update();
+    });
 }
 
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
@@ -128,12 +133,12 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
   }
 });
 
-Object.defineProperty(WindowManager.prototype, "isWindowUpdateEnabled", {
-    get: function() {}
-    ,
+Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
+    get: function() { return this._isWindowUpdatesEnabled; },
     set: function(value) {
         if (value) window.addEventListener("resize", micaHandler);
         else window.removeEventListener("resize", micaHandler);
+        this._isWindowUpdatesEnabled = value;
     }
 })
 
@@ -955,6 +960,7 @@ DocumentCrawler.prototype = {
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager();
+windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler(document);
 var dragAction = new DragAction();
 var windowButtons = {
@@ -1380,10 +1386,6 @@ WindowManager.prototype.closeApp = function(appId) {
 function closeApp(appId) {
     windowManager.closeApp(appId);
 }
-
-var micaHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
-    window.update();
-});
 
 function enableMica() {
     windowManager.toggleMica(true);
