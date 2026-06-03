@@ -1,42 +1,58 @@
 
 'use strict';
-'use esnext';
-/*const*/var body = document.querySelector("body");
-/*for (var index = 0; index < 0; index++) {
-    /var button = document.createElement("button");
-    button.id = index;
-    body.appendChild(button);
-}*/
-var buttons = document.getElementsByTagName("input");
 var output = document.querySelector("output");
-var inputs = [];
+var buttons = document.querySelectorAll("input[type='button']");
+var expression = "";
 
-document.querySelector("form").onsubmit = function(event){
-    event.preventDefault();
-    var result = 0;
-    for (var key in inputs) {
-        result += inputs[key];
+function updateDisplay() {
+    output.textContent = expression || "0";
+}
+
+function calculate() {
+    var safeExpr = expression.replace(/[^0-9+\-*/.]/g, "");
+    if (!safeExpr) {
+        expression = "0";
+        updateDisplay();
+        return;
     }
-    display()
+    try {
+        expression = String(eval(safeExpr));
+    } catch (e) {
+        expression = "Error";
+    }
+    updateDisplay();
 }
 
-
-for (var i = 0; i < 10; i++) {
-    // document.getElementById(i).onclick = function(event){
-    //     ///*const*/var number = event.target.id;
-    //     inputs.push(i);
-    //     display(inputs.join(""));
-    // }
+function clearAll() {
+    expression = "";
+    updateDisplay();
 }
 
-function display(message){
-    //console.log(inputs.join(""))
-    output.innerText = message;//inputs.join("");
+function press(value) {
+    if (value === "=") {
+        calculate();
+        return;
+    }
+    if (value === "C") {
+        clearAll();
+        return;
+    }
+    if (expression === "Error") {
+        expression = "";
+    }
+    expression += value;
+    updateDisplay();
 }
 
-/*for (var button in buttons) {
-    buttons[button].addEventListener("click", function(event){
-        var number = event.target.id;
-        output.innerText += number;
+document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    calculate();
+});
+
+for (var i = 0; i < buttons.length; i += 1) {
+    buttons[i].addEventListener("click", function (event) {
+        press(event.target.value);
     });
-}*/
+}
+
+updateDisplay();
