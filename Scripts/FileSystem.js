@@ -49,13 +49,15 @@ OmniFS.prototype.init = function (api) {
 	this.apis.push(api);
 
 	return new Promise(function (resolve, reject) {
-		if (api == "WebKitFS") {
-			if (!window.webkitRequestFileSystem)
-			return reject('webkitRequestFileSystem not supported here.');
-			
-			window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function (fs) {
-				self.webkitFs = fs;
-			}, reject);
+		switch (api) {
+			case "WebKitFS":
+				if (!window.webkitRequestFileSystem)
+				return reject('webkitRequestFileSystem not supported here.');
+				
+				window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function (fs) {
+					self.webkitFs = fs;
+				}, reject);
+				break;
 		}
 	});
 };
@@ -63,9 +65,8 @@ OmniFS.prototype.init = function (api) {
 OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
 	var self = this;
   return new Promise(function (resolve, reject) {
-    if (!self.webkitFs) {
+    if (!self.webkitFs)
       return reject('webkitRequestFileSystem not initialized.');
-    }
     
       self.webkitFs.root.getFile(fileName, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
@@ -108,12 +109,10 @@ OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
 
 OmniFS.prototype.prototypewriteToOPFS = function (fileName, content) {
     return new Promise(function (resolve, reject) {
-        // Controleer eerst of de moderne opslag API überhaupt bestaat
         if (!navigator.storage || typeof navigator.storage.getDirectory !== 'function') {
             return reject(new Error("OPFS wordt niet ondersteund door deze browser."));
         }
 
-        // 1. Krijg toegang tot de private root-map van je website
         navigator.storage.getDirectory()
             ["then"](function (root) {
                 // 2. Open of maak het bestand aan
