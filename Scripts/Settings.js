@@ -131,26 +131,63 @@ charmsbutton2.innerText = "Settings";
 
 window.addEventListener("mousedown", toggleCharmsEvent);
 
-// This isn't finished yet, I am still working on making dragging and dropping files work properly so we can drag and drop a photo to have it immediately set as wallpaper! While this is work in progress you can set the wallpaper from the charms bar.
+// Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
 window.ondrag = document.ondrag = function(ev){
     ev.preventDefault();
-    elements.desktop.style.opacity = 0;
+    ev.stopPropagation();
+    elements.desktop.style.opacity = 0.5;
 }
 
-window.ondragleave = function(ev){
+window.ondragleave = document.ondragleave = function(ev){
     ev.preventDefault();
+    ev.stopPropagation();
     elements.desktop.style.opacity = null;
 }
 
-window.ondrop = document.ondrop = function(ev){
-    ev.preventDefault();
-    console.log(ev);
+document.body.ondragover = window.ondragover = function(ev) { 
+    ev.preventDefault(); 
+    ev.stopPropagation();
+    ev.dataTransfer.dropEffect = 'copy';
 }
 
-document.body.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")}
-document.body.ondrop = function(ev) {
+/**
+ * Handle dropped files and apply image files as wallpaper.
+ * @param {DragEvent} ev
+ */
+function handleWallpaperDrop(ev) {
     ev.preventDefault();
+    ev.stopPropagation();
+    elements.desktop.style.opacity = null;
+    
+    if (!ev.dataTransfer || !ev.dataTransfer.files) return;
+    
+    var files = ev.dataTransfer.files;
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        // Only process image files
+        if (!file.type.match(/^image\//)) continue;
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                if (typeof applyWallpaperImage === 'function') {
+                    applyWallpaperImage(e.target.result, null, function() {
+                        console.warn("Failed to apply dropped wallpaper image");
+                    });
+                }
+            } catch (ex) {
+                console.error("Error applying wallpaper:", ex);
+            }
+        };
+        reader.onerror = function() {
+            console.warn("Failed to read dropped file");
+        };
+        reader.readAsDataURL(file);
+        break; // Only use the first image
+    }
 }
+
+window.ondrop = document.ondrop = handleWallpaperDrop;
 
 loadSettings();
 
