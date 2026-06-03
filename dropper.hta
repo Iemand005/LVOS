@@ -6,6 +6,13 @@
     <hta:application id="oApp" applicationname="DropFix" scroll="no" windowstate="normal" />
     <style>
         html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+        #dropLayer {
+            position:absolute;
+            inset:0;
+            z-index:9999;
+            background:rgba(0,0,0,0.05);
+            display:none;
+        }
     </style>
 </head>
 <body>
@@ -15,32 +22,91 @@
         <param name="RegisterAsBrowser" value="1">
         <param name="RegisterAsDropTarget" value="1">
     </object>
+    <div id="dropLayer"></div>
 
-	 <script>
+    <script>
+        var dropLayer = null;
+        var dropPendingPath = null;
+
+        function getFileUrl(filePath) {
+            if (!filePath) return filePath;
+            if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(filePath)) return filePath;
+            return 'file:///' + filePath.replace(/\\/g, '/');
+        }
+
+        function handleDroppedFilePath(url) {
+            try {
+                if (wb && wb.Document && wb.Document.parentWindow && typeof wb.Document.parentWindow.handleDroppedFilePath === 'function') {
+                    wb.Document.parentWindow.handleDroppedFilePath(url);
+                    return true;
+                }
+            } catch (e) {
+                return false;
+            }
+            return false;
+        }
+
+        function onDropFile(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropLayer.style.display = 'none';
+            var dt = event.dataTransfer;
+            if (!dt) return;
+            var files = dt.files;
+            if (!files || files.length === 0) return;
+            var file = files[0];
+            var path = file.path || file.fileName || file.name;
+            if (!path) return;
+            var fileUrl = getFileUrl(path);
+            if (!handleDroppedFilePath(fileUrl)) {
+                dropPendingPath = fileUrl;
+            }
+        }
+
+        function showDropLayer(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropLayer.style.display = 'block';
+            if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+        }
+
+        function hideDropLayer(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            dropLayer.style.display = 'none';
+        }
+
         window.onload = function() {
-            // Direct the browser to our UI page
-            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "app_content.html");
+            dropLayer = document.getElementById('dropLayer');
+            if (dropLayer) {
+                dropLayer.addEventListener('dragover', showDropLayer, false);
+                dropLayer.addEventListener('drop', onDropFile, false);
+                dropLayer.addEventListener('dragleave', hideDropLayer, false);
+            }
+
+            window.addEventListener('dragover', showDropLayer, false);
+            window.addEventListener('drop', onDropFile, false);
+
+            wb.RegisterAsBrowser = 1;
+            wb.RegisterAsDropTarget = 1;
+
+            wb.Navigate(location.href.replace(/[^\/\\]+$/, '') + 'index.html');
         };
+
+        window.setInterval(function() {
+            if (dropPendingPath && handleDroppedFilePath(dropPendingPath)) {
+                dropPendingPath = null;
+            }
+        }, 200);
     </script>
 
-
     <script for="wb" event="BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel)">
-        // 1. Check if the URL is trying to break out to a local dropped file path
-		alert("moo!")
-        if (URL.indexOf("app_content.html") === -1) {
-            
-            // 2. Safely tell the underlying ActiveX component to STOP navigating
-            // In IE scripting, changing the "Cancel" parameter requires passing true
-            Cancel.value = true; 
-            
-            // 3. Send the file path directly to the iframe UI
+        if (URL.indexOf("index.html") === -1) {
+            Cancel.value = true;
             try {
                 wb.Document.parentWindow.handleDroppedFilePath(URL);
             } catch(e) {
-                // If the UI document isn't fully loaded yet, wait slightly
-                setTimeout(function() {
-                    wb.Document.parentWindow.handleDroppedFilePath(URL);
-                }, 100);
+                
             }
         }
     </script>
