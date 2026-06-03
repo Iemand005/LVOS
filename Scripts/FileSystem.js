@@ -32,10 +32,12 @@ console.log("Detected Browser Capabilities:", probeAllStorage());
 /**
  * @param {StorageAPI} api 
  */
-function FileSystem(api) {
+function OmniFS(api) {
 	
 	this.webkitSize = 5 * 1024 * 1024;
-	
+}
+
+OmniFS.prototype.init = function() {
 	var self = this;
 	if (api == "WebKitFS") {
 		if (!window.webkitRequestFileSystem) {
@@ -56,13 +58,9 @@ function FileSystem(api) {
 		  }, reject);
 		}, reject);
 	}
-}
-
-FileSystem.prototype.init = function() {
-
 };
 
-FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
+OmniFS.prototype.writeToChromeLegacyFS = function(fileName, textData) {
   return new Promise((resolve, reject) => {
     if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
@@ -84,7 +82,7 @@ FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
   });
 }
 
-FileSystem.prototype.readFromChromeLegacyFS = function(fileName) {
+OmniFS.prototype.readFromChromeLegacyFS = function(fileName) {
   return new Promise(function(resolve, reject) {
     // Check if the legacy API exists
     if (!window.webkitRequestFileSystem) {
