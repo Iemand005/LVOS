@@ -7,7 +7,7 @@ html, body {
     height: 100%;
     width: 100%;
     animation: all 1s ease-in-out 0;
-    transition: all 1s;
+    /* transition: all 1s; */
 }
 
 body > header, body > footer, header.hidden {
@@ -91,14 +91,13 @@ main {
 
 .window header,
 .window header section {
-    -webkit-transition: all 700ms ease-out;
-    -moz-transition: all 700ms ease-out;
-    -o-transition: all 700ms ease-out;
-    transition: all 700ms ease-out;
+    -webkit-transition: all 170ms ease-out;
+    -moz-transition: all 170ms ease-out;
+    -o-transition: all 170ms ease-out;
+    transition: all 170ms ease-out;
 }
 
 .window header section {
-
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
     display: -webkit-box;
@@ -144,10 +143,10 @@ main {
     border-left: none;
 }
 
-.window header button:disabled{
+.window header button:disabled {
     outline: none;
     width: 0px;
-    transition: all 500ms ease-out, border 10s ease 1s;
+    /* transition: all 500ms ease-out, border 10s ease 1s; */
     font-size: 0px;
     border: none;
     margin: 0;
@@ -307,6 +306,9 @@ article {
     border-radius: 0px !important;
 } */
 
+/* .window {
+    transition: unset;
+} */
 
 .window[full] {
     position: fixed !important;

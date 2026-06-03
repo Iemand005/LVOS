@@ -69,8 +69,8 @@ body:not(.blur) .window > article {
   pointer-events: none;
   overflow: visible;
   transform-style: preserve-3d;
-  transition: all 1000ms ease-in-out;
-  transition: all 600ms ease-out;
+  /* transition: all 1000ms ease-in-out;
+  transition: all 600ms ease-out; */
   -webkit-user-drop: element;
 }
 
