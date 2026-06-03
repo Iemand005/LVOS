@@ -56,3 +56,62 @@ if ('serviceWorker' in navigator) {
 function setTheme(theme) {
   document.body.classList.add(theme);
 }
+
+
+// Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
+window.ondrag = document.ondrag = function(ev){
+    ev.preventDefault();
+    ev.stopPropagation();
+    elements.desktop.style.opacity = 0.5;
+}
+
+window.ondragleave = document.ondragleave = function(ev){
+    ev.preventDefault();
+    ev.stopPropagation();
+    elements.desktop.style.opacity = null;
+}
+
+document.body.ondragover = window.ondragover = function(ev) { 
+    ev.preventDefault(); 
+    ev.stopPropagation();
+    ev.dataTransfer.dropEffect = 'copy';
+}
+
+/**
+ * Handle dropped files and apply image files as wallpaper.
+ * @param {DragEvent} ev
+ */
+function handleWallpaperDrop(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    elements.desktop.style.opacity = null;
+    
+    if (!ev.dataTransfer || !ev.dataTransfer.files) return;
+    
+    var files = ev.dataTransfer.files;
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        // Only process image files
+        if (!file.type.match(/^image\//)) continue;
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                if (typeof applyWallpaperImage === 'function') {
+                    applyWallpaperImage(e.target.result, null, function() {
+                        console.warn("Failed to apply dropped wallpaper image");
+                    });
+                }
+            } catch (ex) {
+                console.error("Error applying wallpaper:", ex);
+            }
+        };
+        reader.onerror = function() {
+            console.warn("Failed to read dropped file");
+        };
+        reader.readAsDataURL(file);
+        break; // Only use the first image
+    }
+}
+
+window.ondrop = document.ondrop = handleWallpaperDrop;
