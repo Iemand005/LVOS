@@ -33,15 +33,16 @@ console.log("Detected Browser Capabilities:", probeAllStorage());
  * @param {StorageAPI} api 
  */
 function FileSystem(api) {
+	
 	this.webkitSize = 5 * 1024 * 1024;
 	
+	var self = this;
 	if (api == "WebKitFS") {
 		if (!window.webkitRequestFileSystem) {
 		  return reject('webkitRequestFileSystem not supported here.');
 		}
-	
 		
-		window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
+		window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function(fs) {
 		  fs.root.getFile(fileName, { create: true }, function(fileEntry) {
 			fileEntry.createWriter(function(fileWriter) {
 			  
@@ -56,6 +57,10 @@ function FileSystem(api) {
 		}, reject);
 	}
 }
+
+FileSystem.prototype.init = function() {
+
+};
 
 FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
   return new Promise((resolve, reject) => {
