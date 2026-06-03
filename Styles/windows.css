@@ -308,24 +308,27 @@ article {
 } */
 
 .window[full] {
-    position: fixed !important;
-    z-index: 9999 !important;
-    
     animation: goFullscreen 1s ease-out alternate;
 }
 
 .window[full] content {
-    border-radius: 0 !important;
+    
+}
+
+.window {
+    top: 0;
+    left: 0;
+    right: 0 ;
+    bottom: 0 ;
+    width: 50% ;
+    height: 50% ;
+    transform: translate(0px, 0px) ;
+    border-radius: 0 ;
 }
 
 @keyframes goFullscreen {
     from {
-        top: auto;
-        left: auto;
-        right: auto;
-        bottom: auto;
-        width: auto;
-        height: auto;
+        
     }
     to {
         top: 0 !important;
@@ -335,6 +338,7 @@ article {
         width: 100% !important;
         height: 100% !important;
         transform: translate(0px, 0px) !important;
+        border-radius: 0 !important;
     }
 }
 
