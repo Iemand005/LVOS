@@ -34,6 +34,37 @@
 <body class="transparente">
     <header></header>
     <main>
+        <div id="dropzone">Drag your file here!</div>
+
+    <script>
+        // 1. CRITICAL: Stop the entire page from navigating when a file is dropped
+        window.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+        window.addEventListener("drop", function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+        // 2. Handle the drop strictly inside your target element
+        var myDropzone = document.getElementById("dropzone");
+
+        myDropzone.addEventListener("drop", function(e) {
+            // Stop the event from bubbling up to the window
+            e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation(); 
+
+            // Extract the dropped files
+            var files = e.dataTransfer.files;
+            if (files.length > 0) {
+                alert("Successfully grabbed file: " + files[0].name);
+                // Do your FileReader or Base64 code here!
+            }
+        }, false);
+    </script>
+    
         <section id="desktop">
             <section id="windows">
                 <!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
