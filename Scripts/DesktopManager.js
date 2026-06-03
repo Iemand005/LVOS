@@ -146,24 +146,54 @@ function saveWallpaperToCache(blob, dataUrl) {
         request.onerror = function() {
             console.warn("Failed to save wallpaper to IndexedDB, falling back to localStorage:", request.error);
             // Fall back to localStorage if IndexedDB fails
-            if (dataUrl && typeof settings !== 'undefined' && settings.storage) {
-                try {
-                    settings.set('wallpaperImage', dataUrl);
-                    console.log("Wallpaper saved to localStorage as fallback");
-                } catch (ex) {
-                    console.warn("Failed to save wallpaper to localStorage:", ex.message);
+            if (dataUrl) {
+                if (typeof settings !== 'undefined' && settings.set) {
+                    try {
+                        settings.set('wallpaperImage', dataUrl);
+                        console.log("Wallpaper saved to localStorage via settings");
+                    } catch (ex) {
+                        console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
+                        try {
+                            window.localStorage.setItem('wallpaperImage', dataUrl);
+                            console.log("Wallpaper saved to direct localStorage");
+                        } catch (ex2) {
+                            console.warn("Failed to save to direct localStorage:", ex2.message);
+                        }
+                    }
+                } else {
+                    try {
+                        window.localStorage.setItem('wallpaperImage', dataUrl);
+                        console.log("Wallpaper saved to direct localStorage");
+                    } catch (ex) {
+                        console.warn("Failed to save wallpaper to localStorage:", ex.message);
+                    }
                 }
             }
         };
     }, function(err) {
         console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
-        if (dataUrl && typeof settings !== 'undefined' && settings.storage) {
-            try {
-                settings.set('wallpaperImage', dataUrl);
-                console.log("Wallpaper saved to localStorage as fallback");
-            } catch (ex) {
-                console.warn("Failed to save wallpaper to localStorage:", ex.message);
+        if (dataUrl) {
+            if (typeof settings !== 'undefined' && settings.set) {
+                try {
+                    settings.set('wallpaperImage', dataUrl);
+                    console.log("Wallpaper saved to localStorage via settings");
+                } catch (ex) {
+                    console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
+                    try {
+                        window.localStorage.setItem('wallpaperImage', dataUrl);
+                        console.log("Wallpaper saved to direct localStorage");
+                    } catch (ex2) {
+                        console.warn("Failed to save to direct localStorage:", ex2.message);
+                    }
+                }
+            } else {
+                try {
+                    window.localStorage.setItem('wallpaperImage', dataUrl);
+                    console.log("Wallpaper saved to direct localStorage");
+                } catch (ex) {
+                    console.warn("Failed to save wallpaper to localStorage:", ex.message);
+                }
             }
         }
     });
@@ -204,15 +234,45 @@ function loadWallpaperFromCache() {
  * Load wallpaper from localStorage as fallback.
  */
 function loadWallpaperFromLocalStorage() {
-    if (typeof settings === 'undefined' || !settings.storage) return;
+    console.log("Attempting to load wallpaper from localStorage...");
+    console.log("settings defined:", typeof settings !== 'undefined');
+    if (typeof settings === 'undefined') {
+        console.warn("Settings not available yet, trying direct localStorage access");
+        try {
+            var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
+            if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+                console.log("Loading cached wallpaper from direct localStorage");
+                applyWallpaperImage(cachedWallpaper, null);
+            } else {
+                console.log("No cached wallpaper found in localStorage, or applyWallpaperImage not available");
+            }
+        } catch (ex) {
+            console.warn("Failed to load wallpaper from direct localStorage:", ex.message);
+        }
+        return;
+    }
+    
     try {
         var cachedWallpaper = settings.get('wallpaperImage');
+        console.log("Retrieved from settings.get():", cachedWallpaper ? 'found' : 'not found');
         if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
-            console.log("Loading cached wallpaper from localStorage");
+            console.log("Loading cached wallpaper from localStorage via settings");
             applyWallpaperImage(cachedWallpaper, null);
+        } else {
+            console.log("No cached wallpaper found in settings, or applyWallpaperImage not available");
         }
     } catch (ex) {
-        console.warn("Failed to load wallpaper from localStorage:", ex.message);
+        console.warn("Failed to load wallpaper from settings localStorage:", ex.message);
+        // Try direct localStorage as last resort
+        try {
+            var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
+            if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+                console.log("Loading cached wallpaper from direct localStorage (fallback)");
+                applyWallpaperImage(cachedWallpaper, null);
+            }
+        } catch (ex2) {
+            console.warn("Direct localStorage fallback also failed:", ex2.message);
+        }
     }
 }
 
