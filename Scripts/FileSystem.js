@@ -56,8 +56,8 @@ OmniFS.prototype.init = function (api) {
 
 OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
   return new Promise(function (resolve, reject) {
-    if (!window.webkitRequestFileSystem) {
-      return reject('webkitRequestFileSystem not supported here.');
+    if (!this.webkitFs) {
+      return reject('webkitRequestFileSystem not initialized.');
     }
     
       this.webkitFs.root.getFile(fileName, { create: true }, function(fileEntry) {
@@ -76,8 +76,8 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
 
 OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
   return new Promise(function(resolve, reject) {
-    if (!window.webkitRequestFileSystem)
-      return reject('webkitRequestFileSystem not supported here.');
+    if (!this.webkitFs)
+      return reject('webkitRequestFileSystem not initialized.');
     
     this.webkitFs.root.getFile(fileName, { create: false }, function(fileEntry) {
 		fileEntry.file(function(file) {
