@@ -406,6 +406,10 @@ button:hover {
     cursor: sw-resize;
 }
 
+.window:not([focus]) content > article > * {
+    pointer-events: none !important;
+}
+
 /* Animation */
 
 @keyframes opening {
