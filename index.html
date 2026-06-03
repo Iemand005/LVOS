@@ -32,28 +32,6 @@
     <meta name="theme-color" content="#43b581" />
 </head>
 <body class="transparente">
-    <div id="displayBox">
-        <h2>Drop Any File Anywhere in the Window</h2>
-        <p id="statusText">Waiting for a file drop...</p>
-        <img id="previewImage" />
-    </div>
-
-    <script>
-        // This function handles the raw URL passed directly from the COM layer
-        window.handleDroppedFilePath = function(rawUrl) {
-            // Clean up the Windows local file format 
-            // e.g., file:///C:/Users/Name/File.png -> C:\Users\Name\File.png
-            var cleanPath = rawUrl.replace("file:///", "").replace(/\//g, "\\");
-            cleanPath = decodeURIComponent(cleanPath);
-            
-            document.getElementById("statusText").innerHTML = "<b>Successfully loaded:</b> <br>" + cleanPath;
-            
-            // Render it instantly by passing the raw path string
-            var img = document.getElementById("previewImage");
-            img.src = cleanPath;
-            img.style.display = "inline-block";
-        };
-    </script>
     <header></header>
     <main>
 
