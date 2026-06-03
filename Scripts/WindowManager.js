@@ -76,7 +76,7 @@ function WindowManager() {
 	this._isMicaEnabled = false;
     this._isWindowUpdatesEnabled = false;
 
-    this.micaHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
+    this.resizeHandler = windowManager.forEachWindow.bind(windowManager, function (window) {
         window.update();
     });
 }
@@ -136,8 +136,8 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
     get: function() { return this._isWindowUpdatesEnabled; },
     set: function(value) {
-        if (value) window.addEventListener("resize", this.micaHandler);
-        else window.removeEventListener("resize", this.micaHandler);
+        if (value) window.addEventListener("resize", this.resizeHandler);
+        else window.removeEventListener("resize", this.resizeHandler);
         this._isWindowUpdatesEnabled = value;
     }
 })
