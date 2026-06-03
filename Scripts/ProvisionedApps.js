@@ -190,6 +190,11 @@ var applications = [
         hidden: true
     }, 
     {
+      title: "OPC",
+      id: "opc",
+      src: "https://bypass-online.netlify.app/"
+    },
+    {
       title: "daedalOS",
       id: "daedal",
       src: "https://dustinbrett.com/"
