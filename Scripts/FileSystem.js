@@ -41,30 +41,19 @@ function OmniFS() {
  */
 OmniFS.prototype.init = function(api) {
 	var self = this;
-	
+
 	if (api == "WebKitFS") {
-		if (!window.webkitRequestFileSystem) {
+		if (!window.webkitRequestFileSystem)
 		  return reject('webkitRequestFileSystem not supported here.');
-		}
 		
 		window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function(fs) {
-		  fs.root.getFile(fileName, { create: true }, function(fileEntry) {
-			fileEntry.createWriter(function(fileWriter) {
-			  
-			  fileWriter.onwriteend = () => resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
-			  fileWriter.onerror = (e) => reject(e);
-			  
-			  const blob = new Blob([textData], { type: 'text/plain' });
-			  fileWriter.write(blob);
-			  
-			}, reject);
-		  }, reject);
+		  webkitFs = fs;
 		}, reject);
 	}
 };
 
 OmniFS.prototype.writeToChromeLegacyFS = function(fileName, textData) {
-  return new Promise((resolve, reject) => {
+  return new Promise(function (resolve, reject) {
     if (!window.webkitRequestFileSystem) {
       return reject('webkitRequestFileSystem not supported here.');
     }

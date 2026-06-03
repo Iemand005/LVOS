@@ -238,3 +238,131 @@ if (typeof Array.from !== "function") {
         return id;
     };
 }());
+
+(function () {
+  // Controleer of er al een native Promise aanwezig is (zoals in Edge of Chrome)
+  if (typeof window.Promise === 'function') {
+    return;
+  }
+
+  // Interne statussen gedefinieerd als getallen (ES3-veilig)
+  var PENDING = 0;
+  var FULFILLED = 1;
+  var REJECTED = 2;
+
+  // De Constructor Functie
+  function ES3Promise(executor) {
+    if (typeof executor !== 'function') {
+      throw new TypeError('Promise resolver is geen functie');
+    }
+
+    var self = this;
+    self._state = PENDING;
+    self._value = undefined;
+    self._deferreds = []; // Lijst met gekoppelde .then() handlers
+
+    // Interne resolve functie
+    function resolve(newValue) {
+      try {
+        // Controleren op "Thenables" (andere Promises in de keten)
+        if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+          var then = newValue.then;
+          if (typeof then === 'function') {
+            then.call(newValue, resolve, reject);
+            return;
+          }
+        }
+        
+        if (self._state !== PENDING) return;
+        self._state = FULFILLED;
+        self._value = newValue;
+        self._handleDeferreds();
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    // Interne reject functie
+    function reject(reason) {
+      if (self._state !== PENDING) return;
+      self._state = REJECTED;
+      self._value = reason;
+      self._handleDeferreds();
+    }
+
+    // Voer de executor direct uit
+    try {
+      executor(resolve, reject);
+    } catch (err) {
+      reject(err);
+    }
+  }
+
+  // Interne loop om handlers asynchroon af te vuren
+  ES3Promise.prototype._handleDeferreds = function () {
+    var self = this;
+    if (self._state === PENDING) return;
+
+    // setTimeout is de enige universele macro-task deferrer in ES3 (werkt overal)
+    setTimeout(function () {
+      while (self._deferreds.length > 0) {
+        // .shift() is ondersteund sinds ES3 (IE5.5+)
+        var deferred = self._deferreds.shift(); 
+        var callback = self._state === FULFILLED ? deferred.onFulfilled : deferred.onRejected;
+
+        if (typeof callback !== 'function') {
+          if (self._state === FULFILLED) {
+            deferred.resolve(self._value);
+          } else {
+            deferred.reject(self._value);
+          }
+          continue;
+        }
+
+        try {
+          var ret = callback(self._value);
+          deferred.resolve(ret);
+        } catch (err) {
+          deferred.reject(err);
+        }
+      }
+    }, 0);
+  };
+
+  // De .then methode (Geactiveerd via string-property om ES3-parsers niet te laten crashen)
+  ES3Promise.prototype['then'] = function (onFulfilled, onRejected) {
+    var self = this;
+    return new ES3Promise(function (resolve, reject) {
+      self._deferreds.push({
+        onFulfilled: onFulfilled,
+        onRejected: onRejected,
+        resolve: resolve,
+        reject: reject
+      });
+      self._handleDeferreds();
+    });
+  };
+
+  // De .catch methode (Als string gedefinieerd wegens strict gereserveerd ES3-keyword)
+  ES3Promise.prototype['catch'] = function (onRejected) {
+    return this['then'](null, onRejected);
+  };
+
+  // Statische helper: Promise.resolve()
+  ES3Promise.resolve = function (value) {
+    return new ES3Promise(function (resolve) {
+      resolve(value);
+    });
+  };
+
+  // Statische helper: Promise.reject()
+  ES3Promise.reject = function (reason) {
+    return new ES3Promise(function (resolve, reject) {
+      reject(reason);
+    });
+  };
+
+  // Koppel de polyfill aan het globale window object
+  window.Promise = ES3Promise;
+})();
+
