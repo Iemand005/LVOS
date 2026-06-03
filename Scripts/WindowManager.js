@@ -747,8 +747,13 @@ Dialog.prototype.clearClickOffset = function () {
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
   if (!this.target) return;
-  this.target.classList.toggle("animating", enable);
+  var target = this.target;
+  this.target.classList.add("animating", enable);
   this.target.classList.toggle("fullscreen", enable);
+    var self = this;
+  this.target.addEventListener('transitionend', function(event) {
+    self.target.classList.remove('animating');
+});
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
