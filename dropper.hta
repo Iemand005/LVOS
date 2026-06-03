@@ -17,16 +17,12 @@
 </head>
 <body>
 
-    <!-- The ActiveX container handles the OS drag communication -->
-    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="width:100%; height:100%;">
-        <param name="RegisterAsBrowser" value="1">
-        <param name="RegisterAsDropTarget" value="1">
-    </object>
-    <div id="dropLayer"></div>
+    <iframe id="appFrame" src="index.html" style="width:100%; height:100%; border:none;"></iframe>
+    <div id="dropLayer">Drop file here</div>
 
     <script>
         var dropLayer = null;
-        var dropPendingPath = null;
+        var appFrame = null;
 
         function getFileUrl(filePath) {
             if (!filePath) return filePath;
@@ -34,14 +30,15 @@
             return 'file:///' + filePath.replace(/\\/g, '/');
         }
 
-        function handleDroppedFilePath(url) {
+        function dispatchToFrame(url) {
             try {
-                if (wb && wb.Document && wb.Document.parentWindow && typeof wb.Document.parentWindow.handleDroppedFilePath === 'function') {
-                    wb.Document.parentWindow.handleDroppedFilePath(url);
+                var win = appFrame && appFrame.contentWindow;
+                if (win && typeof win.handleDroppedFilePath === 'function') {
+                    win.handleDroppedFilePath(url);
                     return true;
                 }
             } catch (e) {
-                return false;
+                console.warn('Dispatch error:', e);
             }
             return false;
         }
@@ -55,19 +52,19 @@
             var files = dt.files;
             if (!files || files.length === 0) return;
             var file = files[0];
-            var path = file.path || file.fileName || file.name;
+            var path = file.path || file.fileName || file.fullPath || file.name;
             if (!path) return;
             var fileUrl = getFileUrl(path);
             alert('File drop detected: ' + fileUrl);
-            if (!handleDroppedFilePath(fileUrl)) {
-                dropPendingPath = fileUrl;
+            if (!dispatchToFrame(fileUrl)) {
+                console.log('Frame handler not ready, retained drop:', fileUrl);
             }
         }
 
         function showDropLayer(event) {
             event.preventDefault();
             event.stopPropagation();
-            dropLayer.style.display = 'block';
+            dropLayer.style.display = 'flex';
             if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
         }
 
@@ -79,6 +76,8 @@
 
         window.onload = function() {
             dropLayer = document.getElementById('dropLayer');
+            appFrame = document.getElementById('appFrame');
+
             if (dropLayer) {
                 dropLayer.addEventListener('dragover', showDropLayer, false);
                 dropLayer.addEventListener('drop', onDropFile, false);
@@ -87,30 +86,9 @@
 
             window.addEventListener('dragover', showDropLayer, false);
             window.addEventListener('drop', onDropFile, false);
-
-            wb.RegisterAsBrowser = 1;
-            wb.RegisterAsDropTarget = 1;
-
-            wb.Navigate(location.href.replace(/[^\/\\]+$/, '') + 'index.html');
+            document.body.addEventListener('dragover', showDropLayer, false);
+            document.body.addEventListener('drop', onDropFile, false);
         };
-
-        window.setInterval(function() {
-            if (dropPendingPath && handleDroppedFilePath(dropPendingPath)) {
-                dropPendingPath = null;
-            }
-        }, 200);
-    </script>
-
-    <script for="wb" event="BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel)">
-        if (URL.indexOf("index.html") === -1) {
-            alert('BeforeNavigate2 drop detected: ' + URL);
-            Cancel.value = true;
-            try {
-                wb.Document.parentWindow.handleDroppedFilePath(URL);
-            } catch(e) {
-                
-            }
-        }
     </script>
 </body>
 </html>
