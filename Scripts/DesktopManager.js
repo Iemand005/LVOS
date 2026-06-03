@@ -202,20 +202,8 @@ function handleWallpaperDrop(ev) {
     }
 }
 
-var killEvent = function(e) {
-            e = e || window.event;
-            if (e.preventDefault) e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-            return false;
-        };
 
-        window.addEventListener("dragenter", killEvent, false);
-        window.addEventListener("dragover", killEvent, false);
-        window.addEventListener("drop", killEvent, false);
-        document.addEventListener("drop", killEvent, false);
-
-// window.ondrop = document.ondrop = handleWallpaperDrop;
+window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
 if (document.readyState === 'loading') {
