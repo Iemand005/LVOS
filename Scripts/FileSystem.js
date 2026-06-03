@@ -47,8 +47,8 @@ OmniFS.prototype.init = function (api) {
 			if (!window.webkitRequestFileSystem)
 			return reject('webkitRequestFileSystem not supported here.');
 			
-			window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function(fs) {
-			webkitFs = fs;
+			window.webkitRequestFileSystem(window.PERSISTENT, this.webkitSize, function (fs) {
+				self.webkitFs = fs;
 			}, reject);
 		}
 	});
@@ -60,8 +60,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
       return reject('webkitRequestFileSystem not supported here.');
     }
     
-    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
-      fs.root.getFile(fileName, { create: true }, function(fileEntry) {
+      this.webkitFs.root.getFile(fileName, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
           
           fileWriter.onwriteend = () => resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
@@ -72,36 +71,29 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
           
         }, reject);
       }, reject);
-    }, reject);
-  });
+    });
 }
 
 OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
   return new Promise(function(resolve, reject) {
-    // Check if the legacy API exists
-    if (!window.webkitRequestFileSystem) {
+    if (!window.webkitRequestFileSystem)
       return reject('webkitRequestFileSystem not supported here.');
-    }
     
-    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
-      
-      fs.root.getFile(fileName, { create: false }, function(fileEntry) {
-        
-        fileEntry.file(function(file) {
-          var reader = new FileReader();
+    this.webkitFs.root.getFile(fileName, { create: false }, function(fileEntry) {
+		fileEntry.file(function(file) {
+			var reader = new FileReader();
 
-          reader.onloadend = function() {
-            resolve(this.result);
-          };
+			reader.onloadend = function() {
+			resolve(this.result);
+			};
 
-          reader.onerror = function(e) {
-            reject(e);
-          };
+			reader.onerror = function(e) {
+			reject(e);
+			};
 
-          reader.readAsText(file);
-          
-        }, reject);
-      }, reject);
-    }, reject);
+			reader.readAsText(file);
+			
+		}, reject);
+	}, reject);
   });
 }
