@@ -152,3 +152,36 @@ function downloadObject(object, fileName) {
 function downloadSettings() {
     downloadObject(localStorage);
 }
+
+var htaStorage = {
+    setItem: function(key, value) {
+        var data = {};
+        
+        if (fso.FileExists(STORAGE_FILE)) {
+            try {
+                var readFile = fso.OpenTextFile(STORAGE_FILE, 1);
+                data = JSON.parse(readFile.ReadAll());
+                readFile.Close();
+            } catch(e) { data = {}; }
+        }
+        
+        data[key] = value;
+        
+        var writeFile = fso.OpenTextFile(STORAGE_FILE, 2, true);
+        writeFile.Write(JSON.stringify(data));
+        writeFile.Close();
+    },
+    
+    getItem: function(key) {
+        if (!fso.FileExists(STORAGE_FILE)) return null;
+        
+        try {
+            var readFile = fso.OpenTextFile(STORAGE_FILE, 1);
+            var data = JSON.parse(readFile.ReadAll());
+            readFile.Close();
+            return data[key] !== undefined ? data[key] : null;
+        } catch(e) {
+            return null;
+        }
+    }
+};
