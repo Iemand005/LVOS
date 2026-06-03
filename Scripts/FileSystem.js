@@ -33,25 +33,28 @@ console.log("Detected Browser Capabilities:", probeAllStorage());
  * @param {StorageAPI} api 
  */
 function FileSystem(api) {
-	if (!window.webkitRequestFileSystem) {
-      return reject('webkitRequestFileSystem not supported here.');
-    }
-
-    this.webkitSize = 5 * 1024 * 1024;
-    
-    window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
-      fs.root.getFile(fileName, { create: true }, function(fileEntry) {
-        fileEntry.createWriter(function(fileWriter) {
-          
-          fileWriter.onwriteend = () => resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
-          fileWriter.onerror = (e) => reject(e);
-          
-          const blob = new Blob([textData], { type: 'text/plain' });
-          fileWriter.write(blob);
-          
-        }, reject);
-      }, reject);
-    }, reject);
+	this.webkitSize = 5 * 1024 * 1024;
+	
+	if (api == "WebKitFS") {
+		if (!window.webkitRequestFileSystem) {
+		  return reject('webkitRequestFileSystem not supported here.');
+		}
+	
+		
+		window.webkitRequestFileSystem(window.TEMPORARY, this.webkitSize, function(fs) {
+		  fs.root.getFile(fileName, { create: true }, function(fileEntry) {
+			fileEntry.createWriter(function(fileWriter) {
+			  
+			  fileWriter.onwriteend = () => resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
+			  fileWriter.onerror = (e) => reject(e);
+			  
+			  const blob = new Blob([textData], { type: 'text/plain' });
+			  fileWriter.write(blob);
+			  
+			}, reject);
+		  }, reject);
+		}, reject);
+	}
 }
 
 FileSystem.prototype.writeToChromeLegacyFS = function(fileName, textData) {
