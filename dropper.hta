@@ -16,6 +16,14 @@
         <param name="RegisterAsDropTarget" value="1">
     </object>
 
+	 <script>
+        window.onload = function() {
+            // Direct the browser to our UI page
+            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "app_content.html");
+        };
+    </script>
+
+
     <script for="wb" event="BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel)">
         // 1. Check if the URL is trying to break out to a local dropped file path
 		alert("moo!")
