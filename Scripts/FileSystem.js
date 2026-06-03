@@ -55,16 +55,19 @@ OmniFS.prototype.init = function (api) {
 };
 
 OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
+	var self = this;
   return new Promise(function (resolve, reject) {
-    if (!this.webkitFs) {
+    if (!self.webkitFs) {
       return reject('webkitRequestFileSystem not initialized.');
     }
     
-      this.webkitFs.root.getFile(fileName, { create: true }, function(fileEntry) {
+      self.webkitFs.root.getFile(fileName, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
           
-          fileWriter.onwriteend = () => resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
-          fileWriter.onerror = (e) => reject(e);
+          fileWriter.onwriteend = function () {
+			resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
+		  }
+          fileWriter.onerror = reject;
           
           const blob = new Blob([textData], { type: 'text/plain' });
           fileWriter.write(blob);
@@ -75,21 +78,20 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
 }
 
 OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
+	var self = this;
   return new Promise(function(resolve, reject) {
-    if (!this.webkitFs)
+    if (!self.webkitFs)
       return reject('webkitRequestFileSystem not initialized.');
     
-    this.webkitFs.root.getFile(fileName, { create: false }, function(fileEntry) {
+    self.webkitFs.root.getFile(fileName, { create: false }, function(fileEntry) {
 		fileEntry.file(function(file) {
 			var reader = new FileReader();
 
 			reader.onloadend = function() {
-			resolve(this.result);
+				resolve(this.result);
 			};
 
-			reader.onerror = function(e) {
-			reject(e);
-			};
+			reader.onerror = reject;
 
 			reader.readAsText(file);
 			
