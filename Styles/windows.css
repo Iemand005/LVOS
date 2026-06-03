@@ -64,7 +64,6 @@ main {
     position: absolute;
     background: transparent;
     border: none;
-    transition: top 500ms ease-in-out, left 500ms ease-in-out, width 500ms ease-in-out, height 500ms ease-in-out, transform 500ms ease-in-out, border-radius 500ms ease-in-out, box-shadow 500ms ease-in-out, filter 500ms ease-in-out;
     overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! Well shit... I need this to be hidden, but the backdrop  swhadow isn't applied to this anymroe anywais weait... hm shit. I need this. */
     /* color: black; */
     box-sizing: border-box;
@@ -312,22 +311,14 @@ article {
 
 .window[full] {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
     z-index: 9999 !important;
-    transform: translate(0px, 0px) !important;
+    
     animation: goFullscreen 0.4s ease-out forwards;
 }
 
 .window[full] content {
     border-radius: 0 !important;
 }
-
-/* @m */
 
 @keyframes goFullscreen {
     from {
@@ -339,7 +330,7 @@ article {
         bottom: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: none !important;
+        transform: translate(0px, 0px) !important;
     }
 }
 
