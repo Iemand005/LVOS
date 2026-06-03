@@ -41,6 +41,11 @@ output {
   margin: 10px;
   margin-bottom: 0;
   padding: 5px;
-  background-color: gray;
+
+}
+
+output, button, input[type=button] {
+  background-color: #ffffff38;
   border-radius: 5px;
+  border: 1px solid #ffffff70;
 }
