@@ -78,6 +78,34 @@ document.body.ondragover = window.ondragover = function(ev) {
 }
 
 /**
+ * Store wallpaper image URL to localStorage.
+ * @param {string} imageDataUrl
+ */
+function saveWallpaperToCache(imageDataUrl) {
+    try {
+        localStorage.setItem('wallpaperImage', imageDataUrl);
+        console.log("Wallpaper saved to cache");
+    } catch (ex) {
+        console.warn("Failed to save wallpaper to cache:", ex.message);
+    }
+}
+
+/**
+ * Load wallpaper from localStorage cache if available.
+ */
+function loadWallpaperFromCache() {
+    try {
+        var cachedWallpaper = localStorage.getItem('wallpaperImage');
+        if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+            console.log("Loading cached wallpaper");
+            applyWallpaperImage(cachedWallpaper, null);
+        }
+    } catch (ex) {
+        console.warn("Failed to load wallpaper from cache:", ex.message);
+    }
+}
+
+/**
  * Handle dropped files and apply image files as wallpaper.
  * @param {DragEvent} ev
  */
@@ -101,6 +129,7 @@ function handleWallpaperDrop(ev) {
                     applyWallpaperImage(e.target.result, null, function() {
                         console.warn("Failed to apply dropped wallpaper image");
                     });
+                    saveWallpaperToCache(e.target.result);
                 }
             } catch (ex) {
                 console.error("Error applying wallpaper:", ex);
@@ -115,3 +144,10 @@ function handleWallpaperDrop(ev) {
 }
 
 window.ondrop = document.ondrop = handleWallpaperDrop;
+
+// Load cached wallpaper on initialization
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadWallpaperFromCache);
+} else {
+    loadWallpaperFromCache();
+}
