@@ -79,17 +79,33 @@ document.body.ondragover = window.ondragover = function(ev) {
 
 /**
  * Initialize IndexedDB for wallpaper storage.
+ * Skip IndexedDB for file:// scheme (HTAs, local files).
  */
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
-  if (!indexedDB) return;
-    if (wallpaperDB) onSuccess(wallpaperDB);
+    // IndexedDB is only available over http/https, not file:// scheme
+    var isFileScheme = window.location.protocol === 'file:';
+    if (isFileScheme) {
+        console.log("File scheme detected (HTA/local file). Using localStorage only.");
+        if (onFailure) onFailure(new Error("IndexedDB not available for file:// scheme"));
+        return;
+    }
+    
+    if (!indexedDB) {
+        if (onFailure) onFailure(new Error("IndexedDB not supported"));
+        return;
+    }
+    
+    if (wallpaperDB) {
+        onSuccess(wallpaperDB);
+        return;
+    }
     
     var request = indexedDB.open('LVOSWallpaperDB', 1);
     
     request.onerror = function() {
         console.warn("IndexedDB failed to open:", request.error);
-        onFailure(request.error);
+        if (onFailure) onFailure(request.error);
     };
     
     request.onsuccess = function() {
