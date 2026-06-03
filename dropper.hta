@@ -7,25 +7,50 @@
     <style>
         html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
     </style>
-    <script defer>
-		wb.RegisterAsDropTarget = true; 
-		
-		wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
-		
-		wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
-			
-			if (URL.indexOf("index.html") === -1) {
-				wb.Document.parentWindow.handleDroppedFilePath(URL);
-				window.external.bubbleCancel = true; 
-			}
-		};
-    </script>
 </head>
 <body>
-    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="width:100%; height:100%;">
+    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="position:absolute; top:0; left:0; width:100%; height:100%; display:block;" type="text/html">
         <param name="RegisterAsBrowser" value="1">
         <param name="RegisterAsDropTarget" value="1">
+        <param name="Scroll" value="no">
     </object>
 
+    <script defer>
+        function syncObjectSize() {
+            if (!wb) return;
+            wb.style.width = window.innerWidth + 'px';
+            wb.style.height = window.innerHeight + 'px';
+        }
+
+        window.onload = function() {
+            wb.RegisterAsDropTarget = true;
+            wb.style.position = 'absolute';
+            wb.style.top = '0';
+            wb.style.left = '0';
+            wb.style.width = '100%';
+            wb.style.height = '100%';
+
+            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
+            
+            if (wb.attachEvent) {
+                wb.attachEvent('onbeforenavigate2', function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+                    if (URL.indexOf("index.html") === -1) {
+                        wb.Document.parentWindow.handleDroppedFilePath(URL);
+                        if (Cancel != null) Cancel.value = true;
+                    }
+                });
+            } else {
+                wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+                    if (URL.indexOf("index.html") === -1) {
+                        wb.Document.parentWindow.handleDroppedFilePath(URL);
+                        if (Cancel != null) Cancel.value = true;
+                    }
+                };
+            }
+
+            syncObjectSize();
+            window.onresize = syncObjectSize;
+        };
+    </script>
 </body>
 </html>
