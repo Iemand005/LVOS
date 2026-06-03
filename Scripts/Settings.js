@@ -91,7 +91,7 @@ function loadSettings() {
 
 function updateBlurState() {
     var a = settings.get("blur");
-    toggleBlur(JSON.parse(a));
+    // toggleBlur(JSON.parse(a));
 }
 
 var settings = new SettingsHandler();
@@ -189,3 +189,7 @@ ActiveXStorage.prototype.getItem = function(key) {
         return null;
     }
 };
+
+var activeStorage = new ActiveXStorage();
+
+activeStorage.setItem("hi", 69);
