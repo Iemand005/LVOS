@@ -160,7 +160,7 @@ function ActiveXStorage() {
 }
 
 ActiveXStorage.prototype.setItem = function(key, value) {
-    var data = {};
+    var data = {};  
     
     if (this.fso.FileExists(STORAGE_FILE)) {
         try {
