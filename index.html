@@ -62,6 +62,7 @@
             e.preventDefault();
             if (e.stopPropagation) e.stopPropagation();
             e.returnValue = false;
+            e.cancelBubble = true;
 
             // Access the file tracking data cleanly
             var files = e.dataTransfer.files;

@@ -2,70 +2,43 @@
 <html>
 <head>
     <meta http-equiv="x-ua-compatible" content="IE=edge">
-    <title>My App</title>
+    <title>My Protected App</title>
+    <hta:application id="oApp" applicationname="DropApp" scroll="no" windowstate="normal" />
     
-    <!-- Optional: HTA application header configuration -->
-    <hta:application id="myApp" applicationname="MyApp" scroll="no" singleinstance="yes" />
-
     <style>
-        html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #f0f0f0; }
-        #dropzone { 
-            width: 80%; height: 200px; margin: 40px auto; 
-            border: 3px dashed #666; background: #fff;
-            text-align: center; line-height: 200px; font-family: sans-serif;
-        }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
+        /* Style the wrapper container holding our modern browser object */
+        #browserContainer { width: 100%; height: 100%; }
     </style>
 </head>
+<body>
 
-<!-- 
-  CRITICAL FIX: Inline handlers on the body capture and kill the OS-level shell command.
-  "return false;" here prevents mshta.exe from processing the file redirect.
--->
-<body ondragenter="return false;" ondragover="return false;" ondrop="return false;">
-
-    <!-- The actual area you want users to drop into -->
-    <div id="dropzone">Drop your file directly here</div>
+    <!-- 1. Use the native Windows Shell Explorer instead of a normal iframe -->
+    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="width:100%; height:100%;">
+        <param name="RegisterAsBrowser" value="1">
+        <param name="RegisterAsDropTarget" value="1">
+    </object>
 
     <script>
-        // 1. Kill everything globally via Javascript for double insurance
-        var killEvent = function(e) {
-            e = e || window.event;
-            if (e.preventDefault) e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-            return false;
+        // 2. Point the WebBrowser control to your internal content page
+        window.onload = function() {
+            // RegisterAsDropTarget=true makes this control absorb shell drops safely
+            wb.RegisterAsDropTarget = true; 
+            
+            // Navigate to your actual user interface file (create this app_content.html file next)
+            wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
+            
+            // Hook into the navigation engine to flat-out block any file redirects
+            wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+                // If it tries to navigate away to a local file, cancel it immediately
+                if (URL.indexOf("index.html") === -1) {
+                    // Setting Cancel to true drops the OS navigation process
+                    Cancel = true; 
+                    alert("Redirect blocked! Pass the URL to JS instead: " + URL);
+                }
+            };
         };
-
-        window.addEventListener("dragenter", killEvent, false);
-        window.addEventListener("dragover", killEvent, false);
-        window.addEventListener("drop", killEvent, false);
-        document.addEventListener("drop", killEvent, false);
-
-        // 2. Safely capture the file inside the specific dropzone div element
-        var dropzone = document.getElementById("dropzone");
-
-        dropzone.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            e.returnValue = false;
-        }, false);
-
-        dropzone.addEventListener("drop", function(e) {
-            // Prevent execution bubble up to the body/window
-            e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-
-            // Access the file tracking data cleanly
-            var files = e.dataTransfer.files;
-            if (files && files.length > 0) {
-                var file = files[0];
-                dropzone.innerHTML = "Processing: " + file.name;
-                
-                // Trigger your Base64 FileReader or file workflow safely here!
-                console.log("File detected successfully without crash.");
-            }
-            return false;
-        }, false);
     </script>
+
 </body>
 </html>

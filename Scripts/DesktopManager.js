@@ -82,6 +82,7 @@ document.body.ondragover = window.ondragover = function(ev) {
  */
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
+  if (!indexedDB) return;
     if (wallpaperDB) onSuccess(wallpaperDB);
     
     var request = indexedDB.open('LVOSWallpaperDB', 1);
