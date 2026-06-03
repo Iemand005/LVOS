@@ -58,6 +58,7 @@
             var path = file.path || file.fileName || file.name;
             if (!path) return;
             var fileUrl = getFileUrl(path);
+            alert('File drop detected: ' + fileUrl);
             if (!handleDroppedFilePath(fileUrl)) {
                 dropPendingPath = fileUrl;
             }
@@ -102,6 +103,7 @@
 
     <script for="wb" event="BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel)">
         if (URL.indexOf("index.html") === -1) {
+            alert('BeforeNavigate2 drop detected: ' + URL);
             Cancel.value = true;
             try {
                 wb.Document.parentWindow.handleDroppedFilePath(URL);
