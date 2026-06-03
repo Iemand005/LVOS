@@ -1,5 +1,5 @@
 
-/** @typedef  "WebKitFS" {StorageAPI} */
+/** @typedef StorageAPI "WebKitFS"  */
 
 function probeAllStorage() {
   return {
