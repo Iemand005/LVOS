@@ -972,12 +972,14 @@ Dialog.prototype.injectMica = function() {
         }
 
         clip.appendChild(micaWallpaper);
+        this.target.classList.add("mica");
         this.move();
     } catch(ex) { console.warn(ex); }
 };
 
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
+    this.target.classList.remove("mica");
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
     while (clip.firstChild) clip.removeChild(clip.firstChild);
