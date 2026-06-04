@@ -248,13 +248,13 @@ article {
 }
 
 .window:not(.open) > content {
-    animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
+    /* animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards; */
 }
 
 .window:not(.open) {
     /*display: none; /* The display attribute is set to none by default */
     z-index: -1000;
-    transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm);
+    transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
     /*pointer-events: none !important;*/
 }
 
