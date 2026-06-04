@@ -71,7 +71,7 @@ main {
 .window header {
     margin: 0;
     /*display: flex;*/
-    pointer-events: none !important;
+    pointer-events: auto !important;
     justify-content: space-between;
     padding: 10px;
     /* border: inherit; */
