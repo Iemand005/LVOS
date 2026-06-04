@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        (function() {
+            function kill(e) {
+                if (window.event) {
+                    window.event.returnValue = false;
+                    window.event.cancelBubble = true;
+                }
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                return false;
+            }
+            window.ondragover = kill;
+            window.ondrop = function(e) {
+                kill(e);
+                // --- your drop logic ---
+                var files = e.dataTransfer ? e.dataTransfer.files : [];
+                if (files.length > 0) {
+                    alert("Dropped: " + files[0].name);
+                } else {
+                    var text = e.dataTransfer.getData("Text");
+                    if (text) alert("Text: " + text);
+                }
+                return false;
+            };
+            window.ondragstart = kill;
+        })();
+    </script>
+</head>
+<body>
+    <h2>Drop a file or text here</h2>
+</body>
+</html>
