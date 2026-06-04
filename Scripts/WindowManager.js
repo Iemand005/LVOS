@@ -529,7 +529,9 @@ Object.defineProperty(Dialog.prototype, "y", {
     return this._y * window.innerHeight;
   },
   set: function (y) {
-    if (typeof y == "number") this.move(this.x, y);
+    if (typeof y !== "number") return;
+    this.move(this.x, y);
+    if (y < 1) this.maximize();
   }
 });
 
