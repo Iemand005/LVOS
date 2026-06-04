@@ -22,7 +22,7 @@ var useBlur = false,
 	IE11Booster = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = true,
+	useTransform = false,
 	updateRateLimit = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.

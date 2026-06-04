@@ -243,14 +243,6 @@ article {
     pointer-events: auto;
 }
 
-.window.open > content {
-    /* animation: opening 500ms ease-out forwards; */
-}
-
-.window:not(.open) > content {
-    /* animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards; */
-}
-
 .window:not(.open) > content {
     /*display: none; /* The display attribute is set to none by default */
     z-index: -1000;
@@ -436,26 +428,6 @@ button:hover {
 
 .window:not([focus]) content > article > * {
     pointer-events: none !important;
-}
-
-/* Animation */
-
-@keyframes opening {
-    from {
-        opacity: 0;
-        transform: perspective(4cm) rotateX(5deg) translateZ(-2cm) translateY(-1cm);
-    }
-}
-
-@keyframes closing {
-    99% {
-        opacity: 0;
-        transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm);
-    }
-    100%{
-        opacity: 0;
-        display: none;
-    }
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
