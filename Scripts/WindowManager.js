@@ -811,6 +811,8 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 Dialog.prototype.invokeAnimation = function () {
+    var target = this.target;
+    if (!target) return;
     target.classList.add("animating");
     var animationHandler = function(event) {
         this.useTransform = useTransform;
@@ -821,7 +823,7 @@ Dialog.prototype.invokeAnimation = function () {
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-var target = this.target;
+    var target = this.target;
     if (!target) return;
     this.useTransform = false;
     this.invokeAnimation();
@@ -1234,8 +1236,8 @@ function windowActivationEvent(event, dialog) {
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
-    activeDialog.setClickOffset(event.clientX, event.clientY);
-    activeDialog.activate();
+    dialog.setClickOffset(event.clientX, event.clientY);
+    dialog.activate();
     return dialog;
 }
 
