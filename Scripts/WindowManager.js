@@ -382,9 +382,7 @@ Dialog.prototype.initWithObject = function(object) {
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
 
         var header = this.head;
-        if (header) header.addEventListener("dblclick", function(ev) {
-            self.toggleFullScreen();
-        })
+        if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this));
 
         if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
         else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
