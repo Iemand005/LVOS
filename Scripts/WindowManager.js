@@ -1299,7 +1299,10 @@ function handleWindowDrag(newX, hewY) {
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-    if (dialog.maximized) dialog.maximized = false;
+    if (dialog.maximized) {
+        dialog.maximized = false;
+        dialog.clickOffset.x /= window.innerWidth / dialog.width;
+    }
 }
 
 /**
