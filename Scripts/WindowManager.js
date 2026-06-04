@@ -682,8 +682,8 @@ Object.defineProperty(Dialog.prototype, "maximized", {
         if (!this.target)return;
         return this.target.classList.contains("fullscreen");
     },
-    set: function(title) {
-        this.toggleFullScreen(title);
+    set: function(maximized) {
+        this.toggleFullScreen(maximized);
     }
 });
 
@@ -869,14 +869,10 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 Dialog.prototype.toggleFullScreen = function (enable) {
     this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
         if (!this.useTransform) return;
-        if (enabled) {
-            this.target.style.minHeight = "100%";
-            this.target.style.minWidth = "100%";
-        } else {
-            this.target.style.minHeight = "";
-            this.target.style.minWidth = "";
-            // this.resize()
-        }
+        var style = ""
+        if (enabled) style = "100%";
+        this.target.style.minHeight = style;
+        this.target.style.minWidth = style;
     });
 };
 Dialog.prototype.maximize = function () {
