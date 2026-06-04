@@ -840,7 +840,7 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
  * 
  * @param {string} className 
  * @param {boolean} force 
- * @param {()=>void} animationEndTrigger 
+ * @param {str9jg} animationEndTrigger 
  * @param {()=>void} onEnd 
  * @param {(this:Dialog,enabled:boolean)=>void} onToggled 
  * @returns 
@@ -1338,8 +1338,7 @@ function disableDialogDrag() {
     windowManager.saveState();
     if (!activeDialog) return;
     
-    var mneedo = activeDialog.y <= 0;
-    if (mneedo)
+    if (activeDialog.y <= 0)
         activeDialog.maximize();
     
     if (!activeDialog.moveEvents) return;
