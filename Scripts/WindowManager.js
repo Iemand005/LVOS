@@ -292,6 +292,13 @@ function Dialog(object, create) {
 Dialog.prototype.initWithObject = function(object) {
     if (!object) return;
 
+    if (object instanceof Dialog) {
+        if (object.target) {
+            object.open();
+        }
+        else if (object.application) object = object.application;
+    }
+
     var dialog = this;
 
     if (object instanceof HTMLElement) {
@@ -950,7 +957,7 @@ Dialog.prototype.quit = function() {
 };
 
 Dialog.prototype.launch = function() {
-    if (!this.isOpen && this.application) this.initWithObject(this.application);
+    if (!this.isOpen && this.application) this.initWithObject(this);
     if (this.mica) this.injectMica();
 
     this.open();
