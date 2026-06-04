@@ -1067,11 +1067,7 @@ DocumentCrawler.prototype = {
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getDialogsContainer: function(){ return this.document.getElementById("windows") },
     getOverlay: function(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
-    get charms(){ return document.getElementById("charms"); },
-    get settings(){ return document.getElementById("settings"); },
-    get theme(){ return document.getElementById("theme"); },
-    get desktop(){ return document.getElementById("desktop"); },
-    get applist(){ return document.getElementById("applist"); },
+    getDesktop(){ return document.getElementById("desktop"); },
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
@@ -1157,9 +1153,9 @@ function activeDialogToMetro() {
  * @param {boolean} enable
  */
 function flip(enable){
-    if (!bodyCrawler.desktop) return;
-    bodyCrawler.desktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
-    flipHandler(bodyCrawler.desktop.classList.toggle("flipped", enable));
+    if (!bodyCrawler.getDesktop) return;
+    bodyCrawler.getDesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(bodyCrawler.getDesktop.classList.toggle("flipped", enable));
 }
 
 /**
