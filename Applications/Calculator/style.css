@@ -19,7 +19,7 @@ table, input {
 }
 
 table {
-  padding: 5px;
+  padding: 3px;
 }
 
 tbody, tr {
@@ -33,7 +33,7 @@ tbody {
 }
 
 td {
-  padding: 5px;
+  padding: 1px;
   width: 100%;
 }
 
