@@ -453,7 +453,13 @@ function scaleElement(element, width, height) {
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return Boolean(this.target && this.target.classList.contains("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
-    set: function(force) { if (this.target) this.target.classList.toggle("open", force), this.activate(); }
+    set: function(force) {
+        var target = this.target;
+        if (!target) return;
+        this.invokeAnimation();
+        this.target.classList.toggle("open", force);
+        this.activate();
+    }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
@@ -804,11 +810,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
-/** @param {boolean} [enable] */
-Dialog.prototype.toggleFullScreen = function (enable) {
-var target = this.target;
-    if (!target) return;
-    this.useTransform = false;
+Dialog.prototype.invokeAnimation = function () {
     target.classList.add("animating");
     var animationHandler = function(event) {
         this.useTransform = useTransform;
@@ -816,6 +818,13 @@ var target = this.target;
         target.removeEventListener("transitionend", animationHandler);
     };
     target.addEventListener("transitionend", animationHandler);
+}
+/** @param {boolean} [enable] */
+Dialog.prototype.toggleFullScreen = function (enable) {
+var target = this.target;
+    if (!target) return;
+    this.useTransform = false;
+    this.invokeAnimation();
     target.classList.toggle("fullscreen", enable);
 };
 Dialog.prototype.maximize = function () {
