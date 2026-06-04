@@ -30,9 +30,11 @@ body {
   z-index: 10000;
   overflow: hidden;
   transform-origin: top;
+  -webkit-transform-origin: top;
   border-radius: 5px;
   left: 50%; /* This method of centering the absolute element works for Internet Explorer 11 */
   transform: rotateX(45deg) translateX(-50%);
+  -webkit-transform: rotateX(45deg) translateX(-50%);
   background-color: lightgray;
   perspective: 300px;
   box-shadow: 0 0 10px black;
@@ -42,6 +44,8 @@ body {
 #reflection {
   transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
   transform-origin: top;
+  -webkit-transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
+  -webkit-transform-origin: top;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -397,6 +401,7 @@ aside#metroapplist > button {
   left: 50%;
   /*transform: rotateX(45deg) translateX(-50%);*/
   transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
   /*background-color: lightgray;*/
   /*perspective: 300px;*/
   /*box-shadow: 0 0 10px black;*/

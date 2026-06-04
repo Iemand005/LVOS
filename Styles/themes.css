@@ -68,13 +68,15 @@
     font-weight: 500;
 }
 
-.windows-11 .window header section {
+.windows-11 .window header section,
+.windows-11 .window header nav {
     border-radius: 0;
     background-color: unset;
 }
 
 .windows-11 .window header button,
 .windows-11 .window header section,
+.windows-11 .window header nav,
 .windows-11 .window header {
     height: 30px;
     box-sizing: border-box;
