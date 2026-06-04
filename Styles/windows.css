@@ -305,8 +305,13 @@ article {
     /* width: 100% !important;
     height: 100% !important; */
     border-radius: 0 !important;
+    border: none !important;
     transform: none !important;
     z-index: 9999 !important;
+}
+
+.window.fullscreen > content {
+    border: none !important;
 }
 
 .slow-animations * {
