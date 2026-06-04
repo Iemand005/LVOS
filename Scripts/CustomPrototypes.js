@@ -179,8 +179,11 @@ function find(callback) {
     for (var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
 }
 
-if(!Document.prototype.elementsFromPoint) Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint;
-
+if (typeof Document !== 'undefined' && Document.prototype && !Document.prototype.elementsFromPoint) {
+    Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint || function(x, y) {
+        return this.msElementsFromPoint ? this.msElementsFromPoint(x, y) : [];
+    };
+}
 
 if (!navigator.getUserMedia) navigator.getUserMedia = navigator.webkitGetUserMedia;
 
@@ -392,8 +395,10 @@ if (typeof Array.from !== "function") {
     // Als addEventListener al bestaat (IE9+, Safari 5, etc.), doen we niks
     if (window.addEventListener) return;
 
-    // Bepaal het juiste prototype (IE8 ondersteunt Window, Document en Element prototypes)
-    var targets = [Window.prototype, Document.prototype, Element.prototype];
+    // Bepaal het juiste prototypes (IE8 ondersteunt Window, Document en Element prototypes)
+    var targets = [Window.prototype];
+    if (typeof Document !== 'undefined') targets.push(Document.prototype);
+    if (typeof Element !== 'undefined') targets.push(Element.prototype);
     
     // Functie om de polyfill toe te passen
     function polyfill(target) {
