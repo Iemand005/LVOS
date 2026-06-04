@@ -10,18 +10,7 @@
 
 var applist = document.getElementById("applist");
 
-function addEvent(element, eventName, handler, useCapture) {
-    if (!element) return;
-    if (element.addEventListener) {
-        element.addEventListener(eventName, handler, useCapture || false);
-    } else if (element.attachEvent) {
-        element.attachEvent("on" + eventName, function() { handler.call(element, window.event); });
-    } else {
-        element["on" + eventName] = handler;
-    }
-}
-
-addEvent(applist, "submit", function(event){ if (event && typeof event.preventDefault === 'function') event.preventDefault(); });
+applist.addEventListener("submit", function(event){ event.preventDefault(); });
 
 var reflecitons = false;
 
@@ -38,7 +27,7 @@ function toggleReflections(force) {
     else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
 }
 
-addEvent(window, 'keydown', function(event) {
+window.addEventListener('keydown', function(event) {
   switch (event.key) {
     case "F11":
       event.preventDefault();
@@ -57,7 +46,7 @@ addEvent(window, 'keydown', function(event) {
 });
 
 if ('serviceWorker' in navigator) {
-  addEvent(window, 'load', function() {
+  window.addEventListener('load', function() {
     navigator.serviceWorker.register('./Scripts/sw.js')
       ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
       ["catch"](function(err) { console.error('Registratie mislukt:', err) });
@@ -332,18 +321,18 @@ window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
 if (document.readyState === 'loading') {
-    addEvent(document, 'DOMContentLoaded', loadWallpaperFromCache);
+    document.addEventListener('DOMContentLoaded', loadWallpaperFromCache);
 } else {
     loadWallpaperFromCache();
 }
 
-addEvent(window, 'keydown', function(event) {
+window.addEventListener('keydown', function(event) {
   if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.add('slow-animations');
   }
 });
 
-addEvent(window, 'keyup', function(event) {
+window.addEventListener('keyup', function(event) {
   if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.remove('slow-animations');
   }

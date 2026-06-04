@@ -386,3 +386,75 @@ if (typeof Array.from !== "function") {
   window.Promise = ES3Promise;
 })();
 
+
+
+(function() {
+    // Als addEventListener al bestaat (IE9+, Safari 5, etc.), doen we niks
+    if (window.addEventListener) return;
+
+    // Bepaal het juiste prototype (IE8 ondersteunt Window, Document en Element prototypes)
+    var targets = [Window.prototype, Document.prototype, Element.prototype];
+    
+    // Functie om de polyfill toe te passen
+    function polyfill(target) {
+        if (!target) return;
+
+        // Polyfill voor addEventListener
+        target.addEventListener = function(type, listener) {
+            var self = this;
+            
+            // attachEvent verwacht 'on' voor het event-type (bijv. 'onclick' in plaats van 'click')
+            var eventType = 'on' + type;
+
+            // IE8 verliest standaard de 'this' context in de listener.
+            // We maken een wrapper om te zorgen dat 'this' naar het element blijft wijzen.
+            if (!this._ieListeners) this._ieListeners = [];
+            
+            var wrappedListener = function(event) {
+                // IE8 gebruikt window.event in plaats van het doorgegeven event-argument
+                event = event || window.event;
+                
+                // Polyfill handige moderne event-eigenschappen die IE8 mist
+                if (!event.target) event.target = event.srcElement;
+                if (!event.preventDefault) {
+                    event.preventDefault = function() { event.returnValue = false; };
+                }
+                if (!event.stopPropagation) {
+                    event.stopPropagation = function() { event.cancelBubble = true; };
+                }
+                
+                // Voer de originele functie uit met de juiste 'this' context
+                listener.call(self, event);
+            };
+
+            // Sla de koppeling op zodat we deze later eventueel kunnen verwijderen
+            this._ieListeners.push({
+                original: listener,
+                wrapped: wrappedListener,
+                type: type
+            });
+
+            this.attachEvent(eventType, wrappedListener);
+        };
+
+        // Polyfill voor removeEventListener
+        target.removeEventListener = function(type, listener) {
+            var eventType = 'on' + type;
+            if (!this._ieListeners) return;
+
+            for (var i = 0; i < this._ieListeners.length; i++) {
+                var item = this._ieListeners[i];
+                if (item.original === listener && item.type === type) {
+                    this.detachEvent(eventType, item.wrapped);
+                    this._ieListeners.splice(i, 1);
+                    break;
+                }
+            }
+        };
+    }
+
+    // Pas de polyfill toe op Window, Document en alle HTML-elementen
+    for (var i = 0; i < targets.length; i++) {
+        polyfill(targets[i]);
+    }
+})();
