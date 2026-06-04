@@ -405,7 +405,7 @@ Dialog.prototype.initWithObject = function(object) {
             self.close();
         }.bind(self));
         buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
-        this.close();
+        // this.close();
     }
 
     if (this.id) windowManager.windows[this.id] = this;
@@ -453,12 +453,13 @@ function scaleElement(element, width, height) {
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return Boolean(this.target && this.target.classList.contains("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
-    set: function(force) {
+    set: function(open) {
         var target = this.target;
         if (!target) return;
         var self = this;
-        this.toggleClassAnimated("open", force, "opacity", function () {
-            self.kill();
+        var shouldKill = !open;
+        this.toggleClassAnimated("open", open, "opacity", function () {
+            if (shouldKill) self.kill();
         });
         this.activate();
     }
