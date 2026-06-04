@@ -575,12 +575,12 @@ Object.defineProperty(Dialog.prototype, "left", {
     set: function(left) {
         var difference  = this.x - left;
         if (difference + this.width < this.minWidth) {
-            this.left = this.right - this.minWidth;
+            left = this.right - this.minWidth;
             this.width = this.minWidth;
-        } else {
-            this.x = left;
-            this.width += difference;
         }
+        else this.width += difference;
+
+        this.x = left;
     }
 });
 
