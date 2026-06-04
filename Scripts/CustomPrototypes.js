@@ -91,6 +91,42 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.querySelectorAll(selector)[0];
 }
 
+if (typeof Document !== 'undefined' && !document.getElementsByClassName) {
+    document.getElementsByClassName = function(className) {
+        var results = [];
+        var all = document.getElementsByTagName('*');
+        var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+        for (var i = 0; i < all.length; i++) {
+            if (pattern.test(all[i].className)) results.push(all[i]);
+        }
+        return results;
+    };
+}
+
+if (typeof Document !== 'undefined' && Document.prototype && !Document.prototype.getElementsByClassName) {
+    Document.prototype.getElementsByClassName = function(className) {
+        var results = [];
+        var all = this.getElementsByTagName('*');
+        var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+        for (var i = 0; i < all.length; i++) {
+            if (pattern.test(all[i].className)) results.push(all[i]);
+        }
+        return results;
+    };
+}
+
+if (typeof Element !== 'undefined' && !Element.prototype.getElementsByClassName) {
+    Element.prototype.getElementsByClassName = function(className) {
+        var results = [];
+        var all = this.getElementsByTagName('*');
+        var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
+        for (var i = 0; i < all.length; i++) {
+            if (pattern.test(all[i].className)) results.push(all[i]);
+        }
+        return results;
+    };
+}
+
 // if (!document.body.getBoundingClientRect) document.body.getBoundingClientRect = function() {}
 
 // Function.prototype.bind =
