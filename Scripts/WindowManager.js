@@ -287,7 +287,7 @@ function Dialog(object, create) {
 }
 
 /**
- * @param {HTMLElement | Application} object
+ * @param {HTMLElement | Application | Dialog} object
  */
 Dialog.prototype.initWithObject = function(object) {
     if (!object) return;
@@ -849,7 +849,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    this.useTransform = false;
     this.toggleClassAnimated("fullscreen", enable);
 };
 Dialog.prototype.maximize = function () {
@@ -950,7 +949,6 @@ Dialog.prototype.openUrl = function(url) {
     if (!frame) return;
     frame.src = url;
     this._src = url;
-    // this.launch();
 };
 
 Dialog.prototype.quit = function() {
