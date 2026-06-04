@@ -137,11 +137,10 @@ main {
 }
 
 .window header button:active {
-    background-color: gray;
+    background-color: #ffffff2b;
 }
 
 .window header button:hover {
-    background-color: gray;
     background-color: #0000002b;
 }
 
