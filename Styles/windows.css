@@ -131,7 +131,6 @@ main {
     padding: 0;
     display: inline-block;
     vertical-align: top;
-    float: left;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
