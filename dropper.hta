@@ -12,6 +12,7 @@
         <param name="Scroll" value="no">
     </object>
 
+    <iframe src="./index.html" frameborder="0" class="fullscreen" application="yes"></iframe>
     <script defer>
         // function syncObjectSize() {
         //     if (!wb) return;
@@ -21,11 +22,6 @@
 
         window.onload = function() {
             wb.RegisterAsDropTarget = true;
-            wb.style.position = 'absolute';
-            wb.style.top = '0';
-            wb.style.left = '0';
-            wb.style.width = '100%';
-            wb.style.height = '100%';
 
             wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
             

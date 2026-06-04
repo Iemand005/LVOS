@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LVOS</title>
+    <hta:application id="oHTA" applicationname="LVOS" icon="explorer.exe" sysmenu="yes" caption="yes" windowstate="normal"></hta:application>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="./Styles/classes.css">
+</head>
+<body>  
+  <iframe src="./index.html" frameborder="0" class="fullscreen" application="yes"></iframe>
+  <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" type="text/html" class=".fullscreen">
+        <param name="RegisterAsBrowser" value="1">
+        <param name="RegisterAsDropTarget" value="1">
+        <param name="Scroll" value="no">
+    </object>
+
+    <script>
+        wb.RegisterAsDropTarget = true;
+
+        wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
+        
+        if (wb.attachEvent) {
+            wb.attachEvent('onbeforenavigate2', function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+                if (URL.indexOf("index.html") === -1) {
+                    wb.Document.parentWindow.handleDroppedFilePath(URL);
+                    if (Cancel != null) Cancel.value = true;
+                }
+            });
+        } else {
+            wb.BeforeNavigate2 = function(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+                if (URL.indexOf("index.html") === -1) {
+                    wb.Document.parentWindow.handleDroppedFilePath(URL);
+                    if (Cancel != null) Cancel.value = true;
+                }
+            };
+        }
+    </script>
+</body>
+</html>
