@@ -860,9 +860,16 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    this.toggleClassAnimated("fullscreen", enable);
-    this.target.style.minHeight = "100%";
-    this.target.style.minWidth = "100%";
+    var self = this;
+    this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
+        if (enabled) {
+            self.target.style.minHeight = "100%";
+            self.target.style.minWidth = "100%";
+        } else {
+            self.resize()
+        }
+    });
+    
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
