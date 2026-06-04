@@ -2,65 +2,13 @@
 <html lang="en">
 <head>
   <title>LVOS</title>
-  <hta:application 
-  id="oHTA"
-  applicationname="LVOS"
-  icon="explorer.exe"
-  sysmenu="yes"
-  caption="yes"
-  windowstate="normal"
-  ></hta:application>
+  <hta:application id="oHTA" applicationname="LVOS" icon="explorer.exe" sysmenu="yes" caption="yes" windowstate="normal"></hta:application>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <link rel="stylesheet" href="./Styles/classes.css">
-
-  
 </head>
-<body>
-    <div id="dropzone">Drop your file directly here</div>
-
-    <script>
-        // 1. Kill everything globally via Javascript for double insurance
-        var killEvent = function(e) {
-            e = e || window.event;
-            if (e.preventDefault) e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-            return false;
-        };
-
-        window.addEventListener("dragenter", killEvent, false);
-        window.addEventListener("dragover", killEvent, false);
-        window.addEventListener("drop", killEvent, false);
-        document.addEventListener("drop", killEvent, false);
-
-        // 2. Safely capture the file inside the specific dropzone div element
-        var dropzone = document.getElementById("dropzone");
-
-        dropzone.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            e.returnValue = false;
-        }, false);
-
-        dropzone.addEventListener("drop", function(e) {
-            // Prevent execution bubble up to the body/window
-            e.preventDefault();
-            if (e.stopPropagation) e.stopPropagation();
-            e.returnValue = false;
-
-            // Access the file tracking data cleanly
-            var files = e.dataTransfer.files;
-            if (files && files.length > 0) {
-                var file = files[0];
-                dropzone.innerHTML = "Processing: " + file.name;
-                
-                // Trigger your Base64 FileReader or file workflow safely here!
-                console.log("File detected successfully without crash.");
-            }
-            return false;
-        }, false);
-    </script>
+<body>  
   <iframe src="./index.html" frameborder="0" class="fullscreen" application="yes"></iframe>
 </body>
 </html>
