@@ -831,12 +831,13 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (onEnd) onEnd();
     };
     target.addEventListener(transitionEndEvent, animationHandler);
-    // Toggle the class in the next frame and force layout so transitions trigger
-    if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
-        window.requestAnimationFrame(function() {
-            try { void target.offsetWidth; } catch (e) {}
-            target.classList.toggle(className, force);
-        });
+
+    var toggleHandler = function() {
+        try { void target.offsetWidth; } catch (e) {}
+        target.classList.toggle(className, force);
+    };
+    if (typeof window.requestAnimationFrame === "function") {
+        window.requestAnimationFrame(toggleHandler);
     } else {
         try { void target.offsetWidth; } catch (e) {}
         target.classList.toggle(className, force);
