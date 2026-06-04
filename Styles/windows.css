@@ -468,6 +468,16 @@ button:hover {
         background: linear-gradient(0deg, #b2b2b2, #73737329);
         backdrop-filter: blur(10px);
     }
+
+    @media (prefers-color-scheme: dark) {
+        body.blur .window > content {
+            background-color: rgba(0, 0, 0, 0.267);
+            -webkit-backdrop-filter: saturate(150%) blur(20px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
+            backdrop-filter: saturate(150%) blur(20px) !important;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.267);
+        }
+    }
 }
 
 @media (prefers-color-scheme: dark) {
