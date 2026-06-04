@@ -32,12 +32,36 @@
     window.ondragover  = function(e) { e.returnValue = false; return false; };
     window.ondrop      = function(e) { e.returnValue = false; return false; };
     window.ondragstart = function(e) { e.returnValue = false; return false; };
+    function setupIframeDrag() {
+    const overlay = document.getElementById('dragOverlay');
+    
+    function killEvent(e) {
+        e.returnValue = false;   // IE / HTA
+        e.cancelBubble = true;
+        if (e.preventDefault) e.preventDefault();
+        return false;
+    }
+    
+    overlay.ondragenter = killEvent;
+    overlay.ondragover  = killEvent;
+    overlay.ondrop      = killEvent;
+    overlay.ondragstart = killEvent;
+    
+    // Optional: hide the overlay while still blocking drag?
+    // No need – it's transparent.
+}
 </script>
 </head>
 <body>  
-<iframe id="myFrame" src="./activetest.html" frameborder="0" class="fullscreen"
-        onload="setupIframeDrag()"></iframe>
-
+<div style="position: relative; width: 100%; height: 100%;">
+    <iframe id="myFrame" src="./index.html" frameborder="0"
+            style="width: 100%; height: 100%;" 
+            onload="setupIframeDrag()"></iframe>
+    <!-- Transparent drag‑blocking overlay -->
+    <div id="dragOverlay"
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                background: transparent; z-index: 9999;"></div>
+</div>
 <script>
 function preventDragAndDrop(event) {
     event.returnValue = false;   // IE / HTA
