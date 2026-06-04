@@ -572,7 +572,7 @@ Object.defineProperty(Dialog.prototype, "rightFromLeft", {
 
 Object.defineProperty(Dialog.prototype, "right", {
     get: function() { return window.innerWidth - this.rightFromLeft; },
-    set: function(right) { this.width = right - this.x; }
+    set: function(right) { this.width = (window.innerWidth - right) - this.x; }
 });
 
 Object.defineProperty(Dialog.prototype, "bottomFromTop", {
