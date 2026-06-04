@@ -188,6 +188,12 @@ main {
     background:     linear-gradient(0deg, #0000002b, #ffffff00);
     box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.4);
     transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .window[focus] > content {

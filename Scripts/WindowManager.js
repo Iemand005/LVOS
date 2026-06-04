@@ -765,7 +765,7 @@ var target = this.target;
     target.classList.add("animating", enable);
     var animationHandler = function(event) {
         target.classList.remove('animating');
-        target.removeEventListener(animationHandler);
+        target.removeEventListener('transitionend', animationHandler);
     };
     target.addEventListener('transitionend', animationHandler);
     target.classList.toggle("fullscreen", enable);
