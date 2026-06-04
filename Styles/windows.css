@@ -97,6 +97,10 @@ main {
     transition: all 170ms ease-out;
 }
 
+.window > content {
+    transition: background-color 170ms ease-out;
+}
+
 .window header section,
 .window header nav {
     border-top-right-radius: inherit;
@@ -471,7 +475,7 @@ button:hover {
 
     @media (prefers-color-scheme: dark) {
         body.blur .window > content {
-            background-color: rgba(0, 0, 0, 0.267);
+            background-color: rgba(0, 0, 0, 0.468);
             -webkit-backdrop-filter: saturate(150%) blur(20px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
             backdrop-filter: saturate(150%) blur(20px) !important;
             padding: 0;
