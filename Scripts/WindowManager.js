@@ -1336,10 +1336,13 @@ function disableDialogDrag() {
     dragAction.set();
     windowManager.toggleDragging(false);
     windowManager.saveState();
-    if (!(activeDialog && activeDialog.moveEvents)) return;
-
-    if (activeDialog.y < 0) activeDialog.maximize();
+    if (!activeDialog) return;
     
+    if (activeDialog.y < 0)
+        activeDialog.maximize();
+    
+    if (!activeDialog.moveEvents) return;
+
     var func = activeDialog.exchangeDialogMouseUpEvent;
     if (func) func();
 }
