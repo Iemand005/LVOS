@@ -456,7 +456,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) {
         var target = this.target;
         if (!target) return;
-        this.toggleClassAnimated("open", force);
+        this.toggleClassAnimated("open", force, "opacity");
         this.activate();
     }
 });
@@ -815,7 +815,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     if (!target) return;
     target.classList.add("animating");
     var animationHandler = function(/** @type {TransitionEvent} */event) {
-        if (event.propertyName !== animationEndTrigger) return;
+        if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
         this.useTransform = useTransform;
         target.classList.remove("animating");
         target.removeEventListener(transitionEndEvent, animationHandler);
