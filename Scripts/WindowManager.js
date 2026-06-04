@@ -622,18 +622,18 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
         this._useTransform = useTransform;
         
         if (useTransform) {
-            this.target.style.top = toPixels(this.top);
-            this.target.style.left = toPixels(this.left);
-            this.target.style.right = toPixels(this.right);
-            this.target.style.bottom = toPixels(this.bottom);
+            this.target.style.top = "0px";
+            this.target.style.left = "0px";
+            this.target.style.right = null;
+            this.target.style.bottom = null;
         } else {
+            this.target.style.width = null;
+            this.target.style.height = null;
             this.target.style.transform = null;
             this.target.style.top = toPixels(this.top);
             this.target.style.left = toPixels(this.left);
             this.target.style.right = toPixels(this.right);
             this.target.style.bottom = toPixels(this.bottom);
-            this.target.style.width = null;
-            this.target.style.height = null;
         }
 
         this.update();
@@ -978,16 +978,6 @@ Dialog.prototype.removeMica = function() {
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
     while (clip.firstChild) clip.removeChild(clip.firstChild);
-};
-
-Dialog.prototype.swapPositioning = function () {
-    this.target.style.transform = null;
-    this.target.style.top = toPixels(this.top);
-    this.target.style.left = toPixels(this.left);
-    this.target.style.right = toPixels(this.right);
-    this.target.style.bottom = toPixels(this.bottom);
-    this.target.style.width = null;
-    this.target.style.height = null;
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
