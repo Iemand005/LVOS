@@ -275,28 +275,40 @@ article {
 
 .window > content > article { 
     width: 100%;
-    height: 100%;
     min-height: 0;
     -webkit-box-flex: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
     -ms-flex: 1 1 auto;
-    flex: 1;
+    flex: 1 1 auto;
+    -ms-flex-align: stretch;
+    align-items: stretch;
     overflow: auto;
     box-sizing: border-box;
     pointer-events: auto;
-    display: flex;
     z-index: 1;
     transition: inherit;
     /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
 }
 
-.window > content > article * {
-    display: -webkit-box;
+.window > content > article > * {
+    width: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.window > content > article > iframe {
+    display: block;
+    width: 100%;
+    min-height: 0;
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
+    flex: 1 1 auto;
 }
 
 .window > content > article > *, .window > content > article > iframe {
