@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTA Drop Forwarding</title>
+    <title>HTA Drop Fix – No White Screen</title>
     <HTA:APPLICATION ID="app" APPLICATIONNAME="DropTest" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* optional, reduces accidental drag of content */
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #333;
+        }
         #container {
             position: relative;
             width: 100%;
@@ -18,99 +28,208 @@
             width: 100%;
             height: 100%;
             border: none;
+            background: white;
         }
-        #dropOverlay {
+        /* Overlay – must be solid enough to block mouse events */
+        #blocker {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.001); /* almost transparent, but interactive */
             z-index: 9999;
+            /* Ensure it captures all events */
+            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 <div id="container">
-    <iframe id="myFrame" src="index2.html"></iframe>
-    <div id="dropOverlay"></div>
+    <iframe id="myFrame" src="about:blank"></iframe>
+    <div id="blocker"></div>
 </div>
 
 <script>
-    var overlay = document.getElementById('dropOverlay');
+    // 1. Create the iframe content dynamically (so no external file needed)
     var iframe = document.getElementById('myFrame');
+    var iframeDoc = iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial;
+                    padding: 20px;
+                    background: #f5f5f5;
+                    transition: background 0.2s;
+                }
+                .dropzone {
+                    border: 3px dashed #aaa;
+                    border-radius: 12px;
+                    padding: 40px;
+                    text-align: center;
+                    background: white;
+                    transition: all 0.2s;
+                }
+                .dropzone.drag-over {
+                    border-color: #0078d7;
+                    background: #e5f0ff;
+                    transform: scale(1.01);
+                }
+                #output {
+                    margin-top: 20px;
+                    padding: 10px;
+                    background: white;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    font-family: monospace;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="dropzone" id="dropzone">
+                <h2>✨ Drop files or text here</h2>
+                <p>Drag from desktop, Explorer, or any text</p>
+            </div>
+            <div id="output">Waiting for drop...</div>
+            <script>
+                var dropzone = document.getElementById('dropzone');
+                var output = document.getElementById('output');
 
-    // When the iframe is ready, we can send it the dropped data
-    function forwardDropToIframe(dropData) {
-        // Method 1: postMessage (safe, works cross‑origin but same origin here)
-        iframe.contentWindow.postMessage({
-            type: 'drop',
-            files: dropData.files,      // FileList or array of file objects
-            text: dropData.text,
-            html: dropData.html
-        }, '*');
+                // Listen for forwarded drops from parent
+                window.addEventListener('message', function(e) {
+                    var data = e.data;
+                    if (data && data.type === 'drop') {
+                        handleDrop(data);
+                    } else if (data && data.type === 'dragenter') {
+                        dropzone.classList.add('drag-over');
+                    } else if (data && data.type === 'dragleave') {
+                        dropzone.classList.remove('drag-over');
+                    }
+                });
 
-        // Method 2: Direct function call (if same origin, simpler)
-        // try {
-        //     iframe.contentWindow.handleExternalDrop(dropData);
-        // } catch(e) { console.log(e); }
-    }
+                function handleDrop(data) {
+                    dropzone.classList.remove('drag-over');
+                    output.innerHTML = '';
 
-    // Collect drop data from native event
-    function captureDrop(event) {
-        // Prevent default navigation (this is the key – overlay prevents it)
+                    // Files
+                    if (data.files && data.files.length > 0) {
+                        output.innerHTML += '<strong>📁 Dropped files:</strong><ul>';
+                        for (var i = 0; i < data.files.length; i++) {
+                            var f = data.files[i];
+                            output.innerHTML += '<li>' + f.name + ' (' + (f.size || '?') + ' bytes)</li>';
+                            // Read first file as text (optional)
+                            var reader = new FileReader();
+                            reader.onload = (function(fileName) {
+                                return function(ev) {
+                                    output.innerHTML += '<div><strong>Content of ' + fileName + ':</strong><pre>' + ev.target.result + '</pre></div>';
+                                };
+                            })(f.name);
+                            reader.readAsText(f, 'UTF-8');
+                        }
+                        output.innerHTML += '</ul>';
+                    }
+
+                    // Plain text
+                    if (data.text) {
+                        output.innerHTML += '<strong>📝 Plain text:</strong><pre>' + data.text + '</pre>';
+                    }
+
+                    // HTML (if no text)
+                    if (data.html && !data.text) {
+                        output.innerHTML += '<strong>🌐 HTML:</strong><pre>' + data.html.replace(/</g, '&lt;') + '</pre>';
+                    }
+
+                    if (!data.files.length && !data.text && !data.html) {
+                        output.innerHTML = 'No data received.';
+                    }
+                }
+
+                // Tell parent we are ready
+                window.parent.postMessage({ type: 'ready' }, '*');
+            <\/script>
+        </body>
+        </html>
+    `);
+    iframeDoc.close();
+
+    // 2. Set up the overlay to capture all drag/drop events
+    var blocker = document.getElementById('blocker');
+
+    function killEvent(e) {
+        // Standard methods
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+        // IE/HTA specific
         if (window.event) {
             window.event.returnValue = false;
             window.event.cancelBubble = true;
         }
-        if (event.preventDefault) event.preventDefault();
-        if (event.stopPropagation) event.stopPropagation();
+        return false;
+    }
+
+    // Block every drag-related event on the overlay
+    blocker.ondragenter = killEvent;
+    blocker.ondragover  = killEvent;
+    blocker.ondragleave = killEvent;
+    blocker.ondragstart = killEvent;
+    blocker.ondrop      = function(e) {
+        killEvent(e);
 
         // Extract drop data
-        var data = {
+        var dropData = {
             files: [],
             text: '',
             html: ''
         };
 
         // Files
-        if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-            data.files = Array.from(event.dataTransfer.files); // convert to array for postMessage
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            // Convert FileList to array for postMessage
+            dropData.files = Array.prototype.slice.call(e.dataTransfer.files);
         }
 
-        // Plain text
-        if (event.dataTransfer && event.dataTransfer.getData) {
-            var plainText = event.dataTransfer.getData('Text');
-            if (plainText) data.text = plainText;
-            var htmlText = event.dataTransfer.getData('HTML');
-            if (htmlText) data.html = htmlText;
+        // Text and HTML
+        if (e.dataTransfer && e.dataTransfer.getData) {
+            var plain = e.dataTransfer.getData('Text');
+            if (plain) dropData.text = plain;
+            var html = e.dataTransfer.getData('HTML');
+            if (html) dropData.html = html;
         }
 
         // Forward to iframe
-        forwardDropToIframe(data);
+        iframe.contentWindow.postMessage({
+            type: 'drop',
+            files: dropData.files,
+            text: dropData.text,
+            html: dropData.html
+        }, '*');
 
         return false;
-    }
+    };
 
-    // Block all drag events on overlay
-    function blockDrag(event) {
-        if (window.event) {
-            window.event.returnValue = false;
-            window.event.cancelBubble = true;
-        }
-        if (event.preventDefault) event.preventDefault();
-        if (event.stopPropagation) event.stopPropagation();
+    // 3. (Optional) Send dragenter/dragleave to iframe for visual feedback
+    blocker.ondragenter = function(e) {
+        killEvent(e);
+        iframe.contentWindow.postMessage({ type: 'dragenter' }, '*');
         return false;
-    }
+    };
+    blocker.ondragleave = function(e) {
+        killEvent(e);
+        iframe.contentWindow.postMessage({ type: 'dragleave' }, '*');
+        return false;
+    };
+    // Override dragover again (already set, but ensure it's there)
+    blocker.ondragover = killEvent;
 
-    overlay.ondragenter = blockDrag;
-    overlay.ondragover  = blockDrag;
-    overlay.ondragstart = blockDrag;
-    overlay.ondrop      = captureDrop;
-
-    // Optional: Also block parent window drops (just in case)
-    window.ondragover = blockDrag;
-    window.ondrop = blockDrag;
+    // 4. Also prevent drops on the parent window (belt and suspenders)
+    window.ondragover = killEvent;
+    window.ondrop = killEvent;
 </script>
 </body>
 </html>
