@@ -294,7 +294,8 @@ article {
 }
 
 .window.animating,
-.window.animating > content {
+.window.animating > content,
+.window.animating > .backdrop-clip * {
     transition: all 400ms cubic-bezier(.86,0,.07,1);
 }
 
@@ -313,6 +314,10 @@ article {
 
 .window.fullscreen > content {
     border: 0px solid transparent !important;
+}
+
+.window.fullscreen  > .backdrop-clip * {
+    transform: none !important;
 }
 
 .slow-animations * {

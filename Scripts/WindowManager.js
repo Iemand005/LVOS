@@ -850,19 +850,15 @@ Dialog.prototype.move = function (x, y) {
   var windowHeight = window.innerHeight;
   (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
   if (!this.target) return;
-  if (this.useTransform) {
-    // this.target.style.left = "0px";
-    // this.target.style.top = "0px";
-    translateElement(this.target, this.x, this.y);
-  } else {
-    // this.target.style.transform = "none";
+  if (this.useTransform) translateElement(this.target, this.x, this.y);
+  else {
     this.target.style.left = toPixels(this.left);
     this.target.style.top = toPixels(this.top);
     this.target.style.right = toPixels(this.right);
     this.target.style.bottom = toPixels(this.bottom);
   }
 
-  if (this.mica && this.useTransform) try {
+  if (this.mica) try {
     var backdrop =
       this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
     var wallpaperP = document.getElementById("wallpaper");
