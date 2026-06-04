@@ -838,6 +838,15 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
+/**
+ * 
+ * @param {string} className 
+ * @param {boolean} force 
+ * @param {()=>void | null} animationEndTrigger 
+ * @param {()=>void} onEnd 
+ * @param {(enabled:boolean)=>void} onToggled 
+ * @returns 
+ */
 Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd, onToggled) {
     var target = this.target;
     if (!target) return;
@@ -855,7 +864,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
         var enabled = target.classList.toggle(className, force);
-        if (onToggled) onToggled(enabled);
+        if (onToggled) onToggled.call(enabled);
     });
 }
 /** @param {boolean} [enable] */
@@ -871,7 +880,6 @@ Dialog.prototype.toggleFullScreen = function (enable) {
             self.resize()
         }
     });
-    
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);

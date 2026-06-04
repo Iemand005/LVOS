@@ -311,9 +311,9 @@ article {
     /* top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
-    right: 0 !important;
+    right: 0 !important;*/
+    border: none !important;
     border-radius: 0 !important;
-    border: none !important; */
     transform: translate(0px, 0px) !important;
     z-index: 9999 !important;
 }
@@ -321,8 +321,6 @@ article {
 .use-transform .window.fullscreen {
     width: 100% !important;
     height: 100% !important;
-    max-height: 1000px;
-    max-height: 1000px;
 }
 
 .window.fullscreen > content {
