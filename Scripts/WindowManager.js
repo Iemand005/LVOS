@@ -753,10 +753,11 @@ Dialog.prototype.toggleFullScreen = function (enable) {
 var target = this.target;
     if (!target) return;
     target.classList.add("animating", enable);
-    var listener = function(event) {
+    var animationHandler = function(event) {
         target.classList.remove('animating');
+        target.removeEventListener(animationHandler);
     };
-    target.addEventListener('transitionend', listener);
+    target.addEventListener('transitionend', animationHandler);
     target.classList.toggle("fullscreen", enable);
 };
 Dialog.prototype.maximize = function () {
