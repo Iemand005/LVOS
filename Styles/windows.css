@@ -318,12 +318,12 @@ article {
     z-index: 9999 !important;
 }
 
-.use-transform .window.fullscreen {
+/* .use-transform .window.fullscreen {
     width: 100% !important;
     height: 100% !important;
     max-height: 1000px;
     max-height: 1000px;
-}
+} */
 
 .window.fullscreen > content {
     border: 0px solid transparent !important;
