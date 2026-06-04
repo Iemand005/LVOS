@@ -227,11 +227,10 @@ ClickOffset.prototype.clear = function () {
 }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
 /**
- * Creates an instance of a Dialog that allows the Dialog be resized and moved around.
+ * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  * @param {boolean} [create]
- * @property {number} xe
  */
 function Dialog(object, create) {
     
