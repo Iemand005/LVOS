@@ -456,8 +456,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) {
         var target = this.target;
         if (!target) return;
-        this.toggleClassAnimated();
-        this.target.classList.toggle("open", force);
+        this.toggleClassAnimated("open", force);
         this.activate();
     }
 });
@@ -810,6 +809,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
+var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 Dialog.prototype.toggleClassAnimated = function (className, force) {
     var target = this.target;
     if (!target) return;
@@ -817,10 +817,10 @@ Dialog.prototype.toggleClassAnimated = function (className, force) {
     var animationHandler = function(event) {
         this.useTransform = useTransform;
         target.classList.remove("animating");
-        target.removeEventListener("transitionend", animationHandler);
+        target.removeEventListener(transitionEndEvent, animationHandler);
     };
     target.classList.toggle(className, force);
-    target.addEventListener("transitionend", animationHandler);
+    target.addEventListener(transitionEndEvent, animationHandler);
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
