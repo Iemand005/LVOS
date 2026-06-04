@@ -368,10 +368,10 @@ Dialog.prototype.initWithObject = function(object) {
             }
         }
 
-        target.addEventListener("animationend", function (ev) {
-            if (ev.animationName == "closing")
-                dialog.kill.apply(dialog);
-        }, false);
+        // target.addEventListener("animationend", function (ev) {
+        //     if (ev.animationName == "closing")
+        //         dialog.kill.apply(dialog);
+        // }, false);
         target.addEventListener("dragstart", cancelDomEvent, false);
         target.addEventListener("selectstart", cancelDomEvent, false);
 
@@ -456,7 +456,10 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) {
         var target = this.target;
         if (!target) return;
-        this.toggleClassAnimated("open", force, "opacity");
+        var self = this;
+        this.toggleClassAnimated("open", force, "opacity", function () {
+            self.kill();
+        });
         this.activate();
     }
 });
@@ -810,7 +813,7 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
-Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger) {
+Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd) {
     var target = this.target;
     if (!target) return;
     target.classList.add("animating");
@@ -819,6 +822,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         this.useTransform = useTransform;
         target.classList.remove("animating");
         target.removeEventListener(transitionEndEvent, animationHandler);
+        if (onEnd) onEnd();
     };
     target.classList.toggle(className, force);
     target.addEventListener(transitionEndEvent, animationHandler);
