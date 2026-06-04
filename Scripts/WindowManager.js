@@ -466,9 +466,10 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
-    if (this.toggleClassAnimated("open", forceOpen, "opacity", function () {
+    this.toggleClassAnimated("open", forceOpen, "opacity", function (enabled) {
         if (shouldKill) self.kill();
-    })) this.activate();
+        if (enabled) self.activate();
+    });
 }
 /**
  * @param {boolean} [create]
@@ -817,7 +818,7 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
-Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd) {
+Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd, onToggled) {
     var target = this.target;
     if (!target) return;
     var dialog = this;
@@ -831,14 +832,11 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler);
 
-    var hasClass = !target.classList.contains(className);
-
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
-        target.classList.toggle(className, force);
+        var enabled = target.classList.toggle(className, force);
+        if (onToggled) onToggled(enabled);
     });
-
-    return hasClass;
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
