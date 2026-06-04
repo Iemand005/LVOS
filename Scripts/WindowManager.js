@@ -831,8 +831,16 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (onEnd) onEnd();
     };
     target.addEventListener(transitionEndEvent, animationHandler);
-    // toggle the class after listener is attached so we don't miss the transitionend
-    target.classList.toggle(className, force);
+    // Toggle the class in the next frame and force layout so transitions trigger
+    if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+        window.requestAnimationFrame(function() {
+            try { void target.offsetWidth; } catch (e) {}
+            target.classList.toggle(className, force);
+        });
+    } else {
+        try { void target.offsetWidth; } catch (e) {}
+        target.classList.toggle(className, force);
+    }
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
