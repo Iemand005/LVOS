@@ -456,7 +456,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(force) {
         var target = this.target;
         if (!target) return;
-        this.invokeAnimation();
+        this.toggleClassAnimated();
         this.target.classList.toggle("open", force);
         this.activate();
     }
@@ -810,7 +810,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
-Dialog.prototype.invokeAnimation = function () {
+Dialog.prototype.toggleClassAnimated = function (className, force) {
     var target = this.target;
     if (!target) return;
     target.classList.add("animating");
@@ -819,15 +819,13 @@ Dialog.prototype.invokeAnimation = function () {
         target.classList.remove("animating");
         target.removeEventListener("transitionend", animationHandler);
     };
+    target.classList.toggle(className, force);
     target.addEventListener("transitionend", animationHandler);
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    var target = this.target;
-    if (!target) return;
     this.useTransform = false;
-    this.invokeAnimation();
-    target.classList.toggle("fullscreen", enable);
+    this.toggleClassAnimated("fullscreen", enable);
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
