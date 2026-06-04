@@ -91,10 +91,10 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.querySelectorAll(selector)[0];
 }
 
-if (typeof Document !== 'undefined' && !document.getElementsByClassName) {
+if (typeof document !== 'undefined' && !document.getElementsByClassName) {
     document.getElementsByClassName = function(className) {
         var results = [];
-        var all = document.getElementsByTagName('*');
+        var all = this.getElementsByTagName('*');
         var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
         for (var i = 0; i < all.length; i++) {
             if (pattern.test(all[i].className)) results.push(all[i]);
