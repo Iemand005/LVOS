@@ -466,10 +466,9 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
-    this.toggleClassAnimated("open", forceOpen, "opacity", function () {
+    if (this.toggleClassAnimated("open", forceOpen, "opacity", function () {
         if (shouldKill) self.kill();
-    });
-    this.activate();
+    })) this.activate();
 }
 /**
  * @param {boolean} [create]
