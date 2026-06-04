@@ -919,7 +919,7 @@ Dialog.prototype.move = function (x, y) {
 
     if (y < 0 && this.maximized) this.maximize();
 
-  if (this.mica) try {
+    if (this.mica) try {
         var backdrop =
         this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
         var wallpaperP = document.getElementById("wallpaper");
