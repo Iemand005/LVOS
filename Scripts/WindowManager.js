@@ -917,7 +917,7 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.bottom = toPixels(this.bottom);
     }
 
-    if (y === 0) this.maximize();
+    if (y < 0) this.maximize();
 
   if (this.mica) try {
         var backdrop =
