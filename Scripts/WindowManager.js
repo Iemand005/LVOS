@@ -27,7 +27,10 @@ var useBlur = false,
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
-if (isIE) useTransform = true;
+if (isIE) {
+    useTransform = true;
+    document.body.classList.add("use-transform");
+}
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer = Boolean(
@@ -858,6 +861,10 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
     this.toggleClassAnimated("fullscreen", enable);
+    if (enable) {
+        this.target.style.width = '100%';
+        this.target.style.height = '100%';
+    }
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
