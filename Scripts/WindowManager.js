@@ -245,6 +245,8 @@ function Dialog(object, create) {
     this.minWidth = 200;
     this.minHeight = 200;
     this._mica = useMica;
+
+    this._useTransform = useTransform;
     
     if (!object) return;
     if (!create) create = false;
@@ -527,14 +529,31 @@ Object.defineProperty(Dialog.prototype, "width", {
     set: function(width) {
         if (typeof width !== "number" || !this.target) return;
 
-        this.target.style.width = toPixels(this._width = max(width, this.minWidth));
+        this._width = max(width, this.minWidth);
+        if (this.useTransform) {
+            this.target.style.width = toPixels(this._width);
+        } else {
+            this.target.style.right = toPixels(this.right);
+        }
+
         this._isMinWidth = this._width === this.minWidth;
     }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
     get: function() { return this._height; },
-    set: function(height) { if (typeof height == "number" && this.target) this.target.style.height = toPixels(this._height = max(height, this.minHeight)); this._isMinHeight = this._height === this.minHeight }
+    set: function(height) {
+        if (typeof height !== "number" || !this.target) return;
+
+        this._height = max(height, this.minHeight)
+        if (this.useTransform) {
+            this.target.style.height = toPixels(this._height);
+        } else {
+            this.target.style.bottom = toPixels(this.bottom);
+        }
+
+        this._isMinHeight = this._height === this.minHeight
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "top", {
@@ -586,14 +605,39 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", {
-  get: function () {
-    return this._isMinWidth;
-  }
+    get: function () {
+        return this._isMinWidth;
+    }
 });
+
 Object.defineProperty(Dialog.prototype, "isMinHeight", {
-  get: function () {
-    return this._isMinHeight;
-  }
+    get: function () {
+        return this._isMinHeight;
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "useTransform", {
+    get: function () {return this._useTransform; },
+    set: function(useTransform) {
+        this._useTransform = useTransform;
+        
+        if (useTransform) {
+            this.target.style.top = toPixels(this.top);
+            this.target.style.left = toPixels(this.left);
+            this.target.style.right = toPixels(this.right);
+            this.target.style.bottom = toPixels(this.bottom);
+        } else {
+            this.target.style.transform = null;
+            this.target.style.top = toPixels(this.top);
+            this.target.style.left = toPixels(this.left);
+            this.target.style.right = toPixels(this.right);
+            this.target.style.bottom = toPixels(this.bottom);
+            this.target.style.width = null;
+            this.target.style.height = null;
+        }
+
+        this.update();
+    }
 });
 
 Object.defineProperty(Dialog.prototype, "title", {
@@ -804,17 +848,17 @@ Dialog.prototype.move = function (x, y) {
   var windowHeight = window.innerHeight;
   (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
   if (!this.target) return;
-  if (useTransform) {
-    this.target.style.left = "0px";
-    this.target.style.top = "0px";
+  if (this.useTransform) {
+    // this.target.style.left = "0px";
+    // this.target.style.top = "0px";
     translateElement(this.target, this.x, this.y);
   } else {
-    this.target.style.transform = "none";
-    this.target.style.left = toPixels(this.x);
-    this.target.style.top = toPixels(this.y);
+    // this.target.style.transform = "none";
+    this.target.style.left = toPixels(this.left);
+    this.target.style.top = toPixels(this.top);
   }
 
-  if (this.mica && useTransform) try {
+  if (this.mica && this.useTransform) try {
     var backdrop =
       this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
     var wallpaperP = document.getElementById("wallpaper");
@@ -841,10 +885,11 @@ Dialog.prototype.move = function (x, y) {
  * @param {number} [height]
  */
 Dialog.prototype.resize = function (width, height) {
-  if (this.body)
-    (this.body.style.boxSizing = "border-box"),
-      (this.width = width || this.width),
-      (this.height = height || this.height);
+  if (this.body) {
+        this.body.style.boxSizing = "border-box";
+        this.width = width || this.width;
+        this.height = height || this.height;
+  }
 };
 /**
  * @param {number} width
@@ -894,7 +939,7 @@ function getWallpaper() {
 
 Dialog.prototype.injectMica = function() {
     try {
-        if (!useTransform) return;
+        if (!this.useTransform) return;
         if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
