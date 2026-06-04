@@ -1338,7 +1338,8 @@ function disableDialogDrag() {
     windowManager.saveState();
     if (!activeDialog) return;
     
-    if (activeDialog.y < 0)
+    var mneedo = activeDialog.y <= 0;
+    if (mneedo)
         activeDialog.maximize();
     
     if (!activeDialog.moveEvents) return;
