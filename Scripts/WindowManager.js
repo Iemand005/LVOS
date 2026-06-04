@@ -947,30 +947,35 @@ Dialog.prototype.injectMica = function() {
         if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
-        var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
+        // var newWallpaper = wallpaper.cloneNode(true);
+        // var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
+        var preBlurredImage = blurredSrc != null;
         var clip = this.target.getElementsByClassName("backdrop-clip")[0];
         if (!clip) return;
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
-        var image = null;
-        if (wallpaper.children[0] instanceof HTMLImageElement) {
-            image = wallpaper.children[0].cloneNode(true);
+        
+        var micaWallpaper = null;
+        if (wallpaper.children[0] instanceof HTMLElement) {
+            micaWallpaper = wallpaper.children[0].cloneNode(true);
             if (supportsObjectFit) {
-                image.removeAttribute("style");
-                image.className = "mica-backdrop";
-                if (blurredSrc) image.src = blurredSrc;
+                micaWallpaper.removeAttribute("style");
+                micaWallpaper.className = "mica-backdrop";
+                if (preBlurredImage) {
+                if (blurredSrc) micaWallpaper.src = blurredSrc;
+                }
             } else {
-                image.className = "mica-backdrop legacy-wallpaper-image";
-                image.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
+                micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
+                micaWallpaper.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
             }
         } else {
-            image = document.createElement("img");
-            image.className = "mica-backdrop legacy-wallpaper-image";
-            image.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
+            micaWallpaper = document.createElement("img");
+            micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
+            micaWallpaper.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
         }
 
-        clip.appendChild(image);
+        clip.appendChild(micaWallpaper);
         this.move();
     } catch(ex) { console.warn(ex); }
 };
