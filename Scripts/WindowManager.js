@@ -436,8 +436,9 @@ function min(a, b) {
  * @param {number} y
  */
 function translateElement(element, x, y) {
-    element.style.transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
-    element.style.webkitTransform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    var translate = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    element.style.transform = translate;
+    element.style.webkitTransform = translate;
 }
 
 /**
@@ -628,6 +629,7 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
             this.target.style.bottom = "";
         } else {
             this.target.style.transform = "";
+            this.target.style.webkitTransform = "";
             this.target.style.width = "auto";
             this.target.style.height = "auto";
             this.target.style.top = toPixels(this.top);
