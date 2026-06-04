@@ -294,7 +294,7 @@ article {
 }
 
 .window.animating {
-    transition: all 400ms cubic-bezier(1,0,0,1);;
+    transition: all 400ms cubic-bezier(.86,0,.07,1);
 }
 
 .window.fullscreen {
