@@ -295,6 +295,7 @@ Dialog.prototype.initWithObject = function(object) {
     if (object instanceof Dialog) {
         if (object.target) {
             object.open();
+            return;
         }
         else if (object.application) object = object.application;
     }
