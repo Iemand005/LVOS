@@ -1228,7 +1228,7 @@ function initializeDialogs() {
         
     });
     //flip();
-    checkForFlip();
+    // checkForFlip();
     windowManager.loadState();
 }
 
