@@ -308,6 +308,7 @@ Dialog.prototype.initWithObject = function(object) {
         // this.closeable = true;
         var newDialog = createDialog();
         this.target = newDialog;
+        windowManager.loadState(this);
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
