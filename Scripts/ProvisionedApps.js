@@ -86,6 +86,8 @@ var applications = [
     {
         title: "Calculator",
         id: "calculator",
+        minWidth: 180,
+        minHeight: 240,
         src: "./Applications/Calculator/index.html"
     },
     {
