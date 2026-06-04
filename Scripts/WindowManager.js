@@ -954,12 +954,9 @@ Dialog.prototype.quit = function() {
 
 Dialog.prototype.launch = function() {
     if (!this.isOpen) this.initWithObject(this);
-    try {
+    if (this.mica) this.injectMica();
 
-        if (this.mica) this.injectMica();
-    }
     this.open();
-
 };
 
 Dialog.prototype.relaunch = function() {
