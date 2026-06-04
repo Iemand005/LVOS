@@ -320,6 +320,11 @@ article {
     z-index: 9999 !important;
 }
 
+.transform .window.fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .window.fullscreen > content {
     border: 0px solid transparent !important;
 }
