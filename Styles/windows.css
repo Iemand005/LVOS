@@ -433,11 +433,15 @@ button:hover {
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
+
+    body.blur .window {
+        border-radius: 8px;
+    }
+
     body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);
         -webkit-backdrop-filter: saturate(150%) blur(20px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
         backdrop-filter: saturate(150%) blur(20px) !important;
-        border-radius: 8px;
         padding: 0;
         border: 1px solid rgba(255, 255, 255, 0.267);
     }
