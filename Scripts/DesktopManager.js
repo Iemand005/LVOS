@@ -48,8 +48,8 @@ window.addEventListener('keydown', function(event) {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('./Scripts/sw.js')
-      .then(function(reg) { console.log('Service Worker geregistreerd!', reg)})
-      .catch(function(err) { console.error('Registratie mislukt:', err) });
+      ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
+      ["catch"](function(err) { console.error('Registratie mislukt:', err) });
   });
 }
 

@@ -65,10 +65,22 @@ function forEachIndexed(callbackfn, thisArg) {
 if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
 if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
 
-if (!Object.defineProperty) Object.defineProperty = function(o, key, attributes) {
-    if (!attributes || !(o instanceof Object)) return;
-    if (attributes.get) o.__defineGetter__(key, attributes.get);
-    if (attributes.set) o.__defineSetter__(key, attributes.set);
+if (!Object.defineProperty) {
+    Object.defineProperty = function(o, key, attributes) {
+        if (!attributes || !(o instanceof Object)) return;
+        if (attributes.get) o.__defineGetter__(key, attributes.get);
+        if (attributes.set) o.__defineSetter__(key, attributes.set);
+    };
+} else {
+    try {
+        Object.defineProperty({}, "__test__", { value: true });
+    } catch (ex) {
+        Object.defineProperty = function(o, key, attributes) {
+            if (!attributes || !(o instanceof Object)) return;
+            if ('value' in attributes) o[key] = attributes.value;
+            // Getters/setters are not supported on plain objects in this environment.
+        };
+    }
 }
 
 if (!document.querySelectorAll) document.querySelectorAll = function(selector) {
