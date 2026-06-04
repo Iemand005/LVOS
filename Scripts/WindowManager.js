@@ -810,11 +810,13 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
-Dialog.prototype.toggleClassAnimated = function (className, force) {
+Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger) {
     var target = this.target;
     if (!target) return;
     target.classList.add("animating");
+    /** @type {TransitionEvent} */
     var animationHandler = function(event) {
+        if (event.propertyName)
         this.useTransform = useTransform;
         target.classList.remove("animating");
         target.removeEventListener(transitionEndEvent, animationHandler);
