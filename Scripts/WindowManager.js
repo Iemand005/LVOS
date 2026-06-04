@@ -867,7 +867,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    this.toggleClassAnimated("fullscreen", enable, "top", null, function(enabled) {
+    this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
         if (!this.useTransform) return;
         var style = ""
         if (enabled) style = "100%";
