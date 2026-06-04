@@ -943,7 +943,7 @@ function getWallpaper() {
 
 Dialog.prototype.injectMica = function() {
     try {
-        if (!this.useTransform) return;
+        if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you psosible even do that??");
         if (this.micaElement || !this.target) return;
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return;
