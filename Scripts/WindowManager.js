@@ -22,11 +22,12 @@ var useBlur = false,
 	IE11Booster = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11,
+	useTransform = false,
 	updateRateLimit = false;
 
-useTransform = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
+if (isIE) useTransform = true;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer = Boolean(
