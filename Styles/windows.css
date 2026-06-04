@@ -465,5 +465,6 @@ button:hover {
 @media (prefers-color-scheme: light) {
   .window, button {
     color: black;
+    background-color: #ffffff2b;
   }
 }
