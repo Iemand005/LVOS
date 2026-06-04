@@ -317,7 +317,7 @@ article {
 }
 
 .window.fullscreen  > .backdrop-clip * {
-    transform: none !important;
+    transform: translate(0px, 0px) !important;
 }
 
 .slow-animations * {
