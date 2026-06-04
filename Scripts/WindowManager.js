@@ -624,12 +624,12 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
         if (useTransform) {
             this.target.style.top = "0px";
             this.target.style.left = "0px";
-            this.target.style.right = null;
-            this.target.style.bottom = null;
+            this.target.style.right = "";
+            this.target.style.bottom = "";
         } else {
+            this.target.style.transform = "";
             this.target.style.width = "auto";
             this.target.style.height = "auto";
-            this.target.style.transform = null;
             this.target.style.top = toPixels(this.top);
             this.target.style.left = toPixels(this.left);
             this.target.style.right = toPixels(this.right);
