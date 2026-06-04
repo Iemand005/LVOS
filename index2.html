@@ -1,37 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script>
-        (function() {
-            function kill(e) {
-                if (window.event) {
-                    window.event.returnValue = false;
-                    window.event.cancelBubble = true;
-                }
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                return false;
-            }
-            window.ondragover = kill;
-            window.ondrop = function(e) {
-                kill(e);
-                // --- your drop logic ---
-                var files = e.dataTransfer ? e.dataTransfer.files : [];
-                if (files.length > 0) {
-                    alert("Dropped: " + files[0].name);
-                } else {
-                    var text = e.dataTransfer.getData("Text");
-                    if (text) alert("Text: " + text);
-                }
-                return false;
-            };
-            window.ondragstart = kill;
-        })();
-    </script>
+    <title>Iframe Drop Target</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .drop-zone {
+            border: 3px dashed #aaa;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            transition: 0.2s;
+        }
+        .drop-zone.hover {
+            border-color: #00f;
+            background: #eef;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            min-height: 100px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Drop a file or text here</h2>
+<div class="drop-zone" id="dropZone">
+    <h2>Drop files or text here</h2>
+    <p>Drag from desktop or another window</p>
+</div>
+<div id="output">Waiting for drop...</div>
+
+<script>
+    var dropZone = document.getElementById('dropZone');
+    var output = document.getElementById('output');
+
+    // Listen for forwarded drops from the parent HTA overlay
+    window.addEventListener('message', function(event) {
+        // Optional: check origin if needed (for security)
+        // if (event.origin !== 'ms-hta:') return;
+
+        var data = event.data;
+        if (data.type === 'drop') {
+            handleDrop(data);
+        }
+    });
+
+    // Alternative: Direct function call (uncomment if using Method 2 in parent)
+    window.handleExternalDrop = function(data) {
+        handleDrop(data);
+    };
+
+    function handleDrop(data) {
+        // Clear visual hover effect
+        dropZone.classList.remove('hover');
+
+        output.innerHTML = '';
+
+        // Handle files
+        if (data.files && data.files.length > 0) {
+            output.innerHTML += '<strong>Files:</strong><ul>';
+            for (var i = 0; i < data.files.length; i++) {
+                var f = data.files[i];
+                output.innerHTML += '<li>' + f.name + ' (' + (f.size || '?') + ' bytes)</li>';
+                // Read file content with FileReader if needed
+                // Example: read first file as text
+                var reader = new FileReader();
+                reader.onload = (function(fileName) {
+                    return function(e) {
+                        output.innerHTML += '<div><strong>' + fileName + ' content:</strong><pre>' + e.target.result + '</pre></div>';
+                    };
+                })(f.name);
+                reader.readAsText(f);
+            }
+            output.innerHTML += '</ul>';
+        }
+
+        // Handle plain text
+        if (data.text) {
+            output.innerHTML += '<strong>Plain text:</strong><pre>' + data.text + '</pre>';
+        }
+
+        // Handle HTML
+        if (data.html && !data.text) {
+            output.innerHTML += '<strong>HTML:</strong><pre>' + data.html + '</pre>';
+        }
+
+        if (!data.files.length && !data.text && !data.html) {
+            output.innerHTML = 'Drop was empty or unsupported.';
+        }
+    }
+
+    // Visual feedback when dragging over the iframe (via overlay)
+    // The overlay blocks all drag events, but we can add a global drag detection
+    // by listening to the parent's overlay? Actually easier: use a timeout?
+    // For simplicity, we'll just let the overlay handle it – but we want the iframe to show hover.
+    // You can extend the parent to send a "dragenter"/"dragleave" message. 
+    // Here's a simple version: 
+    window.addEventListener('message', function(event) {
+        if (event.data.type === 'dragenter') {
+            dropZone.classList.add('hover');
+        } else if (event.data.type === 'dragleave') {
+            dropZone.classList.remove('hover');
+        }
+    });
+
+    // Optional: tell parent we're ready
+    window.parent.postMessage({ type: 'ready' }, '*');
+</script>
 </body>
 </html>

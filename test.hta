@@ -1,24 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTA Drag & Drop Test</title>
-    <HTA:APPLICATION ID="test" APPLICATIONNAME="test" />
+    <title>HTA Drop Forwarding</title>
+    <HTA:APPLICATION ID="app" APPLICATIONNAME="DropTest" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; }
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #dropOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 9999;
+        }
+    </style>
 </head>
-<body style="margin:0; overflow:hidden; width:100%; height:100%;">
-    <iframe id="myFrame" src="index2.html" frameborder="0" 
-            style="width:100%; height:100%;"></iframe>
-    <script>
-        // Parent-level drag prevention (stop navigation but allow iframe to handle)
-        window.ondragover = function(e) {
-            if (window.event) window.event.returnValue = false;
-            if (e) e.preventDefault();
-            return false;
+<body>
+<div id="container">
+    <iframe id="myFrame" src="index2.html"></iframe>
+    <div id="dropOverlay"></div>
+</div>
+
+<script>
+    var overlay = document.getElementById('dropOverlay');
+    var iframe = document.getElementById('myFrame');
+
+    // When the iframe is ready, we can send it the dropped data
+    function forwardDropToIframe(dropData) {
+        // Method 1: postMessage (safe, works cross‑origin but same origin here)
+        iframe.contentWindow.postMessage({
+            type: 'drop',
+            files: dropData.files,      // FileList or array of file objects
+            text: dropData.text,
+            html: dropData.html
+        }, '*');
+
+        // Method 2: Direct function call (if same origin, simpler)
+        // try {
+        //     iframe.contentWindow.handleExternalDrop(dropData);
+        // } catch(e) { console.log(e); }
+    }
+
+    // Collect drop data from native event
+    function captureDrop(event) {
+        // Prevent default navigation (this is the key – overlay prevents it)
+        if (window.event) {
+            window.event.returnValue = false;
+            window.event.cancelBubble = true;
+        }
+        if (event.preventDefault) event.preventDefault();
+        if (event.stopPropagation) event.stopPropagation();
+
+        // Extract drop data
+        var data = {
+            files: [],
+            text: '',
+            html: ''
         };
-        window.ondrop = function(e) {
-            if (window.event) window.event.returnValue = false;
-            if (e) e.preventDefault();
-            return false;
-        };
-    </script>
+
+        // Files
+        if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+            data.files = Array.from(event.dataTransfer.files); // convert to array for postMessage
+        }
+
+        // Plain text
+        if (event.dataTransfer && event.dataTransfer.getData) {
+            var plainText = event.dataTransfer.getData('Text');
+            if (plainText) data.text = plainText;
+            var htmlText = event.dataTransfer.getData('HTML');
+            if (htmlText) data.html = htmlText;
+        }
+
+        // Forward to iframe
+        forwardDropToIframe(data);
+
+        return false;
+    }
+
+    // Block all drag events on overlay
+    function blockDrag(event) {
+        if (window.event) {
+            window.event.returnValue = false;
+            window.event.cancelBubble = true;
+        }
+        if (event.preventDefault) event.preventDefault();
+        if (event.stopPropagation) event.stopPropagation();
+        return false;
+    }
+
+    overlay.ondragenter = blockDrag;
+    overlay.ondragover  = blockDrag;
+    overlay.ondragstart = blockDrag;
+    overlay.ondrop      = captureDrop;
+
+    // Optional: Also block parent window drops (just in case)
+    window.ondragover = blockDrag;
+    window.ondrop = blockDrag;
+</script>
 </body>
 </html>
