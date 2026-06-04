@@ -840,7 +840,7 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
  * 
  * @param {string} className 
  * @param {boolean} force 
- * @param {str9jg} animationEndTrigger 
+ * @param {string} animationEndTrigger 
  * @param {()=>void} onEnd 
  * @param {(this:Dialog,enabled:boolean)=>void} onToggled 
  * @returns 
@@ -851,6 +851,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var dialog = this;
     target.classList.add("animating");
     var animationHandler = function(/** @type {TransitionEvent} */event) {
+        console.log("prop" + event.propertyName);
         if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
         try { dialog.useTransform = useTransform; } catch (e) {}
         target.classList.remove("animating");
@@ -867,7 +868,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
+    this.toggleClassAnimated("fullscreen", enable, "width", null, function(enabled) {
         if (!this.useTransform) return;
         var style = ""
         if (enabled) style = "100%";
