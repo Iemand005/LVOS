@@ -821,16 +821,18 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd) {
     var target = this.target;
     if (!target) return;
+    var dialog = this;
     target.classList.add("animating");
     var animationHandler = function(/** @type {TransitionEvent} */event) {
         if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
-        this.useTransform = useTransform;
+        try { dialog.useTransform = useTransform; } catch (e) {}
         target.classList.remove("animating");
         target.removeEventListener(transitionEndEvent, animationHandler);
         if (onEnd) onEnd();
     };
-    target.classList.toggle(className, force);
     target.addEventListener(transitionEndEvent, animationHandler);
+    // toggle the class after listener is attached so we don't miss the transitionend
+    target.classList.toggle(className, force);
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
