@@ -307,6 +307,7 @@ Dialog.prototype.initWithObject = function(object) {
         if (!isDialog(object)) return console.warn("This is not a dialog element");
         this.target = object;
         if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
+        this.close();
     } else {
         this.application = object;
         // this.closeable = true;
