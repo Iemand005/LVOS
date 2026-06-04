@@ -5,16 +5,18 @@
 'use strict';
 'use esnext';
 
-if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
-    this.setAttribute(attribute, null);
-};
+if (typeof HTMLElement !== 'undefined') {
+    if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
+        this.setAttribute(attribute, null);
+    };
 
-// Bug fix, "force === null" --> "typeof force === 'undefined'".
-if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force) {
-    if (typeof force === 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
-    else this.removeAttribute(attribute);
-    return !force;
-};
+    // Bug fix, "force === null" --> "typeof force === 'undefined'".
+    if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force) {
+        if (typeof force === 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
+        else this.removeAttribute(attribute);
+        return !force;
+    };
+}
 
 // This one was a little bit more difficult to get working right but I tested most values like numbers, null, true, false, undefined and it all gave the same results as the Array.fill method in Chrome does so I expect this polyfill to work the same for my applications.
 if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
@@ -106,7 +108,7 @@ if (typeof console == "undefined") {
     }
 }
 
-if (!("classList" in document.documentElement)) {
+if (typeof HTMLElement !== 'undefined' && !("classList" in document.documentElement)) {
     Object.defineProperty(HTMLElement.prototype, "classList", {
         get: function() {
             var self = this;
