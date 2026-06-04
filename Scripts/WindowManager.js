@@ -810,12 +810,12 @@ var target = this.target;
     enable = !target.classList.contains(fullscreenClass);
     if (enable) this.useTransform = false;
     else this.useTransform = useTransform;
-    target.classList.add("animating", enable);
+    target.classList.add("animating");
     var animationHandler = function(event) {
-        target.classList.remove('animating');
-        target.removeEventListener('transitionend', animationHandler);
+        target.classList.remove("animating");
+        target.removeEventListener("transitionend", animationHandler);
     };
-    target.addEventListener('transitionend', animationHandler);
+    target.addEventListener("transitionend", animationHandler);
     target.classList.toggle(fullscreenClass, enable);
 };
 Dialog.prototype.maximize = function () {
