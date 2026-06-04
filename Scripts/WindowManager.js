@@ -410,8 +410,8 @@ Dialog.prototype.initWithObject = function(object) {
 
     if (this.id) windowManager.windows[this.id] = this;
 
-    this.move();
-    this.resize();
+    this.useTransform = this.useTransform;
+    this.update();
 }
 
 /**
@@ -627,8 +627,8 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
             this.target.style.right = null;
             this.target.style.bottom = null;
         } else {
-            this.target.style.width = null;
-            this.target.style.height = null;
+            this.target.style.width = "auto";
+            this.target.style.height = "auto";
             this.target.style.transform = null;
             this.target.style.top = toPixels(this.top);
             this.target.style.left = toPixels(this.left);
@@ -806,13 +806,17 @@ Dialog.prototype.clearClickOffset = function () {
 Dialog.prototype.toggleFullScreen = function (enable) {
 var target = this.target;
     if (!target) return;
+    var fullscreenClass = "fullscreen";
+    enable = !target.classList.contains(fullscreenClass);
+    if (enable) this.useTransform = false;
+    else this.useTransform = useTransform;
     target.classList.add("animating", enable);
     var animationHandler = function(event) {
         target.classList.remove('animating');
         target.removeEventListener('transitionend', animationHandler);
     };
     target.addEventListener('transitionend', animationHandler);
-    target.classList.toggle("fullscreen", enable);
+    target.classList.toggle(fullscreenClass, enable);
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
