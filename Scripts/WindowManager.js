@@ -806,17 +806,15 @@ Dialog.prototype.clearClickOffset = function () {
 Dialog.prototype.toggleFullScreen = function (enable) {
 var target = this.target;
     if (!target) return;
-    var fullscreenClass = "fullscreen";
-    enable = !target.classList.contains(fullscreenClass);
-    if (enable) this.useTransform = false;
-    else this.useTransform = useTransform;
+    this.useTransform = false;
     target.classList.add("animating");
     var animationHandler = function(event) {
+        this.useTransform = useTransform;
         target.classList.remove("animating");
         target.removeEventListener("transitionend", animationHandler);
     };
     target.addEventListener("transitionend", animationHandler);
-    target.classList.toggle(fullscreenClass, enable);
+    target.classList.toggle("fullscreen", enable);
 };
 Dialog.prototype.maximize = function () {
   this.toggleFullScreen(true);
