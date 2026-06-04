@@ -3,24 +3,21 @@
 <head>
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>LVOS</title>
-    <hta:application id="oApp" applicationname="DropFix" scroll="no" windowstate="normal" />
-    <style>
-        html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
-    </style>
+    <hta:application id="oApp" applicationname="LVOS" scroll="no" windowstate="normal" />
 </head>
 <body>
-    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" style="position:absolute; top:0; left:0; width:100%; height:100%; display:block;" type="text/html">
+    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" type="text/html">
         <param name="RegisterAsBrowser" value="1">
         <param name="RegisterAsDropTarget" value="1">
         <param name="Scroll" value="no">
     </object>
 
     <script defer>
-        function syncObjectSize() {
-            if (!wb) return;
-            wb.style.width = window.innerWidth + 'px';
-            wb.style.height = window.innerHeight + 'px';
-        }
+        // function syncObjectSize() {
+        //     if (!wb) return;
+        //     wb.style.width = window.innerWidth + 'px';
+        //     wb.style.height = window.innerHeight + 'px';
+        // }
 
         window.onload = function() {
             wb.RegisterAsDropTarget = true;
@@ -48,8 +45,8 @@
                 };
             }
 
-            syncObjectSize();
-            window.onresize = syncObjectSize;
+            // syncObjectSize();
+            // window.onresize = syncObjectSize;
         };
     </script>
 </body>
