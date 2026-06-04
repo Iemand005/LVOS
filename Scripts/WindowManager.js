@@ -1066,7 +1066,7 @@ DocumentCrawler.prototype = {
     getMetroBody: function(){ var metro = this.getMetro(); return metro && metro.firstChild; },
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getDialogsContainer: function(){ return this.document.getElementById("windows") },
-    get overlay(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
+    getOverlay: function(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
     get charms(){ return document.getElementById("charms"); },
     get settings(){ return document.getElementById("settings"); },
     get theme(){ return document.getElementById("theme"); },
@@ -1108,8 +1108,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
         if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
-                if (!bodyCrawler.overlay) break;
-                bodyCrawler.overlay.ontransitionend = function () {
+                if (!bodyCrawler.getOverlay) break;
+                bodyCrawler.getOverlay.ontransitionend = function () {
                     var dialog = windowManager.windows[source];
                     dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
                     if (dialog.frame) {
@@ -1117,19 +1117,19 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                         oriurl.searchParams.set("fullscreen", String(true));
                         dialog.frame.src = oriurl.href;
                     }
-                    if (!bodyCrawler.overlay) return;
-                    bodyCrawler.overlay.ontransitionend = null;
-                    bodyCrawler.overlay.requestFullscreen();
-                    if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
-                    window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
+                    if (!bodyCrawler.getOverlay) return;
+                    bodyCrawler.getOverlay.ontransitionend = null;
+                    bodyCrawler.getOverlay.requestFullscreen();
+                    if (dialog.body) bodyCrawler.getOverlay.appendChild(dialog.body);
+                    window.setTimeout(bodyCrawler.getOverlay.classList.add.bind(bodyCrawler.getOverlay.classList, "shown"), 500);
                 };
-                bodyCrawler.overlay.classList.toggle("open");
+                bodyCrawler.getOverlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
-                if (!bodyCrawler.overlay) break;
+                if (!bodyCrawler.getOverlay) break;
                 var dialog = windowManager.windows[source];
-                if (dialog.body) bodyCrawler.overlay.appendChild(dialog.body);
-                window.setTimeout(bodyCrawler.overlay.classList.add.bind(bodyCrawler.overlay.classList, "shown"), 500);
+                if (dialog.body) bodyCrawler.getOverlay.appendChild(dialog.body);
+                window.setTimeout(bodyCrawler.getOverlay.classList.add.bind(bodyCrawler.getOverlay.classList, "shown"), 500);
                 break;
         }
         console.log("Received message " + type);
@@ -1171,9 +1171,9 @@ function flipHandler(enabled){
     return flipped = enabled;
 }
 
-var toggleOverlay = bodyCrawler.overlay
-  ? bodyCrawler.overlay.classList.toggle.bind(
-      bodyCrawler.overlay.classList,
+var toggleOverlay = bodyCrawler.getOverlay
+  ? bodyCrawler.getOverlay.classList.toggle.bind(
+      bodyCrawler.getOverlay.classList,
       "open"
     )
   : function () {
