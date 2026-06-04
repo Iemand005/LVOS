@@ -101,21 +101,25 @@ main {
 .window header nav {
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
     position: absolute;
-    -webkit-box-orient: horizontal;
-    flex-direction: row;
     top: 0;
     right: 0;
     overflow: hidden;
     pointer-events: auto;
-    /* border: 1px solid black; */
     border: inherit;
     border-width: inherit;
     border-color: inherit;
     border-style: solid;
+
+    display: inline-block;
+    white-space: nowrap;
+
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -ms-flex-direction: row;
+    flex-direction: row;
 }
 
 .window header button {
@@ -125,7 +129,9 @@ main {
     transition: inherit;
     overflow: hidden;
     padding: 0;
-    display: block;
+    display: inline-block;
+    vertical-align: top;
+    float: left;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
