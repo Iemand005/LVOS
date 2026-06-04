@@ -465,7 +465,15 @@ if (typeof Array.from !== "function") {
                 }
                 
                 // Voer de originele functie uit met de juiste 'this' context
-                listener.call(self, event);
+                if (typeof listener.call === 'function' || typeof listener.call === 'object') {
+        listener.call(self, event);
+    } else {
+        // Fallback voor elementen/objecten in IE8 die geen .call ondersteunen
+        // We zetten de functie tijdelijk direct op het object om 'this' te behouden
+        self._currentListener = listener;
+        self._currentListener(event);
+        self._currentListener = null;
+    }
             };
 
             // Sla de koppeling op zodat we deze later eventueel kunnen verwijderen
