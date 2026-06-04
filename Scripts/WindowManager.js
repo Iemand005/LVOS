@@ -832,16 +832,14 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler);
 
-    var toggleHandler = function() {
+    var hasClass = target.classList.contains(className);
+
+    window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
         target.classList.toggle(className, force);
-    };
-    if (typeof window.requestAnimationFrame === "function") {
-        window.requestAnimationFrame(toggleHandler);
-    } else {
-        try { void target.offsetWidth; } catch (e) {}
-        target.classList.toggle(className, force);
-    }
+    });
+
+    return hasClass;
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
