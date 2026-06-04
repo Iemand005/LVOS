@@ -957,7 +957,7 @@ Dialog.prototype.quit = function() {
 };
 
 Dialog.prototype.launch = function() {
-    if (!this.isOpen && this.application) this.initWithObject(this);
+    if (!this.isOpen) this.initWithObject(this);
     if (this.mica) this.injectMica();
 
     this.open();
