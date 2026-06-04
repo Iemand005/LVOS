@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LVOS Parent</title>
+    <hta:application id="oHTA" applicationname="LVOS" icon="explorer.exe" sysmenu="yes" caption="yes" windowstate="normal"></hta:application>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style>
+        html, body, .fullscreen { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+    </style>
+</head>
+<body>  
+<iframe id="myFrame" src="./index.html" frameborder="0" class="fullscreen"
+        onload="setupIframeDrag()"></iframe>
+
+<script>
+function preventDragAndDrop(event) {
+    event.returnValue = false;   // IE / HTA
+    event.cancelBubble = true;
+    if (event.preventDefault) event.preventDefault();
+    return false;
+}
+
+function setupIframeDrag() {
+    var iframe = document.getElementById('myFrame');
+    
+    // Prevent drops directly on the iframe element
+    iframe.ondragenter = preventDragAndDrop;
+    iframe.ondragover  = preventDragAndDrop;
+    iframe.ondrop      = preventDragAndDrop;
+    
+    // Also disable drag start on the iframe (optional)
+    iframe.ondragstart = preventDragAndDrop;
+    
+    // Now also protect the content inside the iframe
+    protectIframeContent(iframe);
+}
+
+function protectIframeContent(iframe) {
+    try {
+        var iframeDoc = iframe.contentWindow.document;
+        
+        // Disable D&D on the iframe's body and document
+        iframeDoc.ondragenter = preventDragAndDrop;
+        iframeDoc.ondragover  = preventDragAndDrop;
+        iframeDoc.ondrop      = preventDragAndDrop;
+        iframeDoc.ondragstart = preventDragAndDrop;
+        
+        // Also on the document element (for older IE)
+        iframeDoc.documentElement.ondragenter = preventDragAndDrop;
+        iframeDoc.documentElement.ondragover  = preventDragAndDrop;
+        iframeDoc.documentElement.ondrop      = preventDragAndDrop;
+    } catch(e) {
+        // Cross-origin or iframe not ready yet – the onload should handle it
+        console.log("Could not access iframe content immediately");
+    }
+}
+</script>
+</body>
+</html>
