@@ -917,7 +917,7 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.bottom = toPixels(this.bottom);
     }
 
-    if (y < 0) this.maximize();
+    if (y < 0 && this.maximized) this.maximize();
 
   if (this.mica) try {
         var backdrop =
@@ -1337,6 +1337,8 @@ function disableDialogDrag() {
     windowManager.toggleDragging(false);
     windowManager.saveState();
     if (!(activeDialog && activeDialog.moveEvents)) return;
+
+    if (activeDialog.y < 0) activeDialog.maximize();
     
     var func = activeDialog.exchangeDialogMouseUpEvent;
     if (func) func();
