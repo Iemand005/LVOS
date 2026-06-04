@@ -519,7 +519,7 @@ Object.defineProperty(Dialog.prototype, "x", {
   },
   /** @param {number} x */
   set: function (x) {
-    if (typeof x == "number") this.move(x, this.y);
+    if (typeof x === "number") this.move(x, this.y);
   }
 });
 
@@ -529,9 +529,7 @@ Object.defineProperty(Dialog.prototype, "y", {
     return this._y * window.innerHeight;
   },
   set: function (y) {
-    if (typeof y !== "number") return;
-    this.move(this.x, y);
-    if (y < 1) this.maximize();
+    if (typeof y === "number") this.move(this.x, y);
   }
 });
 
@@ -905,41 +903,43 @@ Dialog.prototype.messageFrame = function (type, message) {
  * @param {number?} [y]
  */
 Dialog.prototype.move = function (x, y) {
-  if (typeof x === "undefined" || x === null) x = this.x || 0;
-  if (typeof y === "undefined" || y === null) y = this.y || 0;
-  var windowWidth = window.innerWidth;
-  var windowHeight = window.innerHeight;
-  (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
-  if (!this.target) return;
-  if (this.useTransform) translateElement(this.target, this.x, this.y);
-  else {
-    this.target.style.left = toPixels(this.left);
-    this.target.style.top = toPixels(this.top);
-    this.target.style.right = toPixels(this.right);
-    this.target.style.bottom = toPixels(this.bottom);
-  }
+    if (typeof x === "undefined" || x === null) x = this.x || 0;
+    if (typeof y === "undefined" || y === null) y = this.y || 0;
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
+    if (!this.target) return;
+    if (this.useTransform) translateElement(this.target, this.x, this.y);
+    else {
+        this.target.style.left = toPixels(this.left);
+        this.target.style.top = toPixels(this.top);
+        this.target.style.right = toPixels(this.right);
+        this.target.style.bottom = toPixels(this.bottom);
+    }
+
+    if (y < 1) this.maximize();
 
   if (this.mica) try {
-    var backdrop =
-      this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
-    var wallpaperP = document.getElementById("wallpaper");
-    if (!wallpaperP) return;
-    var wallpaperImage = wallpaperP.children[0];
-    if (!(backdrop instanceof HTMLElement) || !wallpaperImage) return;
-    translateElement(backdrop, -this.x, -this.y);
+        var backdrop =
+        this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
+        var wallpaperP = document.getElementById("wallpaper");
+        if (!wallpaperP) return;
+        var wallpaperImage = wallpaperP.children[0];
+        if (!(backdrop instanceof HTMLElement) || !wallpaperImage) return;
+        translateElement(backdrop, -this.x, -this.y);
 
-    var wallpaperWidth =
-      wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth
-        ? wallpaperImage.clientWidth
-        : wallpaperP.clientWidth;
-    var wallpaperHeight =
-      wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight
-        ? wallpaperImage.clientHeight
-        : wallpaperP.clientHeight;
+        var wallpaperWidth =
+        wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth
+            ? wallpaperImage.clientWidth
+            : wallpaperP.clientWidth;
+        var wallpaperHeight =
+        wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight
+            ? wallpaperImage.clientHeight
+            : wallpaperP.clientHeight;
 
-    backdrop.style.width = toPixels(wallpaperWidth);
-    backdrop.style.height = toPixels(wallpaperHeight);
-  } catch(ex) {}
+        backdrop.style.width = toPixels(wallpaperWidth);
+        backdrop.style.height = toPixels(wallpaperHeight);
+    } catch(ex) {}
 };
 /**
  * @param {number} [width]
