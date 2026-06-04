@@ -288,7 +288,7 @@ article {
 }
 
 .window.animating {
-    transition: all 250ms ease-in-out;
+    transition: all 260ms ease-in-out;
 }
 
 .window.fullscreen {
@@ -299,6 +299,10 @@ article {
     border-radius: 0 !important;
     transform: none !important;
     z-index: 9999 !important;
+}
+
+.slow-animations * {
+    transition-duration: 3s !important;
 }
 
 article > * {

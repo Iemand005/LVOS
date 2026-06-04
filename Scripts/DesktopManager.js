@@ -325,3 +325,15 @@ if (document.readyState === 'loading') {
 } else {
     loadWallpaperFromCache();
 }
+
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Shift' || event.keyCode === 16) {
+    document.body.classList.add('slow-animations');
+  }
+});
+
+window.addEventListener('keyup', function(event) {
+  if (event.key === 'Shift' || event.keyCode === 16) {
+    document.body.classList.remove('slow-animations');
+  }
+});
