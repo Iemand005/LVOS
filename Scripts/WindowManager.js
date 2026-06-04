@@ -383,6 +383,11 @@ Dialog.prototype.initWithObject = function(object) {
 
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
 
+        var header = this.head;
+        if (header) header.addEventListener("dblclick", function(ev) {
+            self.toggleFullScreen();
+        })
+
         if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
         else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
@@ -499,7 +504,7 @@ Object.defineProperty(Dialog.prototype, "body", {
     get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
 });
 Object.defineProperty(Dialog.prototype, "head", {
-    get: function() { return  this.target ?this.target.getElementsByTagName("header")[0] : null; },
+    get: function() { return  this.target ? this.target.getElementsByTagName("header")[0] : null; },
 });
 
 Object.defineProperty(Dialog.prototype, "mica", {
