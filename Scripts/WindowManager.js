@@ -866,6 +866,8 @@ Dialog.prototype.toggleFullScreen = function (enable) {
             self.target.style.minHeight = "100%";
             self.target.style.minWidth = "100%";
         } else {
+            self.target.style.minHeight = "";
+            self.target.style.minWidth = "";
             self.resize()
         }
     });
