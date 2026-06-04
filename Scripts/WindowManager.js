@@ -934,15 +934,13 @@ Dialog.prototype.removeMica = function() {
 };
 
 Dialog.prototype.swapPositioning = function () {
-    var c = windows["calculator"];
-    var windowElement = c.target;
-    windowElement.style.transform = null;
-    windowElement.style.top = toPixels(c.top);
-    windowElement.style.left = toPixels(c.left);
-    windowElement.style.right = toPixels(c.right);
-    windowElement.style.bottom = toPixels(c.bottom);
-    windowElement.style.width = null;
-    windowElement.style.height = null
+    this.target.style.transform = null;
+    this.target.style.top = toPixels(this.top);
+    this.target.style.left = toPixels(this.left);
+    this.target.style.right = toPixels(this.right);
+    this.target.style.bottom = toPixels(this.bottom);
+    this.target.style.width = null;
+    this.target.style.height = null;
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
