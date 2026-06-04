@@ -406,6 +406,7 @@ Dialog.prototype.initWithObject = function(object) {
         }.bind(self));
         buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
         // this.close();
+        this.toggleOpen(false);
     }
 
     if (this.id) windowManager.windows[this.id] = this;
@@ -454,19 +455,22 @@ function scaleElement(element, width, height) {
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return Boolean(this.target && this.target.classList.contains("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
     set: function(open) {
-        var target = this.target;
-        if (!target) return;
-        var self = this;
-        var shouldKill = !open;
-        this.toggleClassAnimated("open", open, "opacity", function () {
-            if (shouldKill) self.kill();
-        });
-        this.activate();
+        this.toggleOpen(open);
     }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
 });
+Dialog.prototype.toggleOpen = function (forceOpen, kill) {
+    var target = this.target;
+    if (!target) return;
+    var self = this;
+    var shouldKill = kill && !forceOpen;
+    this.toggleClassAnimated("open", forceOpen, "opacity", function () {
+        if (shouldKill) self.kill();
+    });
+    this.activate();
+}
 /**
  * @param {boolean} [create]
  * @returns {HTMLIFrameElement?}
