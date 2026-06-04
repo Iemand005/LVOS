@@ -677,6 +677,16 @@ Object.defineProperty(Dialog.prototype, "title", {
     }
 });
 
+Object.defineProperty(Dialog.prototype, "maximized", {
+    get: function() {
+        if (!this.target)return;
+        return this.target.classList.contains("fullscreen");
+    },
+    set: function(title) {
+        this.toggleFullScreen(title);
+    }
+});
+
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
     this.title = title;
@@ -857,7 +867,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    var self = this;
     this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
         if (!this.useTransform) return;
         if (enabled) {
