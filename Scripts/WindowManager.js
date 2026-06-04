@@ -565,8 +565,13 @@ Object.defineProperty(Dialog.prototype, "left", {
     }
 });
 
-Object.defineProperty(Dialog.prototype, "right", {
+Object.defineProperty(Dialog.prototype, "rightFromLeft", {
     get: function() { return this.x + this.width; },
+    set: function(right) { this.width = right - this.x; }
+});
+
+Object.defineProperty(Dialog.prototype, "right", {
+    get: function() { return window.innerWidth - this.rightFromLeft; },
     set: function(right) { this.width = right - this.x; }
 });
 
@@ -921,6 +926,18 @@ Dialog.prototype.removeMica = function() {
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
     while (clip.firstChild) clip.removeChild(clip.firstChild);
+};
+
+Dialog.prototype.swapPositioning = function () {
+    var c = windows["calculator"];
+    var windowElement = c.target;
+    windowElement.style.transform = null;
+    windowElement.style.top = toPixels(c.top);
+    windowElement.style.left = toPixels(c.left);
+    windowElement.style.right = toPixels(c.right);
+    windowElement.style.bottom = toPixels(c.bottom);
+    windowElement.style.width = null;
+    windowElement.style.height = null
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
