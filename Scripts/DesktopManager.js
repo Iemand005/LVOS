@@ -10,7 +10,7 @@
 
 var applist = document.getElementById("applist");
 
-applist.addEventListener("submit", function(event){ event.preventDefault(); });
+if (applist) applist.addEventListener("submit", function(event){ event.preventDefault(); });
 
 var reflecitons = false;
 

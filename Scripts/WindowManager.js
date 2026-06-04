@@ -1067,7 +1067,7 @@ DocumentCrawler.prototype = {
     getAllDialogs: function(){ return this.document.getElementsByClassName("window") },
     getDialogsContainer: function(){ return this.document.getElementById("windows") },
     getOverlay: function(){ return document.getElementById("overlay"); }, // I don't know why I didn't use getters to start with.
-    getDesktop(){ return document.getElementById("desktop"); },
+    getDesktop: function(){ return document.getElementById("desktop"); },
 }
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
