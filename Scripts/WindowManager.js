@@ -282,8 +282,6 @@ function Dialog(object, create) {
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
-    // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    
     var applist = document.getElementById("applist");
     if (applist) applist.appendChild(this.createOpenButton());
     
@@ -292,9 +290,7 @@ function Dialog(object, create) {
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 
-/**
- * @param {HTMLElement | Application | Dialog} object
- */
+/** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
     if (!object) return;
 
@@ -319,7 +315,6 @@ Dialog.prototype.initWithObject = function(object) {
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
-        // this.src = object.src;
         this.openUrl(object.src);
         this.setTitle(object.title);
         this.fixed = object.fixed;
@@ -380,11 +375,7 @@ Dialog.prototype.initWithObject = function(object) {
                 target.appendChild(div);
             }
         }
-
-        // target.addEventListener("animationend", function (ev) {
-        //     if (ev.animationName == "closing")
-        //         dialog.kill.apply(dialog);
-        // }, false);
+        
         target.addEventListener("dragstart", cancelDomEvent, false);
         target.addEventListener("selectstart", cancelDomEvent, false);
 
