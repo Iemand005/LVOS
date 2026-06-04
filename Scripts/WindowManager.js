@@ -831,7 +831,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler);
 
-    var hasClass = target.classList.contains(className);
+    var hasClass = !target.classList.contains(className);
 
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
