@@ -851,7 +851,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var dialog = this;
     target.classList.add("animating");
     var animationHandler = function(/** @type {TransitionEvent} */event) {
-        console.log("prop" + event.propertyName);
         if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
         try { dialog.useTransform = useTransform; } catch (e) {}
         target.classList.remove("animating");
@@ -868,7 +867,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    this.toggleClassAnimated("fullscreen", enable, "width", null, function(enabled) {
+    this.toggleClassAnimated("fullscreen", enable, "top", null, function(enabled) {
         if (!this.useTransform) return;
         var style = ""
         if (enabled) style = "100%";
