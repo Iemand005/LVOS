@@ -239,26 +239,26 @@ article {
     pointer-events: auto;
 }
 
-.window[open] {
+.window.open {
     pointer-events: auto;
 }
 
-.window[open] > content {
+.window.open > content {
     animation: opening 500ms ease-out forwards;
 }
 
-.window:not([open]) > content {
+.window:not(.open) > content {
     animation: closing 400ms cubic-bezier(0, 0, 0.5 , 1) forwards;
 }
 
 
-.window:not([open]) {
+.window:not(.open) {
     /*display: none; /* The display attribute is set to none by default */
     z-index: -1000;
     /*pointer-events: none !important;*/
 }
 
-.window:not([open]), .window:not([open]) > content, .window:not([open]) > div, .window:not([open]) > content > article, .window:not([open]) > content > article * {
+.window:not(.open), .window:not(.open) > content, .window:not(.open) > div, .window:not(.open) > content > article, .window:not(.open) > content > article * {
     pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
 }
 
@@ -296,6 +296,7 @@ article {
 .window.animating,
 .window.animating > content,
 .window.animating > .backdrop-clip * {
+    -webkit-transition: all 400ms cubic-bezier(.86,0,.07,1);
     transition: all 400ms cubic-bezier(.86,0,.07,1);
 }
 

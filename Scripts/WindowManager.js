@@ -452,8 +452,8 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return Boolean(this.target && this.target.hasAttribute("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
-    set: function(force) { if (this.target) this.target.toggleAttribute("open", force), this.activate(); }
+    get: function() { return Boolean(this.target && this.target.classList.contains("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
+    set: function(force) { if (this.target) this.target.classList.toggle("open", force), this.activate(); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
