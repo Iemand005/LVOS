@@ -856,6 +856,8 @@ Dialog.prototype.move = function (x, y) {
     // this.target.style.transform = "none";
     this.target.style.left = toPixels(this.left);
     this.target.style.top = toPixels(this.top);
+    this.target.style.right = toPixels(this.right);
+    this.target.style.bottom = toPixels(this.bottom);
   }
 
   if (this.mica && this.useTransform) try {
