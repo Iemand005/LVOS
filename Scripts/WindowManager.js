@@ -876,7 +876,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
     });
 };
 Dialog.prototype.maximize = function () {
-  this.toggleFullScreen(true);
+  this.maximized = true;
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function (enable) {
@@ -1297,6 +1297,7 @@ function handleWindowDrag(newX, hewY) {
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
+    if (dialog.maximized) dialog.maximized = false;
 }
 
 /**
