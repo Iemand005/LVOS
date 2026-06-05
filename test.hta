@@ -1,92 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTA Drop Fix – No White Screen</title>
+    <title>HTA Drop – No Iframe</title>
     <HTA:APPLICATION ID="app" APPLICATIONNAME="DropTest" />
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         html, body { width:100%; height:100%; overflow:hidden; }
-        #container { position:relative; width:100%; height:100%; }
-        iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; background:red; }
-        #blocker { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0, 255, 4, 0.011); z-index:9999; pointer-events:auto; }
+        #container {
+            width:100%;
+            height:100%;
+            overflow:auto;
+            background:white;
+        }
+        /* Optional: make it look like an iframe */
+        #contentDiv {
+            width:100%;
+            min-height:100%;
+        }
     </style>
 </head>
 <body>
 <div id="container">
-    <iframe id="myFrame" src="about:blank"></iframe>
-    <div id="blocker"></div>
+    <div id="contentDiv"></div>
 </div>
 
 <script>
-    // Create iframe content (no backticks, old‑IE compatible)
-    var iframe = document.getElementById('myFrame');
-    var iframeDoc = iframe.contentWindow.document;
-    iframeDoc.open();
-    iframeDoc.write(
-        '<!DOCTYPE html>' +
-        '<html>' +
-        '<head>' +
-        '<style>' +
-        'body { font-family: Arial; padding: 20px; background: #f5f5f5; }' +
-        '.dropzone { border: 3px dashed #aaa; border-radius: 12px; padding: 40px; text-align: center; background: white; transition: all 0.2s; }' +
-        '.dropzone.drag-over { border-color: #0078d7; background: #e5f0ff; }' +
-        '#output { margin-top: 20px; padding: 10px; background: white; border: 1px solid #ccc; border-radius: 8px; font-family: monospace; white-space: pre-wrap; }' +
-        '</style>' +
-        '</head>' +
-        '<body>' +
-        '<div class="dropzone" id="dropzone">' +
-        '<h2>Drop files or text here</h2>' +
-        '<p>Drag from desktop, Explorer, or any text</p>' +
-        '</div>' +
-        '<div id="output">Waiting for drop...</div>' +
-        '<script>' +
-        'var dropzone = document.getElementById("dropzone");' +
-        'var output = document.getElementById("output");' +
-        'window.addEventListener("message", function(e) {' +
-        '    var data = e.data;' +
-        '    if (data && data.type === "drop") {' +
-        '        dropzone.classList.remove("drag-over");' +
-        '        output.innerHTML = "";' +
-        '        if (data.files && data.files.length > 0) {' +
-        '            output.innerHTML += "<strong>Files:</strong><ul>";' +
-        '            for (var i = 0; i < data.files.length; i++) {' +
-        '                var f = data.files[i];' +
-        '                output.innerHTML += "<li>" + f.name + " (" + (f.size || "?") + " bytes)</li>";' +
-        '                var reader = new FileReader();' +
-        '                reader.onload = (function(fileName) {' +
-        '                    return function(ev) {' +
-        '                        output.innerHTML += "<div><strong>Content of " + fileName + ":</strong><pre>" + ev.target.result + "</pre></div>";' +
-        '                    };' +
-        '                })(f.name);' +
-        '                reader.readAsText(f, "UTF-8");' +
-        '            }' +
-        '            output.innerHTML += "</ul>";' +
-        '        }' +
-        '        if (data.text) {' +
-        '            output.innerHTML += "<strong>Plain text:</strong><pre>" + data.text + "</pre>";' +
-        '        }' +
-        '        if (data.html && !data.text) {' +
-        '            output.innerHTML += "<strong>HTML:</strong><pre>" + data.html.replace(/</g, "&lt;") + "</pre>";' +
-        '        }' +
-        '        if (!data.files.length && !data.text && !data.html) {' +
-        '            output.innerHTML = "No data received.";' +
-        '        }' +
-        '    } else if (data && data.type === "dragenter") {' +
-        '        dropzone.classList.add("drag-over");' +
-        '    } else if (data && data.type === "dragleave") {' +
-        '        dropzone.classList.remove("drag-over");' +
-        '    }' +
-        '});' +
-        'window.parent.postMessage({ type: "ready" }, "*");' +
-        '<\/script>' +
-        '</body>' +
-        '</html>'
-    );
-    iframeDoc.close();
+    // Load external HTML file into the div (works like an iframe)
+    function loadPage(url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('contentDiv').innerHTML = xhr.responseText;
+                // Re‑execute any scripts inside the loaded HTML (optional)
+                var scripts = document.getElementById('contentDiv').getElementsByTagName('script');
+                for (var i = 0; i < scripts.length; i++) {
+                    eval(scripts[i].text);
+                }
+            }
+        };
+        xhr.send();
+    }
 
-    // ========== CRITICAL: Robust event killer for IE/HTA ==========
+    // Load your main page
+    loadPage('index2.html');
+
+    // ----- Handle drops directly on the container (no iframe) -----
+    var container = document.getElementById('container');
+
     function killEvent(e) {
-        // Get the actual event object (IE uses window.event, modern uses parameter)
         var evt = e || window.event;
         if (evt) {
             if (evt.preventDefault) evt.preventDefault();
@@ -94,7 +56,6 @@
             evt.returnValue = false;
             evt.cancelBubble = true;
         }
-        // Extra safety: kill the global window.event
         if (window.event) {
             window.event.returnValue = false;
             window.event.cancelBubble = true;
@@ -102,47 +63,35 @@
         return false;
     }
 
-    var blocker = document.getElementById('blocker');
-
-    // Override all drag/drop events on the blocker
-    blocker.ondragover = function(e) { return killEvent(e); };
-    blocker.ondragenter = function(e) {
-        killEvent(e);
-        iframe.contentWindow.postMessage({ type: 'dragenter' }, '*');
-        return false;
-    };
-    blocker.ondragleave = function(e) {
-        killEvent(e);
-        iframe.contentWindow.postMessage({ type: 'dragleave' }, '*');
-        return false;
-    };
-    blocker.ondrop = function(e) {
+    container.ondragover = killEvent;
+    container.ondrop = function(e) {
         killEvent(e);
         var evt = e || window.event;
-        var dropData = { files: [], text: '', html: '' };
-        if (evt && evt.dataTransfer) {
-            if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
-                dropData.files = Array.prototype.slice.call(evt.dataTransfer.files);
-            }
-            if (evt.dataTransfer.getData) {
-                var plain = evt.dataTransfer.getData('Text');
-                if (plain) dropData.text = plain;
-                var html = evt.dataTransfer.getData('HTML');
-                if (html) dropData.html = html;
+        if (!evt || !evt.dataTransfer) return false;
+
+        // Get dropped files
+        var files = [];
+        if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
+            for (var i = 0; i < evt.dataTransfer.files.length; i++) {
+                files.push(evt.dataTransfer.files[i]);
             }
         }
-        iframe.contentWindow.postMessage({
-            type: 'drop',
-            files: dropData.files,
-            text: dropData.text,
-            html: dropData.html
-        }, '*');
+
+        // Get plain text
+        var text = '';
+        if (evt.dataTransfer.getData) {
+            text = evt.dataTransfer.getData('Text') || '';
+        }
+
+        // Now you can pass this data to the loaded content
+        // For example, call a global function in the loaded page
+        if (window.handleDropInContent) {
+            window.handleDropInContent(files, text);
+        } else {
+            alert('Dropped ' + files.length + ' file(s) and text: ' + text);
+        }
         return false;
     };
-
-    // Also protect the parent window
-    window.ondragover = function(e) { return killEvent(e); };
-    window.ondrop = function(e) { return killEvent(e); };
 </script>
 </body>
 </html>
