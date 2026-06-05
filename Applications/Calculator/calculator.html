@@ -16,7 +16,7 @@ table{
     table-layout:fixed;
 }
 
-/* display row stays minimal */
+/* display row = shrink to content */
 #displayRow td{
     height:1px;
     padding:0;
@@ -31,14 +31,14 @@ input{
     border-radius:5px;
 }
 
-/* container for keypad MUST stretch */
-#padWrap{
+/* keypad row MUST take remaining space */
+#padRow td{
     height:100%;
     padding:0;
-    vertical-align:top;
+    vertical-align:top; /* critical for IE9/10 */
 }
 
-/* keypad fills container */
+/* inner keypad fills its cell */
 #pad{
     width:100%;
     height:100%;
@@ -68,8 +68,8 @@ input{
         </td>
     </tr>
 
-    <tr>
-        <td id="padWrap">
+    <tr id="padRow">
+        <td>
             <table id="pad">
                 <tr>
                     <td>C</td><td>±</td><td>%</td><td>/</td>
