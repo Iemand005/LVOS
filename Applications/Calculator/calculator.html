@@ -12,11 +12,12 @@ html,body{
 table{
     width:100%;
     height:100%;
-    border-collapse:collapse;
+    border-collapse:separate;
+    border-spacing:6px;
     table-layout:fixed;
 }
 
-/* display row = shrink to content */
+/* display row stays minimal */
 #displayRow td{
     height:1px;
     padding:0;
@@ -31,23 +32,8 @@ input{
     border-radius:5px;
 }
 
-/* keypad row MUST take remaining space */
-#padRow td{
-    height:100%;
-    padding:0;
-    vertical-align:top; /* critical for IE9/10 */
-}
-
-/* inner keypad fills its cell */
-#pad{
-    width:100%;
-    height:100%;
-    border-collapse:separate;
-    border-spacing:6px;
-    table-layout:fixed;
-}
-
-#pad td{
+/* keypad cells */
+td.key{
     border:1px solid #ccc;
     border-radius:5px;
     text-align:center;
@@ -63,31 +49,43 @@ input{
 
 <table>
     <tr id="displayRow">
-        <td>
+        <td colspan="4">
             <input readonly value="0">
         </td>
     </tr>
 
-    <tr id="padRow">
-        <td>
-            <table id="pad">
-                <tr>
-                    <td>C</td><td>±</td><td>%</td><td>/</td>
-                </tr>
-                <tr>
-                    <td>7</td><td>8</td><td>9</td><td>*</td>
-                </tr>
-                <tr>
-                    <td>4</td><td>5</td><td>6</td><td>-</td>
-                </tr>
-                <tr>
-                    <td>1</td><td>2</td><td>3</td><td>+</td>
-                </tr>
-                <tr>
-                    <td colspan="2">0</td><td>.</td><td>=</td>
-                </tr>
-            </table>
-        </td>
+    <tr>
+        <td class="key">C</td>
+        <td class="key">±</td>
+        <td class="key">%</td>
+        <td class="key">/</td>
+    </tr>
+
+    <tr>
+        <td class="key">7</td>
+        <td class="key">8</td>
+        <td class="key">9</td>
+        <td class="key">*</td>
+    </tr>
+
+    <tr>
+        <td class="key">4</td>
+        <td class="key">5</td>
+        <td class="key">6</td>
+        <td class="key">-</td>
+    </tr>
+
+    <tr>
+        <td class="key">1</td>
+        <td class="key">2</td>
+        <td class="key">3</td>
+        <td class="key">+</td>
+    </tr>
+
+    <tr>
+        <td class="key" colspan="2">0</td>
+        <td class="key">.</td>
+        <td class="key">=</td>
     </tr>
 </table>
 
