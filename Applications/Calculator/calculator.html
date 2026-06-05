@@ -16,12 +16,13 @@ table{
     table-layout:fixed;
 }
 
-/* display row = natural height */
+/* display row stays minimal */
 #displayRow td{
     height:1px;
     padding:0;
 }
 
+/* display */
 input{
     width:100%;
     box-sizing:border-box;
@@ -30,7 +31,14 @@ input{
     border-radius:5px;
 }
 
-/* keypad fills remaining space */
+/* container for keypad MUST stretch */
+#padWrap{
+    height:100%;
+    padding:0;
+    vertical-align:top;
+}
+
+/* keypad fills container */
 #pad{
     width:100%;
     height:100%;
@@ -61,7 +69,7 @@ input{
     </tr>
 
     <tr>
-        <td style="padding:0;">
+        <td id="padWrap">
             <table id="pad">
                 <tr>
                     <td>C</td><td>±</td><td>%</td><td>/</td>
