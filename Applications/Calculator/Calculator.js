@@ -8,52 +8,52 @@ function Calculator() {
 }
 
 Calculator.prototype.updateDisplay = function() {
-    output.value = expression || "0";
+    output.value = this.expression || "0";
 }
 
 Calculator.prototype.calculate = function () {
-    var safeExpr = expression.replace(/[^0-9+\-*/.]/g, "");
+    var safeExpr = this.expression.replace(/[^0-9+\-*/.]/g, "");
 
     if (!safeExpr) {
         expression = "0";
-        updateDisplay();
+        this.updateDisplay();
         return;
     }
 
     try {
-        expression = String(eval(safeExpr));
+        this.expression = String(eval(safeExpr));
     } catch (e) {
-        expression = "Error";
+        this.expression = "Error";
     }
 
-    updateDisplay();
+    this.updateDisplay();
 }
 
 Calculator.prototype.clearAll = function () {
-    expression = "";
-    updateDisplay();
+    this.expression = "";
+    this.updateDisplay();
 }
 
 Calculator.prototype.press = function (value) {
     if (value === "=") 
-       return calculate();
+       return this.calculate();
 
     if (value === "C") 
-        return clearAll();
+        return this.clearAll();
 
-    if (expression === "Error") {
-        expression = "";
-    }
+    if (this.expression === "Error")
+        this.expression = "";
 
-    expression += value;
+    this.expression += value;
     updateDisplay();
 }
 
+var calculator = new Calculator();
+
 for (var i = 0; i < cells.length; i++) {
     cells[i].onclick = function () {
-        var value = this.textContent || this.innerText;
-        press(value);
+        calculator.press(this.textContent || this.innerText);
     };
 }
 
-updateDisplay();
+calculator.updateDisplay();
