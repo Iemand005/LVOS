@@ -9,11 +9,7 @@ html,body{
     height:100%;
 }
 
-body{
-    display:block;
-}
-
-/* top display area */
+/* display */
 #displayWrap{
     height:15%;
 }
@@ -25,9 +21,10 @@ input{
     font-size:32px;
     text-align:right;
     margin:0;
+    border-radius:5px;
 }
 
-/* bottom keypad */
+/* keypad */
 #pad{
     width:100%;
     height:85%;
@@ -38,17 +35,11 @@ input{
 
 td{
     border:1px solid #ccc;
+    border-radius:5px;
     text-align:center;
     vertical-align:middle;
     font-size:24px;
     cursor:pointer;
-    padding:0;
-}
-
-td > div{
-    width:100%;
-    height:100%;
-    display:block;
 }
 </style>
 
@@ -62,37 +53,37 @@ td > div{
 
 <table id="pad">
     <tr>
-        <td><div>C</div></td>
-        <td><div>±</div></td>
-        <td><div>%</div></td>
-        <td><div>/</div></td>
+        <td>C</td>
+        <td>±</td>
+        <td>%</td>
+        <td>/</td>
     </tr>
 
     <tr>
-        <td><div>7</div></td>
-        <td><div>8</div></td>
-        <td><div>9</div></td>
-        <td><div>*</div></td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>*</td>
     </tr>
 
     <tr>
-        <td><div>4</div></td>
-        <td><div>5</div></td>
-        <td><div>6</div></td>
-        <td><div>-</div></td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>-</td>
     </tr>
 
     <tr>
-        <td><div>1</div></td>
-        <td><div>2</div></td>
-        <td><div>3</div></td>
-        <td><div>+</div></td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>+</td>
     </tr>
 
     <tr>
-        <td colspan="2"><div>0</div></td>
-        <td><div>.</div></td>
-        <td><div>=</div></td>
+        <td colspan="2">0</td>
+        <td>.</td>
+        <td>=</td>
     </tr>
 </table>
 
