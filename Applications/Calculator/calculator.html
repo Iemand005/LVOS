@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Legacy flex-like layout (Safari 5 / old WebKit)</title>
+<style>
+  /* reset margins & full viewport height – required for percentage heights */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  /* safe for old WebKit, makes sizing predictable */
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  /* 
+   * MAIN CONTAINER – uses the OLD flexible box model (2009 spec)
+   * Supported in Safari 5, Chrome 4-20, old iOS, etc.
+   * No JavaScript, no modern flex.
+   */
+  .old-flex-container {
+    /* old flex (WebKit) */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;   /* vertical column direction */
+    
+    /* optional: define a fallback width/height */
+    height: 100%;
+    width: 100%;
+    
+    /* just for visual clarity (not required for layout) */
+    background: #f2f4f6;
+    font-family: system-ui, 'Segoe UI', 'Lucida Grande', sans-serif;
+  }
+
+  /* 
+   * TOP element – height is automatically determined by its content.
+   * No extra flex property needed (box-flex defaults to 0 → content height).
+   */
+  .auto-top {
+    background: #c1d9f0;
+    padding: 1.2rem;
+    border-bottom: 1px solid #9bb7d4;
+    /* natural block flow – takes only the space its content needs */
+  }
+
+  /* 
+   * BOTTOM element – stretches to fill ALL remaining vertical space.
+   * The key property: -webkit-box-flex: 1 → consumes leftover space.
+   */
+  .stretch-bottom {
+    background: #d9edc7;
+    padding: 1.2rem;
+    /* absorb all extra height inside the parent container */
+    -webkit-box-flex: 1;
+    
+    /* optional: ensure content can scroll if it overflows */
+    overflow-y: auto;
+  }
+
+  /* ===== decorations / demo content ===== */
+  .auto-top h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+  }
+
+  .auto-top p {
+    line-height: 1.4;
+    margin-top: 0.25rem;
+  }
+
+  .stretch-bottom p {
+    line-height: 1.4;
+  }
+
+  /* optional button inside bottom to verify height stretching */
+  .stretch-bottom button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: #2c6e2c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  /* simple resizer hint: shows that bottom uses remaining area dynamically */
+  .resize-note {
+    position: fixed;
+    bottom: 10px;
+    right: 12px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: monospace;
+    pointer-events: none;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="old-flex-container">
+  <!-- TOP element: height automatically determined by its content -->
+  <div class="auto-top">
+    <h2>📦 Top element (auto height)</h2>
+    <p>
+      This block’s height is calculated automatically based on its content.
+      Add or remove text — the height adapts without any JavaScript.
+    </p>
+    <p style="margin-top: 8px; font-style: italic;">
+      🧩 Minimal example: <strong>pure CSS + legacy -webkit-box</strong><br>
+      Works in Safari 5 / old iOS and other vintage WebKit browsers.
+    </p>
+  </div>
+
+  <!-- BOTTOM element: stretches to fill the remaining space in the container -->
+  <div class="stretch-bottom">
+    <p>
+      ✅ <strong>Bottom element — stretches the rest of the height</strong><br>
+      Using <code style="background:#eef; padding:2px 4px;">-webkit-box-flex: 1</code> 
+      inside an old flexible box container.
+    </p>
+    <p>
+      Even if you resize the window, the bottom block dynamically fills whatever 
+      vertical space remains after the top block's content.
+    </p>
+    <p>
+      📐 <strong>How it works:</strong><br>
+      → Parent <code>.old-flex-container</code> uses <code>display: -webkit-box</code><br>
+      → <code>-webkit-box-orient: vertical</code> stacks children vertically.<br>
+      → Top child takes natural content height (<code>box-flex: 0</code> by default).<br>
+      → Bottom child uses <code>-webkit-box-flex: 1</code> to consume leftover height.
+    </p>
+    <button onclick="alert('✅ Bottom area is fully stretchable.\nHeight = remaining space of parent.')">
+      🧪 test stretch
+    </button>
+    <p style="margin-top: 2px; font-size: 0.85rem; color: #2c3e2f;">
+      <em>★ no JavaScript required — pure CSS, works in Safari 5 (and other legacy WebKit browsers).</em>
+    </p>
+  </div>
+</div>
+
+<div class="resize-note">
+  ↕️ resize window → bottom stretches, top keeps auto height
+</div>
+
+<!-- 
+  ADDITIONAL INFO FOR SAFARI 5 / OLD BROWSERS:
+  - The container MUST have an explicit height (here html,body height:100%).
+  - Legacy -webkit-box is the closest native "flex-like" solution for Safari 5.
+  - No modern flex, grid, or calc() hacks – just robust 2009 flexbox spec.
+  - Works without JavaScript, exactly as requested.
+-->
+</body>
+</html>
