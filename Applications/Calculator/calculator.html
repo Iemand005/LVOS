@@ -3,10 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <style>
-*{margin:0;padding:0}html,body{height:100%}.c{display:-webkit-box;display:flex;-webkit-box-orient:vertical;flex-direction:column;height:100%}.t{background:red}.b{background:green;-webkit-box-flex:1;flex:1}
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    height: 100%;
+  }
+  .container {
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+  .top {
+    background: red;
+    display: table-row;
+  }
+  .bottom {
+    background: green;
+    display: table-row;
+    height: 100%;
+  }
 </style>
 </head>
 <body>
-<div class="c"><div class="t">&nbsp;</div><div class="b">&nbsp;</div></div>
+<div class="container">
+  <div class="top">e</div>
+  <div class="bottom">e</div>
+</div>
 </body>
 </html>
