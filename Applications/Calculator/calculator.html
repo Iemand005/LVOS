@@ -2,40 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Legacy flex: auto top + stretch bottom</title>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  html, body {
-    height: 100%;
-  }
-  /* Old WebKit flexbox (Safari 5) */
-  .container {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    height: 100%;
-    width: 100%;
-  }
-  /* Top element: height = auto (content) */
-  .top {
-    background: red;
-    /* no box-flex → natural height */
-  }
-  /* Bottom element: stretches remaining space */
-  .bottom {
-    background: green;
-    -webkit-box-flex: 1;
-  }
+*{margin:0;padding:0}html,body{height:100%}.c{display:-webkit-box;display:flex;-webkit-box-orient:vertical;flex-direction:column;height:100%}.t{background:red}.b{background:green;-webkit-box-flex:1;flex:1}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="top">
-	hey
-  </div>
-  <div class="bottom"></div>
-</div>
+<div class="c"><div class="t">&nbsp;</div><div class="b">&nbsp;</div></div>
 </body>
 </html>
