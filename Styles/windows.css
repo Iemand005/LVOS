@@ -360,12 +360,12 @@ article > * {
     height: 100%;
 }
 
-button {
+/* button {
     background-color: rgba(0, 0, 0, 0.219);
     border: 1px solid black;
     text-rendering: geometricPrecision;
     pointer-events: auto !important;
-}
+} */
 
 button:hover {
     background-color: rgba(153, 153, 153, 0.219);
