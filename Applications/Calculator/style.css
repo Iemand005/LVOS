@@ -5,7 +5,8 @@
 }
 
 html,
-body {
+body,
+table {
   width: 100%;
   height: 100%;
 }
@@ -16,23 +17,22 @@ form {
   display: block;
 }
 
-.grid-table {
+table {
   width: 100%;
   height: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-.grid-table td {
+table td {
   padding: 4px;
   border: none;
   vertical-align: middle;
   text-align: center;
 }
 
-/* Buttons fill their cell completely */
-.grid-table button,
-.grid-table input[type="button"] {
+table button,
+table input[type="button"] {
   width: 100%;
   height: 100%;
   display: block;
@@ -48,18 +48,15 @@ form {
   box-sizing: border-box;
 }
 
-/* Optional: hover effect */
-.grid-table button:hover,
-.grid-table input[type="button"]:hover {
+table button:hover,
+table input[type="button"]:hover {
   background-color: #ffffff60;
 }
 
-/* Remove extra spacing inside table */
-.grid-table tbody {
+table tbody {
   display: table-row-group;
-  /* explicit, avoid any flex override */
 }
 
-.grid-table tr {
+table tr {
   display: table-row;
 }
