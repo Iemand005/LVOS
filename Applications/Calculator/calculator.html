@@ -29,6 +29,11 @@
 
 		input[type="button"] {
 			height: 100%;
+			/* additions for filling cell */
+			display: block;
+			width: 100%;
+			margin: 0;
+			box-sizing: border-box;
 		}
 
 		div {
@@ -40,6 +45,15 @@
 		table {
 			width: 100%;
 			height: 100%;
+			border-collapse: collapse;
+		}
+		
+		/* minimal changes for variable rows */
+		td {
+			padding: 0;
+		}
+		tr {
+			height: 1%;   /* old trick – rows share remaining height equally */
 		}
 	</style>
 </head>
@@ -50,6 +64,7 @@
 		<div>
 			<table>
 				<tbody>
+					<!-- you can add or remove rows, they will automatically stretch equally -->
 					<tr>
 						<td><input type="button" value="7"></td>
 						<td><input type="button" value="8"></td>
@@ -74,6 +89,7 @@
 						<td><input type="button" value="."></td>
 						<td><input type="button" value="="></td>
 					</tr>
+					<!-- you could add a 5th row here, and all rows would share height equally -->
 				</tbody>
 			</table>
 		</div>
