@@ -9,24 +9,24 @@ html, body {
   height: 100%;
 }
 
-/* Fallback for IE9 (no flexbox) – uses table layout */
+/* Fallback for IE9 (no flexbox) – simple block layout, works but not perfect */
 form {
-  display: table;
+  display: block;
   width: 100%;
   height: 100%;
 }
 output {
-  display: table-row;
+  display: block;
 }
 table {
-  display: table-row;   /* makes table fill remaining space in IE9 */
+  display: table;
   width: 100%;
-  height: 100%;         /* IE9 needs explicit height */
+  height: calc(100% - 60px); /* approximate height minus output, not perfect but functional */
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-/* For IE10, Safari 5.1, and modern browsers – override with flexbox */
+/* For IE10, Safari 5.1, and modern browsers – use flexbox */
 @supports (display: flex) or (display: -ms-flexbox) or (display: -webkit-box) {
   form {
     display: -ms-flexbox;     /* IE10 */
@@ -37,28 +37,27 @@ table {
     flex-direction: column;
   }
   
-  /* Reset form children to normal block behaviour inside flex */
-  output, table {
-    display: block;           /* override table-row from fallback */
-    width: 100%;
-  }
-  
   output {
+    display: block;
     -ms-flex-negative: 0;
     -webkit-box-flex: 0;
     flex-shrink: 0;
   }
   
   table {
+    display: table;           /* CRITICAL: keep table as table, not block */
+    width: 100%;
+    height: 100%;             /* needed for tr height percentages */
     -ms-flex-positive: 1;     /* IE10 */
     -webkit-box-flex: 1;      /* Safari 5.1 */
     flex-grow: 1;             /* Modern */
-    min-height: 0;            /* Prevents overflow in Firefox/WebKit */
-    height: auto;             /* Override IE9's height:100% */
+    min-height: 0;            /* prevents overflow */
+    table-layout: fixed;
+    border-collapse: collapse;
   }
 }
 
-/* Common table cell & button styles */
+/* Table cells and buttons */
 table td {
   padding: 4px;
   vertical-align: middle;
@@ -79,12 +78,11 @@ table input[type="button"] {
   box-sizing: border-box;
 }
 
-/* Equal row height – works in all browsers */
+/* Equal row heights – works because table has height:100% */
 table tr {
-  height: 25%; /* 4 rows = 25% each */
+  height: 25%; /* 4 rows */
 }
 
-/* Ensure tbody does not break layout */
 tbody {
-  display: table-row-group; /* default, but explicit for safety */
+  display: table-row-group; /* explicit default */
 }
