@@ -262,7 +262,7 @@ article {
 }
 
 .window:not(.open):not(.animating) {
-    display: none;
+    display: none !important;
 }
 
 .window:not(.open), .window:not(.open) > content, .window:not(.open) > div, .window:not(.open) > content > article, .window:not(.open) > content > article * {
