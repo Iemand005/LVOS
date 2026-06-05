@@ -4,40 +4,11 @@
     <title>HTA Drop Fix – No White Screen</title>
     <HTA:APPLICATION ID="app" APPLICATIONNAME="DropTest" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        #container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-        }
-        #blocker {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.001);
-            z-index: 9999;
-            pointer-events: auto;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html, body { width:100%; height:100%; overflow:hidden; }
+        #container { position:relative; width:100%; height:100%; }
+        iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; background:white; }
+        #blocker { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.001); z-index:9999; pointer-events:auto; }
     </style>
 </head>
 <body>
@@ -47,7 +18,7 @@
 </div>
 
 <script>
-    // Create iframe content without backticks (old IE style)
+    // Create iframe content (no backticks, old‑IE compatible)
     var iframe = document.getElementById('myFrame');
     var iframeDoc = iframe.contentWindow.document;
     iframeDoc.open();
@@ -113,12 +84,17 @@
     );
     iframeDoc.close();
 
-    // Overlay event blocking (no backticks)
-    var blocker = document.getElementById('blocker');
-
+    // ========== CRITICAL: Robust event killer for IE/HTA ==========
     function killEvent(e) {
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
+        // Get the actual event object (IE uses window.event, modern uses parameter)
+        var evt = e || window.event;
+        if (evt) {
+            if (evt.preventDefault) evt.preventDefault();
+            if (evt.stopPropagation) evt.stopPropagation();
+            evt.returnValue = false;
+            evt.cancelBubble = true;
+        }
+        // Extra safety: kill the global window.event
         if (window.event) {
             window.event.returnValue = false;
             window.event.cancelBubble = true;
@@ -126,7 +102,10 @@
         return false;
     }
 
-    blocker.ondragover = killEvent;
+    var blocker = document.getElementById('blocker');
+
+    // Override all drag/drop events on the blocker
+    blocker.ondragover = function(e) { return killEvent(e); };
     blocker.ondragenter = function(e) {
         killEvent(e);
         iframe.contentWindow.postMessage({ type: 'dragenter' }, '*');
@@ -139,15 +118,18 @@
     };
     blocker.ondrop = function(e) {
         killEvent(e);
+        var evt = e || window.event;
         var dropData = { files: [], text: '', html: '' };
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            dropData.files = Array.prototype.slice.call(e.dataTransfer.files);
-        }
-        if (e.dataTransfer && e.dataTransfer.getData) {
-            var plain = e.dataTransfer.getData('Text');
-            if (plain) dropData.text = plain;
-            var html = e.dataTransfer.getData('HTML');
-            if (html) dropData.html = html;
+        if (evt && evt.dataTransfer) {
+            if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
+                dropData.files = Array.prototype.slice.call(evt.dataTransfer.files);
+            }
+            if (evt.dataTransfer.getData) {
+                var plain = evt.dataTransfer.getData('Text');
+                if (plain) dropData.text = plain;
+                var html = evt.dataTransfer.getData('HTML');
+                if (html) dropData.html = html;
+            }
         }
         iframe.contentWindow.postMessage({
             type: 'drop',
@@ -158,9 +140,9 @@
         return false;
     };
 
-    // Parent window protection
-    window.ondragover = killEvent;
-    window.ondrop = killEvent;
+    // Also protect the parent window
+    window.ondragover = function(e) { return killEvent(e); };
+    window.ondrop = function(e) { return killEvent(e); };
 </script>
 </body>
 </html>
