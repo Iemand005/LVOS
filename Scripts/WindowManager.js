@@ -327,8 +327,8 @@ Dialog.prototype.initWithObject = function(object) {
         this.moveEvents = object.moveEvents || false;
     }
 
-    this.minWidth = 100;
-    this.minHeight = 200;
+    this.minWidth = 180;
+    this.minHeight = 240;
     
     this.originalBody = this.body;
 

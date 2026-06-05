@@ -367,6 +367,10 @@ article > * {
     pointer-events: auto !important;
 } */
 
+button {
+    pointer-events: auto !important;
+}
+
 button:hover {
     background-color: rgba(153, 153, 153, 0.219);
 }
