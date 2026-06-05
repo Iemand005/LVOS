@@ -9,10 +9,9 @@ html, body {
   height: 100%;
 }
 
-/* Fallback for IE9 (no flexbox) – simple block layout, works but not perfect */
+/* Default for IE9 and other non-flex browsers */
 form {
   display: block;
-  width: 100%;
   height: 100%;
 }
 output {
@@ -21,49 +20,50 @@ output {
 table {
   display: table;
   width: 100%;
-  height: calc(100% - 60px); /* approximate height minus output, not perfect but functional */
   table-layout: fixed;
   border-collapse: collapse;
+  /* fallback height – will be overridden by flex or JS */
+  height: calc(100% - 60px);
 }
 
-/* For IE10, Safari 5.1, and modern browsers – use flexbox */
+/* For IE10, Safari 5.1+, modern browsers */
 @supports (display: flex) or (display: -ms-flexbox) or (display: -webkit-box) {
   form {
-    display: -ms-flexbox;     /* IE10 */
-    display: -webkit-box;     /* Safari 5.1 */
-    display: flex;            /* Modern */
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
     -ms-flex-direction: column;
     -webkit-box-orient: vertical;
     flex-direction: column;
   }
-  
   output {
-    display: block;
     -ms-flex-negative: 0;
     -webkit-box-flex: 0;
     flex-shrink: 0;
   }
-  
   table {
-    display: table;           /* CRITICAL: keep table as table, not block */
+    display: table;        /* keep as table */
     width: 100%;
-    height: 100%;             /* needed for tr height percentages */
-    -ms-flex-positive: 1;     /* IE10 */
-    -webkit-box-flex: 1;      /* Safari 5.1 */
-    flex-grow: 1;             /* Modern */
-    min-height: 0;            /* prevents overflow */
-    table-layout: fixed;
-    border-collapse: collapse;
+    -ms-flex-positive: 1;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    height: auto;          /* let flex control height */
+    min-height: 0;
   }
 }
 
-/* Table cells and buttons */
+/* Equal row heights – this works in all modern browsers + IE10/11 */
+/* But Safari 5 needs a JS fallback – see below */
+table tr {
+  height: 25%;
+}
+
+/* Button styles */
 table td {
   padding: 4px;
   vertical-align: middle;
   text-align: center;
 }
-
 table input[type="button"] {
   width: 100%;
   height: 100%;
@@ -77,12 +77,6 @@ table input[type="button"] {
   cursor: pointer;
   box-sizing: border-box;
 }
-
-/* Equal row heights – works because table has height:100% */
-table tr {
-  height: 25%; /* 4 rows */
-}
-
 tbody {
-  display: table-row-group; /* explicit default */
+  display: table-row-group;
 }
