@@ -4,9 +4,10 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>LVOS</title>
     <hta:application id="oApp" applicationname="LVOS" scroll="no" windowstate="normal" />
+    <link rel="stylesheet" href="./Styles/classes.css">
 </head>
 <body>
-    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" type="text/html">
+    <object id="wb" classid="clsid:8856F961-340A-11D0-A96B-00C04FD705A2" type="text/html" class="fullscreen">
         <param name="RegisterAsBrowser" value="1">
         <param name="RegisterAsDropTarget" value="1">
         <param name="Scroll" value="no">
@@ -14,11 +15,6 @@
 
     <iframe src="./index.html" frameborder="0" class="fullscreen" application="yes"></iframe>
     <script defer>
-        // function syncObjectSize() {
-        //     if (!wb) return;
-        //     wb.style.width = window.innerWidth + 'px';
-        //     wb.style.height = window.innerHeight + 'px';
-        // }
 
         window.onload = function() {
             wb.RegisterAsDropTarget = true;
@@ -40,9 +36,6 @@
                     }
                 };
             }
-
-            // syncObjectSize();
-            // window.onresize = syncObjectSize;
         };
     </script>
 </body>
