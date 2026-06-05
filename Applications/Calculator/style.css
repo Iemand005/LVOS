@@ -1,37 +1,68 @@
+/* Base reset – works everywhere */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body,
-table {
+html, body {
   width: 100%;
   height: 100%;
 }
 
+/* Default layout for IE9 (no flexbox support) – uses table layout */
 form {
+  display: table;
   width: 100%;
   height: 100%;
-  display: block;
 }
-
+output {
+  display: table-row;
+}
 table {
+  display: table-row;
   width: 100%;
-  height: 100%;
+  height: 100%; /* IE9: fills remaining space because table-row plus table layout */
   table-layout: fixed;
   border-collapse: collapse;
 }
 
+/* For IE10, Safari 5.1, and modern browsers – override the table layout */
+@supports (display: flex) or (display: -ms-flexbox) or (display: -webkit-box) {
+  form {
+    display: -ms-flexbox;     /* IE10 old spec */
+    display: -webkit-box;     /* Safari 5.1 & old WebKit */
+    display: flex;            /* Modern browsers */
+    -ms-flex-direction: column;
+    -webkit-box-orient: vertical;
+    flex-direction: column;
+  }
+  
+  /* For IE10: must use -ms-flex-positive, not flex-grow */
+  table {
+    display: block;           /* Reset from table layout */
+    width: 100%;
+    -ms-flex-positive: 1;     /* IE10 old spec equivalent */
+    -webkit-box-flex: 1;      /* Safari 5.1 old spec */
+    flex-grow: 1;             /* Modern browsers */
+    min-height: 0;            /* Prevents overflow in flex containers */
+  }
+  
+  /* Ensure output doesn't shrink */
+  output {
+    -ms-flex-negative: 0;
+    -webkit-box-flex: 0;
+    flex-shrink: 0;
+  }
+}
+
+/* Common table styles – work in all browsers */
 table td {
   padding: 4px;
-  border: none;
   vertical-align: middle;
   text-align: center;
 }
 
-table button,
 table input[type="button"] {
   width: 100%;
   height: 100%;
@@ -46,16 +77,7 @@ table input[type="button"] {
   box-sizing: border-box;
 }
 
-table button:hover,
-table input[type="button"]:hover {
-  background-color: #ffffff60;
-}
-
-table tbody {
-  display: table-row-group;
-}
-
+/* Equal row heights – works in all browsers */
 table tr {
-  display: table-row;
-  height: 25%;
+  height: 25%; /* 4 rows = 25% each */
 }
