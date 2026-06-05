@@ -332,6 +332,7 @@ article {
 }
 
 .slow-animations * {
+    -webkit-transition-duration: 3s !important;
     transition-duration: 3s !important;
 }
 
