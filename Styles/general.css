@@ -6,7 +6,8 @@
 \***************************/
 
 button,
-.button {
+.button,
+input {
     border: 1px solid black;
     border-radius: 4px;
     background-color: black;
@@ -23,7 +24,8 @@ button,
 
 @media (prefers-color-scheme: dark) {
     button,
-    .button {
+    .button,
+    input {
         border-color: #cecece3a;
         background-color: #bebebe38;
         color: white;
