@@ -22,6 +22,7 @@ td{
     vertical-align:middle;
     cursor:pointer;
     font-size:24px;
+    padding:0;
 }
 
 input{
@@ -30,6 +31,14 @@ input{
     box-sizing:border-box;
     font-size:32px;
     text-align:right;
+}
+
+/* key trick */
+.fill{
+    height:100%;
+    width:1px;
+    display:inline-block;
+    vertical-align:middle;
 }
 </style>
 
@@ -45,37 +54,37 @@ input{
     </tr>
 
     <tr>
-        <td>C</td>
-        <td>±</td>
-        <td>%</td>
-        <td>/</td>
+        <td><span class="fill"></span>C</td>
+        <td><span class="fill"></span>±</td>
+        <td><span class="fill"></span>%</td>
+        <td><span class="fill"></span>/</td>
     </tr>
 
     <tr>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>*</td>
+        <td><span class="fill"></span>7</td>
+        <td><span class="fill"></span>8</td>
+        <td><span class="fill"></span>9</td>
+        <td><span class="fill"></span>*</td>
     </tr>
 
     <tr>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>-</td>
+        <td><span class="fill"></span>4</td>
+        <td><span class="fill"></span>5</td>
+        <td><span class="fill"></span>6</td>
+        <td><span class="fill"></span>-</td>
     </tr>
 
     <tr>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>+</td>
+        <td><span class="fill"></span>1</td>
+        <td><span class="fill"></span>2</td>
+        <td><span class="fill"></span>3</td>
+        <td><span class="fill"></span>+</td>
     </tr>
 
     <tr>
-        <td colspan="2">0</td>
-        <td>.</td>
-        <td>=</td>
+        <td colspan="2"><span class="fill"></span>0</td>
+        <td><span class="fill"></span>.</td>
+        <td><span class="fill"></span>=</td>
     </tr>
 </table>
 
