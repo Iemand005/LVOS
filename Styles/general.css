@@ -10,6 +10,23 @@ button,
     border: 1px solid black;
     border-radius: 4px;
     background-color: black;
-    color: white;
+    cursor:pointer;
+	background-color: #ffffff38;
+	border: 1px solid #ffffff70;
+	border-radius: 5px;
+    color: black;
+}
 
+@media screen {
+    
+}
+
+@media (prefers-color-scheme: dark) {
+    button,
+    .button {
+        border: 1px solid black;
+        border-radius: 4px;
+        background-color: black;
+        color: white;
+    }
 }

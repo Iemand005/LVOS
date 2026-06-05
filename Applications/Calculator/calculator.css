@@ -28,7 +28,7 @@ input{
 }
 
 /* buttonpad cells */
-td.button{
+.button{
     border:1px solid #ccc;
     border-radius:5px;
     text-align:center;
@@ -36,7 +36,7 @@ td.button{
     font-size:24px;
     cursor:pointer;
 	background-color: #ffffff38;
-	border-radius: 5px;
 	border: 1px solid #ffffff70;
+	border-radius: 5px;
 	font-size: 1rem;
 }
