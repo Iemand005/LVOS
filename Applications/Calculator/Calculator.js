@@ -33,15 +33,11 @@ function clearAll() {
 }
 
 function press(value) {
-    if (value === "=") {
-        calculate();
-        return;
-    }
+    if (value === "=") 
+       return calculate();
 
-    if (value === "C") {
-        clearAll();
-        return;
-    }
+    if (value === "C") 
+        return clearAll();
 
     if (expression === "Error") {
         expression = "";
@@ -51,7 +47,6 @@ function press(value) {
     updateDisplay();
 }
 
-/* click handling for <td> */
 for (var i = 0; i < cells.length; i++) {
     cells[i].onclick = function () {
         var value = this.textContent || this.innerText;

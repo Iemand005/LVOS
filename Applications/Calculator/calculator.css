@@ -1,0 +1,42 @@
+
+html,body{
+    margin:0;
+    height:100%;
+}
+
+table{
+    width:100%;
+    height:100%;
+    border-collapse:separate;
+    border-spacing:6px;
+    table-layout:fixed;
+}
+
+/* display row stays minimal */
+#displayRow td{
+    height:1px;
+    padding:0;
+}
+
+/* display */
+input{
+    width:100%;
+    box-sizing:border-box;
+    font-size:32px;
+    text-align:right;
+    border-radius:5px;
+}
+
+/* buttonpad cells */
+td.button{
+    border:1px solid #ccc;
+    border-radius:5px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:24px;
+    cursor:pointer;
+	background-color: #ffffff38;
+	border-radius: 5px;
+	border: 1px solid #ffffff70;
+	font-size: 1rem;
+}
