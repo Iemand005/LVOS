@@ -1,125 +1,97 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-	<meta charset="UTF-8">
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-		}
+<meta charset="utf-8">
+<title>Calculator</title>
 
-		html, body {
-			height: 100%;
-		}
+<style type="text/css">
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
 
-		/* Outer table replaces the form */
-		.outer-table {
-			width: 100%;
-			height: 100%;
-			border-collapse: collapse;
-		}
-		.outer-table td {
-			padding: 0;
-			vertical-align: top;
-		}
+body {
+    font-family: Arial, sans-serif;
+}
 
-		/* Top row (red, auto height) */
-		.top-row td {
-			background: red;
-		}
-		.top-row input {
-			width: 100%;
-			border: none;
-			background: red;
-			color: white;
-			font-size: 1.2rem;
-			padding: 16px;
-			box-sizing: border-box;
-		}
+#calculator {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
-		/* Bottom row (green, stretches) */
-		.bottom-row {
-			height: 100%;
-		}
-		.bottom-row td {
-			background: green;
-			height: 100%;
-		}
+#display {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    font-size: 32px;
+    text-align: right;
+    padding: 10px;
+}
 
-		/* Your original button table – untouched */
-		.button-table {
-			width: 100%;
-			height: 100%;
-			border-collapse: collapse;
-		}
-		.button-table td {
-			padding: 0;
-			border: 1px solid rgba(0,0,0,0.1);
-		}
-		.button-table tr {
-			height: 0.1%;   /* equal row distribution */
-		}
-		.button-table input[type="button"] {
-			display: block;
-			width: 100%;
-			height: 100%;
-			margin: 0;
-			box-sizing: border-box;
-			border: none;
-			background: #f0f0f0;
-			font-size: 1.1rem;
-			cursor: pointer;
-		}
-		.button-table input[type="button"]:active {
-			background: #ccc;
-		}
-	</style>
+.button-cell {
+    padding: 0;
+}
+
+.button-cell button {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 1px solid #999;
+    font-size: 24px;
+    cursor: pointer;
+}
+</style>
+
 </head>
-
 <body>
-	<table class="outer-table">
-		<!-- Top row: auto height (red) -->
-		<tr class="top-row">
-			<td>
-				<input value="hi" readonly>
-			</td>
-		</tr>
-		<!-- Bottom row: stretches to fill remaining space (green) -->
-		<tr class="bottom-row">
-			<td>
-				<!-- Your original button table, exactly as you wrote it -->
-				<table class="button-table">
-					<tbody>
-						<tr>
-							<td><input type="button" value="7"></td>
-							<td><input type="button" value="8"></td>
-							<td><input type="button" value="9"></td>
-							<td><input type="button" value="*"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="4"></td>
-							<td><input type="button" value="5"></td>
-							<td><input type="button" value="6"></td>
-							<td><input type="button" value="-"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="1"></td>
-							<td><input type="button" value="2"></td>
-							<td><input type="button" value="3"><td>
-							<td><input type="button" value="+"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="C"></td>
-							<td><input type="button" value="0"></td>
-							<td><input type="button" value="."></td>
-							<td><input type="button" value="="></td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-	</table>
-</body>
 
+<table id="calculator">
+    <tr style="height:15%;">
+        <td colspan="4">
+            <input id="display" type="text" readonly="readonly" value="0">
+        </td>
+    </tr>
+
+    <tr style="height:17%;">
+        <td class="button-cell"><button>C</button></td>
+        <td class="button-cell"><button>±</button></td>
+        <td class="button-cell"><button>%</button></td>
+        <td class="button-cell"><button>/</button></td>
+    </tr>
+
+    <tr style="height:17%;">
+        <td class="button-cell"><button>7</button></td>
+        <td class="button-cell"><button>8</button></td>
+        <td class="button-cell"><button>9</button></td>
+        <td class="button-cell"><button>*</button></td>
+    </tr>
+
+    <tr style="height:17%;">
+        <td class="button-cell"><button>4</button></td>
+        <td class="button-cell"><button>5</button></td>
+        <td class="button-cell"><button>6</button></td>
+        <td class="button-cell"><button>-</button></td>
+    </tr>
+
+    <tr style="height:17%;">
+        <td class="button-cell"><button>1</button></td>
+        <td class="button-cell"><button>2</button></td>
+        <td class="button-cell"><button>3</button></td>
+        <td class="button-cell"><button>+</button></td>
+    </tr>
+
+    <tr style="height:17%;">
+        <td colspan="2" class="button-cell"><button>0</button></td>
+        <td class="button-cell"><button>.</button></td>
+        <td class="button-cell"><button>=</button></td>
+    </tr>
+</table>
+
+</body>
 </html>
