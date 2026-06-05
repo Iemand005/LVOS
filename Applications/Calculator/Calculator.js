@@ -45,7 +45,7 @@ Calculator.prototype.press = function (value) {
         this.expression = "";
 
     this.expression += value;
-    updateDisplay();
+    this.updateDisplay();
 }
 
 var calculator = new Calculator();
