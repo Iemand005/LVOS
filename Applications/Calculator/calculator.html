@@ -9,9 +9,16 @@ html,body{
     height:100%;
 }
 
-/* display */
-#displayWrap{
-    height:15%;
+table{
+    width:100%;
+    height:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+/* top display row */
+#displayRow td{
+    padding:0;
 }
 
 input{
@@ -20,20 +27,19 @@ input{
     box-sizing:border-box;
     font-size:32px;
     text-align:right;
-    margin:0;
     border-radius:5px;
 }
 
-/* keypad */
+/* bottom keypad fills remaining space */
 #pad{
     width:100%;
-    height:85%;
+    height:100%;
     border-collapse:separate;
     border-spacing:6px;
     table-layout:fixed;
 }
 
-td{
+#pad td{
     border:1px solid #ccc;
     border-radius:5px;
     text-align:center;
@@ -47,43 +53,33 @@ td{
 
 <body>
 
-<div id="displayWrap">
-    <input readonly value="0">
-</div>
-
-<table id="pad">
-    <tr>
-        <td>C</td>
-        <td>±</td>
-        <td>%</td>
-        <td>/</td>
+<table>
+    <tr id="displayRow">
+        <td>
+            <input readonly value="0">
+        </td>
     </tr>
 
     <tr>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>*</td>
-    </tr>
-
-    <tr>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>-</td>
-    </tr>
-
-    <tr>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>+</td>
-    </tr>
-
-    <tr>
-        <td colspan="2">0</td>
-        <td>.</td>
-        <td>=</td>
+        <td style="padding:0;">
+            <table id="pad">
+                <tr>
+                    <td>C</td><td>±</td><td>%</td><td>/</td>
+                </tr>
+                <tr>
+                    <td>7</td><td>8</td><td>9</td><td>*</td>
+                </tr>
+                <tr>
+                    <td>4</td><td>5</td><td>6</td><td>-</td>
+                </tr>
+                <tr>
+                    <td>1</td><td>2</td><td>3</td><td>+</td>
+                </tr>
+                <tr>
+                    <td colspan="2">0</td><td>.</td><td>=</td>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>
 
