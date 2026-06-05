@@ -29,7 +29,6 @@
 
 		input[type="button"] {
 			height: 100%;
-			/* additions for filling cell */
 			display: block;
 			width: 100%;
 			margin: 0;
@@ -48,12 +47,16 @@
 			border-collapse: collapse;
 		}
 		
-		/* minimal changes for variable rows */
 		td {
 			padding: 0;
 		}
+		
+		/* ===== FIX FOR VARIABLE ROWS (IE9 + all browsers) ===== */
+		tbody {
+			height: 100%;        /* IE9 needs tbody to inherit table height */
+		}
 		tr {
-			height: 1%;   /* old trick – rows share remaining height equally */
+			height: 0.1%;        /* equal distribution among all rows */
 		}
 	</style>
 </head>
@@ -64,7 +67,7 @@
 		<div>
 			<table>
 				<tbody>
-					<!-- you can add or remove rows, they will automatically stretch equally -->
+					<!-- You can add or remove any number of rows -->
 					<tr>
 						<td><input type="button" value="7"></td>
 						<td><input type="button" value="8"></td>
@@ -89,7 +92,7 @@
 						<td><input type="button" value="."></td>
 						<td><input type="button" value="="></td>
 					</tr>
-					<!-- you could add a 5th row here, and all rows would share height equally -->
+					<!-- Try adding a 5th row – all rows will stay equal -->
 				</tbody>
 			</table>
 		</div>
