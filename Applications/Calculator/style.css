@@ -38,13 +38,11 @@ table input[type="button"] {
   display: block;
   margin: 0;
   padding: 12px 0;
-  /* vertical padding for better appearance */
   background-color: #ffffff38;
   border-radius: 5px;
   border: 1px solid #ffffff70;
   font-size: 1rem;
   cursor: pointer;
-  /* ensure consistent sizing */
   box-sizing: border-box;
 }
 
@@ -59,4 +57,5 @@ table tbody {
 
 table tr {
   display: table-row;
+  height: 33%;
 }
