@@ -1,4 +1,3 @@
-/* Base reset – works everywhere */
 * {
   margin: 0;
   padding: 0;
@@ -10,7 +9,7 @@ html, body {
   height: 100%;
 }
 
-/* Default layout for IE9 (no flexbox support) – uses table layout */
+/* Fallback for IE9 (no flexbox) – uses table layout */
 form {
   display: table;
   width: 100%;
@@ -20,43 +19,46 @@ output {
   display: table-row;
 }
 table {
-  display: table-row;
+  display: table-row;   /* makes table fill remaining space in IE9 */
   width: 100%;
-  height: 100%; /* IE9: fills remaining space because table-row plus table layout */
+  height: 100%;         /* IE9 needs explicit height */
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-/* For IE10, Safari 5.1, and modern browsers – override the table layout */
+/* For IE10, Safari 5.1, and modern browsers – override with flexbox */
 @supports (display: flex) or (display: -ms-flexbox) or (display: -webkit-box) {
   form {
-    display: -ms-flexbox;     /* IE10 old spec */
-    display: -webkit-box;     /* Safari 5.1 & old WebKit */
-    display: flex;            /* Modern browsers */
+    display: -ms-flexbox;     /* IE10 */
+    display: -webkit-box;     /* Safari 5.1 */
+    display: flex;            /* Modern */
     -ms-flex-direction: column;
     -webkit-box-orient: vertical;
     flex-direction: column;
   }
   
-  /* For IE10: must use -ms-flex-positive, not flex-grow */
-  table {
-    display: block;           /* Reset from table layout */
+  /* Reset form children to normal block behaviour inside flex */
+  output, table {
+    display: block;           /* override table-row from fallback */
     width: 100%;
-    -ms-flex-positive: 1;     /* IE10 old spec equivalent */
-    -webkit-box-flex: 1;      /* Safari 5.1 old spec */
-    flex-grow: 1;             /* Modern browsers */
-    min-height: 0;            /* Prevents overflow in flex containers */
   }
   
-  /* Ensure output doesn't shrink */
   output {
     -ms-flex-negative: 0;
     -webkit-box-flex: 0;
     flex-shrink: 0;
   }
+  
+  table {
+    -ms-flex-positive: 1;     /* IE10 */
+    -webkit-box-flex: 1;      /* Safari 5.1 */
+    flex-grow: 1;             /* Modern */
+    min-height: 0;            /* Prevents overflow in Firefox/WebKit */
+    height: auto;             /* Override IE9's height:100% */
+  }
 }
 
-/* Common table styles – work in all browsers */
+/* Common table cell & button styles */
 table td {
   padding: 4px;
   vertical-align: middle;
@@ -77,7 +79,12 @@ table input[type="button"] {
   box-sizing: border-box;
 }
 
-/* Equal row heights – works in all browsers */
+/* Equal row height – works in all browsers */
 table tr {
   height: 25%; /* 4 rows = 25% each */
+}
+
+/* Ensure tbody does not break layout */
+tbody {
+  display: table-row-group; /* default, but explicit for safety */
 }
