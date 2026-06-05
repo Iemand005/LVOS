@@ -24,8 +24,7 @@ button,
 @media (prefers-color-scheme: dark) {
     button,
     .button {
-        border: 1px solid black;
-        border-radius: 4px;
+        border-color: rebeccapurple;
         background-color: black;
         color: white;
     }
