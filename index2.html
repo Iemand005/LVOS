@@ -2,32 +2,60 @@
 <html>
 <head>
     <style>
-        body { font-family: Arial; padding:20px; }
-        .dropzone { border:3px dashed #aaa; padding:40px; text-align:center; }
+        body { font-family: Arial; padding: 20px; }
+        .dropzone { border: 3px dashed #aaa; border-radius: 12px; padding: 40px; text-align: center; background: #f9f9f9; }
+        .dropzone.drag-over { border-color: #0078d7; background: #e5f0ff; }
+        #output { margin-top: 20px; padding: 10px; background: #fff; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-<div class="dropzone">
+<div class="dropzone" id="dropzone">
     <h2>Drop files or text here</h2>
+    <p>Drag from desktop, Explorer, or any text</p>
 </div>
-<div id="output"></div>
+<div id="output">Waiting for drop...</div>
 
 <script>
-    // This function will be called from the parent HTA
+    var dropzone = document.getElementById('dropzone');
+    var output = document.getElementById('output');
+
+    // This function is called from the parent HTA when a drop occurs
     window.handleDropInContent = function(files, text) {
-        var out = document.getElementById('output');
-        out.innerHTML = '';
+        dropzone.classList.remove('drag-over');
+        output.innerHTML = '';
+
         if (files.length > 0) {
-            out.innerHTML += '<strong>Files:</strong><ul>';
-            for (var i=0; i<files.length; i++) {
-                out.innerHTML += '<li>' + files[i].name + '</li>';
+            output.innerHTML += '<strong>Files:</strong><ul>';
+            for (var i = 0; i < files.length; i++) {
+                output.innerHTML += '<li>' + files[i].name + ' (' + (files[i].size || '?') + ' bytes)</li>';
+                // Optional: read file content
+                var reader = new FileReader();
+                reader.onload = (function(fileName) {
+                    return function(ev) {
+                        output.innerHTML += '<div><strong>Content of ' + fileName + ':</strong><pre>' + ev.target.result + '</pre></div>';
+                    };
+                })(files[i].name);
+                reader.readAsText(files[i], 'UTF-8');
             }
-            out.innerHTML += '</ul>';
+            output.innerHTML += '</ul>';
         }
+
         if (text) {
-            out.innerHTML += '<strong>Text:</strong><pre>' + text + '</pre>';
+            output.innerHTML += '<strong>Plain text:</strong><pre>' + text + '</pre>';
+        }
+
+        if (files.length === 0 && !text) {
+            output.innerHTML = 'No data received.';
         }
     };
+
+    // Optional: visual feedback for drag over the entire window
+    window.addEventListener('dragenter', function(e) {
+        dropzone.classList.add('drag-over');
+    });
+    window.addEventListener('dragleave', function(e) {
+        dropzone.classList.remove('drag-over');
+    });
 </script>
 </body>
 </html>

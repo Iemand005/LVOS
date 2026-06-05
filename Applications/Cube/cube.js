@@ -146,6 +146,9 @@ console.log(graphics);
 window.onresize = function (ev) {
   const bounds = canvas.getBoundingClientRect();
 
+  this.requestAnimationFrame(function () {
 
-  graphics.resize(bounds.width, bounds.height);
+    graphics.resize(bounds.width, bounds.height);
+    graphics.render();
+  });
 };

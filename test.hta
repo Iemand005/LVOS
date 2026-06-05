@@ -1,53 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTA Drop – No Iframe</title>
+    <title>HTA Drop – No Iframe, No Access Denied</title>
     <HTA:APPLICATION ID="app" APPLICATIONNAME="DropTest" />
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        html, body { width:100%; height:100%; overflow:hidden; }
-        #container {
-            width:100%;
-            height:100%;
-            overflow:auto;
-            background:white;
-        }
-        /* Optional: make it look like an iframe */
-        #contentDiv {
-            width:100%;
-            min-height:100%;
-        }
+        html, body { width:100%; height:100%; overflow:hidden; background:white; }
+        #contentDiv { width:100%; height:100%; overflow:auto; }
     </style>
 </head>
 <body>
-<div id="container">
-    <div id="contentDiv"></div>
-</div>
+<div id="contentDiv"></div>
 
 <script>
-    // Load external HTML file into the div (works like an iframe)
-    function loadPage(url) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                document.getElementById('contentDiv').innerHTML = xhr.responseText;
-                // Re‑execute any scripts inside the loaded HTML (optional)
-                var scripts = document.getElementById('contentDiv').getElementsByTagName('script');
-                for (var i = 0; i < scripts.length; i++) {
-                    eval(scripts[i].text);
-                }
+    // Use FileSystemObject to load the HTML file (no XHR, no security error)
+    function loadLocalPage(filePath) {
+        try {
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var file = fso.OpenTextFile(filePath, 1); // 1 = ForReading
+            var htmlContent = file.ReadAll();
+            file.Close();
+            document.getElementById('contentDiv').innerHTML = htmlContent;
+            // Re-run any scripts inside the loaded HTML (important)
+            var scripts = document.getElementById('contentDiv').getElementsByTagName('script');
+            for (var i = 0; i < scripts.length; i++) {
+                eval(scripts[i].text);
             }
-        };
-        xhr.send();
+        } catch(e) {
+            document.getElementById('contentDiv').innerHTML = '<h2>Error loading index.html</h2><p>' + e.message + '</p>';
+        }
     }
 
-    // Load your main page
-    loadPage('index2.html');
+    // Load your main page (adjust path if needed)
+    loadLocalPage('index2.html');
 
-    // ----- Handle drops directly on the container (no iframe) -----
-    var container = document.getElementById('container');
-
+    // ----- Handle drops on the main window (no iframe) -----
     function killEvent(e) {
         var evt = e || window.event;
         if (evt) {
@@ -63,13 +50,16 @@
         return false;
     }
 
-    container.ondragover = killEvent;
-    container.ondrop = function(e) {
+    // Block dragover on the whole window
+    window.ondragover = killEvent;
+
+    // Handle the drop event
+    window.ondrop = function(e) {
         killEvent(e);
         var evt = e || window.event;
         if (!evt || !evt.dataTransfer) return false;
 
-        // Get dropped files
+        // Extract files
         var files = [];
         if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
             for (var i = 0; i < evt.dataTransfer.files.length; i++) {
@@ -77,18 +67,23 @@
             }
         }
 
-        // Get plain text
+        // Extract plain text
         var text = '';
         if (evt.dataTransfer.getData) {
             text = evt.dataTransfer.getData('Text') || '';
         }
 
-        // Now you can pass this data to the loaded content
-        // For example, call a global function in the loaded page
+        // Forward the drop data to the loaded content's global handler (if it exists)
         if (window.handleDropInContent) {
             window.handleDropInContent(files, text);
         } else {
-            alert('Dropped ' + files.length + ' file(s) and text: ' + text);
+            // Fallback: show an alert or write to a known element
+            var out = document.getElementById('contentDiv').querySelector('#output');
+            if (out) {
+                out.innerHTML = '<strong>Dropped:</strong> ' + files.length + ' file(s) and text: ' + text;
+            } else {
+                alert('Dropped ' + files.length + ' file(s) and text: ' + text);
+            }
         }
         return false;
     };
