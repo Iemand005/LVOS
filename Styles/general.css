@@ -17,6 +17,16 @@ input {
     color: black;
 }
 
+button:hover,
+.button:hover {
+    background-color: #ffffff2b;
+}
+
+button:active,
+.button:active {
+    background-color: #0000002b;
+}
+
 @media (prefers-color-scheme: dark) {
     button,
     .button,
