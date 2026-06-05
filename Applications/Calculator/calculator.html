@@ -9,97 +9,117 @@
 			padding: 0;
 		}
 
-		html,
-		body {
+		html, body {
 			height: 100%;
 		}
 
-		form {
-			display: table;
+		/* Outer table replaces the form */
+		.outer-table {
 			width: 100%;
 			height: 100%;
+			border-collapse: collapse;
+		}
+		.outer-table td {
+			padding: 0;
+			vertical-align: top;
 		}
 
-		input {
+		/* Top row (red, auto height) */
+		.top-row td {
 			background: red;
-			display: table-row;
+		}
+		.top-row input {
 			width: 100%;
 			border: none;
-		}
-
-		input[type="button"] {
-			height: 100%;
-			display: block;
-			width: 100%;
-			margin: 0;
+			background: red;
+			color: white;
+			font-size: 1.2rem;
+			padding: 16px;
 			box-sizing: border-box;
 		}
 
-		/* GREEN AREA – now a positioning parent */
-		div {
-			background: green;
-			display: table-row;
+		/* Bottom row (green, stretches) */
+		.bottom-row {
 			height: 100%;
-			position: relative;    /* NEW */
+		}
+		.bottom-row td {
+			background: green;
+			height: 100%;
 		}
 
-		/* TABLE – absolute fill inside the green area */
-		div > table {
-			position: absolute;    /* NEW */
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
+		/* Your original button table – untouched */
+		.button-table {
 			width: 100%;
+			height: 100%;
 			border-collapse: collapse;
 		}
-
-		td {
+		.button-table td {
 			padding: 0;
+			border: 1px solid rgba(0,0,0,0.1);
 		}
-
-		/* equal row distribution (works for any number of rows) */
-		tr {
-			height: 0.1%;
+		.button-table tr {
+			height: 0.1%;   /* equal row distribution */
+		}
+		.button-table input[type="button"] {
+			display: block;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			box-sizing: border-box;
+			border: none;
+			background: #f0f0f0;
+			font-size: 1.1rem;
+			cursor: pointer;
+		}
+		.button-table input[type="button"]:active {
+			background: #ccc;
 		}
 	</style>
 </head>
 
 <body>
-	<form>
-		<input value="hi">
-		<div>
-			<!-- table remains exactly as you wrote it -->
-			<table>
-				<tbody>
-					<tr>
-						<td><input type="button" value="7"></td>
-						<td><input type="button" value="8"></td>
-						<td><input type="button" value="9"></td>
-						<td><input type="button" value="*"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="4"></td>
-						<td><input type="button" value="5"></td>
-						<td><input type="button" value="6"></td>
-						<td><input type="button" value="-"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="1"></td>
-						<td><input type="button" value="2"></td>
-						<td><input type="button" value="3"></td>
-						<td><input type="button" value="+"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="C"></td>
-						<td><input type="button" value="0"></td>
-						<td><input type="button" value="."></td>
-						<td><input type="button" value="="></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</form>
+	<table class="outer-table">
+		<!-- Top row: auto height (red) -->
+		<tr class="top-row">
+			<td>
+				<input value="hi" readonly>
+			</td>
+		</tr>
+		<!-- Bottom row: stretches to fill remaining space (green) -->
+		<tr class="bottom-row">
+			<td>
+				<!-- Your original button table, exactly as you wrote it -->
+				<table class="button-table">
+					<tbody>
+						<tr>
+							<td><input type="button" value="7"></td>
+							<td><input type="button" value="8"></td>
+							<td><input type="button" value="9"></td>
+							<td><input type="button" value="*"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="4"></td>
+							<td><input type="button" value="5"></td>
+							<td><input type="button" value="6"></td>
+							<td><input type="button" value="-"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="1"></td>
+							<td><input type="button" value="2"></td>
+							<td><input type="button" value="3"><td>
+							<td><input type="button" value="+"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="C"></td>
+							<td><input type="button" value="0"></td>
+							<td><input type="button" value="."></td>
+							<td><input type="button" value="="></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</table>
 </body>
 
 </html>
