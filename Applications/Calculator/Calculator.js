@@ -3,13 +3,15 @@
 var output = document.querySelector("input");
 var cells = document.getElementsByTagName("td");
 
-var expression = "";
+function Calculator() {
+    this.expression = "";
+}
 
-function updateDisplay() {
+Calculator.prototype.updateDisplay = function() {
     output.value = expression || "0";
 }
 
-function calculate() {
+Calculator.prototype.calculate = function () {
     var safeExpr = expression.replace(/[^0-9+\-*/.]/g, "");
 
     if (!safeExpr) {
@@ -27,12 +29,12 @@ function calculate() {
     updateDisplay();
 }
 
-function clearAll() {
+Calculator.prototype.clearAll = function () {
     expression = "";
     updateDisplay();
 }
 
-function press(value) {
+Calculator.prototype.press = function (value) {
     if (value === "=") 
        return calculate();
 
