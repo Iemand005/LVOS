@@ -24,8 +24,8 @@ button,
 @media (prefers-color-scheme: dark) {
     button,
     .button {
-        border-color: #7c7c7c79;
-        background-color: #4d4d4d38;
+        border-color: #cecece3a;
+        background-color: #bebebe38;
         color: white;
     }
 }
