@@ -51,12 +51,9 @@
 			padding: 0;
 		}
 		
-		/* ===== FIX FOR VARIABLE ROWS (IE9 + all browsers) ===== */
-		tbody {
-			height: 100%;        /* IE9 needs tbody to inherit table height */
-		}
+		/* Equal row height for any number of rows (IE9+) */
 		tr {
-			height: 0.1%;        /* equal distribution among all rows */
+			height: 0.1%;
 		}
 	</style>
 </head>
@@ -65,36 +62,37 @@
 	<form>
 		<input value="hi">
 		<div>
-			<table>
-				<tbody>
-					<!-- You can add or remove any number of rows -->
-					<tr>
-						<td><input type="button" value="7"></td>
-						<td><input type="button" value="8"></td>
-						<td><input type="button" value="9"></td>
-						<td><input type="button" value="*"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="4"></td>
-						<td><input type="button" value="5"></td>
-						<td><input type="button" value="6"></td>
-						<td><input type="button" value="-"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="1"></td>
-						<td><input type="button" value="2"></td>
-						<td><input type="button" value="3"></td>
-						<td><input type="button" value="+"></td>
-					</tr>
-					<tr>
-						<td><input type="button" value="C"></td>
-						<td><input type="button" value="0"></td>
-						<td><input type="button" value="."></td>
-						<td><input type="button" value="="></td>
-					</tr>
-					<!-- Try adding a 5th row – all rows will stay equal -->
-				</tbody>
-			</table>
+			<!-- ONLY ADDITION: a table-cell wrapper to make height:100% work in IE8/9/10 -->
+			<div style="display: table-cell; height: 100%;">
+				<table>
+					<tbody>
+						<tr>
+							<td><input type="button" value="7"></td>
+							<td><input type="button" value="8"></td>
+							<td><input type="button" value="9"></td>
+							<td><input type="button" value="*"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="4"></td>
+							<td><input type="button" value="5"></td>
+							<td><input type="button" value="6"></td>
+							<td><input type="button" value="-"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="1"></td>
+							<td><input type="button" value="2"></td>
+							<td><input type="button" value="3"></td>
+							<td><input type="button" value="+"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="C"></td>
+							<td><input type="button" value="0"></td>
+							<td><input type="button" value="."></td>
+							<td><input type="button" value="="></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</form>
 </body>
