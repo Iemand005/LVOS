@@ -1457,7 +1457,7 @@ function getDialogTemplate(){
     var template = document.querySelector("template") || document.getElementById("window-template");
     if (!template) return void console.warn("Couldn't find template!");
     var content = template.content;
-    return (content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
+    return (content || template).children[0];//document.querySelector("template");
 }
 
 function createDialog() {
