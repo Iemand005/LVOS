@@ -15,6 +15,7 @@ input {
 	border: 1px solid #ffffff70;
 	border-radius: 5px;
     color: black;
+    user-select: none;
 }
 
 button:hover,
