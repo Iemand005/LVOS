@@ -1454,8 +1454,8 @@ Dialog.prototype.retrieveBodyFromMetro = function() {
 }
 
 function getDialogTemplate(){
-    var template = document.querySelector("template");
-    if (!template) return null;
+    var template = document.querySelector("template") || document.getElementById("window-template");
+    if (!template) return void console.warn("Couldn't find template!");
     var content = template.content;
     return (content || document.getElementsByTagName("template")[0]).children[0];//document.querySelector("template");
 }
