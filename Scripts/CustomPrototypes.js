@@ -426,110 +426,77 @@ if (typeof Array.from !== "function") {
 })();
 
 
+(function () {
 
-(function() {
-    // Als addEventListener al bestaat (IE9+, Safari 5, etc.), doen we niks
+    // If modern browser, do nothing
     if (window.addEventListener) return;
 
-    // Bepaal het juiste prototypes (IE8 ondersteunt Window, Document en Element prototypes)
-    var targets = [Window.prototype];
-    if (typeof Document !== 'undefined') targets.push(Document.prototype);
-    if (typeof Element !== 'undefined') targets.push(Element.prototype);
-    
-    // Functie om de polyfill toe te passen
-    function polyfill(target) {
+    function patch(target) {
         if (!target) return;
 
-        // Polyfill voor addEventListener
-        target.addEventListener = function(type, listener) {
-            var self = this;
-            
-            // attachEvent verwacht 'on' voor het event-type (bijv. 'onclick' in plaats van 'click')
-            var eventType = 'on' + type;
+        if (!target._ieListeners) {
+            target._ieListeners = [];
+        }
 
-            // IE8 verliest standaard de 'this' context in de listener.
-            // We maken een wrapper om te zorgen dat 'this' naar het element blijft wijzen.
-            if (!this._ieListeners) this._ieListeners = [];
-            
-            var wrappedListener = function(event) {
-                // IE8 gebruikt window.event in plaats van het doorgegeven event-argument
-                event = event || window.event;
-                
-                // Polyfill handige moderne event-eigenschappen die IE8 mist
-                if (!event.target) event.target = event.srcElement;
+        target.addEventListener = function (type, listener) {
+            var self = this;
+            var eventType = "on" + type;
+
+            var wrapped = function () {
+                var event = window.event;
+
+                if (!event.target) {
+                    event.target = event.srcElement;
+                }
+
                 if (!event.preventDefault) {
-                    event.preventDefault = function() { event.returnValue = false; };
+                    event.preventDefault = function () {
+                        event.returnValue = false;
+                    };
                 }
+
                 if (!event.stopPropagation) {
-                    event.stopPropagation = function() { event.cancelBubble = true; };
+                    event.stopPropagation = function () {
+                        event.cancelBubble = true;
+                    };
                 }
-                
-                // Voer de originele functie uit met de juiste 'this' context
-                if (typeof listener.call === 'function' || typeof listener.call === 'object') {
-        listener.call(self, event);
-    } else {
-        // Fallback voor elementen/objecten in IE8 die geen .call ondersteunen
-        // We zetten de functie tijdelijk direct op het object om 'this' te behouden
-        self._currentListener = listener;
-        self._currentListener(event);
-        self._currentListener = null;
-    }
+
+                listener.call(self, event);
             };
 
-            // Sla de koppeling op zodat we deze later eventueel kunnen verwijderen
             this._ieListeners.push({
+                type: type,
                 original: listener,
-                wrapped: wrappedListener,
-                type: type
+                wrapped: wrapped
             });
 
-            this.attachEvent(eventType, wrappedListener);
+            this.attachEvent(eventType, wrapped);
         };
 
-        // Polyfill voor removeEventListener
-        target.removeEventListener = function(type, listener) {
-            var eventType = 'on' + type;
+        target.removeEventListener = function (type, listener) {
+            var eventType = "on" + type;
+
             if (!this._ieListeners) return;
 
             for (var i = 0; i < this._ieListeners.length; i++) {
                 var item = this._ieListeners[i];
-                if (item.original === listener && item.type === type) {
+
+                if (item.type === type && item.original === listener) {
                     this.detachEvent(eventType, item.wrapped);
                     this._ieListeners.splice(i, 1);
-                    break;
+                    return;
                 }
             }
         };
     }
 
-    // Pas de polyfill toe op Window, Document en alle HTML-elementen
-    for (var i = 0; i < targets.length; i++) {
-        polyfill(targets[i]);
-    }
+    // IMPORTANT: IE8-safe targets (NO prototypes)
+    patch(window);
+    patch(document);
+    patch(Element.prototype);
+
 })();
 
 
 // if (typeof module !== "undefined" && module.)
 if (typeof HTMLElement === "undefined") HTMLElement = Element
-
-(function () {
-
-    if (!Element.prototype.addEventListener) {
-
-        Element.prototype.addEventListener = function (type, listener) {
-            this.attachEvent("on" + type, listener);
-        };
-
-        Element.prototype.removeEventListener = function (type, listener) {
-            this.detachEvent("on" + type, listener);
-        };
-
-        // Optional but important: document/window support
-        document.addEventListener = Element.prototype.addEventListener;
-        document.removeEventListener = Element.prototype.removeEventListener;
-
-        window.addEventListener = Element.prototype.addEventListener;
-        window.removeEventListener = Element.prototype.removeEventListener;
-    }
-
-})();
