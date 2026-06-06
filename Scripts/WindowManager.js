@@ -13,6 +13,8 @@
 "use esnext"; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of /*let*/var and const.
 "use moz"; // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
+
+
 // Modifiable settings
 var useBlur = false,
 	useMica = false,
@@ -28,6 +30,8 @@ var useBlur = false,
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
+
+/**  @typedef {import(./physics.js).Vector} Vector */
 
 if (isIE) {
     useTransform = false;
@@ -622,7 +626,7 @@ Object.defineProperty(Dialog.prototype, "height", {
     }
 });
 
-Object.definseProperty(Dialog.prototype, "position", {
+Object.defineProperty(Dialog.prototype, "position", {
     get: function() { return new Vector(this.x, this.y); },
     set: function(position) {
         if (position instanceof Vector)
