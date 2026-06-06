@@ -946,7 +946,7 @@ function setClass(element, className, enabled) {
         if (!re.test(element.className))
             element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
     } else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-    return element.className.indexOf(className) > -1;
+    return element.className.indexOf(className) !== -1;
 }
 /**
  * 
