@@ -6,6 +6,8 @@
 
 var STORAGE_FILE = "app_storage.json";
 
+var supportsActiveX = typeof ActiveXObject !== "undefined";
+
 function ActiveXStorage() {
     this.fso = new ActiveXObject("Scripting.FileSystemObject");
 }
@@ -50,8 +52,7 @@ ActiveXStorage.prototype.getItem = function(key) {
 // }
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-    // if ()
-    this.storage = typeof localStorage !== "undefined" && localStorage || new ActiveXStorage();
+    this.storage = typeof localStorage !== "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
 }
 
 SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
