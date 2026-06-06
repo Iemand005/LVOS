@@ -177,6 +177,10 @@ main {
     font-size: 15px;
 }
 
+.fill {
+    height: 100%;
+}
+
 .window > content,
 .window > .content {
     display: -webkit-box;
