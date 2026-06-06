@@ -1091,6 +1091,7 @@ var windowManager = new WindowManager();
 windowManager.init();
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler(document);;
+window.onload=
 document.onload = function () {
     bodyCrawler = new DocumentCrawler(document);
 }
