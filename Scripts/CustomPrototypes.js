@@ -511,3 +511,25 @@ if (typeof Array.from !== "function") {
 
 // if (typeof module !== "undefined" && module.)
 if (typeof HTMLElement === "undefined") HTMLElement = Element
+
+(function () {
+
+    if (!Element.prototype.addEventListener) {
+
+        Element.prototype.addEventListener = function (type, listener) {
+            this.attachEvent("on" + type, listener);
+        };
+
+        Element.prototype.removeEventListener = function (type, listener) {
+            this.detachEvent("on" + type, listener);
+        };
+
+        // Optional but important: document/window support
+        document.addEventListener = Element.prototype.addEventListener;
+        document.removeEventListener = Element.prototype.removeEventListener;
+
+        window.addEventListener = Element.prototype.addEventListener;
+        window.removeEventListener = Element.prototype.removeEventListener;
+    }
+
+})();

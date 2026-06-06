@@ -64,26 +64,3 @@ Vector3D.prototype.div = function (amount) {
 Vector3D.prototype.normalize = function () {
     return this.div(this.x + this.y + this.z);
 }
-
-/**
- * @param {number} x 
- * @param {number} y 
- * @param {number} width 
- * @param {number} height 
- */
-function Rectangle(x, y, width, height) {
-    this.position = new Vector(x, y);
-    this.width = width;
-    this.height = height;
-}
-
-Rectangle.prototype = {
-    /** @param {Vector} vector */
-    contains: function (vector) {
-        return vector.x >= this.position.x && vector.y >= this.position.y && vector.x < this.position.x + this.width && vector.y < this.position.y + this.height;
-    },
-    get x() { return this.position.x; },
-    get y() { return this.position.y; },
-    set x(value) { this.position.x = value; },
-    set y(value) { this.position.y = value; }
-};
