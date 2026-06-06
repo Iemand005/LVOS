@@ -873,7 +873,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         target.removeEventListener(transitionEndEvent, animationHandler);
         if (onEnd) onEnd();
     };
-    target.addEventListener(transitionEndEvent, animationHandler);
+    target.addEventListener(transitionEndEvent, animationHandler, false);
 
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
@@ -1353,8 +1353,8 @@ function windowDragEvent(event){
 
 /** @param {boolean} enable */
 function toggleDialogDragEventHandler(enable) {
-    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Starting drag");
-    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent), console.log("Stoppinge drag");
+    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
+    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Stoppinge drag");
 }
 
 function disableDialogDrag() {
