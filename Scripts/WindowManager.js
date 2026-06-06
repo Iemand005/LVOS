@@ -296,7 +296,7 @@ Dialog.prototype.getElementByTagOrClassName = function (name) {
     var target = this.target;
     if (!target) return null;
     var elements = target.getElementsByTagName(name);
-    if (!elements) elements = target.getElementsByClassName(name);
+    if (!elements || !elements.length) elements = target.getElementsByClassName(name);
     return elements.length ? elements[0] : null;
 }
 
