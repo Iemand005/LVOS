@@ -45,6 +45,17 @@ var supportsObjectFit = Boolean(
     document.documentElement.style &&
     typeof document.documentElement.style.objectFit !== "undefined"
 );
+var supportsTransitions = (function () {
+    var style = document.createElement("div").style;
+
+    return (
+        "transition" in style ||
+        "WebkitTransition" in style ||
+        "MozTransition" in style ||
+        "OTransition" in style ||
+        "msTransition" in style
+    );
+})();
 
 if (supportsPointer) console.log("Supports pointer events!");
 
