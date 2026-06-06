@@ -964,14 +964,16 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         this.target.style.minWidth = style;
     });
     else {
-        var startPos = this.position.clone();
-        var startSize = this.size.clone();
+        var startPos = this.position;
+        var startSize = this.size;
         var self = this;
         animate(300, function(t) {
             self.x = lerp(startPos.x, 0, t);
             self.y = lerp(startPos.y, 0, t);
             self.width = lerp(startSize.x, window.innerWidth, t);
             self.height = lerp(startSize.y, window.innerHeight, t);
+        }, function() {
+            self.target.classList.toggle("fullscreen", enable);
         });
     }
 };
