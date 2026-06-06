@@ -329,7 +329,7 @@ article, .article {
     z-index: 9999 !important;
 }
 
-.use-transform .window.fullscreen {
+.use-scale .window.fullscreen {
     width: 100% !important;
     height: 100% !important;
 }
@@ -338,7 +338,7 @@ article, .article {
     border: 0px solid transparent !important;
 }
 
-.window.fullscreen  > .backdrop-clip * {
+.window.fullscreen > .backdrop-clip * {
     transform: translate(0px, 0px) !important;
 }
 

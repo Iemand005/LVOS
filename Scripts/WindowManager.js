@@ -656,21 +656,22 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
     get: function () {return this._useTransform; },
     set: function(useTransform) {
         this._useTransform = useTransform;
-        
+        var target = this.target;
+        if (!target) return;
         if (useTransform) {
-            this.target.style.top = "0px";
-            this.target.style.left = "0px";
-            this.target.style.right = "";
-            this.target.style.bottom = "";
+            target.style.top = "0px";
+            target.style.left = "0px";
+            target.style.right = "";
+            target.style.bottom = "";
         } else {
-            this.target.style.transform = "";
-            this.target.style.webkitTransform = "";
-            this.target.style.width = "auto";
-            this.target.style.height = "auto";
-            this.target.style.top = toPixels(this.top);
-            this.target.style.left = toPixels(this.left);
-            this.target.style.right = toPixels(this.right);
-            this.target.style.bottom = toPixels(this.bottom);
+            target.style.transform = "";
+            target.style.webkitTransform = "";
+            target.style.width = "auto";
+            target.style.height = "auto";
+            target.style.top = toPixels(this.top);
+            target.style.left = toPixels(this.left);
+            target.style.right = toPixels(this.right);
+            target.style.bottom = toPixels(this.bottom);
         }
 
         this.update();
@@ -681,14 +682,16 @@ Object.defineProperty(Dialog.prototype, "useScale", {
     get: function () {return this._useScale; },
     set: function(useScale) {
         this._useScale = useScale;
-        
+        var target = this.target;
+        if (!target) return;
         if (useScale) {
-            this.target.style.right = "";
-            this.target.style.bottom = "";
+            target.style.right = "";
+            target.style.bottom = "";
+            target.classList.add("use-transform");
         } else {
             if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
-            this.target.style.right = toPixels(this.right);
-            this.target.style.bottom = toPixels(this.bottom);
+            target.style.right = toPixels(this.right);
+            target.style.bottom = toPixels(this.bottom);
         }
 
         this.update();
