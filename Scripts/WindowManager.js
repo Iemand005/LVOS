@@ -637,7 +637,7 @@ Object.defineProperty(Dialog.prototype, "position", {
 Object.defineProperty(Dialog.prototype, "size", {
     get: function() { return new Vector(this.width, this.height); },
     set: function(size) {
-        if (position instanceof Vector)
+        if (size instanceof Vector)
             this.resize(size.x, size.y);
     }
 });

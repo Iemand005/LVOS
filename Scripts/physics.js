@@ -13,27 +13,25 @@ function Vector(x, y){
     this.y = y;
 }
 
-Vector.prototype = {
-    /** @param {Vector} vector */
-    add: function (vector) { return this.x += vector.x, this.y += vector.y, this; },
-    /** @param {Vector} vector */
-    sub: function (vector) { return this.x -= vector.x, this.y -= vector.y, this; },
-    /** @param {Vector} vector */
-    mul: function (vector) { return this.x *= vector.x, this.y *= vector.y, this; },
-    /** @param {Vector} vector */
-    div: function (vector) { return this.x /= vector.x, this.y /= vector.y, this; },
-    /** @param {Vector} vector */
-    sum: function (vector) { return new Vector(this.x + vector.x, this.y + vector.y); },
-    /** @param {Vector} vector */
-    difference: function (vector) { return new Vector(this.x - vector.x, this.y - vector.y); },
-    /** @param {Vector} vector */
-    product: function (vector) { return new Vector(this.x * vector.x, this.y * vector.y); },
-    /** @param {Vector} vector */
-    quotient: function (vector) { return new Vector(this.x / vector.x, this.y / vector.y); },
-    /** @param {Vector} vector */
-    set: function (vector) { return this.x = vector.x, this.y = vector.y, this; },
-    clone: function () { return new Vector(this.x, this.y); }
-};
+/** @param {Vector} vector */
+Vector.prototype.add = function (vector) { return this.x += vector.x, this.y += vector.y, this; };
+/** @param {Vector} vector */
+Vector.prototype.sub = function (vector) { return this.x -= vector.x, this.y -= vector.y, this; };
+/** @param {Vector} vector */
+Vector.prototype.mul = function (vector) { return this.x *= vector.x, this.y *= vector.y, this; };
+/** @param {Vector} vector */
+Vector.prototype.div = function (vector) { return this.x /= vector.x, this.y /= vector.y, this; };
+/** @param {Vector} vector */
+Vector.prototype.sum = function (vector) { return new Vector(this.x + vector.x, this.y + vector.y); };
+/** @param {Vector} vector */
+Vector.prototype.difference = function (vector) { return new Vector(this.x - vector.x, this.y - vector.y); };
+/** @param {Vector} vector */
+Vector.prototype.product = function (vector) { return new Vector(this.x * vector.x, this.y * vector.y); };
+/** @param {Vector} vector */
+Vector.prototype.quotient = function (vector) { return new Vector(this.x / vector.x, this.y / vector.y); };
+/** @param {Vector} vector */
+Vector.prototype.set = function (vector) { return this.x = vector.x, this.y = vector.y, this; };
+Vector.prototype.clone = function () { return new Vector(this.x, this.y); }
 
 /**
  * 
