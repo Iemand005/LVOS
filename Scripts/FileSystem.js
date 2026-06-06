@@ -3,7 +3,7 @@
 
 function probeAllStorage() {
   return {
-    OPFS: navigator.storage && typeof navigator.storage.getDirectory === 'function',
+    OPFS: !!navigator.storage && typeof navigator.storage.getDirectory === 'function',
     CacheAPI: 'caches' in window,
     
     IndexedDB: !!window.indexedDB,
@@ -14,7 +14,7 @@ function probeAllStorage() {
     GoogleGears: typeof window.GearsFactory !== 'undefined',
     FlashBridge: (function() {
       try { return !!new ActiveXObject('ShockwaveFlash.ShockwaveFlash'); } 
-      catch(e) { return !!navigator.plugins?.['Shockwave Flash']; }
+      catch(e) { return !!navigator.plugins && !!navigator.plugins['Shockwave Flash']; }
     })(),
     
     IE_userData: (function() {
@@ -72,7 +72,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
         fileEntry.createWriter(function(fileWriter) {
           
           fileWriter.onwriteend = function () {
-			resolve(`Saved via Chrome Legacy FS to ${fileEntry.toURL()}`);
+			resolve("Saved via Chrome Legacy FS to" + fileEntry.toURL());
 		  }
           fileWriter.onerror = reject;
           
