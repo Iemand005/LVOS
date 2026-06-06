@@ -12,7 +12,7 @@ var ConsoleOutType = {
 };
 
 function initializeConsoleApplication() {
-  if (!windowManager.windows["console"]) return;
+  if (!windowManager.windows || !windowManager.windows["console"]) return;
   var consoleForm = windowManager.windows["console"].originalBody; //consoleElement.getElementsByTagName("form")[0];
   var stdout =
     consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];

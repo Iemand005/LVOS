@@ -157,7 +157,8 @@ var reflectionToggle = document.getElementById("reflectiontoggle");
 var charmsbutton = applist.appendChild(document.createElement("button"));
 var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
-if (windowManager.windows.browser) elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
+if (windowManager.windows && windowManager.windows.browser)
+    elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
 
 bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 bodyCrawler.theme.onchange = function () { setThemeOld(this.selectedIndex); };
