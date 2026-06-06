@@ -1090,7 +1090,10 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 var windowManager = new WindowManager();
 windowManager.init();
 windowManager.isWindowUpdatesEnabled = true;
-var bodyCrawler = new DocumentCrawler(document);
+var bodyCrawler = null;
+document.onload = function () {
+    bodyCrawler = new DocumentCrawler(document);
+}
 var dragAction = new DragAction();
 var windowButtons = {
     eject: 0,
