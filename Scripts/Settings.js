@@ -50,7 +50,8 @@ ActiveXStorage.prototype.getItem = function(key) {
 // }
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-    this.storage = localStorage || new ActiveXStorage();
+    // if ()
+    this.storage = typeof localStorage !== "undefined" && localStorage || new ActiveXStorage();
 }
 
 SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
@@ -59,8 +60,8 @@ SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.s
 function setThemeOld(id) {
     if (typeof id === 'undefined') return;
     settings.set("theme", id);
-    for(/*let*/var index in windows){
-        /*const*/var window = windowManager.windows[index];
+    for(var index in windows){
+        var window = windowManager.windows[index];
         switch (id) {
             case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
                 break;
