@@ -37,11 +37,9 @@ if (isIE) {
 if (!hasLocalStorage) canSave  = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
-var supportsPointer = Boolean(
-    typeof navigator !== "undefined" &&
-    (navigator.pointerEnabled || navigator.msPointerEnabled) &&
-    typeof PointerEvent !== "undefined"
-);
+var supportsPointer =
+    typeof window !== "undefined" &&
+    ("PointerEvent" in window || "MSPointerEvent" in window);
 var supportsObjectFit = Boolean(
     document.documentElement &&
     document.documentElement.style &&
