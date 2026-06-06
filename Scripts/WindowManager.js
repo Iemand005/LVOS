@@ -1582,7 +1582,7 @@ Dialog.prototype.getState = function() {
         width: this.width || this.minHeight,
         height: this.height || this.minWidth,
         open: this.isOpen || false,
-        fullscreen: this.maximized
+        maximized: this.maximized
     }
     return state;
 }
@@ -1595,6 +1595,7 @@ Dialog.prototype.loadState = function(state) {
     this.z = state.z;
     this.width = state.width;   
     this.height = state.height;
+    this.maximized = state.maximized;
     if (state.open) this.launch();
 }
 
