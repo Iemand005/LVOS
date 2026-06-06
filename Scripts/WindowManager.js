@@ -663,6 +663,7 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
             target.style.left = "0px";
             target.style.right = "";
             target.style.bottom = "";
+            this.useScale = true;
         } else {
             target.style.transform = "";
             target.style.webkitTransform = "";
@@ -687,7 +688,7 @@ Object.defineProperty(Dialog.prototype, "useScale", {
         if (useScale) {
             target.style.right = "";
             target.style.bottom = "";
-            target.classList.add("use-transform");
+            target.classList.add("use-scale");
         } else {
             if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
             target.style.right = toPixels(this.right);
