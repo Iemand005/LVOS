@@ -145,9 +145,6 @@ var settings = new SettingsHandler();
 
 var elements = {
     desktop: null,
-    desktop: null,
-    desktop: null,
-    desktop: null,
     color: null,
     accent: null,
     resetColor: null,
