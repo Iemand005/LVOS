@@ -1326,8 +1326,8 @@ function windowActivationEvent(event, dialog) {
 
     cancelDomEvent(event);
     console.log("Activating window", dialog);
-    activeDialogId = dialog.id;
-    if (!activeDialogId) return;
+    // activeDialogId = dialog.id;
+    // if (!activeDialogId) return;
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
