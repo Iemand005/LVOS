@@ -1456,10 +1456,11 @@ Dialog.prototype.retrieveBodyFromMetro = function() {
 }
 
 function getDialogTemplate(){
+    /** @type {HTMLTemplateElement | HTMLElement | null} */
     var template = document.querySelector("template") || document.getElementById("window-template");
     if (!template) return void console.warn("Couldn't find template!");
-    var content = template.content;
-    return (content || template).children[0];//document.querySelector("template");
+    var content = template.content || template;
+    return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
 function createDialog() {
