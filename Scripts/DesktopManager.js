@@ -13,7 +13,7 @@ document.addEventListener("load", function() {
     applist.addEventListener("submit", function(event){
         event.preventDefault();
     });
-})
+}, false)
 
 var reflecitons = false;
 

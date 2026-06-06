@@ -73,7 +73,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
         }
     };
 
-    window.addEventListener("message", messageListener);
+    window.addEventListener("message", messageListener, false);
 
     return messageListener;
 };
