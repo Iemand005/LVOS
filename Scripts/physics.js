@@ -7,8 +7,8 @@
  * @param {number} [y]
  */
 function Vector(x, y){
-    if (typeof x === "undefined") x = 0, y = 0;
-    else if (typeof y === "undefined") y = x;
+    if (typeof x !== "number") x = 0, y = 0;
+    else if (typeof y !== "number") y = x;
     this.x = x;
     this.y = y;
 }
