@@ -75,7 +75,7 @@ function setThemeOld(id) {
 }
 
 function toggleCharmsEvent(ev) {
-    /*const*/var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
+    var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
     if (!isCharmsOpen() || clickedElement == charmsbutton || clickedElement == charmsbutton2) return;
 
     if(!(clickedElement == bodyCrawler.charms || bodyCrawler.charms.contains(clickedElement))) {
@@ -144,40 +144,54 @@ function updateBlurState() {
 var settings = new SettingsHandler();
 
 var elements = {
-    desktop: document.getElementById("desktop"),
-    color: document.getElementById("color"),
-    accent: document.getElementById("accent"),
-    resetColor: document.getElementById("resetaccent"),
-    resetAccent: document.getElementById("resetaccent"),
-    border: document.getElementById("border"),
-    dockAppList: document.getElementById("dockapplist")
+    desktop: null,
+    desktop: null,
+    desktop: null,
+    desktop: null,
+    color: null,
+    accent: null,
+    resetColor: null,
+    resetAccent: null,
+    border: null,
+    dockAppList: null
+};
+
+var loadElements = function() {
+    elements.desktop = document.getElementById("desktop");
+    elements.color = document.getElementById("color");
+    elements.accent = document.getElementById("accent");
+    elements.resetColor = document.getElementById("resetaccent");
+    elements.resetAccent = document.getElementById("resetaccent");
+    elements.border = document.getElementById("border");
+    elements.dockAppList = document.getElementById("dockapplist");
 }
 
 var metroAppList = document.getElementById("metroapplist");
-var blurToggle = document.getElementById("blurtoggle");
-var reflectionToggle = document.getElementById("reflectiontoggle");
-// var charmsbutton = applist.appendChild(document.createElement("button"));
-// var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+// var blurToggle = document.getElementById("blurtoggle");
+// var reflectionToggle = document.getElementById("reflectiontoggle");
+// // var charmsbutton = applist.appendChild(document.createElement("button"));
+// // var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
-if (windowManager.windows && windowManager.windows.browser)
-    elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
+// if (windowManager.windows && windowManager.windows.browser)
+//     elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
 
-bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-bodyCrawler.theme.onchange = function () { setThemeOld(this.selectedIndex); };
-reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
-blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
-elements.resetAccent.onclick = setAccentColor.bind(this, "");
-elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
-elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
-elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
+// // var settingsThing = bodyCrawler.getS
+// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
+// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
+// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
+// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
+// elements.resetAccent.onclick = setAccentColor.bind(this, "");
+// elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
+// elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
+// elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
 // charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
 
-metroAppList.classList.toggle("bottom", true);
+// metroAppList.classList.toggle("bottom", true);
 
 // charmsbutton.innerText = "Settings";
 // charmsbutton2.innerText = "Settings";
 
-window.addEventListener("mousedown", toggleCharmsEvent);
+window.addEventListener("mousedown", toggleCharmsEvent, false);
 
 loadSettings();
 
