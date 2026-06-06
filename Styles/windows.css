@@ -250,12 +250,6 @@ article, .article {
     pointer-events: auto;
 }
 
-.window > div.sizer-1 {
-    background-color: red;
-    width: 10px;
-    height: 10px;
-}
-
 .window.open {
     pointer-events: auto;
 }
