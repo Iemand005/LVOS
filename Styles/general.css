@@ -27,6 +27,11 @@ button:active,
     background-color: #0000002b;
 }
 
+input[type="number"] {
+    appearance: unset;
+    -moz-appearance: textfield;
+}
+
 @media (prefers-color-scheme: dark) {
     button,
     .button,
