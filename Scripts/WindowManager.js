@@ -970,10 +970,17 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         var self = this;
         if (!target) return;
         animate(300, function(t) {
-            self.x = lerp(startPos.x, 0, t);
-            self.y = lerp(startPos.y, 0, t);
-            self.width = lerp(startSize.x, window.innerWidth, t);
-            self.height = lerp(startSize.y, window.innerHeight, t);
+            if (enable) {
+                self.x = lerp(startPos.x, 0, t);
+                self.y = lerp(startPos.y, 0, t);
+                self.width = lerp(startSize.x, window.innerWidth, t);
+                self.height = lerp(startSize.y, window.innerHeight, t);
+            } else {
+                self.x = lerp(0, startPos.x, t);
+                self.y = lerp(0, startPos.y, t);
+                self.width = lerp(window.innerWidth, startSize.x, t);
+                self.height = lerp(window.innerHeight, startSize.y, t);
+            }
         }, function() {
             self.x = startPos.x;
             self.y = startPos.y;
