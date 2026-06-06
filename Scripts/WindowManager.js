@@ -1343,7 +1343,6 @@ var ticking = false;
  * @param {number} hewY
  */
 function handleWindowDrag(newX, hewY) {
-    if (!activeDialogId) return;
     var dialog = activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
