@@ -879,11 +879,8 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     var target = this.target;
     if (!target) return;
     if (enable === null) enable = target.style.pointerEvents === "none";
-    // target.classList.toggle("dragging", !enable);
-    // target.style.zoom = 1;
     if (enable) removeClass(target, "dragging");
     else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
-    // target.className = target.className + " dragging";
 
     var events = enable ? "auto" : "none";
     target.style.pointerEvents = events;
@@ -891,7 +888,6 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     var frame = this.frame;
     if (frame) frame.style.pointerEvents = events;
     return events;
-    // return (this.frame || this.getFrame()).style.pointerEvents = enable ? "auto" : "none";
 }
 /**
  * @param {number} buttonId
