@@ -518,7 +518,7 @@ Object.defineProperty(Dialog.prototype, "body", {
     get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
 });
 Object.defineProperty(Dialog.prototype, "head", {
-    get: function() { return  this.target ? this.target.getElementsByTagName("header")[0] : null; },
+    get: function() { return this.getElementByTagOrClassName("header"); },
 });
 
 Object.defineProperty(Dialog.prototype, "mica", {
