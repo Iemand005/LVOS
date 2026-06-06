@@ -36,23 +36,23 @@
     <header></header>
     <main>
 
-        <section id="desktop">
-            <section id="windows">
+        <div id="desktop">
+            <div id="windows">
                 <!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
                  <span id="wallpaper">
                     <iframe src="./Applications/FrostedColours/index.html" frameborder="0"></iframe>
                      <!-- <img src="file:///C:\Users\Lasse\Documents\Projects\LVOS\Applications\GeodeWeb\StellarVeryLight.png" class="backdrop" alt="" srcset=""> -->
                  </span>
-                <section>
+                <div>
                     <form action="" id="applist"></form>
-                </section>
+                </div>
                 <!-- <article id="dockcontaner">
                     
                 </article> -->
-                <section id="dock">
+                <div id="dock">
                     <section id="reflection"></section>
-                </section>
-                <section id="dockapplist"></section>
+                </div>
+                <div id="dockapplist"></div>
 
                 <template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
                     <div class="window">
@@ -114,35 +114,8 @@
                         </article>
                     </content>
                 </div>
-            </section>
-            <section id="metro">
-                <article id="metrobody"></article>
-                <aside id="metroapplist"></aside>
-            </section>
-        </section>
-        <aside id="charms">
-            <h1>Settings</h1>
-            <form id="settings">
-                <label for="theme">Theme: </label>
-                <select name="theme" id="theme">
-                    <option value="square">Square</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="round">Rounded</option>
-                </select>
-                <label for="color">Color: </label>
-                <input type="color" name="color" id="color">
-                <input type="button" id="resetcolor" value="Reset color">
-                <label for="accent">Accent color: </label>
-                <input type="color" name="accent" id="accent">
-                <input type="button" id="resetaccent" value="Reset accent">
-                <label for="border">Border size: </label>
-                <input type="range" value="0" min="0" max="50" step="0.01" name="borderslider" id="border">
-                <label for="blurtoggle">Blur: <input type="checkbox" id="blurtoggle" value="toggleblur"></label>
-                <label for="reflectiontoggle">Reflections: <input type="checkbox" id="reflectiontoggle" value="togglereflections"></label>
-                <input type="file" name="wallpaper" id="wallpaper">
-            </form>
-        </aside>
-        <section id="overlay" class=""></section>
+            </div>
+        </div>
     </main>
     <footer>2023/24 © Lasse Lauwerys</footer>
 </body>
