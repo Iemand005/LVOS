@@ -164,7 +164,7 @@ WindowManager.prototype.saveState = function() {
 };
 
 /** @param {Dialog} [dialog] */
-WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
+WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
 	console.log("Loading window state.");
 	if (canSave) try {
 		if (!localStorage || !localStorage.windowState) return;
@@ -1563,7 +1563,7 @@ function injectApplications() {
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
-}f
+}
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
