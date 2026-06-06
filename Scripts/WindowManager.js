@@ -34,7 +34,7 @@ var hasLocalStorage = typeof localStorage !== "undefined";
 /**  @typedef {import(./physics.js).Vector} Vector */
 
 if (isIE) {
-    useTransform = false;
+    useTransform = true;
     document.body.classList.add("use-transform");
 }
 
