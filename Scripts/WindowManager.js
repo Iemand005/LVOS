@@ -516,7 +516,11 @@ Object.defineProperty(Dialog.prototype, "src", {
     }
 });
 Object.defineProperty(Dialog.prototype, "body", {
-    get: function() { return this.content ? (this.content.children[1] instanceof HTMLElement ? this.content.children[1] : null) : null; },
+    get: function() {
+        var content = this.content;
+        if (!content || !content.children) return null;
+        return this.content.children[1];
+    }
 });
 Object.defineProperty(Dialog.prototype, "head", {
     get: function() { return this.getElementByTagOrClassName("header"); },
