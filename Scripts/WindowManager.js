@@ -739,8 +739,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 Object.defineProperty(Dialog.prototype, "content", {
     get: function() {
         if (!this.target) return null;
-        var content = this.target.getElementsByTagName("content")[0];
-        if (content instanceof HTMLElement) return content;
+        return this.getElementByTagOrClassName("content");
     }
 });
 
