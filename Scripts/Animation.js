@@ -25,3 +25,6 @@ function lerp(a, b, t) {
 function ease(t) {
     return t * t * (3 - 2 * t);
 }
+function easeOutLog(t) {
+    return Math.log(1 + 9 * t) / Math.log(10);
+}
