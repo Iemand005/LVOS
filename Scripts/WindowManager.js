@@ -974,19 +974,9 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
-        // var enabled = target.classList.toggle(className, force);
         var enabled = setClass(target, className, force);
         if (onToggled) onToggled.call(dialog, enabled);
     });
-    // try { void target.offsetWidth; } catch (e) {}
-    // setClass(target, className, force);
-    // // var enabled = target.classList.toggle(className, force);
-    // if (onToggled) onToggled.call(dialog, enabled);
-    // window.requestAnimationFrame(function(force) {
-    //     try { void target.offsetWidth; } catch (e) {}
-    //     var enabled = target.classList.toggle(className, force);
-    //     if (onToggled) onToggled.call(dialog, enabled);
-    // }.bind(this, force));
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
