@@ -239,7 +239,7 @@ var games = [
 ];
 
 // function loadApps
-window.addEventListener("load", function () {
+var initApps = function () {
 var loadApps = true;
 if (loadApps) {
   injectApplications(applications);
@@ -264,4 +264,6 @@ try {
   if (ex instanceof Error) console.warn(ex.message);
 }
 //toggleReflections(true);
-}, false);
+};
+
+window.addEventListener("load", initApps, false);
