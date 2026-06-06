@@ -478,11 +478,10 @@ button:hover {
 
 
 
-.window > div
-/* , .window > div:nth-of-type(n + 5) */
- {
+.window > div {
     width: 5px;
     height: 5px;
+    z-index: 1000   ;
 }
 
 .window > .sizer-1 {
