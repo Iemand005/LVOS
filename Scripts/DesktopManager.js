@@ -8,12 +8,19 @@
 
 /** @typedef {import(./WindowManager.js).Dialog} Dialog */
 
-document.addEventListener("load", function() {
+// applist form
+
+// block
+
+var onDocument = function () {
     var applist = document.getElementById("applist");
     applist.addEventListener("submit", function(event){
         event.preventDefault();
     });
-}, false)
+    applist.onsubmit  = function(event){ event.preventDefault(); };
+};
+
+window.addEventListener("load", onDocument, false);
 
 var reflecitons = false;
 
