@@ -933,7 +933,7 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 function setClass(element, className, enabled) {
     var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-    if (typeof enabled === "undefined") enabled = element.classList.contains(className);
+    if (typeof enabled === "undefined") enabled = !element.classList.contains(className);
 
     if (enabled) {
         if (!re.test(element.className))
