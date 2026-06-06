@@ -1751,6 +1751,10 @@ if (wallpaper) {
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); }
 }
 
+window.addEventListener("unload", function(e) {
+    windowManager.saveState();  
+}, false);
+
 window.addEventListener(
   "dragover",
   function (e) {
