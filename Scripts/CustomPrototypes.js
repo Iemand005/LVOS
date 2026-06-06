@@ -290,6 +290,8 @@ if (typeof Array.from !== "function") {
         return newArray;
     };
 
+    Array.from = arrayFromPolyfill;
+
     try {
         Object.defineProperty(Array, "from", {
             value: arrayFromPolyfill,

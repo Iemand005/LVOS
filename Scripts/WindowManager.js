@@ -26,11 +26,14 @@ var useBlur = false,
 	updateRateLimit = false;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+var hasLocalStorage = typeof localStorage !== "undefined";
 
 if (isIE) {
     useTransform = true;
     document.body.classList.add("use-transform");
 }
+
+if (!hasLocalStorage) canSave  = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer = Boolean(
@@ -433,7 +436,7 @@ Dialog.prototype.initWithObject = function(object) {
         }, false);
         
         var buttons = target.getElementsByTagName("button");
-        buttons[windowButtons.close].addEventListener("click", function () { self.close(); }.bind(self), false);
+        buttons[windowButtons.close].addEventListener("click", function () { self.close(); }, false);
         buttons[windowButtons.full].addEventListener("click", function () { self.toggleFullScreen(); }, false);
 
         this.toggleOpen(false);
