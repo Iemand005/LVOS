@@ -253,6 +253,8 @@ function Dialog(object, create) {
     this._mica = useMica;
 
     this._useTransform = useTransform;
+    // this_useSca
+    this._useScale = true;
     
     if (!object) return;
     if (!create) create = false;
@@ -655,6 +657,26 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
             this.target.style.height = "auto";
             this.target.style.top = toPixels(this.top);
             this.target.style.left = toPixels(this.left);
+            this.target.style.right = toPixels(this.right);
+            this.target.style.bottom = toPixels(this.bottom);
+        }
+
+        this.update();
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "useScale", {
+    get: function () {return this._useTransform; },
+    set: function(useScale) {
+        this._useScale = useScale;
+        
+        if (useScale) {
+            this.target.style.top = "0px";
+            this.target.style.left = "0px";
+            this.target.style.right = "";
+            this.target.style.bottom = "";
+        } else {
+            if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
             this.target.style.right = toPixels(this.right);
             this.target.style.bottom = toPixels(this.bottom);
         }
