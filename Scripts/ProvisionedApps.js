@@ -251,6 +251,12 @@ function dockApp(dialog) {
   if (dockAppList) dockAppList.appendChild(dialog.createOpenButton());
 }
 
+Object.defineProperty(Window.prototype, "windows", {
+  get: function () {
+    return windowManager.windows;
+  }
+})
+
 try {
   var windows = windowManager.windows;
   if (dockAppList) {
