@@ -622,19 +622,19 @@ Object.defineProperty(Dialog.prototype, "height", {
     }
 });
 
-Object.defineProperty(Dialog.prototype, "position", {
+Object.definseProperty(Dialog.prototype, "position", {
     get: function() { return new Vector(this.x, this.y); },
     set: function(position) {
-        if (!position instanceof Vector) return;
-        this.move(position.x, position.y);
+        if (position instanceof Vector)
+            this.move(position.x, position.y);
     }
 });
 
 Object.defineProperty(Dialog.prototype, "size", {
     get: function() { return new Vector(this.width, this.height); },
     set: function(size) {
-        if (!position instanceof Vector) return;
-        this.resize(size.x, size.y);
+        if (position instanceof Vector)
+            this.resize(size.x, size.y);
     }
 });
 
