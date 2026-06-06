@@ -968,8 +968,8 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         var startSize = this.size;
         var self = this;
         animate(300, function(t) {
-            self.x = lerp(startPos.x, self.x, t);
-            self.y = lerp(startPos.y, self.y, t);
+            self.x = lerp(startPos.x, window.innerWidth, t);
+            self.y = lerp(startPos.y, window.innerHeight    , t);
         });
     }
 };
