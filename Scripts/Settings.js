@@ -156,8 +156,8 @@ var elements = {
 var metroAppList = document.getElementById("metroapplist");
 var blurToggle = document.getElementById("blurtoggle");
 var reflectionToggle = document.getElementById("reflectiontoggle");
-var charmsbutton = applist.appendChild(document.createElement("button"));
-var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
+// var charmsbutton = applist.appendChild(document.createElement("button"));
+// var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
 if (windowManager.windows && windowManager.windows.browser)
     elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
@@ -170,12 +170,12 @@ elements.resetAccent.onclick = setAccentColor.bind(this, "");
 elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
 elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
-charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
+// charmsbutton.onclick = charmsbutton2.onclick = toggleCharms;
 
 metroAppList.classList.toggle("bottom", true);
 
-charmsbutton.innerText = "Settings";
-charmsbutton2.innerText = "Settings";
+// charmsbutton.innerText = "Settings";
+// charmsbutton2.innerText = "Settings";
 
 window.addEventListener("mousedown", toggleCharmsEvent);
 
