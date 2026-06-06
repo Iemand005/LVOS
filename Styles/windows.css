@@ -329,7 +329,8 @@ article, .article {
     z-index: 9999 !important;
 }
 
-.use-scale .window.fullscreen {
+.use-scale .window.fullscreen,
+.window.fullscreen.use-scale {
     width: 100% !important;
     height: 100% !important;
 }
