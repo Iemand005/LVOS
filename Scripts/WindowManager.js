@@ -869,9 +869,11 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 /** @param {boolean} enable */
 Dialog.prototype.togglePointerEvents = function(enable) {
     var target = this.target;
-    if (enable === null && target) enable = target.style.pointerEvents === "none";
+    if (!target) return;
+    if (enable === null) enable = target.style.pointerEvents === "none";
+    target.classList.toggle("dragging", enable);
     var events = enable ? "auto" : "none";
-    if (target) target.style.pointerEvents = events;
+    target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
     var frame = this.frame;
     if (frame) frame.style.pointerEvents = events;
