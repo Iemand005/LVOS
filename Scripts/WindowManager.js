@@ -955,9 +955,15 @@ Dialog.prototype.toggleFullScreen = function (enable) {
     if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
         if (!this.useTransform) return;
         var style = ""
-        if (enabled) style = "100%";
-        this.target.style.minHeight = style;
-        this.target.style.minWidth = style;
+        if (enabled) {
+            this.target.style.minWidth = toPixels(this.minWidth);
+            this.target.style.minHeight = toPixels(this.minHeight);
+        } else {
+            // rget.style.minWidth = toPixels(this.minWidth);
+            // this.targe
+            this.target.style.minWidth = "100%";
+            this.target.style.minHeight = "100%";
+        }
     });
     else {
         var startPos = this.position;
