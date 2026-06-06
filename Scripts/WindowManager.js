@@ -926,26 +926,20 @@ Dialog.prototype.clearClickOffset = function () {
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
 /**
- * @param {HTMLElement} el 
- * @param {string} cls 
+ * @param {HTMLElement} element 
+ * @param {string} className 
  * @param {boolean} enabled 
  */
-function setClass(el, cls, enabled) {
-    var re = new RegExp("(^|\\s)" + cls + "(\\s|$)");
+function setClass(element, className, enabled) {
+    var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
+
+    if (typeof enabled === "undefined") enabled = element.classList.contains(className);
 
     if (enabled) {
-        if (!re.test(el.className)) {
-            el.className = (el.className + " " + cls)
-                .replace(/\s+/g, " ")
-                .replace(/^\s+|\s+$/g, "");
-        }
-    } else {
-        el.className = el.className
-            .replace(re, " ")
-            .replace(/\s+/g, " ")
-            .replace(/^\s+|\s+$/g, "");
-    }
-    return el.classList.contains(cls);
+        if (!re.test(element.className))
+            element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    } else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    return element.classList.contains(className);
 }
 /**
  * 
@@ -969,7 +963,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler, false);
 
-    if (typeof force === "undefined") force = target.classList.contains(className);
+    
 
     window.requestAnimationFrame(function() {
         try { void target.offsetWidth; } catch (e) {}
