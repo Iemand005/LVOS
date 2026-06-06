@@ -234,11 +234,11 @@ input[type=checkbox] {
     width: unset;
 }
 
-template {
+template, .template {
     display: none; /* Internet Explorer 11 does not seem to know template, so for all browsers that don't support this it'll be hidden anyways. */
 }
 
-article {
+article, .article {
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
@@ -274,7 +274,8 @@ article {
     pointer-events: none !important;
 }*/
 
-.window > content > article { 
+.window > content > article,
+.window > .content > .article { 
     width: 100%;
     /* height: 100%; */
     -webkit-box-flex: 1;
@@ -288,7 +289,7 @@ article {
     /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
 }
 
-.window > content > article
+/* .window > content > article */
 
 .window > content > article * {
     display: -webkit-box;

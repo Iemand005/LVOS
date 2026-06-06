@@ -6,6 +6,8 @@
 "use strict";
 "use esnext";
 
+try {
+
 var dockAppList = document.getElementById("dockapplist");
 // var windows = windowManager.windows;
 if (windowManager && windowManager.windows.browser) {
@@ -69,6 +71,10 @@ if (windowManager && windowManager.windows.browser) {
       }
     });
   }
+}
+
+} catch (ex) {
+  console.warn("Browser loading failed", ex);
 }
 
 // Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
