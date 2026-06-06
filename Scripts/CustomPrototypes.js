@@ -425,10 +425,8 @@ if (typeof Array.from !== "function") {
   window.Promise = ES3Promise;
 })();
 
-
 (function () {
 
-    // If modern browser, do nothing
     if (window.addEventListener) return;
 
     function patch(target) {
@@ -461,7 +459,14 @@ if (typeof Array.from !== "function") {
                     };
                 }
 
-                listener.call(self, event);
+                // SAFE CALL (IE8 FIX)
+                if (typeof listener === "function") {
+                    listener.apply(self, [event]);
+                } else {
+                    self._currentListener = listener;
+                    self._currentListener(event);
+                    self._currentListener = null;
+                }
             };
 
             this._ieListeners.push({
@@ -490,7 +495,6 @@ if (typeof Array.from !== "function") {
         };
     }
 
-    // IMPORTANT: IE8-safe targets (NO prototypes)
     patch(window);
     patch(document);
     patch(Element.prototype);
