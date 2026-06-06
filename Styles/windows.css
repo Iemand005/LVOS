@@ -458,15 +458,6 @@ button:hover {
 
 
 
-.window > div:nth-of-type(odd) {
-    width: 100%;
-}
-
-.window > div:nth-of-type(even) {
-    height: 100%;
-}
-
-
 .window > div
 /* , .window > div:nth-of-type(n + 5) */
  {
