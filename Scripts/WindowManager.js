@@ -946,11 +946,11 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler, false);
 
-    window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(function(force) {
         try { void target.offsetWidth; } catch (e) {}
         var enabled = target.classList.toggle(className, force);
         if (onToggled) onToggled.call(dialog, enabled);
-    });
+    }.bind(this, force));
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
