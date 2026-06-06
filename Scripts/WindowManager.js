@@ -99,6 +99,8 @@ function WindowManager() {
 	this._isBlurEnabled = true;
 	this._isMicaEnabled = false;
     this._isWindowUpdatesEnabled = false;   
+
+    this.isDragging = false;
 }
 
 WindowManager.prototype.init = function() {
@@ -218,6 +220,7 @@ WindowManager.prototype.loadApp = function(app) {
 WindowManager.prototype.toggleDragging = function(enabled) {
 	windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
 	toggleDialogDragEventHandler(enabled);
+    this.isDragging = enabled;
 };
 
 function ClickOffset() {
@@ -459,8 +462,12 @@ Dialog.prototype.initWithObject = function(object) {
         }, false);
         
         var buttons = target.getElementsByTagName("button");
-        buttons[windowButtons.close].addEventListener("click", function () { self.close(); }, false);
-        buttons[windowButtons.full].addEventListener("click", function () { self.toggleFullScreen(); }, false);
+        buttons[windowButtons.close].addEventListener("click", function () {
+            self.close();
+        }, false);
+        buttons[windowButtons.full].addEventListener("click", function () {
+            self.toggleFullScreen();
+        }, false);
 
         this.toggleOpen(false);
     }
@@ -1392,8 +1399,8 @@ function initializeDialogs() {
         document.onpointerup = disableDialogDrag;
         window.onpointerup = disableDialogDrag;
     } else {
-        document.onmouseup = disableDialogDrag;
-        window.onmouseup = disableDialogDrag;
+        // document.onmouseup = disableDialogDrag;
+        // window.onmouseup = disableDialogDrag;
         document.addEventListener("mouseup", disableDialogDrag, false);
         window.addEventListener("mouseup", disableDialogDrag, false);
     }
@@ -1488,6 +1495,7 @@ function toggleDialogDragEventHandler(enable) {
 }
 
 function disableDialogDrag() {
+    if (!windowManager.isDragging) return;
     // if (flipped) return;
     toggleDialogDragEventHandler(false);
     dragAction.set();
