@@ -967,13 +967,16 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         var startPos = this.position;
         var startSize = this.size;
         var target = this.target;
+        /** @type {Dialog} */
+        var self = this;
         if (!target) return;
         animate(300, function(t) {
-            target.style.top = lerp(startPos.x, 0, t);
-            target.style.left = lerp(startPos.y, 0, t);
+            self.x = lerp(startPos.x, 0, t);
+            self.y = lerp(startPos.y, 0, t);
             self.width = lerp(startSize.x, window.innerWidth, t);
             self.height = lerp(startSize.y, window.innerHeight, t);
         }, function() {
+
             self.target.classList.toggle("fullscreen", enable);
         });
     }
