@@ -371,6 +371,7 @@ article > *,
 
 .dragging .drag-overlay {
     display: block;
+    z-index: 1000;
 }
 
 .acrylic {
