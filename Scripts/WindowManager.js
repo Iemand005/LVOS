@@ -969,6 +969,15 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         var target = this.target;
         var self = this;
         if (!target) return;
+        enable = !target.classList.contains("fullscreen");
+        var toggleThingie = function() {
+            self.x = startPos.x;
+            self.y = startPos.y;
+            self.width = startSize.x;
+            self.height = startSize.y;
+            self.target.classList.toggle("fullscreen", enable);
+        }
+        if (!enable) toggleThingie();
         animate(300, function(t) {
             if (enable) {
                 self.x = lerp(startPos.x, 0, t);
@@ -982,11 +991,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
                 self.height = lerp(window.innerHeight, startSize.y, t);
             }
         }, function() {
-            self.x = startPos.x;
-            self.y = startPos.y;
-            self.width = startSize.x;
-            self.height = startSize.y;
-            self.target.classList.toggle("fullscreen", enable);
+            if (enable) toggleThingie();
         });
     }
 };
