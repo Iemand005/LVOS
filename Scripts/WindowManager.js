@@ -924,6 +924,29 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
+
+/**
+ * @param {HTMLElement} el 
+ * @param {string} cls 
+ * @param {boolean} enabled 
+ */
+function setClass(el, cls, enabled) {
+    var re = new RegExp("(^|\\s)" + cls + "(\\s|$)");
+
+    if (enabled) {
+        if (!re.test(el.className)) {
+            el.className = (el.className + " " + cls)
+                .replace(/\s+/g, " ")
+                .replace(/^\s+|\s+$/g, "");
+        }
+    } else {
+        el.className = el.className
+            .replace(re, " ")
+            .replace(/\s+/g, " ")
+            .replace(/^\s+|\s+$/g, "");
+    }
+    return el.classList.contains(cls);
+}
 /**
  * 
  * @param {string} className 
@@ -946,11 +969,15 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler, false);
 
-    window.requestAnimationFrame(function(force) {
-        try { void target.offsetWidth; } catch (e) {}
-        var enabled = target.classList.toggle(className, force);
-        if (onToggled) onToggled.call(dialog, enabled);
-    }.bind(this, force));
+    try { void target.offsetWidth; } catch (e) {}
+    setClass(target, className, force);
+    // var enabled = target.classList.toggle(className, force);
+    if (onToggled) onToggled.call(dialog, enabled);
+    // window.requestAnimationFrame(function(force) {
+    //     try { void target.offsetWidth; } catch (e) {}
+    //     var enabled = target.classList.toggle(className, force);
+    //     if (onToggled) onToggled.call(dialog, enabled);
+    // }.bind(this, force));
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
