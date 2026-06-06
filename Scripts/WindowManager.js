@@ -181,7 +181,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 		}
 	} catch (exception) {
 		handleStorageException(exception);
-	} else console.error("Storage access is disabled for this session!");
+	} else console.log("Storage access is disabled for this session!");
 };
 
 /** @typedef {(dialog: Dialog, id: string)=>void} WindowCallback */
