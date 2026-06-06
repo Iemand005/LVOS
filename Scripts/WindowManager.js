@@ -838,12 +838,10 @@ Dialog.prototype.getButton = function (index) {
   return this.head && this.head.getElementsByTagName("button")[index];
 };
 Dialog.prototype.createOpenButton = function () {
-  return (
-    this.buttons.unshift(document.createElement("button")),
-    (this.buttons[0].innerText = this.title || ""),
-    (this.buttons[0].onclick = this.launch.bind(this)),
-    this.buttons[0]
-  );
+  var openButton = document.createElement("button");
+    this.buttons.unshift(openButton);
+    openButton.innerText = this.title || "";
+    openButton.onclick = this.launch.bind(this);
 };
 /**
  * @param {number} x
