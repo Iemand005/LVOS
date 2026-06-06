@@ -22,7 +22,7 @@ var useBlur = false,
 	IE11Booster = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = true,
+	useTransform = false,
 	useScale = false,
 	updateRateLimit = false;
 
