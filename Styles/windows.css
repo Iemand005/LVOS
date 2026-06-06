@@ -263,7 +263,7 @@ article, .article {
 .window:not(.open) > content,
 .window:not(.open) > .content {
     /*display: none; /* The display attribute is set to none by default */
-    z-index: 0;
+    z-index: -1000;
     transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
     -webkit-transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
     opacity: 0;

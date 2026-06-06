@@ -502,6 +502,46 @@ if (typeof Array.from !== "function") {
 })();
 
 
+(function () {
+
+    if (Element.prototype.getBoundingClientRect) {
+        return; // already supported
+    }
+
+    function getRect(el) {
+        var x = 0;
+        var y = 0;
+        var w = el.offsetWidth || 0;
+        var h = el.offsetHeight || 0;
+
+        var node = el;
+
+        while (node) {
+            x += node.offsetLeft || 0;
+            y += node.offsetTop || 0;
+            node = node.offsetParent;
+        }
+
+        // include scroll offsets (important in old browsers)
+        x -= document.body.scrollLeft || document.documentElement.scrollLeft || 0;
+        y -= document.body.scrollTop || document.documentElement.scrollTop || 0;
+
+        return {
+            left: x,
+            top: y,
+            right: x + w,
+            bottom: y + h,
+            width: w,
+            height: h
+        };
+    }
+
+    Element.prototype.getBoundingClientRect = function () {
+        return getRect(this);
+    };
+
+})();
+
 // if (typeof module !== "undefined" && module.)
 if (typeof HTMLElement === "undefined") HTMLElement = Element
 if (typeof HTMLTemplateElement === "undefined") HTMLTemplateElement = function() {}
