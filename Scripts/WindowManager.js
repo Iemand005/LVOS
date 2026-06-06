@@ -292,6 +292,13 @@ function Dialog(object, create) {
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 
+Dialog.prototype.getElementByTagOrClassName = function (name) {
+    if (!this.target) return;
+    var elements = this.target.getElementsByTagName(name);
+    if (!elements) elements = this.tar
+    return ;
+}
+
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
     if (!object) return;
@@ -366,7 +373,7 @@ Dialog.prototype.initWithObject = function(object) {
     var target = this.target;
     if (target) {
 
-        var borderSection = target.getElementsByTagName("section")[0];
+        var borderSection = target.getElementsByTagName("section")[0] || target.getElementsByClassName("section")[0];
 
         if(borderSection && !this.fixed) {
             for (var index = 0; index < 8; index++) {
@@ -397,6 +404,7 @@ Dialog.prototype.initWithObject = function(object) {
 
         if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
         else target.addEventListener("mousedown", activationHandler, false);
+        target.onmousedown = activationHandler;
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
             if (!target) return;
             var rect = target.getClientRects()[0];
