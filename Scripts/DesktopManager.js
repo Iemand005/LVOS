@@ -16,7 +16,7 @@ var onDocument = function () {
     var applist = document.getElementById("applist");
     applist.addEventListener("submit", function(event){
         event.preventDefault();
-    });
+    }, false);
     applist.onsubmit  = function(event){ event.preventDefault(); };
 };
 
@@ -53,14 +53,14 @@ window.addEventListener('keydown', function(event) {
       c.maximize();
       break;
   }
-});
+}, false);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('./Scripts/sw.js')
       ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
       ["catch"](function(err) { console.error('Registratie mislukt:', err) });
-  });
+  }, false);
 }
 
 function setTheme(theme) {
@@ -331,7 +331,7 @@ window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadWallpaperFromCache);
+    document.addEventListener('DOMContentLoaded', loadWallpaperFromCache, false);
 } else {
     loadWallpaperFromCache();
 }
@@ -340,10 +340,10 @@ window.addEventListener('keydown', function(event) {
   if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.add('slow-animations');
   }
-});
+}, false);
 
 window.addEventListener('keyup', function(event) {
   if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.remove('slow-animations');
   }
-});
+}, false);
