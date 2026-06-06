@@ -66,6 +66,7 @@ main {
     /* color: black; */
     box-sizing: border-box;
     border-radius: 5px;
+    /* border: 5px; */
 }
 
 .window header,
@@ -187,7 +188,7 @@ main {
     /* border-radius: inherit; */
     border-radius: inherit;
     border: 1px solid #0000005c;
-    padding: 5px;
+    /* padding: 5px; */
     box-sizing: border-box;
     width: inherit;
     height: inherit;
