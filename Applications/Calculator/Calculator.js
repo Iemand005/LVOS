@@ -1,6 +1,6 @@
 'use strict';
 
-var output = document.querySelector("input");
+var output = document.getElementById("display");
 var cells = document.getElementsByTagName("td");
 
 function Calculator() {
