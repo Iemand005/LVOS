@@ -166,7 +166,10 @@ function loadElements() {
     elements.dockAppList = document.getElementById("dockapplist");
 };
 
-document.addEventListener("load", loadElements, false);
+document.addEventListener("load", function() {
+    loadElements();
+    loadSettings();
+}, false);
 
 var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
@@ -195,7 +198,6 @@ var metroAppList = document.getElementById("metroapplist");
 
 window.addEventListener("mousedown", toggleCharmsEvent, false);
 
-loadSettings();
 
 /**
  * @param {*} object 
