@@ -114,8 +114,9 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 
 Object.defineProperty(WindowManager.prototype, "windowStates", {
   get: function () {
-    if (!this._windowStates)
+    if (!this._windowStates && localStorage)
       try {
+        var stringyy = window.localStorage.getItem("");
         /** @type {DesktopState} */
         var windowStates = JSON.parse(localStorage.windowState);
         this._windowStates = windowStates;
