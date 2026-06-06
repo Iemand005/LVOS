@@ -291,10 +291,10 @@ function Dialog(object, create) {
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
-
+/** @param {string} name */
 Dialog.prototype.getElementByTagOrClassName = function (name) {
     var target = this.target;
-    if (!target) return;
+    if (!target) return null;
     var elements = target.getElementsByTagName(name);
     if (!elements) elements = target.getElementsByClassName(name);
     return elements.length ? elements[0] : null;
