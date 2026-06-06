@@ -940,13 +940,13 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 function setClass(element, className, enabled) {
     var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-    if (typeof enabled === "undefined") enabled = !element.classList.contains(className);
+    if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
 
     if (enabled) {
         if (!re.test(element.className))
             element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
     } else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-    return element.className.indexOf(className) !== -1;
+    return element.className.indexOf(className) === -1;
 }
 /**
  * 
@@ -976,7 +976,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         try { void target.offsetWidth; } catch (e) {}
         // var enabled = target.classList.toggle(className, force);
         var enabled = setClass(target, className, force);
-        if (onToggled) onToggled.call(dialog, !force);
+        if (onToggled) onToggled.call(dialog, enabled);
     });
     // try { void target.offsetWidth; } catch (e) {}
     // setClass(target, className, force);
