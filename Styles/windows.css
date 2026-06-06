@@ -358,6 +358,12 @@ article > *,
     overflow: auto;
 }
 
+.drag-overlay {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
 .acrylic {
     background-color: rgba(0, 0, 0, 0.507);
     backdrop-filter: blur(8px);
