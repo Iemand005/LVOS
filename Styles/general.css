@@ -8,8 +8,6 @@
 button,
 .button,
 input {
-    border: 1px solid black;
-    border-radius: 4px;
     cursor: pointer;
 	background-color: #ffffff38;
 	border: 1px solid #ffffff70;
