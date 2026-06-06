@@ -554,7 +554,7 @@ Object.defineProperty(Dialog.prototype, "width", {
         if (typeof width !== "number" || !this.target) return;
 
         this._width = max(width, this.minWidth);
-        if (this.useTransform) {
+        if (this.useTransform || this.useScale) {
             this.target.style.width = toPixels(this._width);
         } else {
             this.target.style.right = toPixels(this.right);
@@ -570,7 +570,7 @@ Object.defineProperty(Dialog.prototype, "height", {
         if (typeof height !== "number" || !this.target) return;
 
         this._height = max(height, this.minHeight)
-        if (this.useTransform) {
+        if (this.useTransform || this.useScale) {
             this.target.style.height = toPixels(this._height);
         } else {
             this.target.style.bottom = toPixels(this.bottom);
@@ -671,8 +671,6 @@ Object.defineProperty(Dialog.prototype, "useScale", {
         this._useScale = useScale;
         
         if (useScale) {
-            this.target.style.top = "0px";
-            this.target.style.left = "0px";
             this.target.style.right = "";
             this.target.style.bottom = "";
         } else {
