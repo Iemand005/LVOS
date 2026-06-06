@@ -357,8 +357,7 @@ Dialog.prototype.initWithObject = function(object) {
     // if (object.body) this.body.appendChild(object.body);
 
     var target = this.target;
-    var body = getDialogBody(target);
-    if (target && body) {
+    if (target) {
 
         var borderSection = target.getElementsByTagName("section")[0];
 
@@ -381,7 +380,9 @@ Dialog.prototype.initWithObject = function(object) {
         target.addEventListener("dragstart", cancelDomEvent, false);
         target.addEventListener("selectstart", cancelDomEvent, false);
 
-        body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
+        var body = this.body;
+        if (body)
+            body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
         var header = this.head;
         if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this), false);
