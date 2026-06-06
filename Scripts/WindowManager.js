@@ -132,7 +132,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
     /** @type {DesktopState} */
     var state = {};
     for (var id in this.windows)
-      if (this.windows[id]) state[id] = this.windows[id].getWindowState();
+      if (this.windows[id]) state[id] = this.windows[id].getState();
     return state;
   }
 });
@@ -185,12 +185,12 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 		if (!localStorage || !localStorage.windowState) return;
 		var windowStates = this.windowStates;
         loaded = true;
-		if (dialog && dialog.id) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
+		if (dialog && dialog.id) dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
 		else {
 			var fails = [];
 			for (var id in windowStates) try {
 				if (windowManager.windows[id] && windowStates[id])
-					windowManager.windows[id].loadWindowState(windowStates[id]);
+					windowManager.windows[id].loadState(windowStates[id]);
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
 			updateTopZ();
@@ -1572,7 +1572,7 @@ function handleStorageException(exception){
     canSave = false;
 }
 
-Dialog.prototype.getWindowState = function() {
+Dialog.prototype.getState = function() {
     /** @type {DialogState} */
     var state = {
         title: this.title || this.id,
@@ -1587,7 +1587,7 @@ Dialog.prototype.getWindowState = function() {
 }
 
 /** @param {DialogState} state */
-Dialog.prototype.loadWindowState = function(state) {
+Dialog.prototype.loadState = function(state) {
     this.title = state.title;
     this.x = state.x;   
     this.y = state.y;
