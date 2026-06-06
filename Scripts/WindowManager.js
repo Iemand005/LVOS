@@ -293,10 +293,11 @@ function Dialog(object, create) {
 }
 
 Dialog.prototype.getElementByTagOrClassName = function (name) {
-    if (!this.target) return;
-    var elements = this.target.getElementsByTagName(name);
-    if (!elements) elements = this.tar
-    return ;
+    var target = this.target;
+    if (!target) return;
+    var elements = target.getElementsByTagName(name);
+    if (!elements) elements = target.getElementsByClassName(name);
+    return elements.length ? elements[0] : null;
 }
 
 /** @param {HTMLElement | Application | Dialog} object */
@@ -373,7 +374,7 @@ Dialog.prototype.initWithObject = function(object) {
     var target = this.target;
     if (target) {
 
-        var borderSection = target.getElementsByTagName("section")[0] || target.getElementsByClassName("section")[0];
+        var borderSection = this.getElementByTagOrClassName("section");
 
         if(borderSection && !this.fixed) {
             for (var index = 0; index < 8; index++) {
