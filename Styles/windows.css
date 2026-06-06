@@ -484,52 +484,52 @@ button:hover {
     top: 0;
     left: 0;
     cursor: n-resize;
+    height: 100%;
 }
 
 .window > .sizer-2 {
     top: 0;
     right: 0;
     cursor: w-resize;
+    width: 100%;
 }
 
 .window > .sizer-3 {
     bottom: 0;
     left: 0;
     cursor: s-resize;
+    height: 100%;
 }
 
 .window > .sizer-4 {
     top: 0;
     left: 0;
     cursor: e-resize;
+    width: 100%;
 }
 
 .window > .sizer-5 {
     top: 0;
     left: 0;
     cursor: nw-resize;
-    height: 100%;
 }
 
 .window > .sizer-6 {
     top: 0;
     right: 0;
     cursor: ne-resize;
-    width: 100%;
 }
 
 .window > .sizer-7 {
     bottom: 0;
     right: 0;
     cursor: se-resize;
-    height: 100%;
 }
 
 .window > .sizer-8 {
     bottom: 0;
     left: 0;
     cursor: sw-resize;
-    width: 100%;
 }
 
 .window:not([focus]) content > article > * {
