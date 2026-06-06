@@ -184,6 +184,7 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 	if (canSave) try {
 		if (!localStorage || !localStorage.windowState) return;
 		var windowStates = this.windowStates;
+        loaded = true;
 		if (dialog && dialog.id) dialog.loadWindowState(windowStates[dialog.id]), updateTopZ(dialog.z);
 		else {
 			var fails = [];
@@ -1235,7 +1236,7 @@ var resizeDirection = 0;
 var topZ = 100;
 /** @type {string?} */
 var metroBodyOrigin;
-var loaded = true;
+var loaded = false;
 /** @type {number} */
 var timeout = -1;
 
