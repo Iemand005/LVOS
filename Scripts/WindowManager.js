@@ -379,15 +379,22 @@ Dialog.prototype.initWithObject = function(object) {
 
         var borderSection = this.getElementByTagOrClassName("section");
 
+        var createSizers = true;
+
         if (this.target.getElementsByClassName("sizer-1").length > 0) {
-            console.warn ("Adding divs while they areldy aexist stop me!");
+            // console.warn ("Adding divs while they areldy aexist stop me!");
             // this.borderSection
-            borderSection = null;
+            createSizers = false;
         }
         if(borderSection && !this.fixed) {
             for (var index = 0; index < 8; index++) {
-                var div = document.createElement("div");
-                div.draggable = false, div.id = String(index + 1), div.classList.add("sizer-" + (index + 1));
+
+                var sizerId = "sizer-" + (index + 1);
+                var div = null;
+                if (createSizers)
+                    div = document.createElement("div");
+                else div = this.getElementByTagOrClassName(sizerId);
+                div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
