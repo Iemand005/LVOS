@@ -299,6 +299,7 @@ article, .article {
 
 .window > content > article *,
 .window > .content > .article * {
+    width: 100%;
     display: -webkit-box;
     -webkit-box-flex: 1;
     flex: 1;
