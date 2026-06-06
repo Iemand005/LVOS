@@ -177,10 +177,6 @@ main {
     font-size: 15px;
 }
 
-.fill {
-    height: 100%;
-}
-
 .window > content,
 .window > .content {
     display: -webkit-box;
@@ -352,11 +348,6 @@ article, .article {
 .slow-animations * {
     -webkit-transition-duration: 3s !important;
     transition-duration: 3s !important;
-}
-
-tbody {
-    width: 100%;
-    height: 100%;
 }
 
 article > *,
