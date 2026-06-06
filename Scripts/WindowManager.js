@@ -951,6 +951,9 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (onToggled) onToggled.call(dialog, enabled);
     });
 }
+function lerp(a, b, t) {
+    return a + (b - a) * t;
+}
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
     if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
@@ -961,10 +964,12 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         this.target.style.minWidth = style;
     });
     else {
-        // animate(300, funcgtion )
-        var startPos = { x: this.x, y: this.y };
+        var startPos = this.position;
+        var startSize = this.size;
+        var self = this;
         animate(300, function(t) {
-
+            self.x = lerp(startPos.x, self.x, t);
+            self.y = lerp(startPos.y, self.y, t);
         });
     }
 };
