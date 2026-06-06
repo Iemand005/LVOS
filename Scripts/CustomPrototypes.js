@@ -504,3 +504,4 @@ if (typeof Array.from !== "function") {
 
 // if (typeof module !== "undefined" && module.)
 if (typeof HTMLElement === "undefined") HTMLElement = Element
+if (typeof HTMLTemplateElement === "undefined") HTMLTemplateElement = function() {}
