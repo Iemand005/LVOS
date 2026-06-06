@@ -376,8 +376,12 @@ Dialog.prototype.initWithObject = function(object) {
 
         var borderSection = this.getElementByTagOrClassName("section");
 
+        if (this.target.getElementsByClassName("sizer-1").length > 0) {
+            console.warn ("Adding divs while they areldy aexist stop me!");
+            // this.borderSection
+            borderSection = null;
+        }
         if(borderSection && !this.fixed) {
-            if (this.target.getElementsByClassName("sizer-1").length > 0) console.warn ("Adding divs while they areldy aexist stop me!");
             for (var index = 0; index < 8; index++) {
                 var div = document.createElement("div");
                 div.draggable = false, div.id = String(index + 1), div.classList.add("sizer-" + (index + 1));
