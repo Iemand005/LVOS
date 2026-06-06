@@ -3,7 +3,7 @@
 
 function probeAllStorage() {
   return {
-    OPFS: typeof navigator.storage?.getDirectory === 'function',
+    OPFS: navigator.storage && typeof navigator.storage.getDirectory === 'function',
     CacheAPI: 'caches' in window,
     
     IndexedDB: !!window.indexedDB,
