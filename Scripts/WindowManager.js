@@ -384,10 +384,10 @@ Dialog.prototype.initWithObject = function(object) {
         body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
         var header = this.head;
-        if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this));
+        if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this), false);
 
         if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
-        else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) });
+        else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) }, false);
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
             if (!target) return;
             var rect = target.getClientRects()[0];
@@ -407,14 +407,12 @@ Dialog.prototype.initWithObject = function(object) {
 
             if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
             self.quit();
-        });
+        }, false);
         
         var buttons = target.getElementsByTagName("button");
-        buttons[windowButtons.close].addEventListener("click", function () {
-            self.close();
-        }.bind(self));
-        buttons[windowButtons.full].addEventListener("click", function(){self.toggleFullScreen()});
-        // this.close();
+        buttons[windowButtons.close].addEventListener("click", function () { self.close(); }.bind(self), false);
+        buttons[windowButtons.full].addEventListener("click", function () { self.toggleFullScreen(); }, false);
+
         this.toggleOpen(false);
     }
 
