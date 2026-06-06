@@ -866,20 +866,12 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
     if (!this.application) return null;
     return this.application.src;
 }});
-function removeClass(el, cls) {
-    var re = new RegExp("(^|\\s)" + cls + "(?=\\s|$)", "g");
-
-    el.className = el.className
-        .replace(re, " ")
-        .replace(/\s+/g, " ")
-        .replace(/^\s+|\s+$/g, "");
-}
 /** @param {boolean} enable */
 Dialog.prototype.togglePointerEvents = function(enable) {
     var target = this.target;
     if (!target) return;
     if (enable === null) enable = target.style.pointerEvents === "none";
-    if (enable) removeClass(target, "dragging");
+    if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
     else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
 
     var events = enable ? "auto" : "none";
