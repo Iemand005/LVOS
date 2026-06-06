@@ -1,8 +1,5 @@
 'use strict';
 
-var output = document.getElementById("display");
-var cells = document.getElementsByTagName("td");
-
 function Calculator() {
     this.expression = "";
 }
@@ -48,12 +45,21 @@ Calculator.prototype.press = function (value) {
     this.updateDisplay();
 }
 
-var calculator = new Calculator();
+var output = document.getElementById("display");
+var cells = document.getElementsByTagName("td");
 
-for (var i = 0; i < cells.length; i++) {
-    cells[i].onclick = function () {
-        calculator.press(this.textContent || this.innerText);
-    };
-}
+/** @type {Calculator?} */
+var calculator = null;
 
-calculator.updateDisplay();
+window.addEventListener("load", function () {
+    calculator = new Calculator;
+
+    for (var i = 0; i < cells.length; i++) {
+        cells[i].onclick = function () {
+            calculator.press(this.textContent || this.innerText);
+        };
+    }
+
+    calculator.updateDisplay();
+}, false);
+
