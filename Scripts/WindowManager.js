@@ -143,8 +143,8 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
     get: function() { return this._isWindowUpdatesEnabled; },
     set: function(value) {
-        if (value) window.addEventListener("resize", this.resizeHandler);
-        else window.removeEventListener("resize", this.resizeHandler);
+        if (value) window.addEventListener("resize", this.resizeHandler, false);
+        else window.removeEventListener("resize", this.resizeHandler, false);
         this._isWindowUpdatesEnabled = value;
     }
 })
@@ -381,7 +381,7 @@ Dialog.prototype.initWithObject = function(object) {
         target.addEventListener("dragstart", cancelDomEvent, false);
         target.addEventListener("selectstart", cancelDomEvent, false);
 
-        body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }});
+        body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
         var header = this.head;
         if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this));
@@ -870,7 +870,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
         try { dialog.useTransform = useTransform; } catch (e) {}
         target.classList.remove("animating");
-        target.removeEventListener(transitionEndEvent, animationHandler);
+        target.removeEventListener(transitionEndEvent, animationHandler, false);
         if (onEnd) onEnd();
     };
     target.addEventListener(transitionEndEvent, animationHandler, false);
