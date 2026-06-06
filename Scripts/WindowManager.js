@@ -662,7 +662,7 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
 });
 
 Object.defineProperty(Dialog.prototype, "useScale", {
-    get: function () {return this._useTransform; },
+    get: function () {return this._useScale; },
     set: function(useScale) {
         this._useScale = useScale;
         
