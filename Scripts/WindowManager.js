@@ -556,9 +556,7 @@ Object.defineProperty(Dialog.prototype, "width", {
         this._width = max(width, this.minWidth);
         if (this.useTransform || this.useScale) {
             this.target.style.width = toPixels(this._width);
-        } else {
-            this.target.style.right = toPixels(this.right);
-        }
+        } else this.target.style.right = toPixels(this.right);
 
         this._isMinWidth = this._width === this.minWidth;
     }
@@ -572,9 +570,7 @@ Object.defineProperty(Dialog.prototype, "height", {
         this._height = max(height, this.minHeight)
         if (this.useTransform || this.useScale) {
             this.target.style.height = toPixels(this._height);
-        } else {
-            this.target.style.bottom = toPixels(this.bottom);
-        }
+        } else this.target.style.bottom = toPixels(this.bottom);
 
         this._isMinHeight = this._height === this.minHeight
     }
