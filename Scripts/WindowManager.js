@@ -1277,6 +1277,8 @@ function initializeDialogs() {
     } else {
         document.onmouseup = disableDialogDrag;
         window.onmouseup = disableDialogDrag;
+        document.addEventListener("mouseup", disableDialogDrag, false);
+        window.addEventListener("mouseup", disableDialogDrag, false);
     }
     
     dragAction.set(0);
