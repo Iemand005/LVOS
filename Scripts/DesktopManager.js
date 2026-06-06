@@ -12,15 +12,21 @@
 
 // block
 
-var onDocument = function () {
+var onLoad = function () {
     var applist = document.getElementById("applist");
     applist.addEventListener("submit", function(event){
         event.preventDefault();
     }, false);
     applist.onsubmit  = function(event){ event.preventDefault(); };
+
+    document.body.ondragover = window.ondragover = function(ev) { 
+        ev.preventDefault(); 
+        ev.stopPropagation();
+        ev.dataTransfer.dropEffect = 'copy';
+    }
 };
 
-window.addEventListener("load", onDocument, false);
+window.addEventListener("load", onLoad, false);
 
 var reflecitons = false;
 
@@ -79,12 +85,6 @@ window.ondragleave = document.ondragleave = function(ev){
     ev.preventDefault();
     ev.stopPropagation();
     elements.desktop.style.opacity = null;
-}
-
-document.body.ondragover = window.ondragover = function(ev) { 
-    ev.preventDefault(); 
-    ev.stopPropagation();
-    ev.dataTransfer.dropEffect = 'copy';
 }
 
 /**
