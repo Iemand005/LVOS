@@ -882,7 +882,7 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     // target.classList.toggle("dragging", !enable);
     // target.style.zoom = 1;
     if (enable) removeClass(target, "dragging");
-    if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
+    else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
     // target.className = target.className + " dragging";
 
     var events = enable ? "auto" : "none";
