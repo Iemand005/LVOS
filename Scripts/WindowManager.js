@@ -872,6 +872,7 @@ Dialog.prototype.togglePointerEvents = function(enable) {
     if (!target) return;
     if (enable === null) enable = target.style.pointerEvents === "none";
     target.classList.toggle("dragging", !enable);
+    target.style.zoom = 1;
     var events = enable ? "auto" : "none";
     target.style.pointerEvents = events;
     if (this.originalBody) this.originalBody.style.pointerEvents = events;
