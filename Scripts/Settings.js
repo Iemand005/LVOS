@@ -156,7 +156,7 @@ var elements = {
     dockAppList: null
 };
 
-var loadElements = function() {
+function loadElements() {
     elements.desktop = document.getElementById("desktop");
     elements.color = document.getElementById("color");
     elements.accent = document.getElementById("accent");
@@ -164,7 +164,9 @@ var loadElements = function() {
     elements.resetAccent = document.getElementById("resetaccent");
     elements.border = document.getElementById("border");
     elements.dockAppList = document.getElementById("dockapplist");
-}
+};
+
+document.addEventListener("load", loadElements, false);
 
 var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
