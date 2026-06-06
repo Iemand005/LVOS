@@ -437,6 +437,7 @@ Dialog.prototype.initWithObject = function(object) {
     if (this.id) windowManager.windows[this.id] = this;
 
     this.useTransform = this.useTransform;
+    this.useScale = this.useScale;
     this.update();
 }
 
@@ -786,7 +787,7 @@ Dialog.prototype.activate = function() {
     this.focus();
     return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 }
-Dialog.prototype.getTitleElement = function() { return this.head && this.head.querySelector("h1"); };
+Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
   return (
