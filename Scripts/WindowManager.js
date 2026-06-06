@@ -622,6 +622,28 @@ Object.defineProperty(Dialog.prototype, "height", {
     }
 });
 
+Object.defineProperty(Dialog.prototype, "position", {
+    get: function() { return new Vector(this.x, this.y); },
+    set: function(position) {
+        if ((!position instanceof Vector) || !this.target) return;
+        this.move(position.x, position.y);
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "size", {
+    get: function() { return this._height; },
+    set: function(height) {
+        if (typeof height !== "number" || !this.target) return;
+
+        this._height = max(height, this.minHeight)
+        if (this.useTransform || this.useScale) {
+            this.target.style.height = toPixels(this._height);
+        } else this.target.style.bottom = toPixels(this.bottom);
+
+        this._isMinHeight = this._height === this.minHeight
+    }
+});
+
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
