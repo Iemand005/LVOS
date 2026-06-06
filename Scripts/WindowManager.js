@@ -292,8 +292,8 @@ function Dialog(object, create) {
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
 /** @param {string} name */
-Dialog.prototype.getElementByTagOrClassName = function (name) {
-    var target = this.target;
+Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
+    var target = parent || this.target;
     if (!target) return null;
     var elements = target.getElementsByTagName(name);
     if (!elements || !elements.length) elements = target.getElementsByClassName(name);
@@ -518,8 +518,8 @@ Object.defineProperty(Dialog.prototype, "src", {
 Object.defineProperty(Dialog.prototype, "body", {
     get: function() {
         var content = this.content;
-        if (!content || !content.children) return null;
-        return this.content.children[1];
+        if (!content) return null;
+        return this.getElementByTagOrClassName("article", content);
     }
 });
 Object.defineProperty(Dialog.prototype, "head", {
