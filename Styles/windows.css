@@ -407,56 +407,56 @@ button:hover {
 }
 
 .window > div:nth-of-type(1),
-.window > div#1 {
+.window > div.sizer-1 {
     top: 0;
     left: 0;
     cursor: n-resize;
 }
 
 .window > div:nth-of-type(2),
-.window > div#2 {
+.window > div.sizer-2 {
     top: 0;
     right: 0;
     cursor: w-resize;
 }
 
 .window > div:nth-of-type(3),
-.window > div#3 {
+.window > div.sizer-3 {
     bottom: 0;
     left: 0;
     cursor: s-resize;
 }
 
 .window > div:nth-of-type(4),
-.window > div#4 {
+.window > div.sizer-4 {
     top: 0;
     left: 0;
     cursor: e-resize;
 }
 
 .window > div:nth-of-type(5),
-.window > div#5 {
+.window > div.sizer-5 {
     top: 0;
     left: 0;
     cursor: nw-resize;
 }
 
 .window > div:nth-of-type(6),
-.window > div#6 {
+.window > div.sizer-6 {
     top: 0;
     right: 0;
     cursor: ne-resize;
 }
 
 .window > div:nth-of-type(7),
-.window > div#7 {
+.window > div.sizer-7 {
     bottom: 0;
     right: 0;
     cursor: se-resize;
 }
 
 .window > div:nth-of-type(8),
-.window > div#8 {
+.window > div.sizer-8 {
     bottom: 0;
     left: 0;
     cursor: sw-resize;
