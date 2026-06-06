@@ -23,13 +23,14 @@ var useBlur = false,
 	loadingOverlay = false,
 	flipped = false,
 	useTransform = false,
+	useScale = false,
 	updateRateLimit = false;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
 
 if (isIE) {
-    useTransform = true;
+    useTransform = false;
     document.body.classList.add("use-transform");
 }
 
@@ -257,7 +258,7 @@ function Dialog(object, create) {
 
     this._useTransform = useTransform;
     // this_useSca
-    this._useScale = true;
+    this._useScale = false;
     
     if (!object) return;
     if (!create) create = false;
