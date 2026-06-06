@@ -379,7 +379,7 @@ Dialog.prototype.initWithObject = function(object) {
         if(borderSection && !this.fixed) {
             for (var index = 0; index < 8; index++) {
                 var div = document.createElement("div");
-                div.draggable = false, div.id = String(index + 1), div.classList.add("sizer" + (index + 1));
+                div.draggable = false, div.id = String(index + 1), div.classList.add("sizer-" + (index + 1));
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
