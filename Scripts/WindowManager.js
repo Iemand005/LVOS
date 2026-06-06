@@ -969,10 +969,16 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     };
     target.addEventListener(transitionEndEvent, animationHandler, false);
 
-    try { void target.offsetWidth; } catch (e) {}
-    setClass(target, className, force);
-    // var enabled = target.classList.toggle(className, force);
-    if (onToggled) onToggled.call(dialog, enabled);
+    window.requestAnimationFrame(function(force) {
+        try { void target.offsetWidth; } catch (e) {}
+        // var enabled = target.classList.toggle(className, force);
+        var enabled = setClass(target, className, force);
+        if (onToggled) onToggled.call(dialog, !force);
+    }.bind(this, force));
+    // try { void target.offsetWidth; } catch (e) {}
+    // setClass(target, className, force);
+    // // var enabled = target.classList.toggle(className, force);
+    // if (onToggled) onToggled.call(dialog, enabled);
     // window.requestAnimationFrame(function(force) {
     //     try { void target.offsetWidth; } catch (e) {}
     //     var enabled = target.classList.toggle(className, force);
