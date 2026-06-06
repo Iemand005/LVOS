@@ -951,9 +951,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (onToggled) onToggled.call(dialog, enabled);
     });
 }
-function lerp(a, b, t) {
-    return a + (b - a) * t;
-}
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
     if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, null, null, function(enabled) {
@@ -980,15 +977,15 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         if (!enable) toggleThingie();
         animate(300, function(t) {
             if (enable) {
-                self.x = lerp(startPos.x, 0, t);
-                self.y = lerp(startPos.y, 0, t);
-                self.width = lerp(startSize.x, window.innerWidth, t);
-                self.height = lerp(startSize.y, window.innerHeight, t);
+                self.x = lerp(startPos.x, 0, ease(t));
+                self.y = lerp(startPos.y, 0, ease(t));
+                self.width = lerp(startSize.x, window.innerWidth, ease(t));
+                self.height = lerp(startSize.y, window.innerHeight, ease(t));
             } else {
-                self.x = lerp(0, startPos.x, t);
-                self.y = lerp(0, startPos.y, t);
-                self.width = lerp(window.innerWidth, startSize.x, t);
-                self.height = lerp(window.innerHeight, startSize.y, t);
+                self.x = lerp(0, startPos.x, ease(t));
+                self.y = lerp(0, startPos.y, ease(t));
+                self.width = lerp(window.innerWidth, startSize.x, ease(t));
+                self.height = lerp(window.innerHeight, startSize.y, ease(t));
             }
         }, function() {
             if (enable) toggleThingie();

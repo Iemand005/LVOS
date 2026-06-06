@@ -18,3 +18,10 @@ function animate(duration, update, complete) {
 
     tick();
 }
+
+function lerp(a, b, t) {
+    return a + (b - a) * t;
+}
+function ease(t) {
+    return t * t * (3 - 2 * t);
+}
