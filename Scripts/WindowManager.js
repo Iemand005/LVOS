@@ -661,8 +661,6 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
         if (useTransform) {
             target.style.top = "0px";
             target.style.left = "0px";
-            target.style.right = "";
-            target.style.bottom = "";
             this.useScale = true;
         } else {
             target.style.transform = "";
