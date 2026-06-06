@@ -1133,6 +1133,9 @@ var bodyCrawler = new DocumentCrawler(document);;
 window.onload=
 document.onload = function () {
     bodyCrawler = new DocumentCrawler(document);
+
+    initializeDialogs();
+    toggleReflections(reflections);
 }
 var dragAction = new DragAction();
 var windowButtons = {
@@ -1621,8 +1624,8 @@ function applyWallpaperImage(url, blurredUrl, onError) {
 
 // enableMica();
 
-initializeDialogs();
-toggleReflections(reflections);
+// initializeDialogs();
+// toggleReflections(reflections);
 
 // applyWallpaperImage(
 //   "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
