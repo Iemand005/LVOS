@@ -250,6 +250,12 @@ article, .article {
     pointer-events: auto;
 }
 
+.window > div.sizer-1 {
+    background-color: red;
+    width: 10px;
+    height: 10px;
+}
+
 .window.open {
     pointer-events: auto;
 }
@@ -456,6 +462,72 @@ button:hover {
 }
 
 .window > div:nth-of-type(8),
+.window > .sizer-8 {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+}
+
+// kikidliteme duplickta
+
+
+
+.window > div:nth-of-type(odd) {
+    width: 100%;
+}
+
+.window > div:nth-of-type(even) {
+    height: 100%;
+}
+
+
+.window > div, .window > div:nth-of-type(n + 5) {
+    width: 5px;
+    height: 5px;
+}
+
+.window > .sizer-1 {
+    top: 0;
+    left: 0;
+    cursor: n-resize;
+}
+
+.window > .sizer-2 {
+    top: 0;
+    right: 0;
+    cursor: w-resize;
+}
+
+.window > .sizer-3 {
+    bottom: 0;
+    left: 0;
+    cursor: s-resize;
+}
+
+.window > .sizer-4 {
+    top: 0;
+    left: 0;
+    cursor: e-resize;
+}
+
+.window > .sizer-5 {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+}
+
+.window > .sizer-6 {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+}
+
+.window > .sizer-7 {
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}
+
 .window > .sizer-8 {
     bottom: 0;
     left: 0;
