@@ -545,5 +545,5 @@ if (typeof Array.from !== "function") {
 })();
 
 // if (typeof module !== "undefined" && module.)
-if (typeof HTMLElement === "undefined") HTMLElement = Element
-if (typeof HTMLTemplateElement === "undefined") HTMLTemplateElement = function() {}
+if (typeof window.HTMLElement === "undefined") window.HTMLElement = Element
+if (typeof window.HTMLTemplateElement === "undefined") window.HTMLTemplateElement = function() {}
