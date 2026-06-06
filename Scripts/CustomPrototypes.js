@@ -507,3 +507,7 @@ if (typeof Array.from !== "function") {
         polyfill(targets[i]);
     }
 })();
+
+
+// if (typeof module !== "undefined" && module.)
+if (typeof HTMLElement === "undefined") HTMLElement = Element
