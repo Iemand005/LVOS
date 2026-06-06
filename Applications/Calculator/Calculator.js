@@ -45,13 +45,16 @@ Calculator.prototype.press = function (value) {
     this.updateDisplay();
 }
 
-var output = document.getElementById("display");
-var cells = document.getElementsByTagName("td");
+var output;
+var cells;
 
 /** @type {Calculator?} */
 var calculator = null;
 
-window.addEventListener("load", function () {
+function load() {
+    output = document.getElementById("display");
+    cells = document.getElementsByTagName("td");
+
     calculator = new Calculator;
 
     for (var i = 0; i < cells.length; i++) {
@@ -61,5 +64,7 @@ window.addEventListener("load", function () {
     }
 
     calculator.updateDisplay();
-}, false);
+}
+
+window.addEventListener("load", load, false);
 
