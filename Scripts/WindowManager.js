@@ -962,11 +962,9 @@ Dialog.prototype.move = function (x, y) {
  * @param {number} [height]
  */
 Dialog.prototype.resize = function (width, height) {
-  if (this.body) {
-        this.body.style.boxSizing = "border-box";
-        this.width = width || this.width;
-        this.height = height || this.height;
-  }
+  if (this.body) this.body.style.boxSizing = "border-box";
+    this.width = width || this.width;
+    this.height = height || this.height;
 };
 Dialog.prototype.update = function () {
   this.move();
