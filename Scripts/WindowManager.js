@@ -976,7 +976,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
         }
         if (!enable) toggleThingie();
         animate(300, function(t) {
-            var ease = easeOutLog;
+            var ease = easeSharpCenterStrong;
             if (enable) {
                 self.x = lerp(startPos.x, 0, ease(t));
                 self.y = lerp(startPos.y, 0, ease(t));

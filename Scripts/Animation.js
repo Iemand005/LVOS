@@ -28,3 +28,13 @@ function ease(t) {
 function easeOutLog(t) {
     return Math.log(1 + 9 * t) / Math.log(10);
 }
+function easeSharpCenter(t) {
+    return 0.5 - 0.5 * Math.cos(Math.PI * t);
+}
+function easeSharpCenterStrong(t) {
+    t = 0.5 - 0.5 * Math.cos(Math.PI * t);
+    return 0.5 - 0.5 * Math.cos(Math.PI * t);
+}
+function easeSharpMiddle(t) {
+    return 0.5 + (t - 0.5) * Math.abs(2 * t - 1);
+}
