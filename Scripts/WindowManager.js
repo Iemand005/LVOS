@@ -258,7 +258,7 @@ function Dialog(object, create) {
 
     this._useTransform = useTransform;
     // this_useSca
-    this._useScale = false;
+    this._useScale = useScale;
     
     if (!object) return;
     if (!create) create = false;
