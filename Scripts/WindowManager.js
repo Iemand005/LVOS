@@ -313,7 +313,10 @@ Dialog.prototype.initWithObject = function(object) {
         // this.closeable = true;
         var newDialog = createDialog();
         this.target = newDialog;
-        windowManager.loadState(this);
+        try {
+
+            // windowManager.loadState(this);
+        } finally {}
         if (object.classes && typeof object.classes === 'object'){
             object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
         }
@@ -356,6 +359,10 @@ Dialog.prototype.initWithObject = function(object) {
 
     // if (object.body) this.body.appendChild(object.body);
 
+    var activationHandler = function (ev) {
+        windowActivationEvent(ev, self)
+    };
+
     var target = this.target;
     if (target) {
 
@@ -369,7 +376,7 @@ Dialog.prototype.initWithObject = function(object) {
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
                     if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
-                    windowActivationEvent(ev, self);
+                    activationHandler(ev);
                 }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is a very stubborn browser and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
                 if (supportsPointer) div.onpointerdown = pointerDown;
                 else div.onmousedown = pointerDown;
@@ -387,8 +394,9 @@ Dialog.prototype.initWithObject = function(object) {
         var header = this.head;
         if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this), false);
 
-        if (supportsPointer) target.addEventListener("pointerdown", function (ev) { windowActivationEvent(ev, self) });
-        else target.addEventListener("mousedown", function (ev) { windowActivationEvent(ev, self) }, false);
+
+        if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
+        else target.addEventListener("mousedown", activationHandler, false);
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
             if (!target) return;
             var rect = target.getClientRects()[0];
