@@ -968,6 +968,10 @@ Dialog.prototype.resize = function (width, height) {
         this.height = height || this.height;
   }
 };
+Dialog.prototype.update = function () {
+  this.move();
+  this.resize();
+};
 /**
  * @param {number} width
  * @param {number} height
@@ -1007,6 +1011,11 @@ Dialog.prototype.launch = function() {
 Dialog.prototype.relaunch = function() {
     this.quit();
     this.launch();
+};
+
+Dialog.prototype.kill = function() {
+    var parent = this.target && this.target.parentElement;
+    if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
 
 function getWallpaper() {
@@ -1524,17 +1533,7 @@ function injectApplications() {
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
-}
-
-Dialog.prototype.kill = function() {
-    var parent = this.target && this.target.parentElement;
-    if (parent && this.closeable && this.target) parent.removeChild(this.target);
-};
-
-Dialog.prototype.update = function () {
-  this.move();
-  this.resize();
-};
+}f
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
