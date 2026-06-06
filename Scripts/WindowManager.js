@@ -116,9 +116,9 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
   get: function () {
     if (!this._windowStates && localStorage)
       try {
-        var stringyy = window.localStorage.getItem("");
+        var stringyy = localStorage.getItem("windowState");
         /** @type {DesktopState} */
-        var windowStates = JSON.parse(localStorage.windowState);
+        var windowStates = JSON.parse(stringyy);
         this._windowStates = windowStates;
       } catch (ex) {
         if (ex instanceof Error) console.error(ex.message);
@@ -1235,7 +1235,7 @@ var resizeDirection = 0;
 var topZ = 100;
 /** @type {string?} */
 var metroBodyOrigin;
-var loaded = false;
+var loaded = true;
 /** @type {number} */
 var timeout = -1;
 
