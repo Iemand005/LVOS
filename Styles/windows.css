@@ -68,17 +68,14 @@ main {
     border-radius: 5px;
 }
 
-.window header {
+.window header,
+.window .header {
     margin: 0;
-    /*display: flex;*/
     pointer-events: auto;
     justify-content: space-between;
     padding: 8px;
-    /* border: inherit; */
-    /* border-style: none; */
     border-width: 0px;
     border-color: inherit;
-    /* color: black; */
 }
 
 .window header,
@@ -98,6 +95,7 @@ main {
 }
 
 .window header section,
+.window .header .section,
 .window header nav {
     border-top-right-radius: inherit;
     border-bottom-left-radius: inherit;
