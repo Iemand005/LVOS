@@ -137,16 +137,11 @@ gl.bufferData(
 
 graphics.buffers = buffers;
 
-const bounds = canvas.getBoundingClientRect();
-graphics.resize(bounds.width, bounds.height);
+graphics.resize();
 graphics.startRendering();
 
 console.log(graphics);
 
 window.onresize = function (ev) {
-  const bounds = canvas.getBoundingClientRect();
-
-  this.requestAnimationFrame(function () {
-    graphics.resize(bounds.width, bounds.height);
-  });
+  graphics.resize();
 };
