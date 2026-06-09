@@ -1,6 +1,18 @@
 
 /* .window themes */
 
+:root {
+  --bg: white;
+  --fg: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111;
+    --fg: #eee;
+  }
+}
+
 .window.rounded-corners {
     border-radius: 10px !important;
 }
