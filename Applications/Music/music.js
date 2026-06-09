@@ -58,18 +58,18 @@ function animateFrame(time){
     }
     refresh();
     //seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
-    /*const*/var width = ctx.canvas.width = visualiser.clientWidth;
-    /*const*/var height = ctx.canvas.height = visualiser.clientHeight;
+    const width = ctx.canvas.width = visualiser.clientWidth;
+    const height = ctx.canvas.height = visualiser.clientHeight;
     seek.value = audio.currentTime;
 
-    /*const*/var freqData = audioVisualiser.frequencyData;
-    /*const*/var timeData = audioVisualiser.timeDomainData;
-    /*const*/var count = timeData.length;
+    const freqData = audioVisualiser.frequencyData;
+    const timeData = audioVisualiser.timeDomainData;
+    const count = timeData.length;
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
-    /*const*/var hue = time/321;
-    /*const*/var a = 70;
+    const hue = time/321;
+    const a = 70;
     ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
@@ -78,12 +78,12 @@ function animateFrame(time){
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
-            /*const*/var amp = parseInt(timeData[index]);
+            const amp = parseInt(timeData[index]);
 
-            /*const*/var a = parseInt(freqData[index]);
+            const a = parseInt(freqData[index]);
 
-            /*const*/var x = (amp) * Math.cos(rad) + cX;
-            /*const*/var y = (amp) * Math.sin(rad) + cY;
+            const x = (amp) * Math.cos(rad) + cX;
+            const y = (amp) * Math.sin(rad) + cY;
             ctx.beginPath();
 
             ctx.fillStyle = "hsl(" + hue + ",100%,"+ a/255*100 +"%)";
@@ -95,11 +95,11 @@ function animateFrame(time){
             rad += inc;
         }
     } else for(let index in freqData){
-    ctx.beginPath();
-    count = freqData.length;    
+        count = freqData.length;    
+        ctx.beginPath();
 
-        /*const*/var amp = parseInt(freqData[index]);
-        /*const*/var x = parseInt(index) * (width/count);
+        const amp = parseInt(freqData[index]);
+        const x = parseInt(index) * (width/count);
         ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
         ctx.fill();
@@ -168,10 +168,10 @@ if(new URL(window.location).searchParams && new URL(window.location).searchParam
 }
 
 function refresh(){
-    /*const*/var m = parseInt(audio.currentTime/60);
-    /*const*/var s = parseInt(audio.currentTime%60);
-    /*const*/var ms = parseInt(audio.currentTime%1/0.01);
-    /*const*/var text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
+    const m = parseInt(audio.currentTime/60);
+    const s = parseInt(audio.currentTime%60);
+    const ms = parseInt(audio.currentTime%1/0.01);
+    const text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     seekOutput.innerText = text;
 }
 }
