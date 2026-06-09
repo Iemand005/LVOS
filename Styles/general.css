@@ -18,6 +18,10 @@ select {
     backdrop-filter: blur(10px);
 }
 
+input[type="range"] {
+    ba
+}
+
 button:hover,
 .button:hover,
 select:hover {

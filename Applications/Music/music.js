@@ -71,7 +71,7 @@ function animateFrame(time){
     /*let*/var cY = height/2;
     const hue = time/321;
     const a = 70;
-    ctx.fillStyle = "rgba(0, 0, 0, 0)";
+    ctx.fillStyle = "transparent";
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
     ctx.fill();
