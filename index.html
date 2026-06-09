@@ -147,15 +147,16 @@
         </aside>
         <section id="overlay" class=""></section>
         <svg width="0" height="0">
-            <filter id="firefox-glass">
+            <filter id="firefox-glases">
                 <feTurbulence id="noise" type="fractalNoise" result="noise" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
 
                 <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
             </filter>
         </svg>
-        
+              <svg class="filter" xmlns="http://www.w3.org/2000/svg">
+
         <defs>
-          <filter id="filter" color-interpolation-filters="sRGB">
+          <filter id="firefox-glass" color-interpolation-filters="sRGB">
             <!-- the input displacement image -->
             <feImage
               x="0"
