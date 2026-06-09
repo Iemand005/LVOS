@@ -375,6 +375,10 @@ article > *,
     height: 100% !important;
 }
 
+.dragging header {
+    cursor: grabbing;
+}
+
 .acrylic {
     background-color: rgba(0, 0, 0, 0.507);
     backdrop-filter: blur(8px);
