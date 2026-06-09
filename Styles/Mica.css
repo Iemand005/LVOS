@@ -61,19 +61,21 @@
   scale: 0.8;
 } */
 
-.mica-glass .backdrop-filter {
+.mica.glass .backdrop-filter {
   filter: url(#firefox-glass);
 }
 
-.mica-glass .backdrop-filter {
+.mica.glass .backdrop-filter {
   position: absolute;
   inset: -20px;
+
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
 }
 
-.mica-glass .backdrop-filter > * {
+.mica.glass .backdrop-filter > *,
+.glass .mica .backdrop-filter > * {
   position: absolute;
   inset: 20px;
 
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
 }
