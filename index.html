@@ -190,17 +190,17 @@
         <defs style="touch-action: none;">
           <filter id="firefox-glass" color-interpolation-filters="sRGB" style="touch-action: none;">
 			<feTurbulence id="noise" type="fractalNoise" result="map" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="-280" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="280" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0
                       0 0 0 0 0
                       0 0 0 0 0
                       0 0 0 1 0" result="red" style="touch-action: none;"></feColorMatrix>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="-200" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="200" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0
                       0 1 0 0 0
                       0 0 0 0 0
                       0 0 0 1 0" result="green" style="touch-action: none;"></feColorMatrix>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R" yChannelSelector="B" result="dispBlue" scale="-160" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R" yChannelSelector="B" result="dispBlue" scale="160" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0
                       0 0 0 0 0
                       0 0 1 0 0
