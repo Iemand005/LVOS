@@ -1063,22 +1063,15 @@ Dialog.prototype.move = function (x, y) {
     if (y < 0 && this.maximized) this.maximize();
 
     if (this.mica) try {
-        var backdrop =
-        this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
+        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
-        var wallpaperImage = wallpaperP.children[0];
+		var wallpaperImage = wallpaperP.children[0];
         if (!(backdrop instanceof HTMLElement) || !wallpaperImage) return;
         translateElement(backdrop, -this.x, -this.y);
 
-        var wallpaperWidth =
-        wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth
-            ? wallpaperImage.clientWidth
-            : wallpaperP.clientWidth;
-        var wallpaperHeight =
-        wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight
-            ? wallpaperImage.clientHeight
-            : wallpaperP.clientHeight;
+        var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
+        var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
 
         backdrop.style.width = toPixels(wallpaperWidth);
         backdrop.style.height = toPixels(wallpaperHeight);
