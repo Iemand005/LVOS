@@ -438,6 +438,11 @@ aside#charms form {
     filter: url(#liquid-glass) !important;
     background-color: rgba(255, 255, 255, 0.395);
   }
+
+  .glass {
+    backdrop-filter: blur(3px) !important;
+  filter: url(#glass-blur) !important;
+  }
 }
 
 @media (pointer: none), (pointer: coarse) {
