@@ -169,15 +169,6 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
     }
 });
 
-Object.defineProperty(WindowManager.prototype, "mica", {
-    get: function() { return this._mica; },
-    set: function(value) {
-        if (value) window.addEventListener("resize", this.resizeHandler, false);
-        else window.removeEventListener("resize", this.resizeHandler, false);
-        this._isWindowUpdatesEnabled = value;
-    }
-});
-
 WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
 	console.log("Saving window state.");
