@@ -822,9 +822,9 @@ Object.defineProperty(Dialog.prototype, "popup", {
 Object.defineProperty(Dialog.prototype, "micaElement", {
     get: function() {
         try {
-            if (!this.target) return;
-            var clipElem = this.target.getElementsByClassName("backdrop-clip");
-            if (!clipElem.length) return;
+            if (!this.target) return null;
+            var clipElem = this.target.getElementsByClassName("backdrop-filter");
+            if (!clipElem.length) return null;
             var clip = clipElem[0].children[0];
             if (clip instanceof HTMLElement) return clip;
         } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
@@ -1150,7 +1150,7 @@ Dialog.prototype.injectMica = function() {
         // var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var preBlurredImage = blurredSrc != null;
-        var clip = this.target.getElementsByClassName("backdrop-clip")[0];
+        var clip = this.target.getElementsByClassName("backdrop-filter")[0];
         if (!clip) return;
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
@@ -1162,7 +1162,7 @@ Dialog.prototype.injectMica = function() {
                 micaWallpaper.removeAttribute("style");
                 micaWallpaper.className = "mica-backdrop";
                 if (preBlurredImage) {
-                if (blurredSrc) micaWallpaper.src = blurredSrc;
+                	if (blurredSrc) micaWallpaper.src = blurredSrc;
                 }
             } else {
                 micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
@@ -1183,7 +1183,7 @@ Dialog.prototype.injectMica = function() {
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     this.target.classList.remove("mica");
-    var clip = this.target.getElementsByClassName("backdrop-clip")[0];
+    var clip = this.target.getElementsByClassName("backdrop-filter")[0];
     if (!clip) return;
     while (clip.firstChild) clip.firstChild.remove();
 };
