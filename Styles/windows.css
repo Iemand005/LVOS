@@ -549,7 +549,7 @@ button:hover {
     body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);
         -webkit-backdrop-filter: saturate(150%) blur(20px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
-        backdrop-filter: saturate(150%) blur(20px) !important;
+        backdrop-filter: saturate(150%) blur(20px);
         padding: 0;
         border: 1px solid rgba(255, 255, 255, 0.267);
     }
@@ -570,9 +570,6 @@ button:hover {
     @media (prefers-color-scheme: dark) {
         body.blur .window > content {
             background-color: rgba(0, 0, 0, 0.468);
-            -webkit-backdrop-filter: saturate(150%) blur(20px); /* For older versions of webkit browsers like Edge, Chrome and Safari */
-            backdrop-filter: saturate(150%) blur(20px) !important;
-            padding: 0;
             border: 1px solid rgba(255, 255, 255, 0.267);
         }
     }
