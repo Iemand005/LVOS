@@ -53,18 +53,6 @@
 
 }
 
-/* .backdrop-filter {
-  scale: 1.2;
-}
-
-.backdrop-filter > * {
-  scale: 0.8;
-} */
-
-.mica.glass .backdrop-filter {
-  filter: url(#firefox-glass);
-}
-
 .mica.glass .backdrop-filter {
   position: absolute;
   inset: -20px;
