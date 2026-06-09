@@ -434,14 +434,13 @@ aside#charms form {
 } */
 
 @supports (filter: url("#liquid-glass")) {
-  .svg-glass {
-    filter: url(#liquid-glass) !important;
-    background-color: rgba(255, 255, 255, 0.395);
-  }
 
-  .glass {
+  .glass content {
+    background: none  ;
+  }
+  .glass .backdrop-clip {
     backdrop-filter: blur(3px) !important;
-  filter: url(#glass-blur) !important;
+    filter: url(#glass-blur) !important;
   }
 }
 
