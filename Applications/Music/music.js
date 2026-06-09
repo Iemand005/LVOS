@@ -124,21 +124,25 @@ file.onchange = function(){
     audioVisualiser.initializeWithMediaElement(audio);
     startAnimation(audioVisualiser);
     volume.value = audio.volume*100;
-}
+};
 
 audio.oncanplay = function(){
     seek.max = audio.duration;
-}
+};
 
 options.onsubmit = function(ev){
     ev.preventDefault();
-}
+};
+
+// const playHandler = 
+function playHandler() { audio.play(); }
+function pauseHandler() { audio.pause(); }
 
 play.onclick = function() { audio.play(); };
 
 audio.onplaying = function(){
     play.innerText = "⏸︎";
-    play.onclick = audio.pause.bind(audio);
+	play.onclick = audio.pause.bind(audio);
     audioVisualiser.initializeWithMediaElement(audio);
 }
 
