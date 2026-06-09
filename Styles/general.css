@@ -13,7 +13,6 @@ select {
 	background-color: #ffffff38;
 	border: 1px solid #ffffff70;
 	border-radius: 5px;
-    /* color: black; */
     user-select: none;
     backdrop-filter: blur(10px);
 }
@@ -37,7 +36,8 @@ input[type="number"] {
 @media (prefers-color-scheme: dark) {
     button,
     .button,
-    input {
+    input,
+    select {
         border-color: #cecece3a;
         background-color: #bebebe38;
         color: white;
