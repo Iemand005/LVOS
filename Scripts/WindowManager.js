@@ -567,9 +567,9 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "mica", {
     get: function() { return this._mica; },
     set: function(mica) {
-        this._mica = mica;
-        if (mica) this.injectMica();
-        else this.removeMica();
+        if (mica) this._mica = this.injectMica();
+        else this._mica = this.removeMica();
+		this.move();
     }
 });
 
@@ -1155,15 +1155,15 @@ function getWallpaper() {
 Dialog.prototype.injectMica = function() {
     try {
         if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you psosible even do that??");
-        if (!this.target) return;
+        if (!this.target) return false;
         var wallpaper = document.getElementById("wallpaper");
-        if (!wallpaper) return;
+        if (!wallpaper) return false;
         // var newWallpaper = wallpaper.cloneNode(true);
         // var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var preBlurredImage = blurredSrc != null;
         var clip = this.micaElement;
-        if (!clip) return;
+        if (!clip) return false;
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
         
@@ -1188,16 +1188,18 @@ Dialog.prototype.injectMica = function() {
 
         clip.appendChild(micaWallpaper);
         this.target.classList.add("mica");
-        this.move();
+        
+		return true;
     } catch(ex) { console.warn(ex); }
 };
 
 Dialog.prototype.removeMica = function() {
-    if (!this.target) return;
+    if (!this.target) return false;
     this.target.classList.remove("mica");
     var clip = this.micaElement;
-    if (!clip) return;
+    if (!clip) return false;
     while (clip.firstChild) clip.firstChild.remove();
+	return false;
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
