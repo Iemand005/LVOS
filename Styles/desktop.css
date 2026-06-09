@@ -435,8 +435,7 @@ aside#charms form {
   }
 
   .glass .window > content {
-    /* backdrop-filter: blur(3px) !important; */
-    backdrop-filter: url(#firefox-glass) !important;
+    backdrop-filter: blur(3px) !important;
   }
 
   .glass .backdrop-filter {
