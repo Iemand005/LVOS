@@ -15,7 +15,7 @@
   height: 100%;
 }
 
-.backdrop-clip {
+.backdrop-clip, .backdrop-filter {
   top: 0;
   left: 0;
   width: 100%;
