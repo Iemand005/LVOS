@@ -138,17 +138,17 @@ options.onsubmit = function(ev){
 function playHandler() { audio.play(); }
 function pauseHandler() { audio.pause(); }
 
-play.onclick = function() { audio.play(); };
+play.onclick = playHandler;
 
 audio.onplaying = function(){
     play.innerText = "⏸︎";
-	play.onclick = audio.pause.bind(audio);
+	play.onclick = pauseHandler;
     audioVisualiser.initializeWithMediaElement(audio);
 }
 
 audio.onpause = function(){
     play.innerText = "⏵︎";
-    play.onclick = audio.play.bind(audio);
+    play.onclick = playHandler;
 }
 
 seek.oninput = function(ev){
@@ -166,7 +166,6 @@ function autoHideControls(){
     timeoute = setTimeout(options.classList.add.bind(document.body.classList, "full"), 3000);
 }
 
-console.error("Implement the URL replacement for older browsers!")
 if(new URL(window.location).searchParams && new URL(window.location).searchParams.get("fullscreen")) {
     autoHideControls();
     document.onmousemove = autoHideControls;
