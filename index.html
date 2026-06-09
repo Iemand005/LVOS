@@ -156,19 +156,20 @@
         
         <svg class="filter" xmlns="http://www.w3.org/2000/svg" style="touch-action: none;">
         <defs style="touch-action: none;">
-          <filter id="firefox-glass" color-interpolation-filters="sRGB" style="touch-action: none;">
+          <filter id="glass" color-interpolation-filters="sRGB" style="touch-action: none;">
 			<feTurbulence id="noise" type="fractalNoise" result="map" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="50" style="touch-action: none;"></feDisplacementMap>
+
+            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="30" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0
                       0 0 0 0 0
                       0 0 0 0 0
                       0 0 0 1 0" result="red" style="touch-action: none;"></feColorMatrix>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="100" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="60" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0
                       0 1 0 0 0
                       0 0 0 0 0
                       0 0 0 1 0" result="green" style="touch-action: none;"></feColorMatrix>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R" yChannelSelector="B" result="dispBlue" scale="160" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R" yChannelSelector="B" result="dispBlue" scale="80" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0
                       0 0 0 0 0
                       0 0 1 0 0

@@ -92,6 +92,22 @@
     background-color: rgb(240, 240, 240);
 }
 
+@supports (filter: url("#firefox-glass")) {
+
+  .glass content {
+    background: none !important;
+  }
+
+  .glass .window > content {
+    backdrop-filter: blur(3px) !important;
+  }
+
+  .glass .backdrop-filter {
+    backdrop-filter: blur(3px) !important;
+    filter: url(#glass) !important;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
 
     .windows-11 .window {
