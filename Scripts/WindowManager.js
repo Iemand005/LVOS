@@ -825,8 +825,20 @@ Object.defineProperty(Dialog.prototype, "micaElement", {
             if (!this.target) return null;
             var clipElem = this.target.getElementsByClassName("backdrop-filter");
             if (!clipElem.length) return null;
-            var clip = clipElem[0].children[0];
+            var clip = clipElem[0];
             if (clip instanceof HTMLElement) return clip;
+        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
+        return null;
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "micaBackdrop", {
+    get: function() {
+        try {
+			var micaElement = this.micaElement;
+            if (!micaElement) return null;
+            var backdrop = micaElement.children[0];
+            if (backdrop instanceof HTMLElement) return backdrop;
         } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
         return null;
     }
