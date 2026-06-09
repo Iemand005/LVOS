@@ -79,9 +79,8 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
     get: function () {
         const size = this.analyser.frequencyBinCount;
 
-        if (!this._frequencyData || this._frequencyData.length !== size) {
+        if (!this._frequencyData || this._frequencyData.length !== size)
             this._frequencyData = new Uint8Array(size);
-        }
 
         this.analyser.getByteFrequencyData(this._frequencyData);
         return this._frequencyData;
@@ -90,7 +89,14 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
 
 Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
     get: function() {
+
+         const size = this.analyser.time;
+
+        if (!this._frequencyData || this._frequencyData.length !== size)
+            this._frequencyData = new Uint8Array(size);
+
         this.analyser.getByteTimeDomainData(this._timeDomainData);
         return this._timeDomainData;
     }
 });
+o
