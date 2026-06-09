@@ -90,10 +90,10 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
 Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
     get: function() {
 
-         const size = this.analyser.time;
+         const size = this.analyser.frequencyBinCount;
 
-        if (!this._frequencyData || this._frequencyData.length !== size)
-            this._frequencyData = new Uint8Array(size);
+        if (!this._timeDomainData || this._timeDomainData.length !== size)
+            this._timeDomainData = new Uint8Array(size);
 
         this.analyser.getByteTimeDomainData(this._timeDomainData);
         return this._timeDomainData;
