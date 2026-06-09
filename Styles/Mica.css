@@ -62,11 +62,15 @@
 } */
 
 
-.backdrop-filter::before {
-  content: "";
+.backdrop-filter {
   position: absolute;
   inset: -20px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: -1;
+}
+
+.backdrop-filter > * {
+  position: absolute;
+  inset: 20px;
+
+  width: 120%;
+  height: 120%;
 }
