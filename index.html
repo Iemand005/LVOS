@@ -148,24 +148,9 @@
         <section id="overlay" class=""></section>
         <svg width="0" height="0">
             <filter id="firefox-glass">
-                <feTurbulence
-                    id="noise"
-                    type="fractalNoise"
-                    baseFrequency="0.015 0.003"
-                    numOctaves="4"
-                    seed="1"
-                    result="noise" />
+                <feTurbulence id="noise" type="fractalNoise" result="noise" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
 
-                <feDisplacementMap
-                    in="SourceGraphic"
-                    in2="noise"
-                    scale="50"
-                    xChannelSelector="R"
-                    yChannelSelector="G" />
-
-                    <feGaussianBlur
-                in="distorted"
-                stdDeviation="5" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
             </filter>
         </svg>
         <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
