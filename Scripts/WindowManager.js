@@ -1063,7 +1063,7 @@ Dialog.prototype.move = function (x, y) {
     if (y < 0 && this.maximized) this.maximize();
 
     if (this.mica) try {
-        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild.firstChild;
+        var backdrop = this.micaElement.firstChild;
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
@@ -1150,7 +1150,7 @@ Dialog.prototype.injectMica = function() {
         // var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var preBlurredImage = blurredSrc != null;
-        var clip = this.target.getElementsByClassName("backdrop-filter")[0];
+        var clip = this.micaElement;
         if (!clip) return;
         while (clip.firstChild) clip.removeChild(clip.firstChild);
 
@@ -1183,7 +1183,7 @@ Dialog.prototype.injectMica = function() {
 Dialog.prototype.removeMica = function() {
     if (!this.target) return;
     this.target.classList.remove("mica");
-    var clip = this.target.getElementsByClassName("backdrop-filter")[0];
+    var clip = this.micaElement;
     if (!clip) return;
     while (clip.firstChild) clip.firstChild.remove();
 };
