@@ -439,18 +439,9 @@ aside#charms form {
   }
 
   .glass .backdrop-filter {
-    /* backdrop-filter: blur(3px) !important; */
+    backdrop-filter: blur(3px) !important;
     filter: url(#firefox-glass) !important;
   }
-
-  /* .glass .backdrop-clip {
-    backdrop-filter: blur(3px) !important;
-    /* filter: url(#firefox-glass) !important; */
-  } */
-  
-  /* .glass .mica .backdrop-filter {
-    filter: url(#firefox-glass);
-  } */
 }
 
 @media (pointer: none), (pointer: coarse) {

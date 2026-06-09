@@ -50,10 +50,10 @@
 
 .mica article > * {
   border: none;
-
 }
 
-.mica.glass .backdrop-filter {
+.mica.glass .backdrop-filter,
+.glass .mica .backdrop-filter {
   position: absolute;
   inset: -20px;
 
@@ -65,5 +65,4 @@
 .glass .mica .backdrop-filter > * {
   position: absolute;
   inset: 20px;
-
 }
