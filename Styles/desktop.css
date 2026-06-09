@@ -444,6 +444,14 @@ aside#charms form {
   }
 }
 
+/* .mica-glass .backdrop-clip {
+  filter: url(#liquid-glass);
+} */
+
+.mica-glass .backdrop-clip::before {
+  filter: url(#liquid-glass);
+}
+
 @media (pointer: none), (pointer: coarse) {
 }
 
