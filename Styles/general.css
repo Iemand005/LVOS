@@ -7,19 +7,15 @@
 
 button,
 .button,
-input,
+input:not([type="range"]),
 select {
     cursor: pointer;
 	background-color: #ffffff38;
 	border: 1px solid #ffffff70;
 	border-radius: 5px;
-    color: black;
+    /* color: black; */
     user-select: none;
     backdrop-filter: blur(10px);
-}
-
-input[type="range"] {
-    ba
 }
 
 button:hover,
