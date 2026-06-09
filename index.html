@@ -168,6 +168,16 @@
 
                 <!-- <feBlend in="red" in2="blue" mode="screen" result="output" /> -->
 
+                <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R"    yChannelSelector="G"    result="dispGreen"  />
+                <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green"  />
+                
+                <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R"    yChannelSelector="G"    result="dispBlue"  />
+                
+                <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue"  />
+
+				<feBlend in="red" in2="green" mode="screen" result="rg" />
+                <feBlend in="rg" in2="blue" mode="screen" result="output" />
+
                 <feDisplacementMap in="SourceGraphic" in2="red" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
             </filter>
         </svg>
