@@ -6,7 +6,6 @@
 	<title>Document</title>
 	<style>
 		.svg-glass {
-			filter: url(#liquid-glass);
 			backdrop-filter: url(#liquid-glass);
 			background-color: rgba(255, 255, 255, 0.395);
 			width: 200px;
@@ -43,6 +42,10 @@
             scale="20"
             xChannelSelector="R"
             yChannelSelector="G" />
+
+			<feGaussianBlur
+        in="distorted"
+        stdDeviation="5" />
     </filter>
 </svg>
 <div class="svg-glass">
