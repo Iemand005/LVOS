@@ -95,7 +95,7 @@
 @supports (filter: url("#firefox-glass")) {
 
   .glass content {
-    background: none !important;
+    /* background: none !important; */
   }
 
   .glass .window > content {
@@ -114,7 +114,8 @@
         color: white;
     }
 
-    .windows-11 .window content {
+    .windows-11 .window content,
+    button {
         background-color: rgb(32, 32, 32);
         border: 1px solid rgba(255, 255, 255, 0.267);
     }
@@ -122,4 +123,8 @@
     .windows-11 .window article, .windows-11 .window article > * {
         background-color: rgb(25, 25, 25);
     }
+
+    /* .glass content {
+    background: none !important;
+  } */
 }
