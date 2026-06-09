@@ -77,7 +77,7 @@ function animateFrame(time){
     if(visualiserOption.selectedIndex){
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
-        for(/*let*/var index in timeData){
+        for(let index in timeData){
             /*const*/var amp = parseInt(timeData[index]);
 
             /*const*/var a = parseInt(freqData[index]);
@@ -94,7 +94,7 @@ function animateFrame(time){
 
             rad += inc;
         }
-    } else for(/*let*/var index in freqData){
+    } else for(let index in freqData){
     ctx.beginPath();
 
         /*const*/var amp = parseInt(freqData[index]);
@@ -107,11 +107,11 @@ function animateFrame(time){
     
 }
 
-function startAnimation(audioVisualiser){
+function startAnimation(){
     fft.oninput = function(){
         audioVisualiser.updateBinCount(Math.pow(2, this.value)); // "2 ** this.value" works in more modern browsers too.
     }
-    animateFrame(0);
+    requestAnimationFrame(animateFrame);
 }
 
 file.onchange = function(){

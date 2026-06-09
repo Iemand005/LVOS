@@ -54,10 +54,13 @@ AudioVisualiser.prototype.initializeWithMediaStream = function (stream) {
 };
 
 AudioVisualiser.prototype.updateBinCount = function (fftSize) {
-        this.analyser.fftSize = fftSize || 64;
-        this._frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
-        this._timeDomainData = new Uint8Array(this.analyser.frequencyBinCount);
-    },
+    this.analyser.fftSize = fftSize || 64;
+
+    const size = this.analyser.frequencyBinCount;
+
+    this._frequencyData = new Uint8Array(size);
+    this._timeDomainData = new Uint8Array(size);
+};
 
 Object.defineProperty(AudioVisualiser, "sharedContext", {
   get: function() {
@@ -74,12 +77,14 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyBinCount", {
 
 Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
     get: function() {
-        return this.analyser.getByteFrequencyData(this._frequencyData), this._frequencyData;
+        this.analyser.getByteFrequencyData(this._frequencyData);
+        return this._frequencyData;
     },
 });
 
 Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
     get: function() {
-        return this.analyser.getByteTimeDomainData(this._timeDomainData), this._timeDomainData;
+        this.analyser.getByteTimeDomainData(this._timeDomainData);
+        return this._timeDomainData;
     }
 });
