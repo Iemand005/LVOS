@@ -53,10 +53,20 @@
 
 }
 
-.backdrop-filter {
+/* .backdrop-filter {
   scale: 1.2;
 }
 
 .backdrop-filter > * {
   scale: 0.8;
+} */
+
+
+.backdrop-filter::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: -1;
 }
