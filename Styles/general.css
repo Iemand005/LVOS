@@ -7,7 +7,8 @@
 
 button,
 .button,
-input {
+input,
+select {
     cursor: pointer;
 	background-color: #ffffff38;
 	border: 1px solid #ffffff70;
@@ -17,7 +18,8 @@ input {
 }
 
 button:hover,
-.button:hover {
+.button:hover,
+select:hover {
     background-color: #ffffff2b;
 }
 

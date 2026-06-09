@@ -64,7 +64,8 @@ function animateFrame(time){
 
     const freqData = audioVisualiser.frequencyData;
     const timeData = audioVisualiser.timeDomainData;
-    const count = timeData.length;
+    // const count = visualiserOption.frequ;
+    const count = audioVisualiser.frequencyBinCount;
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
@@ -95,7 +96,7 @@ function animateFrame(time){
             rad += inc;
         }
     } else for(let index in freqData){
-        count = freqData.length;    
+        // count = freqData.length;    
         ctx.beginPath();
 
         const amp = parseInt(freqData[index]);
@@ -133,7 +134,7 @@ options.onsubmit = function(ev){
     ev.preventDefault();
 }
 
-play.onclick = audio.play.bind(audio);
+play.onclick = function() { audio.play(); };
 
 audio.onplaying = function(){
     play.innerText = "⏸︎";

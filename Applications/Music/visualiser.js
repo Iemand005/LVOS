@@ -77,7 +77,7 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyBinCount", {
 
 Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
     get: function () {
-        const size = this.analyser.frequencyBinCount;
+        const size = this.frequencyBinCount;
 
         if (!this._frequencyData || this._frequencyData.length !== size)
             this._frequencyData = new Uint8Array(size);
@@ -90,7 +90,7 @@ Object.defineProperty(AudioVisualiser.prototype, "frequencyData", {
 Object.defineProperty(AudioVisualiser.prototype, "timeDomainData", {
     get: function() {
 
-         const size = this.analyser.frequencyBinCount;
+         const size = this.frequencyBinCount;
 
         if (!this._timeDomainData || this._timeDomainData.length !== size)
             this._timeDomainData = new Uint8Array(size);
