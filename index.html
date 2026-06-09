@@ -144,6 +144,28 @@
             </form>
         </aside>
         <section id="overlay" class=""></section>
+        <svg width="0" height="0">
+            <filter id="liquid-glass">
+                <feTurbulence
+                    id="noise"
+                    type="fractalNoise"
+                    baseFrequency="0.015 0.03"
+                    numOctaves="2"
+                    seed="1"
+                    result="noise" />
+
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="noise"
+                    scale="20"
+                    xChannelSelector="R"
+                    yChannelSelector="G" />
+
+                    <feGaussianBlur
+                in="distorted"
+                stdDeviation="5" />
+            </filter>
+        </svg>
     </main>
     <footer>2023/24 © Lasse Lauwerys</footer>
 </body>

@@ -428,6 +428,13 @@ aside#charms form {
   background: transparent;
 }
 
+.svg-glass {
+  backdrop-filter: url(#liquid-glass);
+  background-color: rgba(255, 255, 255, 0.395);
+  width: 200px;
+  height: 200px;
+}
+
 @media (pointer: none), (pointer: coarse) {
 }
 
