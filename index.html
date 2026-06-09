@@ -147,42 +147,10 @@
         </aside>
         <section id="overlay" class=""></section>
         <svg width="0" height="0">
-            <filter id="firefox-glases">
+            <filter id="firefox-glass-simple">
                 <feTurbulence id="noise" type="fractalNoise" result="noise" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
 
                 <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
-            </filter>
-        </svg>
-
-        <svg width="0" height="0">
-            <filter id="firefox-glassy" color-interpolation-filters="sRGB">
-                <!-- <feImage x="0" y="0" width="100%" height="100%" result="map"></feImage> -->
-
-                <!-- <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="G" result="dispRed"> -->
-
-                <feTurbulence id="noise" type="fractalNoise" result="map" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
-
-                <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="G" result="dispRed"/>
-
-                <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red"/>
-
-                <!-- <feBlend in="red" in2="blue" mode="screen" result="output" /> -->
-
-                <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R"    yChannelSelector="G"    result="dispGreen"  />
-                <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green"  />
-                
-                <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R"    yChannelSelector="G"    result="dispBlue"  />
-                
-                <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue"/>
-
-				<feBlend in="red" in2="green" mode="screen" result="rg" />
-                <feBlend in="rg" in2="blue" mode="screen" result="output" />
-
-                <feDisplacementMap in="SourceGraphic" in2="output" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
-
-				<feDiffuseLighting in="map" surfaceScale="10" lighting-color="white">
-					<feDistantLight azimuth="45" elevation="60" />
-				</feDiffuseLighting>
             </filter>
         </svg>
         
@@ -190,12 +158,12 @@
         <defs style="touch-action: none;">
           <filter id="firefox-glass" color-interpolation-filters="sRGB" style="touch-action: none;">
 			<feTurbulence id="noise" type="fractalNoise" result="map" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="280" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="50" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0
                       0 0 0 0 0
                       0 0 0 0 0
                       0 0 0 1 0" result="red" style="touch-action: none;"></feColorMatrix>
-            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="200" style="touch-action: none;"></feDisplacementMap>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="100" style="touch-action: none;"></feDisplacementMap>
             <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0
                       0 1 0 0 0
                       0 0 0 0 0
