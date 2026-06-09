@@ -44,9 +44,10 @@ fullscreen.onclick = function(){
 }
 
 
-function animateFrame(audioVisualiser, time){
+function animateFrame(time){
 
-    requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
+    // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
+    requestAnimationFrame(animateFrame);
     if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
         ctx.fillStyle = "#FF000099"
@@ -110,7 +111,7 @@ function startAnimation(audioVisualiser){
     fft.oninput = function(){
         audioVisualiser.updateBinCount(Math.pow(2, this.value)); // "2 ** this.value" works in more modern browsers too.
     }
-    animateFrame(audioVisualiser);
+    animateFrame(0);
 }
 
 file.onchange = function(){
