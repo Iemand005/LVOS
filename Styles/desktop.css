@@ -428,14 +428,15 @@ aside#charms form {
   background: transparent;
 }
 
-@supports (filter: url("#glass-blur")) {
+@supports (filter: url("#firefox-glass")) {
 
   .glass content {
-    background: none  ;
+    background: none !important;
   }
+
   .glass .backdrop-clip {
     backdrop-filter: blur(3px) !important;
-    filter: url(#glass-blur) !important;
+    filter: url(#firefox-glass) !important;
   }
   
   .mica-glass .backdrop-filter {

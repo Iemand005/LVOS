@@ -61,16 +61,19 @@
   scale: 0.8;
 } */
 
+.mica-glass .backdrop-filter {
+  filter: url(#firefox-glass);
+}
 
-.backdrop-filter {
+.mica-glass .backdrop-filter {
   position: absolute;
   inset: -20px;
 }
 
-.backdrop-filter > * {
+.mica-glass .backdrop-filter > * {
   position: absolute;
   inset: 20px;
 
-  width: 120%;
-  height: 120%;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
 }
