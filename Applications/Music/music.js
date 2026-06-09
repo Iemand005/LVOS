@@ -96,6 +96,7 @@ function animateFrame(time){
         }
     } else for(let index in freqData){
     ctx.beginPath();
+    count = freqData.length;    
 
         /*const*/var amp = parseInt(freqData[index]);
         /*const*/var x = parseInt(index) * (width/count);
