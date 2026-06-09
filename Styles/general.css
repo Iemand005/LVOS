@@ -5,15 +5,15 @@
  * Modified on: 06/06/2026 *
 \***************************/
 
-button,
-.button,
-input:not([type="range"]),
-select {
+button, .button, input, select {
     cursor: pointer;
 	background-color: #ffffff38;
 	border: 1px solid #ffffff70;
 	border-radius: 5px;
     user-select: none;
+}
+
+button, .button, input:not([type="range"]), select {
     backdrop-filter: blur(10px);
 }
 
@@ -34,10 +34,7 @@ input[type="number"] {
 }
 
 @media (prefers-color-scheme: dark) {
-    button,
-    .button,
-    input,
-    select {
+    button, .button, input, select {
         border-color: #cecece3a;
         background-color: #bebebe38;
         color: white;
