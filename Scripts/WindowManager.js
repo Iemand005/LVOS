@@ -1063,7 +1063,7 @@ Dialog.prototype.move = function (x, y) {
     if (y < 0 && this.maximized) this.maximize();
 
     if (this.mica) try {
-        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild;
+        var backdrop = this.target.getElementsByClassName("backdrop-clip")[0].firstChild.firstChild;
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
@@ -1185,7 +1185,7 @@ Dialog.prototype.removeMica = function() {
     this.target.classList.remove("mica");
     var clip = this.target.getElementsByClassName("backdrop-clip")[0];
     if (!clip) return;
-    while (clip.firstChild) clip.removeChild(clip.firstChild);
+    while (clip.firstChild) clip.firstChild.remove();
 };
 
 /** @typedef {(dialog: Dialog, offset: ClickOffset, difference: Position)=>void} DragFunction */
