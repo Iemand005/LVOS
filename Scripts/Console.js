@@ -18,7 +18,7 @@ function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
   alert(
-     "kok",
+     "kok"
   )
 
   var consoleForm = windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
@@ -122,5 +122,5 @@ function initializeConsoleApplication() {
     return output;
   };
 }
-alert( 'er' )
+// alert( 'er' )
 if (bindConsole) initializeConsoleApplication();
