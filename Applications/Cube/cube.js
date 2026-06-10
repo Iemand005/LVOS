@@ -12,8 +12,8 @@ Graphics3D.prototype.render = function(now) {
   deltaTime = now - then;
   then = now;
 
-  camera.rotation.x += deltaTime * 10;
-  camera.rotation.y += deltaTime * 5;
+  camera.rotation.x += deltaTime * 7;
+  camera.rotation.y += deltaTime * 3;
   this.drawScene(programInfo, deltaTime, camera);
 
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
