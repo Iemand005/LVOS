@@ -1,7 +1,7 @@
 
 
 
-var bindConsole = true;
+var bindConsole = false;
 
 var ConsoleOutType = {
   Input: -1,
