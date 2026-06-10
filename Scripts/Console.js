@@ -133,8 +133,10 @@ ConsoleInterceptor.prototype.init = function() {
     }
     return output;
   };
-}
+};
+
+var interceptor = new ConsoleInterceptor	();
 
 window.addEventListener("load", function() {
-  	if (bindConsole) initializeConsoleApplication();
+  	if (bindConsole) interceptor.init();
 }, false);
