@@ -114,7 +114,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 
 			var data = result.data[j];
 			var span = document.createElement("span");
-			span.style.background = "blue";
+			// span.style.background = "blue";
 
 			if (result.type == ConsoleOutType.Input) {
 				span.style.color = "black";
