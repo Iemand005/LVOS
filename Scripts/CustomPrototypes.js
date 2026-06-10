@@ -148,7 +148,7 @@ if (typeof console == "undefined") {
             // alert(message);
         },
         warn: function(message) {
-            alert("Warning: " + message);
+            // alert("Warning: " + message);
         },
         error: function(message) {
             alert("Error: " + message);
