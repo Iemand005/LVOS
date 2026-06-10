@@ -61,7 +61,7 @@ ConsoleInterceptor.prototype.init = function() {
 			alert(self.results.length)
 			// alert(event.target)
 
-			var input = (event.target.input | stdin).value;
+			var input = (event.target.input || stdin).value;
 
 			self.results.push({
 				type: ConsoleOutType.Input,
