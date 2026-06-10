@@ -26,7 +26,7 @@ function ConsoleInterceptor() {
 ConsoleInterceptor.prototype.intercept = function() {
 	alert("stds out here" + this.stdout);
 	try {
-	if (this.stdout.firstChild) this.stdout.removeChild(stdout.firstChild);
+	if (this.stdout.firstChild) this.stdout.removeChild(this.stdout.firstChild);
 	var html = this.getHTML();
 	alert(html)
     this.stdout.appendChild(html);
