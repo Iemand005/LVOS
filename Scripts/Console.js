@@ -35,7 +35,7 @@ ConsoleInterceptor.prototype.intercept = function() {
 	// html.style.top = "0";
 	// html.style.width = "100%";
 	// html.style.height = "100%";
-	alert("kaker")
+	// alert("kaker")
 	// alert(html)       
 	// alert (this.stdout)
     this.stdout.appendChild(html);
@@ -114,9 +114,9 @@ ConsoleInterceptor.prototype.getHTML = function() {
 		var result = this.results[index];
 		var tableRow = document.createElement("tr");
 		var tableData = document.createElement("td");
-		alert("dater" + result.data)
+		// alert("dater" + result.data)
 		for (var dataIndex in result.data) {
-			alert("ideks" + dataIndex)
+			// alert("ideks" + dataIndex)
 			var data = result.data[dataIndex];
 			var span = document.createElement("span");
 			span.style.background = "blue"
@@ -124,40 +124,40 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			case ConsoleOutType.Input:
 				span.style.color = "black";
 				span.innerText = data;
-				tableData.insertAdjacentText("beforeend", "← ");
-				tableData.insertAdjacentElement("beforeend", span);
+				tableData.appendChild(document.createTextNode("← "));
+				tableData.appendChild(span);
 				break;
 			case ConsoleOutType.Return:
 				span.style.color = "gray";
 				span.innerText = data;
-				tableData.insertAdjacentText("beforeend", "→ ");
-				tableData.insertAdjacentElement("beforeend", span);
+				tableData.appendChild(document.createTextNode("→ "));
+				tableData.appendChild(span);
 				break;
 			case ConsoleOutType.Warn:
 				span.style.color = "yellow";
 				span.innerText = data;
 				tableData.appendChild(span);
-				span.insertAdjacentText("afterbegin", "⚠ ");
+				span.insertBefore(document.createTextNode("⚠ "), span.firstChild);
 				break;
 			case ConsoleOutType.Error:
 				span.style.color = "red";
 				span.innerText = data;
 				tableData.appendChild(span);
-				span.insertAdjacentText("afterbegin", "⚠ ");
+				span.insertBefore(document.createTextNode("⚠ "), span.firstChild);
 				break;
 			default:
 				tableData.innerText += data + "\t";
 				break;
 			}
 			tableRow.appendChild(tableData);
-			alert("rowie " + tableRow)
+			// alert("rowie " + tableRow)
       }
 	  if (!tableRow.childNodes.length)  tableRow.appendChild(tableData);
 	//   tableRow.style.width = "100px";
 	//   tableRow.style.height = "100px";
 	  tableRow.style.background="blue"
       output.appendChild(tableRow);
-	  alert("dalength " + tableRow.childNodes.length)
+	//   alert("dalength " + tableRow.childNodes.length)
     }
     return output;
 };
