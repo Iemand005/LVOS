@@ -2,17 +2,17 @@
 var bindConsole = true;
 
 var ConsoleOutType = {
-  Input: -1,
-  Return: 0,
-  Log: 1,
-  Warn: 2,
-  Error: 3
+	Input: -1,
+	Return: 0,
+	Log: 1,
+	Warn: 2,
+	Error: 3
 };
 
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
-  alert("kok" + document.getElementById("console"))
+	alert("	kok" + document.getElementById("console"))
 
   // var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
   alert(consoleForm)
@@ -118,5 +118,5 @@ function initializeConsoleApplication() {
 }
 
 window.addEventListener("load", function() {
-  if (bindConsole) initializeConsoleApplication();
+  	if (bindConsole) initializeConsoleApplication();
 }, false);
