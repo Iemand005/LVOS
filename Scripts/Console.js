@@ -24,21 +24,22 @@ function ConsoleInterceptor() {
 }
 
 ConsoleInterceptor.prototype.intercept = function() {
-
+	if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
+    stdout.appendChild(console.getHTML());
+    stdout.scrollTop = stdout.scrollHeight;
 };
 
 ConsoleInterceptor.prototype.init = function() {
+	var self = this;
 	
   var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
   alert(consoleForm)
   var stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
-  var interceptConsole = function() {
-    if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
-    stdout.appendChild(console.getHTML());
-    stdout.scrollTop = stdout.scrollHeight;
-  };
 
-  var self = this;
+	var interceptConsole = function() {
+		self.intercept();
+	};
+
 
   consoleForm.addEventListener("submit", function(event) {
     event.preventDefault();
