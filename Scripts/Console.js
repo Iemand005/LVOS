@@ -35,8 +35,8 @@ ConsoleInterceptor.prototype.intercept = function() {
 	html.style.top = "0";
 	html.style.width = "100%";
 	html.style.height = "100%";
-	alert(html)
-	alert (this.stdout)
+	// alert(html)       
+	// alert (this.stdout)
     this.stdout.appendChild(html);
     // this.stdout.scrollTop = this.stdout.scrollHeight;
 	} catch(ex){alert(ex)}
