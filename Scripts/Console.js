@@ -115,8 +115,10 @@ ConsoleInterceptor.prototype.getHTML = function() {
 		var tableRow = document.createElement("tr");
 		var tableData = document.createElement("td");
 		for (var dataIndex in result.data) {
+			alert(dataIndex)
 			var data = result.data[dataIndex];
 			var span = document.createElement("span");
+			span.style.background = "blue"
 			switch (result.type) {
 			case ConsoleOutType.Input:
 				span.style.color = "black";
