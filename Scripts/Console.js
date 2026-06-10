@@ -71,32 +71,34 @@ ConsoleInterceptor.prototype.init = function() {
 
 ConsoleInterceptor.prototype.bindage = function() {
 
-  // We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
-  if (bindConsole) {
-    console.standardLog = console.log.bind(console);
-    console.logs = [];
-    console.log = function() {
-		console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
-		self.results.push({ type: ConsoleOutType.Log, data: arguments });
-		interceptConsole();
-    };
+	var self = this;
 
-	console.standardWarning = console.error.bind(console);
-	console.warnings = [];
-	console.warn = function() {
-		console.standardWarning.apply(console, arguments);
-		self.results.push({ type: ConsoleOutType.Warn, data: arguments });
-		interceptConsole();
-    };
+	// We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
+	if (bindConsole) {
+		console.standardLog = console.log.bind(console);
+		console.logs = [];
+		console.log = function() {
+			console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
+			self.results.push({ type: ConsoleOutType.Log, data: arguments });
+			interceptConsole();
+		};
 
-    console.standardError = console.error.bind(console);
-    console.errors = new Array();
-    console.error = function() {
-      console.standardError.apply(console, arguments);
-      self.results.push({ type: ConsoleOutType.Error, data: arguments });
-      interceptConsole();
-    };
-  }
+		console.standardWarning = console.error.bind(console);
+		console.warnings = [];
+		console.warn = function() {
+			console.standardWarning.apply(console, arguments);
+			self.results.push({ type: ConsoleOutType.Warn, data: arguments });
+			interceptConsole();
+		};
+
+		console.standardError = console.error.bind(console);
+		console.errors = new Array();
+		console.error = function() {
+		console.standardError.apply(console, arguments);
+		self.results.push({ type: ConsoleOutType.Error, data: arguments });
+		interceptConsole();
+		};
+	}
 };
 
 ConsoleInterceptor.prototype.getHTML = function() {
