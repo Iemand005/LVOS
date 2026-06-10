@@ -118,7 +118,7 @@ const colors = [
   1,1,0,1,  // 4
   1,0,1,1,  // 5
   0,1,1,1,  // 6
-  0.5,0.5,0.5,1 // 7
+  0,0,0,0 // 7
 ];
 
 const colorBuffer = gl.createBuffer();
