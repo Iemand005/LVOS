@@ -5,7 +5,7 @@ var bindConsole = true;
 /**
  * @typedef ConsoleOutput
  * @prop {ConsoleOutputType} type
- * @prop {string} data
+ * @prop {any[]} data
  */
 
 var ConsoleOutType = {
