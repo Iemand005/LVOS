@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./Styles/themes.css">
     <link rel="stylesheet" href="./Styles/Mica.css">
     <link rel="manifest" href="./manifest.json">
-<!-- 
+
     <script src="./Scripts/physics.js" defer></script>
     <script src="./Scripts/messenger.js" defer></script>
     <script src="./Scripts/CustomPrototypes.js" defer></script>
@@ -30,7 +30,7 @@
     <meta property="og:title" content="Virtual Operating System" />
     <meta property="og:description" content="Little Web OS with a couple apps to play around on." />
     <!-- <meta property="og:image" content="https://yourwebsite.com" /> -->
-    <meta name="theme-color" content="#43b581" /> -->
+    <meta name="theme-color" content="#43b581" />
 </head>
 <body>
         <div id="desktop">
@@ -72,6 +72,25 @@
                         <span class="backdrop-clip"></span>
                         <div class="drag-overlay"></div>
                     </div>
+                </div>
+
+                <div class="window open" id="console">
+                    <content>
+                        <header>
+                            <h1>Console</h1>
+                            <section>
+                                <button disabled>🡕</button>
+                                <button disabled>❐</button>
+                                <button disabled>✕</button>
+                            </section>
+                        </header>
+                        <article>
+                            <form action="">
+                                <input type="text" name="input" id="stdin">
+                                <output name="stdout" id="stdout"></output>
+                            </form>
+                        </article>
+                    </content>
                 </div>
             </div>
         </div>
