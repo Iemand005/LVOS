@@ -1,10 +1,24 @@
 
 const canvas = document.getElementById("canvas");
 
-const vsSource =
-  "attribute vec4 aVertexPosition; attribute vec4 aVertexColor; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; varying lowp vec4 vColor; void main() { gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition; vColor = aVertexColor; }";
-const fsSource =
-  "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
+// const vsSource =
+//   "attribute vec4 aVertexPosition; attribute vec4 aVertexColor; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; varying lowp vec4 vColor; void main() { gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition; vColor = aVertexColor; }";
+// const fsSource =
+//   "varying lowp vec4 vColor; void main() { gl_FragColor = vColor; }";
+
+
+  var vsSource =
+"attribute vec2 p;" +
+"void main(){" +
+"gl_Position=vec4(p,0.0,1.0);" +
+"}";
+
+// Fragment shader
+var fsSource =
+"precision mediump float;" +
+"void main(){" +
+"gl_FragColor=vec4(0.2,0.6,1.0,1.0);" +
+"}";
 
 const camera = new Camera();
 
@@ -13,8 +27,8 @@ Graphics3D.prototype.render = function(now) {
   deltaTime = now - then;
   then = now;
 
-  camera.rotation.x += deltaTime * 7;
-  camera.rotation.y += deltaTime * 3;
+//   camera.rotation.x += deltaTime * 7;
+//   camera.rotation.y += deltaTime * 3;
   this.drawScene(programInfo, deltaTime, camera);
 
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
