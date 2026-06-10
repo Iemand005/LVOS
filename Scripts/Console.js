@@ -49,8 +49,6 @@ ConsoleInterceptor.prototype.init = function() {
 	consoleForm.addEventListener("submit", function(event) {
 		event.preventDefault();
 		try {
-			alert(self.results.length)
-			// alert(event.target)
 
 			var input = (event.target.input || stdin).value;
 
