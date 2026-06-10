@@ -29,12 +29,12 @@ ConsoleInterceptor.prototype.intercept = function() {
 	if (this.stdout.firstChild) this.stdout.removeChild(this.stdout.firstChild);
 	var html = this.getHTML();
 	html.style.background = "purple"
-	html.style.display = "block";
-	html.style.position = "absolute";
-	html.style.left = "0";
-	html.style.top = "0";
-	html.style.width = "100%";
-	html.style.height = "100%";
+	// html.style.display = "block";
+	// html.style.position = "absolute";
+	// html.style.left = "0";
+	// html.style.top = "0";
+	// html.style.width = "100%";
+	// html.style.height = "100%";
 	alert("kaker")
 	// alert(html)       
 	// alert (this.stdout)
@@ -152,11 +152,11 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			tableRow.appendChild(tableData);
 			alert("rowie " + tableRow)
       }
-	  tableRow.style.width = "100px";
-	  tableRow.style.height = "100px";
+	//   tableRow.style.width = "100px";
+	//   tableRow.style.height = "100px";
 	  tableRow.style.background="blue"
       output.appendChild(tableRow);
-	  alert("dalength " + output.childNodes.length)
+	  alert("dalength " + tableRow.childNodes.length)
     }
     return output;
 };
