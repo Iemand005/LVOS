@@ -154,6 +154,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
       }
 	  tableRow.style.width = "100px";
 	  tableRow.style.height = "100px";
+	  tableRow.style.background="blue"
       output.appendChild(tableRow);
     }
     return output;
