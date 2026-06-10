@@ -130,7 +130,7 @@ body:not(.blur) .window > article {
   right: 0;
   left: 0;
   top: 0;
-  z-index: -10000;
+  /* z-index: -10000; */
   background-color: red;
   background-position: center center;
   background-repeat: no-repeat;
