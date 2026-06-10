@@ -47,17 +47,17 @@ ConsoleInterceptor.prototype.init = function() {
 		event.preventDefault();
 		try {
 			alert(self.results.length)
-			alert(event.target)
+			// alert(event.target)
 
 			var input = (event.target.input | stdin).value;
 
 			self.results.push({
 				type: ConsoleOutType.Input,
-				data: []
+				data: [input]
 			});
 			self.results.push({
 				type: ConsoleOutType.Log,
-				data: [eval(event.target.input.value)]
+				data: [eval(input)]
 			});
 		} catch (exception) {
 		alert(exception)
