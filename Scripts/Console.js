@@ -92,8 +92,9 @@ ConsoleInterceptor.prototype.init = function() {
       interceptConsole();
     };
   }
+};
 
-  console.getHTML = function() {
+ConsoleInterceptor.prototype.getHTML = function() {
     var output = document.createElement("table");
     for (var index in self.results) {
       var result = self.results[index];
@@ -136,7 +137,6 @@ ConsoleInterceptor.prototype.init = function() {
       output.appendChild(tableRow);
     }
     return output;
-  };
 };
 
 var interceptor = new ConsoleInterceptor();
