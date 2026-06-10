@@ -67,7 +67,9 @@ ConsoleInterceptor.prototype.init = function() {
 		}
 		interceptConsole();
 	}, false);
+};
 
+ConsoleInterceptor.prototype.bindage = function() {
 
   // We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
   if (bindConsole) {
@@ -150,6 +152,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 };
 
 var interceptor = new ConsoleInterceptor();
+interceptor.bindage();
 
 window.addEventListener("load", function() {
   	if (bindConsole) interceptor.init();
