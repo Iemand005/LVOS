@@ -1,6 +1,7 @@
 
 var bindConsole = true;
 
+/** @typedef {"input" | "return" | "log" | "warn" | "error"} */
 /**
  * @typedef ConsoleOutput
  * @prop {string} Cum
