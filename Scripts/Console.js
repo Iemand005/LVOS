@@ -35,7 +35,13 @@ ConsoleInterceptor.prototype.init = function() {
 	
 	var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
 	alert(consoleForm)
-	var stdout = self.stdout = consoleForm.stdout || consoleForm.getElementById("stdout");
+	var stdout = self.stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
+	try {
+
+		if (!stdout) self.stdout = consoleForm.getElementById("stdout");
+	}catch(ex) {
+		alert("tis weer vands" + ex.message);
+	}
 	/** @type {HTMLInputElement?} */
 	var stdin = consoleForm.stdin || consoleForm.getElementById("stdin");
 
