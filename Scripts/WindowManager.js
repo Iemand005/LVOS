@@ -517,7 +517,7 @@ function scaleElement(element, width, height) {
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return Boolean(this.target && this.target.classList.contains("open") && bodyCrawler.getDialogsContainer().contains(this.target)); },
+    get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
     set: function(open) {
         this.toggleOpen(open);
     }
