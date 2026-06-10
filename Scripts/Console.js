@@ -36,6 +36,7 @@ function initializeConsoleApplication() {
         type: ConsoleOutType.Log,
         data: [eval(event.target.input.value)]
       });
+	  alert(console.results.length)
     } catch (exception) {
       console.results.push({ type: ConsoleOutType.Error, data: [exception] });
     }
