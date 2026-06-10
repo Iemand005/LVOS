@@ -17,7 +17,7 @@ var ConsoleOutType = {
 };
 
 function ConsoleInterceptor() {
-
+	this.results = [];
 }
 
 function initializeConsoleApplication() {
