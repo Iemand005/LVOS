@@ -60,8 +60,8 @@ ConsoleInterceptor.prototype.init = function() {
 				data: [eval(input)]
 			});
 		} catch (exception) {
-		alert(exception)
-		self.results.push({ type: ConsoleOutType.Error, data: [exception] });
+			alert(exception)
+			self.results.push({ type: ConsoleOutType.Error, data: [exception] });
 		}
 		interceptConsole();
 	}, false);
