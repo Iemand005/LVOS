@@ -150,6 +150,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 				break;
 			}
 			tableRow.appendChild(tableData);
+			alert("rowie " + tableRow)
       }
       output.appendChild(tableRow);
     }
