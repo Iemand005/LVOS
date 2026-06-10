@@ -196,7 +196,13 @@ var applications = [
         id: "cyanide.metronome",
         src: "./Applications/Cyanide/metronome/index.html",
         hidden: true
-    }, 
+    },
+    {
+        title: "Rainboy",
+        id: "cyanide.rainboy",
+        src: "./Applications/Cyanide/rainboy/index.html",
+        hidden: true
+    },
     {
       title: "OPC",
       id: "opc",
