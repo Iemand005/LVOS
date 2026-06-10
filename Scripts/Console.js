@@ -38,9 +38,7 @@ ConsoleInterceptor.prototype.init = function() {
 	/** @type {HTMLInputElement?} */
 	var stdin = consoleForm.stdin || consoleForm.getElementById("stdin");
 
-	var interceptConsole = function() {
-		self.intercept();
-	};
+	var interceptConsole = function() { self.intercept(); };
 
 
 	consoleForm.addEventListener("submit", function(event) {
