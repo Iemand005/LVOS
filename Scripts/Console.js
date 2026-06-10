@@ -35,6 +35,7 @@ ConsoleInterceptor.prototype.intercept = function() {
 	html.style.top = "0";
 	html.style.width = "100%";
 	html.style.height = "100%";
+	alert("kaker")
 	// alert(html)       
 	// alert (this.stdout)
     this.stdout.appendChild(html);
@@ -108,10 +109,12 @@ ConsoleInterceptor.prototype.init = function() {
 
 ConsoleInterceptor.prototype.getHTML = function() {
     var output = document.createElement("table");
-    for (var index in self.results) {
-      var result = self.results[index];
+	// alert
+    for (var index in this.results) {
+      var result = this.results[index];
       var tableRow = document.createElement("tr");
       var tableData = document.createElement("td");
+	  alert(tableData)
       for (var dataIndex in result.data) {
         var data = result.data[dataIndex];
         var span = document.createElement("span");
