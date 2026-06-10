@@ -123,13 +123,13 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			switch (result.type) {
 			case ConsoleOutType.Input:
 				span.style.color = "black";
-				span.innerText = data;
+				span.innerText = data + "h";
 				tableData.appendChild(document.createTextNode("← "));
 				tableData.appendChild(span);
 				break;
 			case ConsoleOutType.Return:
 				span.style.color = "gray";
-				span.innerText = data;
+				span.innerText = data + "oh this one";
 				tableData.appendChild(document.createTextNode("→ "));
 				tableData.appendChild(span);
 				break;
