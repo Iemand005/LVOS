@@ -80,7 +80,7 @@ ConsoleInterceptor.prototype.bindage = function() {
 		console.log = function() {
 			console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
 			self.results.push({ type: ConsoleOutType.Log, data: arguments });
-			interceptConsole();
+			self.intercept();
 		};
 
 		console.standardWarning = console.error.bind(console);
@@ -88,15 +88,15 @@ ConsoleInterceptor.prototype.bindage = function() {
 		console.warn = function() {
 			console.standardWarning.apply(console, arguments);
 			self.results.push({ type: ConsoleOutType.Warn, data: arguments });
-			interceptConsole();
+			self.intercept();
 		};
 
 		console.standardError = console.error.bind(console);
 		console.errors = new Array();
 		console.error = function() {
-		console.standardError.apply(console, arguments);
-		self.results.push({ type: ConsoleOutType.Error, data: arguments });
-		interceptConsole();
+			console.standardError.apply(console, arguments);
+			self.results.push({ type: ConsoleOutType.Error, data: arguments });
+			self.intercept();
 		};
 	}
 };
