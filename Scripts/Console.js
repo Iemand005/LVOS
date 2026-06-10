@@ -17,7 +17,12 @@ var ConsoleOutType = {
 };
 
 function ConsoleInterceptor() {
+	/** @type {ConsoleOutput[]} */
 	this.results = [];
+}
+
+ConsoleInterceptor.prototype.intercept = function() {
+
 }
 
 function initializeConsoleApplication() {
