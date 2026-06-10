@@ -32,33 +32,33 @@ ConsoleInterceptor.prototype.intercept = function() {
 ConsoleInterceptor.prototype.init = function() {
 	var self = this;
 	
-  var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
-  alert(consoleForm)
-  var stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
+	var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
+	alert(consoleForm)
+	var stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
 
 	var interceptConsole = function() {
 		self.intercept();
 	};
 
 
-  consoleForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-    try {
-		alert(self.results.length)
-      self.results.push({
-        type: ConsoleOutType.Input,
-        data: [event.target.input.value]
-      });
-      self.results.push({
-        type: ConsoleOutType.Log,
-        data: [eval(event.target.input.value)]
-      });
-    } catch (exception) {
-	alert(exception)
-      self.results.push({ type: ConsoleOutType.Error, data: [exception] });
-    }
-    interceptConsole();
-  }, false);
+	consoleForm.addEventListener("submit", function(event) {
+		event.preventDefault();
+		try {
+			alert(self.results.length)
+		self.results.push({
+			type: ConsoleOutType.Input,
+			data: [event.target.input.value]
+		});
+		self.results.push({
+			type: ConsoleOutType.Log,
+			data: [eval(event.target.input.value)]
+		});
+		} catch (exception) {
+		alert(exception)
+		self.results.push({ type: ConsoleOutType.Error, data: [exception] });
+		}
+		interceptConsole();
+	}, false);
 
   self.results = [];
 
