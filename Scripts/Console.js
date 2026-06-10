@@ -26,7 +26,6 @@ function initializeConsoleApplication() {
   };
 
   consoleForm.addEventListener("submit", function(event) {
-    alert("I did a thing")
     event.preventDefault();
     try {
       console.results.push({
