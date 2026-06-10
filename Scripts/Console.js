@@ -1,6 +1,11 @@
 
 var bindConsole = true;
 
+/**
+ * @typedef
+ * @prop {string} Cum
+ */
+
 var ConsoleOutType = {
 	Input: -1,
 	Return: 0,
@@ -10,7 +15,7 @@ var ConsoleOutType = {
 };
 
 function ConsoleInterceptor() {
-	
+
 }
 
 function initializeConsoleApplication() {
