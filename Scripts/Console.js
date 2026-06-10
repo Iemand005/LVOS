@@ -19,11 +19,13 @@ var ConsoleOutType = {
 function ConsoleInterceptor() {
 	/** @type {ConsoleOutput[]} */
 	this.results = [];
+	/** @type {HTMLElement?} */
+	this.stdout = null;
 }
 
 ConsoleInterceptor.prototype.intercept = function() {
 
-}
+};
 
 ConsoleInterceptor.prototype.init = function() {
 	
