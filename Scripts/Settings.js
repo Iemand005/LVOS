@@ -92,7 +92,8 @@ function setBorderSize(size) {
 
 function hexToRGB(hex) {
     if (typeof hex === 'undefined' || !hex) return;
-    var int = parseInt(hex.replace('#', ''), 16);
+    // var int = parseInt(hex.replace('#', ''), 16);
+    var int = 0;
     return {r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255};
 }
 
