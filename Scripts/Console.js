@@ -41,26 +41,28 @@ ConsoleInterceptor.prototype.init = function() {
     stdout.scrollTop = stdout.scrollHeight;
   };
 
+  var self = this;
+
   consoleForm.addEventListener("submit", function(event) {
     event.preventDefault();
     try {
-		alert(console.results.length)
-      console.results.push({
+		alert(self.results.length)
+      self.results.push({
         type: ConsoleOutType.Input,
         data: [event.target.input.value]
       });
-      console.results.push({
+      self.results.push({
         type: ConsoleOutType.Log,
         data: [eval(event.target.input.value)]
       });
     } catch (exception) {
 	alert(exception)
-      console.results.push({ type: ConsoleOutType.Error, data: [exception] });
+      self.results.push({ type: ConsoleOutType.Error, data: [exception] });
     }
     interceptConsole();
   }, false);
 
-  console.results = [];
+  self.results = [];
 
   // We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
   if (bindConsole) {
@@ -68,7 +70,7 @@ ConsoleInterceptor.prototype.init = function() {
     console.logs = [];
     console.log = function() {
       console.standardLog.apply(console, arguments); // Here we call the original log so everything is visible in the browser console too. Only the line number is different.
-      console.results.push({ type: ConsoleOutType.Log, data: arguments });
+      self.results.push({ type: ConsoleOutType.Log, data: arguments });
       interceptConsole();
     };
 
@@ -76,7 +78,7 @@ ConsoleInterceptor.prototype.init = function() {
     console.warnings = [];
     console.warn = function() {
       console.standardWarning.apply(console, arguments);
-      console.results.push({ type: ConsoleOutType.Warn, data: arguments });
+      self.results.push({ type: ConsoleOutType.Warn, data: arguments });
       interceptConsole();
     };
 
@@ -84,15 +86,15 @@ ConsoleInterceptor.prototype.init = function() {
     console.errors = new Array();
     console.error = function() {
       console.standardError.apply(console, arguments);
-      console.results.push({ type: ConsoleOutType.Error, data: arguments });
+      self.results.push({ type: ConsoleOutType.Error, data: arguments });
       interceptConsole();
     };
   }
 
   console.getHTML = function() {
     var output = document.createElement("table");
-    for (var index in console.results) {
-      var result = console.results[index];
+    for (var index in self.results) {
+      var result = self.results[index];
       var tableRow = document.createElement("tr");
       var tableData = document.createElement("td");
       for (var dataIndex in result.data) {
