@@ -58,6 +58,9 @@ window.addEventListener('keydown', function(event) {
       c.open();
       c.maximize();
       break;
+    case "F9":
+        event.preventDefault();
+        this.alert("I'm alive!");
   }
 }, false);
 
@@ -181,7 +184,7 @@ function saveWallpaperToCache(blob, dataUrl) {
             }
         };
     }, function(err) {
-        console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
+        // console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
         if (dataUrl) {
             if (typeof settings !== 'undefined' && settings.set) {
@@ -231,11 +234,11 @@ function loadWallpaperFromCache() {
         };
         
         request.onerror = function() {
-            console.warn("Failed to load wallpaper from IndexedDB, trying localStorage fallback:", request.error);
+            // console.warn("Failed to load wallpaper from IndexedDB, trying localStorage fallback:", request.error);
             loadWallpaperFromLocalStorage();
         };
     }, function(err) {
-        console.warn("Failed to access IndexedDB, trying localStorage fallback:", err);
+        // console.warn("Failed to access IndexedD B, trying localStorage fallback:", err);
         loadWallpaperFromLocalStorage();
     });
 }
