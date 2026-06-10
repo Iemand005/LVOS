@@ -1,20 +1,25 @@
 
 
-
+alert( 'err' )
 var bindConsole = true;
 
-alert("tesr");
+// var ConsoleOutType = {
+//   Input: -1,
+//   Return: 0,
+//   Log: 1,
+//   Warn: 2,
+//   Error: 3
+// };
 
-var ConsoleOutType = {
-  Input: -1,
-  Return: 0,
-  Log: 1,
-  Warn: 2,
-  Error: 3
-};
+alert( 'err' )
+
 
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
+
+  alert(
+     "kok",
+  )
 
   var consoleForm = windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
   var stdout =
@@ -117,4 +122,5 @@ function initializeConsoleApplication() {
     return output;
   };
 }
+alert( 'er' )
 if (bindConsole) initializeConsoleApplication();
