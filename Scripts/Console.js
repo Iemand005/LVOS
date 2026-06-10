@@ -12,8 +12,9 @@ var ConsoleOutType = {
 };
 
 function initializeConsoleApplication() {
-  if (!windowManager.windows || !windowManager.windows["console"]) return;
-  var consoleForm = windowManager.windows["console"].originalBody; //consoleElement.getElementsByTagName("form")[0];
+  // if (!windowManager.windows || !windowManager.windows["console"]) return;
+
+  var consoleForm = windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
   var stdout =
     consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
   var interceptConsole = function() {
@@ -23,6 +24,7 @@ function initializeConsoleApplication() {
   };
 
   consoleForm.addEventListener("submit", function(event) {
+    alert("I did a thing")
     event.preventDefault();
     try {
       console.results.push({
@@ -37,7 +39,7 @@ function initializeConsoleApplication() {
       console.results.push({ type: ConsoleOutType.Error, data: [exception] });
     }
     interceptConsole();
-  });
+  }, false);
 
   console.results = [];
 
