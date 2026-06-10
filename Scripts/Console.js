@@ -152,6 +152,8 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			tableRow.appendChild(tableData);
 			alert("rowie " + tableRow)
       }
+	  tableRow.style.width = "100px";
+	  tableRow.style.height = "100px";
       output.appendChild(tableRow);
     }
     return output;
