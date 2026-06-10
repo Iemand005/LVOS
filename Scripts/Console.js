@@ -1,10 +1,11 @@
 
 var bindConsole = true;
 
-/** @typedef {"input" | "return" | "log" | "warn" | "error"} */
+/** @typedef {"input" | "return" | "log" | "warn" | "error"} ConsoleOutputType */
 /**
  * @typedef ConsoleOutput
- * @prop {string} Cum
+ * @prop {ConsoleOutputType} type
+ * @prop {string} data
  */
 
 var ConsoleOutType = {
