@@ -60,7 +60,7 @@ ConsoleInterceptor.prototype.init = function() {
 		interceptConsole();
 	}, false);
 
-  self.results = [];
+  	// self.results = [];
 
   // We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
   if (bindConsole) {
