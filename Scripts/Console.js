@@ -12,11 +12,10 @@ var ConsoleOutType = {
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
-  alert(
-     "kok"
-  )
+  alert("kok" + document.getElementById("console"))
 
-  var consoleForm = windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
+  // var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
+  alert(consoleForm)
   var stdout =
     consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
   var interceptConsole = function() {
@@ -118,4 +117,6 @@ function initializeConsoleApplication() {
   };
 }
 
-if (bindConsole) initializeConsoleApplication();
+window.addEventListener("load", function() {
+  if (bindConsole) initializeConsoleApplication();
+}, false);
