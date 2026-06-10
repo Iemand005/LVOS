@@ -547,3 +547,33 @@ if (typeof Array.from !== "function") {
 // if (typeof module !== "undefined" && module.)
 if (typeof window.HTMLElement === "undefined") window.HTMLElement = Element
 if (typeof window.HTMLTemplateElement === "undefined") window.HTMLTemplateElement = function() {}
+
+if (!Element.prototype.insertAdjacentText) {
+	Element.prototype.insertAdjacentText = function(position, text) {
+        var node = document.createTextNode(text);
+
+        switch (position.toLowerCase()) {
+            case "beforebegin":
+                this.parentNode.insertBefore(node, this);
+                break;
+
+            case "afterbegin":
+                this.insertBefore(node, this.firstChild);
+                break;
+
+            case "beforeend":
+                this.appendChild(node);
+                break;
+
+            case "afterend":
+                if (this.nextSibling)
+                    this.parentNode.insertBefore(node, this.nextSibling);
+                else
+                    this.parentNode.appendChild(node);
+                break;
+
+            default:
+                throw new Error("Invalid position");
+        }
+    };
+}
