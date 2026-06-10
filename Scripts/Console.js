@@ -24,6 +24,7 @@ function ConsoleInterceptor() {
 }
 
 ConsoleInterceptor.prototype.intercept = function() {
+	alert("stds out here" + this.stdout);
 	if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
     stdout.appendChild(console.getHTML());
     stdout.scrollTop = stdout.scrollHeight;
@@ -34,7 +35,7 @@ ConsoleInterceptor.prototype.init = function() {
 	
 	var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
 	alert(consoleForm)
-	var stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
+	var stdout = self.stdout = consoleForm.stdout || consoleForm.getElementById("stdout");
 	/** @type {HTMLInputElement?} */
 	var stdin = consoleForm.stdin || consoleForm.getElementById("stdin");
 
