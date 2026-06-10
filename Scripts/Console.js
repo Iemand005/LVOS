@@ -25,9 +25,13 @@ function ConsoleInterceptor() {
 
 ConsoleInterceptor.prototype.intercept = function() {
 	alert("stds out here" + this.stdout);
-	if (stdout.firstChild) stdout.removeChild(stdout.firstChild);
-    stdout.appendChild(console.getHTML());
-    stdout.scrollTop = stdout.scrollHeight;
+	try {
+	if (this.stdout.firstChild) this.stdout.removeChild(stdout.firstChild);
+	var html = this.getHTML();
+	alert(html)
+    this.stdout.appendChild(html);
+    this.stdout.scrollTop = this.stdout.scrollHeight;
+	} catch(ex){alert(ex)}
 };
 
 ConsoleInterceptor.prototype.init = function() {
