@@ -12,9 +12,10 @@ var ConsoleOutType = {
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
-	alert("	kok" + document.getElementById("console"))
+	alert("	kok" + document.getElementById("console").getElementsByTagName("form"))
+	alert("wow" + windowManager && windowManager.windows	&&windowManager.windows["console"])
 
-  // var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form"); //consoleElement.getElementsByTagName("form")[0];
+  var consoleForm = windowManager && windowManager.windows && && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
   alert(consoleForm)
   var stdout =
     consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
