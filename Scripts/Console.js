@@ -2,7 +2,7 @@
 var bindConsole = true;
 
 /**
- * @typedef
+ * @typedef ConsoleOutput
  * @prop {string} Cum
  */
 
