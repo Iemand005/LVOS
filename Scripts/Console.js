@@ -38,7 +38,7 @@ ConsoleInterceptor.prototype.init = function() {
 	var stdout = self.stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
 	try {
 
-		if (!stdout) self.stdout = consoleForm.getElementById("stdout");
+		if (!stdout) self.stdout = document	.getElementById("stdout");
 	}catch(ex) {
 		alert("tis weer vands" + ex.message);
 	}
