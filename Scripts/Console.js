@@ -108,58 +108,55 @@ ConsoleInterceptor.prototype.init = function() {
 };
 
 ConsoleInterceptor.prototype.getHTML = function() {
-    var output = document.createElement("table");
-	// alert(this.results.length	+ " eresultas")
-    for (var index in this.results) {
-		var result = this.results[index];
+	var output = document.createElement("table");
+
+	for (var i = 0; i < this.results.length; i++) {
+
+		var result = this.results[i];
+
 		var tableRow = document.createElement("tr");
 		var tableData = document.createElement("td");
-		// alert("dater" + result.data)
-		for (var dataIndex in result.data) {
-			// alert("ideks" + dataIndex)
-			var data = result.data[dataIndex];
+
+		for (var j = 0; j < result.data.length; j++) {
+
+			var data = result.data[j];
 			var span = document.createElement("span");
-			span.style.background = "blue"
-			switch (result.type) {
-			case ConsoleOutType.Input:
+			span.style.background = "blue";
+
+			if (result.type == ConsoleOutType.Input) {
 				span.style.color = "black";
-				span.innerText = data + "h";
+				span.appendChild(document.createTextNode(data));
+
 				tableData.appendChild(document.createTextNode("← "));
 				tableData.appendChild(span);
-				break;
-			case ConsoleOutType.Return:
+
+			} else if (result.type == ConsoleOutType.Log) {
 				span.style.color = "gray";
-				span.innerText = data + "oh this one";
+				span.appendChild(document.createTextNode(data));
+
 				tableData.appendChild(document.createTextNode("→ "));
 				tableData.appendChild(span);
-				break;
-			case ConsoleOutType.Warn:
+
+			} else if (result.type == ConsoleOutType.Warn) {
 				span.style.color = "yellow";
-				span.innerText = data;
+				span.appendChild(document.createTextNode("⚠ " + data));
 				tableData.appendChild(span);
-				span.insertBefore(document.createTextNode("⚠ "), span.firstChild);
-				break;
-			case ConsoleOutType.Error:
+
+			} else if (result.type == ConsoleOutType.Error) {
 				span.style.color = "red";
-				span.innerText = data;
+				span.appendChild(document.createTextNode("⚠ " + data));
 				tableData.appendChild(span);
-				span.insertBefore(document.createTextNode("⚠ "), span.firstChild);
-				break;
-			default:
-				tableData.innerText += data + "\t";
-				break;
+
+			} else {
+				tableData.appendChild(document.createTextNode(data + "\t"));
 			}
-			tableRow.appendChild(tableData);
-			// alert("rowie " + tableRow)
-      }
-	  if (!tableRow.childNodes.length)  tableRow.appendChild(tableData);
-	//   tableRow.style.width = "100px";
-	//   tableRow.style.height = "100px";
-	  tableRow.style.background="blue"
-      output.appendChild(tableRow);
-	//   alert("dalength " + tableRow.childNodes.length)
-    }
-    return output;
+		}
+
+		tableRow.appendChild(tableData);
+		output.appendChild(tableRow);
+	}
+
+	return output;
 };
 
 var interceptor = new ConsoleInterceptor();
