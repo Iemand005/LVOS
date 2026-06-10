@@ -1,0 +1,9 @@
+canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+input {
+	z-index: 1;
+}
