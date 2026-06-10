@@ -35,6 +35,7 @@ ConsoleInterceptor.prototype.init = function() {
 	var consoleForm = windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody || document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
 	alert(consoleForm)
 	var stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0];
+	/** @type {HTMLInputElement?} */
 	var stdin = consoleForm.stdin || consoleForm.getElementById("stdin");
 
 	var interceptConsole = function() {
@@ -47,14 +48,17 @@ ConsoleInterceptor.prototype.init = function() {
 		try {
 			alert(self.results.length)
 			alert(event.target)
-		self.results.push({
-			type: ConsoleOutType.Input,
-			data: [event.target.input.value]
-		});
-		self.results.push({
-			type: ConsoleOutType.Log,
-			data: [eval(event.target.input.value)]
-		});
+
+			var input = (event.target.input | stdin).value;
+
+			self.results.push({
+				type: ConsoleOutType.Input,
+				data: []
+			});
+			self.results.push({
+				type: ConsoleOutType.Log,
+				data: [eval(event.target.input.value)]
+			});
 		} catch (exception) {
 		alert(exception)
 		self.results.push({ type: ConsoleOutType.Error, data: [exception] });
