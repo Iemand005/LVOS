@@ -111,42 +111,42 @@ ConsoleInterceptor.prototype.getHTML = function() {
     var output = document.createElement("table");
 	// alert
     for (var index in this.results) {
-      var result = this.results[index];
-      var tableRow = document.createElement("tr");
-      var tableData = document.createElement("td");
-         for (var dataIndex in result.data) {
-        var data = result.data[dataIndex];
-        var span = document.createElement("span");
-        switch (result.type) {
-          case ConsoleOutType.Input:
-            span.style.color = "black";
-            span.innerText = data;
-            tableData.insertAdjacentText("beforeend", "← ");
-            tableData.insertAdjacentElement("beforeend", span);
-            break;
-          case ConsoleOutType.Return:
-            span.style.color = "gray";
-            span.innerText = data;
-            tableData.insertAdjacentText("beforeend", "→ ");
-            tableData.insertAdjacentElement("beforeend", span);
-            break;
-          case ConsoleOutType.Warn:
-            span.style.color = "yellow";
-            span.innerText = data;
-            tableData.appendChild(span);
-            span.insertAdjacentText("afterbegin", "⚠ ");
-            break;
-          case ConsoleOutType.Error:
-            span.style.color = "red";
-            span.innerText = data;
-            tableData.appendChild(span);
-            span.insertAdjacentText("afterbegin", "⚠ ");
-            break;
-          default:
-            tableData.innerText += data + "\t";
-            break;
-        }
-        tableRow.appendChild(tableData);
+		var result = this.results[index];
+		var tableRow = document.createElement("tr");
+		var tableData = document.createElement("td");
+			for (var dataIndex in result.data) {
+			var data = result.data[dataIndex];
+			var span = document.createElement("span");
+			switch (result.type) {
+			case ConsoleOutType.Input:
+				span.style.color = "black";
+				span.innerText = data;
+				tableData.insertAdjacentText("beforeend", "← ");
+				tableData.insertAdjacentElement("beforeend", span);
+				break;
+			case ConsoleOutType.Return:
+				span.style.color = "gray";
+				span.innerText = data;
+				tableData.insertAdjacentText("beforeend", "→ ");
+				tableData.insertAdjacentElement("beforeend", span);
+				break;
+			case ConsoleOutType.Warn:
+				span.style.color = "yellow";
+				span.innerText = data;
+				tableData.appendChild(span);
+				span.insertAdjacentText("afterbegin", "⚠ ");
+				break;
+			case ConsoleOutType.Error:
+				span.style.color = "red";
+				span.innerText = data;
+				tableData.appendChild(span);
+				span.insertAdjacentText("afterbegin", "⚠ ");
+				break;
+			default:
+				tableData.innerText += data + "\t";
+				break;
+			}
+			tableRow.appendChild(tableData);
       }
       output.appendChild(tableRow);
     }
