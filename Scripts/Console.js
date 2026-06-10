@@ -114,7 +114,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 		var result = this.results[index];
 		var tableRow = document.createElement("tr");
 		var tableData = document.createElement("td");
-		// alert("dater" + result.data)
+		alert("dater" + result.data)
 		for (var dataIndex in result.data) {
 			alert("ideks" + dataIndex)
 			var data = result.data[dataIndex];
@@ -152,6 +152,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			tableRow.appendChild(tableData);
 			alert("rowie " + tableRow)
       }
+	  if (!tableRow.childNodes.length)  tableRow.appendChild(tableData);
 	//   tableRow.style.width = "100px";
 	//   tableRow.style.height = "100px";
 	  tableRow.style.background="blue"
