@@ -114,8 +114,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
       var result = this.results[index];
       var tableRow = document.createElement("tr");
       var tableData = document.createElement("td");
-	  alert(tableData)
-      for (var dataIndex in result.data) {
+         for (var dataIndex in result.data) {
         var data = result.data[dataIndex];
         var span = document.createElement("span");
         switch (result.type) {
