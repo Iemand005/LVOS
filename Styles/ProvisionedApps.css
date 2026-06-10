@@ -34,7 +34,8 @@ table {
 tr {
     width: 100%;
     background-color: chartreuse;
-}
+    height: 10px;
+} 
 
 table > tr:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.123);
