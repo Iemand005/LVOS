@@ -9,6 +9,10 @@ var ConsoleOutType = {
 	Error: 3
 };
 
+function ConsoleInterceptor() {
+	
+}
+
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
@@ -28,6 +32,7 @@ function initializeConsoleApplication() {
   consoleForm.addEventListener("submit", function(event) {
     event.preventDefault();
     try {
+		alert(console.results.length)
       console.results.push({
         type: ConsoleOutType.Input,
         data: [event.target.input.value]
@@ -36,8 +41,8 @@ function initializeConsoleApplication() {
         type: ConsoleOutType.Log,
         data: [eval(event.target.input.value)]
       });
-	  alert(console.results.length)
     } catch (exception) {
+	alert(exception)
       console.results.push({ type: ConsoleOutType.Error, data: [exception] });
     }
     interceptConsole();
