@@ -28,16 +28,6 @@ ConsoleInterceptor.prototype.intercept = function() {
 	try {
 	if (this.stdout.firstChild) this.stdout.removeChild(this.stdout.firstChild);
 	var html = this.getHTML();
-	html.style.background = "purple"
-	// html.style.display = "block";
-	// html.style.position = "absolute";
-	// html.style.left = "0";
-	// html.style.top = "0";
-	// html.style.width = "100%";
-	// html.style.height = "100%";
-	// alert("kaker")
-	// alert(html)       
-	// alert (this.stdout)
     this.stdout.appendChild(html);
     // this.stdout.scrollTop = this.stdout.scrollHeight;
 	} catch(ex){alert(ex)}
