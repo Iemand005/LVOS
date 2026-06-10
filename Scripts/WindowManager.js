@@ -1760,13 +1760,9 @@ window.addEventListener("unload", function(e) {
     windowManager.saveState();  
 }, false);
 
-window.addEventListener(
-  "dragover",
-  function (e) {
+window.addEventListener("dragover", function (e) {
     e.preventDefault();
-  },
-  false
-);
+}, false);
 
 window.addEventListener("drop", function(e) {
   e.preventDefault();

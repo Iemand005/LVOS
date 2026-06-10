@@ -75,6 +75,7 @@ function setThemeOld(id) {
 }
 
 function toggleCharmsEvent(ev) {
+    if (!document.elementFromPoint) return;
     var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
     if (!isCharmsOpen() || clickedElement == charmsbutton || clickedElement == charmsbutton2) return;
 
