@@ -1,18 +1,13 @@
 
-
-alert( 'err' )
 var bindConsole = true;
 
-// var ConsoleOutType = {
-//   Input: -1,
-//   Return: 0,
-//   Log: 1,
-//   Warn: 2,
-//   Error: 3
-// };
-
-alert( 'err' )
-
+var ConsoleOutType = {
+  Input: -1,
+  Return: 0,
+  Log: 1,
+  Warn: 2,
+  Error: 3
+};
 
 function initializeConsoleApplication() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
@@ -122,5 +117,5 @@ function initializeConsoleApplication() {
     return output;
   };
 }
-// alert( 'er' )
+
 if (bindConsole) initializeConsoleApplication();
