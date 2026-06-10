@@ -25,7 +25,7 @@ ConsoleInterceptor.prototype.intercept = function() {
 
 }
 
-function initializeConsoleApplication() {
+ConsoleInterceptor.prototype.init = function() {
   // if (!windowManager.windows || !windowManager.windows["console"]) return;
 
 	// alert("	kok" + document.getElementById("console").getElementsByTagName("form"))
