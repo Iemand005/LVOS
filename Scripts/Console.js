@@ -156,6 +156,7 @@ ConsoleInterceptor.prototype.getHTML = function() {
 	  tableRow.style.height = "100px";
 	  tableRow.style.background="blue"
       output.appendChild(tableRow);
+	  alert("dalength " + output.childNodes.length)
     }
     return output;
 };
