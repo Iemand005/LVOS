@@ -30,7 +30,7 @@ ConsoleInterceptor.prototype.intercept = function() {
 	if (this.stdout.firstChild) this.stdout.removeChild(this.stdout.firstChild);
 	var html = this.getHTML();
     this.stdout.appendChild(html);
-    // this.stdout.scrollTop = this.stdout.scrollHeight;
+    this.stdout.scrollTop = this.stdout.scrollHeight;
 	} catch(ex){alert(ex)}
 };
 
