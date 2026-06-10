@@ -109,13 +109,13 @@ ConsoleInterceptor.prototype.init = function() {
 
 ConsoleInterceptor.prototype.getHTML = function() {
     var output = document.createElement("table");
-	// alert
+	alert(this.results.length	+ " eresultas")
     for (var index in this.results) {
 		var result = this.results[index];
 		var tableRow = document.createElement("tr");
 		var tableData = document.createElement("td");
+		alert(dataIndex)
 		for (var dataIndex in result.data) {
-			alert(dataIndex)
 			var data = result.data[dataIndex];
 			var span = document.createElement("span");
 			span.style.background = "blue"
