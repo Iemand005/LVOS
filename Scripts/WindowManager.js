@@ -532,7 +532,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 });
 /**
  * @param {boolean} forceOpen 
- * @param {boolean} kill 
+ * @param {boolean} [kill] 
  */
 Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     var target = this.target;
