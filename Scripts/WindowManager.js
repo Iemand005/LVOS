@@ -572,7 +572,7 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "mica", {
     get: function() { return this._mica; },
     set: function(mica) {
-        if (mica) this._mica = this.injectMica() || false;
+        if (mica) this._mica = this.injectMica();
         else this._mica = this.removeMica();
 		this.move();
     }
@@ -1163,7 +1163,7 @@ Dialog.prototype.updateScale = function(useScale) {
 function getWallpaper() {
     return document.getElementById("wallpaper");
 }
-
+/** @returns {boolean} */
 Dialog.prototype.injectMica = function() {
     try {
         if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you psosible even do that??");
@@ -1203,6 +1203,7 @@ Dialog.prototype.injectMica = function() {
         
 		return true;
     } catch(ex) { console.warn(ex); }
+	return false;
 };
 
 Dialog.prototype.removeMica = function() {
