@@ -32,6 +32,8 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 var hasLocalStorage = typeof localStorage !== "undefined";
 
 /**  @typedef {import(./physics.js).Vector} Vector */
+/**  @typedef {{[key: string]: DialogState}} DesktopState */
+/**  @typedef {{[id:string]: Dialog}} DialogMap */
 
 if (isIE) {
     useTransform = true;
@@ -106,9 +108,6 @@ function WindowManager() {
 WindowManager.prototype.init = function() {
     this.resizeHandler = this.forEachWindow.bind(windowManager, function (window) { window.update(); });
 };
-
-/**  @typedef {{[key: string]: DialogState}} DesktopState */
-/**  @typedef {{[id:string]: Dialog}} DialogMap */
 
 Object.defineProperty(WindowManager.prototype, "windows", {
 	get: function() { return this._windows; }
