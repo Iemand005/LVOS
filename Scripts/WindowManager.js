@@ -713,7 +713,18 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", {
 Object.defineProperty(Dialog.prototype, "useTransform", {
     get: function () {return this._useTransform; },
     set: function(useTransform) {
-        this._useTransform = useTransform;
+        this.updateUseTransform(useTransform);
+    }
+});
+
+Object.defineProperty(Dialog.prototype, "useScale", {
+    get: function () {return this._useScale; },
+    set: function(useScale) {
+        this.updateScale(useScale);
+});
+
+Dialog.prototype.updateUseTransform = function(useTransform) {
+this._useTransform = useTransform;
         var target = this.target;
         if (!target) return;
         if (useTransform) {
@@ -732,30 +743,9 @@ Object.defineProperty(Dialog.prototype, "useTransform", {
         }
 
         this.update();
-    }
-});
+}
 
-Object.defineProperty(Dialog.prototype, "useScale", {
-    get: function () {return this._useScale; },
-    set: function(useScale) {
-        this._useScale = useScale;
-        var target = this.target;
-        if (!target) return;
-        if (useScale) {
-            target.style.right = "";
-            target.style.bottom = "";
-            target.classList.add("use-scale");
-        } else {
-            if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
-            target.style.right = toPixels(this.right);
-            target.style.bottom = toPixels(this.bottom);
-        }
-
-        this.update();
-    }
-});
-
-Dialog.prototype.updateScale(use) {
+Dialog.prototype.updateScale = function(use) {
 	this._useScale = useScale;
         var target = this.target;
         if (!target) return;
