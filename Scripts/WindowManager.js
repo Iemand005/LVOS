@@ -1005,7 +1005,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
             self.y = startPos.y;
             self.width = startSize.x;
             self.height = startSize.y;
-            self.target.classList.toggle("fullscreen", enable);
+            if ( self.target) self.target.classList.toggle("fullscreen", enable);
         }
         if (!enable) toggleThingie();
         animate(300, function(t) {
