@@ -865,7 +865,7 @@ Dialog.prototype.getButton = function (index) {
 Dialog.prototype.createOpenButton = function () {
     var openButton = document.createElement("button");
     this.buttons.unshift(openButton);
-    openButton.textContent = this.title || "?";
+    openButton.appendChild(document.createTextNode(this.title || "?"));
     openButton.onclick = this.launch.bind(this);
     return openButton;
 };
