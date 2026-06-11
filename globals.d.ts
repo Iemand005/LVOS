@@ -7,13 +7,15 @@ interface Application {
   title: string;
   id: string;
   src: string;
-  fixed?: boolean,
-  scroll?: boolean, 
-  hidden?: boolean, 
-  camera?: boolean, 
-  microphone?: boolean, 
-  moveEvents?: boolean,
-  classes?: string[]
+  fixed?: boolean;
+  scroll?: boolean;
+  hidden?: boolean;
+  camera?: boolean;
+  microphone?: boolean;
+  moveEvents?: boolean;
+  classes?: string[];
+  minWidth?: number;
+  minHeight?: number;
 }
 
 interface DialogState {

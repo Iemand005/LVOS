@@ -6,9 +6,6 @@
 "use strict";
 "use esnext";
 
-// /**  @typedef {import(./WindowManager.js).Application} Application */
-/**  @import { Application } from "../globals" */
-
 try {
 
 var dockAppList = document.getElementById("dockapplist");
