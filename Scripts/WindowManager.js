@@ -242,8 +242,7 @@ function ClickOffset() {
 			this.last = Date.now();
 			this.position.x = x, this.position.y = y;
 			this.positions.push(this.position.clone());
-			this.lastPosition = this.positions.shift() || new Vector;
-			this.difference = ().clone().sub(this.position);
+			this.difference = (this.lastPosition = this.positions.shift() || new Vector).clone().sub(this.position);
 			return this;
 		}
 	};
