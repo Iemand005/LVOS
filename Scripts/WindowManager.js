@@ -1161,7 +1161,7 @@ Dialog.prototype.injectMica = function() {
         var wallpaper = document.getElementById("wallpaper");
         if (!wallpaper) return false;
         // var newWallpaper = wallpaper.cloneNode(true);
-        // var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
+        var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
         var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
         var preBlurredImage = blurredSrc != null;
         var clip = this.micaElement;
@@ -1172,12 +1172,12 @@ Dialog.prototype.injectMica = function() {
         var micaWallpaper = null;
         if (wallpaper.children[0] instanceof HTMLElement) {
             micaWallpaper = wallpaper.children[0].cloneNode(true);
+			if (!(micaWallpaper instanceof HTMLElement)) return;
             if (supportsObjectFit) {
                 micaWallpaper.removeAttribute("style");
                 micaWallpaper.className = "mica-backdrop";
-                if (preBlurredImage) {
-                	if (blurredSrc) micaWallpaper.src = blurredSrc;
-                }
+                if (preBlurredImage &&  micaWallpaper instanceof HTMLIFrameElement && blurredSrc)
+					micaWallpaper.src = blurredSrc;
             } else {
                 micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
                 micaWallpaper.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
