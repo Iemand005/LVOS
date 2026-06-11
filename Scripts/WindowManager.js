@@ -421,10 +421,7 @@ Dialog.prototype.initWithObject = function(object) {
 
         var createSizers = true;
 
-        if (target.getElementsByClassName("sizer-1").length > 0)
-            createSizers = false;
-
-        if(borderSection && !this.fixed) {
+        if(borderSection && !this.fixed && createSizers) {
             for (var index = 0; index < 8; index++) {
 
                 var sizerId = "sizer-" + (index + 1);
