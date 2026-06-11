@@ -32,20 +32,24 @@ function animate(duration, update, complete) {
 function lerp(a, b, t) {
     return a + (b - a) * t;
 }
-/** @peram {number} t */
+/** @param {number} t */
 function ease(t) {
     return t * t * (3 - 2 * t);
 }
+/** @param {number} t */
 function easeOutLog(t) {
     return Math.log(1 + 9 * t) / Math.log(10);
 }
+/** @param {number} t */
 function easeSharpCenter(t) {
     return 0.5 - 0.5 * Math.cos(Math.PI * t);
 }
+/** @param {number} t */
 function easeSharpCenterStrong(t) {
     t = 0.5 - 0.5 * Math.cos(Math.PI * t);
     return 0.5 - 0.5 * Math.cos(Math.PI * t);
 }
+/** @param {number} t */
 function easeSharpMiddle(t) {
     return 0.5 + (t - 0.5) * Math.abs(2 * t - 1);
 }
