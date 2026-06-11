@@ -607,9 +607,7 @@ Object.defineProperty(Dialog.prototype, "y", {
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
-  get: function () {
-    return this._z;
-  },
+  get: function () { return this._z; },
   set: function (z) {
     if (typeof z == "number") this.setZ(z);
   }
@@ -621,9 +619,8 @@ Object.defineProperty(Dialog.prototype, "width", {
         if (typeof width !== "number" || !this.target) return;
 
         this._width = max(width, this.minWidth);
-        if (this.useTransform || this.useScale) {
-            this.target.style.width = toPixels(this._width);
-        } else this.target.style.right = toPixels(this.right);
+        if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+        else this.target.style.right = toPixels(this.right);
 
         this._isMinWidth = this._width === this.minWidth;
     }
