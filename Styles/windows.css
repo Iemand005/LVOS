@@ -77,8 +77,6 @@ main {
     padding: 8px;
     border-width: 0px;
     border-color: inherit;
-    border: none;
-    border: 10px solid black;
     cursor: grab;
 }
 
@@ -122,6 +120,8 @@ main {
     -webkit-box-orient: horizontal;
     -ms-flex-direction: row;
     flex-direction: row;
+    border: 0px solid black;
+
 }
 
 .window header button,
@@ -147,6 +147,8 @@ main {
     border-color: inherit;
     /* border: 1px solid black; */
     background-color: transparent;
+    border: 0px solid black;
+
 }
 
 
