@@ -75,22 +75,33 @@
                 </div>
 
                 <div class="window" id="console" style="height: 100%; width: 100%;">
-                    <div style="width: 100%; height: 100%; position: absolute; background-color: orange;;">
-                        <header>
-                            <h1>Console</h1>
-                            <section>
-                                <button disabled>🡕</button>
-                                <button disabled>❐</button>
-                                <button disabled>✕</button>
-                            </section>
-                        </header>
-                        <article>
-                            <form>
-                                <input type="text" name="input" id="stdin">
-                                <div name="stdout" id="stdout"></div>
-                            </form>
-                        </article>
-                    </div>
+                    <table class="content" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="header">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td>
+                                            <h1></h1>
+                                        </td>
+                                        <td class="section" align="right">
+                                            <button disabled>🡕</button>
+                                            <button disabled>❐</button>
+                                            <button disabled>✕</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="article">
+                                <form>
+                                    <input type="text" name="input" id="stdin">
+                                    <div name="stdout" id="stdout"></div>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
