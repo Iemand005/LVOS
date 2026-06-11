@@ -34,6 +34,19 @@ var hasLocalStorage = typeof localStorage !== "undefined";
 /**  @typedef {import(./physics.js).Vector} Vector */
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
+/**
+ * @typedef Application
+ * @prop {string} title
+ * @prop {string} id
+ * @prop {string} src
+ * @prop {boolean?} fixed
+*  @prop {boolean?} scroll
+ * @prop {boolean?} hidden
+ * @prop {boolean?} camera
+ * @prop {boolean?} microphone
+ * @prop {boolean?} moveEvents
+ * @prop {string[] | null} classes
+ */
 
 if (isIE) {
     useTransform = true;
