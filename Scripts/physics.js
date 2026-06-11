@@ -5,6 +5,8 @@
 /**
  * @param {number} [x]
  * @param {number} [y]
+ * @prop {number } x
+ * @prop {number } y
  */
 function Vector(x, y){
     if (typeof x !== "number") x = 0, y = 0;
