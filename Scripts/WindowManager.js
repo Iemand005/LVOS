@@ -1300,8 +1300,9 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
         if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
-                if (!bodyCrawler || !bodyCrawler.getOverlay()) break;
-                bodyCrawler.getOverlay().ontransitionend = function () {
+                var overlay = bodyCrawler.getOverlay();
+                if (!overlay) break;
+                overlay.ontransitionend = function () {
                     var dialog = windowManager.windows[source];
                     dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
                     if (dialog.frame) {
@@ -1309,19 +1310,20 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                         oriurl.searchParams.set("fullscreen", String(true));
                         dialog.frame.src = oriurl.href;
                     }
-                    if (!bodyCrawler.getOverlay()) return;
-                    bodyCrawler.getOverlay().ontransitionend = null;
-                    bodyCrawler.getOverlay().requestFullscreen();
-                    if (dialog.body) bodyCrawler.getOverlay().appendChild(dialog.body);
-                    window.setTimeout(bodyCrawler.getOverlay().classList.add.bind(bodyCrawler.getOverlay().classList, "shown"), 500);
+                    if (!overlay) return;
+                    overlay.ontransitionend = null;
+                    overlay.requestFullscreen();
+                    if (dialog.body) overlay.appendChild(dialog.body);
+                    window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
                 };
-                bodyCrawler.getOverlay().classList.toggle("open");
+                overlay.classList.toggle("open");
                 break;
             case types.readyToLaunchOverlay:
-                if (!bodyCrawler.getOverlay()) break;
+                var overlay = bodyCrawler.getOverlay();
+                if (!overlay) break;
                 var dialog = windowManager.windows[source];
-                if (dialog.body) bodyCrawler.getOverlay().appendChild(dialog.body);
-                window.setTimeout(bodyCrawler.getOverlay().classList.add.bind(bodyCrawler.getOverlay().classList, "shown"), 500);
+                if (dialog.body) overlay.appendChild(dialog.body);
+                window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
                 break;
         }
         console.log("Received message " + type);
