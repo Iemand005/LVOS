@@ -530,6 +530,10 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
 });
+/**
+ * @param {boolean} forceOpen 
+ * @param {boolean} kill 
+ */
 Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     var target = this.target;
     if (!target) return;
@@ -1182,7 +1186,7 @@ Dialog.prototype.injectMica = function() {
         var micaWallpaper = null;
         if (wallpaper.children[0] instanceof HTMLElement) {
             micaWallpaper = wallpaper.children[0].cloneNode(true);
-			if (!(micaWallpaper instanceof HTMLElement)) return;
+			if (!(micaWallpaper instanceof HTMLElement)) return false;
             if (supportsObjectFit) {
                 micaWallpaper.removeAttribute("style");
                 micaWallpaper.className = "mica-backdrop";
