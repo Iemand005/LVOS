@@ -472,7 +472,7 @@ Dialog.prototype.initWithObject = function(object) {
                 top: rect.top + viewboxPosition.top
             }
 
-            if (self.href) self._popupWindow = window.open(self.href, self.title, stringifyDialogProperties(propeties));
+            if (self.href) self._popupWindow = window.open(self.href, self.title || "LVOS", stringifyDialogProperties(propeties));
             self.quit();
         }, false);
         
@@ -1611,8 +1611,9 @@ Dialog.prototype.getState = function() {
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
     this.title = state.title;
-    this.x = state.x;   
-    this.y = state.y;
+    // this.x = state.x;
+    // this.y = state.y;
+    this.move(state.x, state.y); 
     this.z = state.z;
     this.width = state.width;   
     this.height = state.height;
