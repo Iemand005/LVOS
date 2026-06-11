@@ -331,7 +331,7 @@ function Dialog(object, create) {
 }
 /**
  * @param {string} name 
- * @param {HTMLElement?} parent 
+ * @param {Element?} parent 
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var target = parent || this.target;
@@ -349,8 +349,6 @@ Dialog.prototype.initWithObject = function(object) {
         if (object.target) return;
         else if (object.application) object = object.application;
     }
-
-    var dialog = this;
 
     if (!(object instanceof Dialog)) {
         if (object instanceof HTMLElement) {
