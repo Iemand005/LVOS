@@ -331,7 +331,7 @@ function Dialog(object, create) {
 }
 /**
  * @param {string} name 
- * @param {Element?} parent 
+ * @param {Element | undefined} parent 
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var target = parent || this.target;
@@ -419,7 +419,7 @@ Dialog.prototype.initWithObject = function(object) {
 
         var createSizers = true;
 
-        if (this.target.getElementsByClassName("sizer-1").length > 0) {
+        if (target.getElementsByClassName("sizer-1").length > 0) {
             // console.warn ("Adding divs while they areldy aexist stop me!");
             // this.borderSection
             createSizers = false;
