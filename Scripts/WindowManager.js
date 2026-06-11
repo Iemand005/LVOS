@@ -108,14 +108,10 @@ function WindowManager() {
 
 	var self = this;
 	/** @type {(ev:Event)=>void} */
-    this.resizeHandler = function(EV) {
+    this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	}
 }
-
-WindowManager.prototype.init = function() {
-	
-};
 
 Object.defineProperty(WindowManager.prototype, "windows", {
 	get: function() { return this._windows; }
@@ -1269,7 +1265,6 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager();
-windowManager.init();
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler(document);;
 window.onload=
