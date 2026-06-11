@@ -1682,10 +1682,15 @@ function injectApplication(application) {
 }
 
 /** @param {...Application[]} arguments */
-function injectApplications() {
+WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
+}
+
+/** @param {...Application[]} arguments */
+function injectApplications() {
+    windowManager.injectApplications(arguments);
 }
 
 /** @param {string} appId  */
