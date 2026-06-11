@@ -225,8 +225,10 @@ WindowManager.prototype.forEachWindow = function (callback) {
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
     try {
+        alert("loating");
         this._windows[app.id] = new Dialog(app);
         this._windows[app.id].mica = this.isMicaEnabled;
+        alert("loathed!!");
     } catch(ex) { console.warn("Appleload failed", ex); }
 };
 
