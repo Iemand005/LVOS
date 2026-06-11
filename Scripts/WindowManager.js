@@ -942,7 +942,7 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 /**
  * @param {HTMLElement} element 
  * @param {string} className 
- * @param {boolean} enabled 
+ * @param {boolean} [enabled] 
  */
 function setClass(element, className, enabled) {
     var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
@@ -981,6 +981,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     
 
     window.requestAnimationFrame(function() {
+		if (!target) return;
         try { void target.offsetWidth; } catch (e) {}
         var enabled = setClass(target, className, force);
         if (onToggled) onToggled.call(dialog, enabled);
