@@ -216,7 +216,7 @@ WindowManager.prototype.forEachWindow = function (callback) {
 WindowManager.prototype.loadApp = function(app) {
     try {
         this._windows[app.id] = new Dialog(app);
-        this._windows[app.id].mica = this.isMicaEnabled;
+        this._windows[app.id].mica = this.isMicaEnabled || false;
     } catch(ex) { console.warn("Appleload failed", ex); }
 };
 
