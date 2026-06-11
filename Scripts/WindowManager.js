@@ -853,7 +853,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function() {
 	this.focus();
-	return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
+	return this.setZ(topZ++), this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
