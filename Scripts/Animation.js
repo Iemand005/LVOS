@@ -23,10 +23,16 @@ function animate(duration, update, complete) {
 
     tick();
 }
-
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @param {number} t 
+ * @returns 
+ */
 function lerp(a, b, t) {
     return a + (b - a) * t;
 }
+/** @peram {number} t */
 function ease(t) {
     return t * t * (3 - 2 * t);
 }
