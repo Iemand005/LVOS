@@ -477,8 +477,10 @@ Dialog.prototype.initWithObject = function(object) {
 
     if (this.id) windowManager.windows[this.id] = this;
 
-    this.useTransform = this.useTransform;
-    this.useScale = this.useScale;
+	this.updateUseTransform(this.useTransform);
+	this.updateScale(this.useScale);
+    // this.useTransform = this.useTransform;
+    // this.useScale = this.useScale;
     this.update();
 }
 
@@ -1128,7 +1130,8 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "0px";
 		target.style.left = "0px";
-		this.useScale = true;
+		// this.useScale = true;
+		this.updateScale(true);
 	} else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
