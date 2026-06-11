@@ -953,7 +953,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
     
-
     window.requestAnimationFrame(function() {
 		if (!target) return;
         try { void target.offsetWidth; } catch (e) {}
