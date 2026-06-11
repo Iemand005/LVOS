@@ -77,6 +77,8 @@ main {
     padding: 8px;
     border-width: 0px;
     border-color: inherit;
+    border: none;
+    border: 10px solid black;
     cursor: grab;
 }
 
