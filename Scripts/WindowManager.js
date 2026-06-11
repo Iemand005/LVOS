@@ -572,7 +572,7 @@ Object.defineProperty(Dialog.prototype, "head", {
 Object.defineProperty(Dialog.prototype, "mica", {
     get: function() { return this._mica; },
     set: function(mica) {
-        if (mica) this._mica = this.injectMica();
+        if (mica) this._mica = this.injectMica() || false;
         else this._mica = this.removeMica();
 		this.move();
     }
