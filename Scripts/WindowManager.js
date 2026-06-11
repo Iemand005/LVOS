@@ -642,7 +642,7 @@ Object.defineProperty(Dialog.prototype, "height", {
         this._isMinHeight = this._height === this.minHeight
     }
 });
-
+/** @type {{x:number,y:number}} */
 Object.defineProperty(Dialog.prototype, "position", {
     get: function() { return new Vector(this.x, this.y); },
     set: function(position) {
