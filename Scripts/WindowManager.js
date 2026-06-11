@@ -31,7 +31,7 @@ var useBlur = false,
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
 
-/**  @typedef {import(./physics.js).Vector} Vector */
+// /**  @typedef {import(./physics.js).Vector} Vector */
 // /**  @import { Application } from "../globals" */
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
@@ -132,6 +132,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
     if (!this._windowStates && localStorage)
       try {
         var stringyy = localStorage.getItem("windowState");
+        if (!stringyy) return null;
         /** @type {DesktopState} */
         var windowStates = JSON.parse(stringyy);
         this._windowStates = windowStates;
