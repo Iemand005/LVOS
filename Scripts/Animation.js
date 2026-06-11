@@ -1,3 +1,8 @@
+/**
+ * @param {number} duration 
+ * @param {(time:number)=>void} update 
+ * @param {()=>void} complete 
+ */
 function animate(duration, update, complete) {
     var start = new Date().getTime();
 
