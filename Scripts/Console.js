@@ -21,6 +21,8 @@ function ConsoleInterceptor() {
 	this.results = [];
 	/** @type {HTMLElement?} */
 	this.stdout = null;
+	/** @type {HTMLInputElement?} */
+	this.stdin = null;
 }
 
 ConsoleInterceptor.prototype.intercept = function() {
@@ -39,7 +41,6 @@ ConsoleInterceptor.prototype.init = function() {
 	//windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody ||
 	var consoleForm =  document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
 	this.stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0] || document.getElementById("stdout");
-	/** @type {HTMLInputElement?} */
 	this.stdin = consoleForm.stdin ||consoleForm.getElementsByTagName("INPUT")[0] || consoleForm.getElementById("stdin");
 
 	var interceptConsole = function() { self.intercept(); };
