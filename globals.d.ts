@@ -30,3 +30,9 @@ interface Position {
   x: number;
   y: number;
 }
+
+/**  @typedef {{[key: string]: DialogState}} DesktopState */
+/**  @typedef {{[id:string]: Dialog}} DialogMap */
+
+type DesktopState = {[key: string]: DialogState};
+type DialogMap = {[id: string]: Dialog};
