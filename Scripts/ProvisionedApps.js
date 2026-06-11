@@ -82,130 +82,130 @@ if (windowManager && windowManager.windows.browser) {
 // Working tests of my Window injection API.
 /** @type {Application[]} */
 var applications = [
-    {
-        title: "Calculator",
-        id: "calculator",
-        minWidth: 180,
-        minHeight: 240,
-        src: "./Applications/Calculator/calculator.html"
-    },
-    {
-        title: "Exmple",
-        id: "0",
-        src: "./example.html"
-    },
-    {
-        title: "Camera",
-        id: "camera",
-        src: "./Applications/Camera/index.html",
-        camera: true,
-        microphone: true, // add attribute allow="camera; microphone" to iframe!
-    },
-    {
-        title: "Video",
-        id: "video",
-        src: "./Applications/Video/index.html",
-        hidden: true
-    },
-    {
-        title: "Cover Flow",
-        id: "coverflow",
-        src: "./Applications/Coverflow/Coverflow.html",
-    },
-    {
-        title: "Music",
-        id: "music",
-        src: "./Applications/Music/index.html"
-    },
-    {
-        title: "Citates",
-        id: "citates",
-        src: "./Applications/Citaten/index.html",
-        hidden: true // Hiding the incomplete apps. These are enabled once finished.
-    },
-    {
-        title: "Clock",
-        id: "clock",
-        src: "./Applications/Clock/index.html",
-        hidden: true
-    },
-    {
-        title: "Verlet",
-        id: "verlet",
-        src: "./Applications/Verlet/index.html",
-        hidden: true
-    },
-    {
-        title: "Recorder",
-        id: "recorder",
-        src: "./Applications/Recorder/index.html",
-        hidden: true
-    },
-    {
-        title: "Error",
-        id: "error",
-        src: "./Applications/Error/error.html",
-        hidden: true
-    },
-    {
-        title: "Cube",
-        id: "cube",
-        src: "./Applications/Cube/cube.html",
-        hidden: true
-    },
-    {
-        title: "Geode",
-        id: "geode",
-        src: "./Applications/GeodeWeb/login.html",
-        hidden: true
-    }
-    ,
-    {
-        title: "Level",
-        id: "level",
-        src: "./Applications/Level/level.html",
-        hidden: true
-    },
-    {
-        title: "Browser",
-        id: "browser",
-        src: "./Applications/Browser/index.html",
-        hidden: true
-    },
-    {
-        title: "MPTool",
-        id: "mptool",
-        src: "./Applications/MPTool/index.html",
-        hidden: true
-    },
-    {
-        title: "Autostereograms",
-        id: "stereograms",
-        src: "./Applications/StereogramMaker/index.html",
-        hidden: true
-    },
-    {
-        title: "Metronome",
-        id: "cyanide.metronome",
-        src: "./Applications/Cyanide/metronome/index.html",
-        hidden: true
-    },
-    {
-        title: "Rainboy",
-        id: "cyanide.rainboy",
-        src: "./Applications/Cyanide/rainboy/index.html",
-        hidden: true
-    },
-    {
-      title: "OPC",
-      id: "opc",
-      src: "https://bypass-online.netlify.app/"
-    },
-    {
-      title: "daedalOS",
-      id: "daedal",
-      src: "https://dustinbrett.com/"
-    }
+	{
+		title: "Calculator",
+		id: "calculator",
+		minWidth: 180,
+		minHeight: 240,
+		src: "./Applications/Calculator/calculator.html"
+	},
+	{
+		title: "Exmple",
+		id: "0",
+		src: "./example.html"
+	},
+	{
+		title: "Camera",
+		id: "camera",
+		src: "./Applications/Camera/index.html",
+		camera: true,
+		microphone: true, // add attribute allow="camera; microphone" to iframe!
+	},
+	{
+		title: "Video",
+		id: "video",
+		src: "./Applications/Video/index.html",
+		hidden: true
+	},
+	{
+		title: "Cover Flow",
+		id: "coverflow",
+		src: "./Applications/Coverflow/Coverflow.html",
+	},
+	{
+		title: "Music",
+		id: "music",
+		src: "./Applications/Music/index.html"
+	},
+	{
+		title: "Citates",
+		id: "citates",
+		src: "./Applications/Citaten/index.html",
+		hidden: true // Hiding the incomplete apps. These are enabled once finished.
+	},
+	{
+		title: "Clock",
+		id: "clock",
+		src: "./Applications/Clock/index.html",
+		hidden: true
+	},
+	{
+		title: "Verlet",
+		id: "verlet",
+		src: "./Applications/Verlet/index.html",
+		hidden: true
+	},
+	{
+		title: "Recorder",
+		id: "recorder",
+		src: "./Applications/Recorder/index.html",
+		hidden: true
+	},
+	{
+		title: "Error",
+		id: "error",
+		src: "./Applications/Error/error.html",
+		hidden: true
+	},
+	{
+		title: "Cube",
+		id: "cube",
+		src: "./Applications/Cube/cube.html",
+		hidden: true
+	},
+	{
+		title: "Geode",
+		id: "geode",
+		src: "./Applications/GeodeWeb/login.html",
+		hidden: true
+	}
+	,
+	{
+		title: "Level",
+		id: "level",
+		src: "./Applications/Level/level.html",
+		hidden: true
+	},
+	{
+		title: "Browser",
+		id: "browser",
+		src: "./Applications/Browser/index.html",
+		hidden: true
+	},
+	{
+		title: "MPTool",
+		id: "mptool",
+		src: "./Applications/MPTool/index.html",
+		hidden: true
+	},
+	{
+		title: "Autostereograms",
+		id: "stereograms",
+		src: "./Applications/StereogramMaker/index.html",
+		hidden: true
+	},
+	{
+		title: "Metronome",
+		id: "cyanide.metronome",
+		src: "./Applications/Cyanide/metronome/index.html",
+		hidden: true
+	},
+	{
+		title: "Rainboy",
+		id: "cyanide.rainboy",
+		src: "./Applications/Cyanide/rainboy/index.html",
+		hidden: true
+	},
+	{
+		title: "OPC",
+		id: "opc",
+		src: "https://bypass-online.netlify.app/"
+	},
+	{
+		title: "daedalOS",
+		id: "daedal",
+		src: "https://dustinbrett.com/"
+	}
 ]
 
 /** @type {Application[]} */
