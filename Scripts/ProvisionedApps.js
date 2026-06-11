@@ -89,11 +89,7 @@ var applications = [
 		minHeight: 240,
 		src: "./Applications/Calculator/calculator.html"
 	},
-	{
-		title: "Exmple",
-		id: "0",
-		src: "./example.html"
-	},
+	{ title: "Example", id: "0", src: "./example.html" },
 	{
 		title: "Camera",
 		id: "camera",
