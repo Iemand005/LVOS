@@ -79,6 +79,8 @@ if (windowManager && windowManager.windows.browser) {
   console.warn("Browser loading failed", ex);
 }
 
+// alert
+
 // Working tests of my Window injection API.
 /** @type {Application[]} */
 var applications = [
@@ -268,3 +270,5 @@ try {
 };
 
 window.addEventListener("load", initApps, false);
+
+alert("I DID A TINGELING")
