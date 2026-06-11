@@ -38,9 +38,9 @@ ConsoleInterceptor.prototype.init = function() {
 	var self = this;
 	//windowManager && windowManager.windows && windowManager.windows["console"] &&windowManager.windows["console"].originalBody ||
 	var consoleForm =  document.getElementById("console").getElementsByTagName("form")[0]; //consoleElement.getElementsByTagName("form")[0];
-	var stdout = self.stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0] || document.getElementById("stdout");
+	this.stdout = consoleForm.stdout || consoleForm.getElementsByTagName("output")[0] || document.getElementById("stdout");
 	/** @type {HTMLInputElement?} */
-	var stdin = consoleForm.stdin ||consoleForm.getElementsByTagName("INPUT")[0] || consoleForm.getElementById("stdin");
+	this.stdin = consoleForm.stdin ||consoleForm.getElementsByTagName("INPUT")[0] || consoleForm.getElementById("stdin");
 
 	var interceptConsole = function() { self.intercept(); };
 
@@ -49,7 +49,7 @@ ConsoleInterceptor.prototype.init = function() {
 		event.preventDefault();
 		try {
 
-			var input = (event.target.input || stdin).value;
+			var input = (event.target.input || this.stdin).value;
 
 			self.results.push({
 				type: ConsoleOutType.Input,
