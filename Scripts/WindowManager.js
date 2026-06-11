@@ -1351,9 +1351,10 @@ function activeDialogToMetro() {
  * @param {boolean} enable
  */
 function flip(enable){
-    if (!bodyCrawler.getDesktop) return;
-    bodyCrawler.getDesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
-    flipHandler(bodyCrawler.getDesktop.classList.toggle("flipped", enable));
+    var tesktop = bodyCrawler.getDesktop();
+    if (tesktop!) return;
+    tesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(tesktop.classList.toggle("flipped", enable));
 }
 
 /**
