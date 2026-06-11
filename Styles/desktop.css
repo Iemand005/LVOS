@@ -432,11 +432,6 @@ aside#charms form {
   background: transparent;
 }
 
-button {
-  min-width: 100px;
-  min-height: 100px;
-}
-
 @media (pointer: none), (pointer: coarse) {
 }
 

@@ -17,7 +17,7 @@ if (windowManager && windowManager.windows.browser) {
   var browser = windowManager.windows.browser.target; //document.getElementById("browser");
   var browserform = windowManager.windows.browser.originalBody; //document.getElementById("browserform");
 
-  if (browser && browserform) {
+  if (browser && browserform instanceof HTMLElement) {
     var browserframe = browser.getElementsByTagName("iframe")[0];
 
     browserform.addEventListener("submit", function(event) {
