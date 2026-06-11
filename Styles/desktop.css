@@ -420,6 +420,10 @@ aside#charms form {
   height: fit-content;
 }
 
+#applist {
+  width: 100%;
+}
+
 .transparent #wallpaper {
   display: none;
 }
