@@ -1605,7 +1605,7 @@ Dialog.prototype.loadState = function(state) {
     // this.x = state.x;
     // this.y = state.y;
     this.move(state.x, state.y); 
-    this.z = state.z;
+    this.setZ(state.z);
     this.width = state.width;   
     this.height = state.height;
     this.maximized = state.maximized;
