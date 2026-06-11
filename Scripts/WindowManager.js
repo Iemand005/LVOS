@@ -602,11 +602,7 @@ Object.defineProperty(Dialog.prototype, "z", {
     return this._z;
   },
   set: function (z) {
-    if (typeof z == "number") {
-      this._z = z;
-      if (this.target instanceof HTMLElement)
-        this.target.style.zIndex = String(z);
-    }
+    if (typeof z == "number") this.setZ(z);
   }
 });
     
@@ -1090,8 +1086,9 @@ Dialog.prototype.move = function (x, y) {
         backdrop.style.height = toPixels(wallpaperHeight);
     } catch(ex) {}
 };
-Dialog.prototype.setZ = function(zz) {
-	this._z = zz;
+/** @param {number} z */
+Dialog.prototype.setZ = function(z) {
+	this._z = z;
 	if (this.target instanceof HTMLElement)
         this.target.style.zIndex = String(this._z);
 };
