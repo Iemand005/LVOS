@@ -7,6 +7,7 @@
 "use esnext";
 
 // /**  @typedef {import(./WindowManager.js).Application} Application */
+/**  @import { Application } from "../globals" */
 
 try {
 

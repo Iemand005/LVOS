@@ -3,7 +3,7 @@ interface Array<T> {
   forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
 }
 
-interface Application {
+export interface Application {
   title: string;
   id: string;
   src: string;

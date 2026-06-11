@@ -32,7 +32,7 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 var hasLocalStorage = typeof localStorage !== "undefined";
 
 /**  @typedef {import(./physics.js).Vector} Vector */
-/**  @import { MusicTrack } from "./types.js" */
+/**  @import { Application } from "../globals" */
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 // /**
