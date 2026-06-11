@@ -1352,7 +1352,7 @@ function activeDialogToMetro() {
  */
 function flip(enable){
     var tesktop = bodyCrawler.getDesktop();
-    if (tesktop!) return;
+    if (!tesktop) return;
     tesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
     flipHandler(tesktop.classList.toggle("flipped", enable));
 }
