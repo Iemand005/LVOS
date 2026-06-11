@@ -1720,7 +1720,7 @@ function applyWallpaperImage(url, blurredUrl, onError) {
         console.warn("Failed to load wallpaper image!");
     };
 
-    image.onload = function() {
+    var loadHandler = function() {
         var wallpaper = getWallpaper();
         if (!wallpaper) return;
         while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
@@ -1733,6 +1733,8 @@ function applyWallpaperImage(url, blurredUrl, onError) {
         wallpaper.appendChild(image);
     };
 
+	image.onload = loadHandler;
+
     if (supportsObjectFit) {
         image.src = url;
         image.className = "wallpaper-image";
@@ -1740,7 +1742,7 @@ function applyWallpaperImage(url, blurredUrl, onError) {
         image.className = "wallpaper-image legacy-wallpaper-image";
         image.removeAttribute("src");
         image.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
-        image.onload();
+       	loadHandler();
     }
     if (blurredUrl) image.setAttribute("blurred-src", blurredUrl);
 
