@@ -531,7 +531,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
 });
 /**
- * @param {boolean} forceOpen 
+ * @param {boolean} [forceOpen] 
  * @param {boolean} [kill] 
  */
 Dialog.prototype.toggleOpen = function (forceOpen, kill) {
