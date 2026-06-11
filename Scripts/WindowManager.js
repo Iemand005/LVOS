@@ -1623,10 +1623,11 @@ Dialog.prototype.retrieveBodyFromMetro = function() {
 }
 
 function getDialogTemplate(){
-    /** @type {HTMLTemplateElement} */
+    // /** @type {HTMLTemplateElement?} */
     var template = document.querySelector("template") || document.getElementById("window-template");
-    if (!template) return void console.warn("Couldn't find template!");
-    var content = template.content || template;
+    if (!template ) return void console.warn("Couldn't find template!");
+    var content = template;
+	if (template instanceof HTMLTemplateElement) content = template.content;
     return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
@@ -1670,7 +1671,7 @@ function injectApplication(application) {
     windowManager.loadState();
 }
 
-/** @param {...Application[]} arguments */
+/** @param {Application[]} arguments */
 var injectApplications = WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
