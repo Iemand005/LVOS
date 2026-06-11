@@ -868,19 +868,19 @@ Dialog.prototype.focus = function() {
     focusedDialog = this;
 }
 Dialog.prototype.activate = function() {
-    this.focus();
-    return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
+	this.focus();
+	return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 }
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
-  return this.head && !this.head.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
+	return this.head && !this.head.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
-  return (this.isOpen = true), windowManager.saveState(), this.isOpen;
+	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
 }; // Open, save, return if it's opened or not
 Dialog.prototype.close = function () {
-  return (this.isOpen = false), windowManager.saveState(), this.isOpen;
+	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
 };
 (Dialog.prototype.getInnerRect = function () {
   if (this.target)
