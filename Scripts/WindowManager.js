@@ -865,7 +865,7 @@ Dialog.prototype.getButton = function (index) {
 Dialog.prototype.createOpenButton = function () {
     var openButton = document.createElement("button");
     this.buttons.unshift(openButton);
-    openButton.textContent = this.title || "?";
+    openButton.innerText = this.title || "?";
     openButton.onclick = this.launch.bind(this);
     return openButton;
 };
@@ -1638,7 +1638,6 @@ Dialog.prototype.retrieveBodyFromMetro = function() {
 }
 
 function getDialogTemplate(){
-    // /** @type {HTMLTemplateElement?} */
     var template = document.querySelector("template") || document.getElementById("window-template");
     if (!template ) return void console.warn("Couldn't find template!");
     var content = template;
