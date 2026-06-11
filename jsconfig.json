@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["ES2015", "DOM"],
-    "ignoreDeprecations": "6.0",
     "checkJs": true
   },
+  "ignoreDeprecations": "6.0",
   "include": [
     "./Scripts/WebGraphics",
   ],
