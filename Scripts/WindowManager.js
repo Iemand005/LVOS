@@ -1587,7 +1587,7 @@ function handleStorageException(exception){
 Dialog.prototype.getState = function() {
     /** @type {DialogState} */
     var state = {
-        title: this.title || this.id,
+        title: this.title || this.id || "Unc",
         x: this.x,
         y: this.y,
         z: this.z,

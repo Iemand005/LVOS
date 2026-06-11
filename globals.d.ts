@@ -24,6 +24,7 @@ interface DialogState {
   width: number;
   height: number;
   open: boolean;
+  maximized: boolean;
 }
 
 interface Position {
