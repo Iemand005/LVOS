@@ -1090,6 +1090,11 @@ Dialog.prototype.move = function (x, y) {
         backdrop.style.height = toPixels(wallpaperHeight);
     } catch(ex) {}
 };
+Dialog.prototype.setZ = function(zz) {
+	this._z = zz;
+	if (this.target instanceof HTMLElement)
+        this.target.style.zIndex = String(this._z);
+};
 /**
  * @param {number} [width]
  * @param {number} [height]
