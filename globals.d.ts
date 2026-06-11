@@ -36,3 +36,12 @@ interface Position {
 
 type DesktopState = {[key: string]: DialogState};
 type DialogMap = {[id: string]: Dialog};
+
+declare global {
+  interface HTMLElementEventMap {
+    webkitTransitionEnd: TransitionEvent;
+    webkitAnimationEnd: AnimationEvent;
+    webkitAnimationIteration: AnimationEvent;
+    webkitAnimationStart: AnimationEvent;
+  }
+}

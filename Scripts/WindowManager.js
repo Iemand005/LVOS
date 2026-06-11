@@ -33,8 +33,8 @@ var hasLocalStorage = typeof localStorage !== "undefined";
 
 // /**  @typedef {import(./physics.js).Vector} Vector */
 // /**  @import { Application } from "../globals" */
-/**  @typedef {{[key: string]: DialogState}} DesktopState */
-/**  @typedef {{[id:string]: Dialog}} DialogMap */
+// /**  @typedef {{[key: string]: DialogState}} DesktopState */
+// /**  @typedef {{[id:string]: Dialog}} DialogMap */
 
 
 if (isIE) {
@@ -881,7 +881,7 @@ Dialog.prototype.close = function () {
       height: this.target.offsetHeight
     };
 }), // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-  /** @param {number} index */
+  /** @param {number} [index] */
   (Dialog.prototype.getRect = function (index) {
     if (this.target)
       return index == null
@@ -1074,8 +1074,9 @@ Dialog.prototype.move = function (x, y) {
 
     if (y < 0 && this.maximized) this.maximize();
 
-    if (this.mica) try {
-        var backdrop = this.micaElement.firstChild;
+	var micaElement = this.micaElement;
+    if (micaElement) try {
+        var backdrop = micaElement.firstChild;
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
@@ -1107,17 +1108,18 @@ Dialog.prototype.update = function () {
  * @param {number} height
  */
 Dialog.prototype.resizeBody = function (width, height) {
-  if (this.body && this.target)
+	var rect = this.getRect();
+  if (this.body && this.target && rect)
     (this.body.style.boxSizing = "content-box"),
       (this.body.style.flex = "unset"),
       (this.body.style.width = toPixels(width)),
       (this.body.style.height = toPixels(height)),
-      (this.target.style.width = null),
-      (this.target.style.height = null),
-      (this.width = this.getRect().width),
-      (this.height = this.getRect().height),
-      (this.body.style.boxSizing = null),
-      (this.body.style.flex = null);
+      (this.target.style.width = ""),
+	  (this.target.style.height = ""),
+      (this.width = rect.width),
+      (this.height = rect.height),
+      (this.body.style.boxSizing = ""),
+      (this.body.style.flex = "");
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
