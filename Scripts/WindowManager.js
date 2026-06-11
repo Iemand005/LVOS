@@ -338,7 +338,9 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     if (!target) return null;
     var elements = target.getElementsByTagName(name);
     if (!elements || !elements.length) elements = target.getElementsByClassName(name);
-    return elements.length ? elements[0] : null;
+    var element = elements.length ? elements[0] : null;
+    if (element instanceof HTMLElement) return element;
+    return null;
 }
 
 /** @param {HTMLElement | Application | Dialog} object */
@@ -426,8 +428,9 @@ Dialog.prototype.initWithObject = function(object) {
             for (var index = 0; index < 8; index++) {
 
                 var sizerId = "sizer-" + (index + 1);
-                /
-                var div = createSizers ? document.createElement("div") : this.getElementByTagOrClassName(sizerId);
+
+                var div = this.getElementByTagOrClassName(sizerId);
+                if (!div || !(div instanceof HTMLElement)) div = document.createElement("div");
                 div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
