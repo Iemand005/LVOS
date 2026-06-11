@@ -987,15 +987,16 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var target = this.target;
     if (!target) return;
     var dialog = this;
-    target.classList.add("animating");
-    var animationHandler = function(/** @type {TransitionEvent} */event) {
-        if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
-        target.classList.remove("animating");
-        target.removeEventListener(transitionEndEvent, animationHandler, false);
-        if (onEnd) onEnd();
-    };
-    target.addEventListener(transitionEndEvent, animationHandler, false);
-
+    if (supportsTransitions) {
+        target.classList.add("animating");
+        var animationHandler = function(/** @type {TransitionEvent} */event) {
+            if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
+            target.classList.remove("animating");
+            target.removeEventListener(transitionEndEvent, animationHandler, false);
+            if (onEnd) onEnd();
+        };
+        target.addEventListener(transitionEndEvent, animationHandler, false);
+    }
     
 
     window.requestAnimationFrame(function() {
