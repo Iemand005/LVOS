@@ -874,13 +874,7 @@ Dialog.prototype.activate = function() {
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
-  return (
-    this.head &&
-    !this.head.classList.toggle(
-      "hidden",
-      typeof force !== "undefined" ? !force : undefined
-    )
-  );
+  return this.head && !this.head.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
   return (this.isOpen = true), windowManager.saveState(), this.isOpen;
