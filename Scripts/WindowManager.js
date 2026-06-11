@@ -771,7 +771,7 @@ Object.defineProperty(Dialog.prototype, "title", {
 
 Object.defineProperty(Dialog.prototype, "maximized", {
     get: function() {
-        if (!this.target)return;
+        if (!this.target) return false;
         return this.target.classList.contains("fullscreen");
     },
     set: function(maximized) {
@@ -1027,7 +1027,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
     }
 };
 Dialog.prototype.maximize = function () {
-  this.maximized = true;
+  this.toggleFullScreen(true);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function (enable) {
