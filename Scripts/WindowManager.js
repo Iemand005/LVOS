@@ -105,14 +105,16 @@ function WindowManager() {
     this._isWindowUpdatesEnabled = false;   
 
     this.isDragging = false;
-}
 
-WindowManager.prototype.init = function() {
 	var self = this;
 	/** @type {(ev:Event)=>void} */
     this.resizeHandler = function(EV) {
 		self.forEachWindow(function (window) { window.update(); });
 	}
+}
+
+WindowManager.prototype.init = function() {
+	
 };
 
 Object.defineProperty(WindowManager.prototype, "windows", {
