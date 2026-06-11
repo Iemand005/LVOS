@@ -870,7 +870,7 @@ Dialog.prototype.focus = function() {
 Dialog.prototype.activate = function() {
 	this.focus();
 	return this.z = topZ++, this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
-}
+};
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
@@ -951,6 +951,8 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
+/** @type {keyof HTMLElementEventMap} */
+// @ts-ignore
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
 /**
@@ -985,7 +987,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 	if (supportsTransitions) {
 		target.classList.add("animating");
 		var animationHandler = function(/** @type {TransitionEvent} */event) {
-			if (animationEndTrigger && event.propertyName !== animationEndTrigger) return;
+			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
 			target.classList.remove("animating");
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
