@@ -1300,7 +1300,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
         if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
-                if (!bodyCrawler.getOverlay()) break;
+                if (!bodyCrawler || !bodyCrawler.getOverlay()) break;
                 bodyCrawler.getOverlay().ontransitionend = function () {
                     var dialog = windowManager.windows[source];
                     dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
