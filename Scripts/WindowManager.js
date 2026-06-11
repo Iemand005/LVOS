@@ -331,7 +331,7 @@ function Dialog(object, create) {
 }
 /**
  * @param {string} name 
- * @param {Element | undefined} parent 
+ * @param {Element} [parent] 
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var target = parent || this.target;
