@@ -57,7 +57,7 @@ function forEachIn(callback) { // hasOwnProperty has been deprecated and replace
  * @param {any} thisArg
  */
 function forEachIndexed(callbackfn, thisArg) {
-    for (var i = 0; i < this.length; ++i) if (this.hasOwnProperty(i)) callbackfn.bind(thisArg, this[i], i, this);
+    for (var i = 0; i < this.length; ++i) callbackfn.bind(thisArg, this[i], i, this);
 }
 
 
