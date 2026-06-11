@@ -714,16 +714,12 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", {
 
 Object.defineProperty(Dialog.prototype, "useTransform", {
     get: function () {return this._useTransform; },
-    set: function(useTransform) {
-        this.updateUseTransform(useTransform);
-    }
+    set: function(useTransform) { this.updateUseTransform(useTransform); }
 });
 
 Object.defineProperty(Dialog.prototype, "useScale", {
     get: function () {return this._useScale; },
-    set: function(useScale) {
-        this.updateScale(useScale);
-	}
+    set: function(useScale) { this.updateScale(useScale); }
 });
 
 Object.defineProperty(Dialog.prototype, "title", {
