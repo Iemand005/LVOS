@@ -1712,12 +1712,13 @@ function removeWallpaper() {
 /**
  * @param {string} url
  * @param {string} blurredUrl
- * @param {()=>void | null} onError
+ * @param {()=>void | null} [onError]
  */
 function applyWallpaperImage(url, blurredUrl, onError) {
     var image = document.createElement("img");
     image.onerror = function () {
         console.warn("Failed to load wallpaper image!");
+		if (onError) onError();
     };
 
     var loadHandler = function() {
