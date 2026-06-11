@@ -1428,7 +1428,6 @@ function windowActivationEvent(event, dialog) {
     // If the event originated from an interactive element, don't start a drag
     try {
         var node = event && (event.target || event.srcElement);
-		if (!(node instanceof HTMLEven)) return;
         var isInteractive = false;
         while (node && node.nodeType === 1) {
             var tn = (node.tagName || "").toLowerCase();
