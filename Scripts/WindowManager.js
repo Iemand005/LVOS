@@ -320,9 +320,7 @@ function Dialog(object, create) {
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
-    alert("dappende to app listee");
     var applist = document.getElementById("applist");
-    alert(applist)
     if (applist) applist.appendChild(this.createOpenButton());
     
     var metroapplist = document.getElementById("metroapplist");

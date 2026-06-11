@@ -239,11 +239,8 @@ var games = [
 var initApps = function () {
 	var loadApps = true;
 	if (loadApps) {
-	alert("I DID A TINGELING lol")
 
 	injectApplications(applications);
-	alert("I DID A TINGELING " + windows["0"])
-
   	injectApplications(games);
 }
 
