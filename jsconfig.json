@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["ES2015", "DOM", "./globals.d.ts"],
+    "lib": ["ES2015", "DOM"],
     "checkJs": true
   },
   "ignoreDeprecations": "6.0",
   "include": [
     "./Scripts/WebGraphics",
+    "*.d.ts"
   ],
   "exclude": [
     "Applications/**/WebGraphics",
