@@ -424,13 +424,12 @@ Dialog.prototype.initWithObject = function(object) {
             // this.borderSection
             createSizers = false;
         }
-        if(borderSection && !this.fixed) {
+        if(borderSection && !this.fixed && createSizers) {
             for (var index = 0; index < 8; index++) {
 
                 var sizerId = "sizer-" + (index + 1);
-                var div = null;
-                if (createSizers)
-                    div = document.createElement("div");
+                
+                var div = createSizers ? document.createElement("div");
                 else div = this.getElementByTagOrClassName(sizerId);
                 div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
