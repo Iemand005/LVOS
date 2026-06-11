@@ -1602,8 +1602,6 @@ Dialog.prototype.getState = function() {
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
     this.title = state.title;
-    // this.x = state.x;
-    // this.y = state.y;
     this.move(state.x, state.y); 
     this.setZ(state.z);
     this.width = state.width;   
