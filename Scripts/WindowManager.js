@@ -723,45 +723,6 @@ Object.defineProperty(Dialog.prototype, "useScale", {
         this.updateScale(useScale);
 });
 
-Dialog.prototype.updateUseTransform = function(useTransform) {
-	this._useTransform = useTransform;
-	var target = this.target;
-	if (!target) return;
-	if (useTransform) {
-		target.style.top = "0px";
-		target.style.left = "0px";
-		this.useScale = true;
-	} else {
-		target.style.transform = "";
-		target.style.webkitTransform = "";
-		target.style.width = "auto";
-		target.style.height = "auto";
-		target.style.top = toPixels(this.top);
-		target.style.left = toPixels(this.left);
-		target.style.right = toPixels(this.right);
-		target.style.bottom = toPixels(this.bottom);
-	}
-
-	this.update();
-}
-
-Dialog.prototype.updateScale = function(useScale) {
-	this._useScale = useScale;
-	var target = this.target;
-	if (!target) return;
-	if (useScale) {
-		target.style.right = "";
-		target.style.bottom = "";
-		target.classList.add("use-scale");
-	} else {
-		if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
-		target.style.right = toPixels(this.right);
-		target.style.bottom = toPixels(this.bottom);
-	}
-
-	this.update();
-}
-
 Object.defineProperty(Dialog.prototype, "title", {
     get: function() {
         if (this._title) return this._title;
@@ -1159,6 +1120,45 @@ Dialog.prototype.kill = function() {
     var parent = this.target && this.target.parentElement;
     if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
+/** @param {boolean} useTransform */
+Dialog.prototype.updateUseTransform = function(useTransform) {
+	this._useTransform = useTransform;
+	var target = this.target;
+	if (!target) return;
+	if (useTransform) {
+		target.style.top = "0px";
+		target.style.left = "0px";
+		this.useScale = true;
+	} else {
+		target.style.transform = "";
+		target.style.webkitTransform = "";
+		target.style.width = "auto";
+		target.style.height = "auto";
+		target.style.top = toPixels(this.top);
+		target.style.left = toPixels(this.left);
+		target.style.right = toPixels(this.right);
+		target.style.bottom = toPixels(this.bottom);
+	}
+
+	this.update();
+}
+/** @param {boolean} useScale */
+Dialog.prototype.updateScale = function(useScale) {
+	this._useScale = useScale;
+	var target = this.target;
+	if (!target) return;
+	if (useScale) {
+		target.style.right = "";
+		target.style.bottom = "";
+		target.classList.add("use-scale");
+	} else {
+		if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
+		target.style.right = toPixels(this.right);
+		target.style.bottom = toPixels(this.bottom);
+	}
+
+	this.update();
+}
 
 function getWallpaper() {
     return document.getElementById("wallpaper");
