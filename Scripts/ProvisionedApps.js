@@ -240,6 +240,8 @@ var initApps = function () {
 var loadApps = true;
 if (loadApps) {
   injectApplications(applications);
+alert("I DID A TINGELING")
+
   injectApplications(games);
 }
 
@@ -270,5 +272,3 @@ try {
 };
 
 window.addEventListener("load", initApps, false);
-
-alert("I DID A TINGELING")
