@@ -755,6 +755,23 @@ Object.defineProperty(Dialog.prototype, "useScale", {
     }
 });
 
+Dialog.prototype.updateScale(use) {
+	this._useScale = useScale;
+        var target = this.target;
+        if (!target) return;
+        if (useScale) {
+            target.style.right = "";
+            target.style.bottom = "";
+            target.classList.add("use-scale");
+        } else {
+            if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
+            target.style.right = toPixels(this.right);
+            target.style.bottom = toPixels(this.bottom);
+        }
+
+        this.update();
+}
+
 Object.defineProperty(Dialog.prototype, "title", {
     get: function() {
         if (this._title) return this._title;
