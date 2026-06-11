@@ -108,7 +108,11 @@ function WindowManager() {
 }
 
 WindowManager.prototype.init = function() {
-    this.resizeHandler = this.forEachWindow.bind(windowManager, function (window) { window.update(); });
+	var self = this;
+	/** @type {(ev:Event)=>void} */
+    this.resizeHandler = function(EV) {
+		self.forEachWindow(function (window) { window.update(); });
+	}
 };
 
 Object.defineProperty(WindowManager.prototype, "windows", {
