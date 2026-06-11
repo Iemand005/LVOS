@@ -145,6 +145,7 @@ function updateBlurState() {
 
 var settings = new SettingsHandler();
 
+/** @type {{[key:string]: HTMLElement?}} */
 var elements = {
     desktop: null,
     color: null,
