@@ -329,7 +329,10 @@ function Dialog(object, create) {
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
-/** @param {string} name */
+/**
+ * @param {string} name 
+ * @param {HTMLElement?} parent 
+ */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var target = parent || this.target;
     if (!target) return null;
@@ -349,33 +352,35 @@ Dialog.prototype.initWithObject = function(object) {
 
     var dialog = this;
 
-    if (object instanceof HTMLElement) {
-        if (!isDialog(object)) return console.warn("This is not a dialog element");
-        this.target = object;
-        if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
-        this.close();
-    } else {
-        this.application = object;
-        // this.closeable = true;
-        var newDialog = createDialog();
-        this.target = newDialog;
-        try {
+    if (!(object instanceof Dialog)) {
+        if (object instanceof HTMLElement) {
+            if (!isDialog(object)) return console.warn("This is not a dialog element");
+            this.target = object;
+            if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
+            this.close();
+        } else {
+            this.application = object;
+            // this.closeable = true;
+            var newDialog = createDialog();
+            this.target = newDialog;
+            try {
 
-            // windowManager.loadState(this);
-        } finally {}
-        if (object.classes && typeof object.classes === 'object'){
-            object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
-        }
-        this.openUrl(object.src);
-        this.setTitle(object.title);
-        this.fixed = object.fixed;
-        this.scroll = object.scroll;
-        if (this.frame) {
-            if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-            this.frame.setAttribute("allow", "fullscreen");
-        }
+                // windowManager.loadState(this);
+            } finally {}
+            if (object.classes && typeof object.classes === 'object'){
+                object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
+            }
+            this.openUrl(object.src);
+            this.setTitle(object.title);
+            this.fixed = object.fixed;
+            this.scroll = object.scroll;
+            if (this.frame) {
+                if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+                this.frame.setAttribute("allow", "fullscreen");
+            }
 
-        this.moveEvents = object.moveEvents || false;
+            this.moveEvents = object.moveEvents || false;
+        }
     }
 
     this.minWidth = 180;
