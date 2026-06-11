@@ -79,15 +79,6 @@ if (windowManager && windowManager.windows.browser) {
   console.warn("Browser loading failed", ex);
 }
 
-// Demonstration of my Window API. This lets us inject windows into our desktop environment straight from JavaScript.
-var demo = {
-  // More parameters will be added over time when I need them, you will probably find them as I start using the API instead of hard coding the applications.
-  title: "demo", // The window title! These don't have to be unique.
-  id: "demo", // !! Unique identifier !! Necessary to save, restore and identify the window / dialog in HTML and JavaScript. Duplicates end up giving unexpected behaviour when dragging windows around (the first occurency of given ID is selected from HTML and all code from duplicates is forwarded to this). A way to prevent these problems is by providing a check to see if an ID exists and if so, add a number to the ID (ex: demo1, demo2, demo3).
-  src: "./Applications/Velocities.html", // The path to the HTML file. Inline HTML can be added later but making that work with scripts is excessive work.
-  moveEvents: true // This flag enables attaching window movement statistic listener.
-};
-
 // Working tests of my Window injection API.
 /** @type {Application[]} */
 var applications = [
