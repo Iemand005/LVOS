@@ -35,7 +35,7 @@ var hasLocalStorage = typeof localStorage !== "undefined";
 /**  @typedef {{[key: string]: DialogState}} DesktopState */
 /**  @typedef {{[id:string]: Dialog}} DialogMap */
 /**
- * @typedef Applicatione
+ * @typedef Application
  * @prop {string} title
  * @prop {string} id
  * @prop {string} src
