@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["ES2015", "DOM"],
+    "lib": ["ES2015", "DOM", "./globals.d.ts"],
     "checkJs": true
   },
   "ignoreDeprecations": "6.0",

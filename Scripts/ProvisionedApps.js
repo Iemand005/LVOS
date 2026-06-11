@@ -6,7 +6,7 @@
 "use strict";
 "use esnext";
 
-/**  @typedef {import(./WindowManager.js).Application} Application */
+// /**  @typedef {import(./WindowManager.js).Application} Application */
 
 try {
 
