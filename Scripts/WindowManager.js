@@ -1431,7 +1431,7 @@ function windowActivationEvent(event, dialog) {
     try {
         var node = event && (event.target || event.srcElement);
         var isInteractive = false;
-        while (node && node.nodeType === 1) {
+        while (node && node instanceof HTMLElement && node.nodeType === 1) {
             var tn = (node.tagName || "").toLowerCase();
             if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
