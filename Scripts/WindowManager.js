@@ -62,9 +62,7 @@ var supportsTransitions = (function () {
 
 if (supportsPointer) console.log("Supports pointer events!");
 
-/**
- * @param {Event?} event
- */
+/** @param {Event?} event */
 function cancelDomEvent(event) {
 	if (!event) return false;
 	if (typeof event.preventDefault === "function") event.preventDefault();
@@ -74,16 +72,12 @@ function cancelDomEvent(event) {
 	return false;
 }
 
-/**
- * @param {Element} element
- */
+/** @param {Element} element */
 function isDialog(element) {
 	return element && element.classList && element.classList.contains("window");
 }
 
-/**
- * @param {string} title
- */
+/** @param {string} title */
 function titlify(title) {
 	return title.toLowerCase().split(" ").join("-");
 }
@@ -130,7 +124,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 
 Object.defineProperty(WindowManager.prototype, "state", {
   get: function () {
-    /** @type {DesktotypState} */
+    /** @type {DesktopState} */
     var state = {};
     for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
     return state;
