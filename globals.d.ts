@@ -36,6 +36,8 @@ interface Position {
 
 type DesktopState = {[key: string]: DialogState};
 type DialogMap = {[id: string]: Dialog};
+type DragFunction = (dialog: Dialog, offset: ClickOffset, difference: Position) => void;
+
 
 declare global {
   interface HTMLElementEventMap {
