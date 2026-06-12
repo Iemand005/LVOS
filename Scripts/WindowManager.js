@@ -130,23 +130,15 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 
 Object.defineProperty(WindowManager.prototype, "state", {
   get: function () {
-    /** @type {DesktopState} */
+    /** @type {DesktotypState} */
     var state = {};
-    for (var id in this.windows)
-      if (this.windows[id]) state[id] = this.windows[id].getState();
-	// const meow = state["0"]
-
-	const meow = this.windows.calculator.getState();
-	meow.
-
+    for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
     return state;
   }
 });
 
-Object.defineProperty(WindowManager.prototype, "isBlueEnabled", {
-  get: function () {
-    return this._isBlurEnabled;
-  },
+Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
+  get: function () { return this._isBlurEnabled; },
   set: function (value) {
     if (typeof value === "boolean") this._isBlurEnabled = value;
   }
@@ -206,7 +198,6 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 	} else console.log("Storage access is disabled for this session!");
 };
 
-/** @typedef {(dialog: Dialog, id: string)=>void} WindowCallback */
 
 /** @param {WindowCallback} callback */
 WindowManager.prototype.forEachWindow = function (callback) {
