@@ -104,6 +104,10 @@
     background-color: rgb(240, 240, 240);
 }
 
+.windows-95 button {
+
+}
+
 @supports (filter: url("#firefox-glass")) {
 
   .glass content {
