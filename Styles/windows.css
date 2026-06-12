@@ -228,6 +228,7 @@ main {
 
 iframe {
     border: 0;
+    background: transparent;
 }
 
 input {
