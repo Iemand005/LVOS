@@ -213,7 +213,7 @@ main {
     bottom: 0;
 }
 
-.window.dragging > content {
+.window[focus].dragging > content {
     box-shadow: 0 1rem 16rem rgba(0, 0, 0, 0.512);
 }
 
