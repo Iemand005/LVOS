@@ -2,11 +2,10 @@ export {};
 
 declare global {
     interface Window {
-        __LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
-		 interface Window {
-        MSInputMethodContext?: unknown;
+		MSInputMethodContext?: unknown;
         documentMode?: number;
-    }
+
+		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
     }
 
 	interface HTMLElementEventMap {
