@@ -898,8 +898,8 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
-/** @type {keyof HTMLElementEventMap} */
-var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
+// /** @type {keyof HTMLElementEventMap} */
+const transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
 /**
  * @param {HTMLElement} element 
@@ -932,7 +932,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
-		/** @type {(ev: Event | TransitionEvent)=>void} */
+		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
 			target.classList.remove("animating");
