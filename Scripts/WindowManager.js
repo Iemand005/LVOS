@@ -1629,7 +1629,7 @@ Dialog.prototype.retrieveBodyFromMetro = function() {
     var metroBody = bodyCrawler.getMetroBody();
     if (!metroBody) return;
     if (this.content) this.content.appendChild(metroBody);
-}
+};
 
 function getDialogTemplate(){
     var template = document.querySelector("template") || document.getElementById("window-template");
