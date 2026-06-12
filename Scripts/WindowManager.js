@@ -1444,7 +1444,7 @@ function windowActivationEvent(event, dialog) {
     try {
         var node = event && (event.target || event.srcElement);
         var isInteractive = false;
-        while (node && node instanceof HTMLElement && node.nodeType === 1) {
+        while (node && isElement(node) && node.nodeType === 1) {
             var tn = (node.tagName || "").toLowerCase();
             if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
@@ -1558,9 +1558,9 @@ function getViewboxPosition(){
 /** @param {HTMLElement | Event | null} object */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object) return console.log(object);
-    if (object instanceof HTMLElement && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object instanceof HTMLElement && object.classList && object.classList.contains("window"))) return object;
-    else if (object instanceof Event && object.target instanceof HTMLElement) return getObjectDialog(object.target);
-    else if (object instanceof HTMLElement) return getObjectDialog(object.parentElement);
+    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
+    else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
+    else if (isElement(object)) return getObjectDialog(object.parentElement);
 }
 
 /** @param {number} value */
