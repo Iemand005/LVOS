@@ -26,7 +26,7 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
-	updateRateLimit = true;
+	updateRateLimit = false;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
@@ -1769,7 +1769,6 @@ function applyWallpaperImage(url, blurredUrl, onError) {
 }
 
 // enableMica();
-
 // initializeDialogs();
 // toggleReflections(reflections);
 
