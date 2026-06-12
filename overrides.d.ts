@@ -2,6 +2,6 @@ export {};
 
 declare global {
     interface Window {
-        __LVMessengerReceive: (message: string) => void;
+        __LVMessengerReceive: (message: MessageType) => void;
     }
 }
