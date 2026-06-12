@@ -1486,9 +1486,7 @@ function handleWindowDrag(newX, hewY) {
     }
 }
 
-/**
- * @param {PointerEvent | MouseEvent} event
- */
+/** @param {PointerEvent | MouseEvent} event */
 function windowDragEvent(event){
     try {
         cancelDomEvent(event);
