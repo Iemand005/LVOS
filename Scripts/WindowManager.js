@@ -322,9 +322,12 @@ function Dialog(object, create) {
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || isElement(object)) this.initWithObject(object);
 }
-/** @param {any} object */
+/**
+ * @param {any} object
+ * @returns {object is HTMLElement}
+ */
 function isElement(object) {
-	return "nodeType" in object;
+    return object && "nodeType" in object;
 }
 /**
  * @param {string} name 
