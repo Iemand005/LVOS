@@ -1639,6 +1639,7 @@ function getDialogTemplate(){
     return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
+/** @returns {HTMLElement?} */
 function createDialog() {
     var container = bodyCrawler.getDialogsContainer();
     var template = getDialogTemplate();
