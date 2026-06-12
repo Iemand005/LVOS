@@ -26,6 +26,7 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
+	aeroSnap = false,
 	updateRateLimit = false;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
@@ -1041,7 +1042,7 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.bottom = toPixels(this.bottom);
     }
 
-    if (y < 0 && this.maximized) this.maximize();
+    if (aeroSnap && y < 0 && this.maximized) this.maximize();
 
 	var micaElement = this.micaElement;
     if (micaElement) try {
