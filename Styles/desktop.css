@@ -432,10 +432,6 @@ aside#charms form {
   background: transparent;
 }
 
-tbody {
-  height: 100%;
-}
-
 @media (pointer: none), (pointer: coarse) {
 }
 
