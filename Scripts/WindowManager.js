@@ -294,7 +294,7 @@ function Dialog(object, create) {
 
     /** @type {Application?} */
     this.application = null;
-    if (!("nodeType" in object))
+    if (!isElement(object))
         this.application = object;
 	
     if (!id) id = object.title;
@@ -320,11 +320,11 @@ function Dialog(object, create) {
     
     var metroapplist = document.getElementById("metroapplist");
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
-    if (create || object instanceof HTMLElement) this.initWithObject(object);
+    if (create || isElement(object)) this.initWithObject(object);
 }
 /** @param {any} object */
 function isElement(object) {
-	return object instanceof HTMLElement;
+	return "nodeType" in object;
 }
 /**
  * @param {string} name 
