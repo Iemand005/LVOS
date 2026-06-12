@@ -932,10 +932,11 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
-		var animationHandler = function(/** @type {TransitionEvent} */event) {
+		/** @type {(ev:TransitionEvent)=>void} */
+		var animationHandler = function(event) {
 			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
 			target.classList.remove("animating");
-			target.removeEventListener(transitionEndEvent, animationHandler, false);
+			target.removeEventListener(transitionEndEvent, function (ev){animationHandler(ev);}, false);
 			if (onEnd) onEnd();
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
