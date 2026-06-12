@@ -31,12 +31,6 @@ var useBlur = false,
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
 
-// /**  @typedef {import(./physics.js).Vector} Vector */
-// /**  @import { Application } from "../globals" */
-// /**  @typedef {{[key: string]: DialogState}} DesktopState */
-// /**  @typedef {{[id:string]: Dialog}} DialogMap */
-
-
 if (isIE) {
     useTransform = true;
     document.body.classList.add("use-transform");
@@ -218,7 +212,6 @@ WindowManager.prototype.forEachWindow = function (callback) {
 WindowManager.prototype.loadApp = function(app) {
     try {
         this._windows[app.id] = new Dialog(app);
-		alert("ok")
         this._windows[app.id].mica = this.isMicaEnabled || false;
     } catch(ex) { console.warn("Appleload failed", ex); }
 };
