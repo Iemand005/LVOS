@@ -203,7 +203,7 @@ main {
     /* color: black; */
     transform-origin: center;
     /* background:     linear-gradient(0deg, #0000002b, #ffffff00); */
-    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.2);
     transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out, background-color 170ms ease-out;
 
     position: absolute;
@@ -214,7 +214,7 @@ main {
 }
 
 .window[focus].dragging > content {
-    box-shadow: 0 1rem 16rem rgba(0, 0, 0, 0.512);
+    box-shadow: 0 1rem 8rem rgba(0, 0, 0, 0.411);
 }
 
 .window[focus] > content {
