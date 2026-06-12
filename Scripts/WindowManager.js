@@ -64,7 +64,6 @@ if (supportsPointer) console.log("Supports pointer events!");
 
 /** @param {Event} event */
 function cancelDomEvent(event) {
-	if (!event) return false;
 	if (typeof event.preventDefault === "function") event.preventDefault();
 	event.returnValue = false;
 	if (typeof event.stopPropagation === "function") event.stopPropagation();
