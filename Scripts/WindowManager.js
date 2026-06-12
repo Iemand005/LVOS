@@ -1639,7 +1639,6 @@ function getDialogTemplate(){
     return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
-/** @returns {HTMLElement?} */
 function createDialog() {
     var container = bodyCrawler.getDialogsContainer();
     var template = getDialogTemplate();
@@ -1693,9 +1692,7 @@ WindowManager.prototype.closeApp = function(appId) {
 };
 
 /** @param {string} appId  */
-function closeApp(appId) {
-    windowManager.closeApp(appId);
-}
+function closeApp(appId) { windowManager.closeApp(appId); }
 
 function enableMica() {
     windowManager.toggleMica(true);
@@ -1704,7 +1701,7 @@ function enableMica() {
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleMica = function(enabled) {
     this.isMicaEnabled = true;
-}
+};
 
 /** @param {boolean} enabled */
 function toggleMica(enabled) {
