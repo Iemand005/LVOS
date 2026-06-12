@@ -932,11 +932,11 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
     var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
-		/** @type {(ev:TransitionEvent)=>void} */
+		/** @type {(this: HTMLElement, ev: Event | TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
 			target.classList.remove("animating");
-			target.removeEventListener(transitionEndEvent, function (ev){animationHandler(ev);}, false);
+			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
