@@ -283,7 +283,6 @@ function Dialog(object, create) {
     this._mica = useMica;
 
     this._useTransform = useTransform;
-	alert("make it go away");
     this._useScale = useScale;
     
     if (!object) return;
@@ -305,6 +304,9 @@ function Dialog(object, create) {
         if (titleElement) this._title = titleElement.innerText;
         if (!id) id = this.id || this.title || "";
     }
+
+	alert("make it go away");
+
     
     this._id = id;
     /** @type {HTMLButtonElement[]} */
