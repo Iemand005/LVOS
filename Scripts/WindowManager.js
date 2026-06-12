@@ -1279,7 +1279,7 @@ var timeout = -1;
 /**
  * @param {MessageType} type
  * @param {any} data
- * @param {string} source
+ * @param {string?} source
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     var types = LVMessenger.types;
