@@ -295,7 +295,7 @@ function Dialog(object, create) {
 	alert("make it go awa 1y");
     /** @type {Application?} */
     this.application = null;
-    if (!object.nodeType && !(object instanceof HTMLElement))
+    if (!(object["nodeType"] && object instanceof HTMLElement))
         this.application = object;
 	
 	alert("make it go awa 2y");
