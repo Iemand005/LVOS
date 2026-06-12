@@ -134,6 +134,11 @@ Object.defineProperty(WindowManager.prototype, "state", {
     var state = {};
     for (var id in this.windows)
       if (this.windows[id]) state[id] = this.windows[id].getState();
+	// const meow = state["0"]
+
+	const meow = this.windows.calculator.getState();
+	meow.
+
     return state;
   }
 });
