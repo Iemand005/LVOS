@@ -322,6 +322,10 @@ function Dialog(object, create) {
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || object instanceof HTMLElement) this.initWithObject(object);
 }
+/** @param {any} object */
+function isElement(object) {
+	return object instanceof HTMLElement;
+}
 /**
  * @param {string} name 
  * @param {Element} [parent] 
