@@ -898,8 +898,8 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
-// /** @type {keyof HTMLElementEventMap} */
-const transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
+/** @type {"webkitTransitionEnd" | "transitionend"} */
+var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
 /**
  * @param {HTMLElement} element 
