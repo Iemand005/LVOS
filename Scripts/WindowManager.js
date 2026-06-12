@@ -26,7 +26,7 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
-	updateRateLimit = false;
+	updateRateLimit = true;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 var hasLocalStorage = typeof localStorage !== "undefined";
