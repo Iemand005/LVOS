@@ -899,7 +899,6 @@ Dialog.prototype.clearClickOffset = function () {
   this.clickOffset && this.clickOffset.clear();
 };
 /** @type {keyof HTMLElementEventMap} */
-// @ts-ignore
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
 /**
