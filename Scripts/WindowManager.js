@@ -1594,12 +1594,11 @@ function handleStorageException(exception){
     localStorage.windowState = null; 
     canSave = false;
 }
-
+/** @returns {DialogState} */
 Dialog.prototype.getState = function() {
-    /** @type {DialogState} */
-    var state = {
+    return {
         title: this.title || this.id || "Unc",
-        x: this.x,
+        x: this.x || "",
         y: this.y,
         z: this.z,
         width: this.width || this.minHeight,
@@ -1607,7 +1606,6 @@ Dialog.prototype.getState = function() {
         open: this.isOpen || false,
         maximized: this.maximized
     }
-    return state;
 }
 
 /** @param {DialogState} state */
