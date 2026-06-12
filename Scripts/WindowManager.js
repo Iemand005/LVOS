@@ -292,13 +292,11 @@ function Dialog(object, create) {
     this.target = null;
     var id = object.id;
 
-	alert("make it go awa 1y");
     /** @type {Application?} */
     this.application = null;
     if (!("nodeType" in object))
         this.application = object;
 	
-	alert("make it go awa 2y");
     if (!id) id = object.title;
     if (object.title) this._title = object.title;
     else {
