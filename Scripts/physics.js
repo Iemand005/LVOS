@@ -3,10 +3,11 @@
 // 30/12/2023
 
 /**
+ * @constructor
  * @param {number} [x]
  * @param {number} [y]
- * @prop {number } x
- * @prop {number } y
+ * @property {number} x
+ * @property {number} y
  */
 function Vector(x, y){
     if (typeof x !== "number") x = 0, y = 0;
@@ -64,3 +65,26 @@ Vector3D.prototype.div = function (amount) {
 Vector3D.prototype.normalize = function () {
     return this.div(this.x + this.y + this.z);
 }
+
+/**
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} width 
+ * @param {number} height 
+ */
+function Rectangle(x, y, width, height){
+    this.pos = this.position = new Vector(x, y);
+    this.width = width;
+    this.height = height;
+}
+
+Rectangle.prototype = {
+    contains: function (/** @type {Vector} */vector) {
+        return vector.x >= this.position.x && vector.y >= this.position.y && vector.x < this.position.x + this.width && vector.y < this.position.y + this.height;
+    },
+    /** @this {Rectangle} */
+    get x() { return this.position.x; },
+    get y() { return this.position.y; },
+    set x(value) { return this.position.x = value; },
+    set y(value) { return this.position.y = value; }
+};
