@@ -1621,7 +1621,7 @@ function getDialogTemplate(){
     var template = document.querySelector("template") || document.getElementById("window-template");
     if (!template ) return void console.warn("Couldn't find template!");
     var content = template;
-	if (template instanceof HTMLTemplateElement) content = template.content;
+	if (template instanceof HTMLTemplateElement) return template.content.children[0];
     return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
