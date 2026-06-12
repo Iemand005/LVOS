@@ -1069,7 +1069,7 @@ Dialog.prototype.move = function (x, y) {
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
 	this._z = z;
-	if (this.isElement(target))
+	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
 };
 /**
@@ -1192,7 +1192,7 @@ Dialog.prototype.injectMica = function() {
 
         
         var micaWallpaper = null;
-        if (wallpaper.children[isElement(0])) {
+        if (isElement(wallpaper.children[0])) {
             micaWallpaper = wallpaper.children[0].cloneNode(true);
 			if (!(isElement(micaWallpaper))) return false;
             if (supportsObjectFit) {
@@ -1566,7 +1566,7 @@ function getViewboxPosition(){
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object) return console.log(object);
     if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
-    else if (object instanceof Event && object.isElement(target)) return getObjectDialog(object.target);
+    else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
     else if (isElement(object)) return getObjectDialog(object.parentElement);
 }
 
