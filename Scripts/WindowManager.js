@@ -1598,7 +1598,7 @@ function handleStorageException(exception){
 Dialog.prototype.getState = function() {
     return {
         title: this.title || this.id || "Unc",
-        x: this.x || "",
+        x: this.x,
         y: this.y,
         z: this.z,
         width: this.width || this.minHeight,
