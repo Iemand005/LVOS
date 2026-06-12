@@ -339,7 +339,7 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var elements = target.getElementsByTagName(name);
     if (!elements || !elements.length) elements = target.getElementsByClassName(name);
     var element = elements.length ? elements[0] : null;
-    if (element instanceof HTMLElement) return element;
+    if (isElement(element)) return element;
     return null;
 }
 
@@ -353,7 +353,7 @@ Dialog.prototype.initWithObject = function(object) {
     }
 
     if (!(object instanceof Dialog)) {
-        if (object instanceof HTMLElement) {
+        if (isElement(object)) {
             if (!isDialog(object)) return console.warn("This is not a dialog element");
             this.target = object;
             if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
@@ -427,12 +427,12 @@ Dialog.prototype.initWithObject = function(object) {
                 var sizerId = "sizer-" + (index + 1);
 
                 var div = this.getElementByTagOrClassName(sizerId);
-                if (!div || !(div instanceof HTMLElement)) div = document.createElement("div");
+                if (!div || !(isElement(div))) div = document.createElement("div");
                 div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
-                    if (ev.target && ev.target instanceof HTMLElement) dragAction.set(Number(ev.target.id));
+                    if (ev.target && isElement(ev.target)) dragAction.set(Number(ev.target.id));
                     activationHandler(ev);
                 }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
                 if (supportsPointer) div.onpointerdown = pointerDown;
@@ -805,7 +805,7 @@ Object.defineProperty(Dialog.prototype, "micaElement", {
             var clipElem = this.target.getElementsByClassName("backdrop-filter");
             if (!clipElem.length) return null;
             var clip = clipElem[0];
-            if (clip instanceof HTMLElement) return clip;
+            if (isElement(clip)) return clip;
         } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
         return null;
     }
@@ -817,7 +817,7 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
 			var micaElement = this.micaElement;
             if (!micaElement) return null;
             var backdrop = micaElement.children[0];
-            if (backdrop instanceof HTMLElement) return backdrop;
+            if (isElement(backdrop)) return backdrop;
         } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
         return null;
     }
@@ -1056,7 +1056,7 @@ Dialog.prototype.move = function (x, y) {
         var wallpaperP = document.getElementById("wallpaper");
         if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
-        if (!(backdrop instanceof HTMLElement) || !wallpaperImage) return;
+        if (!(isElement(backdrop)) || !wallpaperImage) return;
         translateElement(backdrop, -this.x, -this.y);
 
         var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
@@ -1069,7 +1069,7 @@ Dialog.prototype.move = function (x, y) {
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
 	this._z = z;
-	if (this.target instanceof HTMLElement)
+	if (this.isElement(target))
         this.target.style.zIndex = String(this._z);
 };
 /**
@@ -1192,9 +1192,9 @@ Dialog.prototype.injectMica = function() {
 
         
         var micaWallpaper = null;
-        if (wallpaper.children[0] instanceof HTMLElement) {
+        if (wallpaper.children[isElement(0])) {
             micaWallpaper = wallpaper.children[0].cloneNode(true);
-			if (!(micaWallpaper instanceof HTMLElement)) return false;
+			if (!(isElement(micaWallpaper))) return false;
             if (supportsObjectFit) {
                 micaWallpaper.removeAttribute("style");
                 micaWallpaper.className = "mica-backdrop";
@@ -1432,7 +1432,7 @@ function initializeDialogs() {
     dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
-        if (dialog instanceof HTMLElement)
+        if (isElement(dialog))
           windowManager.loadApp(dialog);
         
     });
@@ -1451,7 +1451,7 @@ function windowActivationEvent(event, dialog) {
     try {
         var node = event && (event.target || event.srcElement);
         var isInteractive = false;
-        while (node && node instanceof HTMLElement && node.nodeType === 1) {
+        while (node && isElement(node) && node.nodeType === 1) {
             var tn = (node.tagName || "").toLowerCase();
             if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
@@ -1555,7 +1555,7 @@ function stringifyDialogProperties(properties){
 function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     if (!target) return null;
     var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
-    return body instanceof HTMLElement ? body : null;
+    return isElement(body) ? body : null;
 }
 
 function getViewboxPosition(){
@@ -1565,9 +1565,9 @@ function getViewboxPosition(){
 /** @param {HTMLElement | Event | null} object */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object) return console.log(object);
-    if (object instanceof HTMLElement && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (object instanceof HTMLElement && object.classList && object.classList.contains("window"))) return object;
-    else if (object instanceof Event && object.target instanceof HTMLElement) return getObjectDialog(object.target);
-    else if (object instanceof HTMLElement) return getObjectDialog(object.parentElement);
+    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
+    else if (object instanceof Event && object.isElement(target)) return getObjectDialog(object.target);
+    else if (isElement(object)) return getObjectDialog(object.parentElement);
 }
 
 /** @param {number} value */
@@ -1657,7 +1657,7 @@ function createDialog() {
     var clone = template.cloneNode(true);
     if (container && clone instanceof Element) {
         var dialogElement = container.appendChild(removeComments(clone));
-        if (dialogElement instanceof HTMLElement) return dialogElement;
+        if (isElement(dialogElement)) return dialogElement;
     }
     return null;
 }
@@ -1666,7 +1666,7 @@ function createDialog() {
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function (child) {
         if (child.nodeName=="#comment") element.removeChild(child);
-        else if (child instanceof HTMLElement) removeComments(child);
+        else if (isElement(child)) removeComments(child);
     });
     return element;
 }
