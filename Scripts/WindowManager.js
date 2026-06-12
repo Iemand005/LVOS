@@ -1042,8 +1042,6 @@ Dialog.prototype.move = function (x, y) {
         this.target.style.bottom = toPixels(this.bottom);
     }
 
-    if (aeroSnap && y < 0 && this.maximized) this.maximize();
-
 	var micaElement = this.micaElement;
     if (micaElement) try {
         var backdrop = micaElement.firstChild;
@@ -1519,7 +1517,7 @@ function disableDialogDrag() {
     windowManager.saveState();
     if (!activeDialog) return;
     
-    if (activeDialog.y <= 0)
+    if (aeroSnap && activeDialog.y <= 0)
         activeDialog.maximize();
     
     if (!activeDialog.moveEvents) return;
