@@ -33,48 +33,19 @@
     <meta name="theme-color" content="#43b581" />
 </head>
 <body>
-        <div id="desktop">
-            <div id="windows">
-                <!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
-                 <div id="wallpaper">
-                    <iframe src="./Applications/FrostedColours/index.html" frameborder="0"></iframe>
-                     <!-- <img src="file:///C:\Users\Lasse\Documents\Projects\LVOS\Applications\GeodeWeb\StellarVeryLight.png" class="backdrop" alt="" srcset=""> -->
-                 </div>
-                <div style="position: absolute; width: 100%; height: 100%;">
-                    <div action="" id="applist"></div>
+    <div id="desktop">
+        <div id="windows">
+            <!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
+                <div id="wallpaper">
+                <iframe src="./Applications/FrostedColours/index.html" frameborder="0"></iframe>
+                    <!-- <img src="file:///C:\Users\Lasse\Documents\Projects\LVOS\Applications\GeodeWeb\StellarVeryLight.png" class="backdrop" alt="" srcset=""> -->
                 </div>
-                
-                <div class="template" id="window-template">
-                    <div class="window">
-                        <table class="content" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td class="header">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                        <tr>
-                                            <td>
-                                                <h1></h1>
-                                            </td>
-                                            <td class="section" align="right">
-                                                <button disabled>🡕</button>
-                                                <button disabled>❐</button>
-                                                <button disabled>✕</button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="article">
-                                </td>
-                            </tr>
-                        </table>
-                        <span class="backdrop-clip"></span>
-                        <div class="drag-overlay"></div>
-                    </div>
-                </div>
-
-                <div class="window" id="console" style="height: 100%; width: 100%;">
+            <div style="position: absolute; width: 100%; height: 100%;">
+                <div action="" id="applist"></div>
+            </div>
+            
+            <div class="template" id="window-template">
+                <div class="window">
                     <table class="content" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                             <td class="header">
@@ -95,17 +66,46 @@
 
                         <tr>
                             <td class="article">
-                                <div>
-									<form>
-										<input type="text" name="input" id="stdin">
-										<div name="stdout" id="stdout"></div>
-									</form>
-                                </div>
                             </td>
                         </tr>
                     </table>
+                    <span class="backdrop-clip"></span>
+                    <div class="drag-overlay"></div>
                 </div>
             </div>
+
+            <div class="window" id="console" style="height: 100%; width: 100%;">
+                <table class="content" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td class="header">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td>
+                                        <h1></h1>
+                                    </td>
+                                    <td class="section" align="right">
+                                        <button disabled>🡕</button>
+                                        <button disabled>❐</button>
+                                        <button disabled>✕</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="article">
+                            <div>
+                                <form>
+                                    <input type="text" name="input" id="stdin">
+                                    <div name="stdout" id="stdout"></div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
+    </div>
 </body>
 </html>
