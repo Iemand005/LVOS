@@ -218,6 +218,7 @@ WindowManager.prototype.forEachWindow = function (callback) {
 WindowManager.prototype.loadApp = function(app) {
     try {
         this._windows[app.id] = new Dialog(app);
+		alert("ok")
         this._windows[app.id].mica = this.isMicaEnabled || false;
     } catch(ex) { console.warn("Appleload failed", ex); }
 };
@@ -282,7 +283,7 @@ function Dialog(object, create) {
     this._mica = useMica;
 
     this._useTransform = useTransform;
-    // this_useSca
+	alert("make it go away");
     this._useScale = useScale;
     
     if (!object) return;
