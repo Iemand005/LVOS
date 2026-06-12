@@ -213,6 +213,10 @@ main {
     bottom: 0;
 }
 
+.window.dragging > content {
+    box-shadow: 0 1rem 16rem rgba(0, 0, 0, 0.512);
+}
+
 .window[focus] > content {
     filter: saturate(1);
     box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.3);
