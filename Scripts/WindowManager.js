@@ -62,7 +62,7 @@ var supportsTransitions = (function () {
 
 if (supportsPointer) console.log("Supports pointer events!");
 
-/** @param {Event?} event */
+/** @param {Event} event */
 function cancelDomEvent(event) {
 	if (!event) return false;
 	if (typeof event.preventDefault === "function") event.preventDefault();
