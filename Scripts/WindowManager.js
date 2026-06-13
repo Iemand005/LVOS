@@ -988,40 +988,40 @@ Dialog.prototype.toggleFullScreen = function (enable) {
     }
 };
 Dialog.prototype.maximize = function () {
-  this.toggleFullScreen(true);
+  	this.toggleFullScreen(true);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function (enable) {
-  this.toggleButton(windowButtons.close, enable);
+  	this.toggleButton(windowButtons.close, enable);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleEjectButton = function (enable) {
-  this.toggleButton(windowButtons.eject, enable);
+  	this.toggleButton(windowButtons.eject, enable);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullButton = function (enable) {
-  this.toggleButton(windowButtons.full, enable);
+  	this.toggleButton(windowButtons.full, enable);
 };
 /**
  * @param {MessageType | string} type
  * @param {*} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
-  var frame = this.frame;
-  if (frame) LVMessenger.broadcastToChild(type, message, frame);
+	var frame = this.frame;
+	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 /**
  * @param {number} [x]
  * @param {number} [y]
  */
 Dialog.prototype.move = function (x, y) {
-    if (typeof x === "undefined" || x === null) x = this.x || 0;
-    if (typeof y === "undefined" || y === null) y = this.y || 0;
-    var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    (this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
-    if (!this.target) return;
-    if (this.useTransform) translateElement(this.target, this.x, this.y);
+	if (typeof x === "undefined" || x === null) x = this.x || 0;
+	if (typeof y === "undefined" || y === null) y = this.y || 0;
+	var windowWidth = window.innerWidth;
+	var windowHeight = window.innerHeight;
+	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
+	if (!this.target) return;
+	if (this.useTransform) translateElement(this.target, this.x, this.y);
     else {
         this.target.style.top = toPixels(this.top);
         this.target.style.left = toPixels(this.left);
