@@ -1030,20 +1030,20 @@ Dialog.prototype.move = function (x, y) {
 	}
 
 	var micaElement = this.micaElement;
-    if (micaElement) try {
-        var backdrop = micaElement.firstChild;
-        var wallpaperP = document.getElementById("wallpaper");
-        if (!wallpaperP) return;
+	if (micaElement) try {
+		var backdrop = micaElement.firstChild;
+		var wallpaperP = document.getElementById("wallpaper");
+		if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
-        if (!(isElement(backdrop)) || !wallpaperImage) return;
-        translateElement(backdrop, -this.x, -this.y);
+		if (!(isElement(backdrop)) || !wallpaperImage) return;
+		translateElement(backdrop, -this.x, -this.y);
 
-        var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
-        var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
+		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
+		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
 
-        backdrop.style.width = toPixels(wallpaperWidth);
-        backdrop.style.height = toPixels(wallpaperHeight);
-    } catch(ex) {}
+		backdrop.style.width = toPixels(wallpaperWidth);
+		backdrop.style.height = toPixels(wallpaperHeight);
+	} catch(ex) {}
 };
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
