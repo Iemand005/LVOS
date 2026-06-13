@@ -44,7 +44,6 @@ jobs:
           git submodule sync
           git submodule update --init Applications/FrostedColours
           git submodule update --init Applications/StereogramMaker
-          git submodule update --init Applications/Level/WebGraphics
           git submodule update --init Applications/Cyanide
 
       - name: Build Pages folder
