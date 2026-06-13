@@ -42,6 +42,7 @@ jobs:
         working-directory: current
         run: |
           git submodule sync
+          git submodule update --init Scripts/WebGraphics
           git submodule update --init Applications/FrostedColours
           git submodule update --init Applications/StereogramMaker
           git submodule update --init Applications/Cyanide
