@@ -823,7 +823,7 @@ Dialog.prototype.toggleTitlebar = function (force) {
 };
 Dialog.prototype.open = function () {
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
-}; // Open, save, return if it's opened or not
+};
 Dialog.prototype.close = function () {
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
 };
