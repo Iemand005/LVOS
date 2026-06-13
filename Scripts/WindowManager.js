@@ -1022,12 +1022,12 @@ Dialog.prototype.move = function (x, y) {
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
 	if (!this.target) return;
 	if (this.useTransform) translateElement(this.target, this.x, this.y);
-    else {
-        this.target.style.top = toPixels(this.top);
-        this.target.style.left = toPixels(this.left);
-        this.target.style.right = toPixels(this.right);
-        this.target.style.bottom = toPixels(this.bottom);
-    }
+	else {
+		this.target.style.top = toPixels(this.top);
+		this.target.style.left = toPixels(this.left);
+		this.target.style.right = toPixels(this.right);
+		this.target.style.bottom = toPixels(this.bottom);
+	}
 
 	var micaElement = this.micaElement;
     if (micaElement) try {
