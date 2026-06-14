@@ -1477,12 +1477,14 @@ function handleWindowDrag(newX, hewY) {
     /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
 
-    dragAction.execute(dialog, dialog.clickOffset, difference);
-    if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-    if (aeroSnap && dialog.maximized) {
+    if (dialog.maximized) {
+        if (!aeroSnap) return; 
         dialog.maximized = false;
         dialog.clickOffset.x /= window.innerWidth / dialog.width;
     }
+
+    dragAction.execute(dialog, dialog.clickOffset, difference);
+    if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
 /** @param {PointerEvent | MouseEvent} event */
