@@ -121,6 +121,11 @@ body:not(.blur) .window > article {
   /*Kenia*/
 }
 
+#windows > section
+#windows > .section {
+  z-index: 1;
+}
+
 
 #wallpaper {
   position: absolute;
