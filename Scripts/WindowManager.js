@@ -934,6 +934,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
 		var animationHandler = function(event) {
 			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
 			target.classList.remove("animating");
+            console.log("Aborting animation over " + event.propertyName);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
 		};
