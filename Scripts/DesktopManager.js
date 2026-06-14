@@ -296,7 +296,7 @@ function loadWallpaperFromLocalStorage() {
 function handleWallpaperDrop(ev) {
     ev.preventDefault();
     ev.stopPropagation();
-    elements.desktop.style.opacity = null;
+    if (elements.desktop) elements.desktop.style.opacity = "";
 
     
     if (!ev.dataTransfer || !ev.dataTransfer.files) return;
