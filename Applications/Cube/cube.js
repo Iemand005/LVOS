@@ -23,7 +23,7 @@ Graphics3D.prototype.startRendering = function() {
   requestAnimationFrame(Graphics3D.prototype.render.bind(this));
 };
 
-const graphics = new Graphics3D(canvas);
+const graphics = canvas instanceof HTMLCanvasElement ? new Graphics3D(canvas) : null;
 const gl = graphics.gl;
 graphics.clear();
 graphics.loadShaders(vsSource, fsSource);
