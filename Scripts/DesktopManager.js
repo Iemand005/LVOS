@@ -281,7 +281,7 @@ function loadWallpaperFromLocalStorage() {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
             if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
                 console.log("Loading cached wallpaper from direct localStorage (fallback)");
-                applyWallpaperImage(cachedWallpaper, null);
+                applyWallpaperImage(cachedWallpaper);
             }
         } catch (ex2) {
             console.warn("Direct localStorage fallback also failed:", ex2.message);

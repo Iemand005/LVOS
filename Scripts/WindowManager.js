@@ -1718,7 +1718,7 @@ function removeWallpaper() {
 
 /**
  * @param {string} url
- * @param {string} blurredUrl
+ * @param {string} [blurredUrl]
  * @param {()=>void | null} [onError]
  */
 function applyWallpaperImage(url, blurredUrl, onError) {
