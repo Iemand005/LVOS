@@ -584,7 +584,7 @@ button:hover {
     @media (prefers-color-scheme: dark) {
         body.blur .window > content {
             background-color: rgba(0, 0, 0, 0.468);
-            border: 1px solid rgba(255, 255, 255, 0.267);
+            border: 1px solid rgba(147, 147, 147, 0.27);
         }
     }
 }
