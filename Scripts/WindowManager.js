@@ -924,28 +924,9 @@ function setClass(element, className, enabled) {
  * @returns 
  */
 Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
-    var target = this.target;
-    if (!target) return;
-    var dialog = this;
-	if (supportsTransitions) {
-		target.classList.add("animating");
-		/** @type {(ev: TransitionEvent)=>void} */
-		var animationHandler = function(event) {
-			if (animationEndTrigger && event.propertyName !== animationEndTrigger || !target) return;
-			target.classList.remove("animating");
-            console.log("Aborting animation over " + event.propertyName);
-			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd();
-		};
-		target.addEventListener(transitionEndEvent, animationHandler, false);
-	}
-    
-    window.requestAnimationFrame(function() {
-		if (!target) return;
-        try { void target.offsetWidth; } catch (e) {}
-        var enabled = setClass(target, className, force);
-        if (onToggled) onToggled.call(dialog, enabled);
-    });
+    this.toggleClassAnimated(className, force, function(propertyName) {
+        return propertyName === animationEndTrigger;
+    }, onEnd, onToggled);
 }
 /**
  * @param {string} className 
@@ -963,7 +944,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		target.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (onTransitionEnd && !onTransitionEnd(event.propertyName)  || !target) return;
+			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
 			target.classList.remove("animating");
             console.log("Aborting animation over " + event.propertyName);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
