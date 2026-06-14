@@ -126,7 +126,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
     for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
     return state;
   }
-});
+});f
 
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
   get: function () { return this._isBlurEnabled; },
