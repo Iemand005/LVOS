@@ -126,7 +126,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
     for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
     return state;
   }
-});f
+});
 
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
   get: function () { return this._isBlurEnabled; },
@@ -1479,7 +1479,7 @@ function handleWindowDrag(newX, hewY) {
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-    if (dialog.maximized) {
+    if (aeroSnap && dialog.maximized) {
         dialog.maximized = false;
         dialog.clickOffset.x /= window.innerWidth / dialog.width;
     }
