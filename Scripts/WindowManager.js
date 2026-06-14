@@ -532,7 +532,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
-    this.toggleClassAnimated("open", forceOpen, "opacity", function () {
+    this.toggleClassAnimatedOld("open", forceOpen, "opacity", function () {
         if (shouldKill) self.kill();
     }, function (enabled) {
         if (enabled) self.activate();
@@ -923,7 +923,7 @@ function setClass(element, className, enabled) {
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled] 
  * @returns 
  */
-Dialog.prototype.toggleClassAnimated = function (className, force, animationEndTrigger, onEnd, onToggled) {
+Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
     var target = this.target;
     if (!target) return;
     var dialog = this;
@@ -947,9 +947,41 @@ Dialog.prototype.toggleClassAnimated = function (className, force, animationEndT
         if (onToggled) onToggled.call(dialog, enabled);
     });
 }
+/**
+ * @param {string} className 
+ * @param {boolean} [force] 
+ * @param {(name:string)=>boolean} [onTransitionEnd] 
+ * @param {()=>void} [onEnd] 
+ * @param {(this:Dialog,enabled:boolean)=>void} [onToggled] 
+ * @returns 
+ */
+Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
+    var target = this.target;
+    if (!target) return;
+    var dialog = this;
+	if (supportsTransitions) {
+		target.classList.add("animating");
+		/** @type {(ev: TransitionEvent)=>void} */
+		var animationHandler = function(event) {
+			if (onTransitionEnd && !onTransitionEnd(event.propertyName)  || !target) return;
+			target.classList.remove("animating");
+            console.log("Aborting animation over " + event.propertyName);
+			target.removeEventListener(transitionEndEvent, animationHandler, false);
+			if (onEnd) onEnd();
+		};
+		target.addEventListener(transitionEndEvent, animationHandler, false);
+	}
+    
+    window.requestAnimationFrame(function() {
+		if (!target) return;
+        try { void target.offsetWidth; } catch (e) {}
+        var enabled = setClass(target, className, force);
+        if (onToggled) onToggled.call(dialog, enabled);
+    });
+}
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, undefined, undefined, function(enabled) {
+    if (supportsTransitions) this.toggleClassAnimatedOld("fullscreen", enable, undefined, undefined, function(enabled) {
         if (!this.useTransform || !this.target) return;
         this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
         this.target.style.minHeight = enabled ? "100%" : toPixels(this.minHeight);
