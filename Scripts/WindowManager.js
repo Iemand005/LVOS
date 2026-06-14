@@ -962,7 +962,10 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    if (supportsTransitions) this.toggleClassAnimatedOld("fullscreen", enable, undefined, undefined, function(enabled) {
+    if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
+        console.log("ended: ", name);
+        return false;
+    }, undefined, function(enabled) {
         if (!this.useTransform || !this.target) return;
         this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
         this.target.style.minHeight = enabled ? "100%" : toPixels(this.minHeight);
