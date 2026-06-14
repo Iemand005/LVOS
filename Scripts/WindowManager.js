@@ -916,7 +916,6 @@ function setClass(element, className, enabled) {
     return element.className.indexOf(className) !== -1;
 }
 /**
- * 
  * @param {string} className 
  * @param {boolean} [force] 
  * @param {string} [animationEndTrigger] 
