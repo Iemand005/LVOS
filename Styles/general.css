@@ -5,6 +5,10 @@
  * Modified on: 06/06/2026 *
 \***************************/
 
+* {
+    transition: color 300ms, background-color 300ms;
+}
+
 button, .button, input, select {
     cursor: pointer;
 	background-color: #ffffff38;
