@@ -230,6 +230,12 @@ var games = [
     id: "chess",
     src: "./Games/Chess/index.html",
     hidden: true
+  },
+  {
+    title: "Tetris",
+    id: "tetris",
+    src: "./Games/Tetris/tetris.html",
+    hidden: true
   }
 ];
 
