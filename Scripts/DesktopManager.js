@@ -58,13 +58,13 @@ window.addEventListener('keydown', function(event) {
   }
 }, false);
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./Scripts/sw.js')
-      ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
-      ["catch"](function(err) { console.error('Registratie mislukt:', err) });
-  }, false);
-}
+window.addEventListener('load', function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./Scripts/sw.js')
+        ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
+        ["catch"](function(err) { console.error('Registratie mislukt:', err) });
+    }
+}, false);
 
 function setTheme(theme) {
   document.body.classList.add(theme);
