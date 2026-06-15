@@ -58,13 +58,15 @@ window.addEventListener('keydown', function(event) {
   }
 }, false);
 
-window.addEventListener('load', function() {
+function loadDesktop() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./Scripts/sw.js')
         ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
         ["catch"](function(err) { console.error('Registratie mislukt:', err) });
     }
-}, false);
+}
+
+window.addEventListener("load", loadDesktop, false);
 
 function setTheme(theme) {
   document.body.classList.add(theme);
