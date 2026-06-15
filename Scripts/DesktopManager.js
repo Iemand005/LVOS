@@ -18,6 +18,12 @@ var onLoad = function () {
         ev.stopPropagation();
         ev.dataTransfer.dropEffect = 'copy';
     }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./Scripts/sw.js')
+        ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
+        ["catch"](function(err) { console.error('Registratie mislukt:', err) });
+    }
 };
 
 window.addEventListener("load", onLoad, false);
@@ -57,16 +63,6 @@ window.addEventListener('keydown', function(event) {
         this.alert("I'm alive!");
   }
 }, false);
-
-function loadDesktop() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./Scripts/sw.js')
-        ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
-        ["catch"](function(err) { console.error('Registratie mislukt:', err) });
-    }
-}
-
-window.addEventListener("load", loadDesktop, false);
 
 function setTheme(theme) {
   document.body.classList.add(theme);
