@@ -27,7 +27,8 @@ var onLoad = function () {
         });
     }
 
-    const 
+    var act = new DragAction();
+    // act. 
 };
 
 window.addEventListener("load", onLoad, false);
