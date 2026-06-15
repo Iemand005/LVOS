@@ -6,12 +6,6 @@
 'use strict';
 'use esnext';
 
-/** @typedef {import(./WindowManager.js).Dialog} Dialog */
-
-// applist form
-
-// block
-
 var onLoad = function () {
     var applist = document.getElementById("applist");
     applist.addEventListener("submit", function(event){
