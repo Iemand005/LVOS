@@ -26,6 +26,8 @@ var onLoad = function () {
             console.error('Registration of service worker failed:', err);
         });
     }
+
+    const 
 };
 
 window.addEventListener("load", onLoad, false);
