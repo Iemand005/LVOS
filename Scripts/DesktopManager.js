@@ -20,9 +20,11 @@ var onLoad = function () {
     }
 
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./Scripts/sw.js')
-        ["then"](function(reg) { console.log('Service Worker geregistreerd!', reg)})
-        ["catch"](function(err) { console.error('Registratie mislukt:', err) });
+        navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
+            console.log('Service Worker registered!', reg);
+        })["catch"](function(err) {
+            console.error('Registration of service worker failed:', err);
+        });
     }
 };
 
