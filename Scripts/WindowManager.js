@@ -407,7 +407,7 @@ Dialog.prototype.initWithObject = function(object) {
     var self = this;
     /** @param {Position} difference */
     this.exchangeDialogMoveEvent = function(difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
-        if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.stats.update(difference.x, difference.y));
+        if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
     };
 
     // if (object.body) this.body.appendChild(object.body);
@@ -895,7 +895,13 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    return this.clickOffset.clickX = x, this.clickOffset.clickY = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.startY = rect.top, this.clickOffset.startX = rect.left, this.clickOffset.stats.reset();
+    this.clickOffset.clickX = x;
+	this.clickOffset.clickY = y;
+	this.clickOffset.height = window.height || rect.height;
+	this.clickOffset.width = window.width || rect.width;
+	this.clickOffset.startY = rect.top;
+	this.clickOffset.startX = rect.left;
+	return this.clickOffset.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
