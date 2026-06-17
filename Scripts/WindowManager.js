@@ -216,12 +216,12 @@ WindowManager.prototype.toggleDragging = function(enabled) {
 };
 
 function ClickOffset() {
-	this.x = 0;
-	this.y = 0;
+	this.clickZXX = 0;
+	this.clickY = 0;
 	this.height = 0;
 	this.width = 0;
-	this.top = 0;
-	this.left = 0;
+	this.startY = 0;
+	this.startX = 0;
 	this.start = new Vector;
 	this.stats = {
 		start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
@@ -238,7 +238,7 @@ function ClickOffset() {
 }
 
 ClickOffset.prototype.clear = function () {
-  (this.x = 0), (this.y = 0);
+  (this.clickZXX = 0), (this.clickY = 0);
 }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
 /**
@@ -880,7 +880,7 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    return this.clickOffset.x = x, this.clickOffset.y = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.top = rect.top, this.clickOffset.left = rect.left, this.clickOffset.stats.reset();
+    return this.clickOffset.clickZXX = x, this.clickOffset.clickY = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.startY = rect.top, this.clickOffset.startX = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
@@ -1251,15 +1251,15 @@ function DragAction() { // This looks less elegant than checking on mouse move b
     this.execute = function(){};
     /** @type {DragFunction[]} */
     this.resizeFunctions = [
-        function(dialog, offset, difference){ dialog.move(offset.x + difference.x, offset.y + difference.y); }, // Move
-        function(dialog, offset, difference){ dialog.top = offset.top + difference.y }, // Top
+        function(dialog, offset, difference){ dialog.move(offset.clickZXX + difference.x, offset.clickY + difference.y); }, // Move
+        function(dialog, offset, difference){ dialog.top = offset.startY + difference.y }, // Top
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
-        function(dialog, offset, difference){ dialog.left = offset.left + difference.x; }, // Left
-        function(dialog, offset, difference){ dialog.top = offset.top + difference.y, dialog.left = offset.left + difference.x; }, // Top Left
-        function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.top + difference.y },// Top right
+        function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
+        function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
+        function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.height = offset.height - difference.y, dialog.y = offset.startY + difference.y },// Top right
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x }, // Bottom right
-        function(dialog, offset, difference){ dialog.left = offset.left + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom cleft?
+        function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom cleft?
     ];
 }
 
@@ -1499,12 +1499,12 @@ function handleWindowDrag(newX, hewY) {
     var dialog = activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
-    var difference = { x: newX - dialog.clickOffset.x, y: hewY - dialog.clickOffset.y };
+    var difference = { x: newX - dialog.clickOffset.clickZXX, y: hewY - dialog.clickOffset.clickY };
 
     if (dialog.maximized) {
         if (!aeroSnap) return; 
         dialog.maximized = false;
-        dialog.clickOffset.x /= window.innerWidth / dialog.width;
+        dialog.clickOffset.clickZXX /= window.innerWidth / dialog.width;
     }
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
