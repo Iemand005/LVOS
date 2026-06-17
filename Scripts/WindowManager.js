@@ -216,7 +216,7 @@ WindowManager.prototype.toggleDragging = function(enabled) {
 };
 
 function ClickOffset() {
-	this.clickZXX = 0;
+	this.clickX = 0;
 	this.clickY = 0;
 	this.height = 0;
 	this.width = 0;
@@ -232,15 +232,17 @@ function ClickOffset() {
 	this.difference = new Vector;
 
 	var self = this;
+}
 
-	this.stats = {
-		reset: function () {
+ClickOffset.prototype.reset = function () {
+	var self = this;
 			self.start = Date.now();
 			self.last = self.start;
 			self.position = new Vector();
 			return this;
-		}, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-		update: function(/** @type {number}*/x, /** @type {number}*/y){
+		}; // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
+ClickOffset.prototype.update = function(/** @type {number}*/x, /** @type {number}*/y){
+	var self = this;
 			self.last = Date.now();
 			self.position.x = x, self.position.y = y;
 			self.positions.push(self.position.clone());
@@ -248,11 +250,9 @@ function ClickOffset() {
 			self.difference = self.lastPosition.clone().sub(self.position);
 			return self;
 		}
-	};
-}
 
 ClickOffset.prototype.clear = function () {
-	this.clickZXX = 0;
+	this.clickX = 0;
 	this.clickY = 0;
 }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
@@ -895,7 +895,7 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    return this.clickOffset.clickZXX = x, this.clickOffset.clickY = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.startY = rect.top, this.clickOffset.startX = rect.left, this.clickOffset.stats.reset();
+    return this.clickOffset.clickX = x, this.clickOffset.clickY = y, this.clickOffset.height = window.height || rect.height, this.clickOffset.width = window.width || rect.width, this.clickOffset.startY = rect.top, this.clickOffset.startX = rect.left, this.clickOffset.stats.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
@@ -1514,12 +1514,12 @@ function handleWindowDrag(newX, hewY) {
     var dialog = activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
-    var difference = { x: newX - dialog.clickOffset.clickZXX, y: hewY - dialog.clickOffset.clickY };
+    var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
 
     if (dialog.maximized) {
         if (!aeroSnap) return; 
         dialog.maximized = false;
-        dialog.clickOffset.clickZXX /= window.innerWidth / dialog.width;
+        dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
     }
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
