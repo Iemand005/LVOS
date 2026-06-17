@@ -1251,7 +1251,7 @@ function DragAction() { // This looks less elegant than checking on mouse move b
     this.execute = function(){};
     /** @type {DragFunction[]} */
     this.resizeFunctions = [
-        function(dialog, offset, difference){ dialog.move(offset.left + difference.x, offset.top + difference.y); }, // Move
+        function(dialog, offset, difference){ dialog.move(offset.x + difference.x, offset.y + difference.y); }, // Move
         function(dialog, offset, difference){ dialog.top = offset.top + difference.y }, // Top
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
         function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
