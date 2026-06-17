@@ -5,7 +5,8 @@
     "checkJs": true,
     "allowJs": true,
     "strict": true,
-    "typeRoots": ["./Types"]
+    "typeRoots": ["./Types"],
+    // exc
   },
   "ignoreDeprecations": "6.0",
   "include": [
