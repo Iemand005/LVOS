@@ -269,6 +269,8 @@ function Dialog(object, create) {
 
     this._useTransform = useTransform;
     this._useScale = useScale;
+
+    this._skew = 0;
     
     if (!object) return;
     if (!create) create = false;
@@ -501,8 +503,9 @@ function min(a, b) {
  * @param {HTMLElement} element
  * @param {number} x
  * @param {number} y
+ * @param {number} [skew]
  */
-function translateElement(element, x, y) {
+function translateElement(element, x, y, skew) {
     var translate = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     element.style.transform = translate;
     element.style.webkitTransform = translate;
@@ -1047,7 +1050,7 @@ Dialog.prototype.move = function (x, y) {
 	var windowHeight = window.innerHeight;
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
 	if (!this.target) return;
-	if (this.useTransform) translateElement(this.target, this.x, this.y);
+	if (this.useTransform) translateElement(this.target, this.x, this.y, this._skew);
 	else {
 		this.target.style.top = toPixels(this.top);
 		this.target.style.left = toPixels(this.left);
