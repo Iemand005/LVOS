@@ -808,9 +808,8 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
     }
 });
 
-/** @type {number} */
 Object.defineProperty(Dialog.prototype, "skew", {
-    set: function(skew) {
+    set: function(/** @type {number} */skew) {
         try {
 			var micaElement = this.micaElement;
             if (!micaElement) return null;
