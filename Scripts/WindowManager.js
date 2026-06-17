@@ -246,7 +246,8 @@ function ClickOffset() {
 }
 
 ClickOffset.prototype.clear = function () {
-  (this.clickZXX = 0), (this.clickY = 0);
+	this.clickZXX = 0;
+	this.clickY = 0;
 }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
 
 /**
