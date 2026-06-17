@@ -5,8 +5,7 @@
     "checkJs": true,
     "allowJs": true,
     "strict": true,
-    "typeRoots": ["./Types"],
-    // exc
+    "typeRoots": ["./Types"]
   },
   "ignoreDeprecations": "6.0",
   "include": [
@@ -16,6 +15,6 @@
     "**/*.d.ts"
   ],
   "exclude": [
-    "Applications/**/WebGraphics",
+    "./Applications/**/WebGraphics"
   ]
 }

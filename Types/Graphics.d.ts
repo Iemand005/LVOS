@@ -1,8 +1,12 @@
-interface Graphics3D {
-    loadShader(type: number, source: string): WebGLShader | null;
-}
+export {};
 
-declare var Graphics3D: {
-    prototype: Graphics3D;
-    new(): Graphics3D;
-};
+declare global {
+    interface Graphics3D {
+        loadShader(type: number, source: string): WebGLShader | null;
+    }
+
+    var Graphics3D: {
+        new (): Graphics3D;
+        prototype: Graphics3D;
+    };
+}
