@@ -1040,6 +1040,9 @@ Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
+Dialog.prototype.updateTranslation = function () {
+    if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew);
+}
 /**
  * @param {number} [x]
  * @param {number} [y]
@@ -1051,7 +1054,7 @@ Dialog.prototype.move = function (x, y) {
 	var windowHeight = window.innerHeight;
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
 	if (!this.target) return;
-	if (this.useTransform) translateElement(this.target, this.x, this.y, this._skew);
+	if (this.useTransform) this.updateTranslation();
 	else {
 		this.target.style.top = toPixels(this.top);
 		this.target.style.left = toPixels(this.left);
