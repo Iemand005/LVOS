@@ -32,7 +32,7 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 
 try {
     hasLocalStorage = typeof localStorage !== "undefined";
-} catch { console.warn("Local storage access   denied."); }
+} catch(ex) { console.warn("Local storage access denied.", ex); }
 
 if (isIE) {
     useTransform = true;
