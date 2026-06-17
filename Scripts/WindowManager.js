@@ -222,7 +222,7 @@ function ClickOffset() {
 	this.width = 0;
 	this.top = 0;
 	this.left = 0;
-	this.start = { x: 0, y: 0 };
+	this.start = new Vector;
 	this.stats = {
 		start: 0, last: 0, positions: [new Vector], position: new Vector, lastPosition: new Vector, difference: new Vector,
 		reset: function () { return this.start = Date.now(), this.last = this.start, this.position = new Vector(), this; }, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
