@@ -25,10 +25,14 @@ var useBlur = false,
 	useTransform = false,
 	useScale = false,
 	aeroSnap = false,
-	updateRateLimit = false;
+	updateRateLimit = false,
+    hasLocalStorage = false;
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
-var hasLocalStorage = typeof localStorage !== "undefined";
+
+try {
+    hasLocalStorage = typeof localStorage !== "undefined";
+} catch { console.warn("Local storage access   denied."); }
 
 if (isIE) {
     useTransform = true;
