@@ -255,6 +255,22 @@ ClickOffset.prototype.clear = function () {
 	this.clickX = 0;
 	this.clickY = 0;
 }; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
+/**
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {number} startX 
+ * @param {number} startY 
+ */
+ClickOffset.prototype.set = function (x, y, width, height, startX, startY) {
+	this.clickX = x;
+	this.clickY = y;
+	this.height = width;
+	this.width = width;
+	this.startY = rect.top;
+	this.startX = rect.left;
+}
 
 /**
  * A window that can be moved around and resized and stuff.
