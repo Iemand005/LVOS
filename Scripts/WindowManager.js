@@ -1063,6 +1063,8 @@ Dialog.prototype.move = function (x, y) {
 		backdrop.style.width = toPixels(wallpaperWidth);
 		backdrop.style.height = toPixels(wallpaperHeight);
 	} catch(ex) {}
+
+    // i wanna add a like move event thing with velocity and stuff
 };
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
