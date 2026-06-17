@@ -810,12 +810,7 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
 
 Object.defineProperty(Dialog.prototype, "skew", {
     set: function(/** @type {number} */skew) {
-        try {
-			var micaElement = this.micaElement;
-            if (!micaElement) return null;
-            var backdrop = micaElement.children[0];
-            if (isElement(backdrop)) return backdrop;
-        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
+        if (this.target) this.target.style.transform
         return null;
     }
 });
@@ -1585,6 +1580,11 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 /** @param {number} value */
 function toPixels(value) {
     return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
+}
+
+/** @param {number} value */
+function toDegree(value) {
+    return Math.round(value) + "deg";
 }
 
 /** @param {number} pixels */
