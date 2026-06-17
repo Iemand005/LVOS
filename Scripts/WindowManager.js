@@ -507,6 +507,7 @@ function min(a, b) {
  */
 function translateElement(element, x, y, skew) {
     var translate = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    if (skew) translate += " skewX(" + toDegree(skew) + ")";
     element.style.transform = translate;
     element.style.webkitTransform = translate;
 }
