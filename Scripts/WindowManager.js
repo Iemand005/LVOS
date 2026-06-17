@@ -808,6 +808,19 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
     }
 });
 
+/** @type {number} */
+Object.defineProperty(Dialog.prototype, "skew", {
+    set: function(skew) {
+        try {
+			var micaElement = this.micaElement;
+            if (!micaElement) return null;
+            var backdrop = micaElement.children[0];
+            if (isElement(backdrop)) return backdrop;
+        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
+        return null;
+    }
+});
+
 /** @type {Dialog?} */
 var focusedDialog = null;
 Dialog.prototype.focus = function() {
@@ -1065,6 +1078,8 @@ Dialog.prototype.move = function (x, y) {
 	} catch(ex) {}
 
     // i wanna add a like move event thing with velocity and stuff
+
+
 };
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
