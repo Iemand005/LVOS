@@ -226,24 +226,27 @@ function ClickOffset() {
 
 	this.last = 0;
 	this.positions = [new Vector];
+	this.start = 0;
+	this.position = new Vector;
+	this.lastPosition = new Vector;
+	this.difference = new Vector;
 
 	var self = this;
 
 	this.stats = {
-		start: 0, , position: new Vector, lastPosition: new Vector, difference: new Vector,
 		reset: function () {
-			this.start = Date.now();
-			self.last = this.start;
-			this.position = new Vector();
+			self.start = Date.now();
+			self.last = self.start;
+			self.position = new Vector();
 			return this;
 		}, // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
 		update: function(/** @type {number}*/x, /** @type {number}*/y){
 			self.last = Date.now();
-			this.position.x = x, this.position.y = y;
-			self.positions.push(this.position.clone());
-			this.lastPosition = self.positions.shift() || new Vector;
-			this.difference = this.lastPosition.clone().sub(this.position);
-			return this;
+			self.position.x = x, self.position.y = y;
+			self.positions.push(self.position.clone());
+			self.lastPosition = self.positions.shift() || new Vector;
+			self.difference = self.lastPosition.clone().sub(self.position);
+			return self;
 		}
 	};
 }
