@@ -814,8 +814,10 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
 
 Object.defineProperty(Dialog.prototype, "skew", {
     set: function(/** @type {number} */skew) {
-        if (this.target) this.target.style.transform
-        return null;
+        // if (this.target) this.target.style.transform
+        this._skew = skew;
+        this.updateTranslation();
+        // return null;
     }
 });
 
