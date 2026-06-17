@@ -266,10 +266,10 @@ ClickOffset.prototype.clear = function () {
 ClickOffset.prototype.set = function (x, y, width, height, startX, startY) {
 	this.clickX = x;
 	this.clickY = y;
-	this.height = width;
 	this.width = width;
-	this.startY = rect.top;
-	this.startX = rect.left;
+	this.height = height;
+	this.startY = startX;
+	this.startX = startY;
 }
 
 /**
