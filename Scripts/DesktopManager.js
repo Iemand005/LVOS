@@ -33,7 +33,7 @@ var onLoad = function () {
 
     if (tingeling instanceof HTMLElement) {
         var selector = document.createElement("div");
-        tingeling.onmousedown = function(ev) {
+        tingeling.onpouter = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
             
@@ -45,15 +45,15 @@ var onLoad = function () {
                 var width = clickOffset.position.x, height = clickOffset.position.y;
 
 				translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
-				
+
 				selector.style.width = toPixels(Math.abs(width));
                 selector.style.height = toPixels(Math.abs(height));
             };
-            clickOffset.toggleDragEventHandler(true);
         };
         tingeling.onmouseup = function() {
-            selector.remove();
+			selector.remove();
         };
+		clickOffset.toggleDragEventHandler(true);
     }
 
 };
