@@ -265,14 +265,14 @@ ClickOffset.prototype.clear = function () {
  * @param {number} startX 
  * @param {number} startY 
  */
-ClickOffset.prototype.set = function (x, y, width, height, startX, startY) {
+ClickOffset.prototype.start = function (x, y, width, height, startX, startY) {
 	this.clickX = x;
 	this.clickY = y;
 	this.width = width;
 	this.height = height;
 	this.startY = startX;
 	this.startX = startY;
-}
+};
 
 /**
  * A window that can be moved around and resized and stuff.
