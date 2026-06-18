@@ -34,7 +34,8 @@ var onLoad = function () {
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
-    if (tingeling instanceof HTMLElement) tingeling.onmousedown = function(ev) {
+    if (!(tingeling instanceof HTMLElement)) return;
+    tingeling.onmousedown = function(ev) {
         clickOffset.init(ev.clientX, ev.clientY);
 
         var selector = document.createElement("div");
@@ -44,6 +45,7 @@ var onLoad = function () {
             clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
         };
     };
+
 };
 
 window.addEventListener("load", onLoad, false);
