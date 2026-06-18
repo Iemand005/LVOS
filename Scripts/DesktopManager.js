@@ -40,7 +40,9 @@ var onLoad = function () {
         var selector = document.createElement("div");
         selector.className = "selector";
         tingeling.appendChild(selector);
-        clickOffset.
+        clickOffset.dragHandler = function(ev) {
+            clickOffset.update(ev.clientX, ev.clientY);
+        };
     };
 };
 
