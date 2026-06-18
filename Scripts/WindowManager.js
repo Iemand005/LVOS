@@ -1581,8 +1581,7 @@ function windowDragEvent(event){
 
 /** @param {boolean} enable */
 function toggleDialogDragEventHandler(enable) {
-    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
-    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Stoppinge drag");
+    ClickOffset.toggleDragEventHandler(enable, windowDragEvent);
 }
 
 function disableDialogDrag() {
