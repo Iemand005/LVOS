@@ -6,7 +6,7 @@
 \***************************/
 
 * {
-    transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+    transition: color 100ms ease-in-out, background-color 90ms ease-out;
 }
 
 button, .button, input, select {
