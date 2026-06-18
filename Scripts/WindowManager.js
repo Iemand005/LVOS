@@ -281,16 +281,16 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 
 /**
  * @param {boolean} enable
- * @param {(ev:PointerEvent|MouseEvent)=>void} [handler]
+ * @param {(ev:PointerEvent|MouseEvent)=>void} handler
  */
 ClickOffset.toggleDragEventHandler = function (enable, handler) {
-    handler && (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false), console.log("Starting drag");
+    (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
+    console.log(enable ? "Starting drag" : "Ending drag");
 }
 
 /** @param {boolean} enable */
 ClickOffset.prototype.toggleDragEventHandler = function (enable) {
-    if (this.dragHandler) ClickOffset.toggleDragEventHandler()
-    this.dragHandler && (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", this.dragHandler, false), console.log("Starting drag");
+    if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler);
 }
 
 /**
