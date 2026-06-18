@@ -18,7 +18,7 @@ var onLoad = function () {
     document.body.ondragover = window.ondragover = function(ev) { 
         ev.preventDefault(); 
         ev.stopPropagation();
-        ev.dataTransfer.dropEffect = 'copy';
+        ev.dataTransfer && ev.dataTransfer.dropEffect = 'copy';
     }
 
     if ('serviceWorker' in navigator) {
