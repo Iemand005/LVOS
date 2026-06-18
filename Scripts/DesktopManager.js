@@ -39,8 +39,10 @@ var onLoad = function () {
     if (tingeling instanceof HTMLElement) {
         tingeling.onmousedown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
-    
+
+            
             var selector = document.createElement("div");
+            translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
             clickOffset.dragHandler = function(ev) {
