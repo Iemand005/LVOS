@@ -271,8 +271,8 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
     if (!width || !height || !startX || !startY) return;
 	this.width = width;
 	this.height = height;
-	this.startY = startX;
-	this.startX = startY;
+	this.startX = startX;
+	this.startY = startY;
 };
 
 /**
