@@ -251,12 +251,12 @@ ClickOffset.prototype.update = function(x, y){
 
     self.lastPosition = lastPosition;
 	return self;
-}
+};
 
 ClickOffset.prototype.clear = function () {
 	this.clickX = 0;
 	this.clickY = 0;
-}; // Modern way: clear(){}. I am doing it the old way for compatibility. Not all browsers understand the new notation yet. Yet? I mean IE will never support it so it's not not yet it's never
+};
 /**
  * @param {number} x 
  * @param {number} y 
