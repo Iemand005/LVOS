@@ -37,11 +37,11 @@ var onLoad = function () {
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
     if (tingeling instanceof HTMLElement) {
+        var selector = document.createElement("div");
         tingeling.onmousedown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
             
-            var selector = document.createElement("div");
             translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
@@ -51,6 +51,9 @@ var onLoad = function () {
                 selector.style.height = toPixels(clickOffset.position.y);
             };
             clickOffset.toggleDragEventHandler(true);
+        };
+        tingeling.onmouseup = function(ev) {
+            selector.remove();
         };
     }
 
