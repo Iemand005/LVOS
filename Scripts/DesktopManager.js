@@ -21,13 +21,11 @@ var onLoad = function () {
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'copy';
 	}
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
-            console.log('Service Worker registered!', reg);
-        })["catch"](function(err) {
-            console.error('Registration of service worker failed:', err);
-        });
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
+		console.log('Service Worker registered!', reg);
+	})["catch"](function(err) {
+		console.error('Registration of service worker failed:', err);
+	});
 
     var clickOffset = new ClickOffset;
 
