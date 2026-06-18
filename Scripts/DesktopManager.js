@@ -33,27 +33,28 @@ var onLoad = function () {
 
     if (tingeling instanceof HTMLElement) {
         var selector = document.createElement("div");
-        tingeling.onmousedown  = function(ev) {
+		clickOffset.dragHandler = function(ev) {
+			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
+			var width = clickOffset.position.x, height = clickOffset.position.y;
+
+			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			
+			selector.style.width = toPixels(Math.abs(width));
+			selector.style.height = toPixels(Math.abs(height));
+		};
+		clickOffset.toggleDragEventHandler(true);`
+		`
+        tingeling.onmousedown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
             
             translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
-            clickOffset.dragHandler = function(ev) {
-                clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
-                var width = clickOffset.position.x, height = clickOffset.position.y;
-
-				translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
-
-				selector.style.width = toPixels(Math.abs(width));
-                selector.style.height = toPixels(Math.abs(height));
-            };
         };
         tingeling.onmouseup = function() {
-			selector.remove();
+            selector.remove();
         };
-		clickOffset.toggleDragEventHandler(true);
     }
 
 };
