@@ -48,7 +48,7 @@ var onLoad = function () {
             };
             clickOffset.toggleDragEventHandler(true);
         };
-        tingeling.onmouseup = function(ev) {
+        tingeling.onmouseup = function() {
             selector.remove();
         };
     }
