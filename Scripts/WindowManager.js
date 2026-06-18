@@ -229,6 +229,9 @@ function ClickOffset() {
 	this.position = new Vector;
 	this.lastPosition = new Vector;
 	this.difference = new Vector;
+
+    /** @type {((ev:PointerEvent|MouseEvent)=>void)?} */
+    this.dragHandler = null;
 }
 
 ClickOffset.prototype.reset = function () {
@@ -278,7 +281,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 
 /** @param {boolean} enable */
 ClickOffset.prototype.toggleDragEventHandler = function (enable) {
-    (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
+    this.dragHandler && (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", this.dragHandler, false), console.log("Starting drag");
 }
 
 /**
