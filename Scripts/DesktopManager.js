@@ -33,7 +33,7 @@ var onLoad = function () {
 
     if (tingeling instanceof HTMLElement) {
         var selector = document.createElement("div");
-        tingeling.onpouter = function(ev) {
+        tingeling.onpointerdown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
             
@@ -50,7 +50,7 @@ var onLoad = function () {
                 selector.style.height = toPixels(Math.abs(height));
             };
         };
-        tingeling.onmouseup = function() {
+        tingeling.onpointerup = function() {
 			selector.remove();
         };
 		clickOffset.toggleDragEventHandler(true);
