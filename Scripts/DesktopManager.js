@@ -45,6 +45,8 @@ var onLoad = function () {
                 var width = clickOffset.position.x, height = clickOffset.position.y;
 				if (width < 0)
 					translateElement(selector, ev.clientX, ev.clientY);
+				if (height < 0)
+					translateElement(selector, ev.clientX, ev.clientY);
 				selector.style.width = toPixels(Math.abs(width));
                 selector.style.height = toPixels(Math.abs(height));
             };
