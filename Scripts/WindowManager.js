@@ -278,8 +278,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 
 /** @param {boolean} enable */
 ClickOffset.prototype.toggleDragEventHandler = function (enable) {
-    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
-    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Stoppinge drag");
+    (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
 }
 
 /**
