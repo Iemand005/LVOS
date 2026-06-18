@@ -47,8 +47,9 @@ var onLoad = function () {
             tingeling.appendChild(selector);
             clickOffset.dragHandler = function(ev) {
                 clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
-                selector.style.width = toPixels(clickOffset.position.x);
-                selector.style.height = toPixels(clickOffset.position.y);
+                var width = clickOffset.position.x, height = clickOffset.position.y;
+                selector.style.width = toPixels(width);
+                selector.style.height = toPixels(height);
             };
             clickOffset.toggleDragEventHandler(true);
         };
