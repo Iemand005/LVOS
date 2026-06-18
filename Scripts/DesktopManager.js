@@ -43,7 +43,9 @@ var onLoad = function () {
             clickOffset.dragHandler = function(ev) {
                 clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
                 var width = clickOffset.position.x, height = clickOffset.position.y;
-                selector.style.width = toPixels(width);
+				if (width > 0)
+                	selector.style.width = toPixels(width);
+				else translateElement(selector, ev.clientX, ev.)
                 selector.style.height = toPixels(height);
             };
             clickOffset.toggleDragEventHandler(true);
