@@ -443,6 +443,10 @@ aside#charms form {
   pointer-events: all;
 }
 
+.selector {
+  border: 1px solid blue;
+}
+
 @media (pointer: none), (pointer: coarse) {
 }
 
