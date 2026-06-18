@@ -29,6 +29,12 @@ var onLoad = function () {
 
     var act = new DragAction();
     // act. 
+
+    var clickOffset = new ClickOffset;
+
+    Array.from(document.getElementsByClassName("folder-content"))[0].onmousedown = function(ev) {
+
+    };
 };
 
 window.addEventListener("load", onLoad, false);
