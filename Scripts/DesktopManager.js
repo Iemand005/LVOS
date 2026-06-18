@@ -41,7 +41,7 @@ var onLoad = function () {
         selector.className = "selector";
         tingeling.appendChild(selector);
         clickOffset.dragHandler = function(ev) {
-            clickOffset.update(ev.clientX, ev.clientY);
+            clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
         };
     };
 };
