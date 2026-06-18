@@ -914,12 +914,13 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
     var rect = this.getRect();
     if (!this.clickOffset || !rect) return;
-    this.clickOffset.clickX = x;
-	this.clickOffset.clickY = y;
-	this.clickOffset.height = window.height || rect.height;
-	this.clickOffset.width = window.width || rect.width;
-	this.clickOffset.startY = rect.top;
-	this.clickOffset.startX = rect.left;
+    // this.clickOffset.clickX = x;
+	// this.clickOffset.clickY = y;
+	// this.clickOffset.height = window.height || rect.height;
+	// this.clickOffset.width = window.width || rect.width;
+	// this.clickOffset.startY = rect.top;
+	// this.clickOffset.startX = rect.left;
+    this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y)
 	return this.clickOffset.reset();
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };

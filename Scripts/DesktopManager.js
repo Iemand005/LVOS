@@ -34,8 +34,8 @@ var onLoad = function () {
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
-    .onmousedown = function(ev) {
-
+    if (tingeling instanceof HTMLElement) tingeling.onmousedown = function(ev) {
+        clickOffset.init(ev.clientX, ev.clientY);
     };
 };
 
