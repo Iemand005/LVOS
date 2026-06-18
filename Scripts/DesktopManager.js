@@ -6,12 +6,14 @@
 'use strict';
 'use esnext';
 
+var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
+
 var onLoad = function () {
     var applist = document.getElementById("applist");
-    applist.addEventListener("submit", function(event){
-        event.preventDefault();
-    }, false);
-    applist.onsubmit  = function(event){ event.preventDefault(); };
+
+    if (applist) {
+        applist.addEventListener("submit", eventPrevent, false);
+    }
 
     document.body.ondragover = window.ondragover = function(ev) { 
         ev.preventDefault(); 
@@ -44,6 +46,7 @@ var onLoad = function () {
             clickOffset.dragHandler = function(ev) {
                 clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
             };
+            clickOffset.toggleDragEventHandler(true);
         };
     }
 

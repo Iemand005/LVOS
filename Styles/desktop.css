@@ -445,6 +445,7 @@ aside#charms form {
 
 .selector {
   border: 1px solid blue;
+  position: absolute;
 }
 
 @media (pointer: none), (pointer: coarse) {
