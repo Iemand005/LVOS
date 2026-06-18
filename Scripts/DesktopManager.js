@@ -34,17 +34,18 @@ var onLoad = function () {
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
-    if (!(tingeling instanceof HTMLElement)) return;
-    tingeling.onmousedown = function(ev) {
-        clickOffset.init(ev.clientX, ev.clientY);
-
-        var selector = document.createElement("div");
-        selector.className = "selector";
-        tingeling.appendChild(selector);
-        clickOffset.dragHandler = function(ev) {
-            clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
+    if (tingeling instanceof HTMLElement) {
+        tingeling.onmousedown = function(ev) {
+            clickOffset.init(ev.clientX, ev.clientY);
+    
+            var selector = document.createElement("div");
+            selector.className = "selector";
+            tingeling.appendChild(selector);
+            clickOffset.dragHandler = function(ev) {
+                clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
+            };
         };
-    };
+    }
 
 };
 
