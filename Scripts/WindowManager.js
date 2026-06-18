@@ -235,11 +235,14 @@ ClickOffset.prototype.reset = function () {
 	var self = this;
 	self.start = Date.now();
 	self.last = self.start;
-	self.position = new Vector();
+	self.position = new Vector;
 	return this;
-}; // De nieuwe manier reset(){} zou moeten toegepast worden, maar I am doing it the inappropriate way for compatibility with Internet Explorer 11.
-
-ClickOffset.prototype.update = function(/** @type {number}*/x, /** @type {number}*/y){
+};
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
+ClickOffset.prototype.update = function(x, y){
 	var self = this;
 	self.last = Date.now();
 	self.position.x = x, self.position.y = y;
