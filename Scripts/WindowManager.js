@@ -260,10 +260,10 @@ ClickOffset.prototype.clear = function () {
 /**
  * @param {number} x 
  * @param {number} y 
- * @param {number} width 
- * @param {number} height 
- * @param {number} startX 
- * @param {number} startY 
+ * @param {number} [width ]
+ * @param {number} [height] 
+ * @param {number} [startX] 
+ * @param {number} [startY] 
  */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.clickX = x;
@@ -1196,7 +1196,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "0px";
 		target.style.left = "0px";
-		// this.useScale = true;
 		this.updateScale(true);
 	} else {
 		target.style.transform = "";
