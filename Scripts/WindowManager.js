@@ -224,10 +224,7 @@ function ClickOffset() {
 	this.startX = 0;
 	this.start = new Vector;
 
-    this._calculateVelocities = false;
-
 	this.last = 0;
-	this.positions = [new Vector];
 	this.start = 0;
 	this.position = new Vector;
 	this.lastPosition = new Vector;
@@ -247,9 +244,6 @@ ClickOffset.prototype.update = function(/** @type {number}*/x, /** @type {number
 	self.last = Date.now();
 	self.position.x = x, self.position.y = y;
     var lastPosition = self.position.clone();
-    if (this._calculateVelocities) {
-        self.positions.push(lastPosition);
-    }
 	self.difference = self.lastPosition.clone().sub(self.position);
 
     self.lastPosition = lastPosition;
