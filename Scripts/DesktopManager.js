@@ -30,7 +30,7 @@ var onLoad = function () {
     var act = new DragAction();
     // act. 
 
-    var clickOffset = new ClickOffset();
+    var clickOffset = new ClickOffset;
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
@@ -38,7 +38,7 @@ var onLoad = function () {
         clickOffset.init(ev.clientX, ev.clientY);
 
         var selector = document.createElement("div");
-        selector.w
+        selector.className = "selector";
     };
 };
 
