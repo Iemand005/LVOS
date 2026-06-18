@@ -24,13 +24,10 @@ var onLoad = function () {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
             console.log('Service Worker registered!', reg);
-        })["catch"](function(err) {
+        })["catch"](function(err) {AAa
             console.error('Registration of service worker failed:', err);
         });
-    }
-
-    var act = new DragAction();
-    // act. 
+    }W
 
     var clickOffset = new ClickOffset;
 
