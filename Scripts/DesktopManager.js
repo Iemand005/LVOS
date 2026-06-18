@@ -9,17 +9,17 @@
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
 var onLoad = function () {
-    var applist = document.getElementById("applist");
+	var applist = document.getElementById("applist");
 
-    if (applist) {
-        applist.addEventListener("submit", eventPrevent, false);
-    }
+	if (applist) {
+		applist.addEventListener("submit", eventPrevent, false);
+	}
 
-    document.body.ondragover = window.ondragover = function(ev) { 
-        ev.preventDefault(); 
-        ev.stopPropagation();
-        ev.dataTransfer && ev.dataTransfer.dropEffect = 'copy';
-    }
+	document.body.ondragover = window.ondragover = function(ev) { 
+		ev.preventDefault(); 
+		ev.stopPropagation();
+		if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'copy';
+	}
 
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
