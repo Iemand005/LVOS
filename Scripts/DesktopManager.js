@@ -32,7 +32,9 @@ var onLoad = function () {
 
     var clickOffset = new ClickOffset;
 
-    Array.from(document.getElementsByClassName("folder-content"))[0].onmousedown = function(ev) {
+    var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
+
+    .onmousedown = function(ev) {
 
     };
 };
