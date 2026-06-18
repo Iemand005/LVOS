@@ -30,7 +30,7 @@ var onLoad = function () {
     var act = new DragAction();
     // act. 
 
-    var clickOffset = new ClickOffset;
+    var clickOffset = new ClickOffset();
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
