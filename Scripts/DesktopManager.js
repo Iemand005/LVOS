@@ -42,13 +42,18 @@ var onLoad = function () {
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
 		};
-		clickOffset.toggleDragEventHandler(true);`
-		`
+		clickOffset.toggleDragEventHandler(true);
+
         tingeling.onmousedown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
+			var width = clickOffset.position.x, height = clickOffset.position.y;
+			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			
+			selector.style.width = toPixels(Math.abs(width));
+			selector.style.height = toPixels(Math.abs(height));
             
-            translateElement(selector, ev.clientX, ev.clientY);
+            // translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
         };

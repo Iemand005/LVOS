@@ -238,7 +238,7 @@ ClickOffset.prototype.reset = function () {
 	var self = this;
 	self.start = Date.now();
 	self.last = self.start;
-	self.position = new Vector;
+	self.position.x = 0, self.position.y = 0;
 	return this;
 };
 /**
