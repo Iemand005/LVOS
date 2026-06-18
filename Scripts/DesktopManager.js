@@ -39,6 +39,8 @@ var onLoad = function () {
 
         var selector = document.createElement("div");
         selector.className = "selector";
+        tingeling.appendChild(selector);
+        clickOffset.
     };
 };
 
