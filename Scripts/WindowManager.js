@@ -269,6 +269,7 @@ ClickOffset.prototype.clear = function () {
  * @param {number} [startY] 
  */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
+    this.reset();
 	this.clickX = x;
 	this.clickY = y;
     if (!width || !height || !startX || !startY) return;
@@ -276,7 +277,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.height = height;
 	this.startX = startX;
 	this.startY = startY;
-    return this.reset();
+    return this;
 };
 
 /**
