@@ -276,6 +276,12 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
     return this.reset();
 };
 
+/** @param {boolean} enable */
+ClickOffset.prototype.toggleDragEventHandler = function (enable) {
+    if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Starting drag");
+    else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", windowDragEvent, false), console.log("Stoppinge drag");
+}
+
 /**
  * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
