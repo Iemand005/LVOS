@@ -66,6 +66,7 @@ var reflectionr = document.getElementById("reflection");
 var reflector = new Reflector(document.getElementById("reflection"));
 var applistItems = document.getElementById("dockapplist");
 
+/** @param {boolean} force  */
 function toggleReflections(force) {
     if (!reflector) return;
     if(force === null) reflecitons = !reflecitons;
@@ -94,7 +95,7 @@ window.addEventListener('keydown', function(event) {
         this.alert("I'm alive!");
   }
 }, false);
-
+/** @param {string} theme */
 function setTheme(theme) {
   document.body.classList.add(theme);
 }
@@ -104,13 +105,13 @@ function setTheme(theme) {
 window.ondrag = document.ondrag = function(ev){
     ev.preventDefault();
     ev.stopPropagation();
-    elements.desktop.style.opacity = 0.5;
+    if (elements.desktop) elements.desktop.style.opacity = "0.5";
 }
 
 window.ondragleave = document.ondragleave = function(ev){
     ev.preventDefault();
     ev.stopPropagation();
-    elements.desktop.style.opacity = null;
+    if (elements.desktop) elements.desktop.style.opacity = "";
 }
 
 /**
@@ -170,7 +171,7 @@ function saveWallpaperToCache(blob, dataUrl) {
     }
     
     // Try IndexedDB first
-    initWallpaperDB(function(db) {
+    initWallpaperDB(function (db) {
         var transaction = db.transaction(['wallpapers'], 'readwrite');
         var store = transaction.objectStore('wallpapers');
         var request = store.put({ id: 'current', blob: blob, timestamp: Date.now() });
@@ -206,7 +207,7 @@ function saveWallpaperToCache(blob, dataUrl) {
                 }
             }
         };
-    }, function(err) {
+    }, function (err) {
         // console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
         if (dataUrl) {
