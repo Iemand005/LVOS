@@ -48,7 +48,10 @@ function SudokuCell(row, col) {
 }
 
 function Sudoku() {
-	this.grid = new Grid(9, 9);
+	this.width = 9;
+	this.height = 9;
+
+	this.grid = new Grid(this.width, this.height);
 
 	/** @type {SudokuCell[]} */
     this.cells = [];
@@ -100,17 +103,15 @@ Sudoku.prototype.addCell = function(row, col) {
 
 Sudoku.prototype.populateRandom = function() {
 
-    for (var row = 0; row < 9; row++) {
-        for (var col = 0; col < 9; col++) {
+    for (var row = 0; row < this.height; row++) for (var col = 0; col < this.width; col++) {
 
-            var value = Math.floor(Math.random() * 9) + 1;
+		var value = Math.floor(Math.random() * 9) + 1;
 
-            var cell = this.getCell(row, col);
-            cell.value = value;
+		var cell = this.getCell(row, col);
+		cell.value = value;
 
-            this.grid.cells[row * 9 + col].textContent = value.toString();
-        }
-    }
+		this.grid.cells[row * 9 + col].textContent = value.toString();
+	}
 };
 
 
@@ -119,4 +120,5 @@ var sudoku = new Sudoku();
 window.onload = function() {
 
 	sudoku.init();
+	sudoku.populateRandom();
 };
