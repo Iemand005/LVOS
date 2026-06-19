@@ -40,4 +40,8 @@ Sudoku.prototype.init = function() {
 };
 
 var sudoku = new Sudoku();
-sudoku.init();
+
+window.onload = function() {
+
+	sudoku.init();
+};
