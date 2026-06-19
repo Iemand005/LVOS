@@ -4,8 +4,12 @@ var clickCount = document.getElementById("click-count");
 
 
 function Clicker() {
+	var clicks = 0;
 	try {
-		var clicks = localStorage.getItem("clicker_clicks");
+		var clickStr = localStorage.getItem("clicker_clicks");
+		if (clickStr) clicks = parseInt(clickStr);
+	} catch(ex) {
+		console.log("error storage", ex);
 	}
 	this.clicks = 0;
 }
