@@ -177,6 +177,8 @@ Sudoku.prototype.fill = function(index) {
 };
 
 Sudoku.prototype.createNumberPad = function() {
+	var self = this;
+	
 	var container = document.createElement("div");
 
 	for (var i = 1; i <= 9; i++) {
@@ -187,6 +189,13 @@ Sudoku.prototype.createNumberPad = function() {
 		radio.type = "radio";
 		radio.name = "sudoku-number";
 		radio.value = i.toString();
+
+		if (i === 1) radio.checked = true;
+
+		radio.onclick = function(ev) {
+			if (typeof ev.target === HTML)
+			self.selectedNumber = parseInt(ev.target.value, 10);
+		};
 
 		label.appendChild(radio);
 		label.appendChild(document.createTextNode(i.toString()));
