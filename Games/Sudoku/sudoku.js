@@ -55,7 +55,17 @@ function Sudoku() {
 }
 
 Sudoku.prototype.init = function() {
-	this.grid.generate();
+	var self = this;
+	this.grid.generate(function(td) {
+		var cell = self.addCell();
+
+    td.onclick = function() {
+        if (!cell.fixed) {
+            cell.value = (cell.value % 9) + 1;
+            td.textContent = String(cell.value);
+        }
+    };
+	});
 };
 
 /**
