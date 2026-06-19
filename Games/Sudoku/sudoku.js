@@ -77,11 +77,19 @@ Sudoku.prototype.getCell = function(row, col) {
     return this.cells[row * 9 + col];
 };
 
-Sudoku.prototype.addCell = function() {
-    var index = this.cells.length;
+/**
+ * @param {number} [row] 
+ * @param {number} [col] 
+ * @returns {SudokuCell}
+ */
+Sudoku.prototype.addCell = function(row, col) {
 
-    var row = Math.floor(index / 9);
-    var col = index % 9;
+	if (!row || !col) {
+		var index = this.cells.length;
+	
+		row = Math.floor(index / 9);
+		col = index % 9;
+	}
 
     var cell = new SudokuCell(row, col);
 
