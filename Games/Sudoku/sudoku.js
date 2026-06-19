@@ -193,8 +193,8 @@ Sudoku.prototype.createNumberPad = function() {
 		if (i === 1) radio.checked = true;
 
 		radio.onclick = function(ev) {
-			if (typeof ev.target === HTML)
-			self.selectedNumber = parseInt(ev.target.value, 10);
+			if (ev.target instanceof HTMLInputElement)
+				self.selectedNumber = parseInt(ev.target.value, 10);
 		};
 
 		label.appendChild(radio);
