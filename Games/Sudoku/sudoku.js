@@ -67,7 +67,7 @@ Sudoku.prototype.init = function() {
 			td.onclick = function() {
 				td.textContent = cell.value.toString();
 			};
-		}
+		} else td.textContent = cell.value.toString();
 	});
 };
 
