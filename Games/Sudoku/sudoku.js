@@ -82,9 +82,10 @@ Sudoku.prototype.getCell = function(row, col) {
 /**
  * @param {number} [row] 
  * @param {number} [col] 
+ * @param {boolean} [fixed] 
  * @returns {SudokuCell}
  */
-Sudoku.prototype.addCell = function(row, col) {
+Sudoku.prototype.addCell = function(row, col, fixed) {
 
 	if (!row || !col) {
 		var index = this.cells.length;
@@ -92,6 +93,8 @@ Sudoku.prototype.addCell = function(row, col) {
 		row = Math.floor(index / 9);
 		col = index % 9;
 	}
+
+	if (typeof fixed == "undefined") fixed = Math.random() < 0.5;
 
     var cell = new SudokuCell(row, col);
 
