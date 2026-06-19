@@ -4,6 +4,9 @@ var clickCount = document.getElementById("click-count");
 
 
 function Clicker() {
+	try {
+		var clicks = localStorage.getItem("clicker_clicks");
+	}
 	this.clicks = 0;
 }
 
