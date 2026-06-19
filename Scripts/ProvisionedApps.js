@@ -246,7 +246,7 @@ var games = [
   {
     title: "Clicker",
     id: "clicker",
-    src: "./Games/Clicker/clicker.html",
+    src: "./Games/ChoccyClicker/clicker.html",
     hidden: true
   }
 ];
