@@ -204,4 +204,5 @@ window.onload = function() {
 
 	sudoku.init();
 	sudoku.fill(0);
+	sudoku.createNumberPad();
 };
