@@ -77,8 +77,14 @@ Sudoku.prototype.init = function() {
 		if (!cell.fixed) {
 			td.onclick = function() {
 				if (!self.selectedNumber) return;
-				console.log( "isright", self.selectedNumber === cell.value);
-				td.textContent = self.selectedNumber.toString();
+				var correct = self.selectedNumber === cell.value;
+				console.log( "isright", correct);
+				if (correct) {
+
+					td.textContent = cell.value.toString();
+					cell.fixed = true;
+					td.onclick = null;
+				}
 			};
 		}
 	});
