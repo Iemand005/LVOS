@@ -74,7 +74,7 @@ function Sudoku() {
     this.cells = [];
 
 	/** @type {number?} */
-	this.selectedNumber = null;
+	this.selectedNumber = 1;
 
 	this._health = 5;
 }
@@ -105,7 +105,7 @@ Sudoku.prototype.init = function() {
 				console.log( "isright", correct);
 				if (correct) {
 
-					td.textContent = cell.value.toString();
+					cell.show();
 					cell.fixed = true;
 					td.onclick = null;
 				} else self.health--;
