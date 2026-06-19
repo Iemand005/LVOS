@@ -66,6 +66,8 @@ function Sudoku() {
 
 	/** @type {number?} */
 	this.selectedNumber = null;
+
+	this.health = 5;
 }
 
 Sudoku.prototype.init = function() {
@@ -84,7 +86,7 @@ Sudoku.prototype.init = function() {
 					td.textContent = cell.value.toString();
 					cell.fixed = true;
 					td.onclick = null;
-				}
+				} else self.health--;
 			};
 		}
 	});
