@@ -50,6 +50,10 @@ function SudokuCell(row, col, fixed) {
 	this.element = null;
 }
 
+SudokuCell.prototype.show = function(callback) {
+	if (this.element) this.element.textContent = this.value.toString();
+}
+
 function Sudoku() {
 	this.width = 9;
 	this.height = 9;
