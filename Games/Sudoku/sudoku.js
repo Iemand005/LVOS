@@ -38,3 +38,6 @@ function Sudoku() {
 Sudoku.prototype.init = function() {
 	this.grid.generate();
 };
+
+var sudoku = new Sudoku();
+sudoku.init();
