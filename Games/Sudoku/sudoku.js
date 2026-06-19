@@ -108,8 +108,6 @@ Sudoku.prototype.populateRandom = function() {
 
 		var cell = this.getCell(row, col);
 		cell.value = value;
-
-		this.grid.cells[row * 9 + col].textContent = value.toString();
 	}
 };
 
