@@ -8,6 +8,11 @@ h1 {
 }
 
 button {
-	padding: 0;
-  border: none;
+	padding: 5px;
+  	border: none;
+	max-width: 100%;
+}
+
+img {
+	display: block;
 }
