@@ -242,6 +242,12 @@ var games = [
     id: "sudoku",
     src: "./Games/Sudoku/sudoku.html",
     hidden: true
+  },
+  {
+    title: "Clicker",
+    id: "clicker",
+    src: "./Games/Clicker/clicker.html",
+    hidden: true
   }
 ];
 
