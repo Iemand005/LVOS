@@ -64,7 +64,6 @@ Sudoku.prototype.init = function() {
 
 		td.onclick = function() {
 			if (!cell.fixed) {
-				cell.value = (cell.value % 9) + 1;
 				td.textContent = cell.value.toString();
 			}
 		};
