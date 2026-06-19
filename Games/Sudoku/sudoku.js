@@ -53,6 +53,14 @@ function SudokuCell(row, col, fixed) {
 	this.textNode = document.createTextNode("");
 }
 
+Object.defineProperty(SudokuCell.prototype, "element", {
+	get: function() { return this._element; },
+	set: function(/** @type {number} */value) {
+		if (value === 0) console.log("Game over!");
+		this._health = value;
+	}
+});
+
 SudokuCell.prototype.show = function() {
 	if (this.element) this.element.textContent = this.value.toString();
 }
@@ -71,14 +79,6 @@ function Sudoku() {
 
 	this._health = 5;
 }
-
-Object.defineProperty(Sudoku.prototype, "health", {
-	get: function() { return this._health; },
-	set: function(/** @type {number} */value) {
-		if (value === 0) console.log("Game over!");
-		this._health = value;
-	}
-});
 
 Object.defineProperty(Sudoku.prototype, "health", {
 	get: function() { return this._health; },
