@@ -218,10 +218,12 @@ Sudoku.prototype.createNumberPad = function() {
 	for (var i = 1; i <= 9; i++) {
 
 		var label = document.createElement("label");
+		label.htmlFor = radio.id;
 
 		var radio = document.createElement("input");
 		radio.type = "radio";
 		radio.name = "sudoku-number";
+		radio.id = "num" + i;
 		radio.value = i.toString();
 
 		if (i === 1) radio.checked = true;
