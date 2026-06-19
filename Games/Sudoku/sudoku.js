@@ -138,7 +138,6 @@ Sudoku.prototype.fill = function(index) {
 
     var nums = [1,2,3,4,5,6,7,8,9];
 
-    // shuffle numbers
     for (var i = nums.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         [nums[i], nums[j]] = [nums[j], nums[i]];
@@ -166,5 +165,6 @@ var sudoku = new Sudoku();
 window.onload = function() {
 
 	sudoku.init();
-	sudoku.populateRandom();
+	// sudoku.populateRandom();
+	sudoku.fill(0);
 };
