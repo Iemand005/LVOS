@@ -12,7 +12,7 @@ function Grid(width, height) {
 }
 /**
  * 
- * @param {(cell:HTMLElement)=>void} [callback] 
+ * @param {(cell:HTMLElement,row:number,column:number)=>void} [callback] 
  */
 Grid.prototype.generate = function(callback) {
 	var table = document.createElement("table");
@@ -25,7 +25,7 @@ Grid.prototype.generate = function(callback) {
 
 			this.cells.push(cell);
 
-			if (callback) callback(cell);
+			if (callback) callback(cell, i, j);
 
 			row.appendChild(cell);
 		}
@@ -82,9 +82,14 @@ Object.defineProperty(Sudoku.prototype, "health", {
 
 Sudoku.prototype.init = function() {
 	var self = this;
-	this.grid.generate(function(td) {
+	this.grid.generate(function(td, row, column) {
 		var cell = self.addCell();
 		cell.element = td;
+
+		if (row % 3 === 0) td.classList.add("cell-top");
+		if (column % 3 === 0) td.classList.add("cell-left");
+		if (row === 8) td.classList.add("cell-bottom");
+		if (column === 8) td.classList.add("cell-right");
 
 		if (!cell.fixed) {
 			td.onclick = function() {
