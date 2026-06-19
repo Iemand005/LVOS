@@ -9,6 +9,10 @@
     transition: color 100ms ease-in-out, background-color 90ms ease-out;
 }
 
+h1 {
+    margin: 0;
+}
+
 button, .button, input, select {
     cursor: pointer;
 	background-color: #ffffff38;
