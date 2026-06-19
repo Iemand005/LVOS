@@ -36,13 +36,32 @@ Grid.prototype.generate = function(callback) {
 	document.body.appendChild(table);
 };
 
+/**
+ * @param {number} row 
+ * @param {number} col 
+ */
+function SudokuCell(row, col) {
+    this.row = row;
+    this.col = col;
+    this.value = 0;
+    this.fixed = false;
+}
+
 function Sudoku() {
 	this.grid = new Grid(9, 9);
+
+	/** @type {SudokuCell[]} */
+    this.cells = [];
 }
 
 Sudoku.prototype.init = function() {
 	this.grid.generate();
 };
+
+Sudoku.prototype.getCell = function(row, col) {
+    return this.cells[row * 9 + col];
+};
+
 
 var sudoku = new Sudoku();
 
