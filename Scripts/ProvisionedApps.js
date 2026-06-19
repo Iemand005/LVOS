@@ -236,6 +236,12 @@ var games = [
     id: "tetris",
     src: "./Games/Tetris/tetris.html",
     hidden: true
+  },
+  {
+    title: "Sudoku",
+    id: "sudoku",
+    src: "./Games/Sudoku/sudoku.html",
+    hidden: true
   }
 ];
 

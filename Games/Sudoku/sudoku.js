@@ -98,6 +98,21 @@ Sudoku.prototype.addCell = function(row, col) {
     return cell;
 };
 
+Sudoku.prototype.populateRandom = function() {
+
+    for (var row = 0; row < 9; row++) {
+        for (var col = 0; col < 9; col++) {
+
+            var value = Math.floor(Math.random() * 9) + 1;
+
+            var cell = this.getCell(row, col);
+            cell.value = value;
+
+            this.grid.cells[row * 9 + col].textContent = value.toString();
+        }
+    }
+};
+
 
 var sudoku = new Sudoku();
 
