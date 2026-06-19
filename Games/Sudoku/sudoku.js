@@ -67,8 +67,15 @@ function Sudoku() {
 	/** @type {number?} */
 	this.selectedNumber = null;
 
-	this.health = 5;
+	this._health = 5;
 }
+
+Object.defineProperty(Sudoku.prototype, "health", {
+	set: function(/** @type {number} */value) {
+		if (value === 0) console.log("Game over!");
+		this._health = value;
+	}
+})
 
 Sudoku.prototype.init = function() {
 	var self = this;
