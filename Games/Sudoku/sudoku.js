@@ -21,8 +21,14 @@ Grid.prototype.generate = function() {
 			var cell = document.createElement("td");
 
 			this.cells.push(cell);
+
+			row.appendChild(cell);
 		}
+
+		table.appendChild(row);
 	}
+
+	document.body.appendChild(table);
 };
 
 function Sudoku() {
