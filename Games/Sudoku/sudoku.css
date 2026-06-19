@@ -1,6 +1,6 @@
 
 table {
-	background-color: red;
+	/* background-color: red; */
 }
 
 tr {
@@ -13,6 +13,10 @@ td {
 	height: 40px;
 	text-align: center;
 	user-select: none;
+	font-size: 20px;
+	border: 1px solid #aaa;
+	font-family: sans-serif;
+	cursor: pointer;
 }
 
 .cell-top { border-top: 3px solid black; }
