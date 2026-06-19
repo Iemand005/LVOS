@@ -46,8 +46,12 @@ function SudokuCell(row, col, fixed) {
     this.col = col;
     this.value = 0;
     this.fixed = !!fixed;
+
 	/** @type {HTMLElement?} */
 	this.element = null;
+
+	/** @type {number?} */
+	this.selectedNumber = null;
 }
 
 SudokuCell.prototype.show = function() {
