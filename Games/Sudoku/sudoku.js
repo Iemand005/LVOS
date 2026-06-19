@@ -213,7 +213,7 @@ Sudoku.prototype.fill = function(index) {
 Sudoku.prototype.createNumberPad = function() {
 	var self = this;
 	
-	var container = document.createElement("div");
+	var container = document.createElement("form");
 
 	for (var i = 1; i <= 9; i++) {
 
