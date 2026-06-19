@@ -100,31 +100,33 @@ Sudoku.prototype.addCell = function(row, col) {
     return cell;
 };
 
+/**
+ * @param {number} row 
+ * @param {number} col 
+ * @param {number} num 
+ * @returns {boolean}
+ */
 Sudoku.prototype.isValid = function(row, col, num) {
 
-    // row + column check
     for (var i = 0; i < 9; i++) {
         if (this.getCell(row, i).value === num) return false;
         if (this.getCell(i, col).value === num) return false;
     }
 
-    // 3x3 box check
     var boxRow = Math.floor(row / 3) * 3;
     var boxCol = Math.floor(col / 3) * 3;
 
-    for (var r = 0; r < 3; r++) {
-        for (var c = 0; c < 3; c++) {
+    for (var r = 0; r < 3; r++)
+        for (var c = 0; c < 3; c++)
             if (this.getCell(boxRow + r, boxCol + c).value === num)
                 return false;
-        }
-    }
 
     return true;
 };
 
 /**
  * @param {number} index 
- * @returns 
+ * @returns {boolean}
  */
 Sudoku.prototype.fill = function(index) {
 
