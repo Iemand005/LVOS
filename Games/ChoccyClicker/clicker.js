@@ -14,4 +14,5 @@ var textNode = document.createTextNode("0");
 if (clickCount) clickCount.appendChild(textNode);
 if (button) button.onclick = function() {
 	clicker.clicks++;
+	textNode.data = clicker.clicks.toString();
 };
