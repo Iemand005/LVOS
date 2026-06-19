@@ -95,7 +95,7 @@ Sudoku.prototype.addCell = function(row, col, fixed) {
 		col = index % 9;
 	}
 
-	if (typeof fixed == "undefined") fixed = Math.random() < 0.5;
+	if (typeof fixed === "undefined") fixed = Math.random() < 0.5;
 
     var cell = new SudokuCell(row, col, fixed);
 
