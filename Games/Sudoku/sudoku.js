@@ -63,11 +63,11 @@ Sudoku.prototype.init = function() {
 	this.grid.generate(function(td) {
 		var cell = self.addCell();
 
-		td.onclick = function() {
-			if (!cell.fixed) {
+		if (!cell.fixed) {
+			td.onclick = function() {
 				td.textContent = cell.value.toString();
-			}
-		};
+			};
+		}
 	});
 };
 
