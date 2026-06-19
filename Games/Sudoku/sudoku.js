@@ -7,6 +7,7 @@ function Grid(width, height) {
 	this.width = width;
 	this.height = height;
 
+	/** @type {HTMLElement[]} */
 	this.cells = [];
 }
 
