@@ -14,3 +14,8 @@ td {
 	text-align: center;
 	user-select: none;
 }
+
+.cell-top { border-top: 3px solid black; }
+.cell-left { border-left: 3px solid black; }
+.cell-right { border-right: 3px solid black; }
+.cell-bottom { border-bottom: 3px solid black; }
