@@ -38,9 +38,13 @@ input[type="number"] {
 }
 
 @media (prefers-color-scheme: dark) {
+
+    * {
+        color: white;
+    }
+
     button, .button, input, select {
         border-color: #cecece3a;
         background-color: #0000;
-        color: white;
     }
 }
