@@ -176,6 +176,25 @@ Sudoku.prototype.fill = function(index) {
 	return false;
 };
 
+Sudoku.prototype.createNumberPad = function() {
+	var self = this;
+
+	var container = document.createElement("div");
+
+	for (var i = 1; i <= 9; i++) {
+		var btn = document.createElement("button");
+		btn.textContent = i.toString();
+
+		btn.onclick = function() {
+			self.selectedNumber = parseInt(this.textContent, 10);
+		};
+
+		container.appendChild(btn);
+	}
+
+	document.body.appendChild(container);
+};
+
 
 var sudoku = new Sudoku();
 
