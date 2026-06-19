@@ -71,12 +71,12 @@ function Sudoku() {
 }
 
 Object.defineProperty(Sudoku.prototype, "health", {
+	get: function() {
+		return this._health;
+	},
 	set: function(/** @type {number} */value) {
 		if (value === 0) console.log("Game over!");
 		this._health = value;
-	},
-	get: function() {
-		return this._health;
 	}
 })
 
