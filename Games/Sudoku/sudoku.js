@@ -217,9 +217,7 @@ Sudoku.prototype.createNumberPad = function() {
 
 	for (var i = 1; i <= 9; i++) {
 
-		var label = document.createElement("label");
-		label.htmlFor = radio.id;
-
+		
 		var radio = document.createElement("input");
 		radio.type = "radio";
 		radio.name = "sudoku-number";
@@ -232,10 +230,12 @@ Sudoku.prototype.createNumberPad = function() {
 			if (ev.target instanceof HTMLInputElement)
 				self.selectedNumber = parseInt(ev.target.value, 10);
 		};
-
-		label.appendChild(radio);
+		
+		var label = document.createElement("label");
+		label.htmlFor = radio.id;
 		label.appendChild(document.createTextNode(i.toString()));
 
+		container.appendChild(radio);
 		container.appendChild(label);
 	}
 
