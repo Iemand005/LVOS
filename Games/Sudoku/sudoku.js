@@ -25,7 +25,7 @@ Grid.prototype.generate = function(callback) {
 
 			this.cells.push(cell);
 
-			callback(cell);
+			if (callback)callback(cell);
 
 			row.appendChild(cell);
 		}
