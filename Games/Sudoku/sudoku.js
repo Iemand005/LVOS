@@ -36,5 +36,5 @@ function Sudoku() {
 }
 
 Sudoku.prototype.init = function() {
-
+	this.grid.generate();
 };
