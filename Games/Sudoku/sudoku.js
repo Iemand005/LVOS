@@ -6,9 +6,13 @@
 function Grid(width, height) {
 	this.width = width;
 	this.height = height;
+
+	this.cells = [];
 }
 
-Grid.prototype.
+Grid.prototype.generate = function() {
+
+};
 
 function Sudoku() {
 
