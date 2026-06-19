@@ -32,5 +32,9 @@ Grid.prototype.generate = function() {
 };
 
 function Sudoku() {
-
+	this.grid = new Grid(9, 9);
 }
+
+Sudoku.prototype.init = function() {
+
+};
