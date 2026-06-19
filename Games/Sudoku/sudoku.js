@@ -56,8 +56,7 @@ function SudokuCell(row, col, fixed) {
 Object.defineProperty(SudokuCell.prototype, "element", {
 	get: function() { return this._element; },
 	set: function(/** @type {HTMLElement?} */value) {
-		this._element = value;
-		if (this._element) this._element.appendChild(this.textNode);
+		if (this._element = value) this._element.appendChild(this.textNode);
 	}
 });
 
