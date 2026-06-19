@@ -46,6 +46,8 @@ function SudokuCell(row, col, fixed) {
     this.col = col;
     this.value = 0;
     this.fixed = !!fixed;
+	/** @type {HTMLElement?} */
+	this.element?;
 }
 
 function Sudoku() {
@@ -67,7 +69,7 @@ Sudoku.prototype.init = function() {
 			td.onclick = function() {
 				td.textContent = cell.value.toString();
 			};
-		} else td.textContent = cell.value.toString();
+		}
 	});
 };
 
@@ -153,8 +155,10 @@ Sudoku.prototype.fill = function(index) {
 		if (this.isValid(row, col, num)) {
 			cell.value = num;
 
-			if (this.fill(index + 1))
+			if (this.fill(index + 1)) {
 				return true;
+				td.textContent = cell.value.toString();
+			}
 
 			cell.value = 0;
 		}
