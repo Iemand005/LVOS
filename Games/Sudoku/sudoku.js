@@ -108,20 +108,20 @@ Sudoku.prototype.addCell = function(row, col) {
  */
 Sudoku.prototype.isValid = function(row, col, num) {
 
-    for (var i = 0; i < 9; i++) {
-        if (this.getCell(row, i).value === num) return false;
-        if (this.getCell(i, col).value === num) return false;
-    }
+	for (var i = 0; i < 9; i++) {
+		if (this.getCell(row, i).value === num) return false;
+		if (this.getCell(i, col).value === num) return false;
+	}
 
-    var boxRow = Math.floor(row / 3) * 3;
-    var boxCol = Math.floor(col / 3) * 3;
+	var boxRow = Math.floor(row / 3) * 3;
+	var boxCol = Math.floor(col / 3) * 3;
 
-    for (var r = 0; r < 3; r++)
-        for (var c = 0; c < 3; c++)
-            if (this.getCell(boxRow + r, boxCol + c).value === num)
-                return false;
+	for (var r = 0; r < 3; r++)
+		for (var c = 0; c < 3; c++)
+			if (this.getCell(boxRow + r, boxCol + c).value === num)
+				return false;
 
-    return true;
+	return true;
 };
 
 /**
@@ -130,33 +130,33 @@ Sudoku.prototype.isValid = function(row, col, num) {
  */
 Sudoku.prototype.fill = function(index) {
 
-    if (index >= 81) return true;
+	if (index >= 81) return true;
 
-    var row = Math.floor(index / 9);
-    var col = index % 9;
-    var cell = this.getCell(row, col);
+	var row = Math.floor(index / 9);
+	var col = index % 9;
+	var cell = this.getCell(row, col);
 
-    var nums = [1,2,3,4,5,6,7,8,9];
+	var nums = [1,2,3,4,5,6,7,8,9];
 
-    for (var i = nums.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        [nums[i], nums[j]] = [nums[j], nums[i]];
-    }
+	for (var i = nums.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1));
+		[nums[i], nums[j]] = [nums[j], nums[i]];
+	}
 
-    for (var k = 0; k < nums.length; k++) {
-        var num = nums[k];
+	for (var k = 0; k < nums.length; k++) {
+		var num = nums[k];
 
-        if (this.isValid(row, col, num)) {
-            cell.value = num;
+		if (this.isValid(row, col, num)) {
+			cell.value = num;
 
-            if (this.fill(index + 1))
-                return true;
+			if (this.fill(index + 1))
+				return true;
 
-            cell.value = 0;
-        }
-    }
+			cell.value = 0;
+		}
+	}
 
-    return false;
+	return false;
 };
 
 
@@ -165,6 +165,5 @@ var sudoku = new Sudoku();
 window.onload = function() {
 
 	sudoku.init();
-	// sudoku.populateRandom();
 	sudoku.fill(0);
 };
