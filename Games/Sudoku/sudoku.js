@@ -57,6 +57,7 @@ function Sudoku() {
 Sudoku.prototype.init = function() {
 	this.grid.generate();
 };
+
 /**
  * @param {number} row 
  * @param {number} col 
