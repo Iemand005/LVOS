@@ -57,9 +57,26 @@ function Sudoku() {
 Sudoku.prototype.init = function() {
 	this.grid.generate();
 };
-
+/**
+ * @param {number} row 
+ * @param {number} col 
+ * @returns {SudokuCell}
+ */
 Sudoku.prototype.getCell = function(row, col) {
     return this.cells[row * 9 + col];
+};
+
+Sudoku.prototype.addCell = function() {
+    var index = this.cells.length;
+
+    var row = Math.floor(index / 9);
+    var col = index % 9;
+
+    var cell = new SudokuCell(row, col);
+
+    this.cells.push(cell);
+
+    return cell;
 };
 
 
