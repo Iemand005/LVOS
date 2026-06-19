@@ -7,7 +7,10 @@ table {
 td {
 	width: 40px;
 	height: 40px;
+	
 	text-align: center;
+vertical-align: middle;
+
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
