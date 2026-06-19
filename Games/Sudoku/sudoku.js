@@ -47,7 +47,7 @@ function SudokuCell(row, col, fixed) {
     this.value = 0;
     this.fixed = !!fixed;
 	/** @type {HTMLElement?} */
-	this.element?;
+	this.element = null;
 }
 
 function Sudoku() {
@@ -64,6 +64,7 @@ Sudoku.prototype.init = function() {
 	var self = this;
 	this.grid.generate(function(td) {
 		var cell = self.addCell();
+		cell.element = td;
 
 		if (!cell.fixed) {
 			td.onclick = function() {
