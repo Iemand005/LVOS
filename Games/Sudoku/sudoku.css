@@ -1,19 +1,10 @@
 
 table {
-	font-size: 20px;
-	border: 1px solid #aaa;
-	font-family: sans-serif;
-
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-tr {
-	background-color: green;
-}
-
 td {
-	background-color: blue;
 	width: 40px;
 	height: 40px;
 	text-align: center;
