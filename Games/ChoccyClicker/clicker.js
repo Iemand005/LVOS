@@ -11,7 +11,9 @@ function Clicker() {
 	} catch(ex) {
 		console.log("error storage", ex);
 	}
-	this.clicks = 0;
+	this.clicks = clicks;
+
+	this.textNode = document.createTextNode(clicks.toString());
 }
 
 Clicker.prototype.click = function() {
@@ -21,10 +23,9 @@ Clicker.prototype.click = function() {
 
 var clicker = new Clicker();
 
-var textNode = document.createTextNode("0");
 
-if (clickCount) clickCount.appendChild(textNode);
+if (clickCount) clickCount.appendChild(clicker.textNode);
 if (button) button.onclick = function() {
 	clicker.clicks++;
-	textNode.data = clicker.clicks.toString();
+	clicker.textNode.data = clicker.clicks.toString();
 };
