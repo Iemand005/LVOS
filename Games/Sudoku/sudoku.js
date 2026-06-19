@@ -59,12 +59,12 @@ Sudoku.prototype.init = function() {
 	this.grid.generate(function(td) {
 		var cell = self.addCell();
 
-    td.onclick = function() {
-        if (!cell.fixed) {
-            cell.value = (cell.value % 9) + 1;
-            td.textContent = cell.value.toString();
-        }
-    };
+		td.onclick = function() {
+			if (!cell.fixed) {
+				cell.value = (cell.value % 9) + 1;
+				td.textContent = cell.value.toString();
+			}
+		};
 	});
 };
 
