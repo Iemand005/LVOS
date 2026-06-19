@@ -185,9 +185,11 @@ Sudoku.prototype.createNumberPad = function() {
 		var btn = document.createElement("button");
 		btn.textContent = i.toString();
 
-		btn.onclick = function() {
-			self.selectedNumber = parseInt(this.textContent, 10);
-		};
+		(function(num) {
+			btn.onclick = function() {
+				self.selectedNumber = num;
+			};
+		})(i);
 
 		container.appendChild(btn);
 	}
