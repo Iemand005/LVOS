@@ -180,7 +180,9 @@ Sudoku.prototype.fill = function(index) {
 
 	for (var i = nums.length - 1; i > 0; i--) {
 		var j = Math.floor(Math.random() * (i + 1));
-		[nums[i], nums[j]] = [nums[j], nums[i]];
+		var temp = nums[i];
+		nums[i] = nums[j];
+		nums[j] = temp;
 	}
 
 	for (var k = 0; k < nums.length; k++) {
