@@ -62,7 +62,7 @@ Object.defineProperty(SudokuCell.prototype, "element", {
 });
 
 SudokuCell.prototype.show = function() {
-	if (this.element) this.element.textContent = this.value.toString();
+	if (this.element) this.textNode.data = this.value.toString();
 }
 
 function Sudoku() {
