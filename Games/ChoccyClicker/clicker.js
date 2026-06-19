@@ -26,6 +26,6 @@ var clicker = new Clicker();
 
 if (clickCount) clickCount.appendChild(clicker.textNode);
 if (button) button.onclick = function() {
-	clicker.clicks++;
+	clicker.click();
 	clicker.textNode.data = clicker.clicks.toString();
 };

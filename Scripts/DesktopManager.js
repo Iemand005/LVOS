@@ -100,6 +100,10 @@ window.addEventListener('keydown', function(event) {
     case "F9":
         event.preventDefault();
         this.alert("I'm alive!");
+    case "F8":
+        event.preventDefault();
+        downloadSettings();
+        break;
   }
 }, false);
 /** @param {string} theme */
