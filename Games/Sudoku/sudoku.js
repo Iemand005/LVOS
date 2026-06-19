@@ -177,21 +177,21 @@ Sudoku.prototype.fill = function(index) {
 };
 
 Sudoku.prototype.createNumberPad = function() {
-	var self = this;
-
 	var container = document.createElement("div");
 
 	for (var i = 1; i <= 9; i++) {
-		var btn = document.createElement("button");
-		btn.textContent = i.toString();
 
-		(function(num) {
-			btn.onclick = function() {
-				self.selectedNumber = num;
-			};
-		})(i);
+		var label = document.createElement("label");
 
-		container.appendChild(btn);
+		var radio = document.createElement("input");
+		radio.type = "radio";
+		radio.name = "sudoku-number"; // 👈 important (grouping)
+		radio.value = i.toString();
+
+		label.appendChild(radio);
+		label.appendChild(document.createTextNode(i));
+
+		container.appendChild(label);
 	}
 
 	document.body.appendChild(container);
