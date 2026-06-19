@@ -1,6 +1,12 @@
 
 var button = document.getElementById("button");
 
-button?.onclick = function() {
-	
+function Clicker() {
+	this.clicks = 0;
 }
+
+var clicker = new Clicker();
+
+if (button) button.onclick = function() {
+	clicker.clicks++;
+};
