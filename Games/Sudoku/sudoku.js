@@ -39,12 +39,13 @@ Grid.prototype.generate = function(callback) {
 /**
  * @param {number} row 
  * @param {number} col 
+ * @param {boolean} [fixed] 
  */
-function SudokuCell(row, col) {
+function SudokuCell(row, col, fixed) {
     this.row = row;
     this.col = col;
     this.value = 0;
-    this.fixed = false;
+    this.fixed = Boolean(fixed);
 }
 
 function Sudoku() {
@@ -96,7 +97,7 @@ Sudoku.prototype.addCell = function(row, col, fixed) {
 
 	if (typeof fixed == "undefined") fixed = Math.random() < 0.5;
 
-    var cell = new SudokuCell(row, col);
+    var cell = new SudokuCell(row, col, fixed);
 
     this.cells.push(cell);
 
