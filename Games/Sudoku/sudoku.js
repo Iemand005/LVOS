@@ -45,7 +45,7 @@ function SudokuCell(row, col, fixed) {
     this.row = row;
     this.col = col;
     this.value = 0;
-    this.fixed = Boolean(fixed);
+    this.fixed = !!fixed;
 }
 
 function Sudoku() {
