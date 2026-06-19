@@ -7,6 +7,11 @@ function Clicker() {
 	this.clicks = 0;
 }
 
+Clicker.prototype.click = function() {
+	this.clicks++;
+	localStorage.setItem("clicker_clicks", this.clicks.toString());
+}
+
 var clicker = new Clicker();
 
 var textNode = document.createTextNode("0");
