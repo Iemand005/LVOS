@@ -50,7 +50,7 @@ function SudokuCell(row, col, fixed) {
 	this.element = null;
 }
 
-SudokuCell.prototype.show = function(callback) {
+SudokuCell.prototype.show = function() {
 	if (this.element) this.element.textContent = this.value.toString();
 }
 
@@ -161,8 +161,8 @@ Sudoku.prototype.fill = function(index) {
 			cell.value = num;
 
 			if (this.fill(index + 1)) {
+				if (cell.fixed) cell.show();
 				return true;
-				td.textContent = cell.value.toString();
 			}
 
 			cell.value = 0;
