@@ -49,9 +49,6 @@ function SudokuCell(row, col, fixed) {
 
 	/** @type {HTMLElement?} */
 	this.element = null;
-
-	/** @type {number?} */
-	this.selectedNumber = null;
 }
 
 SudokuCell.prototype.show = function() {
@@ -66,6 +63,9 @@ function Sudoku() {
 
 	/** @type {SudokuCell[]} */
     this.cells = [];
+
+	/** @type {number?} */
+	this.selectedNumber = null;
 }
 
 Sudoku.prototype.init = function() {
