@@ -185,11 +185,11 @@ Sudoku.prototype.createNumberPad = function() {
 
 		var radio = document.createElement("input");
 		radio.type = "radio";
-		radio.name = "sudoku-number"; // 👈 important (grouping)
+		radio.name = "sudoku-number";
 		radio.value = i.toString();
 
 		label.appendChild(radio);
-		label.appendChild(document.createTextNode(i));
+		label.appendChild(document.createTextNode(i.toString()));
 
 		container.appendChild(label);
 	}
