@@ -492,15 +492,15 @@ button:hover {
 
 
 
-.window > div {
-    width: 5px;
-    height: 5px;
-    z-index: 1000;
-}
-
 .window > .touch {
     width: 20px;
     height: 20px;
+    z-index: 1000;
+}
+
+.window > div {
+    width: 5px;
+    height: 5px;
     z-index: 1000;
 }
 
