@@ -247,10 +247,14 @@ var dragStopTimer;
 window.addEventListener("pointermove", (e) => {
     // console.log("mouse moving");
 
+	ClickOffset._overlay.style.display = "block";
+
     clearTimeout(dragStopTimer);
 
     dragStopTimer = setTimeout(() => {
         // console.log("mouse stopped");
+	ClickOffset._overlay.style.display = "none";
+
     }, 50);
 });
 
