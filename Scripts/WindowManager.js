@@ -1367,7 +1367,8 @@ Dialog.prototype.createPopout = function() {
 		}
 
 		if (width !== prevRect.width || height !== prevRect.height) {
-			
+
+			prevRect.width = width, prevRect.height = height;
 		}
 	}, 10);
 };
