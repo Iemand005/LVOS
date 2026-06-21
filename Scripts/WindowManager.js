@@ -1219,10 +1219,10 @@ Dialog.prototype.resizeBody = function (width, height) {
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
-    var frame = this.getOrCreateFrame(true);
-    if (!frame) return;
-    frame.src = url;
-    this._src = url;
+	var frame = this.getOrCreateFrame(true);
+	if (!frame) return;
+	frame.src = url;
+	this._src = url;
 };
 
 Dialog.prototype.quit = function() {
