@@ -1345,6 +1345,7 @@ Dialog.prototype.createPopout = function() {
 	if (!this._popupWindow) return;
 	var self = this;
 	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
+	var windowChromeHeight = getWindowChromeHeight(window);
 	var chromeHeight = getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
@@ -1359,7 +1360,7 @@ Dialog.prototype.createPopout = function() {
 
 		if (outerX !== prevRect.x || outerX !== prevRect.y) {
 			var x = outerX - window.screenX,
-				y = outerY - window.screenY - chromeHeight + titleBarHeight;
+				y = outerY - window.screenY - chromeHeight - windowChromeHeight;
 
 			console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 			self.move(x, y);
