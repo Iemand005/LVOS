@@ -1285,7 +1285,7 @@ Dialog.prototype.resizeBody = function (width, height) {
 	if (!rect || !bodyRect) return;
 	var diffWidth = bodyRect.width - width;
 	var diffHeight = bodyRect.height - height;
-	this.resize(width + (rect.width - bodyRect.width ), height + (rect.height - rect.height ));
+	this.resize(this.width + diffWidth, this.height + diffHeight);
 	/*
   	if (this.body && this.target && rect) {
 	  	this.body.style.boxSizing = "content-box";
