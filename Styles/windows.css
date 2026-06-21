@@ -557,39 +557,27 @@ button:hover {
     cursor: sw-resize;
 }
 
+.window > div.touch-sizer-6,
+.window > div.touch-sizer-5,
 .window > div.touch-sizer-1 {
     top: -20px;
 }
 
+.window > div.touch-sizer-7,
+.window > div.touch-sizer-6,
 .window > div.touch-sizer-2 {
     right: -20px;
 }
 
+.window > div.touch-sizer-8,
+.window > div.touch-sizer-7,
 .window > div.touch-sizer-3 {
     bottom: -20px;
 }
 
+.window > div.touch-sizer-8,
+.window > div.touch-sizer-5,
 .window > div.touch-sizer-4 {
-    left: -20px;
-}
-
-.window > div.touch-sizer-5 {
-    top: -20px;
-    left: -20px;
-}
-
-.window > div.touch-sizer-6 {
-    top: -20px;
-    right: -20px;
-}
-
-.window > div.touch-sizer-7 {
-    bottom: -20px;
-    right: -20px;
-}
-
-.window > div.touch-sizer-8 {
-    bottom: -20px;
     left: -20px;
 }
 
