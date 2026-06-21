@@ -1320,8 +1320,9 @@ Dialog.prototype.eject = function() {
 	this.quit();
 };
 Dialog.prototype.createPopout = function() {
-	if (!this.content) return;
-	var rect = this.content.getClientRects()[0];
+	var body = this.body;
+	if (!body) return;
+	var rect = body.getClientRects()[0];
 	var viewboxPosition = getViewboxPosition();
 	var propeties = {
 		scrollbars: true,
