@@ -1342,14 +1342,15 @@ Dialog.prototype.createPopout = function() {
 	}
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
-	self = this;
+	var self = this;
 	this._popupPositionInterval = setInterval(function() {
-		if (!popup || popup.closed) {
-			this._popupPositionInterval = 0;
+		if (!self._popupWindow || self._popupWindow.closed) {
+			clearInterval(self._popupPositionInterval);
+			self._popupPositionInterval = 0;
 			return;
 		}
 
-		console.log("pos:", popup.screenX, popup.screenY);
+		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 	}, 100);
 };
 /** @param {boolean} useTransform */
