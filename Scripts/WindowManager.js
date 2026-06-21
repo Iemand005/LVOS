@@ -1284,7 +1284,7 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
-	if (!bodyRect) return;
+	if (!bodyRect || (bodyRect.x === 0 || bodyRect.y === 0)) return;
 	this._bodyOffset.width = this.width - bodyRect.width;
 	this._bodyOffset.height = this.height - bodyRect.height;
 	this._bodyOffset.x = this.x - bodyRect.x;
