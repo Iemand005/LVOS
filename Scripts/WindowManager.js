@@ -968,7 +968,7 @@ Dialog.prototype.close = function () {
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
 };
 Dialog.prototype.getInnerRect = function () {
-  i	f (!this.target) return;
+  	if (!this.target) return;
 	return {
 		top: this.target.offsetTop,
 		left: this.target.offsetLeft,
