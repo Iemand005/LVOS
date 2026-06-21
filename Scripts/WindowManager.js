@@ -497,7 +497,8 @@ Dialog.prototype.initWithObject = function(object) {
 			if (createTouchSizers) {
 				for (var index = 0; index < 8; index++) {
 
-					var sizerId = "touch-sizer-" + (index + 1);
+					var id = index + 1;
+					var sizerId = "touch-sizer-" + id;
 
 					var div = this.getElementByTagOrClassName(sizerId);
 					if (!div || !(isElement(div))) div = document.createElement("div");
