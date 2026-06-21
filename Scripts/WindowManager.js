@@ -1282,14 +1282,11 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 		this.resize(height * ratio, height);
     }
 };
-/**
- * @param {number} width
- * @param {number} height
- */
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
 	if (!bodyRect) return;
-	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
+	this._bodyOffset.width = this.width - bodyRect.width;
+	this._bodyOffset.height = this.height - bodyRect.height;
 };
 /**
  * @param {number} width
