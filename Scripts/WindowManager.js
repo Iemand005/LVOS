@@ -1283,7 +1283,7 @@ Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
 	if (!rect || !bodyRect) return;
-	this.resize(width + rect.width - bodyRect.width, height + rect.height - bodyRect.height);
+	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
 	return;
 };
 /** @param {string} url */
