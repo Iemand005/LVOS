@@ -1695,7 +1695,7 @@ Dialog.prototype.loadState = function(state) {
     this.move(state.x, state.y); 
     this.setZ(state.z);
 	this.resize(state.width, state.height);
-    console.log("window loaded width: " state.width, state.height)
+    console.log("window loaded width: ", state.width, state.height)
     this.toggleFullScreen(state.maximized);
     if (state.open) this.launch();
 };
