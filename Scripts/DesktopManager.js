@@ -56,9 +56,12 @@ var onLoad = function () {
             // translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
+            // document.body.hasPointerCapture
+            document.body.style.pointerEvents = "none";
         };
         tingeling.onmouseup = function() {
             selector.remove();
+            document.body.style.pointerEvents = "";
         };
     }
 
