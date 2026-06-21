@@ -1315,10 +1315,10 @@ Dialog.prototype.kill = function() {
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
-Dialog.prototype.eject = function() _{
-	self.popout();
-	self.quit();
-}
+Dialog.prototype.eject = function() {
+	this.createPopout();
+	this.quit();
+};
 Dialog.prototype.createPopout = function() {
 	if (!this.target) return;
 	var rect = this.target.getClientRects()[0];
