@@ -1196,7 +1196,11 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
 	this._minAspectRatio = ratio;
 	this.resize();
 }
-/** @param {number} ratio */
+/** @typedef {"left" | "right" | "top" | "bottom" } Side */
+/**
+ * @param {number} ratio
+ * @param {}
+ */
 Dialog.prototype.enforceAspectRatio = function (ratio) {
 
 }
