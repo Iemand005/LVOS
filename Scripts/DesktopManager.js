@@ -57,11 +57,9 @@ var onLoad = function () {
             selector.className = "selector";
             tingeling.appendChild(selector);
             // document.body.hasPointerCapture
-            document.body.style.pointerEvents = "none";
         };
         tingeling.onmouseup = function() {
             selector.remove();
-            document.body.style.pointerEvents = "";
         };
     }
 

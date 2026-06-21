@@ -277,6 +277,8 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.height = height;
 	this.startX = startX;
 	this.startY = startY;
+	/** @type {HTMLElement?} */
+	this._overlay = null;
     return this;
 };
 
