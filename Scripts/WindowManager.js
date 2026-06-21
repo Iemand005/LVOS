@@ -1367,7 +1367,7 @@ Dialog.prototype.createPopout = function() {
 		width = Math.round(width);
 		height = Math.round(height);
 
-		if (outerX !== prevRect.x || outerX !== prevRect.y) {
+		if (outerX !== prevRect.x || outerY !== prevRect.y) {
 			var x = outerX - window.screenX + 100,
 				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
 
