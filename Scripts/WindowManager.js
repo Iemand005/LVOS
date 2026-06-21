@@ -1355,7 +1355,7 @@ Dialog.prototype.createPopout = function() {
 		if (x === prevX && y === prevY) return;
 
 		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
-		// self.move()
+		self.move(x, y);
 		prevX = x, prevY = y;
 	}, 100);
 };
