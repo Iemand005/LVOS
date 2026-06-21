@@ -1282,6 +1282,8 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
+	if (!rect || !bodyRect) return;
+	this.resize(width + rect?.width - bodyRect?.width, height);
 	/*
   	if (this.body && this.target && rect) {
 	  	this.body.style.boxSizing = "content-box";
