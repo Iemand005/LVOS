@@ -1,12 +1,12 @@
 {
   "version": "1.0",
   "project": {
-    "totalFocusTime": 125909
+    "totalFocusTime": 160339
   },
   "files": {
     "Scripts/WindowManager.js": {
       "pending": 0,
-      "focus": 69106
+      "focus": 97787
     }
   }
 }
