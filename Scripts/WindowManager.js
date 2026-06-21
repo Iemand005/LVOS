@@ -1157,6 +1157,15 @@ Dialog.prototype.update = function () {
   this.resize();
 };
 /**
+ * @param {number} [width]
+ * @param {number} [height]
+ */
+Dialog.prototype.setMinSize = function (width, height) {
+    this._minWidth = width;
+    this._minHeight = height;
+    this.resize();
+}
+/**
  * @param {number} width
  * @param {number} height
  */
