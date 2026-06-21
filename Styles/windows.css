@@ -578,7 +578,7 @@ button:hover {
 }
 
 .window > div.touch-sizer-4 {
-    top: -20px;
+    top: 0;
     left: -20px;
     cursor: e-resize;
     height: 100%;
