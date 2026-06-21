@@ -246,7 +246,8 @@ var dragStopTimer;
 
 window.addEventListener("pointermove", function(ev) {
     // console.log("mouse moving");
-
+	if (!ev.buttons) ClickOffset._overlay.remove();
+	
 	ClickOffset._overlay.style.display = "block";
 
     clearTimeout(dragStopTimer);
