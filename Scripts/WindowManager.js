@@ -1345,8 +1345,7 @@ Dialog.prototype.createPopout = function() {
 	if (!this._popupWindow) return;
 	var self = this;
 	/** @type {DOMRect} */
-	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
-	var prevX = -1, prevY = -1, prevX = -1, prevY = -1;
+	var prevRect = { x: -1, y: -1, width: -1, height: -1, bottom: -1, left: -1, top: -1, right: -1 };
 	var chromeHeight = getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
