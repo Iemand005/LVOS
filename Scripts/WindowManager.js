@@ -1343,7 +1343,7 @@ Dialog.prototype.createPopout = function() {
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
 	var self = this;
-	var prevX = -1, prevY = 0;
+	var prevX = -1, prevY = -1;
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
 			clearInterval(self._popupPositionInterval);
@@ -1351,9 +1351,13 @@ Dialog.prototype.createPopout = function() {
 			self.launch();
 			return;
 		}
+		var x = self._popupWindow.screenX, y = self._popupWindow.screenY;
+		if ()
 
 		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 		// self.move()
+		prevX = x;
+		prevY = y;
 	}, 100);
 };
 /** @param {boolean} useTransform */
