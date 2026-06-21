@@ -1203,7 +1203,10 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
  * @param {Side} [sideConstraint2]
  */
 Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideConstraint2) {
-
+	this.aspectRatio = ratio;
+	if (sideConstraint1 !== undefined) {
+		
+	}
 }
 /**
  * @param {number} width
