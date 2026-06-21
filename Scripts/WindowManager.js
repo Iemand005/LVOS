@@ -1359,8 +1359,8 @@ Dialog.prototype.createPopout = function() {
 		var width = self._popupWindow.innerWidth || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
 
 		if (outerX !== prevRect.x || outerX !== prevRect.y) {
-			var x = outerX - window.screenX + 10,
-				y = outerY - window.screenY + windowChromeHeight;
+			var x = outerX - window.screenX + 100,
+				y = outerY - window.screenY;
 
 			console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 			self.move(x, y);
