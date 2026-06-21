@@ -1058,45 +1058,45 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
-    if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
-        return name == "transform" || name === "width";
-    }, undefined, function(enabled) {
-        if (!this.useTransform || !this.target) return;
-        this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
-        this.target.style.minHeight = enabled ? "100%" : toPixels(this.minHeight);
-    });
-    else {
-        var startPos = this.position;
-        var startSize = this.size;
-        var target = this.target;
-        var self = this;
-        if (!target) return;
-        enable = !target.classList.contains("fullscreen");
-        var toggleThingie = function() {
-            self.x = startPos.x;
-            self.y = startPos.y;
-            self.width = startSize.x;
-            self.height = startSize.y;
-            if ( self.target) self.target.classList.toggle("fullscreen", enable);
-        }
-        if (!enable) toggleThingie();
-        animate(300, function(t) {
-            var ease = easeSharpCenterStrong;
-            if (enable) {
-                self.x = lerp(startPos.x, 0, ease(t));
-                self.y = lerp(startPos.y, 0, ease(t));
-                self.width = lerp(startSize.x, window.innerWidth, ease(t));
-                self.height = lerp(startSize.y, window.innerHeight, ease(t));
-            } else {
-                self.x = lerp(0, startPos.x, ease(t));
-                self.y = lerp(0, startPos.y, ease(t));
-                self.width = lerp(window.innerWidth, startSize.x, ease(t));
-                self.height = lerp(window.innerHeight, startSize.y, ease(t));
-            }
-        }, function() {
-            if (enable) toggleThingie();
-        });
-    }
+	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
+		return name == "transform" || name === "width";
+	}, undefined, function(enabled) {
+		if (!this.useTransform || !this.target) return;
+		this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
+		this.target.style.minHeight = enabled ? "100%" : toPixels(this.minHeight);
+	});
+	else {
+		var startPos = this.position;
+		var startSize = this.size;
+		var target = this.target;
+		var self = this;
+		if (!target) return;
+		enable = !target.classList.contains("fullscreen");
+		var toggleThingie = function() {
+			self.x = startPos.x;
+			self.y = startPos.y;
+			self.width = startSize.x;
+			self.height = startSize.y;
+			if ( self.target) self.target.classList.toggle("fullscreen", enable);
+		}
+		if (!enable) toggleThingie();
+		animate(300, function(t) {
+			var ease = easeSharpCenterStrong;
+			if (enable) {
+				self.x = lerp(startPos.x, 0, ease(t));
+				self.y = lerp(startPos.y, 0, ease(t));
+				self.width = lerp(startSize.x, window.innerWidth, ease(t));
+				self.height = lerp(startSize.y, window.innerHeight, ease(t));
+			} else {
+				self.x = lerp(0, startPos.x, ease(t));
+				self.y = lerp(0, startPos.y, ease(t));
+				self.width = lerp(window.innerWidth, startSize.x, ease(t));
+				self.height = lerp(window.innerHeight, startSize.y, ease(t));
+			}
+		}, function() {
+			if (enable) toggleThingie();
+		});
+	}
 };
 Dialog.prototype.maximize = function () {
   	this.toggleFullScreen(true);
