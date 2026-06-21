@@ -1179,24 +1179,24 @@ Dialog.prototype.resize = function (width, height) {
     this.height = height || this.height;
 };
 Dialog.prototype.update = function () {
-  this.move();
-  this.resize();
+	this.move();
+	this.resize();
 };
 /**
  * @param {number} [width]
  * @param {number} [height]
  */
 Dialog.prototype.setMinSize = function (width, height) {
-    this._minWidth = width || 180;
-    this._minHeight = height || 200;
-    this.resize();
+	this._minWidth = width || 180;
+	this._minHeight = height || 200;
+	this.resize();
 }
 /**
  * @param {number} ratio
  */
 Dialog.prototype.setMinAspectRatio = function (ratio) {
-    this._minAspectRatio
-    this.resize();
+	this._minAspectRatio = ratio;
+	this.resize();
 }
 /**
  * @param {number} width
