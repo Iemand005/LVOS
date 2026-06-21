@@ -1365,6 +1365,10 @@ Dialog.prototype.createPopout = function() {
 			self.move(x, y);
 			prevRect.x = outerX, prevRect.y = outerY;
 		}
+
+		if (width !== prevRect.width || height !== prevRect.height) {
+			
+		}
 	}, 10);
 };
 /** @param {Window} window */
