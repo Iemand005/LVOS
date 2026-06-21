@@ -44,7 +44,7 @@ var onLoad = function () {
 		};
 		
 
-        tingeling.onmousedown = function(ev) {
+        tingeling.onpointerdown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
