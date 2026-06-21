@@ -695,7 +695,7 @@ Object.defineProperty(Dialog.prototype, "minWidth", {
 });
 Object.defineProperty(Dialog.prototype, "minHeight", {
     get: function() { return this._minHeight; },
-    set: function(width) { this.setMinSize(this.minWidth, width); }
+    set: function(height) { this.setMinSize(this.minWidth, height); }
 });
 /** @type {{x:number,y:number}} */
 Object.defineProperty(Dialog.prototype, "position", {
