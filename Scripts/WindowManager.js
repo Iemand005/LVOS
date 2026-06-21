@@ -1392,7 +1392,7 @@ Dialog.prototype.createPopout = function() {
 
 			self.resizeBody(width, height);
 
-			console.log("pos:", width, width);
+			console.log("size:", width, width);
 
 			prevRect.width = width, prevRect.height = height;
 		}
