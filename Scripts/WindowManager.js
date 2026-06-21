@@ -357,7 +357,7 @@ function Dialog(object, create) {
 
     this._skew = 0;
 
-	this._bodyOffset = { width: 0, height: 0 };
+	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
     if (!object) return;
     if (!create) create = false;
@@ -1287,6 +1287,8 @@ Dialog.prototype.updateBodyOffset = function () {
 	if (!bodyRect) return;
 	this._bodyOffset.width = this.width - bodyRect.width;
 	this._bodyOffset.height = this.height - bodyRect.height;
+	this._bodyOffset.x = this.x - bodyRect.x;
+	this._bodyOffset.y = this.y - bodyRect.y;
 };
 /**
  * @param {number} width
