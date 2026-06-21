@@ -986,11 +986,11 @@ Dialog.prototype.togglePointerEvents = function(enable) {
  * @param {boolean} [enable]
  */
 Dialog.prototype.toggleButton = function (buttonId, enable) {
-  var button = this.getButton(buttonId);
-  return button && button.toggleAttribute("disabled", !enable);
+	var button = this.getButton(buttonId);
+	return button && button.toggleAttribute("disabled", !enable);
 };
 Dialog.prototype.clearClickOffset = function () {
-  this.clickOffset && this.clickOffset.clear();
+  	this.clickOffset && this.clickOffset.clear();
 };
 /** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
