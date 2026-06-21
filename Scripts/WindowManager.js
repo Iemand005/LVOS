@@ -1205,9 +1205,23 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
 Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideConstraint2) {
 	this.aspectRatio = ratio;
 	if (sideConstraint1 !== undefined) {
-		
+
 	}
 }
+Dialog.prototype.resizeWithAspect = function (newWidth, newHeight) {
+    const ratio = this.aspectRatio;
+
+    const widthDelta = Math.abs(newWidth - this.width);
+    const heightDelta = Math.abs(newHeight - this.height);
+
+    if (widthDelta > heightDelta) {
+        this.width = newWidth;
+        this.height = newWidth / ratio;
+    } else {
+        this.height = newHeight;
+        this.width = newHeight * ratio;
+    }
+};
 /**
  * @param {number} width
  * @param {number} height
