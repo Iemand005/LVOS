@@ -1354,14 +1354,15 @@ Dialog.prototype.createPopout = function() {
 			return;
 		}
 
-		var outerX, outerY;
+		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
 
-		var x = self._popupWindow.screenX - window.screenX, y = self._popupWindow.screenY - window.screenY - chromeHeight + titleBarHeight;
-		if (x === prevX && y === prevY) return;
+		if (outerX !== prevX || outerX !== prevY) {
+			var x = outerX - window.screenX, y = outerY - window.screenY - chromeHeight + titleBarHeight;
 
-		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
-		self.move(x, y);
-		prevX = x, prevY = y;
+			console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
+			self.move(x, y);
+			prevX = outerX, prevY = outerY;
+		}
 	}, 10);
 };
 /** @param {Window} window */
