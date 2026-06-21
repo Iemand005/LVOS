@@ -983,6 +983,10 @@ Dialog.prototype.getRect = function (index) {
 	if (!this.target) return;
 	return index ? this.target.getClientRects()[index] : this.target.getBoundingClientRect();
 };
+Dialog.prototype.getBodyRect = function () {
+	if (!this.body) return;
+	return this.body.getBoundingClientRect();
+};
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
