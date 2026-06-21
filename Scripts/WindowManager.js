@@ -1344,8 +1344,8 @@ Dialog.prototype.createPopout = function() {
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
 	if (!this._popupWindow) return;
 	var self = this;
-	DOMRect
-	var prevRect = {}
+	/** @type {DOMRect} */
+	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
 	var prevX = -1, prevY = -1, prevX = -1, prevY = -1;
 	var chromeHeight = getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
