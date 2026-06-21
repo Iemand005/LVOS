@@ -1347,10 +1347,12 @@ Dialog.prototype.createPopout = function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
 			clearInterval(self._popupPositionInterval);
 			self._popupPositionInterval = 0;
+			self.launch();
 			return;
 		}
 
 		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
+		// self.move()
 	}, 100);
 };
 /** @param {boolean} useTransform */
