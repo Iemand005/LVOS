@@ -1252,13 +1252,11 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
     var widthDelta = Math.abs(width - this.width);
     var heightDelta = Math.abs(height - this.height);
 
-    // if (widthDelta > heightDelta) {
-    //     this.width = width;
-    //     this.height = width / ratio;
-    // } else {
-    //     this.height = height;
-    //     this.width = height * ratio;
-    // }
+    if (widthDelta > heightDelta) {
+		this.resize(width, width / ratio);
+    } else {
+		this.resize(height * ratio, height);
+    }
 };
 /**
  * @param {number} width
