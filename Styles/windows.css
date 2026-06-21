@@ -602,7 +602,7 @@ button:hover {
     cursor: sw-resize;
 }
 
-.touch .window > div {
+.window > div.touch {
     width: 20px;
     height: 20px;
     z-index: 1000;
