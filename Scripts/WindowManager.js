@@ -1335,7 +1335,7 @@ Dialog.prototype.createPopout = function() {
 		menubar: false,
 		width: rect.width,
 		height: rect.height,
-		left: rect.left + viewboxPosition.left + titleBarRect.height,
+		left: rect.left + viewboxPosition.left,
 		top: rect.top + viewboxPosition.top + titleBarRect.height
 	}
 
