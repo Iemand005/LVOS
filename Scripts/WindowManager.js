@@ -470,6 +470,7 @@ Dialog.prototype.initWithObject = function(object) {
         var borderSection = this.getElementByTagOrClassName("section");
 
         var createSizers = true;
+		var createTouchSizers = true;
 
         if(borderSection && !this.fixed && createSizers) {
             for (var index = 0; index < 8; index++) {
@@ -489,6 +490,26 @@ Dialog.prototype.initWithObject = function(object) {
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
             }
+
+			if (createTouchSizers) {
+				for (var index = 0; index < 8; index++) {
+
+					var sizerId = "sizer-" + (index + 1);
+
+					var div = this.getElementByTagOrClassName(sizerId);
+					if (!div || !(isElement(div))) div = document.createElement("div");
+					div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
+					/** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
+					var pointerDown = function (ev) {
+						cancelDomEvent(ev);
+						if (ev.target && isElement(ev.target)) dragAction.set(Number(ev.target.id));
+						activationHandler(ev);
+					}; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+					if (supportsPointer) div.onpointerdown = pointerDown;
+					else div.onmousedown = pointerDown;
+					target.appendChild(div);
+				}
+			}
         }
         
         target.addEventListener("dragstart", cancelDomEvent, false);
