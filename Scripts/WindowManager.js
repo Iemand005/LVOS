@@ -318,6 +318,8 @@ function Dialog(object, create) {
 
     this._minWidth = 200;
     this._minHeight = 200;
+    this._minAspectRatio = 0;
+    this._maxAspectRatio = Infinity;
     this._mica = useMica;
 
     this._useTransform = useTransform;
@@ -720,7 +722,7 @@ Object.defineProperty(Dialog.prototype, "aspectRatio", {
 });
 
 Object.defineProperty(Dialog.prototype, "minAspectRatio", {
-    get: function() { return this._minAs; },
+    get: function() { return this._minAspectRatio; },
     set: function(aspect) { this.width = this.height * aspect; }
 });
 
