@@ -1061,6 +1061,10 @@ function setClass(element, className, enabled) {
 	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	return element.className.indexOf(className) !== -1;
 }
+Dialog.prototype.stopAnimating = function () {
+	if (!this.target) return;
+	this.target.classList.remove("animating");
+}
 /**
  * @param {string} className 
  * @param {boolean} [force] 
@@ -1091,7 +1095,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
-			target.classList.remove("animating");
+			dialog.stopAnimating();
 			console.log("Aborting animation over " + event.propertyName);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
