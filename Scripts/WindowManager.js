@@ -1324,7 +1324,7 @@ Dialog.prototype.eject = function() {
 Dialog.prototype.createPopout = function() {
 	var body = this.body;
 	var titlebar = this.titleBar;
-	if (!body || !titlebar || !this.href) return;
+	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
 	var titleBarRect = titlebar && titlebar.getBoundingClientRect().height || 0;
 	var viewboxPosition = getViewboxPosition();
