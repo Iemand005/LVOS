@@ -356,6 +356,8 @@ function Dialog(object, create) {
     this._useScale = useScale;
 
     this._skew = 0;
+
+	this._bodyOffset = { width: 0, height: 0 };
     
     if (!object) return;
     if (!create) create = false;
@@ -1279,6 +1281,15 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
     } else {
 		this.resize(height * ratio, height);
     }
+};
+/**
+ * @param {number} width
+ * @param {number} height
+ */
+Dialog.prototype.updateBodyOffset = function () {
+	var bodyRect = this.getBodyRect();
+	if (!bodyRect) return;
+	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
 };
 /**
  * @param {number} width
