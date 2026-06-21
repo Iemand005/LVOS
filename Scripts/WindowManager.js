@@ -1341,7 +1341,12 @@ Dialog.prototype.createPopout = function() {
 		top: rect.top + viewboxPosition.top + titleBarRect
 	}
 
-	if (this.href) this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
+	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
+	this_pop = setInterval(() => {
+    if (!popup || popup.closed) return;
+
+    console.log("pos:", popup.screenX, popup.screenY);
+}, 100);
 };
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
