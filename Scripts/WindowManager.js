@@ -1033,28 +1033,28 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
  * @returns 
  */
 Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
-    var target = this.target;
-    if (!target) return;
-    var dialog = this;
+	var target = this.target;
+	if (!target) return;
+	var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
 			target.classList.remove("animating");
-            console.log("Aborting animation over " + event.propertyName);
+			console.log("Aborting animation over " + event.propertyName);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
-    
-    window.requestAnimationFrame(function() {
+
+	window.requestAnimationFrame(function() {
 		if (!target) return;
-        try { void target.offsetWidth; } catch (e) {}
-        var enabled = setClass(target, className, force);
-        if (onToggled) onToggled.call(dialog, enabled);
-    });
+		try { void target.offsetWidth; } catch (e) {}
+		var enabled = setClass(target, className, force);
+		if (onToggled) onToggled.call(dialog, enabled);
+	});
 }
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
