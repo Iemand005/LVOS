@@ -1368,7 +1368,7 @@ Dialog.prototype.createPopout = function() {
 		height = Math.round(height);
 
 		if (outerX !== prevRect.x || outerY !== prevRect.y) {
-			var x = outerX - window.screenX + 100,
+			var x = outerX - window.screenX,
 				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
 
 			console.log("pos:", outerX, outerY);
@@ -1384,7 +1384,7 @@ Dialog.prototype.createPopout = function() {
 
 			prevRect.width = width, prevRect.height = height;
 		}
-	}, 10);
+	}, 100);
 };
 /** @param {Window} window */
 function getWindowChromeHeight(window) {
