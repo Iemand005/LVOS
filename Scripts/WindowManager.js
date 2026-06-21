@@ -1283,9 +1283,28 @@ Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
 	if (!rect || !bodyRect) return;
+	this.resize(width + rect.width - bodyRect.width, height + rect.height - rect.height);
+	return;
+	var rect = this.getRect();
+	var bodyRect = this.getBodyRect();
+	if (!rect || !bodyRect) return;
 	var diffWidth = bodyRect.width - width;
 	var diffHeight = bodyRect.height - height;
 	this.resize(this.width - diffWidth, this.height - diffHeight);
+	/*
+  	if (this.body && this.target && rect) {
+	  	this.body.style.boxSizing = "content-box";
+		this.body.style.flex = "unset";
+		this.body.style.width = toPixels(width);
+		this.body.style.height = toPixels(height);
+		this.target.style.width = "";
+		this.target.style.height = "";
+		this.width = rect.width;
+		this.height = rect.height;
+		this.body.style.boxSizing = "";
+		this.body.style.flex = "";
+  	}
+	*/
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
