@@ -498,6 +498,12 @@ button:hover {
     z-index: 1000;
 }
 
+.window > .touch {
+    width: 20px;
+    height: 20px;
+    z-index: 1000;
+}
+
 .window > .sizer-1, .window > .touch-sizer-1 {
     top: 0;
     left: 0;
@@ -550,30 +556,20 @@ button:hover {
     cursor: sw-resize;
 }
 
-.window > div.touch {
-    width: 20px;
-    height: 20px;
-    z-index: 1000;
-}
-
 .window > div.touch-sizer-1 {
     top: -20px;
-    width: 100%;
 }
 
 .window > div.touch-sizer-2 {
     right: -20px;
-    height: 100%;
 }
 
 .window > div.touch-sizer-3 {
     bottom: -20px;
-    width: 100%;
 }
 
 .window > div.touch-sizer-4 {
     left: -20px;
-    height: 100%;
 }
 
 .window > div.touch-sizer-5 {
