@@ -1283,6 +1283,8 @@ Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
 	if (!rect || !bodyRect) return;
+	var diffWidth = bodyRect.width - width;
+	var diffHeight = bodyRect.height - height;
 	this.resize(width + (rect.width - bodyRect.width ), height + (rect.height - rect.height ));
 	/*
   	if (this.body && this.target && rect) {
