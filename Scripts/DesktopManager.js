@@ -42,7 +42,7 @@ var onLoad = function () {
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
 		};
-		clickOffset.toggleDragEventHandler(true);
+		
 
         tingeling.onmousedown = function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
@@ -56,11 +56,15 @@ var onLoad = function () {
             // translateElement(selector, ev.clientX, ev.clientY);
             selector.className = "selector";
             tingeling.appendChild(selector);
+
+            clickOffset.toggleDragEventHandler(true);
             // document.body.hasPointerCapture
         };
         tingeling.onmouseup = function() {
             selector.remove();
         };
+
+        window.addEventListener("mouseup", function(ev) { selector.remove(); }, false);
     }
 
 };
