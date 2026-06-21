@@ -1751,6 +1751,8 @@ function handleWindowDrag(newX, hewY) {
         dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
     }
 
+	dialog.stopAnimating();
+
     dragAction.execute(dialog, dialog.clickOffset, difference);
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
