@@ -1355,6 +1355,7 @@ Dialog.prototype.createPopout = function() {
 		}
 
 		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
+		var width = self._popupWindow.innerWidth || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
 
 		if (outerX !== prevRect.x || outerX !== prevRect.y) {
 			var x = outerX - window.screenX,
