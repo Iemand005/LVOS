@@ -1291,7 +1291,7 @@ Dialog.prototype.resizeBody = function (width, height) {
 Dialog.prototype.moveBody = function (x, y) {
 	var bodyRect = this.getBodyRect();
 	if (!bodyRect) return;
-	this.move(x, y);
+	this.move(x + this.x - bodyRect.x, y + this.y - bodyRect.y);
 }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
