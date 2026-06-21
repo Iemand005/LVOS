@@ -1001,15 +1001,15 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
  * @param {boolean} [enabled] 
  */
 function setClass(element, className, enabled) {
-    var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
+	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-    if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
+	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
 
-    if (enabled) {
-        if (!re.test(element.className))
-            element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-    } else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-    return element.className.indexOf(className) !== -1;
+	if (enabled) {
+		if (!re.test(element.className))
+			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	return element.className.indexOf(className) !== -1;
 }
 /**
  * @param {string} className 
