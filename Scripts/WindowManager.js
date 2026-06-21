@@ -967,7 +967,7 @@ Dialog.prototype.open = function () {
 Dialog.prototype.close = function () {
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
 };
-(Dialog.prototype.getInnerRect = function () {
+Dialog.prototype.getInnerRect = function () {
   if (this.target)
     return {
       top: this.target.offsetTop,
@@ -977,11 +977,11 @@ Dialog.prototype.close = function () {
       width: this.target.offsetWidth,
       height: this.target.offsetHeight
     };
-}), // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-/** @param {number} [i] */
-Dialog.prototype.getRect = function (i) {
+}; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+/** @param {number} [index] */
+Dialog.prototype.getRect = function (index) {
 	if (!this.target) return;
-	return i === null ? this.target.getBoundingClientRect() : this.target.getClientRects()[i];
+	return index === null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index];
 };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
