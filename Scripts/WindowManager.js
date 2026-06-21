@@ -988,7 +988,8 @@ function getRect(element, index) {
 }
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
-Dialog.prototype.getBodyRect = function () { return getRect(this.body, index); };
+/** @param {number} [index] */
+Dialog.prototype.getBodyRect = function (index) { return getRect(this.body, index); };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
@@ -1280,6 +1281,7 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
  */
 Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
+	var bodyRect = this.getBodyRect();
   	if (this.body && this.target && rect) {
 	  	this.body.style.boxSizing = "content-box";
 		this.body.style.flex = "unset";
