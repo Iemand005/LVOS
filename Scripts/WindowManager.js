@@ -988,11 +988,10 @@ function getRect(element, index) {
 }
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) {
-	return  getRect(this.target, index);
+	return getRect(this.target, index);
 };
 Dialog.prototype.getBodyRect = function () {
-	if (!this.body) return;
-	return this.body.getBoundingClientRect();
+	return getRect(this.body, index);
 };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
