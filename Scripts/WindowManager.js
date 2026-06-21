@@ -1192,6 +1192,14 @@ Dialog.prototype.setMinSize = function (width, height) {
     this.resize();
 }
 /**
+ * @param {number} ratio
+ */
+Dialog.prototype.setMinAspectRatio = function (ratio) {
+    this._minWidth = width || 180;
+    this._minHeight = height || 200;
+    this.resize();
+}
+/**
  * @param {number} width
  * @param {number} height
  */
