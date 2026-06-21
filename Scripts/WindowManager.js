@@ -508,7 +508,10 @@ Dialog.prototype.initWithObject = function(object) {
 					var touchDown = function(id) {
 						/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
 						return function (ev) {
-							if (ev.pointerType !== "touch") return;
+							if (ev.pointerType !== "touch") {
+								dragAction.set(-1);
+								return;
+							}
 							cancelDomEvent(ev);
 							console.log(ev.type, ev.pointerType);
 							// ev.pointerType = "";
