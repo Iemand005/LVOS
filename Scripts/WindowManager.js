@@ -1332,11 +1332,11 @@ Dialog.prototype.injectMica = function() {
 };
 
 Dialog.prototype.removeMica = function() {
-    if (!this.target) return false;
-    this.target.classList.remove("mica");
-    var clip = this.micaElement;
-    if (!clip) return false;
-    while (clip.firstChild) clip.firstChild.remove();
+	if (!this.target) return false;
+	this.target.classList.remove("mica");
+	var clip = this.micaElement;
+	if (!clip) return false;
+	while (clip.firstChild) clip.firstChild.remove();
 	return false;
 };
 
