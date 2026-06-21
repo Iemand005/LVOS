@@ -60,11 +60,11 @@ var onLoad = function () {
             clickOffset.toggleDragEventHandler(true);
             // document.body.hasPointerCapture
         };
-        tingeling.onmouseup = function() {
+        tingeling.onpointerup = function() {
             selector.remove();
         };
 
-        window.addEventListener("mouseup", function(ev) { selector.remove(); }, false);
+        window.addEventListener("pointerup", function(ev) { selector.remove(); }, false);
     }
 
 };
