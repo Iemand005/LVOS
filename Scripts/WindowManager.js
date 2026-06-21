@@ -549,7 +549,7 @@ Dialog.prototype.initWithObject = function(object) {
         if (body)
             body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
-        var header = this.header;
+        var header = this.titleBar;
         if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this, undefined), false);
 
 
@@ -668,7 +668,7 @@ Object.defineProperty(Dialog.prototype, "body", {
         return this.getElementByTagOrClassName("article", content);
     }
 });
-Object.defineProperty(Dialog.prototype, "header", {
+Object.defineProperty(Dialog.prototype, "titleBar", {
     get: function() { return this.getElementByTagOrClassName("header"); },
 });
 
@@ -957,7 +957,7 @@ Dialog.prototype.activate = function() {
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
-	return this.header && !this.header.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
+	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
@@ -985,7 +985,7 @@ Dialog.prototype.close = function () {
   });
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
-  return this.header && this.header.getElementsByTagName("button")[index];
+  return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
 };
 Dialog.prototype.createOpenButton = function () {
     var openButton = document.createElement("button");
