@@ -978,13 +978,11 @@ Dialog.prototype.close = function () {
       height: this.target.offsetHeight
     };
 }), // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-  /** @param {number} [index] */
-  (Dialog.prototype.getRect = function (index) {
-    if (this.target)
-      return index == null
-        ? this.target.getBoundingClientRect()
-        : this.target.getClientRects()[index];
-  });
+/** @param {number} [index] */
+Dialog.prototype.getRect = function (index) {
+	if (!this.target) return;
+	return index === null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index];
+};
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
