@@ -236,6 +236,7 @@ function ClickOffset() {
 
 ClickOffset._overlay = document.createElement("div");
 ClickOffset._overlay.className = "drag-overlay";
+window.addEventListener("mousemove", function (ev) {if (!ev.buttons) ClickOffset._overlay.remove();})
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
