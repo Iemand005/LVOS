@@ -51,7 +51,7 @@ input[type="number"] {
     }
 
     button, .button, input, select {
-        border-color: #cecece3a;
-        background-color: #0000;
+        border-color: #9595953b;
+        background-color: #0000004a;
     }
 }
