@@ -1242,18 +1242,22 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
 
 	}
 }
-Dialog.prototype.resizeWithAspect = function (newWidth, newHeight) {
+/**
+ * @param {number} width
+ * @param {number} height
+ */
+Dialog.prototype.resizeWithAspect = function (width, height) {
     const ratio = this.aspectRatio;
 
-    const widthDelta = Math.abs(newWidth - this.width);
-    const heightDelta = Math.abs(newHeight - this.height);
+    const widthDelta = Math.abs(width - this.width);
+    const heightDelta = Math.abs(height - this.height);
 
     if (widthDelta > heightDelta) {
-        this.width = newWidth;
-        this.height = newWidth / ratio;
+        this.width = width;
+        this.height = width / ratio;
     } else {
-        this.height = newHeight;
-        this.width = newHeight * ratio;
+        this.height = height;
+        this.width = height * ratio;
     }
 };
 /**
