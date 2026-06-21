@@ -1691,13 +1691,13 @@ Dialog.prototype.getState = function() {
 
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
+    if (state.open) this.launch();
     this.title = state.title;
     this.move(state.x, state.y); 
     this.setZ(state.z);
 	this.resize(state.width, state.height);
     console.log(state.title, "window loaded width: ", state.width, state.height)
     this.toggleFullScreen(state.maximized);
-    if (state.open) this.launch();
 };
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
