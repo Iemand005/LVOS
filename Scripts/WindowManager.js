@@ -557,7 +557,7 @@ Dialog.prototype.initWithObject = function(object) {
         else target.addEventListener("mousedown", activationHandler, false);
         target.onmousedown = activationHandler;
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
-            self.popout();
+            self.createPopout();
             self.quit();
         }, false);
         
@@ -1319,7 +1319,7 @@ Dialog.prototype.eject = function() _{
 	self.popout();
 	self.quit();
 }
-Dialog.prototype.popout = function() {
+Dialog.prototype.createPopout = function() {
 	if (!this.target) return;
 	var rect = this.target.getClientRects()[0];
 	var viewboxPosition = getViewboxPosition();
