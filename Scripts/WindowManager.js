@@ -1285,8 +1285,8 @@ Dialog.prototype.resizeBody = function (width, height) {
 	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
 };
 /**
- * @param {number} [x]
- * @param {number} [y]
+ * @param {number} x
+ * @param {number} y
  */
 Dialog.prototype.moveBody = function (x, y) {
 	var bodyRect = this.getBodyRect();
