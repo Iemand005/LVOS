@@ -290,7 +290,9 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler) {
     (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
     console.log(enable ? "Starting drag" : "Ending drag");
-	if ()
+	if (!this._overlay) return;
+	if (enable) document.body.appendChild(this._overlay);
+	else this._overlay.remove();
 }
 
 /** @param {boolean} enable */
