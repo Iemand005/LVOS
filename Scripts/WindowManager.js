@@ -1204,7 +1204,7 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
  */
 Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
-  if (this.body && this.target && rect) {
+  	if (this.body && this.target && rect) {
 	  	this.body.style.boxSizing = "content-box";
 		this.body.style.flex = "unset";
 		this.body.style.width = toPixels(width);
@@ -1215,7 +1215,7 @@ Dialog.prototype.resizeBody = function (width, height) {
 		this.height = rect.height;
 		this.body.style.boxSizing = "";
 		this.body.style.flex = "";
-  }
+  	}
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
