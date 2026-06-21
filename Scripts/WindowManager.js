@@ -1199,8 +1199,8 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
 /** @typedef {"left" | "right" | "top" | "bottom" } Side */
 /**
  * @param {number} ratio
- * @param {Side} sideConstraint1
- * @param {Side} sideConstraint2
+ * @param {Side} [sideConstraint1]
+ * @param {Side} [sideConstraint2]
  */
 Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideConstraint2) {
 
