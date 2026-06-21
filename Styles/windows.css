@@ -550,7 +550,59 @@ button:hover {
     cursor: sw-resize;
 }
 
-touch .window > div {
+.window > .touch-sizer-1 {
+    top: -20px;
+    left: -20px;
+    cursor: n-resize;
+    width: 100%;
+}
+
+.window > .touch-sizer-2 {
+    top: -20px;
+    right: -20px;
+    cursor: w-resize;
+    height: 100%;
+}
+
+.window > .touch-sizer-3 {
+    bottom: -20px;
+    left: -20px;
+    cursor: s-resize;
+    width: 100%;
+}
+
+.window > .touch-sizer-4 {
+    top: -20px;
+    left: -20px;
+    cursor: e-resize;
+    height: 100%;
+}
+
+.window > .touch-sizer-5 {
+    top: -20px;
+    left: -20px;
+    cursor: nw-resize;
+}
+
+.window > .touch-sizer-6 {
+    top: -20px;
+    right: -20px;
+    cursor: ne-resize;
+}
+
+.window > .touch-sizer-7 {
+    bottom: -20px;
+    right: -20px;
+    cursor: se-resize;
+}
+
+.window > .touch-sizer-8 {
+    bottom: -20px;
+    left: -20px;
+    cursor: sw-resize;
+}
+
+.touch .window > div {
     width: 20px;
     height: 20px;
     z-index: 1000;
