@@ -957,29 +957,29 @@ Dialog.prototype.createOpenButton = function () {
  * @param {number} y
  */
 Dialog.prototype.setClickOffset = function(x, y) {
-    var rect = this.getRect();
-    if (!this.clickOffset || !rect) return;
-    return this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y)
+	var rect = this.getRect();
+	if (!this.clickOffset || !rect) return;
+	return this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y)
 }
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
-    if (!this.application) return null;
-    return this.application.src;
+	if (!this.application) return null;
+	return this.application.src;
 }});
 /** @param {boolean} enable */
 Dialog.prototype.togglePointerEvents = function(enable) {
-    var target = this.target;
-    if (!target) return;
-    if (enable === null) enable = target.style.pointerEvents === "none";
-    if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
-    else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
+	var target = this.target;
+	if (!target) return;
+	if (enable === null) enable = target.style.pointerEvents === "none";
+	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
+	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
 
-    var events = enable ? "auto" : "none";
-    target.style.pointerEvents = events;
-    if (this.originalBody) this.originalBody.style.pointerEvents = events;
-    var frame = this.frame;
-    if (frame) frame.style.pointerEvents = events;
-    return events;
+	var events = enable ? "auto" : "none";
+	target.style.pointerEvents = events;
+	if (this.originalBody) this.originalBody.style.pointerEvents = events;
+	var frame = this.frame;
+	if (frame) frame.style.pointerEvents = events;
+	return events;
 }
 /**
  * @param {number} buttonId
@@ -990,7 +990,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 	return button && button.toggleAttribute("disabled", !enable);
 };
 Dialog.prototype.clearClickOffset = function () {
-  	this.clickOffset && this.clickOffset.clear();
+	this.clickOffset && this.clickOffset.clear();
 };
 /** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
