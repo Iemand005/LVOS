@@ -210,8 +210,8 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
-	windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
-	toggleDialogDragEventHandler(enabled);
+	// windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
+	ClickOffset.toggleDragEventHandler(enabled, windowDragEvent);
     this.isDragging = enabled;
 };
 
