@@ -499,9 +499,9 @@ button:hover {
 }
 
 .window > div {
-    width: 5px;
-    height: 5px;
-    z-index: 1000;
+	width: 5px;
+	height: 5px;
+	z-index: 1000;
 }
 
 .window > .sizer-1, .window > .touch-sizer-1 {
