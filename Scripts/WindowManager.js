@@ -1331,6 +1331,25 @@ Dialog.prototype.kill = function() {
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
+Dialog.prototype.popout = function() {
+	fi (!this.target) return;
+	var rect = this.target.getClientRects()[0];
+	var viewboxPosition = getViewboxPosition();
+	var propeties = {
+		scrollbars: true,
+		resizable: true,
+		status: false,
+		location: false,
+		toolbar: false,
+		menubar: false,
+		width: rect.width,
+		height: rect.height,
+		left: rect.left + viewboxPosition.left,
+		top: rect.top + viewboxPosition.top
+	}
+
+	if (self.href) self._popupWindow = window.open(self.href, self.title || "LVOS", stringifyDialogProperties(propeties));
+};
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
