@@ -1335,8 +1335,8 @@ Dialog.prototype.createPopout = function() {
 		menubar: false,
 		width: rect.width,
 		height: rect.height,
-		left: rect.left + viewboxPosition.left,
-		top: rect.top + viewboxPosition.top
+		left: rect.left + viewboxPosition.left + titleBarRect.height,
+		top: rect.top + viewboxPosition.top + titleBarRect.height
 	}
 
 	if (this.href) this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
