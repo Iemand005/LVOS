@@ -558,22 +558,7 @@ Dialog.prototype.initWithObject = function(object) {
         target.onmousedown = activationHandler;
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
             if (!target) return;
-            var rect = target.getClientRects()[0];
-            var viewboxPosition = getViewboxPosition();
-            var propeties = {
-                scrollbars: true,
-                resizable: true,
-                status: false,
-                location: false,
-                toolbar: false,
-                menubar: false,
-                width: rect.width,
-                height: rect.height,
-                left: rect.left + viewboxPosition.left,
-                top: rect.top + viewboxPosition.top
-            }
-
-            if (self.href) self._popupWindow = window.open(self.href, self.title || "LVOS", stringifyDialogProperties(propeties));
+            self.popout();
             self.quit();
         }, false);
         
@@ -1332,7 +1317,7 @@ Dialog.prototype.kill = function() {
 	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
 Dialog.prototype.popout = function() {
-	fi (!this.target) return;
+	if (!this.target) return;
 	var rect = this.target.getClientRects()[0];
 	var viewboxPosition = getViewboxPosition();
 	var propeties = {
@@ -1348,7 +1333,7 @@ Dialog.prototype.popout = function() {
 		top: rect.top + viewboxPosition.top
 	}
 
-	if (self.href) self._popupWindow = window.open(self.href, self.title || "LVOS", stringifyDialogProperties(propeties));
+	if (this.href) this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
 };
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
