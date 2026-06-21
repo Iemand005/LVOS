@@ -1020,9 +1020,9 @@ function setClass(element, className, enabled) {
  * @returns 
  */
 Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
-    this.toggleClassAnimated(className, force, function(propertyName) {
-        return propertyName === animationEndTrigger;
-    }, onEnd, onToggled);
+	this.toggleClassAnimated(className, force, function(propertyName) {
+		return propertyName === animationEndTrigger;
+	}, onEnd, onToggled);
 }
 /**
  * @param {string} className 
