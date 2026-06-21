@@ -981,7 +981,7 @@ Dialog.prototype.getInnerRect = function () {
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) {
 	if (!this.target) return;
-	return index === null ? this.target.getBoundingClientRect() : this.target.getClientRects()[index];
+	return index ? this.target.getClientRects()[index] : this.target.getBoundingClientRect();
 };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
