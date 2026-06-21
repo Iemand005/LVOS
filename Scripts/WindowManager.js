@@ -681,17 +681,17 @@ Object.defineProperty(Dialog.prototype, "width", {
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
-    get: function() { return this._height; },
-    set: function(height) {
-        if (typeof height !== "number" || !this.target) return;
+	get: function() { return this._height; },
+	set: function(height) {
+		if (typeof height !== "number" || !this.target) return;
 
-        this._height = max(height, this.minHeight)
-        if (this.useTransform || this.useScale) {
-            this.target.style.height = toPixels(this._height);
-        } else this.target.style.bottom = toPixels(this.bottom);
+		this._height = max(height, this.minHeight)
+		if (this.useTransform || this.useScale) {
+			this.target.style.height = toPixels(this._height);
+		} else this.target.style.bottom = toPixels(this.bottom);
 
-        this._isMinHeight = this._height === this.minHeight
-    }
+		this._isMinHeight = this._height === this.minHeight
+	}
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
     get: function() { return this._minWidth; },
