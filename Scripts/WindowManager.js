@@ -1286,7 +1286,7 @@ Dialog.prototype.updateScale = function(useScale) {
 }
 
 function getWallpaper() {
-    return document.getElementById("wallpaper");
+	return document.getElementById("wallpaper");
 }
 /** @returns {boolean} */
 Dialog.prototype.injectMica = function() {
