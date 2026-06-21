@@ -240,14 +240,16 @@ ClickOffset.disableOverlay = function (/** @type {MouseEvent} */ev) { if (!ev.bu
 window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
-let stopTimer;
+
+/** @type {number} */
+var dragStopTimer;
 
 window.addEventListener("pointermove", (e) => {
     console.log("mouse moving");
 
-    clearTimeout(stopTimer);
+    clearTimeout(dragStopTimer);
 
-    stopTimer = setTimeout(() => {
+    dragStopTimer = setTimeout(() => {
         console.log("mouse stopped");
     }, 100); // tweak this (50–200ms typical)
 });
