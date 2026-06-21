@@ -316,8 +316,8 @@ function Dialog(object, create) {
     /** @type {string?} */
     this._src = null;
 
-    this.minWidth = 200;
-    this.minHeight = 200;
+    this._minWidth = 200;
+    this._minHeight = 200;
     this._mica = useMica;
 
     this._useTransform = useTransform;
@@ -423,8 +423,7 @@ Dialog.prototype.initWithObject = function(object) {
         }
     }
 
-    this.minWidth = 180;
-    this.minHeight = 250;
+    this.setMinSize(180, 250);
     
     this.originalBody = this.body;
 
@@ -688,6 +687,30 @@ Object.defineProperty(Dialog.prototype, "height", {
         } else this.target.style.bottom = toPixels(this.bottom);
 
         this._isMinHeight = this._height === this.minHeight
+    }
+});
+Object.defineProperty(Dialog.prototype, "minWidth", {
+    get: function() { return this._minWidth; },
+    set: function(width) {
+        if (typeof width !== "number" || !this.target) return;
+
+        this._width = max(width, this.minWidth);
+        if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+        else this.target.style.right = toPixels(this.right);
+
+        this._isMinWidth = this._width === this.minWidth;
+    }
+});
+Object.defineProperty(Dialog.prototype, "minHeight", {
+    get: function() { return this._minHeight; },
+    set: function(width) {
+        if (typeof width !== "number" || !this.target) return;
+
+        this._width = max(width, this.minWidth);
+        if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+        else this.target.style.right = toPixels(this.right);
+
+        this._isMinWidth = this._width === this.minWidth;
     }
 });
 /** @type {{x:number,y:number}} */
