@@ -1280,11 +1280,9 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
  * @param {number} height
  */
 Dialog.prototype.resizeBody = function (width, height) {
-	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
-	if (!rect || !bodyRect) return;
+	if (!bodyRect) return;
 	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
-	return;
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
