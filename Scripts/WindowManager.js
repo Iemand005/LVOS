@@ -1237,13 +1237,13 @@ Dialog.prototype.launch = function() {
 };
 
 Dialog.prototype.relaunch = function() {
-    this.quit();
-    this.launch();
+	this.quit();
+	this.launch();
 };
 
 Dialog.prototype.kill = function() {
-    var parent = this.target && this.target.parentElement;
-    if (parent && this.closeable && this.target) parent.removeChild(this.target);
+	var parent = this.target && this.target.parentElement;
+	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
