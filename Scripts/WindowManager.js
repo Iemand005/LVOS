@@ -719,6 +719,11 @@ Object.defineProperty(Dialog.prototype, "aspectRatio", {
     set: function(aspect) { this.width = this.height * aspect; }
 });
 
+Object.defineProperty(Dialog.prototype, "minAspectRatio", {
+    get: function() { return this._minAs; },
+    set: function(aspect) { this.width = this.height * aspect; }
+});
+
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
