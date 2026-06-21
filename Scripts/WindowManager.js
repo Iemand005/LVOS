@@ -668,16 +668,16 @@ Object.defineProperty(Dialog.prototype, "z", {
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
-    get: function() { return this._width; },
-    set: function(width) {
-        if (typeof width !== "number" || !this.target) return;
+	get: function() { return this._width; },
+	set: function(width) {
+		if (typeof width !== "number" || !this.target) return;
 
-        this._width = max(width, this.minWidth);
-        if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
-        else this.target.style.right = toPixels(this.right);
+		this._width = max(width, this.minWidth);
+		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+		else this.target.style.right = toPixels(this.right);
 
-        this._isMinWidth = this._width === this.minWidth;
-    }
+		this._isMinWidth = this._width === this.minWidth;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
