@@ -1368,6 +1368,8 @@ Dialog.prototype.createPopout = function() {
 
 		if (width !== prevRect.width || height !== prevRect.height) {
 
+			self.resize(width, height);
+
 			prevRect.width = width, prevRect.height = height;
 		}
 	}, 10);
