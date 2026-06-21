@@ -245,13 +245,13 @@ window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 var dragStopTimer;
 
 window.addEventListener("pointermove", (e) => {
-    console.log("mouse moving");
+    // console.log("mouse moving");
 
     clearTimeout(dragStopTimer);
 
     dragStopTimer = setTimeout(() => {
-        console.log("mouse stopped");
-    }, 100); // tweak this (50–200ms typical)
+        // console.log("mouse stopped");
+    }, 50);
 });
 
 ClickOffset.prototype.reset = function () {
