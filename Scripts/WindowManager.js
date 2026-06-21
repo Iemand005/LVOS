@@ -236,8 +236,10 @@ function ClickOffset() {
 
 ClickOffset._overlay = document.createElement("div");
 ClickOffset._overlay.className = "drag-overlay";
-ClickOffset.disableOverlay = function (ev) { if (!ev.buttons) ClickOffset._overlay.remove(); }
-window.addEventListener("mousemove", , false);
+ClickOffset.disableOverlay = function (/** @type {MouseEvent} */ev) { if (!ev.buttons) ClickOffset._overlay.remove(); }
+window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
+window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
+window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
