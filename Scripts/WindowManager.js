@@ -232,11 +232,10 @@ function ClickOffset() {
 
     /** @type {((ev:PointerEvent|MouseEvent)=>void)?} */
     this.dragHandler = null;
-
-	/** @type {HTMLElement?} */
-	this._overlay = document.createElement("div");
-	this._overlay.className = "drag-overlay";
 }
+
+ClickOffset._overlay = document.createElement("div");
+ClickOffset._overlay.className = "drag-overlay";
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
