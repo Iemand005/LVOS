@@ -1324,9 +1324,9 @@ Dialog.prototype.eject = function() {
 Dialog.prototype.createPopout = function() {
 	var body = this.body;
 	var titlebar = this.titleBar;
-	if (!body || !titlebar) return;
+	if (!body || !titlebar || !this.href) return;
 	var rect = body.getBoundingClientRect();
-	var titleBarRect = titlebar.getBoundingClientRect();
+	var titleBarRect = titlebar && titlebar.getBoundingClientRect().height || 0;
 	var viewboxPosition = getViewboxPosition();
 	var propeties = {
 		scrollbars: true,
@@ -1338,7 +1338,7 @@ Dialog.prototype.createPopout = function() {
 		width: rect.width,
 		height: rect.height,
 		left: rect.left + viewboxPosition.left,
-		top: rect.top + viewboxPosition.top + titleBarRect.height
+		top: rect.top + viewboxPosition.top + titleBarRect
 	}
 
 	if (this.href) this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
