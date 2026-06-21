@@ -1295,18 +1295,16 @@ Dialog.prototype.updateBodyOffset = function () {
  * @param {number} height
  */
 Dialog.prototype.resizeBody = function (width, height) {
-	var bodyRect = this.getBodyRect();
-	if (!bodyRect) return;
-	this.resize(width + this.width - bodyRect.width, height + this.height - bodyRect.height);
+	this.updateBodyOffset();
+	this.resize(width + this._bodyOffset.width, height + this._bodyOffset.height);
 };
 /**
  * @param {number} x
  * @param {number} y
  */
 Dialog.prototype.moveBody = function (x, y) {
-	var bodyRect = this.getBodyRect();
-	if (!bodyRect) return;
-	this.move(x + this.x - bodyRect.x, y + this.y - bodyRect.y);
+	this.updateBodyOffset();
+	this.move(x + this._bodyOffset.x, y + this._bodyOffset.y);
 }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
