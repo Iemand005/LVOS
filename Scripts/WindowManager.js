@@ -1230,10 +1230,10 @@ Dialog.prototype.quit = function() {
 };
 
 Dialog.prototype.launch = function() {
-    if (!this.isOpen) this.initWithObject(this);
-    if (this.mica) this.injectMica();
+	if (!this.isOpen) this.initWithObject(this);
+	if (this.mica) this.injectMica();
 
-    this.open();
+	this.open();
 };
 
 Dialog.prototype.relaunch = function() {
