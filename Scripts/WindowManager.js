@@ -278,7 +278,8 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.startX = startX;
 	this.startY = startY;
 	/** @type {HTMLElement?} */
-	this._overlay = null;
+	this._overlay = document.createElement("div");
+	this._overlay.className = "drag-overlay";
     return this;
 };
 
@@ -289,6 +290,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler) {
     (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
     console.log(enable ? "Starting drag" : "Ending drag");
+	if ()
 }
 
 /** @param {boolean} enable */
