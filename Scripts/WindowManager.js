@@ -557,7 +557,6 @@ Dialog.prototype.initWithObject = function(object) {
         else target.addEventListener("mousedown", activationHandler, false);
         target.onmousedown = activationHandler;
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
-            if (!target) return;
             self.popout();
             self.quit();
         }, false);
@@ -1316,6 +1315,10 @@ Dialog.prototype.kill = function() {
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
+Dialog.prototype.popup = function() _{
+	self.popout();
+            self.quit();
+}
 Dialog.prototype.popout = function() {
 	if (!this.target) return;
 	var rect = this.target.getClientRects()[0];
