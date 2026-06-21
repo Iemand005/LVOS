@@ -505,7 +505,7 @@ Dialog.prototype.initWithObject = function(object) {
 					div.classList.add("touch");
 					/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
 					var touchDown = function (ev) {
-						cancelDomEvent(ev);
+						cancelDomEvent(ev, ev.pointerType);
 						console.log(ev.type);
 						// ev.pointerType = "";
 						if (ev.target && isElement(ev.target)) dragAction.set(Number(ev.target.id));
