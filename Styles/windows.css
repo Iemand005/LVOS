@@ -498,28 +498,28 @@ button:hover {
     z-index: 1000;
 }
 
-.window > .sizer-1 {
+.window > .sizer-1, .window > .touch-sizer-1 {
     top: 0;
     left: 0;
     cursor: n-resize;
     width: 100%;
 }
 
-.window > .sizer-2 {
+.window > .sizer-2, .window > .touch-sizer-2 {
     top: 0;
     right: 0;
     cursor: w-resize;
     height: 100%;
 }
 
-.window > .sizer-3 {
+.window > .sizer-3, .window > .touch-sizer-3 {
     bottom: 0;
     left: 0;
     cursor: s-resize;
     width: 100%;
 }
 
-.window > .sizer-4 {
+.window > .sizer-4, .window > .touch-sizer-4 {
     top: 0;
     left: 0;
     cursor: e-resize;
