@@ -232,6 +232,10 @@ function ClickOffset() {
 
     /** @type {((ev:PointerEvent|MouseEvent)=>void)?} */
     this.dragHandler = null;
+
+	/** @type {HTMLElement?} */
+	this._overlay = document.createElement("div");
+	this._overlay.className = "drag-overlay";
 }
 
 ClickOffset.prototype.reset = function () {
@@ -277,9 +281,6 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.height = height;
 	this.startX = startX;
 	this.startY = startY;
-	/** @type {HTMLElement?} */
-	this._overlay = document.createElement("div");
-	this._overlay.className = "drag-overlay";
     return this;
 };
 
