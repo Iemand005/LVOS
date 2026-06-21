@@ -1356,12 +1356,13 @@ Dialog.prototype.createPopout = function() {
 
 		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
 
-		if (outerX !== prevX || outerX !== prevY) {
-			var x = outerX - window.screenX, y = outerY - window.screenY - chromeHeight + titleBarHeight;
+		if (outerX !== prevRect.x || outerX !== prevRect.y) {
+			var x = outerX - window.screenX,
+				y = outerY - window.screenY - chromeHeight + titleBarHeight;
 
 			console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 			self.move(x, y);
-			prevX = outerX, prevY = outerY;
+			prevRect.x = outerX, prevRect.y = outerY;
 		}
 	}, 10);
 };
