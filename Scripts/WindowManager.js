@@ -1326,7 +1326,7 @@ Dialog.prototype.createPopout = function() {
 	var titlebar = this.titleBar;
 	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
-	var titleBarRect = titlebar && titlebar.getBoundingClientRect().height || 0;
+	var titleBarHeight = titlebar && titlebar.getBoundingClientRect().height || 0;
 	var viewboxPosition = getViewboxPosition();
 	var propeties = {
 		scrollbars: true,
@@ -1338,12 +1338,14 @@ Dialog.prototype.createPopout = function() {
 		width: rect.width,
 		height: rect.height,
 		left: rect.left + viewboxPosition.left,
-		top: rect.top + viewboxPosition.top + titleBarRect
+		top: rect.top + viewboxPosition.top + titleBarHeight
 	}
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
+	if (!this._popupWindow) return;
 	var self = this;
 	var prevX = -1, prevY = -1;
+	var chromeHeight = getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
 			clearInterval(self._popupPositionInterval);
@@ -1351,14 +1353,18 @@ Dialog.prototype.createPopout = function() {
 			self.launch();
 			return;
 		}
-		var x = self._popupWindow.screenX, y = self._popupWindow.screenY;
+		var x = self._popupWindow.screenX, y = self._popupWindow.screenY - titleBarHeight;
 		if (x === prevX && y === prevY) return;
 
 		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 		self.move(x, y);
 		prevX = x, prevY = y;
-	}, 100);
+	}, 10);
 };
+/** @param {Window} window */
+function getWindowChromeHeight(window) {
+	return window.outerHeight - window.innerHeight;
+}
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
