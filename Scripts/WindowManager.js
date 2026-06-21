@@ -1168,8 +1168,8 @@ Dialog.prototype.update = function () {
  * @param {number} [height]
  */
 Dialog.prototype.setMinSize = function (width, height) {
-    this._minWidth = width;
-    this._minHeight = height;
+    this._minWidth = width || 180;
+    this._minHeight = height || 200;
     this.resize();
 }
 /**
