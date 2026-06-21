@@ -715,7 +715,7 @@ Object.defineProperty(Dialog.prototype, "size", {
 });
 
 Object.defineProperty(Dialog.prototype, "aspectRatio", {
-    get: function() { return new Vector(this.width, this.height); },
+    get: function() { return this.width / this.height; },
     set: function(aspect) {  }
 });
 
