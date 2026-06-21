@@ -1315,9 +1315,9 @@ Dialog.prototype.kill = function() {
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.closeable && this.target) parent.removeChild(this.target);
 };
-Dialog.prototype.popup = function() _{
+Dialog.prototype.eject = function() _{
 	self.popout();
-            self.quit();
+	self.quit();
 }
 Dialog.prototype.popout = function() {
 	if (!this.target) return;
