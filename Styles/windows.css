@@ -493,9 +493,9 @@ button:hover {
 
 
 .window > .touch {
-    width: 20px;
-    height: 20px;
-    z-index: 1000;
+	width: 20px;
+	height: 20px;
+	z-index: 1000;
 }
 
 .window > div {
