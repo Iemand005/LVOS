@@ -1352,12 +1352,11 @@ Dialog.prototype.createPopout = function() {
 			return;
 		}
 		var x = self._popupWindow.screenX, y = self._popupWindow.screenY;
-		if ()
+		if (x === prevX && y === prevY) return;
 
 		console.log("pos:", self._popupWindow.screenX, self._popupWindow.screenY);
 		// self.move()
-		prevX = x;
-		prevY = y;
+		prevX = x, prevY = y;
 	}, 100);
 };
 /** @param {boolean} useTransform */
