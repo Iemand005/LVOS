@@ -1247,10 +1247,10 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
  * @param {number} height
  */
 Dialog.prototype.resizeWithAspect = function (width, height) {
-    const ratio = this.aspectRatio;
+    var ratio = this.aspectRatio;
 
-    const widthDelta = Math.abs(width - this.width);
-    const heightDelta = Math.abs(height - this.height);
+    var widthDelta = Math.abs(width - this.width);
+    var heightDelta = Math.abs(height - this.height);
 
     if (widthDelta > heightDelta) {
         this.width = width;
