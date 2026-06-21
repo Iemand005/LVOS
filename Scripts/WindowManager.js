@@ -1343,6 +1343,7 @@ Dialog.prototype.createPopout = function() {
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
 	var self = this;
+	var prevX = -1, prevY = 0;
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
 			clearInterval(self._popupPositionInterval);
