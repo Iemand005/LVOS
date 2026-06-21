@@ -498,7 +498,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 					var div = this.getElementByTagOrClassName(sizerId);
 					if (!div || !(isElement(div))) div = document.createElement("div");
-					div.draggable = false, div.id = "touch-" + String(index + 1), div.classList.add(sizerId);
+					div.draggable = false, div.id = "touch-" + (index + 1), div.classList.add(sizerId);
 					div.classList.add("touch");
 					/** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
 					var pointerDown = function (ev) {
