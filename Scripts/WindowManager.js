@@ -1282,6 +1282,7 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 Dialog.prototype.resizeBody = function (width, height) {
 	var rect = this.getRect();
 	var bodyRect = this.getBodyRect();
+	/*
   	if (this.body && this.target && rect) {
 	  	this.body.style.boxSizing = "content-box";
 		this.body.style.flex = "unset";
@@ -1294,6 +1295,7 @@ Dialog.prototype.resizeBody = function (width, height) {
 		this.body.style.boxSizing = "";
 		this.body.style.flex = "";
   	}
+	*/
 };
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
