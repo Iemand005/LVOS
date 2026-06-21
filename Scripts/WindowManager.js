@@ -978,6 +978,7 @@ Dialog.prototype.getInnerRect = function () {
 		height: this.target.offsetHeight
 	};
 }; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+void getRect
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) {
 	if (!this.target) return;
