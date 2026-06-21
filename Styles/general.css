@@ -21,7 +21,7 @@ button, .button, input, select {
     user-select: none;
 }
 
-.blur button, .button, input:not([type="range"]), select {
+.blur button, .blur .button, .blur input:not([type="range"]), .blur select {
     backdrop-filter: blur(10px);
 }
 
