@@ -392,6 +392,8 @@ function Dialog(object, create) {
     var metroapplist = document.getElementById("metroapplist");
     if (metroapplist) metroapplist.appendChild(this.createOpenButton());
     if (create || isElement(object)) this.initWithObject(object);
+
+	this._popupPositionInterval = 0;
 }
 /**
  * @param {any} object
