@@ -101,6 +101,27 @@ function WindowManager() {
     this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	}
+
+	/** @param {PointerEvent | MouseEvent} event */
+	this.windowDragEvent = function(event) {
+		if (!event.buttons) {
+			disableDialogDrag();
+			return;
+		}
+		try {
+			cancelDomEvent(event);
+			if (updateRateLimit) {
+				if (ticking) return;
+				window.requestAnimationFrame(function() {
+					handleWindowDrag(event.clientX, event.clientY);
+					ticking = false;
+				});
+				ticking = true;
+			} else handleWindowDrag(event.clientX, event.clientY);
+		} catch (ex) {
+			console.error(ex);
+		}
+	}
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -1765,26 +1786,7 @@ function handleWindowDrag(newX, hewY) {
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
-/** @param {PointerEvent | MouseEvent} event */
-function windowDragEvent(event) {
-	if (!event.buttons) {
-		disableDialogDrag();
-		return;
-	}
-    try {
-        cancelDomEvent(event);
-        if (updateRateLimit) {
-            if (ticking) return;
-            window.requestAnimationFrame(function() {
-                handleWindowDrag(event.clientX, event.clientY);
-                ticking = false;
-            });
-            ticking = true;
-        } else handleWindowDrag(event.clientX, event.clientY);
-    } catch (ex) {
-        console.error(ex);
-    }
-}
+
 
 /** @param {boolean} enable */
 WindowManager.prototype.toggleDialogDragEventHandler = function(enable) {
