@@ -1825,8 +1825,8 @@ function getDialogBody(target) { // I am specifically not using querySelector in
     return isElement(body) ? body : null;
 }
 
-function getViewboxPosition(){
-    return { left: window.screenLeft, top: window.screenTop }
+function getViewboxPosition() {
+	return { left: window.screenLeft, top: window.screenTop }
 }
 
 /** @param {HTMLElement | Event | null} object */
