@@ -232,7 +232,7 @@ WindowManager.prototype.loadApp = function(app) {
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
 	// windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
-	ClickOffset.toggleDragEventHandler(enabled, windowDragEvent);
+	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent);
     this.isDragging = enabled;
 };
 
@@ -1786,17 +1786,9 @@ function handleWindowDrag(newX, hewY) {
     if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
-
-
-/** @param {boolean} enable */
-WindowManager.prototype.toggleDialogDragEventHandler = function(enable) {
-    ClickOffset.toggleDragEventHandler(enable, windowDragEvent);
-}
-
 function disableDialogDrag() {
     if (!windowManager.isDragging) return;
     // if (flipped) return;
-    toggleDialogDragEventHandler(false);
     dragAction.set();
     windowManager.toggleDragging(false);
     windowManager.saveState();
