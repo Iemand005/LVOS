@@ -1,5 +1,5 @@
 /*\
-   \________                                                
+   \________
    / ______/\                                                 \\
   / /     /\ \    LWM (Lasse's Window Manager)                 \\
  /_/_____/  \ \   Targetting: ES5 (with custom ES6 extensions)  \\
