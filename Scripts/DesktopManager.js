@@ -71,6 +71,12 @@ var onLoad = function () {
 
 window.addEventListener("load", onLoad, false);
 
+document.addEventListener("contextmenu", e => {
+    e.preventDefault();
+
+    console.log("Open contex tp ples");
+});
+
 var reflecitons = false;
 
 var dock = document.getElementById("dock");
