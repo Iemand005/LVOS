@@ -1787,7 +1787,7 @@ function windowDragEvent(event) {
 }
 
 /** @param {boolean} enable */
-function toggleDialogDragEventHandler(enable) {
+WindowManager.toggleDialogDragEventHandler = function(enable) {
     ClickOffset.toggleDragEventHandler(enable, windowDragEvent);
 }
 
