@@ -1803,7 +1803,7 @@ function disableDialogDrag() {
     if (func) func();
 }
 
-function enableDialogDrag(){
+function enableDialogDrag() {
     windowManager.toggleDragging(true);
 }
 
