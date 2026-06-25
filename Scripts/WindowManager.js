@@ -769,6 +769,14 @@ Object.defineProperty(Dialog.prototype, "minHeight", {
     get: function() { return this._minHeight; },
     set: function(height) { this.setMinSize(this.minWidth, height); }
 });
+Object.defineProperty(Dialog.prototype, "maxWidth", {
+    get: function() { return this._maxWidth; },
+    set: function(width) { this.setMaxSize(width); }
+});
+Object.defineProperty(Dialog.prototype, "maxHeight", {
+    get: function() { return this._maxHeight; },
+    set: function(height) { this.setMaxSize(this.maxWidth, height); }
+});
 /** @type {{x:number,y:number}} */
 Object.defineProperty(Dialog.prototype, "position", {
     get: function() { return new Vector(this.x, this.y); },
@@ -1269,6 +1277,15 @@ Dialog.prototype.update = function () {
 Dialog.prototype.setMinSize = function (width, height) {
 	this._minWidth = width || 180;
 	this._minHeight = height || 200;
+	this.resize();
+}
+/**
+ * @param {number} [width]
+ * @param {number} [height]
+ */
+Dialog.prototype.setMaxSize = function (width, height) {
+	this._maxWidth = width || 180;
+	this._maxHeight = height || 200;
 	this.resize();
 }
 /** @param {number} ratio */
