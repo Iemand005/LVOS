@@ -826,13 +826,13 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        var difference  = this.x - left;
-        if (difference + this.width < this.minWidth) {
+        var newWidth  = this.x - left + this.width;
+        if (newWidth < this.minWidth || newWidth > this.maxWidth) {
             this.x = this.rightFromLeft - this.minWidth;
             this.width = this.minWidth;
         } else {
             this.x = left;
-            this.width += difference;
+            this.width = newWidth;
         }
     }
 });
