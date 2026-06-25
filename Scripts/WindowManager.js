@@ -813,7 +813,10 @@ Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
         var newHeight = this.y - top + this.height;
-        if (newHeight < this.minHeight || newHeight > this.maxHeight) {
+        if (newHeight > this.maxHeight) {
+            this.y = this.bottomFromTop - this.maxHeight;
+            this.height = this.maxHeight;
+        } if (newHeight < this.minHeight) {
             this.y = this.bottomFromTop - this.minHeight;
             this.height = this.minHeight;
         } else {
@@ -827,7 +830,10 @@ Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
         var newWidth  = this.x - left + this.width;
-        if (newWidth < this.minWidth || newWidth > this.maxWidth) {
+        if (newWidth > this.maxWidth) {
+            this.x = this.rightFromLeft - this.maxWidth;
+            this.width = this.maxWidth;
+        } if (newWidth < this.minWidth) {
             this.x = this.rightFromLeft - this.minWidth;
             this.width = this.minWidth;
         } else {
