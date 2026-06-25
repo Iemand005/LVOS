@@ -849,6 +849,11 @@ Object.defineProperty(Dialog.prototype, "bottom", {
     set: function(bottom) { this.height = (window.innerHeight - bottom) - this.y; }
 });
 
+Object.defineProperty(Dialog.prototype, "bottom", {
+    get: function() { return window.innerHeight - this.bottomFromTop; },
+    set: function(bottom) { this.height = (window.innerHeight - bottom) - this.y; }
+});
+
 Object.defineProperty(Dialog.prototype, "isMinWidth", {
     get: function () {
         return this._isMinWidth;
