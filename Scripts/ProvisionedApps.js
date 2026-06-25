@@ -152,7 +152,7 @@ var applications = [
 	{
 		title: "Geode",
 		id: "geode",
-		src: "https://geode.tepartive.net/login.html",
+		src: "https://geode.tepartive.net",
 		hidden: true
 	},
 	{
