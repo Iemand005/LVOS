@@ -794,20 +794,20 @@ Object.defineProperty(Dialog.prototype, "size", {
     }
 });
 
-Object.defineProperty(Dialog.prototype, "aspectRatio", {
-    get: function() { return this.width / this.height; },
-    set: function(aspect) { this.width = this.height * aspect; }
-});
+// Object.defineProperty(Dialog.prototype, "aspectRatio", {
+//     get: function() { return this.width / this.height; },
+//     set: function(aspect) { this.width = this.height * aspect; }
+// });
 
-Object.defineProperty(Dialog.prototype, "minAspectRatio", {
-    get: function() { return this._minAspectRatio; },
-    set: function(aspect) { this.width = this.height * aspect; }
-});
+// Object.defineProperty(Dialog.prototype, "minAspectRatio", {
+//     get: function() { return this._minAspectRatio; },
+//     set: function(aspect) { this.width = this.height * aspect; }
+// });
 
-Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
-    get: function() { return this._maxAspectRatio; },
-    set: function(aspect) { this.width = this.height * aspect; }
-});
+// Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
+//     get: function() { return this._maxAspectRatio; },
+//     set: function(aspect) { this.width = this.height * aspect; }
+// });
 
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
@@ -1312,14 +1312,14 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
 Dialog.prototype.resizeWithAspect = function (width, height) {
     var ratio = this.aspectRatio;
 
-    var widthDelta = Math.abs(width - this.width);
-    var heightDelta = Math.abs(height - this.height);
+    // var widthDelta = Math.abs(width - this.width);
+    // var heightDelta = Math.abs(height - this.height);
 
-    if (widthDelta > heightDelta) {
-		this.resize(width, width / ratio);
-    } else {
-		this.resize(height * ratio, height);
-    }
+    // if (widthDelta > heightDelta) {
+	// 	this.resize(width, width / ratio);
+    // } else {
+	// 	this.resize(height * ratio, height);
+    // }
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
