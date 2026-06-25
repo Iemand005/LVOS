@@ -740,7 +740,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 	set: function(width) {
 		if (typeof width !== "number" || !this.target) return;
 
-		this._width = min(max(width, this.minWidth), this.maxWidth);
+		this._width = max(min(width, this.maxWidth), this.minWidth);
 		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
 
