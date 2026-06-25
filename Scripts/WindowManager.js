@@ -850,8 +850,8 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 });
 
 Object.defineProperty(Dialog.prototype, "inset", {
-    get: function() { return (bottom + right + left + top) /  4; },
-    set: function(bottom) { this.height = (window.innerHeight - bottom) - this.y; }
+    get: function() { return (this.bottom + this.right + this.left + this.top) / 4; },
+    set: function(inset) { this.bottom = this.right = this.left = this.top = inset; }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", {
