@@ -753,7 +753,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 	set: function(height) {
 		if (typeof height !== "number" || !this.target) return;
 
-		this._height = max(min(height, this.maxHeight, this.minHeight));
+		this._height = max(min(height, this.maxHeight), this.minHeight);
 		if (this.useTransform || this.useScale) {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
