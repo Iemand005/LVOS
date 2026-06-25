@@ -855,15 +855,11 @@ Object.defineProperty(Dialog.prototype, "inset", {
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", {
-    get: function () {
-        return this._isMinWidth;
-    }
+    get: function () { return this._isMinWidth; }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinHeight", {
-    get: function () {
-        return this._isMinHeight;
-    }
+    get: function () { return this._isMinHeight; }
 });
 
 Object.defineProperty(Dialog.prototype, "useTransform", {
