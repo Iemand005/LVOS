@@ -152,10 +152,9 @@ var applications = [
 	{
 		title: "Geode",
 		id: "geode",
-		src: "./Applications/GeodeWeb/login.html",
+		src: "https://geode.tepartive.net/login.html",
 		hidden: true
-	}
-	,
+	},
 	{
 		title: "Level",
 		id: "level",
