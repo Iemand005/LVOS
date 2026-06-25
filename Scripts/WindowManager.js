@@ -740,7 +740,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 	set: function(width) {
 		if (typeof width !== "number" || !this.target) return;
 
-		this._width = max(width, this.minWidth);
+		this._width = min(max(width, this.minWidth), this.maxWidth);
 		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
 
@@ -753,7 +753,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 	set: function(height) {
 		if (typeof height !== "number" || !this.target) return;
 
-		this._height = max(height, this.minHeight)
+		this._height = min(max(height, this.minHeight), this.maxHeight);
 		if (this.useTransform || this.useScale) {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
@@ -794,20 +794,20 @@ Object.defineProperty(Dialog.prototype, "size", {
     }
 });
 
-// Object.defineProperty(Dialog.prototype, "aspectRatio", {
-//     get: function() { return this.width / this.height; },
-//     set: function(aspect) { this.width = this.height * aspect; }
-// });
+Object.defineProperty(Dialog.prototype, "aspectRatio", {
+    get: function() { return this.width / this.height; },
+    set: function(aspect) { this.width = this.height * aspect; }
+});
 
-// Object.defineProperty(Dialog.prototype, "minAspectRatio", {
-//     get: function() { return this._minAspectRatio; },
-//     set: function(aspect) { this.width = this.height * aspect; }
-// });
+Object.defineProperty(Dialog.prototype, "minAspectRatio", {
+    get: function() { return this._minAspectRatio; },
+    set: function(aspect) { this.width = this.height * aspect; }
+});
 
-// Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
-//     get: function() { return this._maxAspectRatio; },
-//     set: function(aspect) { this.width = this.height * aspect; }
-// });
+Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
+    get: function() { return this._maxAspectRatio; },
+    set: function(aspect) { this.width = this.height * aspect; }
+});
 
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
@@ -1312,14 +1312,14 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
 Dialog.prototype.resizeWithAspect = function (width, height) {
     var ratio = this.aspectRatio;
 
-    // var widthDelta = Math.abs(width - this.width);
-    // var heightDelta = Math.abs(height - this.height);
+    var widthDelta = Math.abs(width - this.width);
+    var heightDelta = Math.abs(height - this.height);
 
-    // if (widthDelta > heightDelta) {
-	// 	this.resize(width, width / ratio);
-    // } else {
-	// 	this.resize(height * ratio, height);
-    // }
+    if (widthDelta > heightDelta) {
+		this.resize(width, width / ratio);
+    } else {
+		this.resize(height * ratio, height);
+    }
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
