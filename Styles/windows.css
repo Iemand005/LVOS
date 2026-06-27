@@ -459,25 +459,25 @@ button:hover {
     cursor: e-resize;
 }
 
-.window > div:nth-of-type(5) {
+ {
     top: 0;
     left: 0;
     cursor: nw-resize;
 }
 
-.window > div:nth-of-type(6) {
+ {
     top: 0;
     right: 0;
     cursor: ne-resize;
 }
 
-.window > div:nth-of-type(7) {
+ {
     bottom: 0;
     right: 0;
     cursor: se-resize;
 }
 
-.window > div:nth-of-type(8) {
+ {
     bottom: 0;
     left: 0;
     cursor: sw-resize;
@@ -527,31 +527,31 @@ button:hover {
 }
 
 .window > .sizer-4, .window > div.touch-sizer-4 {
-    top: 0;
-    left: 0;
-    cursor: e-resize;
-    height: 100%;
+	top: 0;
+	left: 0;
+	cursor: e-resize;
+	height: 100%;
 }
 
-.window > .sizer-5 {
+.window > div:nth-of-type(5), .window > .sizer-5 {
     top: 0;
     left: 0;
     cursor: nw-resize;
 }
 
-.window > .sizer-6 {
+.window > div:nth-of-type(6), .window > .sizer-6 {
     top: 0;
     right: 0;
     cursor: ne-resize;
 }
 
-.window > .sizer-7 {
+.window > div:nth-of-type(7), .window > .sizer-7 {
     bottom: 0;
     right: 0;
     cursor: se-resize;
 }
 
-.window > .sizer-8 {
+.window > div:nth-of-type(8), .window > .sizer-8 {
     bottom: 0;
     left: 0;
     cursor: sw-resize;
