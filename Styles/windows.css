@@ -520,6 +520,18 @@ button:hover {
     pointer-events: none !important;
 }
 
+@supports (display: flex) {
+    tbody {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .window tr:nth-of-type(2) {
+        height: 100%;
+    }
+}
+
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
 
     body.blur .window {
