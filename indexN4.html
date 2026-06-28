@@ -109,6 +109,7 @@
 
 	<script>
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
+	var dicument = document;
 	var document = document.layers.masterPageContainer.document;
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
 
@@ -124,12 +125,12 @@
 	var startY;
 	var dragging = false;
 
-	document.onmousedown = function(ev) {
+	dicument.onmousedown = function(ev) {
 		startX = ev.pageX;
 		startY = ev.pageY;
 	};
 
-	document.onmousemove = function(ev) {
+	dicument.onmousemove = function(ev) {
 		if (!startX) return;
 		dialog.move(ev.pageX, ev.pageY);
 		dialog.resize(startX - ev.pageX, startY - ev.pageY);
@@ -138,7 +139,7 @@
 
 	};
 
-	document.onmouseup = function(ev) {
+	dicument.onmouseup = function(ev) {
 		startX = 0;
 		wowdoc.open();
         wowdoc.write('Your text or <strong>your bold text</strong> here');
