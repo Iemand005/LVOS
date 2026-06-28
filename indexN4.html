@@ -42,6 +42,8 @@
 		tags.H1.color = "red";
 		tags.p.fontSize = "20pt";
 
+		tags.DIV.bgColor = "green";
+
 		with (tags.H3) {
 			color = "green";
 		}
@@ -59,14 +61,17 @@
 	<input type="text" id="dbg" onsubmit="alert(dbg)">
 	<h1 id="meow" name="bark" onmouseover="alert('hover')">I am alive</h1>
 
-	<div name="" bgColor="green">
+	<div name="winow" bgColor="green">
 		hi
 	</div>
 
 	<script>
 	document.captureEvents(Event.MOUSEMOVE);
 	var layer = document.layers["bark"];
-	alert(layer);
+
+	var winow = document.layers["winow"];
+	winow.bgColor = "blue"
+	//alert(layer);
 	layer.top = 69;
 	document.onmousemove = function(ev) {
 		//alert(ev.x)
