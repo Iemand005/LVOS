@@ -56,10 +56,11 @@
 </head>
 <body class="windows-95">
 	<input type="text" id="dbg" onsubmit="alert(dbg)">
-	<h1 id="meow" onmouseover="alert('hover')">I am alive</h1>
+	<h1 id="meow" name="bark" onmouseover="alert('hover')">I am alive</h1>
 
 	<script>
 	document.captureEvents(Event.MOUSEMOVE);
+	alert(bark)
 	//document.onmousemove = alert
         //tags.H1.color = "red";
         //alert(meow)
