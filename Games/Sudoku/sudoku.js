@@ -82,7 +82,7 @@ function Sudoku() {
 Object.defineProperty(Sudoku.prototype, "health", {
 	get: function() { return this._health; },
 	set: function(/** @type {number} */value) {
-		if (value === 0) console.log("Game over!");
+		if (value == 0) console.log("Game over!");
 		this._health = value;
 	}
 });
@@ -93,15 +93,15 @@ Sudoku.prototype.init = function() {
 		var cell = self.addCell();
 		cell.element = td;
 
-		if (row % 3 === 0) td.classList.add("cell-top");
-		if (column % 3 === 0) td.classList.add("cell-left");
-		if (row === 8) td.classList.add("cell-bottom");
-		if (column === 8) td.classList.add("cell-right");
+		if (row % 3 == 0) td.classList.add("cell-top");
+		if (column % 3 == 0) td.classList.add("cell-left");
+		if (row == 8) td.classList.add("cell-bottom");
+		if (column == 8) td.classList.add("cell-right");
 
 		if (!cell.fixed) {
 			td.onclick = function() {
 				if (!self.selectedNumber) return;
-				var correct = self.selectedNumber === cell.value;
+				var correct = self.selectedNumber == cell.value;
 				console.log( "isright", correct);
 				if (correct) {
 
@@ -138,7 +138,7 @@ Sudoku.prototype.addCell = function(row, col, fixed) {
 		col = index % 9;
 	}
 
-	if (typeof fixed === "undefined") fixed = Math.random() < 0.5;
+	if (typeof fixed == "undefined") fixed = Math.random() < 0.5;
 
     var cell = new SudokuCell(row, col, fixed);
 
@@ -156,8 +156,8 @@ Sudoku.prototype.addCell = function(row, col, fixed) {
 Sudoku.prototype.isValid = function(row, col, num) {
 
 	for (var i = 0; i < 9; i++) {
-		if (this.getCell(row, i).value === num) return false;
-		if (this.getCell(i, col).value === num) return false;
+		if (this.getCell(row, i).value == num) return false;
+		if (this.getCell(i, col).value == num) return false;
 	}
 
 	var boxRow = Math.floor(row / 3) * 3;
@@ -165,7 +165,7 @@ Sudoku.prototype.isValid = function(row, col, num) {
 
 	for (var r = 0; r < 3; r++)
 		for (var c = 0; c < 3; c++)
-			if (this.getCell(boxRow + r, boxCol + c).value === num)
+			if (this.getCell(boxRow + r, boxCol + c).value == num)
 				return false;
 
 	return true;
@@ -224,7 +224,7 @@ Sudoku.prototype.createNumberPad = function() {
 		radio.id = "num" + i;
 		radio.value = i.toString();
 
-		if (i === 1) radio.checked = true;
+		if (i == 1) radio.checked = true;
 
 		radio.onclick = function(ev) {
 			if (ev.target instanceof HTMLInputElement)

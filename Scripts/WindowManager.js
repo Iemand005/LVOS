@@ -28,10 +28,10 @@ var useBlur = false,
 	updateRateLimit = false,
     hasLocalStorage = false;
 
-var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
 
 try {
-    hasLocalStorage = typeof localStorage !== "undefined";
+    hasLocalStorage = typeof localStorage != "undefined";
 } catch(ex) { console.warn("Local storage access denied.", ex); }
 
 if (isIE) {
@@ -43,12 +43,12 @@ if (!hasLocalStorage) canSave  = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer =
-    typeof window !== "undefined" &&
+    typeof window != "undefined" &&
     ("PointerEvent" in window || "MSPointerEvent" in window);
 var supportsObjectFit = Boolean(
     document.documentElement &&
     document.documentElement.style &&
-    typeof document.documentElement.style.objectFit !== "undefined"
+    typeof document.documentElement.style.objectFit != "undefined"
 );
 var supportsTransitions = (function () {
     var style = document.createElement("div").style;
@@ -66,9 +66,9 @@ if (supportsPointer) console.log("Supports pointer events!");
 
 /** @param {Event} event */
 function cancelDomEvent(event) {
-	if (typeof event.preventDefault === "function") event.preventDefault();
+	if (typeof event.preventDefault == "function") event.preventDefault();
 	event.returnValue = false;
-	if (typeof event.stopPropagation === "function") event.stopPropagation();
+	if (typeof event.stopPropagation == "function") event.stopPropagation();
 	event.cancelBubble = true;
 	return false;
 }
@@ -156,7 +156,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
   get: function () { return this._isBlurEnabled; },
   set: function (value) {
-    if (typeof value === "boolean") this._isBlurEnabled = value;
+    if (typeof value == "boolean") this._isBlurEnabled = value;
   }
 });
 
@@ -165,7 +165,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
     return this._isMicaEnabled;
   },
   set: function (value) {
-    if (typeof value !== "boolean") return;
+    if (typeof value != "boolean") return;
     document.body.classList.toggle("mica", value);
     windowManager.forEachWindow(function(window) { window.mica = value; });
     this._isMicaEnabled = value;
@@ -185,7 +185,7 @@ WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
 	console.log("Saving window state.");
 	try {
-		if (canSave && typeof localStorage !== "undefined")
+		if (canSave && typeof localStorage != "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
 		handleStorageException(exception);
@@ -453,7 +453,7 @@ Dialog.prototype.initWithObject = function(object) {
         if (isElement(object)) {
             if (!isDialog(object)) return console.warn("This is not a dialog element");
             this.target = object;
-            if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
+            if (this.target.parentElement && this.target.parentElement.nodeName == "TEMPLATE") return;
             this.close();
         } else {
             this.application = object;
@@ -464,7 +464,7 @@ Dialog.prototype.initWithObject = function(object) {
 
                 // windowManager.loadState(this);
             } finally {}
-            if (object.classes && typeof object.classes === 'object'){
+            if (object.classes && typeof object.classes == 'object'){
                 object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
             }
             this.openUrl(object.src);
@@ -551,7 +551,7 @@ Dialog.prototype.initWithObject = function(object) {
 					var touchDown = function(id) {
 						/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
 						return function (ev) {
-							if (ev.pointerType !== "touch") {
+							if (ev.pointerType != "touch") {
 								dragAction.set(-1);
 								return;
 							}
@@ -714,7 +714,7 @@ Object.defineProperty(Dialog.prototype, "x", {
   },
   /** @param {number} x */
   set: function (x) {
-    if (typeof x === "number") this.move(x, this.y);
+    if (typeof x == "number") this.move(x, this.y);
   }
 });
 
@@ -724,7 +724,7 @@ Object.defineProperty(Dialog.prototype, "y", {
     return this._y * window.innerHeight;
   },
   set: function (y) {
-    if (typeof y === "number") this.move(this.x, y);
+    if (typeof y == "number") this.move(this.x, y);
   }
 });
 
@@ -738,27 +738,27 @@ Object.defineProperty(Dialog.prototype, "z", {
 Object.defineProperty(Dialog.prototype, "width", {
 	get: function() { return this._width; },
 	set: function(width) {
-		if (typeof width !== "number" || !this.target) return;
+		if (typeof width != "number" || !this.target) return;
 
 		this._width = max(min(width, this.maxWidth), this.minWidth);
 		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
 
-		this._isMinWidth = this._width === this.minWidth;
+		this._isMinWidth = this._width == this.minWidth;
 	}
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
 	set: function(height) {
-		if (typeof height !== "number" || !this.target) return;
+		if (typeof height != "number" || !this.target) return;
 
 		this._height = max(min(height, this.maxHeight), this.minHeight);
 		if (this.useTransform || this.useScale) {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
 
-		this._isMinHeight = this._height === this.minHeight
+		this._isMinHeight = this._height == this.minHeight
 	}
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
@@ -789,7 +789,7 @@ Object.defineProperty(Dialog.prototype, "position", {
 Object.defineProperty(Dialog.prototype, "size", {
     get: function() { return new Vector(this.width, this.height); },
     set: function(size) {
-        if (typeof size.x !== "number" || typeof size.y !== "number") return;
+        if (typeof size.x != "number" || typeof size.y != "number") return;
         this.resize(size.x, size.y);
     }
 });
@@ -986,7 +986,7 @@ Object.defineProperty(Dialog.prototype, "skew", {
 /** @type {Dialog?} */
 var focusedDialog = null;
 Dialog.prototype.focus = function() {
-    if (focusedDialog !== null && focusedDialog.target)
+    if (focusedDialog != null && focusedDialog.target)
         focusedDialog.target.removeAttribute("focus");
     if (this.target) this.target.setAttribute("focus", String(true));
     focusedDialog = this;
@@ -998,7 +998,7 @@ Dialog.prototype.activate = function() {
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitlebar = function (force) {
-	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
+	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force != "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
@@ -1058,7 +1058,7 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 Dialog.prototype.togglePointerEvents = function(enable) {
 	var target = this.target;
 	if (!target) return;
-	if (enable === null) enable = target.style.pointerEvents === "none";
+	if (enable == null) enable = target.style.pointerEvents == "none";
 	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
 	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
 
@@ -1091,13 +1091,13 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 function setClass(element, className, enabled) {
 	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
+	if (typeof enabled == "undefined") enabled = element.className.indexOf(className) == -1;
 
 	if (enabled) {
 		if (!re.test(element.className))
 			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-	return element.className.indexOf(className) !== -1;
+	return element.className.indexOf(className) != -1;
 }
 Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
@@ -1113,7 +1113,7 @@ Dialog.prototype.stopAnimating = function () {
  */
 Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
 	this.toggleClassAnimated(className, force, function(propertyName) {
-		return propertyName === animationEndTrigger;
+		return propertyName == animationEndTrigger;
 	}, onEnd, onToggled);
 }
 /**
@@ -1151,7 +1151,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
 	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
-		return name == "transform" || name === "width";
+		return name == "transform" || name == "width";
 	}, undefined, function(enabled) {
 		if (!this.useTransform || !this.target) return;
 		this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
@@ -1221,8 +1221,8 @@ Dialog.prototype.updateTranslation = function () {
  * @param {number} [y]
  */
 Dialog.prototype.move = function (x, y) {
-	if (typeof x === "undefined" || x === null) x = this.x || 0;
-	if (typeof y === "undefined" || y === null) y = this.y || 0;
+	if (typeof x == "undefined" || x == null) x = this.x || 0;
+	if (typeof y == "undefined" || y == null) y = this.y || 0;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
@@ -1307,7 +1307,7 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
  */
 Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideConstraint2) {
 	// this.aspectRatio = ratio;
-	if (sideConstraint1 !== undefined) {
+	if (sideConstraint1 != undefined) {
 
 	}
 }
@@ -1329,7 +1329,7 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
-	if (!bodyRect || (bodyRect.width === 0 && bodyRect.height === 0 && bodyRect.x === 0 && bodyRect.y === 0)) return;
+	if (!bodyRect || (bodyRect.width == 0 && bodyRect.height == 0 && bodyRect.x == 0 && bodyRect.y == 0)) return;
 	this._bodyOffset.width = this.width - bodyRect.width;
 	this._bodyOffset.height = this.height - bodyRect.height;
 	this._bodyOffset.x = this.x - bodyRect.x;
@@ -1424,7 +1424,7 @@ Dialog.prototype.createPopout = function() {
 		width = Math.round(width);
 		height = Math.round(height);
 
-		if (outerX !== prevRect.x || outerY !== prevRect.y) {
+		if (outerX != prevRect.x || outerY != prevRect.y) {
 			var x = outerX - window.screenX,
 				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
 
@@ -1433,7 +1433,7 @@ Dialog.prototype.createPopout = function() {
 			prevRect.x = outerX, prevRect.y = outerY;
 		}
 
-		if (width !== prevRect.width || height !== prevRect.height) {
+		if (width != prevRect.width || height != prevRect.height) {
 
 			self.resizeBody(width, height);
 
@@ -1618,7 +1618,7 @@ var timeout = -1;
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
     var types = LVMessenger.types;
     if (source) {
-        if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+        if (type == types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
         switch (type) {
             case types.launchOverlay:
                 var overlay = bodyCrawler.getOverlay();
@@ -1708,7 +1708,7 @@ function flipHandler(enabled){
 //     if (!loaded) {
 //         //I'll s'
 //         console.log("th I'll set the timeoutrat");
-//         if (timeout !== -1) return;
+//         if (timeout != -1) return;
 //         timeout = setTimeout(function () {
 //             timeout = -1;
 //             toggleOverlay(!(!loaded ? (loaded = true) : false));
@@ -1764,9 +1764,9 @@ function windowActivationEvent(event, dialog) {
     try {
         var node = event && (event.target || event.srcElement);
         var isInteractive = false;
-        while (node && isElement(node) && node.nodeType === 1) {
+        while (node && isElement(node) && node.nodeType == 1) {
             var tn = (node.tagName || "").toLowerCase();
-            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
+            if (tn == "input" || tn == "textarea" || tn == "select" || tn == "button" || tn == "a" || tn == "label" || tn == "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
             node = node.parentElement;
         }
@@ -1879,7 +1879,7 @@ function pixelsToCentimeters(pixels){
 /** @param {string} text */
 function fromPixels(text){
     if (text != null) try {
-        return typeof text === 'number' ? text : parseInt(text.replace("px", ''))
+        return typeof text == 'number' ? text : parseInt(text.replace("px", ''))
     } catch (ex) { console.warn("Failed to parse pixels:", ex); }
     return 0;
 }
@@ -2038,7 +2038,7 @@ function applyWallpaperImage(url, blurredUrl, onError) {
         if (!wallpaper) return;
         while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
         wallpaper.setAttribute("data-wallpaper-src", url);
-        if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
+        if (typeof blurredUrl == "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
         else wallpaper.removeAttribute("data-blurred-src");
     
         wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);

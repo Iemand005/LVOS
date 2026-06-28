@@ -6,7 +6,7 @@
 'use moz';
 
 /*const*/var reasoningElement = document.getElementById("reason");
-if (typeof URLSearchParams !== "undefined") {
+if (typeof URLSearchParams != "undefined") {
   /*const*/var urlSearchParams = new URLSearchParams(window.location.search);
   /*const*/var message = urlSearchParams.get("message");
   reasoningElement.innerText = message;

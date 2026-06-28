@@ -272,9 +272,9 @@ function load() {
 window.addEventListener("load", load, false);
 
 /**\
-\ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ======       222222       0000      222222    666666
+\ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ====       222222       0000      222222    666666
  \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  66      
   | * |  LL        aa  aa     SSSSSS    SSSSSS   eeee      || cc     ||       222    00      00      222    666666
  / * /   LL       aaaaaaaa         SS        SS  ee         \\ cccc //      22        00    00     22      66    66
-/ * /    LLLLLL  aa      aa  SSSSSSS   SSSSSSS   eeeeeee      ======      22222222      0000     22222222   666666
+/ * /    LLLLLL  aa      aa  SSSSSSS   SSSSSSS   eeeeeee      ====      22222222      0000     22222222   666666
 \**/

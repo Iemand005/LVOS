@@ -41,7 +41,7 @@ if (windowManager && windowManager.windows.browser) {
         console.log(url, url.hostname);
         if (url.hostname.indexOf("youtube") != -1) {
           console.log("yoututbe!", url.pathname);
-          if (url.pathname === "/watch") {
+          if (url.pathname == "/watch") {
             console.log("wanna watch??");
             windowManager.windows["video"].openUrl(url.href);
           }
@@ -54,7 +54,7 @@ if (windowManager && windowManager.windows.browser) {
         url = new URL("./Applications/Error/error.html", window.location.href);
         url.searchParams.set("errormessage", e.message);
         url.searchParams.set("code", e.code);
-        if (e.code === 19) {
+        if (e.code == 19) {
           // Error handling for other potential problems can be done here!
           //url = new URL("./Applications/Error/error.html", window.location.href);
           url.searchParams.set(

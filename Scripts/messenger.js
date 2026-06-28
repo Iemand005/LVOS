@@ -54,7 +54,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
     var messageListener = function (ev) {
         try {
             /** @type {LVMessage} */
-            var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
+            var data = typeof ev.data == "string" ? JSON.parse(ev.data) : ev.data;
             
             if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id); break;
@@ -62,12 +62,12 @@ LVMessenger.receive = function (callback, destroyWhenType) {
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
                     var identity = { name: "LVOS" };
-                    if (ev.source && typeof ev.source.postMessage === "function")
+                    if (ev.source && typeof ev.source.postMessage == "function")
                         LVMessenger.broadcast(ev.source, LVMessenger.types.identity,  identity);
                     break;
             }
             // else console.warn("Missing data property", data);
-            if (data.type === destroyWhenType) this.window.removeEventListener("message", messageListener);
+            if (data.type == destroyWhenType) this.window.removeEventListener("message", messageListener);
         } catch (ex) {
             console.warn("Error decoding data", ev.data, ex);
         }
@@ -85,8 +85,8 @@ LVMessenger.receive = function (callback, destroyWhenType) {
  * @param {*} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
-    var target = window.parent && window.parent !== window ? window.parent : window.top;
-    if (target && typeof target.__LVMessengerReceive === "function") {
+    var target = window.parent && window.parent != window ? window.parent : window.top;
+    if (target && typeof target.__LVMessengerReceive == "function") {
         try {
             target.__LVMessengerReceive(type, message, id);
         } catch (ex) {
@@ -108,7 +108,7 @@ LVMessenger.broadcastToChild = function (type, message, iFrame) {
 /** @param {()=>void} callback */
 LVMessenger.onHostBeingLVOS = function (callback) {
     LVMessenger.receive(function(type, data) {
-        if (type === "identity" && data.name == "LVOS") callback();
+        if (type == "identity" && data.name == "LVOS") callback();
     }, "identity");
     LVMessenger.broadcastToParent(LVMessenger.types.identify);
 }

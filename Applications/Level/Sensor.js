@@ -34,7 +34,7 @@ function drawHorizon(roll, pitch) {
 
 function handleMotion(e) {
   var g = e.accelerationIncludingGravity;
-  if (!g || g.x === null) return;
+  if (!g || g.x == null) return;
   var x = g.x, y = g.y, z = g.z;
 
   const pitch = Math.atan2(z, Math.sqrt(x * x + y * y)) * (180 / Math.PI);
@@ -44,9 +44,9 @@ function handleMotion(e) {
 }
 
 function startLevel() {
-  if (typeof DeviceMotionEvent.requestPermission === 'function')
+  if (typeof DeviceMotionEvent.requestPermission == 'function')
     DeviceMotionEvent.requestPermission().then(function (permission) {
-      if (permission === 'granted')
+      if (permission == 'granted')
         window.addEventListener('devicemotion', handleMotion);
     });
   else window.addEventListener('devicemotion', handleMotion);

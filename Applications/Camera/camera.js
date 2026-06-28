@@ -39,7 +39,7 @@ function getCamera(){
         stream => {
             video.srcObject = videoStream = stream;
             video.src = window.URL.createObjectURL(videoStream)
-            if(typeof MediaRecorder !== 'undefined') recorder = new MediaRecorder(stream);
+            if(typeof MediaRecorder != 'undefined') recorder = new MediaRecorder(stream);
         },
         exception => console.error(exception)
     );

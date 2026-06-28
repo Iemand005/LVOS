@@ -28,7 +28,7 @@ browserform.addEventListener("submit", function(event){
         console.log(url, url.hostname)
         if(url.hostname.indexOf("youtube")!=-1) {
             console.log("yoututbe!", url.pathname);
-            if(url.pathname === "/watch"){
+            if(url.pathname == "/watch"){
                 console.log("wanna watch??");
                 windowManager.windows["video"].openUrl(url.href);
             }
@@ -38,7 +38,7 @@ browserform.addEventListener("submit", function(event){
         url = new URL("./Applications/Error/error.html", window.location.href);
         url.searchParams.set("errormessage", e.message);
         url.searchParams.set("code", e.code);
-        if(e.code === 19) { // Error handling for other potential problems can be done here!
+        if(e.code == 19) { // Error handling for other potential problems can be done here!
             //url = new URL("./Applications/Error/error.html", window.location.href);
             url.searchParams.set("message", "Some websites like the ones hosted by Google do not allow loading their website inside another website for security reasons.");
             //url.searchParams.set("code", e.code);

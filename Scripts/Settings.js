@@ -6,7 +6,7 @@
 
 var STORAGE_FILE = "app_storage.json";
 
-var supportsActiveX = typeof ActiveXObject !== "undefined";
+var supportsActiveX = typeof ActiveXObject != "undefined";
 
 function ActiveXStorage() {
     this.fso = new ActiveXObject("Scripting.FileSystemObject");
@@ -37,7 +37,7 @@ ActiveXStorage.prototype.getItem = function(key) {
         var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
         var data = JSON.parse(readFile.ReadAll());
         readFile.Close();
-        return data[key] !== undefined ? data[key] : null;
+        return data[key] != undefined ? data[key] : null;
     } catch(e) {
         return null;
     }
@@ -52,14 +52,14 @@ ActiveXStorage.prototype.getItem = function(key) {
 // }
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-    this.storage = typeof localStorage !== "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
+    this.storage = typeof localStorage != "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
 }
 
 SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 function setThemeOld(id) {
-    if (typeof id === 'undefined') return;
+    if (typeof id == 'undefined') return;
     settings.set("theme", id);
     for(var index in windows){
         var window = windowManager.windows[index];
@@ -92,21 +92,21 @@ function setBorderSize(size) {
 }
 
 function hexToRGB(hex) {
-    if (typeof hex === 'undefined' || !hex) return;
+    if (typeof hex == 'undefined' || !hex) return;
     // var int = parseInt(hex.replace('#', ''), 16);
     var bla = 0;
     return {r: (bla >> 16) & 255, g: (bla >> 8) & 255, b: bla & 255};
 }
 
 function isColorDark(color) {
-    if (typeof color === 'undefined') return;
+    if (typeof color == 'undefined') return;
     var rgb = hexToRGB(color);
     if (!rgb) return false;
     return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
 }
 
 function setColor(color){
-    if (typeof color === 'undefined' || !(elements.color instanceof HTMLInputElement)) return;
+    if (typeof color == 'undefined' || !(elements.color instanceof HTMLInputElement)) return;
     settings.set("color", elements.color.value = color);
     
     var isWhite = isColorDark(color);

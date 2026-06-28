@@ -10,8 +10,8 @@
  * @property {number} y
  */
 function Vector(x, y){
-    if (typeof x !== "number") x = 0, y = 0;
-    else if (typeof y !== "number") y = x;
+    if (typeof x != "number") x = 0, y = 0;
+    else if (typeof y != "number") y = x;
     this.x = x;
     this.y = y;
 }
@@ -46,12 +46,12 @@ function Vector3D(x, y, z) {
     this.x = 0;
     this.y = 0;
     this.z = 0;
-    if (typeof x === "number") {
+    if (typeof x == "number") {
         this.x = x;
         if (y == null && z == null) 
             this.y = x, this.z = x;
         else this.y = y, this.z = z;
-    } else if (typeof x === "object" && x.x && x.y && x.z) {
+    } else if (typeof x == "object" && x.x && x.y && x.z) {
         this.x = x.x, this.y = x.y, this.z = x.z;
     }
 }

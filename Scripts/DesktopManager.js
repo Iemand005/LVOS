@@ -87,10 +87,10 @@ var applistItems = document.getElementById("dockapplist");
 /** @param {boolean} force  */
 function toggleReflections(force) {
     if (!reflector) return;
-    if(force === null) reflecitons = !reflecitons;
+    if(force == null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
     if(reflecitons) windowManager.forEachWindow(function(dialog) { reflector.reflect(dialog.target); });
-    else if (typeof reflector.observer !== 'undefined') reflector.observer.disconnect();
+    else if (typeof reflector.observer != 'undefined') reflector.observer.disconnect();
 }
 
 window.addEventListener('keydown', function(event) {
@@ -143,7 +143,7 @@ window.ondragleave = document.ondragleave = function(ev){
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
     // IndexedDB is only available over http/https, not file:// scheme
-    var isFileScheme = window.location.protocol === 'file:';
+    var isFileScheme = window.location.protocol == 'file:';
     if (isFileScheme) {
         console.log("File scheme detected (HTA/local file). Using localStorage only.");
         if (onFailure) onFailure(new Error("IndexedDB not available for file:// scheme"));
@@ -206,7 +206,7 @@ function saveWallpaperToCache(blob, dataUrl) {
             console.warn("Failed to save wallpaper to IndexedDB, falling back to localStorage:", request.error);
             // Fall back to localStorage if IndexedDB fails
             if (dataUrl) {
-                if (typeof settings !== 'undefined' && settings.set) {
+                if (typeof settings != 'undefined' && settings.set) {
                     try {
                         settings.set('wallpaperImage', dataUrl);
                         console.log("Wallpaper saved to localStorage via settings");
@@ -233,7 +233,7 @@ function saveWallpaperToCache(blob, dataUrl) {
         // console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
         if (dataUrl) {
-            if (typeof settings !== 'undefined' && settings.set) {
+            if (typeof settings != 'undefined' && settings.set) {
                 try {
                     settings.set('wallpaperImage', dataUrl);
                     console.log("Wallpaper saved to localStorage via settings");
@@ -269,7 +269,7 @@ function loadWallpaperFromCache() {
         
         request.onsuccess = function() {
             var result = request.result;
-            if (result && result.blob && typeof applyWallpaperImage === 'function') {
+            if (result && result.blob && typeof applyWallpaperImage == 'function') {
                 var objectUrl = URL.createObjectURL(result.blob);
                 console.log("Loading cached wallpaper from IndexedDB");
                 applyWallpaperImage(objectUrl, null);
@@ -294,12 +294,12 @@ function loadWallpaperFromCache() {
  */
 function loadWallpaperFromLocalStorage() {
     console.log("Attempting to load wallpaper from localStorage...");
-    console.log("settings defined:", typeof settings !== 'undefined');
-    if (typeof settings === 'undefined') {
+    console.log("settings defined:", typeof settings != 'undefined');
+    if (typeof settings == 'undefined') {
         console.warn("Settings not available yet, trying direct localStorage access");
         try {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
-            if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+            if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
                 console.log("Loading cached wallpaper from direct localStorage");
                 applyWallpaperImage(cachedWallpaper, null);
             } else {
@@ -314,7 +314,7 @@ function loadWallpaperFromLocalStorage() {
     try {
         var cachedWallpaper = settings.get('wallpaperImage');
         console.log("Retrieved from settings.get():", cachedWallpaper ? 'found' : 'not found');
-        if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+        if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
             console.log("Loading cached wallpaper from localStorage via settings");
             applyWallpaperImage(cachedWallpaper, null);
         } else {
@@ -325,7 +325,7 @@ function loadWallpaperFromLocalStorage() {
         // Try direct localStorage as last resort
         try {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
-            if (cachedWallpaper && typeof applyWallpaperImage === 'function') {
+            if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
                 console.log("Loading cached wallpaper from direct localStorage (fallback)");
                 applyWallpaperImage(cachedWallpaper);
             }
@@ -358,7 +358,7 @@ function handleWallpaperDrop(ev) {
             var dataUrl = e.target.result;
 
             try {
-                if (typeof applyWallpaperImage === 'function') {
+                if (typeof applyWallpaperImage == 'function') {
                     applyWallpaperImage(dataUrl, null, function() {
                         console.warn("Failed to apply dropped wallpaper image");
                     });
@@ -379,20 +379,20 @@ function handleWallpaperDrop(ev) {
 window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
-if (document.readyState === 'loading') {
+if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', loadWallpaperFromCache, false);
 } else {
     loadWallpaperFromCache();
 }
 
 window.addEventListener('keydown', function(event) {
-  if (event.key === 'Shift' || event.keyCode === 16) {
+  if (event.key == 'Shift' || event.keyCode == 16) {
     document.body.classList.add('slow-animations');
   }
 }, false);
 
 window.addEventListener('keyup', function(event) {
-  if (event.key === 'Shift' || event.keyCode === 16) {
+  if (event.key == 'Shift' || event.keyCode == 16) {
     document.body.classList.remove('slow-animations');
   }
 }, false);

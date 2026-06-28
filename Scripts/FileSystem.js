@@ -3,7 +3,7 @@
 
 function probeAllStorage() {
   return {
-    OPFS: !!navigator.storage && typeof navigator.storage.getDirectory === 'function',
+    OPFS: !!navigator.storage && typeof navigator.storage.getDirectory == 'function',
     CacheAPI: 'caches' in window,
     
     IndexedDB: !!window.indexedDB,
@@ -11,7 +11,7 @@ function probeAllStorage() {
     LocalStorage: 'localStorage' in window,
     
     WebSQL: 'openDatabase' in window,
-    GoogleGears: typeof window.GearsFactory !== 'undefined',
+    GoogleGears: typeof window.GearsFactory != 'undefined',
     FlashBridge: (function() {
       try { return !!new ActiveXObject('ShockwaveFlash.ShockwaveFlash'); } 
       catch(e) { return !!navigator.plugins && !!navigator.plugins['Shockwave Flash']; }
@@ -23,7 +23,7 @@ function probeAllStorage() {
     ActiveX_FSO: (function() {
       try { return !!new ActiveXObject("Scripting.FileSystemObject"); } catch(e) { return false; }
     })(),
-    JavaApplets: typeof navigator.javaEnabled === 'function' && navigator.javaEnabled()
+    JavaApplets: typeof navigator.javaEnabled == 'function' && navigator.javaEnabled()
   };
 }
 
@@ -44,7 +44,7 @@ function OmniFS() {
 OmniFS.prototype.init = function (api) {
 	var self = this;
 
-	if (this.apis.indexOf(api) !== -1) return;
+	if (this.apis.indexOf(api) != -1) return;
 
 	this.apis.push(api);
 
@@ -109,7 +109,7 @@ OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
 
 OmniFS.prototype.prototypewriteToOPFS = function (fileName, content) {
     return new Promise(function (resolve, reject) {
-        if (!navigator.storage || typeof navigator.storage.getDirectory !== 'function') {
+        if (!navigator.storage || typeof navigator.storage.getDirectory != 'function') {
             return reject(new Error("OPFS wordt niet ondersteund door deze browser."));
         }
 

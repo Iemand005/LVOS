@@ -32,13 +32,13 @@ Calculator.prototype.clearAll = function () {
 }
 
 Calculator.prototype.press = function (value) {
-    if (value === "=") 
+    if (value == "=")
        return this.calculate();
 
-    if (value === "C") 
+    if (value == "C")
         return this.clearAll();
 
-    if (this.expression === "Error")
+    if (this.expression == "Error")
         this.expression = "";
 
     this.expression += value;

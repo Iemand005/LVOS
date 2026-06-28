@@ -5,14 +5,14 @@
 'use strict';
 'use esnext';
 
-if (typeof HTMLElement !== 'undefined') {
+if (typeof HTMLElement != 'undefined') {
     if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
         this.setAttribute(attribute, null);
     };
 
-    // Bug fix, "force === null" --> "typeof force === 'undefined'".
+    // Bug fix, "force == null" --> "typeof force == 'undefined'".
     if(!HTMLElement.prototype.toggleAttribute) HTMLElement.prototype.toggleAttribute = function(attribute, force) {
-        if (typeof force === 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
+        if (typeof force == 'undefined'? force = !this.hasAttribute(attribute) : force) this.createAttribute(attribute);
         else this.removeAttribute(attribute);
         return !force;
     };
@@ -20,11 +20,11 @@ if (typeof HTMLElement !== 'undefined') {
 
 // This one was a little bit more difficult to get working right but I tested most values like numbers, null, true, false, undefined and it all gave the same results as the Array.fill method in Chrome does so I expect this polyfill to work the same for my applications.
 if(!Array.prototype.fill) Array.prototype.fill = function(value, from, to){
-    for (/*let*/var index = typeof from !== 'undefined' ? Number(from) : 0; index < Number(typeof to !== 'undefined' ? to : this.length); index++) this[index] = value;
+    for (/*let*/var index = typeof from != 'undefined' ? Number(from) : 0; index < Number(typeof to != 'undefined' ? to : this.length); index++) this[index] = value;
     return this;
 };
 
-if(typeof MutationObserver === "undefined") window.MutationObserver = function(callback) {
+if(typeof MutationObserver == "undefined") window.MutationObserver = function(callback) {
     /**
      * @param {Node} target
      * @param {MutationObserverInit} [options]
@@ -91,7 +91,7 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.querySelectorAll(selector)[0];
 }
 
-if (typeof document !== 'undefined' && !document.getElementsByClassName) {
+if (typeof document != 'undefined' && !document.getElementsByClassName) {
     document.getElementsByClassName = function(className) {
         var results = [];
         var all = this.getElementsByTagName('*');
@@ -103,7 +103,7 @@ if (typeof document !== 'undefined' && !document.getElementsByClassName) {
     };
 }
 
-if (typeof Document !== 'undefined' && Document.prototype && !Document.prototype.getElementsByClassName) {
+if (typeof Document != 'undefined' && Document.prototype && !Document.prototype.getElementsByClassName) {
     Document.prototype.getElementsByClassName = function(className) {
         var results = [];
         var all = this.getElementsByTagName('*');
@@ -115,7 +115,7 @@ if (typeof Document !== 'undefined' && Document.prototype && !Document.prototype
     };
 }
 
-if (typeof Element !== 'undefined' && !Element.prototype.getElementsByClassName) {
+if (typeof Element != 'undefined' && !Element.prototype.getElementsByClassName) {
     Element.prototype.getElementsByClassName = function(className) {
         var results = [];
         var all = this.getElementsByTagName('*');
@@ -156,7 +156,7 @@ if (typeof console == "undefined") {
     }
 }
 
-if (typeof HTMLElement !== 'undefined' && !("classList" in document.documentElement)) {
+if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
     Object.defineProperty(HTMLElement.prototype, "classList", {
         get: function() {
             var self = this;
@@ -215,7 +215,7 @@ function find(callback) {
     for (var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
 }
 
-if (typeof Document !== 'undefined' && Document.prototype && !Document.prototype.elementsFromPoint) {
+if (typeof Document != 'undefined' && Document.prototype && !Document.prototype.elementsFromPoint) {
     Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint || function(x, y) {
         return this.msElementsFromPoint ? this.msElementsFromPoint(x, y) : [];
     };
@@ -225,13 +225,13 @@ if (!navigator.getUserMedia) navigator.getUserMedia = navigator.webkitGetUserMed
 
 // I tested this one with "String.prototype.repeat.bind("hey", 2)()", this gives me the same result with polyfill as the native code!
 if (!String.prototype.repeat) String.prototype.repeat = function (e) {
-    if (typeof this === 'undefined') throw new TypeError("String.prototype.repeat called on null or undefined"); // To correspond to String.prototype.repeat.bind(null, undefined)() in Google Chrome
+    if (typeof this == 'undefined') throw new TypeError("String.prototype.repeat called on null or undefined"); // To correspond to String.prototype.repeat.bind(null, undefined)() in Google Chrome
     /*let*/var result = "";
     for (/*let*/var i = 0; i < e; i++) result += this;
     return result;
 }
 
-if (typeof URLSearchParams === "undefined") {
+if (typeof URLSearchParams == "undefined") {
     window.URLSearchParams = function (search) {
         /*const*/var items = search.replace("?", "").split("&");
         // /*const*/var kv = items[0].split("=");
@@ -276,16 +276,16 @@ if (typeof URLSearchParams === "undefined") {
 // if(!Array.prototype.forEach) Array.prototype.forEach = callback => { for(/*let*/var index in this) if(this.hasOwnProperty(index)) callback(this[index], index) }
 
 if (!document.elementsFromPoint) document.elementsFromPoint = function (point) {
-    // if (typeof point === "undefined")
+    // if (typeof point == "undefined")
     //     point = document.createElement("div");
     // point.style.position = "absolute";
     console.log("Point", point);
 }
 
-if (typeof Array.from !== "function") {
+if (typeof Array.from != "function") {
     var arrayFromPolyfill = function (arrayLike) {
         var newArray = [];
-        if (!arrayLike || typeof arrayLike.length !== "number") return newArray;
+        if (!arrayLike || typeof arrayLike.length != "number") return newArray;
         for (var i = 0; i < arrayLike.length; i++) newArray.push(arrayLike[i]);
         return newArray;
     };
@@ -317,7 +317,7 @@ if (typeof Array.from !== "function") {
 }());
 
 (function () {
-  if (typeof window.Promise === 'function')
+  if (typeof window.Promise == 'function')
     return;
 
   var PENDING = 0;
@@ -325,7 +325,7 @@ if (typeof Array.from !== "function") {
   var REJECTED = 2;
 
   function ES3Promise(executor) {
-    if (typeof executor !== 'function') {
+    if (typeof executor != 'function') {
       throw new TypeError('Promise resolver is geen functie');
     }
 
@@ -336,15 +336,15 @@ if (typeof Array.from !== "function") {
 
     function resolve(newValue) {
       try {
-        if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+        if (newValue && (typeof newValue == 'object' || typeof newValue == 'function')) {
           var then = newValue.then;
-          if (typeof then === 'function') {
+          if (typeof then == 'function') {
             then.call(newValue, resolve, reject);
             return;
           }
         }
         
-        if (self._state !== PENDING) return;
+        if (self._state != PENDING) return;
         self._state = FULFILLED;
         self._value = newValue;
         self._handleDeferreds();
@@ -354,7 +354,7 @@ if (typeof Array.from !== "function") {
     }
 
     function reject(reason) {
-      if (self._state !== PENDING) return;
+      if (self._state != PENDING) return;
       self._state = REJECTED;
       self._value = reason;
       self._handleDeferreds();
@@ -369,15 +369,15 @@ if (typeof Array.from !== "function") {
 
   ES3Promise.prototype._handleDeferreds = function () {
     var self = this;
-    if (self._state === PENDING) return;
+    if (self._state == PENDING) return;
 
     setTimeout(function () {
       while (self._deferreds.length > 0) {
         var deferred = self._deferreds.shift(); 
-        var callback = self._state === FULFILLED ? deferred.onFulfilled : deferred.onRejected;
+        var callback = self._state == FULFILLED ? deferred.onFulfilled : deferred.onRejected;
 
-        if (typeof callback !== 'function') {
-          if (self._state === FULFILLED) {
+        if (typeof callback != 'function') {
+          if (self._state == FULFILLED) {
             deferred.resolve(self._value);
           } else {
             deferred.reject(self._value);
@@ -462,7 +462,7 @@ if (typeof Array.from !== "function") {
                 }
 
                 // SAFE CALL (IE8 FIX)
-                if (typeof listener === "function") {
+                if (typeof listener == "function") {
                     listener.apply(self, [event]);
                 } else {
                     self._currentListener = listener;
@@ -488,7 +488,7 @@ if (typeof Array.from !== "function") {
             for (var i = 0; i < this._ieListeners.length; i++) {
                 var item = this._ieListeners[i];
 
-                if (item.type === type && item.original === listener) {
+                if (item.type == type && item.original == listener) {
                     this.detachEvent(eventType, item.wrapped);
                     this._ieListeners.splice(i, 1);
                     return;
@@ -544,6 +544,6 @@ if (typeof Array.from !== "function") {
 
 })();
 
-// if (typeof module !== "undefined" && module.)
-if (typeof window.HTMLElement === "undefined") window.HTMLElement = Element
-if (typeof window.HTMLTemplateElement === "undefined") window.HTMLTemplateElement = function() {}
+// if (typeof module != "undefined" && module.)
+if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element
+if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {}
