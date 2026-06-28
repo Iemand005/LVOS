@@ -68,44 +68,44 @@
 
 </head>
 <body class="windows-95" bgcolor="#00FF00">
+	<ilayer id="masterPageContainer">
+		<input type="text" id="dbg" onsubmit="alert(dbg)">
+		<h1 id="meow" name="bark" onmouseover="alert('hover')" bgcolor="#FFFF00"><strong>I am alive</strong></h1>
+		<table id="winow" name="winow" bgcolor="#FF0000" width="300" height="100" cellpadding="10" cellspacing="0">
+			<tr>
+				<td class="header">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td>
+								<h1><span>Woof!</span></h1>
+							</td>
+							<td class="section" align="right">
+								<button disabled>🡕</button>
+								<button disabled>❐</button>
+								<button disabled>✕</button>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<font color="#FFFFFF">This box has a reliable red background.</font>
+				</td>
+			</tr>
+		</table>
 
-	<input type="text" id="dbg" onsubmit="alert(dbg)">
-	<h1 id="meow" name="bark" onmouseover="alert('hover')" bgcolor="#FFFF00"><strong>I am alive</strong></h1>
-	<table id="winow" name="winow" bgcolor="#FF0000" width="300" height="100" cellpadding="10" cellspacing="0">
-		<tr>
-			<td class="header">
-				<table width="100%" cellpadding="0" cellspacing="0" border="0">
-					<tr>
-						<td>
-							<h1><span>Woof!</span></h1>
-						</td>
-						<td class="section" align="right">
-							<button disabled>🡕</button>
-							<button disabled>❐</button>
-							<button disabled>✕</button>
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<td>
-			<font color="#FFFFFF">This box has a reliable red background.</font>
-			</td>
-		</tr>
-	</table>
+		<layer name="clue" bgcolor="#0000FF" width="300" top="100" left="100">
+		This is a blue box using Netscape's proprietary layer tag.
+			<ilayer src="transformtest.html" width="300" height="200" bgcolor="#ffffff"></ilayer>
 
-	<layer name="clue" bgcolor="#0000FF" width="300" top="100" left="100">
-	This is a blue box using Netscape's proprietary layer tag.
-		<ilayer src="transformtest.html" width="300" height="200" bgcolor="#ffffff"></ilayer>
-
-	</layer>
-
-
-	<layer name="wow" bgcolor="#0000FF" width="300" top="100" left="100">
-	</layer>
+		</layer>
 
 
+		<layer name="wow" bgcolor="#0000FF" width="300" top="100" left="100">
+		</layer>
+
+	</ilayer>
 
 	<script>
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
