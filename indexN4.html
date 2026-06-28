@@ -67,14 +67,19 @@
 			</td>
 		</tr>
 	</table>
+	<div style="background-color: #00FFF0; border: 1px solid #00FFF0; width: 300px;">
+	This green box requires a border to render correctly in Netscape 4.
+	</div>
 
 	<script>
 	alert(document.body)
 	document.captureEvents(Event.MOUSEMOVE);
 	var layer = document.layers["bark"];
+	alert(document.layers.length)
 
 	var winow = document.layers["winow"];
 	//winow.bgColor = "blue"
+	winow.top = 100;
 	//alert(layer);
 	layer.top = 69;
 	document.onmousemove = function(ev) {
