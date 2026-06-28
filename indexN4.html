@@ -126,8 +126,8 @@
 		dialog.move(ev.pageX, ev.pageY);
 
 		//winow.width = ev.pageX + 100;
-
-		dialog.resize(100,100);
+		if (!startX) return;
+		dialog.resize(startX + ev.pageX, startY + ev.pageY);
 	}
 	for (var a in layer)
 	{
