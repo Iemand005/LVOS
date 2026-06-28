@@ -148,6 +148,10 @@
         wowdoc.close();
 
         document.layers['clue'].visibility = 'hide';
+
+        var targetLayer = document.layers['clue'].document;
+
+		var currentHTML = targetLayer.toString();
 		//document.layers['clue'].visibility = 'show';
 	};
 	</script>
