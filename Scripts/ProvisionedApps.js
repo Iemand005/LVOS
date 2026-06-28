@@ -6,8 +6,6 @@
 "use strict";
 "use esnext";
 
-try {
-
 var dockAppList = document.getElementById("dockapplist");
 // var windows = windowManager.windows;
 if (windowManager && windowManager.windows.browser) {
@@ -71,10 +69,6 @@ if (windowManager && windowManager.windows.browser) {
       }
     });
   }
-}
-
-} catch (ex) {
-  console.warn("Browser loading failed", ex);
 }
 
 // alert
