@@ -19,6 +19,13 @@
         alert("oh no your browser is too old broski");
     </script>
 
+	<script>
+		window.onerror = function(msg, url, line) {
+			alert("JS Error on line " + line + ": " + msg);
+			return true; // suppress default handling
+		};
+	</script>
+
 
     <script src="./Scripts/physics.js" defer></script>
     <script src="./Scripts/messenger.js" defer></script>
