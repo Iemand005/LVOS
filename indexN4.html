@@ -152,7 +152,10 @@
         var targetLayer = document.layers['clue'].document;
 
 		var currentHTML = targetLayer.toString();
-		alert(currentHTML)
+		alert(currentHTML);
+		targetLayer.open();
+		targetLayer.write(currentHTML);
+		targetLayer.close();
 		//document.layers['clue'].visibility = 'show';
 	};
 	</script>
