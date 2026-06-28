@@ -112,6 +112,8 @@
 
 	var winow = document.layers["clue"];
 	var wowdoc = document.layers["wow"].document;
+	document.layers["wow"].zIndex = 0;
+	winow.zIndex = 10;
 
 	var dialog = new Dialog(winow);
 
@@ -131,13 +133,14 @@
 		dialog.resize(startX - ev.pageX, startY - ev.pageY);
 
 		var ee = winow.document;
-		wowdoc.open();
-        wowdoc.write('Your text or <strong>your bold text</strong> here');
-        wowdoc.close();
+
 	};
 
 	document.onmouseup = function(ev) {
 		startX = 0;
+		wowdoc.open();
+        wowdoc.write('Your text or <strong>your bold text</strong> here');
+        wowdoc.close();
 	};
 	</script>
 </body>
