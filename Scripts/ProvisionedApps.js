@@ -264,18 +264,15 @@ Object.defineProperty(Window.prototype, "windows", {
   }
 })
 
-try {
-  var windows = windowManager.windows;
-  if (dockAppList) {
-    dockApp(windows.browser);
-    dockApp(windows.console);
-    dockApp(windows.browser);
-    dockApp(windows.console);
-    dockApp(windows.music);
-  }
-} catch (ex) {
-  if (ex instanceof Error) console.warn(ex.message);
+var windows = windowManager.windows;
+if (dockAppList) {
+	dockApp(windows.browser);
+	dockApp(windows.console);
+	dockApp(windows.browser);
+	dockApp(windows.console);
+	dockApp(windows.music);
 }
+
 //toggleReflections(true);
 };
 
