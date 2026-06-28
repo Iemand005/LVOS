@@ -79,7 +79,7 @@
 		</tr>
 	</table>
 
-	<layer bgcolor="#0000FF" width="300" top="100" left="100">
+	<layer name="clue" bgcolor="#0000FF" width="300" top="100" left="100">
 	This is a blue box using Netscape's proprietary layer tag.
 	</layer>
 
@@ -90,7 +90,8 @@
 	var layer = document.layers["bark"];
 	alert(document.layers.length)
 
-	var winow = document.layers["winow"];
+	var winow = document.layers["clue"];
+	alert("clue:"+winow);
 	//winow.bgColor = "blue"
 	//winow.top = 100;
 	//alert(layer);
