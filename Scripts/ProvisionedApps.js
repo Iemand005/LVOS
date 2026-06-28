@@ -255,13 +255,13 @@ var initApps = function () {
 
 /** @param {Dialog} dialog */
 function dockApp(dialog) {
-  if (dockAppList) dockAppList.appendChild(dialog.createOpenButton());
+	if (dockAppList) dockAppList.appendChild(dialog.createOpenButton());
 }
 
 Object.defineProperty(Window.prototype, "windows", {
-  get: function () {
-    return windowManager.windows;
-  }
+	get: function () {
+		return windowManager.windows;
+	}
 })
 
 var windows = windowManager.windows;
