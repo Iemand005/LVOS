@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Netscape 4 Draggable Box</TITLE>
+</HEAD>
+<BODY BGCOLOR="silver" TEXT="black">
+
+<H1>Netscape 4 Draggable Box</H1>
+
+<P>Click and drag the blue box to move it. Drag from the bottom-right corner to resize.</P>
+
+<LAYER NAME="mybox" LEFT="100" TOP="100" WIDTH="150" HEIGHT="150" BGCOLOR="white">
+  <LAYER NAME="titleBar" LEFT="0" TOP="0" WIDTH="150" HEIGHT="30" BGCOLOR="blue">
+    <FONT COLOR="white" SIZE="+1"><B>Title</B></FONT>
+  </LAYER>
+  
+  <LAYER NAME="contentArea" LEFT="0" TOP="30" WIDTH="150" HEIGHT="120" BGCOLOR="lightblue">
+    <FONT COLOR="black" SIZE="2">
+      Content goes here
+    </FONT>
+  </LAYER>
+  
+  <LAYER NAME="resizeHandle" LEFT="130" TOP="130" WIDTH="20" HEIGHT="20" BGCOLOR="gray" STYLE="cursor: move;">
+  </LAYER>
+</LAYER>
+
+<SCRIPT LANGUAGE="JavaScript1.2">
+
+function Dialog(target) {
+    this.target = target;
+    this.draggedLayer = null;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.resizeMode = false;
+    this.initialPageX = 0;
+    this.initialPageY = 0;
+    this.initialWidth = 0;
+    this.initialHeight = 0;
+    this.cornerSize = 20;
+    
+    this.updateSize();
+}
+
+Dialog.prototype.updateSize = function() {
+    this.width = this.target.clip.right - this.target.clip.left;
+    this.height = this.target.clip.bottom - this.target.clip.top;
+    
+    // Update title bar width
+    var titleBar = this.target.layers['titleBar'];
+    if (titleBar) {
+        titleBar.resizeTo(this.width, 30);
+    }
+    
+    // Update content layer to fill remaining space
+    var contentLayer = this.target.layers['contentArea'];
+    if (contentLayer) {
+        contentLayer.resizeTo(this.width, this.height - 30);
+    }
+    
+    // Move and resize handle to bottom-right corner
+    var resizeHandle = this.target.layers['resizeHandle'];
+    if (resizeHandle) {
+        resizeHandle.moveTo(this.width - 20, this.height - 20);
+    }
+}
+
+Dialog.prototype.getWidth = function() {
+    return this.width;
+}
+
+Dialog.prototype.getHeight = function() {
+    return this.height;
+}
+
+Dialog.prototype.isInCorner = function(pageX, pageY) {
+    // Convert page coordinates to main layer coordinates
+    var mainLayerX = pageX - this.target.left;
+    var mainLayerY = pageY - this.target.top;
+    
+    // Check if click is in resize handle area (bottom-right corner)
+    var handleX = this.width - 20;
+    var handleY = this.height - 20;
+    
+    return mainLayerX >= handleX && mainLayerX <= this.width && 
+           mainLayerY >= handleY && mainLayerY <= this.height;
+}
+
+Dialog.prototype.move = function(x, y) {
+    this.target.left = x;
+    this.target.top = y;
+}
+
+Dialog.prototype.resize = function(width, height) {
+    this.target.resizeTo(width, height);
+    this.updateSize();
+}
+
+Dialog.prototype.startDrag = function(e) {
+    var self = this;
+    this.draggedLayer = this.target;
+    
+    if (this.isInCorner(e.pageX, e.pageY)) {
+        this.resizeMode = true;
+        this.initialPageX = e.pageX;
+        this.initialPageY = e.pageY;
+        this.initialWidth = this.width;
+        this.initialHeight = this.height;
+    } else {
+        this.resizeMode = false;
+        this.offsetX = e.layerX;
+        this.offsetY = e.layerY;
+    }
+    
+    window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+    
+    window.onmousemove = function(e) {
+        return self.doDrag(e);
+    }
+    
+    window.onmouseup = function(e) {
+        return self.stopDrag(e);
+    }
+    
+    return false;
+}
+
+Dialog.prototype.doDrag = function(e) {
+    if (this.draggedLayer) {
+        if (this.resizeMode) {
+            var deltaX = e.pageX - this.initialPageX;
+            var deltaY = e.pageY - this.initialPageY;
+            var newWidth = Math.max(50, this.initialWidth + deltaX);
+            var newHeight = Math.max(50, this.initialHeight + deltaY);
+            this.resize(newWidth, newHeight);
+        } else {
+            this.move(e.pageX - this.offsetX, e.pageY - this.offsetY);
+        }
+    }
+    return false;
+}
+
+Dialog.prototype.stopDrag = function(e) {
+    window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+    this.draggedLayer = null;
+    this.resizeMode = false;
+    window.onmousemove = null;
+    window.onmouseup = null;
+    return false;
+}
+
+// Initialize
+var dialog = new Dialog(document.layers['mybox']);
+window.captureEvents(Event.MOUSEDOWN);
+
+var dialogRef = dialog;
+window.onmousedown = function(e) {
+    return dialogRef.startDrag(e);
+}
+
+</SCRIPT>
+
+</BODY>
+</HTML>
