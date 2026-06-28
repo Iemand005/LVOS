@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Netscape 4 Draggable Box</TITLE>
+</HEAD>
+<BODY BGCOLOR="silver" TEXT="black">
+
+<H1>Netscape 4 Draggable Box</H1>
+
+<P>Click and drag the blue box around the screen.</P>
+
+<LAYER NAME="mybox" LEFT="100" TOP="100" WIDTH="150" HEIGHT="150" BGCOLOR="blue">
+  <FONT COLOR="white" SIZE="+2">
+    <CENTER>
+      <B>Drag Me!</B>
+    </CENTER>
+  </FONT>
+</LAYER>
+
+<SCRIPT LANGUAGE="JavaScript1.2">
+
+var draggedLayer = null;
+var offsetX = 0;
+var offsetY = 0;
+
+function startDrag(e) {
+  alert("MOUSEDOWN fired! e.target.name=" + e.target.name);
+  
+  // Check if clicked on the box layer
+  if (document.layers['mybox']) {
+    alert("Found mybox layer!");
+    draggedLayer = document.layers['mybox'];
+    offsetX = e.layerX;
+    offsetY = e.layerY;
+    alert("Starting drag. offsetX=" + offsetX + " offsetY=" + offsetY);
+    
+    window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+    window.onmousemove = doDrag;
+    window.onmouseup = stopDrag;
+  }
+  
+  return false;
+}
+
+function doDrag(e) {
+  if (draggedLayer) {
+    alert("MOUSEMOVE: pageX=" + e.pageX + " pageY=" + e.pageY);
+    draggedLayer.left = e.pageX - offsetX;
+    draggedLayer.top = e.pageY - offsetY;
+  }
+  return false;
+}
+
+function stopDrag(e) {
+  alert("MOUSEUP fired!");
+  window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+  draggedLayer = null;
+  window.onmousemove = null;
+  window.onmouseup = null;
+  return false;
+}
+
+// Initialize
+alert("Setting up event capture...");
+window.captureEvents(Event.MOUSEDOWN);
+window.onmousedown = startDrag;
+alert("Event capture ready!");
+
+</SCRIPT>
+
+</BODY>
+</HTML>

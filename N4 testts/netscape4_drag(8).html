@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Netscape 4 Draggable Box</TITLE>
+</HEAD>
+<BODY BGCOLOR="silver" TEXT="black">
+
+<H1>Netscape 4 Draggable Box</H1>
+
+<P>Click and drag the blue box around the screen.</P>
+
+<LAYER NAME="mybox" LEFT="100" TOP="100" WIDTH="150" HEIGHT="150" BGCOLOR="blue">
+  <FONT COLOR="white" SIZE="+2">
+    <CENTER>
+      <B>Drag Me!</B>
+    </CENTER>
+  </FONT>
+</LAYER>
+
+<SCRIPT LANGUAGE="JavaScript1.2">
+
+var draggedLayer = null;
+var offsetX = 0;
+var offsetY = 0;
+var resizeMode = false;
+var initialWidth = 0;
+var initialHeight = 0;
+var initialPageX = 0;
+var initialPageY = 0;
+
+function startDrag(e) {
+  if (document.layers['mybox']) {
+    draggedLayer = document.layers['mybox'];
+    
+    // Check if click is in bottom-right corner (within 20 pixels of edge)
+    if (e.layerX > 130 && e.layerY > 130) {
+      // Resize mode
+      resizeMode = true;
+      initialPageX = e.pageX;
+      initialPageY = e.pageY;
+      initialWidth = draggedLayer.width;
+      initialHeight = draggedLayer.height;
+    } else {
+      // Drag mode
+      resizeMode = false;
+      offsetX = e.layerX;
+      offsetY = e.layerY;
+    }
+    
+    window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+    window.onmousemove = doDrag;
+    window.onmouseup = stopDrag;
+  }
+  
+  return false;
+}
+
+function doDrag(e) {
+  if (draggedLayer) {
+    if (resizeMode) {
+      var deltaX = e.pageX - initialPageX;
+      var deltaY = e.pageY - initialPageY;
+      draggedLayer.width = Math.max(50, initialWidth + deltaX);
+      draggedLayer.height = Math.max(50, initialHeight + deltaY);
+    } else {
+      draggedLayer.left = e.pageX - offsetX;
+      draggedLayer.top = e.pageY - offsetY;
+    }
+  }
+  return false;
+}
+
+function stopDrag(e) {
+  window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+  draggedLayer = null;
+  resizeMode = false;
+  window.onmousemove = null;
+  window.onmouseup = null;
+  return false;
+}
+
+// Initialize
+window.captureEvents(Event.MOUSEDOWN);
+window.onmousedown = startDrag;
+
+</SCRIPT>
+
+</BODY>
+</HTML>

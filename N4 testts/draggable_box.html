@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<TITLE>Draggable Box</TITLE>
+<STYLE>
+  BODY {
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+  }
+  
+  #dragBox {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    width: 150px;
+    height: 150px;
+    background-color: #3366CC;
+    border: 2px solid #000;
+    color: white;
+    padding: 20px;
+    cursor: move;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  }
+  
+  H1 {
+    margin-top: 0;
+  }
+  
+  P {
+    color: #666;
+  }
+</STYLE>
+<SCRIPT LANGUAGE="JavaScript1.2">
+  var isDragging = false;
+  var dragElement = null;
+  var offsetX = 0;
+  var offsetY = 0;
+
+  function startDrag(e) {
+    isDragging = true;
+    
+    // Get the box element
+    if (document.layers) {
+      // Netscape 4
+      dragElement = document.layers['dragBox'];
+      offsetX = e.x - dragElement.left;
+      offsetY = e.y - dragElement.top;
+      document.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+      document.onmousemove = doDrag;
+      document.onmouseup = stopDrag;
+    } else {
+      // Modern browsers
+      dragElement = document.getElementById('dragBox');
+      var rect = dragElement.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      document.onmousemove = doDrag;
+      document.onmouseup = stopDrag;
+    }
+    
+    return false;
+  }
+
+  function doDrag(e) {
+    if (!isDragging || !dragElement) return false;
+    
+    if (document.layers) {
+      // Netscape 4
+      dragElement.left = e.x - offsetX;
+      dragElement.top = e.y - offsetY;
+    } else {
+      // Modern browsers
+      dragElement.style.left = (e.clientX - offsetX) + 'px';
+      dragElement.style.top = (e.clientY - offsetY) + 'px';
+    }
+    
+    return false;
+  }
+
+  function stopDrag() {
+    if (document.layers) {
+      document.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+    }
+    isDragging = false;
+    dragElement = null;
+    document.onmousemove = null;
+    document.onmouseup = null;
+    return false;
+  }
+</SCRIPT>
+</HEAD>
+<BODY>
+
+  <H1>Draggable Box Demo</H1>
+  <P>Click and drag the blue box around the screen!</P>
+  
+  <!-- For Netscape 4 -->
+  <LAYER ID="dragBox" ONMOUSEDOWN="return startDrag(event)">
+    <CENTER>
+      <STRONG>Drag Me!</STRONG>
+    </CENTER>
+  </LAYER>
+  
+  <!-- For modern browsers (DIV with same ID) -->
+  <DIV ID="dragBox" ONMOUSEDOWN="return startDrag(event)">
+    Drag Me!
+  </DIV>
+
+</BODY>
+</HTML>
