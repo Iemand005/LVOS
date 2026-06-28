@@ -56,16 +56,17 @@
 
 
 </head>
-<body class="windows-95">
+<body class="windows-95" bgcolor="#00FF00">
 
 	<input type="text" id="dbg" onsubmit="alert(dbg)">
 	<h1 id="meow" name="bark" onmouseover="alert('hover')">I am alive</h1>
 
-	<div name="winow" bgcolor="green">
+	<div id="winow" name="winow" bgcolor="green">
 		hi
 	</div>
 
 	<script>
+	alert(document.body)
 	document.captureEvents(Event.MOUSEMOVE);
 	var layer = document.layers["bark"];
 
