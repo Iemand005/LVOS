@@ -26,9 +26,7 @@
 		};
 	</script>
 
-	<script>
-        tags.H1.color = "red";
-	</script>
+
 
 	<style>
 		h1 { color: red; }
@@ -38,6 +36,12 @@
 </head>
 <body class="windows-95">
 	<input type="text" id="dbg" onsubmit="alert(dbg)">
-	<h1>I am alive</h1>
+	<h1 id="meow">I am alive</h1>
+
+	<script>
+        //tags.H1.color = "red";
+        alert(document.getElementById("meow").style.color)
+        document.getElementById("meow").style.color = "blue";
+	</script>
 </body>
 </html>
