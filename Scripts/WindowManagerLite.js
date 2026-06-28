@@ -5,11 +5,11 @@ function Dialog(target) {
 
 alert("IM GOOD");
 
-Dialog.prototype.move(x, y) {
+Dialog.prototype.move = function(x, y) {
     this.target.left = x;
     this.target.top = y;
 }
 
-Dialog.prototype.resize(width, height) {
+Dialog.prototype.resize = function(width, height) {
     this.target.resizeTo(width, height);
 }
