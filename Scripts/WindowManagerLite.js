@@ -5,6 +5,11 @@ function Dialog(target) {
 
 alert("IM GOOD");
 
+Dialog.prototype.move(x, y) {
+    winow.left = x;
+    winow.top = y;
+}
+
 Dialog.prototype.resize(width, height) {
-    target.resizeTo(width, height);
+    this.target.resizeTo(width, height);
 }
