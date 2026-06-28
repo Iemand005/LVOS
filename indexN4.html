@@ -125,9 +125,10 @@
 		dialog.move(ev.pageX, ev.pageY);
 		dialog.resize(startX - ev.pageX, startY - ev.pageY);
 
-		winow.open();
-        winow.write('Your text or <strong>your bold text</strong> here');
-        winow.close();
+		var ee = winow.document;
+		ee.open();
+        ee.write('Your text or <strong>your bold text</strong> here');
+        ee.close();
 	};
 
 	document.onmouseup = function(ev) {
