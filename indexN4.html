@@ -67,11 +67,11 @@
 
 
 </head>
-<body class="windows-95" bgcolor="#00FF00">
+<body class="windows-95" bgcolor="">
 
 	<input type="text" id="dbg" onsubmit="alert(dbg)">
 	<h1 id="meow" name="bark" onmouseover="alert('hover')" bgcolor="#FFFF00">I am alive</h1>
-	<table id="winow" name="winow" bgcolor="#FF0000" width="300" height="100" cellpadding="10" cellspacing="0">
+	<table id="winow" name="winow" bgcolor="" width="300" height="100" cellpadding="10" cellspacing="0">
 		<tr>
 			<td class="header">
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -119,7 +119,8 @@
 	//alert(layer);
 	layer.top = 69;
 
-	var startX, startY;
+	var startX;
+	var startY;
 	var dragging = false;
 
 	document.onmousedown = function(ev) {
@@ -151,10 +152,10 @@
 		startX = 0;
 	};
 
-	for (var a in layer)
-	{
-	//alert(a)
-	}
+	// for (var a in layer)
+	// {
+	// //alert(a)
+	// }
 	//document.onmousemove = alert
         //tags.H1.color = "red";
         //alert(meow)
