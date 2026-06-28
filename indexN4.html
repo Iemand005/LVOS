@@ -143,8 +143,11 @@
 	dicument.onmouseup = function(ev) {
 		startX = 0;
 		wowdoc.open();
-        wowdoc.write('Your text or <strong>your bold text</strong> here <ilayer src="transformtest.html" width="300" height="200" bgcolor="#ffffff"></ilayer>');
+        wowdoc.write('You');
         wowdoc.close();
+
+        document.layers['clue'].visibility = 'hide';
+		document.layers['clue'].visibility = 'show';
 	};
 	</script>
 </body>
