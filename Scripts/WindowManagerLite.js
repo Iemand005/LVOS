@@ -3,7 +3,7 @@ function Dialog(target) {
     this.target = target;
 }
 
-alert("IM GOOD");
+// alert("IM GOOD");
 
 Dialog.prototype.move = function(x, y) {
     this.target.left = x;
@@ -13,3 +13,5 @@ Dialog.prototype.move = function(x, y) {
 Dialog.prototype.resize = function(width, height) {
     this.target.resizeTo(width, height);
 }
+
+alert("IM GOOD");
