@@ -97,7 +97,7 @@
 
 		<layer name="clue" bgcolor="#0000FF" width="300" top="100" left="100">
 		This is a blue box using Netscape's proprietary layer tag.
-			<ilayer src="transformtest.html" width="300" height="200" bgcolor="#ffffff"></ilayer>
+			<ilayer name="tata" src="transformtest.html" width="300" height="200" bgcolor="#ffffff"></ilayer>
 
 		</layer>
 
@@ -110,7 +110,7 @@
 	<script>
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
 	var dicument = document;
-	alert(document.layers.masterPageContainer.document.toString())
+	//alert(document.layers.masterPageContainer.document.toString())
 	var document = document.layers.masterPageContainer.document;
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
 
@@ -149,13 +149,13 @@
 
         document.layers['clue'].visibility = 'hide';
 
-        var targetLayer = document.layers['clue'].document;
+        document.layers['tata'].src = "transformtest.html";
 
-		var currentHTML = targetLayer.toString();
-		alert(currentHTML);
-		targetLayer.open();
-		targetLayer.write(currentHTML);
-		targetLayer.close();
+		// var currentHTML = targetLayer.toString();
+		// alert(currentHTML);
+		// targetLayer.open();
+		// targetLayer.write(currentHTML);
+		// targetLayer.close();
 		//document.layers['clue'].visibility = 'show';
 	};
 	</script>
