@@ -102,11 +102,16 @@
 	</layer>
 
 
+	<layer name="wow" bgcolor="#0000FF" width="300" top="100" left="100">
+	</layer>
+
+
 
 	<script>
 	document.captureEvents(Event.MOUSEMOVE | Event.MOUSEDOWN | Event. MOUSEUP);
 
 	var winow = document.layers["clue"];
+	var wowdoc = document.layers["wow"].document;
 
 	var dialog = new Dialog(winow);
 
@@ -126,9 +131,9 @@
 		dialog.resize(startX - ev.pageX, startY - ev.pageY);
 
 		var ee = winow.document;
-		ee.open();
-        ee.write('Your text or <strong>your bold text</strong> here');
-        ee.close();
+		wowdoc.open();
+        wowdoc.write('Your text or <strong>your bold text</strong> here');
+        wowdoc.close();
 	};
 
 	document.onmouseup = function(ev) {
