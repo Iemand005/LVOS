@@ -104,9 +104,11 @@
 	layer.top = 69;
 
 	var startX, startY;
+	var dragging = false;
 
 	document.onmousedown = function(ev) {
-
+		startX = ev.pageX;
+		startY = ev.pageY;
 	};
 
 	document.onmousemove = function(ev) {
