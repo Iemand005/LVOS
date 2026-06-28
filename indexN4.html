@@ -123,12 +123,18 @@
 		// layer.top = ev.pageY;
 		// winow.left = ev.pageX;
 		// winow.top = ev.pageY;
+		if (!startX) return;
 		dialog.move(ev.pageX, ev.pageY);
 
 		//winow.width = ev.pageX + 100;
-		if (!startX) return;
+
 		dialog.resize(startX - ev.pageX, startY - ev.pageY);
-	}
+	};
+
+	document.onmouseup = function(ev) {
+		startX = 0;
+	};
+
 	for (var a in layer)
 	{
 	//alert(a)
