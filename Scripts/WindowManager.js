@@ -992,7 +992,7 @@ Object.defineProperty(Dialog.prototype, "skew", {
         this._skew = skew;
 	if (this.useTransform) 
         	this.updateTranslation();
-	else 
+	else if (this.target) skewElement(this.target, skew);
         // return null;
     }
 });
