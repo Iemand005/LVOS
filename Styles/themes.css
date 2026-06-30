@@ -109,6 +109,17 @@
     background-color: white;
 }
 
+.flippy.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    transform: translate(0px, 0px) translateY(360deg) !important;
+    z-index: 9999 !important;
+}
+
 @supports (filter: url("#firefox-glass")) {
 
   .glass content {
