@@ -110,7 +110,7 @@
 }
 
 .flippy .window.maximized {
-    animation: spin360 400ms ease-in-out;
+    animation: spin360 400ms ease-in-out reverse;
 }
 
 .flippy .window.maximized {
