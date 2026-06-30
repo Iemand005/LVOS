@@ -1274,9 +1274,9 @@ Dialog.prototype.setZ = function(z) {
 Dialog.prototype.resize = function (width, height) {
 	// this.resizeWithAspect(width, height);
 	// return;
-  if (this.body) this.body.style.boxSizing = "border-box";
-    this.width = width || this.width;
-    this.height = height || this.height;
+	if (this.body) this.body.style.boxSizing = "border-box";
+	this.width = width || this.width;
+	this.height = height || this.height;
 };
 Dialog.prototype.update = function () {
 	this.move();
@@ -1322,16 +1322,16 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
  * @param {number} height
  */
 Dialog.prototype.resizeWithAspect = function (width, height) {
-    var ratio = this.aspectRatio;
+	var ratio = this.aspectRatio;
 
-    var widthDelta = Math.abs(width - this.width);
-    var heightDelta = Math.abs(height - this.height);
+	var widthDelta = Math.abs(width - this.width);
+	var heightDelta = Math.abs(height - this.height);
 
-    if (widthDelta > heightDelta) {
+	if (widthDelta > heightDelta) {
 		this.resize(width, width / ratio);
-    } else {
+	} else {
 		this.resize(height * ratio, height);
-    }
+	}
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
