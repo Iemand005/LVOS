@@ -1364,16 +1364,16 @@ Dialog.prototype.moveBody = function (x, y) {
  * @param {number} bottom 
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
-    if (!this.target) return;
-    if (this.target.style.inset) this.target.style.inset = toPixels(top) + toPixels(left) + toPixels(right) + toPixels(bottom);
-    else {
-        this.target.style.top = toPixels(this.top);
+	if (!this.target) return;
+	if (this.target.style.inset) this.target.style.inset = toPixels(top) + toPixels(left) + toPixels(right) + toPixels(bottom);
+	else {
+		this.target.style.top = toPixels(this.top);
 		this.target.style.left = toPixels(this.left);
-        if (!this.useScale) {
-            this.target.style.right = toPixels(this.right);
-            this.target.style.bottom = toPixels(this.bottom);
-        }
-    }
+		if (!this.useScale) {
+			this.target.style.right = toPixels(this.right);
+			this.target.style.bottom = toPixels(this.bottom);
+		}
+	}
 }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
