@@ -110,7 +110,7 @@
 }
 
 .flippy .window.maximized {
-    transform: rotateY(360deg) !important;
+    transform: translate(0px, 0px) rotateY(360deg) !important;
 }
 
 @supports (filter: url("#firefox-glass")) {
