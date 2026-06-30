@@ -1228,6 +1228,10 @@ Dialog.prototype.updateTranslation = function () {
  * @param {number} [y]
  */
 Dialog.prototype.move = function (x, y) {
+	if (useSkewAnimations) {
+		this._previousX = this.x;
+		this._previousY = this.y;
+	}
 	if (typeof x == "undefined" || x == null) x = this.x || 0;
 	if (typeof y == "undefined" || y == null) y = this.y || 0;
 	var windowWidth = window.innerWidth;
@@ -1256,8 +1260,7 @@ Dialog.prototype.move = function (x, y) {
     // i wanna add a like move event thing with velocity and stuff
 
     if (useSkewAnimations) {
-	//thiis
-this._previousX = 
+	var deltaX, deltaY = ;
     }
 };
 /**
