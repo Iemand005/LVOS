@@ -111,18 +111,18 @@
 
 .flippy .window:not(.maximized) {
     /* sanimation: spin360 500ms ease-in-out reverse; */
-    animation-direction: normal;
+    animation-direction: reverse;
 }
 
 .flippy .window.maximized {
-    animation: flip 500ms ease-in-out;
-    animation-direction: reverse;
+    animation: flip 5000ms linear;
+    animation-direction: normal;
 }
 
 @keyframes flip {
   0%     { transform: rotateY(0deg); }
   50%    { transform: rotateY(90deg); }
-  50.01% { transform: rotateY(270deg); }
+  50.01% { transform: rotateY(271deg); }
   100%   { transform: rotateY(360deg); }
 }
 
