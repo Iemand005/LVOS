@@ -1260,7 +1260,8 @@ Dialog.prototype.move = function (x, y) {
     // i wanna add a like move event thing with velocity and stuff
 
     if (useSkewAnimations) {
-	var deltaX = this., deltaY = this.x - this._previousX;
+	    var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
+        
     }
 };
 /**
