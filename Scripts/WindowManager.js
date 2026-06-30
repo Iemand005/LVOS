@@ -1569,7 +1569,7 @@ function DragAction() { // BS
         function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
         function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
         function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y },// Top right
-        function(dialog, offset, difference){ dialog.height = offset.height + difference.y, dialog.width = offset.width + difference.x }, // Bottom right
+        function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y) }, // Bottom right
         function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom left
     ];
 }
