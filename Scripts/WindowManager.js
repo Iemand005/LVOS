@@ -92,13 +92,13 @@ function WindowManager() {
 
 	this._isBlurEnabled = true;
 	this._isMicaEnabled = false;
-    this._isWindowUpdatesEnabled = false;   
+	this._isWindowUpdatesEnabled = false;   
 
-    this.isDragging = false;
+	this.isDragging = false;
 
-	var self = this;
-	/** @type {(ev:Event)=>void} */
-    this.resizeHandler = function() {
+		var self = this;
+		/** @type {(ev:Event)=>void} */
+	this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	}
 
