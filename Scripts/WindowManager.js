@@ -1251,7 +1251,9 @@ Dialog.prototype.move = function (x, y) {
 	} catch(ex) {}
 
     // i wanna add a like move event thing with velocity and stuff
-
+};
+/*
+Dialog.prototype.moveBy(deltaX, deltaY) {
 
 };
 /** @param {number} z */
