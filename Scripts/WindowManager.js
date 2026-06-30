@@ -1479,10 +1479,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 		target.style.webkitTransform = "";
 		target.style.width = "auto";
 		target.style.height = "auto";
-		target.style.top = toPixels(this.top);
-		target.style.left = toPixels(this.left);
-		target.style.right = toPixels(this.right);
-		target.style.bottom = toPixels(this.bottom);
 	}
 
 	this.update();
