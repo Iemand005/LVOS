@@ -1241,6 +1241,13 @@ Dialog.prototype.move = function (x, y) {
 	if (this.useTransform) this.updateTranslation();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
 
+	if (useSkewAnimations) {
+		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
+		if (deltaX > 0) {
+			this.skew = deltaX;
+		}
+	}
+
 	var micaElement = this.micaElement;
 	if (micaElement) try {
 		var backdrop = micaElement.firstChild;
@@ -1259,12 +1266,7 @@ Dialog.prototype.move = function (x, y) {
 
     // i wanna add a like move event thing with velocity and stuff
 
-    if (useSkewAnimations) {
-	    var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
-        if (deltaX > 0) {
-            this.skew = deltaX;
-        }
-    }
+    
 };
 /**
  * @param {number} deltaX 
