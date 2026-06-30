@@ -1592,6 +1592,10 @@ Dialog.prototype.removeMica = function() {
 	return false;
 };
 
+Dialog.prototype.flip = function() {
+	;
+};
+
 // No longer revlant
 function DragAction() { // BS
     /** @type {DragFunction} */
