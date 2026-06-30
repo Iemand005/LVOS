@@ -29,11 +29,12 @@ Reflector.prototype.reflect = function (target) {
         this.observer = new MutationObserver(function (mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type == "attributes" && mutation.target instanceof HTMLElement) {
-                    refElement.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));
-                    refElement.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
-                    refElement.style.width = mutation.target.style.width;
-                    refElement.style.height = mutation.target.style.height;
-                    refElement.style.zIndex = mutation.target.style.zIndex;
+			var rect = target.getBoundingClientRect();
+			refElement.style.top = toPixels(rect.top - dock.offsetTop + (dock.offsetHeight*0));
+			refElement.style.left = toPixels((rect.left - dock.offsetLeft) + (dock.offsetWidth /2));
+			refElement.style.width = mutation.target.style.width;
+			refElement.style.height = mutation.target.style.height;
+			refElement.style.zIndex = mutation.target.style.zIndex;
                 }
             });
         });
