@@ -1254,9 +1254,8 @@ Dialog.prototype.move = function (x, y) {
 
 	if (useSkewAnimations) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
-		if (deltaX > 0) {
-			this.skew =- deltaX;
-		}
+		
+		this.skew =- deltaX;
 	}
 
 	var micaElement = this.micaElement;
