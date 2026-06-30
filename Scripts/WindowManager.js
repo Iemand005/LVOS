@@ -1821,7 +1821,7 @@ function handleWindowDrag(newX, hewY) {
 	dialog.stopAnimating();
 
     dragAction.execute(dialog, dialog.clickOffset, difference);
-    if(dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
+	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
 function disableDialogDrag() {
