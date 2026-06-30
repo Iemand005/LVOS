@@ -1,16 +1,20 @@
-
-function Dialog(target) {
+/** @param {{top: number,left:number,resizeTo:(width:number,height:number)}} target  */
+function DialogLite(target) {
     this.target = target;
 }
-
-// alert("IM GOOD");
-
-Dialog.prototype.move = function(x, y) {
+/**
+ * @param {number} x 
+ * @param {number} y 
+ */
+DialogLite.prototype.move = function(x, y) {
     this.target.left = x;
     this.target.top = y;
 }
-
-Dialog.prototype.resize = function(width, height) {
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
+DialogLite.prototype.resize = function(width, height) {
     this.target.resizeTo(width, height);
 }
 
