@@ -110,9 +110,13 @@
 }
 
 .flippy .window.maximized {
+    animation: spin360 400ms ease-in-out;
+}
+
+.flippy .window.maximized {
     /* transform: translate(0px, 0px) rotateY(360deg) !important; */
     
-    animation: spin360 400ms cubic-bezier(.86,0,.07,1);
+    animation: spin360 400ms ease-in-out;
 }
 
 @keyframes spin360 {
