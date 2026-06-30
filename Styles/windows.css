@@ -68,7 +68,7 @@ main {
     border-radius: 5px;
     /* border: 5px; */
     transform: rotateY(0deg);
-    transform-style: preserve-3d;
+    /* transform-style: preserve-3d; */
 }
 
 .window.flipped {
