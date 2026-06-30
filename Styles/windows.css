@@ -70,7 +70,7 @@ main {
     transform: rotateY('0deg');
 }
 
-.window .flipped {
+.window.flipped {
     transform: rotateY('180deg');
 }
 
