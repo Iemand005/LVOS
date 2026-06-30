@@ -11,7 +11,7 @@ function Reflector(element) {
     this.observer;
     this.clones = []; // We use the array literal notation [] instead of the constructor new Array().
 }
-
+/** @param {HTMLElement} target */
 Reflector.prototype.reflect = function (target) {
     try {
         var reflection = target.cloneNode(true);
