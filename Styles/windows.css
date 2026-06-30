@@ -70,6 +70,10 @@ main {
     transform: rotateY('0deg');
 }
 
+.window .flipped {
+    transform: rotateY('180deg');
+}
+
 .window header,
 .window .header {
     margin: 0;
