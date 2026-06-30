@@ -1231,8 +1231,10 @@ Dialog.prototype.move = function (x, y) {
 	else {
 		this.target.style.top = toPixels(this.top);
 		this.target.style.left = toPixels(this.left);
-		this.target.style.right = toPixels(this.right);
-		this.target.style.bottom = toPixels(this.bottom);
+        if (!this.useScale) {
+            this.target.style.right = toPixels(this.right);
+            this.target.style.bottom = toPixels(this.bottom);
+        }
 	}
 
 	var micaElement = this.micaElement;
