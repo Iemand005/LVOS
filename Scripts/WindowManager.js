@@ -365,6 +365,8 @@ function Dialog(object, create) {
     /** @type {string?} */
     this._src = null;
 
+    this._previousX = 0;
+    this._previousY = 0;
     this._minWidth = 200;
     this._minHeight = 200;
     this._maxWidth = 1000;
@@ -376,7 +378,7 @@ function Dialog(object, create) {
     this._useTransform = useTransform;
     this._useScale = useScale;
 
-    this._skew = 0;
+    	this._skew = 0;
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
