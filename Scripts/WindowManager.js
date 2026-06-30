@@ -29,6 +29,11 @@ var useBlur = false,
 	useSkewAnimations = true,
     	hasLocalStorage = false;
 
+var flags = {
+	useMica: false,
+	useSkewAnimations: false
+};
+
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
 
 try {
@@ -1239,7 +1244,7 @@ Dialog.prototype.updateTranslation = function () {
  * @param {number} [y]
  */
 Dialog.prototype.move = function (x, y) {
-	if (useSkewAnimations) {
+	if (flags.useSkewAnimations) {
 		this._previousX = this.x;
 		this._previousY = this.y;
 	}
@@ -1252,7 +1257,7 @@ Dialog.prototype.move = function (x, y) {
 	if (this.useTransform) this.updateTranslation();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
 
-	if (useSkewAnimations) {
+	if (flags.useSkewAnimations) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
 		
 		this.skew =- deltaX / 3;
