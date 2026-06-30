@@ -1147,7 +1147,13 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		var enabled = setClass(target, className, force);
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
-}
+};
+/** @param {boolean} [enable] */
+Dialog.prototype.setMinSizeConstraints = function(enabled) {
+    if (!this.target) return;
+    this.target.style.minWidth = enabled ? "100%" : toPixels(this.minWidth);
+    this.target.style.minHeight = enabled ? "100%" : toPixels(this.minHeight);
+};
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
 	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
