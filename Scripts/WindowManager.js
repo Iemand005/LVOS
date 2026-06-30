@@ -26,7 +26,8 @@ var useBlur = false,
 	useScale = false,
 	aeroSnap = false,
 	updateRateLimit = false,
-    hasLocalStorage = false;
+	useSkewAnimations = true,
+    	hasLocalStorage = false;
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
 
@@ -1253,6 +1254,11 @@ Dialog.prototype.move = function (x, y) {
 	} catch(ex) {}
 
     // i wanna add a like move event thing with velocity and stuff
+
+    if (useSkewAnimations) {
+	//thiis
+this._previousX = 
+    }
 };
 /**
  * @param {number} deltaX 
