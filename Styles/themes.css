@@ -121,7 +121,7 @@
   0%     { transform: rotateY(0deg); }
   50%    { transform: rotateY(90deg); }
   50.01% { transform: rotateY(270deg); }
-  100%   { transform: rotateY(180deg); }
+  100%   { transform: rotateY(360deg); }
 }
 
 @supports (filter: url("#firefox-glass")) {
