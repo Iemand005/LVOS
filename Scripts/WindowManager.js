@@ -1357,9 +1357,15 @@ Dialog.prototype.moveBody = function (x, y) {
 	this.updateBodyOffset();
 	this.move(x + this._bodyOffset.x, y + this._bodyOffset.y);
 };
-Dialog.prototype.setIndet = function(top, left, right, bottom) {
+/**
+ * @param {number} top 
+ * @param {number} left 
+ * @param {number} right 
+ * @param {number} bottom 
+ */
+Dialog.prototype.setInset = function(top, left, right, bottom) {
     if (!this.target) return;
-    this.target.style.inset = toPixels(top) + toPixels(left) + toPixels(right) + toPixels() + toPixels(bottom);
+    this.target.style.inset = toPixels(top) + toPixels(left) + toPixels(right) + toPixels(bottom);
 }
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
