@@ -330,7 +330,7 @@ article, .article {
     transition: all 400ms cubic-bezier(.86,0,.07,1);
 }
 
-.window.fullscreen {
+.window.maximized {
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
@@ -341,17 +341,17 @@ article, .article {
     z-index: 9999 !important;
 }
 
-.use-scale .window.fullscreen,
-.window.fullscreen.use-scale {
+.use-scale .window.maximized,
+.window.maximized.use-scale {
     width: 100% !important;
     height: 100% !important;
 }
 
-.window.fullscreen > content {
+.window.maximized > content {
     border: 0px solid transparent !important;
 }
 
-.window.fullscreen > .backdrop-clip * {
+.window.maximized > .backdrop-clip * {
     transform: translate(0px, 0px) !important;
 }
 
