@@ -67,11 +67,11 @@ main {
     box-sizing: border-box;
     border-radius: 5px;
     /* border: 5px; */
-    transform: rotateY('0deg');
+    transform: rotateY(0deg);
 }
 
 .window.flipped {
-    transform: rotateY('180deg');
+    transform: rotateY(180deg);
 }
 
 .window header,
