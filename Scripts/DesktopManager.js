@@ -89,7 +89,7 @@ function toggleReflections(force) {
     if (!reflector) return;
     if(force == null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
-    if(reflecitons) windowManager.forEachWindow(function(dialog) { reflector.reflect(dialog.target); });
+    if(reflecitons) windowManager.forEachWindow(function(dialog) { if (dialog.target) reflector.reflect(dialog.target); });
     else if (typeof reflector.observer != 'undefined') reflector.observer.disconnect();
 }
 
