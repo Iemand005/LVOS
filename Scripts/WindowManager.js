@@ -695,16 +695,16 @@ Object.defineProperty(Dialog.prototype, "body", {
     }
 });
 Object.defineProperty(Dialog.prototype, "titleBar", {
-    get: function() { return this.getElementByTagOrClassName("header"); },
+    	get: function() { return this.getElementByTagOrClassName("header"); },
 });
 
 Object.defineProperty(Dialog.prototype, "mica", {
-    get: function() { return this._mica; },
-    set: function(mica) {
-        if (mica) this._mica = this.injectMica();
-        else this._mica = this.removeMica();
-		this.move();
-    }
+	get: function() { return this._mica; },
+	set: function(mica) {
+		if (mica) this._mica = this.injectMica();
+		else this._mica = this.removeMica();
+			this.move();
+	}
 });
 
 
@@ -1218,7 +1218,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 Dialog.prototype.updateTranslation = function () {
-    if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew);
+	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew);
 }
 /**
  * @param {number} [x]
