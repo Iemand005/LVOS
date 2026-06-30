@@ -1592,8 +1592,9 @@ Dialog.prototype.removeMica = function() {
 	return false;
 };
 
-Dialog.prototype.flip = function() {
-	;
+/** @param {boolean} [enable] */
+Dialog.prototype.flip = function(enable) {
+	this.toggleClassAnimated("flipped", enable);
 };
 
 // No longer revlant
