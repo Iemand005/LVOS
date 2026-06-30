@@ -32,8 +32,8 @@ Reflector.prototype.reflect = function (target) {
 			var rect = target.getBoundingClientRect();
 			refElement.style.top = toPixels(rect.top - dock.offsetTop + (dock.offsetHeight*0));
 			refElement.style.left = toPixels((rect.left - dock.offsetLeft) + (dock.offsetWidth /2));
-			refElement.style.width = mutation.target.style.width;
-			refElement.style.height = mutation.target.style.height;
+			refElement.style.width = toPixels(rect.width);
+			refElement.style.height = toPixels(rect.height);
 			refElement.style.zIndex = mutation.target.style.zIndex;
                 }
             });
