@@ -115,7 +115,7 @@
 }
 
 .flippy .window.maximized {
-    animation: flip 5000ms linear;
+    animation: flip 500ms linear;
     animation-direction: normal;
 }
 
