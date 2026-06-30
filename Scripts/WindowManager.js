@@ -903,7 +903,7 @@ Object.defineProperty(Dialog.prototype, "title", {
 Object.defineProperty(Dialog.prototype, "maximized", {
     get: function() {
         if (!this.target) return false;
-        return this.target.classList.contains("fullscreen");
+        return this.target.classList.contains("maximized");
     },
     set: function(maximized) {
         this.toggleMaximized(maximized);
@@ -1156,7 +1156,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
-	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
+	if (supportsTransitions) this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
@@ -1167,13 +1167,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		var self = this;
 		if (!target) return;
-		enable = !target.classList.contains("fullscreen");
+		enable = !target.classList.contains("maximized");
 		var toggleThingie = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
-			if ( self.target) self.target.classList.toggle("fullscreen", enable);
+			if ( self.target) self.target.classList.toggle("maximized", enable);
 		}
 		if (!enable) toggleThingie();
 		animate(300, function(t) {
