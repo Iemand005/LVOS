@@ -111,6 +111,12 @@
 
 .flippy .window.maximized {
     transform: translate(0px, 0px) rotateY(360deg) !important;
+    animation: spin360 1s linear;
+}
+
+@keyframes spin360 {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
 }
 
 @supports (filter: url("#firefox-glass")) {
