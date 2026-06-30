@@ -1232,14 +1232,7 @@ Dialog.prototype.move = function (x, y) {
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
 	if (!this.target) return;
 	if (this.useTransform) this.updateTranslation();
-	else {
-		this.target.style.top = toPixels(this.top);
-		this.target.style.left = toPixels(this.left);
-        if (!this.useScale) {
-            this.target.style.right = toPixels(this.right);
-            this.target.style.bottom = toPixels(this.bottom);
-        }
-	}
+	else this.setInset(this.top, this.left, this.right, this.bottom);
 
 	var micaElement = this.micaElement;
 	if (micaElement) try {
