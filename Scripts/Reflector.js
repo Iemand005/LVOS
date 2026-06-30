@@ -6,15 +6,21 @@
 'use esnext';
 'use moz';
 
+/** @param {HTMLElement} element */
 function Reflector(element) {
-    this.element = element;
-    this.observer;
-    this.clones = []; // We use the array literal notation [] instead of the constructor new Array().
+	this.element = element;
+	this.observer;
+	/** @type {HTMLElement[]} */
+	this.clones = [];
 }
-/** @param {HTMLElement} target */
+/**
+ * @param {HTMLElement} target
+ * @returns {HTMLElement?}
+ */
 Reflector.prototype.reflect = function (target) {
     try {
         var reflection = target.cloneNode(true);
+	if (!isElement(reflection)) return null;
         reflection.id += "reflection";
         this.clones.push(reflection);
         this.element.appendChild(reflection);
@@ -35,4 +41,5 @@ Reflector.prototype.reflect = function (target) {
     } catch (ex) {
         console.warn(ex); // The reflections aren't that important, we don't want to throw excessive errors.
     }
+    return null;
 }
