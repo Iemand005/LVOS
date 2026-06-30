@@ -638,6 +638,15 @@ function translateElement(element, x, y, skew) {
     element.style.transform = translate;
     element.style.webkitTransform = translate;
 }
+/**
+ * @param {HTMLElement} element
+ * @param {number} skew
+ */
+function skewElement(element, skew) {
+	var transform = " skewX(" + toDegree(skew) + ")";
+	element.style.transform = transform;
+	element.style.webkitTransform = transform;
+}
 
 /**
  * @param {HTMLElement} element
@@ -981,7 +990,9 @@ Object.defineProperty(Dialog.prototype, "skew", {
     set: function(/** @type {number} */skew) {
         // if (this.target) this.target.style.transform
         this._skew = skew;
-        this.updateTranslation();
+	if (this.useTransform) 
+        	this.updateTranslation();
+	else 
         // return null;
     }
 });
