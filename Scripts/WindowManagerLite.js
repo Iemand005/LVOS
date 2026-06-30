@@ -1,4 +1,4 @@
-/** @param {{top: number,left:number,resizeTo:(width:number,height:number)}} target  */
+/** @param {{top: number,left:number,resizeTo:(width:number,height:number)=>void}} target  */
 function DialogLite(target) {
     this.target = target;
 }
