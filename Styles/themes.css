@@ -109,12 +109,12 @@
     background-color: white;
 }
 
-.flippy .window.maximized {
-    animation: spin360 400ms ease-in-out reverse;
+.flippy .window:not(.maximized) {
+    animation: spin360 500ms ease-in-out reverse;
 }
 
 .flippy .window.maximized {
-    animation: spin360 400ms ease-in-out;
+    animation: spin360 500ms ease-in-out;
 }
 
 @keyframes spin360 {
