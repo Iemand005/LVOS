@@ -1358,13 +1358,13 @@ Dialog.prototype.moveBody = function (x, y) {
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (!this.target) return;
-	if (this.target.style.inset) this.target.style.inset = toPixels(top) + toPixels(left) + toPixels(right) + toPixels(bottom);
+	if (this.target.style.inset) this.target.style.inset = toPixels(top) + " " + toPixels(left) + " "  + toPixels(right) + " "  + toPixels(bottom);
 	else {
-		this.target.style.top = toPixels(this.top);
-		this.target.style.left = toPixels(this.left);
+		this.target.style.top = toPixels(top);
+		this.target.style.left = toPixels(left);
 		if (!this.useScale) {
-			this.target.style.right = toPixels(this.right);
-			this.target.style.bottom = toPixels(this.bottom);
+			this.target.style.right = toPixels(right);
+			this.target.style.bottom = toPixels(bottom);
 		}
 	}
 }
