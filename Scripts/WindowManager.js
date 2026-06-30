@@ -1267,7 +1267,7 @@ Dialog.prototype.setZ = function(z) {
 Dialog.prototype.resize = function (width, height) {
 	// this.resizeWithAspect(width, height);
 	// return;
-	if (this.body) this.body.style.boxSizing = "border-box";
+	//if (this.body) this.body.style.boxSizing = "border-box";
 	this.width = width || this.width;
 	this.height = height || this.height;
 };
