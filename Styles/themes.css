@@ -114,8 +114,6 @@
 }
 
 .flippy .window.maximized {
-    /* transform: translate(0px, 0px) rotateY(360deg) !important; */
-    
     animation: spin360 400ms ease-in-out;
 }
 
