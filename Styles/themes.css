@@ -111,10 +111,12 @@
 
 .flippy .window:not(.maximized) {
     /* sanimation: spin360 500ms ease-in-out reverse; */
+    animation-direction: normal;
 }
 
 .flippy .window.maximized {
     animation: flip 500ms ease-in-out;
+    animation-direction: reverse;
 }
 
 @keyframes flip {
