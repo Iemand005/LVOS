@@ -21,25 +21,24 @@ Reflector.prototype.reflect = function (target) {
     try {
         var reflection = target.cloneNode(true);
 	if (!isElement(reflection)) return null;
-        reflection.id += "reflection";
-        this.clones.push(reflection);
-        this.element.appendChild(reflection);
+	var refElement = reflection;
+        refElement.id += "reflection";
+        this.clones.push(refElement);
+        this.element.appendChild(refElement);
 
         this.observer = new MutationObserver(function (mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type == "attributes" && mutation.target instanceof HTMLElement) {
-                    reflection.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));
-                    reflection.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
-                    reflection.style.width = mutation.target.style.width;
-                    reflection.style.height = mutation.target.style.height;
-                    reflection.style.zIndex = mutation.target.style.zIndex;
+                    refElement.style.top = toPixels(target.offsetTop - dock.offsetTop + (dock.offsetHeight*0));
+                    refElement.style.left = toPixels((target.offsetLeft - dock.offsetLeft) + (dock.offsetWidth /2));
+                    refElement.style.width = mutation.target.style.width;
+                    refElement.style.height = mutation.target.style.height;
+                    refElement.style.zIndex = mutation.target.style.zIndex;
                 }
             });
         });
         this.observer.observe(target, { attributes: true });
-        return reflection;
-    } catch (ex) {
-        console.warn(ex); // The reflections aren't that important, we don't want to throw excessive errors.
-    }
+        return refElement;
+    } catch (ex) { console.warn(ex); }
     return null;
 }
