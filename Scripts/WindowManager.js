@@ -1148,18 +1148,18 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
 };
-/** @param {boolean} [enable] */
-Dialog.prototype.toggleMinSizeConstraints = function(enable) {
+/** @param {boolean} [isFullscreen] */
+Dialog.prototype.toggleMinSizeConstraints = function(isFullscreen) {
     if (!this.target) return;
-    this.target.style.minWidth = enable ? "100%" : toPixels(this.minWidth);
-    this.target.style.minHeight = enable ? "100%" : toPixels(this.minHeight);
+    this.target.style.minWidth = isFullscreen ? "100%" : toPixels(this.minWidth);
+    this.target.style.minHeight = isFullscreen ? "100%" : toPixels(this.minHeight);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleFullScreen = function (enable) {
 	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
 		return name == "transform" || name == "width";
-	}, undefined, function(enabled) {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(enabled);
+	}, undefined, function(isFullscreen) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isFullscreen);
 	});
 	else {
 		var startPos = this.position;
