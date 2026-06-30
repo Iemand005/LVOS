@@ -36,7 +36,7 @@ body {
   transform: rotateX(45deg) translateX(-50%);
   -webkit-transform: rotateX(45deg) translateX(-50%);
   background-color: lightgray;
-  perspective: 900px;
+  perspective: 300px;
   box-shadow: 0 0 10px black;
   background: linear-gradient(0deg, #b2b2b2, #737373);
 }
@@ -110,7 +110,7 @@ body:not(.blur) .window > article {
 
 #windows {
   /* overflow: hidden; */
-  perspective: 300px;
+  perspective: 900px;
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
