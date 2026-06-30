@@ -576,7 +576,7 @@ Dialog.prototype.initWithObject = function(object) {
             body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
         var header = this.titleBar;
-        if (header) header.addEventListener("dblclick", this.toggleFullScreen.bind(this, undefined), false);
+        if (header) header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
 
 
         if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
@@ -592,7 +592,7 @@ Dialog.prototype.initWithObject = function(object) {
             self.close();
         }, false);
         buttons[windowButtons.full].addEventListener("click", function () {
-            self.toggleFullScreen();
+            self.toggleMaximized();
         }, false);
 
         this.toggleOpen(false);
@@ -906,7 +906,7 @@ Object.defineProperty(Dialog.prototype, "maximized", {
         return this.target.classList.contains("fullscreen");
     },
     set: function(maximized) {
-        this.toggleFullScreen(maximized);
+        this.toggleMaximized(maximized);
     }
 });
 
@@ -1148,18 +1148,18 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
 };
-/** @param {boolean} [isFullscreen] */
-Dialog.prototype.toggleMinSizeConstraints = function(isFullscreen) {
+/** @param {boolean} [isMaximized] */
+Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     if (!this.target) return;
-    this.target.style.minWidth = isFullscreen ? "100%" : toPixels(this.minWidth);
-    this.target.style.minHeight = isFullscreen ? "100%" : toPixels(this.minHeight);
+    this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
+    this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 /** @param {boolean} [enable] */
-Dialog.prototype.toggleFullScreen = function (enable) {
+Dialog.prototype.toggleMaximized = function (enable) {
 	if (supportsTransitions) this.toggleClassAnimated("fullscreen", enable, function(name) {
 		return name == "transform" || name == "width";
-	}, undefined, function(isFullscreen) {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isFullscreen);
+	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 	});
 	else {
 		var startPos = this.position;
@@ -1195,7 +1195,7 @@ Dialog.prototype.toggleFullScreen = function (enable) {
 	}
 };
 Dialog.prototype.maximize = function () {
-  	this.toggleFullScreen(true);
+  	this.toggleMaximized(true);
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleCloseButton = function (enable) {
@@ -1928,7 +1928,7 @@ Dialog.prototype.loadState = function(state) {
     this.setZ(state.z);
 	this.resize(state.width, state.height);
     console.log(state.title, "window loaded width: ", state.width, state.height)
-    this.toggleFullScreen(state.maximized);
+    this.toggleMaximized(state.maximized);
 };
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
