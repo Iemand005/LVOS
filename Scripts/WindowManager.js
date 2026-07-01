@@ -1855,7 +1855,7 @@ function handleWindowDrag(newX, hewY) {
     var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
 
     if (dialog.maximized) {
-        if (!aeroSnap) return; 
+        if (!flags.aeroSnap) return; 
         dialog.maximized = false;
         dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
     }
@@ -1874,7 +1874,7 @@ function disableDialogDrag() {
     windowManager.saveState();
     if (!activeDialog) return;
     
-    if (aeroSnap && activeDialog.y <= 0)
+    if (flags.aeroSnap && activeDialog.y <= 0)
         activeDialog.maximize();
     
     if (!activeDialog.moveEvents) return;
