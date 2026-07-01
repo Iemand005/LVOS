@@ -1954,27 +1954,27 @@ function handleStorageException(exception){
 }
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
-    return {
-        title: this.title || this.id || "Unc",
-        x: this.x,
-        y: this.y,
-        z: this.z,
-        width: this.width || this.minHeight,
-        height: this.height || this.minWidth,
-        open: this.isOpen || false,
-        maximized: this.maximized
-    };
+	return {
+		title: this.title || this.id || "Unc",
+		x: this.x,
+		y: this.y,
+		z: this.z,
+		width: this.width || this.minHeight,
+		height: this.height || this.minWidth,
+		open: this.isOpen || false,
+		maximized: this.maximized
+	};
 };
 
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
-    if (state.open) this.launch();
-    this.title = state.title;
-    this.move(state.x, state.y); 
-    this.setZ(state.z);
+    	if (state.open) this.launch();
+	this.title = state.title;
+	this.move(state.x, state.y); 
+	this.setZ(state.z);
 	this.resize(state.width, state.height);
-    console.log(state.title, "window loaded width: ", state.width, state.height)
-    this.toggleMaximized(state.maximized);
+	console.log(state.title, "window loaded width: ", state.width, state.height)
+	this.toggleMaximized(state.maximized);
 };
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
