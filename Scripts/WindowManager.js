@@ -17,7 +17,6 @@
 var useBlur = false,
 	useMica = false,
 	reflections = false,
-	fasterDialogTracking = true,
 	canSave = true,
 	loadingOverlay = false,
 	flipped = false,
@@ -26,7 +25,6 @@ var useBlur = false,
     	hasLocalStorage = false;
 
 var flags = {
-	useMica: false,
 	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: false
