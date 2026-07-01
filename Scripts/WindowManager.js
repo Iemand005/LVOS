@@ -2057,9 +2057,9 @@ function enableMica() {
     windowManager.toggleMica(true);
 }
 
-/** @param {boolean} enabled */
+/** @param {boolean} [enabled] */
 WindowManager.prototype.toggleMica = function(enabled) {
-    this.isMicaEnabled = true;
+    this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
 
 /** @param {boolean} enabled */
