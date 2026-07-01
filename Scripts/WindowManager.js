@@ -2130,7 +2130,7 @@ if (wallpaper) {
 }
 
 window.addEventListener("unload", function(e) {
-    windowManager.saveState();  
+	windowManager.saveState();  
 }, false);
 
 window.addEventListener("dragover", function (e) {
