@@ -24,13 +24,13 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
-	updateRateLimit = false,
     	hasLocalStorage = false;
 
 var flags = {
 	useMica: false,
 	useSkewAnimations: false,
 	aeroSnap: false,
+	updateRateLimit: false
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
@@ -115,7 +115,7 @@ function WindowManager() {
 		}
 		try {
 			cancelDomEvent(event);
-			if (updateRateLimit) {
+			if (flags.updateRateLimit) {
 				if (ticking) return;
 				window.requestAnimationFrame(function() {
 					handleWindowDrag(event.clientX, event.clientY);
