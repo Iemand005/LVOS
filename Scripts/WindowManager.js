@@ -346,7 +346,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler) {
 
 /** @param {boolean} enable */
 ClickOffset.prototype.toggleDragEventHandler = function (enable) {
-    if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler);
+	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler);
 }
 
 /**
@@ -381,8 +381,8 @@ function Dialog(object, create) {
     this._maxAspectRatio = Infinity;
     this._mica = useMica;
 
-    this._useTransform = useTransform;
-    this._useScale = useScale;
+	this._useTransform = useTransform;
+	this._useScale = useScale;
 
     	this._skew = 0;
 
