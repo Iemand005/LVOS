@@ -1644,6 +1644,8 @@ window.onload=
 document.onload = function () {
     bodyCrawler = new DocumentCrawler(document);
 
+    if ('chrome' in window) setTheme("glass");
+
     initializeDialogs();
     toggleReflections(reflections);
 }

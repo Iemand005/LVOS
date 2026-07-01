@@ -152,6 +152,7 @@
     button {
         background-color: rgb(32, 32, 32);
         border: 1px solid rgba(255, 255, 255, 0.267);
+        backdrop-filter: none;
     }
 
     .windows-11 .window article, .windows-11 .window article > * {

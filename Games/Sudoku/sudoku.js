@@ -76,6 +76,7 @@ function Sudoku() {
 	/** @type {number?} */
 	this.selectedNumber = 1;
 
+	this._emptyCells = 10;
 	this._health = 5;
 }
 
@@ -104,10 +105,10 @@ Sudoku.prototype.init = function() {
 				var correct = self.selectedNumber == cell.value;
 				console.log( "isright", correct);
 				if (correct) {
-
+					td.onclick = null;
 					cell.show();
 					cell.fixed = true;
-					td.onclick = null;
+					self._emptyCells--;
 				} else self.health--;
 			};
 		}
