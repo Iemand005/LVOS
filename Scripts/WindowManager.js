@@ -2129,7 +2129,7 @@ if (wallpaper) {
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); }
 }
 
-window.addEventListener("unload", function(e) {
+window.addEventListener("unload", function() {
 	windowManager.saveState();  
 }, false);
 
