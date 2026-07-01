@@ -19,7 +19,6 @@ var useBlur = false,
 	reflections = false,
 	fasterDialogTracking = true,
 	canSave = true,
-	IE11Booster = true,
 	loadingOverlay = false,
 	flipped = false,
 	useTransform = false,
@@ -101,8 +100,8 @@ function WindowManager() {
 
 	this.isDragging = false;
 
-		var self = this;
-		/** @type {(ev:Event)=>void} */
+	var self = this;
+	/** @type {(ev:Event)=>void} */
 	this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	}
