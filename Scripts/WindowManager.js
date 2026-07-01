@@ -24,14 +24,13 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
-	aeroSnap = false,
 	updateRateLimit = false,
-	useSkewAnimations = true,
     	hasLocalStorage = false;
 
 var flags = {
 	useMica: false,
-	useSkewAnimations: false
+	useSkewAnimations: false,
+	aeroSnap: false,
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
