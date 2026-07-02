@@ -132,7 +132,7 @@ function animateFrame(time){
     ctx.rect(0, 0, width, height);
     ctx.fill();
 
-    const fillStyle = "rgb(" + rgb.r + ","+ rgb.g + ","+ rgb.b + ")";
+    const fillStyle = "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
 
     if(visualiserOption.selectedIndex){
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
@@ -146,7 +146,7 @@ function animateFrame(time){
             const y = (amp) * Math.sin(rad) + cY;
             ctx.beginPath();
 
-            ctx.fillStyle = "hsl(" + hue + ",100%,"+ a/255*100 +"%)";
+            ctx.fillStyle = fillStyle;
 
             ctx.arc(x, y, 10, 0, Math.PI*2);
             ctx.fill();
@@ -160,7 +160,7 @@ function animateFrame(time){
 
         const amp = parseInt(freqData[index]);
         const x = parseInt(index) * (width/count);
-        ctx.fillStyle = "hsl(" + hue + ",100%,"+ amp/255*100 +"%)";
+        ctx.fillStyle = fillStyle;
         ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
         ctx.fill();
     // ctx.closePath();
