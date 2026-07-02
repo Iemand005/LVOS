@@ -47,4 +47,12 @@ declare global {
     webkitAnimationIteration: AnimationEvent;
     webkitAnimationStart: AnimationEvent;
   }
+
+  interface GraphicsBase {
+    canvas: HTMLCanvasElement;
+  }
+
+  interface Graphics2D extends GraphicsBase {
+    ctx: CanvasRenderingContext2D;
+  }
 }
