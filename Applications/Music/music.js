@@ -127,10 +127,15 @@ async function openCanvasPip() {
     return;
   }
 
-  pipWindow = await window.documentPictureInPicture.requestWindow({
-    width: visualiser.width,
-    height: visualiser.height,
-  });
+  	try {
+		pipWindow = await window.documentPictureInPicture.requestWindow({
+			width: visualiser.width,
+			height: visualiser.height,
+		});
+	} catch(ex) {
+		// Messenger
+		LVMessenger.broadcastToParent("pip", )
+	}
 
   pipWindow.document.body.style.margin = '0';
   pipWindow.document.body.style.overflow = 'hidden';

@@ -18,7 +18,8 @@ LVMessenger.types = {
     prepareToLaunchOverlay: "prepareToLaunchOverlay",
     readyToLaunchOverlay: "readyToLaunchOverlay",
     identify: "identify",
-    identity: "identity"
+    identity: "identity",
+    pip: "pip",
 };
 
 /** @typedef {keyof typeof LVMessenger.types} MessageType */
