@@ -10,6 +10,7 @@ var frequencies = 128;
 
 var micButton = document.getElementById("mic");
 var dispAudioBtn = document.getElementById("display-audio");
+var auraButton = document.getElementById("aura-button");
 var virtualAudio = document.createElement("audio");
 var file = document.getElementById("file");
 var audio = document.getElementsByTagName("audio")[0];
