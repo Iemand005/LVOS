@@ -130,8 +130,8 @@ MusicApp.prototype.animateFrame = function(time) {
     }
     refresh();
     //seekOutput.innerText = parseInt(audio.currentTime/60) +":" + parseInt(audio.currentTime%60) + "."+ parseInt(audio.currentTime%1/0.01);
-    const width = ctx.canvas.width = visualiser.clientWidth;
-    const height = ctx.canvas.height = visualiser.clientHeight;
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
     seek.value = audio.currentTime;
 
     const freqData = audioVisualiser.frequencyData;
