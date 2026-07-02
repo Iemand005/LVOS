@@ -50,7 +50,7 @@ function MusicApp(visualizerElement) {
 	/** @type {"bars" | "circle"} */
 	this.visualizer = "bars";
 
-	// this.prevTime
+	this.prevTime = 0;
 }
 
 const musicApp = new MusicApp(visualiser);
@@ -113,6 +113,8 @@ function getRainbowRGB(intensity) {
 
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
+
+	const deltaTime = time - this.prevTime;
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
@@ -191,6 +193,8 @@ MusicApp.prototype.animateFrame = function(time) {
         ctx.fill();
     // ctx.closePath();
     }
+
+    this.prevTime = time;
     
 }
 
