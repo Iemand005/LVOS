@@ -57,8 +57,8 @@ if (dispAudioBtn) dispAudioBtn.onclick = function() {
 }
 
 if (auraButton) auraButton.onclick = function(){
-    aura.getAuraDevice().then(function() {
-        aura.init();
+    aura.init().then(function() {
+        console.log("Aura loaded!");
     });
 };
 
