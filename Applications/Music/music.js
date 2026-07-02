@@ -114,6 +114,39 @@ function getRainbowRGB(intensity) {
 	return { r: Math.round(r), g: Math.round(g), b: Math.round(b) };
 }
 
+let pipWindow = null;
+
+async function openCanvasPip() {
+  if (!('documentPictureInPicture' in window)) {
+    console.warn('Document Picture-in-Picture not supported.');
+    return;
+  }
+
+  if (window.documentPictureInPicture.window) {
+    window.documentPictureInPicture.window.close();
+    return;
+  }
+
+  pipWindow = await window.documentPictureInPicture.requestWindow({
+    width: canvas.width,
+    height: canvas.height,
+  });
+
+  pipWindow.document.body.style.margin = '0';
+  pipWindow.document.body.style.overflow = 'hidden';
+
+  // Move the actual canvas element — same element, same context reference
+  pipWindow.document.body.appendChild(canvas);
+
+  pipWindow.addEventListener('pagehide', () => {
+    document.getElementById('visualiser-container').appendChild(canvas);
+    pipWindow = null;
+  }, { once: true });
+}
+
+const pipBtn = document.getElementById("pip-button");
+pipBtn.onclick = openCanvasPip;
+
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
 
