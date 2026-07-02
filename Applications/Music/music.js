@@ -128,18 +128,18 @@ async function openCanvasPip() {
   }
 
   pipWindow = await window.documentPictureInPicture.requestWindow({
-    width: canvas.width,
-    height: canvas.height,
+    width: visualiser.width,
+    height: visualiser.height,
   });
 
   pipWindow.document.body.style.margin = '0';
   pipWindow.document.body.style.overflow = 'hidden';
 
   // Move the actual canvas element — same element, same context reference
-  pipWindow.document.body.appendChild(canvas);
+  pipWindow.document.body.appendChild(visualiser);
 
   pipWindow.addEventListener('pagehide', () => {
-    document.getElementById('visualiser-container').appendChild(canvas);
+    document.getElementById('visualiser-container').appendChild(visualiser);
     pipWindow = null;
   }, { once: true });
 }
