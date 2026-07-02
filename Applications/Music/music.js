@@ -115,7 +115,7 @@ function getRainbowRGB(intensity) {
 }
 
 const pipBtn = document.getElementById('pip-button');
-const canvasContainer = canvas.parentElement; // wherever it normally lives
+const canvasContainer = visualiser.parentElement; // wherever it normally lives
 
 let pipWindow = null;
 
@@ -132,8 +132,8 @@ async function openVisualiserPip() {
   }
 
   pipWindow = await window.documentPictureInPicture.requestWindow({
-    width: canvas.width || 400,
-    height: canvas.height || 300,
+    width: visualiser.width || 400,
+    height: visualiser.height || 300,
   });
 
   // Copy your stylesheets so the canvas/controls look right
@@ -155,7 +155,7 @@ async function openVisualiserPip() {
   pipWindow.document.body.classList.add('transparent');
 
   // Move the canvas element itself into the PiP window
-  pipWindow.document.body.appendChild(canvas);
+  pipWindow.document.body.appendChild(visualiser);
 
   // Optional: also move a mini play button, and control the real <audio> via reference
   const miniPlay = pipWindow.document.createElement('button');
@@ -167,12 +167,14 @@ async function openVisualiserPip() {
 
   // When the PiP window closes, move the canvas back
   pipWindow.addEventListener('pagehide', () => {
-    canvasContainer.appendChild(canvas);
+    canvasContainer.appendChild(visualiser);
     pipWindow = null;
   }, { once: true });
 }
 
-pipBtn.addEventListene
+// pipBtn.addEventListene
+pipBtn.addEventListener('click', openVisualiserPip);
+
 
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
