@@ -33,10 +33,14 @@ var clear = false;
 const media = new Media;
 const aura = new Aura;
 
+const graphics = new Graphics2D(visualiser);
+
+	console.log("graphics canvas found:", this.graphics.ctx);
+
+
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
-	this.graphics = new Graphics2D(visualizerElement);
-	console.log("graphics canvas found:", this.graphics.ctx);
+	this.graphics = 
 	// this.ctx = visualizerElement.getContext("2d");
 }
 
