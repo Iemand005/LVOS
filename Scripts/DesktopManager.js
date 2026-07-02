@@ -375,6 +375,76 @@ function handleWallpaperDrop(ev) {
     }
 }
 
+/**
+ * Moves any DOM element into a Document Picture-in-Picture window.
+ * Calling it again while already open closes the PiP and restores the element.
+ *
+ * @param {HTMLElement} el - the element to pop out
+ * @param {Object} [opts]
+ * @param {number} [opts.width] - PiP window width (defaults to el's rendered width)
+ * @param {number} [opts.height] - PiP window height (defaults to el's rendered height)
+ * @param {boolean} [opts.copyStyles=true] - copy stylesheets into the PiP window
+ * @returns {Promise<Window|null>} the PiP window, or null if unsupported/closed
+ */
+async function toggleElementPip(el, opts = {}) {
+  if (!('documentPictureInPicture' in window)) {
+    console.warn('Document Picture-in-Picture not supported in this browser.');
+    return null;
+  }
+
+  // If already in PiP, close it (this triggers pagehide -> restores element)
+  const existing = window.documentPictureInPicture.window;
+  if (existing) {
+    existing.close();
+    return null;
+  }
+
+  const rect = el.getBoundingClientRect();
+  const {
+    width = Math.round(rect.width) || 400,
+    height = Math.round(rect.height) || 300,
+    copyStyles = true,
+  } = opts;
+
+  const pipWindow = await window.documentPictureInPicture.requestWindow({ width, height });
+
+  // Remember where the element came from so we can put it back
+  const originalParent = el.parentNode;
+  const originalNextSibling = el.nextSibling;
+
+  if (copyStyles) {
+    [...document.styleSheets].forEach((styleSheet) => {
+      try {
+        const cssText = [...styleSheet.cssRules].map(r => r.cssText).join('');
+        const style = pipWindow.document.createElement('style');
+        style.textContent = cssText;
+        pipWindow.document.head.appendChild(style);
+      } catch (e) {
+        // Cross-origin stylesheet, link it instead
+        const link = pipWindow.document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = styleSheet.type;
+        link.media = styleSheet.media;
+        link.href = styleSheet.href;
+        pipWindow.document.head.appendChild(link);
+      }
+    });
+  }
+
+  pipWindow.document.body.style.margin = '0';
+  pipWindow.document.body.appendChild(el);
+
+  pipWindow.addEventListener('pagehide', () => {
+    if (originalNextSibling) {
+      originalParent.insertBefore(el, originalNextSibling);
+    } else {
+      originalParent.appendChild(el);
+    }
+  }, { once: true });
+
+  return pipWindow;
+}
+
 
 window.ondrop = document.ondrop = handleWallpaperDrop;
 
