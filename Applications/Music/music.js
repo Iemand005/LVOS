@@ -33,6 +33,10 @@ var clear = false;
 const media = new Media;
 const aura = new Aura;
 
+function MusicApp() {
+	
+}
+
 if (micButton)
 micButton.onclick = function(ev){
     // if (isActive) stop();
