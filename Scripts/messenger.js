@@ -90,6 +90,8 @@ LVMessenger.broadcastToParent = function (type, message, id) {
     if (target && typeof target.__LVMessengerReceive == "function") {
         try {
             target.__LVMessengerReceive(type, message, id);
+
+            return;
         } catch (ex) {
             console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
         }
