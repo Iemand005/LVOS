@@ -57,7 +57,7 @@ function MusicApp(visualizerElement) {
 
 const musicApp = new MusicApp(visualiser);
 
-onresize = function() {
+window.onresize = function() {
 	musicApp.graphics.resize();
 }
 
