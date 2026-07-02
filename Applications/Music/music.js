@@ -120,7 +120,7 @@ file.onchange = function(){
     audio.src = URL.createObjectURL(this.files[0]);
     audio.load();
     if(audioVisualiser) audioVisualiser.destroy();
-    audioVisualiser = new AudioVisualiser(frequencies);
+    audioVisualiser = new AudioVisualizer(frequencies);
     audioVisualiser.initializeWithMediaElement(audio);
     startAnimation(audioVisualiser);
     volume.value = audio.volume*100;
