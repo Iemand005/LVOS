@@ -134,7 +134,8 @@ async function openCanvasPip() {
 		});
 	} catch(ex) {
 		// Messenger
-		LVMessenger.broadcastToParent("pip", )
+		console.error("bark", ex);
+		LVMessenger.broadcastToParent("pip", {id: "visualiser"});
 	}
 
   pipWindow.document.body.style.margin = '0';
