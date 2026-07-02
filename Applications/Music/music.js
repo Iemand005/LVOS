@@ -109,7 +109,7 @@ function getRainbowRGB(intensity) {
 MusicApp.prototype.animateFrame = function(time) {
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
-    requestAnimationFrame(animateFrame);
+    requestAnimationFrame(this.animateFrame);
     if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
         ctx.fillStyle = "#FF000099"
@@ -190,7 +190,7 @@ function startAnimation(){
     fft.oninput = function(){
         audioVisualiser.updateBinCount(Math.pow(2, this.value)); // "2 ** this.value" works in more modern browsers too.
     }
-    requestAnimationFrame(animateFrame);
+    requestAnimationFrame(musicApp.animateFrame);
 }
 
 file.onchange = function(){
