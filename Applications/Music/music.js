@@ -117,18 +117,23 @@ function animateFrame(time){
 
     const averageIntensity = total / count;
 
-    const rgb = getRainbowRGB(averageIntensity);
+    const hue = time/321;
+
+
+    const rgb = getRainbowRGB(hue);
 
     if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
-    const hue = time/321;
     const a = 70;
     ctx.fillStyle = "transparent";
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
     ctx.fill();
+
+    const fillStyle = "rgb(" + rgb.r + ","+ rgb.g + ","+ rgb.b + ")";
+
     if(visualiserOption.selectedIndex){
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
