@@ -39,9 +39,7 @@ const aura = new Aura;
 // 	console.log("graphics canvas found:", graphics.ctx);
 // }
 
-onresize = function() {
-	graphics.resize();
-}
+
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
@@ -58,6 +56,10 @@ function MusicApp(visualizerElement) {
 }
 
 const musicApp = new MusicApp(visualiser);
+
+onresize = function() {
+	musicApp.graphics.resize();
+}
 
 if (micButton)
 micButton.onclick = function(ev){
