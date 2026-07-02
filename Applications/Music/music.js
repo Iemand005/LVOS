@@ -56,6 +56,12 @@ if (dispAudioBtn) dispAudioBtn.onclick = function() {
     }
 }
 
+if (auraButton) auraButton.onclick = function(){
+    aura.getAuraDevice().then(function() {
+        aura.init();
+    });
+};
+
 ctx.globalAlpha = 0.1;
 
 function localFullscreen() {
