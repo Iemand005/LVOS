@@ -105,8 +105,8 @@ function getRainbowRGB(intensity) {
   };
 }
 
-
-function animateFrame(time){
+/** @param {number} time */
+MusicApp.prototype.animateFrame = function(time) {
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     requestAnimationFrame(animateFrame);
