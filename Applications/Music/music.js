@@ -41,14 +41,6 @@ if (visualiser instanceof HTMLCanvasElement) {
 
 
 
-/** @param {HTMLCanvasElement} visualizerElement  */
-function MusicApp(visualizerElement) {
-	this.graphics = 
-	// this.ctx = visualizerElement.getContext("2d");
-}
-
-const musicApp = new MusicApp(visualiser);
-
 if (micButton)
 micButton.onclick = function(ev){
     // if (isActive) stop();
