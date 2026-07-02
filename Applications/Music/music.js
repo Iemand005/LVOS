@@ -110,8 +110,9 @@ function getRainbowRGB(intensity) {
 MusicApp.prototype.animateFrame = function(time) {
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
-    window.requestAnimationFrame(this.animateFrame);
-    if(clear) ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    window.requestAnimationFrame(this.animateFrame.bind(musicApp));
+    if (!this.graphics.ctx) return;
+    if(clear) this.graphics.ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
         ctx.fillStyle = "#FF000099"
         ctx.beginPath();
