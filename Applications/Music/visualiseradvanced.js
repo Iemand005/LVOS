@@ -5,6 +5,8 @@
 'use esnext';
 'use moz';
 
+const media = new Media();
+
 /*let*/var isActive = false;
 /*let*/var stop = new Function;
 
@@ -29,9 +31,10 @@ if (micButton)
 micButton.onclick = function(ev){
     if(isActive) stop(); // Not all browsers support this syntax "e => console.log(e)". It's also not recognised by VS2013. I'll be using brackets around single parameters for arrow notation, "(e) => console.log(e)".
     else {
-        /*const*/var params = {audio: true, video: false}, handler=  e=>microphoneActivated(e),error= e=>console.error(e.message)
-        if(navigator.getUserMedia) navigator.getUserMedia(params, handler, error)
-        (navigator.getUserMedia || navigator.webkitGetUserMedia)()
+        media.getMicrophoneStream()?.then(microphoneActivated);
+        // /*const*/var params = {audio: true, video: false}, handler=  e=>microphoneActivated(e),error= e=>console.error(e.message)
+        // if(navigator.getUserMedia) navigator.getUserMedia(params, handler, error)
+        // (navigator.getUserMedia || navigator.webkitGetUserMedia)()
     }
 }
 
