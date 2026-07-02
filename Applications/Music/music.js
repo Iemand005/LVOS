@@ -114,68 +114,6 @@ function getRainbowRGB(intensity) {
 	return { r: Math.round(r), g: Math.round(g), b: Math.round(b) };
 }
 
-const pipBtn = document.getElementById('pip-button');
-const canvasContainer = visualiser.parentElement; // wherever it normally lives
-
-let pipWindow = null;
-
-async function openVisualiserPip() {
-  if (!('documentPictureInPicture' in window)) {
-    alert('Picture-in-Picture not supported in this browser.');
-    return;
-  }
-
-  // Toggle off if already open
-  if (window.documentPictureInPicture.window) {
-    window.documentPictureInPicture.window.close();
-    return;
-  }
-
-  pipWindow = await window.documentPictureInPicture.requestWindow({
-    width: visualiser.width || 400,
-    height: visualiser.height || 300,
-  });
-
-  // Copy your stylesheets so the canvas/controls look right
-  [...document.styleSheets].forEach((styleSheet) => {
-    try {
-      const cssText = [...styleSheet.cssRules].map(r => r.cssText).join('');
-      const style = pipWindow.document.createElement('style');
-      style.textContent = cssText;
-      pipWindow.document.head.appendChild(style);
-    } catch (e) {
-      const link = pipWindow.document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = styleSheet.href;
-      pipWindow.document.head.appendChild(link);
-    }
-  });
-
-  pipWindow.document.body.style.margin = '0';
-  pipWindow.document.body.classList.add('transparent');
-
-  // Move the canvas element itself into the PiP window
-  pipWindow.document.body.appendChild(visualiser);
-
-  // Optional: also move a mini play button, and control the real <audio> via reference
-  const miniPlay = pipWindow.document.createElement('button');
-  miniPlay.textContent = '⏵︎/⏸︎';
-  miniPlay.addEventListener('click', () => {
-    document.getElementById('play').click(); // trigger your existing play logic
-  });
-  pipWindow.document.body.appendChild(miniPlay);
-
-  // When the PiP window closes, move the canvas back
-  pipWindow.addEventListener('pagehide', () => {
-    canvasContainer.appendChild(visualiser);
-    pipWindow = null;
-  }, { once: true });
-}
-
-// pipBtn.addEventListene
-pipBtn.addEventListener('click', openVisualiserPip);
-
-
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
 
