@@ -76,16 +76,21 @@ fullscreen.onclick = function(){
 }
 
 function getRainbowRGB(intensity) {
-	const h = intensity * 6;
-	const x = Math.round(255 * (1 - Math.abs((h % 2) - 1)));
+  const t = intensity % 1;
 
-	if (h < 1) return { r: 255, g: x,   b: 0   };
-	if (h < 2) return { r: x,   g: 255, b: 0   };
-	if (h < 3) return { r: 0,   g: 255, b: x   };
-	if (h < 4) return { r: 0,   g: x,   b: 255 };
-	if (h < 5) return { r: x,   g: 0,   b: 255 };
-		return { r: 255, g: 0,   b: x   };
+  const angle = t * 2 * Math.PI;
+
+  const r = Math.sin(angle) * 127 + 128;
+  const g = Math.sin(angle + (2 * Math.PI / 3)) * 127 + 128;
+  const b = Math.sin(angle + (4 * Math.PI / 3)) * 127 + 128;
+
+  return {
+    r: Math.round(r),
+    g: Math.round(g),
+    b: Math.round(b)
+  };
 }
+
 
 
 function animateFrame(time){
@@ -117,7 +122,7 @@ function animateFrame(time){
 
     const averageIntensity = total / count;
 
-    const hue = time/321;
+    const hue = time/3210;
 
 
     const rgb = getRainbowRGB(hue);
