@@ -33,6 +33,8 @@ var colorBuffer = [0, 0];
 var valueBuffer = new Array(30);
 const media = new Media();
 
+const aura = new Aura;
+
 if (micButton)
 micButton.onclick = function(ev){
     // if (isActive) stop();
