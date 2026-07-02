@@ -35,7 +35,9 @@ const aura = new Aura;
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
-	this.ctx = visualizerElement.getContext("2d");
+	this.graphics = new Graphics2D(visualizerElement);
+	console.log("graphics canvas found:", this.graphics.ctx);
+	// this.ctx = visualizerElement.getContext("2d");
 }
 
 if (micButton)
