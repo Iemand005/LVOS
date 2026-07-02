@@ -158,7 +158,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const fillStyle = "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
 
-    if () {
+    if (this.visualizer === "bars") {
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
@@ -192,8 +192,8 @@ MusicApp.prototype.animateFrame = function(time) {
     
 }
 
-visualiserOption?.onchange = function() {
-	visualiserOption.selectedIndex
+if (visualiserOption) visualiserOption.onchange = function() {
+	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.selectedIndex === 1 ? "circle" : "bars";
 }
 
 function startAnimation(){
