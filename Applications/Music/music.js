@@ -33,8 +33,9 @@ var clear = false;
 const media = new Media;
 const aura = new Aura;
 
-function MusicApp() {
-	
+/** @param {HTMLCanvasElement} visualizerElement  */
+function MusicApp(visualizerElement) {
+	this.ctx = visualizerElement.getContext("2d");
 }
 
 if (micButton)
