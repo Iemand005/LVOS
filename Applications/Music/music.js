@@ -101,6 +101,7 @@ fullscreen.onclick = function(){
     LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
 }
 
+/** @param {number} intensity */
 function getRainbowRGB(intensity) {
 	const t = intensity % 1;
 
@@ -118,7 +119,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	const deltaTime = time - this.prevTime;
 
-	this.rotation += deltaTime * 0.00001;
+	this.rotation += deltaTime * 0.000001;
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
