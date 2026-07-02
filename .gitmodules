@@ -25,3 +25,6 @@
 [submodule "Applications/Cyanide"]
 	path = Applications/Cyanide
 	url = https://github.com/cyanide-again/lvos.git
+[submodule "Scripts/WebAura"]
+	path = Scripts/WebAura
+	url = https://github.com/Iemand005/WebAura
