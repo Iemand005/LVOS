@@ -54,5 +54,6 @@ declare global {
 
   interface Graphics2D extends GraphicsBase {
     ctx: CanvasRenderingContext2D;
+    resize();
   }
 }
