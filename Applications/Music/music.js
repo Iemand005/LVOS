@@ -189,7 +189,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const averageIntensity = total / count;
 
-    this.rotation += (Math.pow(2, averageIntensity / 255 * 12) - 1) * 0.0001;
+    this.rotation += (Math.pow(2, averageIntensity / 255 * 10) - 1) * 0.0001;
 
     const hue = this.rotation;
 
