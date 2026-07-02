@@ -102,19 +102,15 @@ fullscreen.onclick = function(){
 }
 
 function getRainbowRGB(intensity) {
-  const t = intensity % 1;
+	const t = intensity % 1;
 
-  const angle = t * 2 * Math.PI;
+	const angle = t * 2 * Math.PI;
 
-  const r = Math.sin(angle) * 127 + 128;
-  const g = Math.sin(angle + (2 * Math.PI / 3)) * 127 + 128;
-  const b = Math.sin(angle + (4 * Math.PI / 3)) * 127 + 128;
+	const r = Math.sin(angle) * 127 + 128;
+	const g = Math.sin(angle + (2 * Math.PI / 3)) * 127 + 128;
+	const b = Math.sin(angle + (4 * Math.PI / 3)) * 127 + 128;
 
-  return {
-    r: Math.round(r),
-    g: Math.round(g),
-    b: Math.round(b)
-  };
+	return { r: Math.round(r), g: Math.round(g), b: Math.round(b) };
 }
 
 /** @param {number} time */
