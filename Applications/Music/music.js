@@ -193,7 +193,7 @@ MusicApp.prototype.animateFrame = function(time) {
 }
 
 if (visualiserOption) visualiserOption.onchange = function() {
-	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.selectedIndex === 1 ? "circle" : "bars";
+	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.selectedIndex === 1 ? "bars" : "circle";
 }
 
 function startAnimation(){
