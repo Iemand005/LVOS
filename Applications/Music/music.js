@@ -28,7 +28,7 @@ var visualiserOption = document.getElementById("style");
 let elements = [];
 var audioVisualiser = new AudioVisualizer(frequencies);
 var circular = true;
-var clear = false;
+var clear = true;
 
 const media = new Media;
 const aura = new Aura;
@@ -118,7 +118,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	const deltaTime = time - this.prevTime;
 
-	this.rotation += deltaTime * 0.001;
+	this.rotation += deltaTime * 0.00001;
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
@@ -149,7 +149,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const averageIntensity = total / count;
 
-    this.rotation += averageIntensity / 100;
+    this.rotation += averageIntensity / 10000;
 
     const hue = this.rotation;
 
