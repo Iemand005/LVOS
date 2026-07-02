@@ -51,6 +51,8 @@ function MusicApp(visualizerElement) {
 	this.visualizer = "bars";
 
 	this.prevTime = 0;
+
+	this.rotation = 0;
 }
 
 const musicApp = new MusicApp(visualiser);
@@ -116,6 +118,8 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	const deltaTime = time - this.prevTime;
 
+	this.rotation += deltaTime * 0.001;
+
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
     if (!this.graphics.ctx) return;
@@ -145,7 +149,9 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const averageIntensity = total / count;
 
-    const hue = time / 10210;
+    this.rotation += averageIntensity / 100;
+
+    const hue = this.rotation;
 
 
     const rgb = getRainbowRGB(hue);
