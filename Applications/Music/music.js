@@ -9,6 +9,7 @@
 var frequencies = 128;
 
 var micButton = document.getElementById("mic");
+var dispAudioBtn = document.getElementById("display-audio");
 var virtualAudio = document.createElement("audio");
 var file = document.getElementById("file");
 var audio = document.getElementsByTagName("audio")[0];
@@ -40,6 +41,16 @@ micButton.onclick = function(ev){
         startAnimation();
     });
     // }
+}
+
+if (dispAudioBtn) dispAudioBtn.onclick = function() {
+    const displayStream = media.getDisplayStream();
+    if (displayStream) {
+        displayStream.then(function(stream) {
+            audioVisualiser.initializeWithMediaStream(stream);
+            startAnimation();
+        })
+    }
 }
 
 ctx.globalAlpha = 0.1;
