@@ -15,7 +15,7 @@ const media = new Media();
  */
 function microphoneActivated(stream){
     isActive = true;
-    /*const*/var visualiser = new AudioVisualiser(frequencies);
+    /*const*/var visualiser = new AudioVisualizer(frequencies);
     visualiser.initializeWithMediaStream(stream);
     startAnimation(visualiser);
     stop = endStream.bind(this, stream);
