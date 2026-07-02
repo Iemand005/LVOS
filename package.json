@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/w3c-web-hid": "^1.0.7"
+  }
+}
