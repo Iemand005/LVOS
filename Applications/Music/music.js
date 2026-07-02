@@ -98,6 +98,12 @@ function animateFrame(time){
     const timeData = audioVisualiser.timeDomainData;
     // const count = visualiserOption.frequ;
     const count = audioVisualiser.frequencyBinCount;
+
+    var total = 0;
+    for (let i = 0; i < freqData.length; i++)
+        total += freqData[i];
+
+    const averageIntensity = total / count;
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
