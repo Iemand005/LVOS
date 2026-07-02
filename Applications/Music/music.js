@@ -116,6 +116,10 @@ function animateFrame(time){
         total += freqData[i];
 
     const averageIntensity = total / count;
+
+    const rgb = getRainbowRGB(averageIntensity);
+
+    if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
