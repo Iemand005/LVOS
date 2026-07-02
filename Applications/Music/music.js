@@ -33,13 +33,13 @@ const media = new Media();
 
 if (micButton)
 micButton.onclick = function(ev){
-    if (isActive) stop();
-    else {
-        media.getMicrophoneStream()?.then(function(stream) {
-            audioVisualiser.initializeWithMediaStream(stream);
-            startAnimation();
-        });
-    }
+    // if (isActive) stop();
+    // else {
+    media.getMicrophoneStream()?.then(function(stream) {
+        audioVisualiser.initializeWithMediaStream(stream);
+        startAnimation();
+    });
+    // }
 }
 
 ctx.globalAlpha = 0.1;
