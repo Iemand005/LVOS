@@ -1719,7 +1719,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                 var doc = dialog.contentDocument;
                 if (!doc) break;
                 var targetElement = doc.getElementById(id);
-                cosnole.log("Ripped out element:", targetElement);
+                console.log("Ripped out element:", targetElement);
+                if (targetElement) toggleElementPip(targetElement);
                 break;
 
         }
