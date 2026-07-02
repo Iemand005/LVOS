@@ -119,7 +119,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	const deltaTime = time - this.prevTime;
 
-	this.rotation += deltaTime * 0.000001;
+	this.rotation += deltaTime * 0.0001;
 
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
