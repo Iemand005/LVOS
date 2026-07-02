@@ -46,6 +46,9 @@ function MusicApp(visualizerElement) {
 	this.graphics = new Graphics2D(visualizerElement);
 	// this.ctx = visualizerElement.getContext("2d");
 	console.log("graphics canvas found:", this.graphics.ctx);
+
+	/** @type {"bars" | "circle"} */
+	this.visualizer = "bars";
 }
 
 const musicApp = new MusicApp(visualiser);
@@ -155,7 +158,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const fillStyle = "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
 
-    if(visualiserOption.selectedIndex){
+    if () {
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
@@ -187,6 +190,10 @@ MusicApp.prototype.animateFrame = function(time) {
     // ctx.closePath();
     }
     
+}
+
+visualiserOption?.onchange = function() {
+	visualiserOption.selectedIndex
 }
 
 function startAnimation(){
