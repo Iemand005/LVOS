@@ -710,6 +710,12 @@ Object.defineProperty(Dialog.prototype, "body", {
 Object.defineProperty(Dialog.prototype, "titleBar", {
     	get: function() { return this.getElementByTagOrClassName("header"); },
 });
+Object.defineProperty(Dialog.prototype, "document", {
+    get: function() {
+        var frame = this.frame;
+        return frame ? frame.contentWindow : null;
+    }
+});
 
 Object.defineProperty(Dialog.prototype, "mica", {
 	get: function() { return this._mica; },
@@ -2155,3 +2161,4 @@ window.addEventListener("drop", function(e) {
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
 \*/
+                                       
