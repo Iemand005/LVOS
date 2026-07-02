@@ -132,22 +132,22 @@ async function openCanvasPip() {
 			width: visualiser.width,
 			height: visualiser.height,
 		});
+	
+
+	pipWindow.document.body.style.margin = '0';
+	pipWindow.document.body.style.overflow = 'hidden';
+
+	pipWindow.document.body.appendChild(visualiser);
+
+	pipWindow.addEventListener('pagehide', () => {
+	document.getElementById('visualiser-container').appendChild(visualiser);
+	pipWindow = null;
+	}, { once: true });
 	} catch(ex) {
 		// Messenger
 		console.error("bark", ex);
 		LVMessenger.broadcastToParent("pip", {id: "visualiser"}, "music");
 	}
-
-  pipWindow.document.body.style.margin = '0';
-  pipWindow.document.body.style.overflow = 'hidden';
-
-  // Move the actual canvas element — same element, same context reference
-  pipWindow.document.body.appendChild(visualiser);
-
-  pipWindow.addEventListener('pagehide', () => {
-    document.getElementById('visualiser-container').appendChild(visualiser);
-    pipWindow = null;
-  }, { once: true });
 }
 
 const pipBtn = document.getElementById("pip-button");
