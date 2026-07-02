@@ -33,18 +33,19 @@ var clear = false;
 const media = new Media;
 const aura = new Aura;
 
-if (visualiser instanceof HTMLCanvasElement) {
-	const graphics = new Graphics2D(visualiser);
+// if (visualiser instanceof HTMLCanvasElement) {
+// 	const graphics = new Graphics2D(visualiser);
 	
-	console.log("graphics canvas found:", graphics.ctx);
-}
+// 	console.log("graphics canvas found:", graphics.ctx);
+// }
 
 
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
-	this.graphics = 
+	this.graphics = new Graphics2D(visualizerElement);
 	// this.ctx = visualizerElement.getContext("2d");
+	console.log("graphics canvas found:", this.graphics.ctx);
 }
 
 const musicApp = new MusicApp(visualiser);
