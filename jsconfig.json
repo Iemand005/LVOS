@@ -1,6 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "es2025",
+	"compilerOptions": {
+		"target": "es2025",
     "lib": ["ES2015", "DOM"],
     "checkJs": true,
     "allowJs": true,
@@ -18,9 +18,9 @@
     "**/*.js",
     "**/*.d.ts"
   ],
-  "exclude": [
-    "./Applications/**/WebGraphics",
-    "./Applications/StereogramMaker",
-    "node_modules"
-  ]
+	"exclude": [
+		"node_modules",
+		"./Applications/**/WebGraphics",
+		"./Applications/StereogramMaker"
+	]
 }
