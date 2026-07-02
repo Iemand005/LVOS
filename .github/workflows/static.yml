@@ -43,6 +43,9 @@ jobs:
         run: |
           git submodule sync
           git submodule update --init Scripts/WebGraphics
+          git submodule update --init Scripts/WebAura
+          git submodule update --init Scripts/WebAudioVisualizer
+          git submodule update --init Scripts/WebMedia
           git submodule update --init Applications/FrostedColours
           git submodule update --init Applications/StereogramMaker
           git submodule update --init Applications/Cyanide
