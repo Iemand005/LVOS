@@ -75,6 +75,18 @@ fullscreen.onclick = function(){
     LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
 }
 
+function getRainbowRGB(intensity) {
+	const h = intensity * 6;
+	const x = Math.round(255 * (1 - Math.abs((h % 2) - 1)));
+
+	if (h < 1) return { r: 255, g: x,   b: 0   };
+	if (h < 2) return { r: x,   g: 255, b: 0   };
+	if (h < 3) return { r: 0,   g: 255, b: x   };
+	if (h < 4) return { r: 0,   g: x,   b: 255 };
+	if (h < 5) return { r: x,   g: 0,   b: 255 };
+		return { r: 255, g: 0,   b: x   };
+}
+
 
 function animateFrame(time){
 
