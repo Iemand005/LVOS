@@ -49,6 +49,8 @@ function MusicApp(visualizerElement) {
 
 	/** @type {"bars" | "circle"} */
 	this.visualizer = "bars";
+
+	// this.prevTime
 }
 
 const musicApp = new MusicApp(visualiser);
