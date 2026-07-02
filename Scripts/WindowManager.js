@@ -1716,7 +1716,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
             case types.pip:
                 var id = data.id;
                 console.log("Element ID to rip from app guts: " + id, dialog);
-                windowManager.windows[source]
+                var document = dialog.contentDocument;
+                if (!document) document.getElementById(id);
                 break;
 
         }
