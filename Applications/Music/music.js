@@ -40,6 +40,8 @@ function MusicApp(visualizerElement) {
 	// this.ctx = visualizerElement.getContext("2d");
 }
 
+const musicApp = new MusicApp(visualiser);
+
 if (micButton)
 micButton.onclick = function(ev){
     // if (isActive) stop();
@@ -126,7 +128,7 @@ function animateFrame(time){
 
     const averageIntensity = total / count;
 
-    const hue = time/10210;
+    const hue = time / 10210;
 
 
     const rgb = getRainbowRGB(hue);
