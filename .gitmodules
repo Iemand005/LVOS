@@ -28,3 +28,9 @@
 [submodule "Scripts/WebAura"]
 	path = Scripts/WebAura
 	url = https://github.com/Iemand005/WebAura
+[submodule "Scripts/WebAudioVisualizer"]
+	path = Scripts/WebAudioVisualizer
+	url = https://github.com/Iemand005/WebAudioVisualizer
+[submodule "Scripts/WebMedia"]
+	path = Scripts/WebMedia
+	url = https://github.com/Iemand005/WebMedia
