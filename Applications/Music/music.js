@@ -24,11 +24,23 @@ var volumeOutput = document.getElementById("volume-output");
 var fft = document.getElementById("fft");
 var visualiserOption = document.getElementById("style");
 let elements = [];
-var audioVisualiser;
+var audioVisualiser = new AudioVisualiser(frequencies);
 var circular = true;
 var clear = false;
 var colorBuffer = [0, 0];
 var valueBuffer = new Array(30);
+const media = new Media();
+
+if (micButton)
+micButton.onclick = function(ev){
+    if (isActive) stop();
+    else {
+        media.getMicrophoneStream()?.then(function(stream) {
+            audioVisualiser.initializeWithMediaStream(stream);
+            startAnimation();
+        });
+    }
+}
 
 ctx.globalAlpha = 0.1;
 
