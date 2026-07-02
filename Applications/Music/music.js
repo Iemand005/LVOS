@@ -29,10 +29,8 @@ let elements = [];
 var audioVisualiser = new AudioVisualizer(frequencies);
 var circular = true;
 var clear = false;
-var colorBuffer = [0, 0];
-var valueBuffer = new Array(30);
-const media = new Media();
 
+const media = new Media;
 const aura = new Aura;
 
 if (micButton)
@@ -90,7 +88,6 @@ function getRainbowRGB(intensity) {
     b: Math.round(b)
   };
 }
-
 
 
 function animateFrame(time){
