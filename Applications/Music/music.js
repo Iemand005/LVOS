@@ -77,7 +77,7 @@ if (auraButton) auraButton.onclick = function(){
     });
 };
 
-ctx.globalAlpha = 0.1;
+// ctx.globalAlpha = 0.1;
 
 function localFullscreen() {
     // document.body.requestFullscreen({navigationUI: ""});
