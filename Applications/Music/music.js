@@ -126,7 +126,7 @@ function animateFrame(time){
 
     const averageIntensity = total / count;
 
-    const hue = time/3210;
+    const hue = time/10210;
 
 
     const rgb = getRainbowRGB(hue);
