@@ -33,9 +33,12 @@ var clear = false;
 const media = new Media;
 const aura = new Aura;
 
-const graphics = new Graphics2D(visualiser);
+if (visualiser instanceof HTMLCanvasElement) {
+	const graphics = new Graphics2D(visualiser);
+	
+	console.log("graphics canvas found:", graphics.ctx);
+}
 
-	console.log("graphics canvas found:", this.graphics.ctx);
 
 
 /** @param {HTMLCanvasElement} visualizerElement  */
