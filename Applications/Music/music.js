@@ -134,18 +134,16 @@ async function openCanvasPip() {
 		});
 	
 
-	pipWindow.document.body.style.margin = '0';
-	pipWindow.document.body.style.overflow = 'hidden';
+		pipWindow.document.body.style.margin = '0';
+		pipWindow.document.body.style.overflow = 'hidden';
 
-	pipWindow.document.body.appendChild(visualiser);
+		pipWindow.document.body.appendChild(visualiser);
 
-	pipWindow.addEventListener('pagehide', () => {
-	document.getElementById('visualiser-container').appendChild(visualiser);
-	pipWindow = null;
-	}, { once: true });
+		pipWindow.addEventListener('pagehide', function() {
+			document.getElementById('visualiser-container').appendChild(visualiser);
+			pipWindow = null;
+		}, { once: true });
 	} catch(ex) {
-		// Messenger
-		console.error("bark", ex);
 		LVMessenger.broadcastToParent("pip", {id: "visualiser"}, "music");
 	}
 }
