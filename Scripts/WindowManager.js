@@ -710,7 +710,13 @@ Object.defineProperty(Dialog.prototype, "body", {
 Object.defineProperty(Dialog.prototype, "titleBar", {
     	get: function() { return this.getElementByTagOrClassName("header"); },
 });
-Object.defineProperty(Dialog.prototype, "document", {
+Object.defineProperty(Dialog.prototype, "contentDocument", {
+    get: function() {
+        var frame = this.frame;
+        return frame ? frame.contentDocument : null;
+    }
+});
+Object.defineProperty(Dialog.prototype, "contentWindow", {
     get: function() {
         var frame = this.frame;
         return frame ? frame.contentWindow : null;
