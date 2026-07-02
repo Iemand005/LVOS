@@ -176,7 +176,7 @@ MusicApp.prototype.animateFrame = function(time) {
         /*let*/var rad = 0, inc = Math.PI*2*(1/count);
         ctx.lineWidth = 100;
         for(let index in timeData){
-            const amp = parseInt(timeData[index.toString()]);
+            const amp = parseInt(timeData[index]);
 
             const a = parseInt(freqData[index]);
 
