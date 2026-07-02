@@ -15,7 +15,7 @@ var virtualAudio = document.createElement("audio");
 var file = document.getElementById("file");
 var audio = document.getElementsByTagName("audio")[0];
 var visualiser = document.getElementById("visualiser");
-var ctx = visualiser instanceof HTMLCanvasElement ? visualiser.getContext("2d") : null;
+// var ctx = visualiser instanceof HTMLCanvasElement ? visualiser.getContext("2d") : null;
 var fullscreen = document.getElementById("fullscreen");
 var volume = document.getElementById("volume");
 var seek = document.getElementById("seek");
@@ -112,6 +112,7 @@ MusicApp.prototype.animateFrame = function(time) {
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
     if (!this.graphics.ctx) return;
+    const ctx = this.graphics.ctx;
     if(clear) this.graphics.ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
         ctx.fillStyle = "#FF000099"
