@@ -35,13 +35,6 @@ const aura = typeof Aura !== "undefined" ? new Aura : null;
 
 const THROTTLE_MS = 20;
 
-// if (visualiser instanceof HTMLCanvasElement) {
-// 	const graphics = new Graphics2D(visualiser);
-	
-// 	console.log("graphics canvas found:", graphics.ctx);
-// }
-
-
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
@@ -205,13 +198,15 @@ MusicApp.prototype.animateFrame = function(time) {
     const rgb = getRainbowRGB(hue);
 
     if (aura && aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
-    var parentWindow = getParentWindow();
-	if (parentWindow && parentWindow.__LVMessenger.accent) {
-		var color = rgbToHex(rgb.r, rgb.g, rgb.b);
-		
-		if (time - lastUpdateTime > THROTTLE_MS) {
-		parentWindow.__LVMessenger.accent.setAttribute('content', color);
-			lastUpdateTime = time
+	if (colourTitlebar) {
+		var parentWindow = getParentWindow();
+		if (parentWindow && parentWindow.__LVMessenger.accent) {
+			var color = rgbToHex(rgb.r, rgb.g, rgb.b);
+			
+			if (time - lastUpdateTime > THROTTLE_MS) {
+			parentWindow.__LVMessenger.accent.setAttribute('content', color);
+				lastUpdateTime = time
+			}
 		}
 	}
     
