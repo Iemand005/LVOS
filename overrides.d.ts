@@ -7,7 +7,7 @@ declare global {
 
 		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
 		__LVMessenger?: {
-			accent: HTMLElement?;
+			accent: HTMLMetaElement?;
 		};
     }
 
