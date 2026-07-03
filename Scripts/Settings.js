@@ -79,7 +79,7 @@ function toggleCharmsEvent(ev) {
     var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
     if (!isCharmsOpen() || clickedElement == charmsbutton) return;
 
-    if(!(clickedElement == bodyCrawler.charms || bodyCrawler.charms.contains(clickedElement))) {
+    if(!(clickedElement == elements.charms || elements.charms.contains(clickedElement))) {
         //if(clickedElement == charmsbutton || clickedElement == charmsbutton2) toggleCharms();
     //else 
         toggleCharms(false);
@@ -148,6 +148,7 @@ var settings = new SettingsHandler();
 /** @type {{[key:string]: HTMLElement?}} */
 var elements = {
     desktop: null,
+    charms: null,
     color: null,
     accent: null,
     resetColor: null,
@@ -158,6 +159,7 @@ var elements = {
 
 function loadElements() {
     elements.desktop = document.getElementById("desktop");
+    elements.charms = document.getElementById("charms");
     elements.color = document.getElementById("color");
     elements.accent = document.getElementById("accent");
     elements.resetColor = document.getElementById("resetaccent");
@@ -166,7 +168,7 @@ function loadElements() {
     elements.dockAppList = document.getElementById("dockapplist");
 };
 
-document.addEventListener("load", function() {
+windowon  .addEventListener("load", function() {
     loadElements();
     loadSettings();
 }, false);
