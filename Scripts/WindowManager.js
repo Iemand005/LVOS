@@ -2184,4 +2184,3 @@ window.addEventListener("drop", function(e) {
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
 \*/
-                                                                                                         
