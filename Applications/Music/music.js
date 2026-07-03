@@ -83,7 +83,7 @@ if (dispAudioBtn) dispAudioBtn.onclick = function() {
 }
 
 if (auraButton) auraButton.onclick = function(){
-    aura.init().then(function() {
+    aura && aura.init().then(function() {
         console.log("Aura loaded!");
     });
 };
@@ -205,7 +205,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const rgb = getRainbowRGB(hue);
 
-    if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
+    if (aura && aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
     var parentWindow = getParentWindow();
 	if (parentWindow && parentWindow.__LVMessenger.accent) {
 		var color = rgbToHex(rgb.r, rgb.g, rgb.b);
