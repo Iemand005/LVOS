@@ -33,6 +33,8 @@ var clear = true;
 const media = new Media;
 const aura = new Aura;
 
+const THROTTLE_MS = 100;
+
 // if (visualiser instanceof HTMLCanvasElement) {
 // 	const graphics = new Graphics2D(visualiser);
 	
@@ -160,6 +162,8 @@ function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
+let lastUpdateTime = 0;
+
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
 
@@ -207,7 +211,11 @@ MusicApp.prototype.animateFrame = function(time) {
     var parentWindow = getParentWindow();
     if (parentWindow && parentWindow.__LVMessenger.accent) {
         var color = rgbToHex(rgb.r, rgb.g, rgb.b);
-        // parentWindow.__LVMessenger.accent.setAttribute('content', color);
+        
+        if (time - lastUpdateTime > THROTTLE_MS) {
+            parentWindow.__LVMessenger.accent.setAttribute('content', color);
+lastUpdateTime = time
+        }
     }
     
     /*let*/var cX = width/2;
