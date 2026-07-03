@@ -89,7 +89,7 @@ function getParentWindow() {
  * @param {*} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
-    var target = getParentWindow();
+    var target = getParentWindow()();
     if (target && typeof target.__LVMessengerReceive == "function") {
         try {
             target.__LVMessengerReceive(type, message, id);
