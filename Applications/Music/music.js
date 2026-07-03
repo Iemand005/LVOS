@@ -196,7 +196,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const averageIntensity = total / count;
 
-    this.rotation += (Math.pow(2, averageIntensity / 255 * 10) - 1) * 0.0001;
+    this.rotation += (Math.pow(2, averageIntensity / 255 * 12) - 1) * 0.0001;
 
     const hue = this.rotation;
 
@@ -207,7 +207,7 @@ MusicApp.prototype.animateFrame = function(time) {
     var parentWindow = getParentWindow();
     if (parentWindow && parentWindow.__LVMessenger.accent) {
         var color = rgbToHex(rgb.r, rgb.g, rgb.b);
-        parentWindow.__LVMessenger.accent.setAttribute('content', color);
+        // parentWindow.__LVMessenger.accent.setAttribute('content', color);
     }
     
     /*let*/var cX = width/2;
