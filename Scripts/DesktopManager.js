@@ -409,7 +409,7 @@ function toggleElementPip(el, opts = {}) {
 		pipWindow.document.body.style.margin = '0';
 		pipWindow.document.body.appendChild(el);
 
-		pipWindow.addEventListener('pagehide', () => {
+		pipWindow.addEventListener('pagehide', function () {
 		if (originalNextSibling) {
 		originalParent.insertBefore(el, originalNextSibling);
 		} else {
