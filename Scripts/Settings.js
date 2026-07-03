@@ -6,7 +6,7 @@
 
 var STORAGE_FILE = "app_storage.json";
 
-const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+// var metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
 
 var supportsActiveX = typeof ActiveXObject != "undefined";
