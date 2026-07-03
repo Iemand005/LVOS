@@ -79,6 +79,9 @@ LVMessenger.receive = function (callback, destroyWhenType) {
     return messageListener;
 };
 
+function getParentWindow() {
+    return window.parent && window.parent != window ? window.parent : window.top;
+}
 
 /**
  * @param {MessageType | string} type 
@@ -86,7 +89,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
  * @param {*} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
-    var target = window.parent && window.parent != window ? window.parent : window.top;
+    var target = getParentWindow();
     if (target && typeof target.__LVMessengerReceive == "function") {
         try {
             target.__LVMessengerReceive(type, message, id);
