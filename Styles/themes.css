@@ -106,21 +106,23 @@
 
 .windows-95 .window > content
 .windows-95 .window .content {
-    background-color: white;
+	background-color: white;
 }
 
 .flippy .window:not(.maximized) {
-    /* sanimation: spin360 500ms ease-in-out reverse; */
-    animation-direction: reverse;
+	/* sanimation: spin360 500ms ease-in-out reverse; */
+	animation-direction: reverse;
 }
 
 .flippy .window.maximized {
-    animation: flip 500ms linear;
-    animation-direction: normal;
+	animation: flip 500ms linear;
+	animation-direction: normal;
 }
 
-.gnome {
-    
+.gnome .selector {
+	border: 1px dashed rgb(82, 82, 82);
+	background-color: #007cff30;
+	border-radius: 1rem;
 }
 
 @keyframes flip {
