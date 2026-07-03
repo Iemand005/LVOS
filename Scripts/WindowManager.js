@@ -1681,55 +1681,58 @@ var timeout = -1;
  * @param {string?} source
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-    var types = LVMessenger.types;
-    
-    if (source) {
-        var dialog = windowManager.windows[source];
-        
-        if (type == types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
-        switch (type) {
-            case types.launchOverlay:
-                var overlay = bodyCrawler.getOverlay();
-                if (!overlay) break;
-                overlay.ontransitionend = function () {
-                    dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
-                    if (dialog.frame) {
-                        var oriurl = new URL(dialog.frame.src);
-                        oriurl.searchParams.set("fullscreen", String(true));
-                        dialog.frame.src = oriurl.href;
-                    }
-                    if (!overlay) return;
-                    overlay.ontransitionend = null;
-                    overlay.requestFullscreen();
-                    if (dialog.body) overlay.appendChild(dialog.body);
-                    window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
-                };
-                overlay.classList.toggle("open");
-                break;
-            case types.readyToLaunchOverlay:
-                var overlay = bodyCrawler.getOverlay();
-                if (!overlay) break;
-                var dialog = windowManager.windows[source];
-                if (dialog.body) overlay.appendChild(dialog.body);
-                window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
-                break;
-            case types.pip:
-                var id = data.id;
-                console.log("Element ID to rip from app guts: " + id, dialog);
-                var doc = dialog.contentDocument;
-                if (!doc) break;
-                var targetElement = doc.getElementById(id);
-                console.log("Ripped out element:", targetElement);
-                if (!targetElement) break;
-                var pipWindow = toggleElementPip(targetElement);
-                pipWindow.onresize = function(ev) {
+	var types = LVMessenger.types;
+	
+	if (source) {
+		var dialog = windowManager.windows[source];
+		
+		if (type == types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+		switch (type) {
+			case types.launchOverlay:
+				var overlay = bodyCrawler.getOverlay();
+				if (!overlay) break;
+				overlay.ontransitionend = function () {
+					dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
+					if (dialog.frame) {
+						var oriurl = new URL(dialog.frame.src);
+						oriurl.searchParams.set("fullscreen", String(true));
+						dialog.frame.src = oriurl.href;
+					}
+					if (!overlay) return;
+					overlay.ontransitionend = null;
+					overlay.requestFullscreen();
+					if (dialog.body) overlay.appendChild(dialog.body);
+					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				};
+				overlay.classList.toggle("open");
+				break;
+			case types.readyToLaunchOverlay:
+				var overlay = bodyCrawler.getOverlay();
+				if (!overlay) break;
+				var dialog = windowManager.windows[source];
+				if (dialog.body) overlay.appendChild(dialog.body);
+				window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				break;
+			case types.pip:
+				var id = data.id;
+				console.log("Element ID to rip from app guts: " + id, dialog);
+				var doc = dialog.contentDocument;
+				if (!doc) break;
+				var targetElement = doc.getElementById(id);
+				console.log("Ripped out element:", targetElement);
+				if (!targetElement) break;
+				toggleElementPip(targetElement).then(function (pipWindow) {
 
-                }
-                break;
+					if (pipWindow) pipWindow.onresize = function(ev) {
+						if (!pipWindow) return;
+					targetElement.style.width = "";
+					}
+				})
+				break;
 
-        }
-        console.log("Received message " + type);
-    }
+		}
+		console.log("Received message " + type);
+	}
 }
 
 window.__LVMessengerReceive = messageReceived;
