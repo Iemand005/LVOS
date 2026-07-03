@@ -151,6 +151,15 @@ async function openCanvasPip() {
 const pipBtn = document.getElementById("pip-button");
 pipBtn.onclick = openCanvasPip;
 
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
 
@@ -197,7 +206,7 @@ MusicApp.prototype.animateFrame = function(time) {
     if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
     var parentWindow = getParentWindow();
     if (parentWindow && parentWindow.__LVMessenger.accent) {
-        
+        var color = rgbToHex(rgb.r, rgb.g, rgb.b);
         parentWindow.__LVMessenger.accent.setAttribute('content', color);
     }
     
