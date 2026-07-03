@@ -35,6 +35,8 @@ const aura = typeof Aura !== "undefined" ? new Aura : null;
 
 const THROTTLE_MS = 20;
 
+const colorTitlebar = false;
+
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
@@ -198,7 +200,7 @@ MusicApp.prototype.animateFrame = function(time) {
     const rgb = getRainbowRGB(hue);
 
     if (aura && aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
-	if (colourTitlebar) {
+	if (colorTitlebar) {
 		var parentWindow = getParentWindow();
 		if (parentWindow && parentWindow.__LVMessenger.accent) {
 			var color = rgbToHex(rgb.r, rgb.g, rgb.b);
