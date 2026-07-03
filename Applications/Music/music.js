@@ -14,7 +14,7 @@ var auraButton = document.getElementById("aura-button");
 var virtualAudio = document.createElement("audio");
 var file = document.getElementById("file");
 var audio = document.getElementsByTagName("audio")[0];
-var visualiser = document.getElementById("visualiser");
+var visualiser = document.getElementById("visualizer");
 // var ctx = visualiser instanceof HTMLCanvasElement ? visualiser.getContext("2d") : null;
 var fullscreen = document.getElementById("fullscreen");
 var volume = document.getElementById("volume");
@@ -144,7 +144,7 @@ async function openCanvasPip() {
 			pipWindow = null;
 		}, { once: true });
 	} catch(ex) {
-		LVMessenger.broadcastToParent("pip", {id: "visualiser"}, "music");
+		LVMessenger.broadcastToParent("pip", {id: "visualizer"}, "music");
 	}
 }
 

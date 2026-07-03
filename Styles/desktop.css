@@ -462,6 +462,11 @@ aside#charms form {
   z-index: 1000;
 }
 
+#visualizer {
+	width: 100%;
+	height: 100%;
+}
+
 @media (pointer: none), (pointer: coarse) {
 }
 
