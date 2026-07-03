@@ -168,7 +168,7 @@ function loadElements() {
     elements.dockAppList = document.getElementById("dockapplist");
 };
 
-windowon  .addEventListener("load", function() {
+addEventListener("load", function() {
     loadElements();
     loadSettings();
 }, false);
