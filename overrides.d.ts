@@ -6,7 +6,9 @@ declare global {
         documentMode?: number;
 
 		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
-		__LVMessenger: { accent: HTMLElement; };
+		__LVMessenger?: {
+			accent: HTMLElement?;
+		};
     }
 
 	interface Document {
