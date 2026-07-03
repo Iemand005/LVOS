@@ -376,16 +376,9 @@ function handleWallpaperDrop(ev) {
 }
 
 /**
- * Moves any DOM element into a Document Picture-in-Picture window.
- * Calling it again while already open closes the PiP and restores the element.
- *
  * @param {HTMLElement} el - the element to pop out
- * @param {Object} [opts]
- * @param {number} [opts.width] - PiP window width (defaults to el's rendered width)
- * @param {number} [opts.height] - PiP window height (defaults to el's rendered height)
- * @param {boolean} [opts.copyStyles=true] - copy stylesheets into the PiP window
  */
-function toggleElementPip(el, opts = {}) {
+function toggleElementPip(el) {
   if (!('documentPictureInPicture' in window)) {
     console.warn('Document Picture-in-Picture not supported in this browser.');
     return null;
