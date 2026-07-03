@@ -195,6 +195,11 @@ MusicApp.prototype.animateFrame = function(time) {
     const rgb = getRainbowRGB(hue);
 
     if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
+    var parentWindow = getParentWindow();
+    if (parentWindow && parentWindow.__LVMessenger.accent) {
+        
+        parentWindow.__LVMessenger.accent.setAttribute('content', color);
+    }
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
