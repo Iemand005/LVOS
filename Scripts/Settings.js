@@ -166,6 +166,17 @@ function loadElements() {
     elements.resetAccent = document.getElementById("resetaccent");
     elements.border = document.getElementById("border");
     elements.dockAppList = document.getElementById("dockapplist");
+
+    // // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
+	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
+	// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
+	// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
+	// elements.resetAccent.onclick = setAccentColor.bind(this, "");
+	elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
+	elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
+	elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
+	charmsbutton.onclick  = toggleCharms;
+
 };
 
 addEventListener("load", function() {
@@ -183,15 +194,6 @@ var charmsbutton = applist.appendChild(document.createElement("button"));
 //     elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
 
 // // var settingsThing = bodyCrawler.getS
-// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
-// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
-// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
-// elements.resetAccent.onclick = setAccentColor.bind(this, "");
-// elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
-// elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
-// elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
-charmsbutton.onclick  = toggleCharms;
 
 // metroAppList.classList.toggle("bottom", true);
 
