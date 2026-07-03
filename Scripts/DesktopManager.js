@@ -400,11 +400,12 @@ function toggleElementPip(el, opts = {}) {
   }
 
   const rect = el.getBoundingClientRect();
-  const {
-    width = Math.round(rect.width) || 400,
-    height = Math.round(rect.height) || 300,
-    copyStyles = true,
-  } = opts;
+//   var width = 
+//   const {
+	var width = Math.round(rect.width) || 400,
+	var height = Math.round(rect.height) || 300,
+//     copyStyles = true,
+//   } = opts;
 
 	window.documentPictureInPicture.requestWindow({ width, height }).then(function(pipWindow) {
 		const originalParent = el.parentNode;
@@ -425,40 +426,21 @@ function toggleElementPip(el, opts = {}) {
 	});
 
   // Remember where the element came from so we can put it back
-  const originalParent = el.parentNode;
-  const originalNextSibling = el.nextSibling;
+//   const originalParent = el.parentNode;
+//   const originalNextSibling = el.nextSibling;
 
-  if (copyStyles) {
-    // [...document.styleSheets].forEach((styleSheet) => {
-    //   try {
-    //     const cssText = [...styleSheet.cssRules].map(r => r.cssText).join('');
-    //     const style = pipWindow.document.createElement('style');
-    //     style.textContent = cssText;
-    //     pipWindow.document.head.appendChild(style);
-    //   } catch (e) {
-    //     // Cross-origin stylesheet, link it instead
-    //     const link = pipWindow.document.createElement('link');
-    //     link.rel = 'stylesheet';
-    //     link.type = styleSheet.type;
-    //     link.media = styleSheet.media;
-    //     link.href = styleSheet.href;
-    //     pipWindow.document.head.appendChild(link);
-    //   }
-    // });
-  }
+//   pipWindow.document.body.style.margin = '0';
+//   pipWindow.document.body.appendChild(el);
 
-  pipWindow.document.body.style.margin = '0';
-  pipWindow.document.body.appendChild(el);
+//   pipWindow.addEventListener('pagehide', () => {
+//     if (originalNextSibling) {
+//       originalParent.insertBefore(el, originalNextSibling);
+//     } else {
+//       originalParent.appendChild(el);
+//     }
+//   }, { once: true });
 
-  pipWindow.addEventListener('pagehide', () => {
-    if (originalNextSibling) {
-      originalParent.insertBefore(el, originalNextSibling);
-    } else {
-      originalParent.appendChild(el);
-    }
-  }, { once: true });
-
-  return pipWindow;
+//   return pipWindow;
 }
 
 
