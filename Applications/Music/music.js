@@ -121,25 +121,23 @@ function openCanvasPip() {
     return;
   }
 
-  	try {
-		window.documentPictureInPicture.requestWindow({
-			width: visualiser.width,
-			height: visualiser.height,
-		}).then(function(/** @type {Window} */pipWindow) {
+	window.documentPictureInPicture.requestWindow({
+		width: visualiser.width,
+		height: visualiser.height,
+	}).then(function(/** @type {Window} */pipWindow) {
 
-			pipWindow.document.body.style.margin = '0';
-			pipWindow.document.body.style.overflow = 'hidden';
-	
-			pipWindow.document.body.appendChild(visualiser);
-	
-			pipWindow.addEventListener('pagehide', function() {
-				document.getElementById('visualiser-container').appendChild(visualiser);
-				pipWindow = null;
-			}, { once: true });
-		});
-	} catch(ex) {
+		pipWindow.document.body.style.margin = '0';
+		pipWindow.document.body.style.overflow = 'hidden';
+
+		pipWindow.document.body.appendChild(visualiser);
+
+		pipWindow.addEventListener('pagehide', function() {
+			document.getElementById('visualiser-container').appendChild(visualiser);
+			pipWindow = null;
+		}, { once: true });
+	}).catch(function(ex) {
 		LVMessenger.broadcastToParent("pip", {id: "visualizer"}, "music");
-	}
+	});
 }
 
 const pipBtn = document.getElementById("pip-button");
