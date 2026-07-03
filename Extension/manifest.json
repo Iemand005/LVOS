@@ -1,0 +1,17 @@
+{
+  "name": "LVOS",
+  "description": "Lasse's Virtual Operating System",
+  "version": "1.0",
+  "manifest_version": 2,
+  "app": {
+    "urls": ["https://example.com/"],
+    "launch": {
+      "web_url": "https://Iemand005.github.io/LVOS"
+    }
+  },
+  "icons": {
+    "16": "cake_top.png",
+    "48": "cake_top.png",
+    "128": "cake_top.png"
+  }
+}
