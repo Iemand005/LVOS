@@ -384,7 +384,6 @@ function handleWallpaperDrop(ev) {
  * @param {number} [opts.width] - PiP window width (defaults to el's rendered width)
  * @param {number} [opts.height] - PiP window height (defaults to el's rendered height)
  * @param {boolean} [opts.copyStyles=true] - copy stylesheets into the PiP window
- * @returns {Promise<Window|null>} the PiP window, or null if unsupported/closed
  */
 function toggleElementPip(el, opts = {}) {
   if (!('documentPictureInPicture' in window)) {
@@ -399,13 +398,9 @@ function toggleElementPip(el, opts = {}) {
     return null;
   }
 
-  const rect = el.getBoundingClientRect();
-//   var width = 
-//   const {
-	var width = Math.round(rect.width) || 400,
-	var height = Math.round(rect.height) || 300,
-//     copyStyles = true,
-//   } = opts;
+  	var rect = el.getBoundingClientRect();
+	var width = Math.round(rect.width) || 400;
+	var height = Math.round(rect.height) || 300;
 
 	window.documentPictureInPicture.requestWindow({ width, height }).then(function(pipWindow) {
 		const originalParent = el.parentNode;
@@ -424,23 +419,6 @@ function toggleElementPip(el, opts = {}) {
 
 		return pipWindow;
 	});
-
-  // Remember where the element came from so we can put it back
-//   const originalParent = el.parentNode;
-//   const originalNextSibling = el.nextSibling;
-
-//   pipWindow.document.body.style.margin = '0';
-//   pipWindow.document.body.appendChild(el);
-
-//   pipWindow.addEventListener('pagehide', () => {
-//     if (originalNextSibling) {
-//       originalParent.insertBefore(el, originalNextSibling);
-//     } else {
-//       originalParent.appendChild(el);
-//     }
-//   }, { once: true });
-
-//   return pipWindow;
 }
 
 
