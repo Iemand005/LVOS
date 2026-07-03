@@ -120,8 +120,8 @@
 }
 
 .gnome .selector {
-	border: 1px dashed rgb(82, 82, 82);
-	background-color: #007cff30;
+	border: 2px solid rgb(59, 59, 59);
+	background-color: rgba(59, 59, 59, 9);
 	border-radius: 1rem;
 }
 
