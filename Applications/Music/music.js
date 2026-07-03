@@ -65,8 +65,7 @@ window.onresize = function() {
 
 if (micButton)
 micButton.onclick = function(ev){
-	const micrStream = media.getMicrophoneStream();
-	if (micrStream) micrStream.then(function(stream) {
+	media.getMicrophoneStream(function(stream) {
 		audioVisualiser.initializeWithMediaStream(stream);
 		startAnimation();
 	});
