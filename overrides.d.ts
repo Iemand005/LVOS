@@ -15,6 +15,16 @@ declare global {
         documentMode?: number;
 	}
 
+	interface Navigator {
+		getUserMedia?(
+			constraints: MediaStreamConstraints,
+			successCallback: (stream: MediaStream) => void,
+			errorCallback: (error: Error) => void
+		): void;
+		webkitGetUserMedia?: Navigator['getUserMedia'];
+		mozGetUserMedia?: Navigator['getUserMedia'];
+	}
+
 	interface HTMLElementEventMap {
 		webkitTransitionEnd: TransitionEvent;
 		webkitAnimationEnd: AnimationEvent;
