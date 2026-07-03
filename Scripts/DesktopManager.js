@@ -406,7 +406,23 @@ function toggleElementPip(el, opts = {}) {
     copyStyles = true,
   } = opts;
 
-  const pipWindow = await window.documentPictureInPicture.requestWindow({ width, height });
+	window.documentPictureInPicture.requestWindow({ width, height }).then(function(pipWindow) {
+		const originalParent = el.parentNode;
+		const originalNextSibling = el.nextSibling;
+
+		pipWindow.document.body.style.margin = '0';
+		pipWindow.document.body.appendChild(el);
+
+		pipWindow.addEventListener('pagehide', () => {
+		if (originalNextSibling) {
+		originalParent.insertBefore(el, originalNextSibling);
+		} else {
+		originalParent.appendChild(el);
+		}
+		}, { once: true });
+
+		return pipWindow;
+	});
 
   // Remember where the element came from so we can put it back
   const originalParent = el.parentNode;
