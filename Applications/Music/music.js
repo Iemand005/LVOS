@@ -209,14 +209,14 @@ MusicApp.prototype.animateFrame = function(time) {
 
     if (aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
     var parentWindow = getParentWindow();
-    if (parentWindow && parentWindow.__LVMessenger.accent) {
-        var color = rgbToHex(rgb.r, rgb.g, rgb.b);
-        
-        if (time - lastUpdateTime > THROTTLE_MS) {
-            parentWindow.__LVMessenger.accent.setAttribute('content', color);
-lastUpdateTime = time
-        }
-    }
+	if (parentWindow && parentWindow.__LVMessenger.accent) {
+		var color = rgbToHex(rgb.r, rgb.g, rgb.b);
+		
+		if (time - lastUpdateTime > THROTTLE_MS) {
+		parentWindow.__LVMessenger.accent.setAttribute('content', color);
+			lastUpdateTime = time
+		}
+	}
     
     /*let*/var cX = width/2;
     /*let*/var cY = height/2;
