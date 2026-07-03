@@ -413,22 +413,22 @@ function toggleElementPip(el, opts = {}) {
   const originalNextSibling = el.nextSibling;
 
   if (copyStyles) {
-    [...document.styleSheets].forEach((styleSheet) => {
-      try {
-        const cssText = [...styleSheet.cssRules].map(r => r.cssText).join('');
-        const style = pipWindow.document.createElement('style');
-        style.textContent = cssText;
-        pipWindow.document.head.appendChild(style);
-      } catch (e) {
-        // Cross-origin stylesheet, link it instead
-        const link = pipWindow.document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = styleSheet.type;
-        link.media = styleSheet.media;
-        link.href = styleSheet.href;
-        pipWindow.document.head.appendChild(link);
-      }
-    });
+    // [...document.styleSheets].forEach((styleSheet) => {
+    //   try {
+    //     const cssText = [...styleSheet.cssRules].map(r => r.cssText).join('');
+    //     const style = pipWindow.document.createElement('style');
+    //     style.textContent = cssText;
+    //     pipWindow.document.head.appendChild(style);
+    //   } catch (e) {
+    //     // Cross-origin stylesheet, link it instead
+    //     const link = pipWindow.document.createElement('link');
+    //     link.rel = 'stylesheet';
+    //     link.type = styleSheet.type;
+    //     link.media = styleSheet.media;
+    //     link.href = styleSheet.href;
+    //     pipWindow.document.head.appendChild(link);
+    //   }
+    // });
   }
 
   pipWindow.document.body.style.margin = '0';
