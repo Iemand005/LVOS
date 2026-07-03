@@ -31,7 +31,7 @@ var circular = true;
 var clear = true;
 
 const media = new Media;
-const aura = new Aura;
+const aura = Aura ? new Aura : null;
 
 const THROTTLE_MS = 20;
 
