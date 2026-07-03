@@ -1720,7 +1720,11 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
                 if (!doc) break;
                 var targetElement = doc.getElementById(id);
                 console.log("Ripped out element:", targetElement);
-                if (targetElement) toggleElementPip(targetElement);
+                if (!targetElement) break;
+                var pipWindow = toggleElementPip(targetElement);
+                pipWindow.onresize = function(ev) {
+
+                }
                 break;
 
         }
