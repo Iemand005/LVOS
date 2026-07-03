@@ -33,7 +33,7 @@ var clear = true;
 const media = new Media;
 const aura = new Aura;
 
-const THROTTLE_MS = 100;
+const THROTTLE_MS = 1000;
 
 // if (visualiser instanceof HTMLCanvasElement) {
 // 	const graphics = new Graphics2D(visualiser);
