@@ -65,13 +65,11 @@ window.onresize = function() {
 
 if (micButton)
 micButton.onclick = function(ev){
-    // if (isActive) stop();
-    // else {
-    media.getMicrophoneStream()?.then(function(stream) {
-        audioVisualiser.initializeWithMediaStream(stream);
-        startAnimation();
-    });
-    // }
+	const micrStream = media.getMicrophoneStream();
+	if (micrStream) micrStream.then(function(stream) {
+		audioVisualiser.initializeWithMediaStream(stream);
+		startAnimation();
+	});
 }
 
 if (dispAudioBtn) dispAudioBtn.onclick = function() {
