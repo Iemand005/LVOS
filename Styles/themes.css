@@ -121,8 +121,8 @@
 
 .gnome .selector {
 	border: 2px solid rgb(59, 59, 59);
-	background-color: rgba(59, 59, 59, 9);
-	border-radius: 1rem;
+	background-color: rgba(165, 165, 165, 0.308);
+	border-radius: 12px;
 }
 
 @keyframes flip {
