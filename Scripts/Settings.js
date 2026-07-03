@@ -6,6 +6,9 @@
 
 var STORAGE_FILE = "app_storage.json";
 
+const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
+
 var supportsActiveX = typeof ActiveXObject != "undefined";
 
 function ActiveXStorage() {
@@ -118,6 +121,7 @@ function setColor(color){
         content.style.backgroundColor = color;
         content.style.color = isWhite ? "white" : "black";
     }
+	if (metaThemeColor) metaThemeColor.setAttribute('content', color);
 }
 
 function setAccentColor(color) {
