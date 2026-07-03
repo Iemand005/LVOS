@@ -386,7 +386,7 @@ function handleWallpaperDrop(ev) {
  * @param {boolean} [opts.copyStyles=true] - copy stylesheets into the PiP window
  * @returns {Promise<Window|null>} the PiP window, or null if unsupported/closed
  */
-async function toggleElementPip(el, opts = {}) {
+function toggleElementPip(el, opts = {}) {
   if (!('documentPictureInPicture' in window)) {
     console.warn('Document Picture-in-Picture not supported in this browser.');
     return null;
