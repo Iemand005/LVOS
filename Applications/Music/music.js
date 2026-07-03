@@ -116,7 +116,7 @@ function getRainbowRGB(intensity) {
 
 let pipWindow = null;
 
-async function openCanvasPip() {
+function openCanvasPip() {
   if (!('documentPictureInPicture' in window)) {
     console.warn('Document Picture-in-Picture not supported.');
     return;
@@ -128,21 +128,21 @@ async function openCanvasPip() {
   }
 
   	try {
-		pipWindow = await window.documentPictureInPicture.requestWindow({
+		window.documentPictureInPicture.requestWindow({
 			width: visualiser.width,
 			height: visualiser.height,
-		});
+		}).then(function(/** @type {Window} */pipWindow) {
+
+			pipWindow.document.body.style.margin = '0';
+			pipWindow.document.body.style.overflow = 'hidden';
 	
-
-		pipWindow.document.body.style.margin = '0';
-		pipWindow.document.body.style.overflow = 'hidden';
-
-		pipWindow.document.body.appendChild(visualiser);
-
-		pipWindow.addEventListener('pagehide', function() {
-			document.getElementById('visualiser-container').appendChild(visualiser);
-			pipWindow = null;
-		}, { once: true });
+			pipWindow.document.body.appendChild(visualiser);
+	
+			pipWindow.addEventListener('pagehide', function() {
+				document.getElementById('visualiser-container').appendChild(visualiser);
+				pipWindow = null;
+			}, { once: true });
+		});
 	} catch(ex) {
 		LVMessenger.broadcastToParent("pip", {id: "visualizer"}, "music");
 	}
