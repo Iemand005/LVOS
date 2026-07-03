@@ -4,7 +4,7 @@
   "version": "1.0",
   "manifest_version": 2,
   "app": {
-    "urls": ["https://example.com/"],
+    "urls": ["https://Iemand005.github.io/LVOS"],
     "launch": {
       "web_url": "https://Iemand005.github.io/LVOS"
     }
