@@ -1742,6 +1742,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 
 window.__LVMessengerReceive = messageReceived;
 LVMessenger.receive(messageReceived);
+// window->>
+window.__LVMessenger.accent = document.querySelector('meta[name="theme-color"]');
 
 function swapMetroBody() {
     if (!flipped) return;
