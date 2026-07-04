@@ -20,12 +20,12 @@ var useBlur = false,
 	canSave = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = false,
+	useTransform = true,
 	useScale = false,
 	hasLocalStorage = false;
 
 var flags = {
-	useSkewAnimations: false,
+	useSkewAnimations: true,
 	aeroSnap: false,
 	updateRateLimit: false
 };
