@@ -1005,6 +1005,26 @@ Object.defineProperty(Dialog.prototype, "skew", {
     }
 });
 
+Object.defineProperty(Dialog.prototype, "scaleY", {
+    set: function(/** @type {number} */skew) {
+        this._scaleY = skew;
+	if (this.useTransform) 
+        	this.updateTranslation();
+    }
+});
+
+Dialog.prototype.setSckew = function(scaleY) {
+	this._scaleY = scaleY;
+	if (this.useTransform) 
+        	this.updateTranslation();
+};
+
+Dialog.prototype.setScaleY = function(scaleY) {
+	this._scaleY = scaleY;
+	if (this.useTransform) 
+        	this.updateTranslation();
+};
+
 /** @type {Dialog?} */
 var focusedDialog = null;
 Dialog.prototype.focus = function() {
