@@ -628,9 +628,10 @@ function min(a, b) {
  * @param {number} y
  * @param {number} [skew]
  */
-function translateElement(element, x, y, skew) {
+function translateElement(element, x, y, skew, scaleY) {
     var translate = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     if (skew) translate += " skewX(" + toDegree(skew) + ")";
+    if (scaleY) translate += "scaleY(" + scaleY + ")";
     element.style.transform = translate;
     element.style.webkitTransform = translate;
 }
@@ -1250,7 +1251,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 Dialog.prototype.updateTranslation = function () {
-	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew);
+	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew, this._scaleY);
 };
 /**
  * @param {number} [x]
