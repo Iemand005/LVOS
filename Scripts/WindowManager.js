@@ -995,11 +995,11 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
 });
 
 Object.defineProperty(Dialog.prototype, "skew", {
-    set: function(/** @type {number} */skew) { this.setSkew(skew); }
+	set: function(/** @type {number} */skew) { this.setSkew(skew); }
 });
 
 Object.defineProperty(Dialog.prototype, "scaleY", {
-set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); 	}
+	set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); }
 });
 /** @param {number} skew */
 Dialog.prototype.setSkew = function(skew) {
