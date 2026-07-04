@@ -585,7 +585,7 @@ Dialog.prototype.initWithObject = function(object) {
 
         if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
         else target.addEventListener("mousedown", activationHandler, false);
-        target.onmousedown = activationHandler;
+
         target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
             self.createPopout();
             self.quit();
