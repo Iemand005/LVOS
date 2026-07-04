@@ -995,30 +995,20 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
 });
 
 Object.defineProperty(Dialog.prototype, "skew", {
-    set: function(/** @type {number} */skew) {
-        // if (this.target) this.target.style.transform
-        this._skew = skew;
-	if (this.useTransform) 
-        	this.updateTranslation();
-	else if (this.target) skewElement(this.target, skew);
-        // return null;
-    }
+    set: function(/** @type {number} */skew) { this.setSkew(skew); }
 });
 
 Object.defineProperty(Dialog.prototype, "scaleY", {
-    set: function(/** @type {number} */skew) {
-        this._scaleY = skew;
-	if (this.useTransform) 
-        	this.updateTranslation();
-    }
+set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); 	}
 });
-
-Dialog.prototype.setSckew = function(scaleY) {
-	this._scaleY = scaleY;
+/** @param {number} skew */
+Dialog.prototype.setSkew = function(skew) {
+	this._skew = skew;
 	if (this.useTransform) 
         	this.updateTranslation();
+	else if (this.target) skewElement(this.target, skew);
 };
-
+/** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
 	this._scaleY = scaleY;
 	if (this.useTransform) 
