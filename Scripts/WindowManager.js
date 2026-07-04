@@ -22,7 +22,7 @@ var useBlur = false,
 	flipped = false,
 	useTransform = false,
 	useScale = false,
-    	hasLocalStorage = false;
+	hasLocalStorage = false;
 
 var flags = {
 	useSkewAnimations: false,
