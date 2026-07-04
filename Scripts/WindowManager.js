@@ -627,13 +627,14 @@ function min(a, b) {
  * @param {number} x
  * @param {number} y
  * @param {number} [skew]
+ * @param {number} [scaleY]
  */
 function translateElement(element, x, y, skew, scaleY) {
-    var translate = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
-    if (skew) translate += " skewX(" + toDegree(skew) + ")";
-    if (scaleY) translate += "scaleY(" + scaleY + ")";
-    element.style.transform = translate;
-    element.style.webkitTransform = translate;
+    var transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
+    if (skew) transform += " skewX(" + toDegree(skew) + ")";
+    if (scaleY) transform += "scaleY(" + scaleY + ")";
+    element.style.transform = transform;
+    element.style.webkitTransform = transform;
 }
 /**
  * @param {HTMLElement} element
