@@ -375,6 +375,7 @@ function Dialog(object, create) {
 	this._useScale = useScale;
 
     	this._skew = 0;
+	this._scaleY = 0;
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
