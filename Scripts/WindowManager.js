@@ -945,28 +945,28 @@ Object.defineProperty(Dialog.prototype, "id", {
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
-    get: function() {
-        if (!this.target) return null;
-        return this.getElementByTagOrClassName("content");
-    }
+	get: function() {
+		if (!this.target) return null;
+		return this.getElementByTagOrClassName("content");
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "closeable", {
-    get: function() { return this.application != null; }
+	get: function() { return this.application != null; }
 });
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
-    set: function (value) {
-        if (!this.content) return;
-        this.content.style.padding = toPixels(value);
-        this.content.style.border = toPixels(value);
-        this.content.style.borderRadius = toPixels(value);
-    },
-    get: function () { return this.content && fromPixels(this.content.style.padding); },
+	set: function (value) {
+		if (!this.content) return;
+		this.content.style.padding = toPixels(value);
+		this.content.style.border = toPixels(value);
+		this.content.style.borderRadius = toPixels(value);
+	},
+	get: function () { return this.content && fromPixels(this.content.style.padding); },
 });
 
 Object.defineProperty(Dialog.prototype, "popup", {
-    get: function() { return this._popupWindow; }
+	get: function() { return this._popupWindow; }
 });
 
 Object.defineProperty(Dialog.prototype, "micaElement", {
