@@ -1013,8 +1013,7 @@ Dialog.prototype.setSkew = function(skew) {
 /** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
 	this._scaleY = scaleY;
-	if (this.useTransform) 
-        	this.updateTranslation();
+	this.updateTranslation();
 };
 
 /** @type {Dialog?} */
