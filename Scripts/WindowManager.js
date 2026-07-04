@@ -44,14 +44,8 @@ if (isIE) {
 if (!hasLocalStorage) canSave  = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
-var supportsPointer =
-    typeof window != "undefined" &&
-    ("PointerEvent" in window || "MSPointerEvent" in window);
-var supportsObjectFit = Boolean(
-    document.documentElement &&
-    document.documentElement.style &&
-    typeof document.documentElement.style.objectFit != "undefined"
-);
+var supportsPointer = typeof window != "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
+var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
 var supportsTransitions = (function () {
     var style = document.createElement("div").style;
 
@@ -1763,9 +1757,7 @@ function activeDialogToMetro() {
     if (activeDialog) activeDialog.exportDialogBodyToMetro();
 }
 
-/**
- * @param {boolean} enable
- */
+/** @param {boolean} enable */
 function flip(enable){
     var tesktop = bodyCrawler.getDesktop();
     if (!tesktop) return;
@@ -1773,13 +1765,18 @@ function flip(enable){
     flipHandler(tesktop.classList.toggle("flipped", enable));
 }
 
-/**
- * @param {boolean} enabled
- */
-function flipHandler(enabled){
+/** @param {boolean} enable */
+function flipHandler(enable){
     toggleCharms(false);
     swapMetroBody();
-    return flipped = enabled;
+    return flipped = enable;
+}
+
+/** @param {boolean} [enable] */
+function toggleOverlay(enable) {
+	var overlay = bodyCrawler.getOverlay();
+	if (!overlay) return;
+	overlay.classList.toggle("open", enable);
 }
 
 // var toggleOverlay = bodyCrawler.getOverlay()
