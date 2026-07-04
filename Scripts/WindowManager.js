@@ -1275,7 +1275,7 @@ Dialog.prototype.move = function (x, y) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
 		
 		this.skew =- deltaX / 3;
-		this.scaleY = 1 - deltaY / 10;
+		this.scaleY = 1 - deltaY / 100;
 	}
 
 	var micaElement = this.micaElement;
