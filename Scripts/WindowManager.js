@@ -1251,7 +1251,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 };
 Dialog.prototype.updateTranslation = function () {
 	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew);
-}
+};
 /**
  * @param {number} [x]
  * @param {number} [y]
@@ -1274,6 +1274,7 @@ Dialog.prototype.move = function (x, y) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
 		
 		this.skew =- deltaX / 3;
+		this.scaleY = - deltaY / 3;
 	}
 
 	var micaElement = this.micaElement;
