@@ -1599,22 +1599,21 @@ Dialog.prototype.flip = function(enable) {
 	this.toggleClassAnimated("flipped", enable);
 };
 
-// No longer revlant
-function DragAction() { // BS
-    /** @type {DragFunction} */
-    this.execute = function(){};
-    /** @type {DragFunction[]} */
-    this.resizeFunctions = [
-        function(dialog, offset, difference){ dialog.move(offset.startX + difference.x, offset.startY + difference.y); }, // Move
-        function(dialog, offset, difference){ dialog.top = offset.startY + difference.y }, // Top
-        function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
-        function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
-        function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
-        function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
-        function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y },// Top right
-        function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y) }, // Bottom right
-        function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom left
-    ];
+function DragAction() {
+	/** @type {DragFunction} */
+	this.execute = function(){};
+	/** @type {DragFunction[]} */
+	this.resizeFunctions = [
+		function(dialog, offset, difference){ dialog.move(offset.startX + difference.x, offset.startY + difference.y); }, // Move
+		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y }, // Top
+		function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
+		function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
+		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
+		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
+		function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y },// Top right
+		function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y) }, // Bottom right
+		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom left
+	];
 }
 
 /** @param {number} [direction] */
@@ -1778,15 +1777,6 @@ function toggleOverlay(enable) {
 	if (!overlay) return;
 	overlay.classList.toggle("open", enable);
 }
-
-// var toggleOverlay = bodyCrawler.getOverlay()
-//   ? bodyCrawler.getOverlay().classList.toggle.bind(
-//       bodyCrawler.getOverlay().classList,
-//       "open"
-//     )
-//   : function () {
-//       console.warn("Overlay wasn't found on initialization.");
-//     }; // The force attribute gets automatically forwarded!
 
 // toggleOverlay(loadingOverlay);
 // checkForFlip();
