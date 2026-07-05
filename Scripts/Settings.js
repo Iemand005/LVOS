@@ -159,7 +159,7 @@ var elements = {
     resetAccent: null,
     border: null,
     dockAppList: null
-};b
+};
 
 function loadElements() {
     elements.desktop = document.getElementById("desktop");

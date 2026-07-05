@@ -476,7 +476,9 @@ aside#charms form {
 
   opacity: 0;
 
-  display: none;
+  transition: all 1s;
+
+  /* display: none; */
 }
 
 #launchpad.open {
