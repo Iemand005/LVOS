@@ -68,10 +68,13 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 		if (!flags.hasOwnProperty(flagId)) continue;
 		var flag = flags[flagId];
 		/** @type {HTMLElement?} */
-		var settingElement = null;
+		var settingElement = document.createElement("label");
 		switch (typeof flag) {
 			case "boolean":
-				settingElement = document.createElement("label");
+				var toggle = document.createElement("input");
+				toggle.type = "checkbox";
+				toggle.checked = flag;
+				settingElement.appendChild(toggle);
 				break;
 		}
 		if (!settingElement) return;
