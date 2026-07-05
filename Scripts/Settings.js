@@ -71,6 +71,8 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 		var settingElement = null;
 		switch (typeof flag) {
 			case "boolean":
+				settingElement = document.createElement("label");
+				break;
 		}
 		if (!settingElement) return;
 		flagsElement.appendChild(settingElement);
