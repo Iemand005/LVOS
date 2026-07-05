@@ -11,9 +11,13 @@ Launchpad.prototype.init = function(launchpad) {
 };
 
 Launchpad.prototype.open = function() {
-	// this.launchpad?.style
 	if (!this.launchpad) return;
 	this.launchpad.style.display = "block";
+}
+
+Launchpad.prototype.close = function() {
+	if (!this.launchpad) return;
+	this.launchpad.style.display = "none";
 }
 
 /**
