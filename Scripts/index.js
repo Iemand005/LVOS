@@ -2,9 +2,15 @@
 var launchpad = new Launchpad();
 
 function init() {
-	windowManager.forEachWindow(function(dialog) {
-		if (dialog.application) launchpad.addApp(dialog.application);
-	});
-}
+
+	var launchpadElement = document.getElementById("launchpad");
+	if (launchpadElement) {
+		launchpad.init(launchpadElement);
+	
+		windowManager.forEachWindow(function(dialog) {
+			if (dialog.application) launchpad.addApp(dialog.application);
+		});
+	}
+	}
 
 window.addEventListener("load", init, false);
