@@ -74,6 +74,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 				var toggle = document.createElement("input");
 				toggle.type = "checkbox";
 				toggle.checked = flag;
+				settingElement.appendChild(document.createTextNode(flagId));
 				settingElement.appendChild(toggle);
 				break;
 		}
