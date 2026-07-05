@@ -253,7 +253,12 @@ function ClickOffset() {
 
 ClickOffset._overlay = document.createElement("div");
 ClickOffset._overlay.className = "drag-overlay";
-ClickOffset.disableOverlay = function (/** @type {MouseEvent} */ev) { if (!ev.buttons) ClickOffset._overlay.remove(); }
+ClickOffset.disableOverlay = function (/** @type {MouseEvent} */ev) {
+	if (!ev.buttons) {
+		if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
+		else if (ClickOffset._overlay.parentElement) ClickOffset._overlay.parentElement.removeChild(ClickOffset._overlay);
+	}
+}
 window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
