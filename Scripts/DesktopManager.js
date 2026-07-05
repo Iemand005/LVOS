@@ -31,8 +31,8 @@ var onLoad = function () {
 
     var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
-    if (tingeling instanceof HTMLElement) {
-        var selector = document.createElement("div");
+    	if (tingeling instanceof HTMLElement) {
+        	var selector = document.createElement("div");
 		clickOffset.dragHandler = function(ev) {
 			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -43,8 +43,8 @@ var onLoad = function () {
 			selector.style.height = toPixels(Math.abs(height));
 		};
 		
-
-        tingeling.onpointerdown = function(ev) {
+		// if (supportsPointer)
+        	tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
             clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -59,7 +59,8 @@ var onLoad = function () {
 
             clickOffset.toggleDragEventHandler(true);
             // document.body.hasPointerCapture
-        };
+	}, false);
+
         tingeling.onpointerup = function() {
             selector.remove();
         };
