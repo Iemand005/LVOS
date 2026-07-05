@@ -10,6 +10,12 @@ Launchpad.prototype.init = function(launchpad) {
 	this.launchpad.appendChild(this.list);
 };
 
+Launchpad.prototype.open = function() {
+	// this.launchpad?.style
+	if (!this.launchpad) return;
+	this.launchpad.style.display = "block";
+}
+
 /**
  * @param {Dialog} app 
  */
