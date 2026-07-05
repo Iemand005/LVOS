@@ -332,8 +332,8 @@ article, .article {
 .window.animating,
 .window.animating > content,
 .window.animating > .backdrop-clip * {
-    -webkit-transition: all 400ms cubic-bezier(.86,0,.07,1);
-    transition: all 400ms cubic-bezier(.86,0,.07,1);
+    -webkit-transition: all 400ms cubic-bezier(.86,0,.07,1) !important;
+    transition: all 400ms cubic-bezier(.86,0,.07,1) !important;
 }
 
 .window.maximized {
