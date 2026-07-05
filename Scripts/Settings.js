@@ -90,13 +90,14 @@ function setThemeOld(id) {
     settings.set("theme", id);
     for(var index in windowManager.windows){
         var window = windowManager.windows[index];
-	if (!window.target) continue;
+	var target = window.target;
+	if (!target) continue;
         switch (id) {
-            case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
+            case 0: target.classList.remove("rounded-corners"), target.classList.add("sharp-corners");
                 break;
-            case 1: window.target.classList.remove("rounded-corners"), window.target.classList.remove("sharp-corners");
+            case 1: target.classList.remove("rounded-corners"), target.classList.remove("sharp-corners");
                 break;
-            case 2: window.target.classList.remove("sharp-corners"), window.target.classList.add("rounded-corners");
+            case 2: target.classList.remove("sharp-corners"), target.classList.add("rounded-corners");
                 break;
         }
     }
