@@ -203,7 +203,7 @@ function loadElements() {
 	if (elements.border) elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 	if (elements.accent) elements.accent.oninput = elements.accent.onchange = function () { setAccentColor(this.value); };
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
-	charmsbutton.onclick  = toggleCharms;
+	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
 
 
 	settings.loadFlags(flags);
@@ -217,7 +217,8 @@ addEventListener("load", function() {
 var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
 // var reflectionToggle = document.getElementById("reflectiontoggle");
-var charmsbutton = applist.appendChild(document.createElement("button"));
+
+var charmsbutton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
 // var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
 // if (windowManager.windows && windowManager.windows.browser)
