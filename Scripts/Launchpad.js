@@ -1,8 +1,14 @@
 
 function Launchpad() {
-	this.launchpad = document.getElementById("launchpad");
+	/** @type {HTMLElement?} */
+	this.launchpad = null;
 	this.list = document.createElement("ul");
 }
+/** @param {HTMLElement} launchpad */
+Launchpad.prototype.init = function(launchpad) {
+	this.launchpad = launchpad;
+};
+
 /**
  * @param {Application} app 
  */
@@ -11,3 +17,5 @@ Launchpad.prototype.addApp = function(app) {
 	appElement.textContent = app.id;
 	this.list.appendChild(appElement);
 };
+
+// Launchpad.prototype.removeApp = function()
