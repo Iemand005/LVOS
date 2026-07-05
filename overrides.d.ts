@@ -9,8 +9,8 @@ declare global {
 
 		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
 		__LVMessenger: {
-			accent: HTMLMetaElement?;
-		} | undefined;
+			accent: HTMLMetaElement | undefined;
+		} | {} | undefined;
 
 		documentPictureInPicture: DocumentPictureInPicture | undefined;
 	}

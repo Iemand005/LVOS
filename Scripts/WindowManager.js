@@ -1670,7 +1670,17 @@ document.onload = function () {
 
     initializeDialogs();
     toggleReflections(reflections);
-}
+
+	
+	LVMessenger.receive(messageReceived);
+	var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+	if (metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
+		window.__LVMessenger.accent = metaThemeColor;
+};
+
+window.__LVMessengerReceive = messageReceived;
+window.__LVMessenger = {};
+
 var dragAction = new DragAction();
 var windowButtons = {
     eject: 0,
@@ -1752,15 +1762,6 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 		console.log("Received message " + type);
 	}
 }
-
-window.__LVMessengerReceive = messageReceived;
-LVMessenger.receive(messageReceived);
-// window->>
-window.__LVMessenger = {};
-var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-// document.querySelector('meta[name="theme-color"]');
-if (metaThemeColor instanceof HTMLMetaElement)
-	window.__LVMessenger.accent = metaThemeColor;
 
 function swapMetroBody() {
     if (!flipped) return;
@@ -2203,4 +2204,4 @@ window.addEventListener("drop", function(e) {
  *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
-\*
+\*/
