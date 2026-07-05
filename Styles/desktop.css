@@ -473,6 +473,12 @@ aside#charms form {
 	height: 100%;
 
   background-color: orange;
+
+  display: none;
+}
+
+#launchpad.blur {
+  backdrop-filter: blur(1rem);
 }
 
 @media (pointer: none), (pointer: coarse) {
