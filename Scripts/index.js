@@ -1,6 +1,6 @@
 
 var launchpad = new Launchpad();
 
-windowManager.forEachWindow(dialog => {
+windowManager.forEachWindow(function(dialog) {
 	if (dialog.application) launchpad.addApp(dialog.application);
 });
