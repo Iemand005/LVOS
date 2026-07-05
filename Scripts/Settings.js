@@ -81,6 +81,8 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 		if (!settingElement) return;
 		flagsElement.appendChild(settingElement);
 	}
+	var settingsElement = document.getElementById("settings");
+	if (settingsElement) settingsElement.appendChild(flagsElement);
 };
 
 function setThemeOld(id) {
