@@ -61,6 +61,15 @@ function SettingsHandler() { // First class declarations, then the functions and
 SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
+/** @param {{[key:string]: boolean}} flags */
+SettingsHandler.prototype.loadFlags = function (flags) { 
+	for (var flag in flags) {
+		if (flags.hasOwnProperty(flag)) {
+			
+		}
+	}
+};
+
 function setThemeOld(id) {
     if (typeof id == 'undefined') return;
     settings.set("theme", id);
@@ -182,9 +191,7 @@ function loadElements() {
 	charmsbutton.onclick  = toggleCharms;
 
 
-    for (var flag in flags) {
-
-    }
+    
 };
 
 addEventListener("load", function() {
