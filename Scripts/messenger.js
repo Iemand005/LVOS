@@ -43,7 +43,7 @@ LVMessenger.types = {
  * @param {*} [id] 
  */
 LVMessenger.broadcast = function (target, type, message, id){
-    if(target) target.postMessage(JSON.stringify({type: type, data: message, id: id}), '*');
+    if(target && JSON) target.postMessage(JSON.stringify({type: type, data: message, id: id}), '*');
 }
 
 /**
