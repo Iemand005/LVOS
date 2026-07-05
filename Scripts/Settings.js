@@ -62,7 +62,8 @@ SettingsHandler.prototype.get = function (key) { if (this.storage) return this.s
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 /** @param {{[key:string]: boolean}} flags */
-SettingsHandler.prototype.loadFlags = function (flags) { 
+SettingsHandler.prototype.loadFlags = function (flags) {
+	var flagsElement = document.createElement("article");
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId)) continue;
 		var flag = flags[flagId];
@@ -71,6 +72,8 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 		switch (typeof flag) {
 			case "boolean":
 		}
+		if (!settingElement) return;
+		flagsElement.appendChild(settingElement);
 	}
 };
 
