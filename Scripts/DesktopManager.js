@@ -302,7 +302,7 @@ function loadWallpaperFromLocalStorage() {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
             if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
                 console.log("Loading cached wallpaper from direct localStorage");
-                applyWallpaperImage(cachedWallpaper, null);
+                applyWallpaperImage(cachedWallpaper);
             } else {
                 console.log("No cached wallpaper found in localStorage, or applyWallpaperImage not available");
             }
@@ -317,7 +317,7 @@ function loadWallpaperFromLocalStorage() {
         console.log("Retrieved from settings.get():", cachedWallpaper ? 'found' : 'not found');
         if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
             console.log("Loading cached wallpaper from localStorage via settings");
-            applyWallpaperImage(cachedWallpaper, null);
+            applyWallpaperImage(cachedWallpaper);
         } else {
             console.log("No cached wallpaper found in settings, or applyWallpaperImage not available");
         }
