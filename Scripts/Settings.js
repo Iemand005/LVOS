@@ -204,7 +204,7 @@ function loadElements() {
 	charmsbutton.onclick  = toggleCharms;
 
 
-    
+	settings.loadFlags(flags);
 };
 
 addEventListener("load", function() {
