@@ -343,7 +343,7 @@ article, .article {
     right: 0 !important;
     border: none !important;
     border-radius: 0 !important;
-    transform: translate(0px, 0px);
+    transform: translate(0px, 0px) scale(0, 0) skew(0deg, 0deg);
     z-index: 9999 !important;
 }
 
