@@ -113,10 +113,10 @@ function toggleCharmsEvent(ev) {
     }
 }
 
+/** @param {number} size */
 function setBorderSize(size) {
 	settings.set("borderSize", size);
-	windowManager.forEachWindow()
-    for (/*let*/var index in windows) windowManager.windows[index].borderSize = size;
+	for (var index in windowManager.windows) windowManager.windows[index].borderSize = size;
 }
 
 function hexToRGB(hex) {
