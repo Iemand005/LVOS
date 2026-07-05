@@ -1274,7 +1274,7 @@ Dialog.prototype.move = function (x, y) {
 	if (flags.useSkewAnimations) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
 
-		var intensity = 2;
+		var intensity = 1;
 		
 		this.skew = -deltaX * intensity / 3;
 		this.scaleY = 1 - deltaY * intensity / 100;
