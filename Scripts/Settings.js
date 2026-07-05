@@ -85,6 +85,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	if (settingsElement) settingsElement.appendChild(flagsElement);
 };
 
+/** @param {string} id */
 function setThemeOld(id) {
     if (typeof id == 'undefined') return;
     settings.set("theme", id);
