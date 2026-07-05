@@ -12,7 +12,8 @@ var STORAGE_FILE = "app_storage.json";
 var supportsActiveX = typeof ActiveXObject != "undefined";
 
 function ActiveXStorage() {
-    this.fso = new ActiveXObject("Scripting.FileSystemObject");
+	if (!ActiveXObject) throw new Error("ActiveX not supported!");
+	this.fso = new ActiveXObject("Scripting.FileSystemObject");
 }
 
 ActiveXStorage.prototype.setItem = function(key, value) {

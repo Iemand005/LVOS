@@ -49,6 +49,20 @@ declare global {
 		webkitAnimationStart: AnimationEvent;
 	}
 
+	interface ActiveXObject {
+		[key: string]: any;
+	}
+
+	interface ActiveXObjectConstructor {
+		new (progId: string): ActiveXObject;
+	}
+
+	interface Window {
+		ActiveXObject?: ActiveXObjectConstructor;
+	}
+
+	var ActiveXObject: ActiveXObjectConstructor | undefined;
+
 	interface GraphicsBase {
 		canvas: HTMLCanvasElement;
 	}
