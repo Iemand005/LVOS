@@ -343,7 +343,7 @@ article, .article {
     right: 0 !important;
     border: none !important;
     border-radius: 0 !important;
-    transform: translate(0px, 0px) scale(0, 0) skew(0deg, 0deg);
+    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
     z-index: 9999 !important;
 }
 
@@ -361,7 +361,7 @@ article, .article {
     transform: translate(0px, 0px) !important;
 }
 
-.slow-animations * {
+.slow-animations *, body.slow-animations *.window {
     -webkit-transition-duration: 3s !important;
     transition-duration: 3s !important;
 }
