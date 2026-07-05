@@ -3,7 +3,7 @@ export {};
 declare global {
     interface Window {
 		MSInputMethodContext?: unknown;
-        documentMode?: number;
+		documentMode?: number;
 
 		windows: Dialog[]?;
 
@@ -11,7 +11,25 @@ declare global {
 		__LVMessenger: {
 			accent: HTMLMetaElement?;
 		};
+
+		documentPictureInPicture: DocumentPictureInPicture;
     }
+
+	interface DocumentPictureInPicture extends EventTarget {
+  readonly window: Window | null;
+  requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
+  onenter: ((this: DocumentPictureInPicture, ev: Event) => any) | null;
+}
+
+interface DocumentPictureInPictureOptions {
+  width?: number;
+  height?: number;
+  disallowReturnToOpener?: boolean;
+  preferInitialWindowPlacement?: boolean;
+}
+
+interface Window {
+}
 
 	interface Document {
         documentMode?: number;
