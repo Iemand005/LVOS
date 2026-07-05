@@ -526,6 +526,10 @@ button:hover {
     pointer-events: none !important;
 }
 
+.jelly .window {
+    transition: transform 100ms;
+}
+
 @supports (display: flex) {
     tbody {
         height: 100%;
