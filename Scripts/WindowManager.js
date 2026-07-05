@@ -1735,13 +1735,12 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				var targetElement = doc.getElementById(id);
 				console.log("Ripped out element:", targetElement);
 				if (!targetElement) break;
-				toggleElementPip(targetElement).then(function (pipWindow) {
+				toggleElementPip(targetElement, function (pipWindow) {
 					if (!pipWindow) return;
 					pipWindow.onresize = function() {
-						// if (targetElement instanceof HTMLCanvasElement) {
-							targetElement.width = targetElement.clientWidth;
-							targetElement.height = targetElement.clientHeight;
-						// }
+						// if (!(targetElement instanceof HTMLCanvasElement)) return;
+						targetElement.width = targetElement.clientWidth;
+						targetElement.height = targetElement.clientHeight;
 					}
 					if (!targetElement) return;
 					targetElement.style.width = "100%";
@@ -2204,4 +2203,4 @@ window.addEventListener("drop", function(e) {
  *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
-\*/
+\*
