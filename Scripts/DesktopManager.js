@@ -387,7 +387,7 @@ function toggleElementPip(el) {
   }
 
   // If already in PiP, close it (this triggers pagehide -> restores element)
-  const existing = window.documentPictureInPicture.window;
+  var existing = window.documentPictureInPicture.window;
   if (existing) {
     existing.close();
     return null;
@@ -398,8 +398,8 @@ function toggleElementPip(el) {
 	var height = Math.round(rect.height) || 300;
 
 	window.documentPictureInPicture.requestWindow({ width, height }).then(function(pipWindow) {
-		const originalParent = el.parentNode;
-		const originalNextSibling = el.nextSibling;
+		var originalParent = el.parentNode;
+		var originalNextSibling = el.nextSibling;
 
 		pipWindow.document.body.style.margin = '0';
 		pipWindow.document.body.appendChild(el);
