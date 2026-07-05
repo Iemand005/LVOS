@@ -114,7 +114,8 @@ function toggleCharmsEvent(ev) {
 }
 
 function setBorderSize(size) {
-    settings.set("borderSize", size);
+	settings.set("borderSize", size);
+	windowManager.forEachWindow()
     for (/*let*/var index in windows) windowManager.windows[index].borderSize = size;
 }
 
