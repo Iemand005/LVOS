@@ -341,8 +341,8 @@ function loadWallpaperFromLocalStorage() {
  * @param {DragEvent} ev
  */
 function handleWallpaperDrop(ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
+	ev.preventDefault();
+	ev.stopPropagation();
     if (elements.desktop) elements.desktop.style.opacity = "";
 
     
@@ -358,6 +358,7 @@ function handleWallpaperDrop(ev) {
         reader.onload = function(e) {
             if (!e.target) return;
             var dataUrl = e.target.result;
+			if (!dataUrl) return;
 
             try {
                 if (typeof applyWallpaperImage == 'function') {
