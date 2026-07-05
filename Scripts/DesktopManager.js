@@ -358,11 +358,11 @@ function handleWallpaperDrop(ev) {
         reader.onload = function(e) {
             if (!e.target) return;
             var dataUrl = e.target.result;
-			if (!dataUrl) return;
+			if (!(typeof dataUrl === "string")) return;
 
             try {
                 if (typeof applyWallpaperImage == 'function') {
-                    applyWallpaperImage(dataUrl, null, function() {
+                    applyWallpaperImage(dataUrl, undefined, function() {
                         console.warn("Failed to apply dropped wallpaper image");
                     });
 
