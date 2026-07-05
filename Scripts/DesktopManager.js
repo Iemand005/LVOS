@@ -71,7 +71,7 @@ var onLoad = function () {
 
 window.addEventListener("load", onLoad, false);
 
-document.addEventListener("contextmenu", e => {
+document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
     console.log("Open contex tp ples");
