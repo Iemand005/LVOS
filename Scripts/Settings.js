@@ -88,7 +88,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 function setThemeOld(id) {
     if (typeof id == 'undefined') return;
     settings.set("theme", id);
-    for(var index in windows){
+    for(var index in windowManager.windows){
         var window = windowManager.windows[index];
         switch (id) {
             case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
