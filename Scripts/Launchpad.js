@@ -12,12 +12,12 @@ Launchpad.prototype.init = function(launchpad) {
 
 Launchpad.prototype.open = function() {
 	if (!this.launchpad) return;
-	this.launchpad.style.display = "block";
+	this.launchpad.classList.add("open");
 }
 
 Launchpad.prototype.close = function() {
 	if (!this.launchpad) return;
-	this.launchpad.style.display = "none";
+	this.launchpad.classList.remove("open");
 }
 
 /**
@@ -29,5 +29,3 @@ Launchpad.prototype.addApp = function(app) {
 	appElement.appendChild(app.createOpenButton());
 	this.list.appendChild(appElement);
 };
-
-// Launchpad.prototype.removeApp = function()
