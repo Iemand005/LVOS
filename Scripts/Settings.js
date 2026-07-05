@@ -176,9 +176,9 @@ function loadElements() {
 	// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
 	// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
 	// elements.resetAccent.onclick = setAccentColor.bind(this, "");
-	elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
-	elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
-	elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
+	if (elements.border) elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
+	if (elements.accent) elements.accent.oninput = elements.accent.onchange = function (ev) { setAccentColor(this.value); };
+	if (elements.color) elements.color.oninput = elements.color.onchange = function (ev) { setColor(this.value); };
 	charmsbutton.onclick  = toggleCharms;
 
 };
