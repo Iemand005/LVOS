@@ -75,7 +75,7 @@ document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
     console.log("Open contex tp ples");
-});
+}, false);
 
 var reflecitons = false;
 
