@@ -11,11 +11,12 @@ Launchpad.prototype.init = function(launchpad) {
 };
 
 /**
- * @param {Application} app 
+ * @param {Dialog} app 
  */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
-	appElement.textContent = app.id;
+	// appElement.textContent = app.id;
+	appElement.appendChild(app.createOpenButton());
 	this.list.appendChild(appElement);
 };
 
