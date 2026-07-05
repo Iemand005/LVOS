@@ -61,11 +61,11 @@ var onLoad = function () {
             // document.body.hasPointerCapture
 	}, false);
 
-        tingeling.onpointerup = function() {
+        tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown",function() {
             selector.remove();
-        };
+        }, false);
 
-        window.addEventListener("pointerup", function(ev) { selector.remove(); }, false);
+        window.addEventListener(supportsPointer?"pointerup":"mouseup", function(ev) { selector.remove(); }, false);
     }
 
 };
