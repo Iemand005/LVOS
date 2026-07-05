@@ -1,7 +1,7 @@
 export {};
 
 declare global {
-    interface Window {
+	interface Window {
 		MSInputMethodContext?: unknown;
 		documentMode?: number;
 
@@ -13,23 +13,20 @@ declare global {
 		};
 
 		documentPictureInPicture: DocumentPictureInPicture;
-    }
+	}
 
 	interface DocumentPictureInPicture extends EventTarget {
-  readonly window: Window | null;
-  requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
-  onenter: ((this: DocumentPictureInPicture, ev: Event) => any) | null;
-}
+		readonly window: Window | null;
+		requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
+		onenter: ((this: DocumentPictureInPicture, ev: Event) => any) | null;
+	}
 
-interface DocumentPictureInPictureOptions {
-  width?: number;
-  height?: number;
-  disallowReturnToOpener?: boolean;
-  preferInitialWindowPlacement?: boolean;
-}
-
-interface Window {
-}
+	interface DocumentPictureInPictureOptions {
+		width?: number;
+		height?: number;
+		disallowReturnToOpener?: boolean;
+		preferInitialWindowPlacement?: boolean;
+	}
 
 	interface Document {
         documentMode?: number;
