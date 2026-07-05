@@ -20,7 +20,7 @@ var useBlur = false,
 	canSave = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = true,
+	useTransform = false,
 	useScale = false,
 	hasLocalStorage = false;
 
