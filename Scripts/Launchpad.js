@@ -7,6 +7,7 @@ function Launchpad() {
 /** @param {HTMLElement} launchpad */
 Launchpad.prototype.init = function(launchpad) {
 	this.launchpad = launchpad;
+	this.launchpad.appendChild(this.list);
 };
 
 /**
