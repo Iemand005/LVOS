@@ -279,7 +279,7 @@ window.addEventListener("pointermove", function(ev) {
 	ClickOffset._overlay.style.display = "none";
 
     }, 50);
-});
+}, false);
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
