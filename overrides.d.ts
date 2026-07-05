@@ -5,6 +5,8 @@ declare global {
 		MSInputMethodContext?: unknown;
         documentMode?: number;
 
+		windows: Dialog[]?;
+
 		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
 		__LVMessenger: {
 			accent: HTMLMetaElement?;
