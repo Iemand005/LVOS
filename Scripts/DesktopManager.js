@@ -355,6 +355,7 @@ function handleWallpaperDrop(ev) {
         
         var reader = new FileReader();
         reader.onload = function(e) {
+            if (!e.target) return;
             var dataUrl = e.target.result;
 
             try {
@@ -379,7 +380,7 @@ function handleWallpaperDrop(ev) {
  * @param {HTMLElement} el - the element to pop out
  */
 function toggleElementPip(el) {
-  if (!('documentPictureInPicture' in window)) {
+  if (!('documentPictureInPicture' in window) || !window.documentPictureInPicture) {
     console.warn('Document Picture-in-Picture not supported in this browser.');
     return null;
   }
@@ -403,11 +404,9 @@ function toggleElementPip(el) {
 		pipWindow.document.body.appendChild(el);
 
 		pipWindow.addEventListener('pagehide', function () {
-		if (originalNextSibling) {
-		originalParent.insertBefore(el, originalNextSibling);
-		} else {
-		originalParent.appendChild(el);
-		}
+            if (!originalParent) return;
+            if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
+            else originalParent.appendChild(el);
 		}, { once: true });
 
 		return pipWindow;
