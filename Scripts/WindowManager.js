@@ -269,7 +269,7 @@ window.addEventListener("pointermove", function(ev) {
 
     clearTimeout(dragStopTimer);
 
-    dragStopTimer = setTimeout(() => {
+    dragStopTimer = setTimeout(function() {
         // console.log("mouse stopped");
 	ClickOffset._overlay.style.display = "none";
 
