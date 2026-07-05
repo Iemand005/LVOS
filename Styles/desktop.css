@@ -474,7 +474,15 @@ aside#charms form {
 
   background-color: orange;
 
+  opacity: 0;
+
   display: none;
+}
+
+#launchpad.open {
+  display: block;
+
+  opacity: 1;
 }
 
 #launchpad.blur {
