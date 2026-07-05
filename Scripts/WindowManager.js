@@ -257,7 +257,7 @@ ClickOffset._overlay.className = "drag-overlay";
 ClickOffset.disableOverlay = function (ev) {
 	if (ev && ev.buttons) return;
 	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
-	else if (ClickOffset._overlay.parentElement) ClickOffset._overlay.parentElement.removeChild(ClickOffset._overlay);
+	else if (ClickOffset._overlay.parentNode) ClickOffset._overlay.parentNode.removeChild(ClickOffset._overlay);
 }
 window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
