@@ -380,8 +380,9 @@ function handleWallpaperDrop(ev) {
 
 /**
  * @param {HTMLElement} el - the element to pop out
+ * @param {(pipWindow:Window)=>void} callback - the element to pop out
  */
-function toggleElementPip(el) {
+function toggleElementPip(el, callbcak) {
   if (!('documentPictureInPicture' in window) || !window.documentPictureInPicture) {
     console.warn('Document Picture-in-Picture not supported in this browser.');
     return null;
