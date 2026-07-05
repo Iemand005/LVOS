@@ -2,17 +2,17 @@ export {};
 
 declare global {
 	interface Window {
-		MSInputMethodContext?: unknown;
-		documentMode?: number;
+		MSInputMethodContext: unknown | undefined;
+		documentMode:  | undefined;
 
 		windows: Dialog[]?;
 
 		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
 		__LVMessenger: {
 			accent: HTMLMetaElement?;
-		};
+		} | undefined;
 
-		documentPictureInPicture: DocumentPictureInPicture;
+		documentPictureInPicture: DocumentPictureInPicture | undefined;
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
