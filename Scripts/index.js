@@ -8,7 +8,7 @@ function init() {
 		launchpad.init(launchpadElement);
 	
 		windowManager.forEachWindow(function(dialog) {
-			if (dialog.application) launchpad.addApp(dialog.application);
+			if (dialog.application) launchpad.addApp(dialog);
 		});
 	}
 	}

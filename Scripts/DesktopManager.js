@@ -174,6 +174,7 @@ function initWallpaperDB(onSuccess, onFailure) {
     };
     
     request.onupgradeneeded = function(event) {
+        if (!event.target) return;
         var db = event.target.result;
         if (!db.objectStoreNames.contains('wallpapers')) {
             db.createObjectStore('wallpapers', { keyPath: 'id' });
