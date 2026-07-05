@@ -181,6 +181,10 @@ function loadElements() {
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
 	charmsbutton.onclick  = toggleCharms;
 
+
+    for (var flag in flags) {
+
+    }
 };
 
 addEventListener("load", function() {
