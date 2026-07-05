@@ -382,7 +382,7 @@ function handleWallpaperDrop(ev) {
  * @param {HTMLElement} el - the element to pop out
  * @param {(pipWindow:Window)=>void} callback - the element to pop out
  */
-function toggleElementPip(el, callbcak) {
+function toggleElementPip(el, callback) {
   if (!('documentPictureInPicture' in window) || !window.documentPictureInPicture) {
     console.warn('Document Picture-in-Picture not supported in this browser.');
     return null;
@@ -407,12 +407,12 @@ function toggleElementPip(el, callbcak) {
 		pipWindow.document.body.appendChild(el);
 
 		pipWindow.addEventListener('pagehide', function () {
-            if (!originalParent) return;
-            if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
-            else originalParent.appendChild(el);
+			if (!originalParent) return;
+			if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
+			else originalParent.appendChild(el);
 		}, { once: true });
 
-		return pipWindow;
+		callback(pipWindow);
 	});
 }
 
