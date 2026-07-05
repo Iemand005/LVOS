@@ -1648,7 +1648,7 @@ function DocumentCrawler(document){
 DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
 DocumentCrawler.prototype.getMetroBody = function () { var metro = this.getMetro(); return metro && metro.firstChild; };
 DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window") };
-DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("windows") };
+DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section") };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); }; // I don't know why I d;dn't use getters to start with.
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
