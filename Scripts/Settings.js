@@ -66,8 +66,10 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId)) continue;
 		var flag = flags[flagId];
-		if (typeof flag === "boolean") {
-			
+		/** @type {HTMLElement?} */
+		var settingElement = null;
+		switch (typeof flag) {
+			case "boolean":
 		}
 	}
 };
