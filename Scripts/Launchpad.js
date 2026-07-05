@@ -8,5 +8,6 @@ function Launchpad() {
  */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
+	appElement.textContent = app.id;
 	this.list.appendChild(appElement);
 };
