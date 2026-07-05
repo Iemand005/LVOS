@@ -4,6 +4,14 @@
 
 function Launchpad() {
 	this.launchpad = document.getElementById("launchpad");
+	this.list = document.createElement("ul");
 }
+/**
+ * @param {Application} app 
+ */
+Launchpad.prototype.addApp = function(app) {
+	var appElement = document.createElement("div");
+	this.list.appendChild(appElement);
+};
 
 var launchpad = new Launchpad();
