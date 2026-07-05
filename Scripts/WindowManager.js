@@ -1167,7 +1167,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
 			dialog.stopAnimating();
-			console.log("Aborting animation over " + event.propertyName, "took: ", event.elapsedTime);
+			console.log("Aborting animation over " + event.propertyName, ". Took: ", event.elapsedTime, ". Reported by: ", event.target);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd();
 		};
