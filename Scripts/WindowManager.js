@@ -277,7 +277,7 @@ window.addEventListener("pointermove", function(ev) {
 
     dragStopTimer = setTimeout(function() {
         // console.log("mouse stopped");
-	ClickOffset._overlay.style.display = "none";
+		ClickOffset._overlay.style.display = "none";
 
     }, 50);
 }, false);
@@ -1942,7 +1942,7 @@ function updateTopZ(newZ) {
 
 /** @param {*} properties */
 function stringifyDialogProperties(properties){
-    return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '');
+    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '') : "No JSON!";
 }
 
 /** @param {Element?} target */
