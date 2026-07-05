@@ -253,11 +253,11 @@ function ClickOffset() {
 
 ClickOffset._overlay = document.createElement("div");
 ClickOffset._overlay.className = "drag-overlay";
-ClickOffset.disableOverlay = function (/** @type {MouseEvent} */ev) {
-	if (!ev.buttons) {
-		if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
-		else if (ClickOffset._overlay.parentElement) ClickOffset._overlay.parentElement.removeChild(ClickOffset._overlay);
-	}
+/** @param {MouseEvent} [ev] */
+ClickOffset.disableOverlay = function (ev) {
+	if (ev && ev.buttons) return;
+	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
+	else if (ClickOffset._overlay.parentElement) ClickOffset._overlay.parentElement.removeChild(ClickOffset._overlay);
 }
 window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
@@ -337,7 +337,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler) {
     console.log(enable ? "Starting drag" : "Ending drag");
 	if (!this._overlay) return;
 	if (enable) document.body.appendChild(this._overlay);
-	else this._overlay.remove();
+	else this.disableOverlay();
 }
 
 /** @param {boolean} enable */
