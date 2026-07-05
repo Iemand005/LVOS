@@ -90,6 +90,7 @@ function setThemeOld(id) {
     settings.set("theme", id);
     for(var index in windowManager.windows){
         var window = windowManager.windows[index];
+	if (!window.target) continue;
         switch (id) {
             case 0: window.target.classList.remove("rounded-corners"), window.target.classList.add("sharp-corners");
                 break;
