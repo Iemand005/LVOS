@@ -1,6 +1,6 @@
 
 var launchpad = new Launchpad();
 
-window.windows.forEach(/** @type {Dialog} */dialog => {
-	dialog
+if (window.windows) window.windows.forEach(dialog => {
+	if (dialog.application) launchpad.addApp(dialog.application);
 });
