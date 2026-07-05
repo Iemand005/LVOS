@@ -361,7 +361,7 @@ article, .article {
     transform: translate(0px, 0px) !important;
 }
 
-.slow-animations *, body.slow-animations *.window {
+.slow-animations *, body.slow-animations *.window, .slow-animations *.window > content {
     -webkit-transition-duration: 3s !important;
     transition-duration: 3s !important;
 }
