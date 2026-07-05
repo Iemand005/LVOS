@@ -63,8 +63,10 @@ SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.s
 
 /** @param {{[key:string]: boolean}} flags */
 SettingsHandler.prototype.loadFlags = function (flags) { 
-	for (var flag in flags) {
-		if (flags.hasOwnProperty(flag)) {
+	for (var flagId in flags) {
+		if (!flags.hasOwnProperty(flagId)) continue;
+		var flag = flags[flagId];
+		if (typeof flag === "boolean") {
 			
 		}
 	}
