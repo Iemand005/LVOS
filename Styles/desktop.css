@@ -467,6 +467,14 @@ aside#charms form {
 	height: 100%;
 }
 
+#launchpad {
+  position: absolute;
+  width: 100%;
+	height: 100%;
+
+  background-color: orange;
+}
+
 @media (pointer: none), (pointer: coarse) {
 }
 
