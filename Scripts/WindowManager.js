@@ -277,7 +277,7 @@ window.addEventListener(supportsPointer? "pointermove" : "mousemove", function(e
 
     dragStopTimer = setTimeout(function() {
         // console.log("mouse stopped");
-		ClickOffset._overlay.style.display = "none";
+		// ClickOffset._overlay.style.display = "none";
 
     }, 50);
 }, false);
