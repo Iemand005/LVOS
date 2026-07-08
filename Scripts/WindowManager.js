@@ -25,7 +25,7 @@ var useBlur = false,
 	hasLocalStorage = false;
 
 var flags = {
-	useSkewAnimations: true,
+	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: false
 };
