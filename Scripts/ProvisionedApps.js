@@ -194,6 +194,11 @@ var applications = [
 		title: "daedalOS",
 		id: "daedal",
 		src: "https://dustinbrett.com/"
+	},
+	{
+		title: "Fenix Engine Demo",
+		id: "fenix.web",
+		src: "https://iemand005.github.io/FenixWeb/"
 	}
 ]
 
