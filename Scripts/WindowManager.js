@@ -350,7 +350,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 		return;
 	}
-	
+
 	if (cursor) this._overlay.style.cursor = cursor;
 	else this._overlay.style.cursor = "";
 	if (enable) document.body.appendChild(this._overlay);
@@ -1659,11 +1659,7 @@ function DragAction() {
 
 /** @param {number} [direction] */
 DragAction.prototype.set = function (direction) {
-  this.execute =
-    this.resizeFunctions[direction || 0] ||
-    function () {
-      console.log("bleed mself sdry");
-    };
+	this.execute = ««this.resizeFunctions[direction || 0] || function () {};
 };
 
 /** @param {HTMLDocument} document */
