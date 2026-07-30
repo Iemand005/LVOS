@@ -75,32 +75,27 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
 		switch (typeof flag) {
 			case "boolean":
-				 var row = document.createElement("li");
+				var row = document.createElement("li");
 
-                // Maak de checkbox aan
                 var toggle = document.createElement("input");
                 toggle.type = "checkbox";
                 toggle.id = "flag-" + flagId;
-                toggle.checked = flagValue; // Dit triggert veilig de getter
+                toggle.checked = flagValue;
 
-                // Koppel de change handler via een IIFE om de scope van flagId te fixeren
                 (function(currentKey) {
                     toggle.addEventListener("change", function() {
-                        flags[currentKey] = toggle.checked; // Dit triggert veilig de setter!
+                        flags[currentKey] = toggle.checked;
                     }, false);
                 })(flagId);
 
-                // Maak het label aan en koppel het aan de checkbox via 'htmlFor'
                 var label = document.createElement("label");
                 label.htmlFor = toggle.id;
                 label.appendChild(document.createTextNode(flagId));
 
-                // Voeg de elementen samen in de rij
                 row.appendChild(toggle);
                 row.appendChild(label);
                 
-                // Voeg de rij toe aan de hoofdlijst
-                settingsElement.appendChild(row);
+                flagsElement.appendChild(row);
                 break;
 				break;
 		}
@@ -282,33 +277,4 @@ function downloadObject(object, fileName) {
 
 function downloadSettings() {
 	downloadObject(localStorage);
-}
-
-function loadFlags() {
-	var settingsElement = document.getElementById("flag-settings");
-	for (var key in flags) {
-		if (key.charAt(0) === "_") continue;
-
-		var row = document.createElement("li");
-
-		var checkbox = document.createElement("input");
-		checkbox.type = "checkbox";
-		checkbox.id = "flag-" + key;
-		
-		checkbox.checked = flags[key]; 
-
-		(function(currentKey) {
-			checkbox.addEventListener("change", function() {
-				flags[currentKey] = checkbox.checked; 
-			}, false);
-		})(key);
-
-		var label = document.createElement("label");
-		label.htmlFor = checkbox.id;
-		label.appendChild(document.createTextNode(key));
-
-		row.appendChild(checkbox);
-		row.appendChild(label);
-		settingsElement.appendChild(row);
-	}
 }
