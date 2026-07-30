@@ -28,10 +28,13 @@ var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: false,
-	useTransform: {
-		get: function () {
-			windowManager.forEachWindow(function(dialog) { dialog.useTransform = true; });
-		},
+	_useTransform = useTransform;
+	get useTransform() {
+		return this._useTransform;
+	}
+	set useTransform(value) {
+		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+	},
 		set: function (value) {}
 	}
 };
