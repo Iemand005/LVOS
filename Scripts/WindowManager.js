@@ -346,12 +346,11 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
     // (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
     console.log(enable ? "Starting drag" : "Ending drag");
 
-	if (!flags.useDragOverlay) {
+	if (!flags.useDragOverlay || !this._overlay) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 		return;
 	}
-
-	if (!this._overlay) return;
+	
 	if (cursor) this._overlay.style.cursor = cursor;
 	else this._overlay.style.cursor = "";
 	if (enable) document.body.appendChild(this._overlay);
