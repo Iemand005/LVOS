@@ -274,13 +274,11 @@ function loadFlags() {
 		
 		checkbox.checked = flags[key]; 
 
-		(function(currentKey, currentCheckbox) {
-			var changeHandler = function() {
-				flags[currentKey] = currentCheckbox.checked; 
-			};
-
-			currentCheckbox.addEventListener("change", changeHandler, false);
-		})(key, checkbox);
+		(function(currentKey) {
+			checkbox.addEventListener("change", function() {
+				flags[currentKey] = checkbox.checked; 
+			}, false);
+		})(key);
 
 		var label = document.createElement("label");
 		label.htmlFor = checkbox.id;
