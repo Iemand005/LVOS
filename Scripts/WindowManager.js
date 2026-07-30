@@ -227,8 +227,9 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
-	// windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
-	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent);
+	var useDragOverlay = false;
+	if (!useDragOverlay) this.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
+	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent, "grabbing");
     this.isDragging = enabled;
 };
 
@@ -331,7 +332,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 /**
  * @param {boolean} enable
  * @param {(ev:PointerEvent|MouseEvent)=>void} handler
- * @param {string} [cursor]
+ * @param {Cursor} [cursor]
  */
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
@@ -344,9 +345,12 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	else this.disableOverlay();
 }
 
-/** @param {boolean} enable */
-ClickOffset.prototype.toggleDragEventHandler = function (enable) {
-	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler);
+/**
+ * @param {boolean} enable
+ * @param {Cursor} [cursor]
+ */
+ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
+	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
 }
 
 /**
