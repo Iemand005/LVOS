@@ -209,6 +209,12 @@ var applications = [
 		title: "My Web Archive",
 		id: "foxyz.archive",
 		src: "https://iemand005.github.io/Archive-2023/index.html"
+	},
+	{
+		title: "Tappy",
+		id: "foxyz.tappy",
+		src: "https://iemand005.github.io/Tappy/tappy.html",
+		hidden: true
 	}
 ]
 
