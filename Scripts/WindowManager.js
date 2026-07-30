@@ -341,6 +341,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
     console.log(enable ? "Starting drag" : "Ending drag");
 	if (!this._overlay) return;
 	if (cursor) this._overlay.style.cursor = cursor;
+	else this._overlay.style.cursor = "";
 	if (enable) document.body.appendChild(this._overlay);
 	else this.disableOverlay();
 }
