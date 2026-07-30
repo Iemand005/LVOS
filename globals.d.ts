@@ -57,3 +57,5 @@ declare global {
     resize();
   }
 }
+
+type Cursor = "grab" | "grabbing" | "move"
