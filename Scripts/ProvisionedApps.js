@@ -213,7 +213,8 @@ var applications = [
 	{
 		title: "Tappy",
 		id: "foxyz.tappy",
-		src: "https://iemand005.github.io/Tappy/tappy.html",
+		// src: "https://iemand005.github.io/Tappy/tappy.html", // TODO: perhaps uh a prod vs dev env for github url and local
+		src: "./Applications/Cyanide/metronome/index.html",
 		hidden: true
 	}
 ]
