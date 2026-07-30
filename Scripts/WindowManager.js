@@ -27,7 +27,13 @@ var useBlur = false,
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
-	updateRateLimit: false
+	updateRateLimit: false,
+	useTransform: {
+		get: function () {
+			windowManager.forEachWindow(function(dialog) { dialog.useTransform = true; });
+		},
+		set: function (value) {}
+	}
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
