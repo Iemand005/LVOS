@@ -8,6 +8,16 @@ var STORAGE_FILE = "app_storage.json";
 
 // var metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+function formatCamelCase(text) {
+    if (!text) return "";
+    var result = text.replace(/([A-Z])/g, " $1");
+    return result.charAt(0).toUpperCase() + result.slice(1);
+}
+
 
 var supportsActiveX = typeof ActiveXObject != "undefined";
 
@@ -90,7 +100,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
                 var label = document.createElement("label");
                 label.htmlFor = toggle.id;
-                label.appendChild(document.createTextNode(flagId));
+                label.appendChild(document.createTextNode(formatCamelCase(flagId)));
 
                 row.appendChild(toggle);
                 row.appendChild(label);
