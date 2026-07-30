@@ -262,11 +262,11 @@ function downloadSettings() {
 function loadFlags() {
 	// const se
 	// or giht no const bruh mybad sorry forgot
-	var settingsElement = document.getElementById("settings");
+	var settingsElement = document.getElementById("flag-settings");
 	for (var key in flags) {
 		if (key.charAt(0) === "_") continue;
 
-		var row = document.createElement("div");
+		var row = document.createElement("li");
 
 		var checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
@@ -283,8 +283,8 @@ function loadFlags() {
 		})(key, checkbox);
 
 		var label = document.createElement("label");
-		label.htmlFor = "flag-" + key;
-		label.appendChild(document.createTextNode(" " + key));
+		label.htmlFor = checkbox.id;
+		label.appendChild(document.createTextNode(key));
 
 		row.appendChild(checkbox);
 		row.appendChild(label);
