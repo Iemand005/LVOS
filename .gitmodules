@@ -34,3 +34,6 @@
 [submodule "Scripts/WebMedia"]
 	path = Scripts/WebMedia
 	url = https://github.com/Iemand005/WebMedia
+[submodule "Applications/Tappy"]
+	path = Applications/Tappy
+	url = https://github.com/iemand005/Tappy

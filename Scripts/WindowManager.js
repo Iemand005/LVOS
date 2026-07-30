@@ -1659,7 +1659,7 @@ function DragAction() {
 
 /** @param {number} [direction] */
 DragAction.prototype.set = function (direction) {
-	this.execute = ««this.resizeFunctions[direction || 0] || function () {};
+	this.execute = this.resizeFunctions[direction || 0] || function () {};
 };
 
 /** @param {HTMLDocument} document */
