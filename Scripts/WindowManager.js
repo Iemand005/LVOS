@@ -28,6 +28,7 @@ var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: false,
+	useDragOverlay: false,
 	_useTransform: useTransform,
 	get useTransform() {
 		return this._useTransform;
@@ -234,9 +235,9 @@ WindowManager.prototype.loadApp = function(app) {
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
-	var useDragOverlay = false;
-	if (!useDragOverlay) this.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
-	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent, "grabbing");
+	if (flags.useDragOverlay)
+		ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent, "grabbing");
+	else this.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enabled); });
     this.isDragging = enabled;
 };
 
