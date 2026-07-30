@@ -260,35 +260,28 @@ function downloadSettings() {
 }
 
 function loadFlags() {
+	// const se
+	// or giht no const bruh mybad sorry forgot
+	var settingsElement = document.getElementById("settings");
 	for (var key in flags) {
-		// 1. Skip the internal storage variable completely
 		if (key === "_useTransform") {
 			continue;
 		}
 
-		// 2. Create a wrapper container for this setting row
 		var row = document.createElement("div");
 
-		// 3. Create the checkbox input element
 		var checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
 		checkbox.id = "flag-" + key;
 		
-		// Reading flags[key] safely triggers your standard value OR your custom getter!
 		checkbox.checked = flags[key]; 
 
-		// 4. Attach an event listener (using attachEvent / addEventListener fallback for safety)
 		(function(currentKey, currentCheckbox) {
 			var changeHandler = function() {
-			// Writing to flags[key] updates standard values OR triggers your custom setter!
-			flags[currentKey] = currentCheckbox.checked; 
+				flags[currentKey] = currentCheckbox.checked; 
 			};
 
-			if (currentCheckbox.addEventListener) {
 			currentCheckbox.addEventListener("change", changeHandler, false);
-			} else if (currentCheckbox.attachEvent) { // For old IE compatibility if needed
-			currentCheckbox.attachEvent("onchange", changeHandler);
-			}
 		})(key, checkbox);
 
 		var label = document.createElement("label");
