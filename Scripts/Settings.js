@@ -264,9 +264,7 @@ function loadFlags() {
 	// or giht no const bruh mybad sorry forgot
 	var settingsElement = document.getElementById("settings");
 	for (var key in flags) {
-		if (key === "_useTransform") {
-			continue;
-		}
+		if (key.charAt(0) === "_") continue;
 
 		var row = document.createElement("div");
 
@@ -290,6 +288,6 @@ function loadFlags() {
 
 		row.appendChild(checkbox);
 		row.appendChild(label);
-		container.appendChild(row);
+		settingsElement.appendChild(row);
 	}
 }
