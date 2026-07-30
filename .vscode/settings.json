@@ -22,5 +22,6 @@
     "statusBar.debuggingForeground": "#FFF8F4",
     "statusBar.noFolderBackground": "#9B4207",
     "statusBar.noFolderForeground": "#FFF8F4"
-  }
+  },
+  "git.detectSubmodulesLimit": 20
 }
