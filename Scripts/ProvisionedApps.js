@@ -204,6 +204,11 @@ var applications = [
 		title: "FoxCraft",
 		id: "fenix.foxcraft",
 		src: "https://iemand005.github.io/FenixWeb/FoxCraft/index.html"
+	},
+	{
+		title: "My Web Archive",
+		id: "foxyz.archive",
+		src: "https://iemand005.github.io/Archive-2023/index.html"
 	}
 ]
 

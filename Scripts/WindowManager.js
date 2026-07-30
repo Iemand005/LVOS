@@ -331,6 +331,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 /**
  * @param {boolean} enable
  * @param {(ev:PointerEvent|MouseEvent)=>void} handler
+ * @param {string} [cursor]
  */
 ClickOffset.toggleDragEventHandler = function (enable, handler) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
