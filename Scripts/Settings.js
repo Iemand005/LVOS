@@ -64,19 +64,44 @@ SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.s
 
 /** @param {{[key:string]: boolean}} flags */
 SettingsHandler.prototype.loadFlags = function (flags) {
-	var flagsElement = document.createElement("article");
+	var flagsElement = document.createElement("ul");
 	for (var flagId in flags) {
-		if (!flags.hasOwnProperty(flagId)) continue;
+		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
 		var flag = flags[flagId];
 		/** @type {HTMLElement?} */
 		var settingElement = document.createElement("label");
+
+		var flagValue = flags[flagId];
+
 		switch (typeof flag) {
 			case "boolean":
-				var toggle = document.createElement("input");
-				toggle.type = "checkbox";
-				toggle.checked = flag;
-				settingElement.appendChild(document.createTextNode(flagId));
-				settingElement.appendChild(toggle);
+				 var row = document.createElement("li");
+
+                // Maak de checkbox aan
+                var toggle = document.createElement("input");
+                toggle.type = "checkbox";
+                toggle.id = "flag-" + flagId;
+                toggle.checked = flagValue; // Dit triggert veilig de getter
+
+                // Koppel de change handler via een IIFE om de scope van flagId te fixeren
+                (function(currentKey) {
+                    toggle.addEventListener("change", function() {
+                        flags[currentKey] = toggle.checked; // Dit triggert veilig de setter!
+                    }, false);
+                })(flagId);
+
+                // Maak het label aan en koppel het aan de checkbox via 'htmlFor'
+                var label = document.createElement("label");
+                label.htmlFor = toggle.id;
+                label.appendChild(document.createTextNode(flagId));
+
+                // Voeg de elementen samen in de rij
+                row.appendChild(toggle);
+                row.appendChild(label);
+                
+                // Voeg de rij toe aan de hoofdlijst
+                settingsElement.appendChild(row);
+                break;
 				break;
 		}
 		if (!settingElement) return;
@@ -260,8 +285,6 @@ function downloadSettings() {
 }
 
 function loadFlags() {
-	// const se
-	// or giht no const bruh mybad sorry forgot
 	var settingsElement = document.getElementById("flag-settings");
 	for (var key in flags) {
 		if (key.charAt(0) === "_") continue;
