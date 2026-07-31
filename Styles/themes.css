@@ -47,8 +47,9 @@
 	background-color: transparent !important;
 }
 
-.WINDOWS #dockapplist {
+.windows #dockapplist {
 	width: 100%;
+	background: black;
 }
 
 .windows-11 button {
