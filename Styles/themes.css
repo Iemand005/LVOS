@@ -2,91 +2,91 @@
 /* .window themes */
 
 :root {
-  --bg: white;
-  --fg: black;
+--bg: white;
+--fg: black;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111;
-    --fg: #eee;
-  }
+:root {
+	--bg: #111;
+	--fg: #eee;
+}
 }
 
 .window.rounded-corners {
-    border-radius: 10px !important;
+	border-radius: 10px !important;
 }
 
 .window.rounded-corners > content > article {
-    border-radius: 5px;
+	border-radius: 5px;
 }
 
 .window.sharp-corners {
-    border-radius: 0px !important;
+	border-radius: 0px !important;
 }
 
 .default-theme .window > content > article {
-    border: inherit;
+	border: inherit;
 
 }
 
 .default-theme .window > content > article > iframe {
-    background-color: rgba(0, 0, 0, 0.267);
-    box-shadow: inset 0px 0px 10px black;
+	background-color: rgba(0, 0, 0, 0.267);
+	box-shadow: inset 0px 0px 10px black;
 }
 
 .default-theme .window content {
-    background-color: white;
+	background-color: white;
 }
 
 .mica .window content {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .mica .window article {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .windows-11 button {
-    background-color: rgb(253, 253, 253);
-    border-color: rgb(208, 208, 208);
-    border-bottom-color: rgb(186, 186, 186);
-    border-radius: 4px;
-    border-width: 1px;
+	background-color: rgb(253, 253, 253);
+	border-color: rgb(208, 208, 208);
+	border-bottom-color: rgb(186, 186, 186);
+	border-radius: 4px;
+	border-width: 1px;
 }
 
 .windows-11 .window {
-    color: black;
+	color: black;
 }
 
 .windows-11 .window header button {
-    background: transparent;
+	background: transparent;
 }
 
 .windows-11 .window content,
 .windows-11 .window .content {
-    background-color: rgb(243, 243, 243);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.267);
-    padding: 0;
+	background-color: rgb(243, 243, 243);
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.267);
+	padding: 0;
 }
 
 .windows-11 .window header,
 .windows-11 .window .header {
-    align-content: center;
+	align-content: center;
 }
 
 .windows-11 .window header h1,
 .windows-11 .window .header h1 {
-    margin-left: 10px;
-    font-size: 12px;
-    font-weight: 500;
+	margin-left: 10px;
+	font-size: 12px;
+	font-weight: 500;
 }
 
 .windows-11 .window header section,
 .windows-11 .window .header section {
-    border-radius: 0;
-    background-color: unset;
+	border-radius: 0;
+	background-color: unset;
 }
 
 .windows-11 .window header button,
@@ -95,13 +95,13 @@
 .windows-11 .window .header section,
 .windows-11 .window .header,
 .windows-11 .window header {
-    height: 30px;
-    box-sizing: border-box;
-    padding: 0;
+	height: 30px;
+	box-sizing: border-box;
+	padding: 0;
 }
 
 .windows-11 .window article > * {
-    background-color: rgb(240, 240, 240);
+	background-color: rgb(240, 240, 240);
 }
 
 .windows-95 .window > content
@@ -126,80 +126,84 @@
 }
 
 .modern .window {
-    border-radius: 15px;
+	border-radius: 15px;
+}
+
+.modern .window header {
+	display: flex;
 }
 
 .modern .window content::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: .5px;
-    background: linear-gradient(rgba(255,255,255,0.1), transparent 75%);
-    -webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: .5px;
+	background: linear-gradient(rgba(255,255,255,0.1), transparent 75%);
+	-webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
 }
 
 .modern .window content::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: .5px;
-    background: rgba(255,255,255,0.1);
-    pointer-events: none;
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: .5px;
+	background: rgba(255,255,255,0.1);
+	pointer-events: none;
 }
 
 
 .modern .window content {
-    background: linear-gradient(358deg, #161616, #333232);
-    padding: 5px;
-    border: 0px solid black;
+	background: linear-gradient(358deg, #161616, #333232);
+	padding: 5px;
+	border: 0px solid black;
 }
 
 @keyframes flip {
-  0%     { transform: rotateY(0deg); }
-  50%    { transform: rotateY(90deg); }
-  50.01% { transform: rotateY(271deg); }
-  100%   { transform: rotateY(360deg); }
+0%     { transform: rotateY(0deg); }
+50%    { transform: rotateY(90deg); }
+50.01% { transform: rotateY(271deg); }
+100%   { transform: rotateY(360deg); }
 }
 
 @supports (filter: url("#firefox-glass")) {
 
-  .glass content {
-    /* background: none !important; */
-  }
+.glass content {
+	/* background: none !important; */
+}
 
-  .glass .window > content {
-    backdrop-filter: blur(3px) !important;
-  }
+.glass .window > content {
+	backdrop-filter: blur(3px) !important;
+}
 
-  .glass .backdrop-filter {
-    backdrop-filter: blur(3px) !important;
-    filter: url(#glass) !important;
-  }
+.glass .backdrop-filter {
+	backdrop-filter: blur(3px) !important;
+	filter: url(#glass) !important;
+}
 }
 
 @media (prefers-color-scheme: dark) {
 
-    .windows-11 .window {
-        color: white;
-    }
+	.windows-11 .window {
+		color: white;
+	}
 
-    .windows-11 .window content,
-    button {
-        background-color: rgb(32, 32, 32);
-        border: 1px solid rgba(255, 255, 255, 0.267);
-        backdrop-filter: none;
-    }
+	.windows-11 .window content,
+	button {
+		background-color: rgb(32, 32, 32);
+		border: 1px solid rgba(255, 255, 255, 0.267);
+		backdrop-filter: none;
+	}
 
-    .windows-11 .window article, .windows-11 .window article > * {
-        background-color: rgb(25, 25, 25);
-    }
+	.windows-11 .window article, .windows-11 .window article > * {
+		background-color: rgb(25, 25, 25);
+	}
 
-    /* .glass content {
-    background: none !important;
-  } */
+	/* .glass content {
+	background: none !important;
+} */
 }
