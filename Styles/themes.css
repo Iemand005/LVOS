@@ -182,7 +182,7 @@
 	border: 0px solid black;
 }
 
-.modern button
+.modern button::before
 {
 	content: "";
 	position: absolute;
