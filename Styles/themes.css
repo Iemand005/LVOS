@@ -176,13 +176,14 @@
 	border: 0px solid black;
 }
 
-/* .modern button {
+.modern button {
 	background: linear-gradient(358deg, #161616, #333232);
 	padding: 5px;
 	border: 0px solid black;
+	position: relative;
 }
 
-.modern button::before
+.modern button::after
 {
 	content: "";
 	position: absolute;
@@ -194,7 +195,7 @@
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
 	pointer-events: none;
-} */
+}
 
 @keyframes flip {
 0%     { transform: rotateY(0deg); }
