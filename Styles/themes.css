@@ -135,7 +135,11 @@
 }
 
 .modern .window header button {
-	
+	background: none;
+}
+
+.modern .window header button::after {
+	display: none;
 }
 
 .modern .window header h1 {
