@@ -15,6 +15,14 @@ var onLoad = function () {
 		applist.addEventListener("submit", eventPrevent, false);
 	}
 
+    var appButtons = document.getElementById("dockapplist");
+
+    if (appButtons) {
+        var startButton = document.createElement("button").innerHTML = "Start";
+        
+        appButtons.appendChild(startButton);
+    }
+
 	document.body.ondragover = window.ondragover = function(ev) { 
 		ev.preventDefault(); 
 		ev.stopPropagation();
