@@ -51,6 +51,14 @@
 	width: 100%;
     background: #0d0d0d57;
     backdrop-filter: blur(10px);
+
+	transform: none;
+	-webkit-transform: none;
+	left: 0;
+}
+
+.windows #dock {
+	display: none;
 }
 
 .windows-11 button {
