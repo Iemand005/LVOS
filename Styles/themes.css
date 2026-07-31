@@ -144,11 +144,11 @@
 	position: relative;
 }
 
-.modern .window content::before
+.modern .window content::before,
 .modern button
 {
 	content: "";
-	position: absolute;
+	/* position: absolute; */
 	inset: 0;
 	border-radius: inherit;
 	padding: .5px;
@@ -160,7 +160,6 @@
 }
 
 .modern .window content::after
-.modern button
 {
 	content: "";
 	position: absolute;
@@ -172,7 +171,8 @@
 }
 
 
-.modern .window content {
+.modern .window content,
+.modern button {
 	background: linear-gradient(358deg, #161616, #333232);
 	padding: 5px;
 	border: 0px solid black;
