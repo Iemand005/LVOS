@@ -482,18 +482,16 @@ aside#charms form {
 	/* display: none; */
 }
 
-.blur #launchpad {
-	
-}
-
 #launchpad.open {
 	display: block;
 
 	opacity: 1;
 }
 
-#launchpad.blur {
+#launchpad.blur,
+.blur #launchpad {
 	backdrop-filter: blur(1rem);
+	background-color: transparent;
 }
 
 @media (pointer: none), (pointer: coarse) {
