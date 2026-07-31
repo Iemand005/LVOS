@@ -7,8 +7,11 @@ function Launchpad() {
 /** @param {HTMLElement} launchpad */
 Launchpad.prototype.init = function(launchpad) {
 	var closeButton = document.createElement("button");
+	var self = this;
+	closeButton.onclick = function() { self.close(); };
 	closeButton.textContent = "Close";
 	launchpad.appendChild(closeButton);
+
 	launchpad.appendChild(this.list);
 	this.launchpad = launchpad;
 };
