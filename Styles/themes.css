@@ -182,6 +182,8 @@
 	padding: 5px;
 	border: 0px solid black;
 	position: relative;
+	border-radius: 100px;
+	padding: 5px 10px;
 }
 
 @keyframes flip {
