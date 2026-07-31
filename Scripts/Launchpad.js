@@ -6,8 +6,11 @@ function Launchpad() {
 }
 /** @param {HTMLElement} launchpad */
 Launchpad.prototype.init = function(launchpad) {
+	var closeButton = document.createElement("button");
+	closeButton.textContent = "Close";
+	launchpad.appendChild(closeButton);
+	launchpad.appendChild(this.list);
 	this.launchpad = launchpad;
-	this.launchpad.appendChild(this.list);
 };
 
 Launchpad.prototype.open = function() {
