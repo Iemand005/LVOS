@@ -144,7 +144,9 @@
 	position: relative;
 }
 
-.modern .window content::before {
+.modern .window content::before
+.modern button
+{
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -157,7 +159,9 @@
 	pointer-events: none;
 }
 
-.modern .window content::after {
+.modern .window content::after
+.modern button
+{
 	content: "";
 	position: absolute;
 	inset: 0;
