@@ -135,14 +135,8 @@
 }
 
 .modern .window header h1 {
-	    align-content
-Aligns a flex container's lines within the flex container when there is extra space in the cross-axis, similar to how 'justify-content' aligns individual items within the main-axis.
-
-Widely available across major browsers (Baseline since March 2018)
-Learn more
-
-Don't show
-: center;
+	align-content: center;
+	margin-left: 8px;
 }
 
 .modern .window header > section {
