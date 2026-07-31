@@ -14,7 +14,7 @@ body > header, body > footer, header.hidden {
     display: none;
 }
 
-html, body, main, main > section, main > section > section {
+main, main > section, main > section > section {
     overflow: hidden;
 }
 
@@ -43,7 +43,6 @@ body {
 main {
     height: 100%;
     width: 100%;
-    overflow: hidden;
     pointer-events: none;
     perspective: 1000px;
 }
