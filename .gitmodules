@@ -34,3 +34,6 @@
 [submodule "Applications/Tappy"]
 	path = Applications/Tappy
 	url = https://github.com/Iemand005/Tappy
+[submodule "Applications/AIOneWeb"]
+	path = Applications/AIOneWeb
+	url = https://github.com/Iemand005/AIOneWeb
