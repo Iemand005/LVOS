@@ -18,8 +18,12 @@ var onLoad = function () {
     var appButtons = document.getElementById("dockapplist");
 
     if (appButtons) {
-        var startButton = document.createElement("button").innerHTML = "Start";
-        
+        var startButton = document.createElement("button")
+        startButton.innerHTML = "Start";
+        startButton.addEventListener("click", function () {
+            
+        }, false);
+
         appButtons.appendChild(startButton);
     }
 
