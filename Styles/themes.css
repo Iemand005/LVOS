@@ -126,6 +126,23 @@
 }
 
 .modern .window {
+    border-radius: 1rem;
+}
+
+.modern .window content:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: .5px;
+    background: linear-gradient(rgba(255,255,255,0.1), transparent 75%);
+    -webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.modern .window content {
     background: linear-gradient(358deg, #161616, #333232);
 }
 
