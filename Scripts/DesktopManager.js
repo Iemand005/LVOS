@@ -21,7 +21,7 @@ var onLoad = function () {
         var startButton = document.createElement("button")
         startButton.innerHTML = "Start";
         startButton.addEventListener("click", function () {
-            
+            launchpad.open();
         }, false);
 
         appButtons.appendChild(startButton);

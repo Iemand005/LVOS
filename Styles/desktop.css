@@ -482,6 +482,10 @@ aside#charms form {
 	/* display: none; */
 }
 
+.blur #launchpad {
+	
+}
+
 #launchpad.open {
 	display: block;
 
