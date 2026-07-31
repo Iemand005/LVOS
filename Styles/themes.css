@@ -134,6 +134,10 @@
 	padding: 0;
 }
 
+.modern .window header button {
+	
+}
+
 .modern .window header h1 {
 	align-content: center;
 	margin-left: 8px;
