@@ -1,465 +1,466 @@
-       /*/*/
-      /*/*
-     /* *
-     * *
-    * *     Desktop designs by Lasse (c) 2026
-    * *     LVOS - 12/1/2024
-     * *
-       * *
-         * *
-          * *
-          * *
-         * *
-        * *
-       * *
-      \**/
+			/*/*/
+			/*/*
+		/* *
+		* *
+		* *     Desktop designs by Lasse (c) 2026
+		* *     LVOS - 12/1/2024
+		* *
+			* *
+				* *
+					* *
+					* *
+				* *
+				* *
+			* *
+			\**/
 
 html,
 body {
-  margin: 0;
-  touch-action: none;
-  overscroll-behavior: none;
-  -webkit-user-drop: element;
+	margin: 0;
+	touch-action: none;
+	overscroll-behavior: none;
+	-webkit-user-drop: element;
 }
 
 #dock {
-  position: absolute;
-  height: 50px;
-  bottom: 0;
-  width: 300px;
-  z-index: 10000 !important;
-  overflow: hidden;
-  transform-origin: top;
-  -webkit-transform-origin: top;
-  border-radius: 5px;
-  left: 50%; /* This method of centering the absolute element works for Internet Explorer 11 */
-  transform: rotateX(45deg) translateX(-50%);
-  -webkit-transform: rotateX(45deg) translateX(-50%);
-  background-color: lightgray;
-  perspective: 300px;
-  box-shadow: 0 0 10px black;
-  background: linear-gradient(0deg, #b2b2b2, #737373);
+	position: absolute;
+	height: 50px;
+	bottom: 0;
+	width: 300px;
+	z-index: 10000 !important;
+	overflow: hidden;
+	transform-origin: top;
+	-webkit-transform-origin: top;
+	border-radius: 5px;
+	left: 50%; /* This method of centering the absolute element works for Internet Explorer 11 */
+	transform: rotateX(45deg) translateX(-50%);
+	-webkit-transform: rotateX(45deg) translateX(-50%);
+	background-color: lightgray;
+	perspective: 300px;
+	box-shadow: 0 0 10px black;
+	background: linear-gradient(0deg, #b2b2b2, #737373);
 }
 
 #reflection {
-  transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
-  transform-origin: top;
-  -webkit-transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
-  -webkit-transform-origin: top;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0.4;
+	transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
+	transform-origin: top;
+	-webkit-transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
+	-webkit-transform-origin: top;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0.4;
 }
 
 body.blur #reflection {
-  filter: blur(2px);
+	filter: blur(2px);
 }
 
 body:not(.blur) .window > article {
-  backdrop-filter: none;
+	backdrop-filter: none;
 }
 
 #reflection > * {
-  opacity: 0.3;
+	opacity: 0.3;
 }
 
 #desktop {
-  bottom: 0;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  /* z-index: -1000; */
-  pointer-events: none;
-  overflow: visible;
-  transform-style: preserve-3d;
-  /* transition: all 1000ms ease-in-out;
-  transition: all 600ms ease-out; */
-  -webkit-user-drop: element;
+	bottom: 0;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	/* z-index: -1000; */
+	pointer-events: none;
+	overflow: visible;
+	transform-style: preserve-3d;
+	/* transition: all 1000ms ease-in-out;
+	transition: all 600ms ease-out; */
+	-webkit-user-drop: element;
 }
 
 /*section#desktop[flipped] article#metrobody{
-    pointer-events: none !important;
+		pointer-events: none !important;
 }*/
 
 #desktop img {
-  -o-object-fit: cover;
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
+	-o-object-fit: cover;
+	object-fit: cover;
+	height: 100%;
+	width: 100%;
 }
 
 /* #wallpaper {
-  background-color: orange;
-  position: absolute;
-  display: none;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+	background-color: orange;
+	position: absolute;
+	display: none;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 } */
 
 #windows,
 #metro {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	top: 0;
 }
 
 #windows {
-  /* overflow: hidden; */
-  perspective: 900px;
-  justify-content: center;
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  justify-content: space-evenly;
-  pointer-events: none;
-  overflow: hidden !important;
-  /*Kenia*/
+	/* overflow: hidden; */
+	perspective: 900px;
+	justify-content: center;
+	display: flex;
+	flex-wrap: wrap;
+	overflow-y: scroll;
+	justify-content: space-evenly;
+	pointer-events: none;
+	overflow: hidden !important;
+	/*Kenia*/
 }
 
 #windows > section,
 #windows > .section {
-  z-index: 1;
+	z-index: 1;
 }
 
 
 #wallpaper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-  /* z-index: -10000; */
-  background-color: red;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  user-select: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	top: 0;
+	/* z-index: -10000; */
+	background-color: red;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 #wallpaper.legacy-wallpaper > img {
-  display: block;
-  position: absolute;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+	display: block;
+	position: absolute;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 .mica-backdrop.legacy-wallpaper-image,
 .legacy-wallpaper-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 #wallpaper > * {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
 }
 
 #wallpaper,
 .backdrop-clip {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 #wallpaper > img,
 .backdrop-clip img {
-  object-fit: cover;
+	object-fit: cover;
 }
 
 article#metrobody {
-  pointer-events: none !important;
+	pointer-events: none !important;
 }
 
 section#desktop[flipped] article#metrobody {
-  pointer-events: all !important;
+	pointer-events: all !important;
 }
 
 #metro {
-  height: 100%;
-  width: 100%;
-  background: white;
-  display: flex;
-  /* align-content: center; */
-  justify-content: center;
-  align-items: center;
-  display: flex;
+	height: 100%;
+	width: 100%;
+	background: white;
+	display: flex;
+	/* align-content: center; */
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }
 
 #metro > * {
-  height: 100%;
-  width: 100%;
+	height: 100%;
+	width: 100%;
 }
 
 #metro > article {
-  pointer-events: none;
+	pointer-events: none;
 }
 
 #windows,
 #metro {
-  transition: opacity 50ms ease-out 200ms;
+	transition: opacity 50ms ease-out 200ms;
 }
 
 #desktop[flipped] > #metro {
-  animation: forwards 1s ease-in flip;
+	animation: forwards 1s ease-in flip;
 }
 
 #desktop:not([flipped]) #metroapplist {
-  display: none;
+	display: none;
 }
 
 #desktop[flipped] > #windows {
-  animation: forwards 1s ease-in flip;
+	animation: forwards 1s ease-in flip;
 }
 
 #desktop[flipped],
 #metro {
-  transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 
 #desktop[flipped] > #windows {
-  translate: 0 0 1px;
-  opacity: 0;
+	translate: 0 0 1px;
+	opacity: 0;
 }
 
 #desktop[flipped] > #metro {
-  opacity: 1;
+	opacity: 1;
 }
 
 #desktop:not([flipped]) > #windows {
-  opacity: 1;
+	opacity: 1;
 }
 
 #desktop:not([flipped]) > #metro {
-  translate: 0 0 -1px;
-  opacity: 0;
+	translate: 0 0 -1px;
+	opacity: 0;
 }
 
 aside#charms {
-  animation: none;
-  position: fixed;
-  /* right: 0; */
-  top: 0;
-  right: -300px;
-  /* transition: all 1s ease-in-out; */
-  /* transition: all 400ms cubic-bezier(0.36, 0.15, 0.22, 0.95); */
-  /* transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1); */
-  /* display: none; */
-  animation: charmsclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
-  pointer-events: all;
-  background-color: green;
-  /* /    opacity: 1; */
-  width: 300px;
-  height: 100%;
-  padding: 0 21px;
-  z-index: 10000;
-  box-sizing: border-box;
-  user-select: none;
+	animation: none;
+	position: fixed;
+	/* right: 0; */
+	top: 0;
+	right: -300px;
+	/* transition: all 1s ease-in-out; */
+	/* transition: all 400ms cubic-bezier(0.36, 0.15, 0.22, 0.95); */
+	/* transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1); */
+	/* display: none; */
+	animation: charmsclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
+	pointer-events: all;
+	background-color: green;
+	/* /    opacity: 1; */
+	width: 300px;
+	height: 100%;
+	padding: 0 21px;
+	z-index: 10000;
+	box-sizing: border-box;
+	user-select: none;
 }
 
 aside#charms.open {
-  animation: opensesame 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
+	animation: opensesame 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards;
 }
 
 aside#metroapplist {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 70px;
-  position: fixed;
-  z-index: 100000;
-  top: 0;
-  left: 0;
-  background: linear-gradient(90deg, #000000b8 70px, transparent);
-  background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
-  color: white;
-  padding-right: 19px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 70px;
-  /* display: table; */
-  position: fixed;
-  z-index: 100000;
-  top: 0;
-  left: 0;
-  background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
-  color: white;
-  padding-right: 19px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 109px;
-  /* display: table; */
-  position: fixed;
-  z-index: 100000;
-  top: 0;
-  left: 0;
-  background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
-  color: white;
-  padding-right: 19px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	position: fixed;
+	z-index: 100000;
+	top: 0;
+	left: 0;
+	background: linear-gradient(90deg, #000000b8 70px, transparent);
+	background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+	color: white;
+	padding-right: 19px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	/* display: table; */
+	position: fixed;
+	z-index: 100000;
+	top: 0;
+	left: 0;
+	background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+	color: white;
+	padding-right: 19px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 109px;
+	/* display: table; */
+	position: fixed;
+	z-index: 100000;
+	top: 0;
+	left: 0;
+	background: linear-gradient(90deg, #000000c9, #ccc1c1b8 70px, transparent);
+	color: white;
+	padding-right: 19px;
 }
 
 #browserform {
-  height: 23px;
+	height: 23px;
 }
 
 aside#metroapplist.bottom {
-  bottom: 0;
-  height: 76px;
-  top: unset;
-  width: 100%;
-  background: linear-gradient(0, #000000c9, #ccc1c1b8 70%, transparent);
-  flex-direction: row;
-  flex-wrap: wrap;
-  bottom: 0;
-  height: 43px;
-  top: unset;
-  width: 100%;
-  background: linear-gradient(0, #000000c9, #00000087 70%, transparent);
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-end;
-  padding: 15px 0;
+	bottom: 0;
+	height: 76px;
+	top: unset;
+	width: 100%;
+	background: linear-gradient(0, #000000c9, #ccc1c1b8 70%, transparent);
+	flex-direction: row;
+	flex-wrap: wrap;
+	bottom: 0;
+	height: 43px;
+	top: unset;
+	width: 100%;
+	background: linear-gradient(0, #000000c9, #00000087 70%, transparent);
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: flex-end;
+	padding: 15px 0;
 }
 
 aside#metroapplist > button {
-  color: white;
+	color: white;
 
-  border-color: white;
-  color: black;
-  border-color: black;
-  background-color: #ffffffb0;
+	border-color: white;
+	color: black;
+	border-color: black;
+	background-color: #ffffffb0;
 }
 
 #overlay {
-  transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1);
-  transition: all 3621ms cubic-bezier(0.8, -0.01, 1, 1);
-  transition: all 3621ms cubic-bezier(0, 0, 0.13, 0.97);
-  opacity: 0;
-  background: black;
-  pointer-events: none;
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  /* animation: overlayclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
+	transition: all 456ms cubic-bezier(0.53, 0.01, 0.27, 1);
+	transition: all 3621ms cubic-bezier(0.8, -0.01, 1, 1);
+	transition: all 3621ms cubic-bezier(0, 0, 0.13, 0.97);
+	opacity: 0;
+	background: black;
+	pointer-events: none;
+	z-index: 10000;
+	width: 100%;
+	height: 100%;
+	/* animation: overlayclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
 }
 
 #metro, #overlay {
-  display: none;
+	display: none;
 
 }
 
 #overlay.open {
-  transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
-  /* ll 1163ms */
-  transition: all 1163ms cubic-bezier(0, 0, 0.19, 0.86);
-  pointer-events: all;
-  z-index: 1;
-  opacity: 1;
-  /* animation: overlayopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
+	transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
+	/* ll 1163ms */
+	transition: all 1163ms cubic-bezier(0, 0, 0.19, 0.86);
+	pointer-events: all;
+	z-index: 1;
+	opacity: 1;
+	/* animation: overlayopen 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
 }
 #overlay > * {
-  transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
-  height: 100%;
-  opacity: 0;
+	transition: all 1163ms cubic-bezier(0.8, -0.01, 1, 1);
+	height: 100%;
+	opacity: 0;
 }
 #overlay.shown > * {
-  opacity: 1;
+	opacity: 1;
 }
 
 #dockapplist {
-  /* ToDo: Implement moving apps in and out the dock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.) */
-  position: absolute;
-  height: 50px;
-  bottom: 0;
-  width: 300px;
-  z-index: 100000 !important;
-  display: flex;
-  /*align-content: center;*/
-  /*align-items: center;*/
-  justify-content: center;
-  position: absolute;
-  pointer-events: all;
-  height: 50px;
-  bottom: 0;
-  width: 300px;
-  z-index: 10000;
-  overflow: hidden;
-  /*transform-origin: top;*/
-  /*border-radius: 5px;*/
-  left: 50%;
-  /*transform: rotateX(45deg) translateX(-50%);*/
-  transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  /*background-color: lightgray;*/
-  /*perspective: 300px;*/
-  /*box-shadow: 0 0 10px black;*/
-  /*background: linear-gradient(0deg, #b2b2b2, #737373);*/
+	/* ToDo: Implement moving apps in and out the dock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.) */
+	position: absolute;
+	height: 50px;
+	bottom: 0;
+	width: 300px;
+	z-index: 100000 !important;
+	display: flex;
+	/*align-content: center;*/
+	/*align-items: center;*/
+	justify-content: center;
+	position: absolute;
+	pointer-events: all;
+	height: 50px;
+	bottom: 0;
+	width: 300px;
+	z-index: 10000;
+	overflow: hidden;
+	/*transform-origin: top;*/
+	/*border-radius: 5px;*/
+	left: 50%;
+	/*transform: rotateX(45deg) translateX(-50%);*/
+	transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	/*background-color: lightgray;*/
+	/*perspective: 300px;*/
+	/*box-shadow: 0 0 10px black;*/
+	/*background: linear-gradient(0deg, #b2b2b2, #737373);*/
 }
 
 aside#charms form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  height: fit-content;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-evenly;
+	height: fit-content;
 }
 
 #applist {
-  width: 100%;
+	width: 100%;
+	position: absolute;
 }
 
 .transparent #wallpaper {
-  display: none;
+	display: none;
 }
 
 .transparent {
-  background: transparent;
+	background: transparent;
 }
 
 .folder-content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: all;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: all;
 }
 
 .selector {
-  position: absolute;
-  border: 1px dashed rgb(0, 89, 255);
-  background-color: #007cff30;
+	position: absolute;
+	border: 1px dashed rgb(0, 89, 255);
+	background-color: #007cff30;
 }
 
 .drag-overlay {
-  display: block;
-  pointer-events: all;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.0);
-  z-index: 1000;
+	display: block;
+	pointer-events: all;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.0);
+	z-index: 1000;
 }
 
 #visualizer {
@@ -468,111 +469,111 @@ aside#charms form {
 }
 
 #launchpad {
-  position: absolute;
-  width: 100%;
+	position: absolute;
+	width: 100%;
 	height: 100%;
 
-  background-color: orange;
+	background-color: orange;
 
-  opacity: 0;
+	opacity: 0;
 
-  transition: all 1s;
+	transition: all 1s;
 
-  /* display: none; */
+	/* display: none; */
 }
 
 #launchpad.open {
-  display: block;
+	display: block;
 
-  opacity: 1;
+	opacity: 1;
 }
 
 #launchpad.blur {
-  backdrop-filter: blur(1rem);
+	backdrop-filter: blur(1rem);
 }
 
 @media (pointer: none), (pointer: coarse) {
 }
 
 /* @media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
-  #desktop {
-    transform: rotateY(180deg) !important;
-  }
+	#desktop {
+		transform: rotateY(180deg) !important;
+	}
 
-  #windows {
-    translate: 0 0 1px;
-    opacity: 0 !important;
-  }
+	#windows {
+		translate: 0 0 1px;
+		opacity: 0 !important;
+	}
 
-  #metro {
-    translate: none !important;
-    opacity: 1 !important;
-  }
+	#metro {
+		translate: none !important;
+		opacity: 1 !important;
+	}
 } */
 
 @keyframes opensesame {
-  from {
-    right: -300px;
-  }
-  to {
-    right: 0px;
-  }
+	from {
+		right: -300px;
+	}
+	to {
+		right: 0px;
+	}
 }
 
 @keyframes charmsclose {
-  from {
-    right: 0px;
-  }
-  to {
-    display: none;
-    right: -300px;
-  }
+	from {
+		right: 0px;
+	}
+	to {
+		display: none;
+		right: -300px;
+	}
 }
 
 @keyframes overlayopen {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 1;
+	}
 }
 @keyframes overlayclose {
-  from {
-    right: 0px;
-  }
-  to {
-    display: none;
-    right: -300px;
-  }
+	from {
+		right: 0px;
+	}
+	to {
+		display: none;
+		right: -300px;
+	}
 }
 
 @keyframes metroflip {
-  from {
-    transform: rotateY(180deg);
-    opacity: 1;
-  }
-  to {
-    translate: 0 0 -1px;
-    opacity: 0;
-  }
+	from {
+		transform: rotateY(180deg);
+		opacity: 1;
+	}
+	to {
+		translate: 0 0 -1px;
+		opacity: 0;
+	}
 }
 
 @keyframes flop {
-  to {
-    transform: rotateY(180deg);
-    opacity: 1;
-  }
-  from {
-    translate: 0 0 1px;
-    opacity: 0;
-  }
+	to {
+		transform: rotateY(180deg);
+		opacity: 1;
+	}
+	from {
+		translate: 0 0 1px;
+		opacity: 0;
+	}
 }
 
-          /*******\
-      /***         ***\
-   /**                 **\
- /*                       *\
+					/*******\
+			/***         ***\
+	/**                 **\
+/*                       *\
 /*                         *\
 *   Lasse Lauwerys © 2024   *
 \*                         */
