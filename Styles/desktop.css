@@ -477,7 +477,7 @@ aside#charms form {
 
 	opacity: 0;
 
-	transition: all 240ms ease-in-out;
+	transition: all 240ms ease-out;
 
 	/* display: none; */
 }
