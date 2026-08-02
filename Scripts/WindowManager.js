@@ -641,6 +641,22 @@ Dialog.prototype.initWithObject = function(object) {
     // this.useTransform = this.useTransform;
     // this.useScale = this.useScale;
     this.update();
+
+    if (!isElement(object)) {
+        if (typeof object.centerX == "number" || typeof object.centerY == "number") {
+            this.moveToCenter(
+                typeof object.centerX == "number" ? object.centerX : window.innerWidth / 2,
+                typeof object.centerY == "number" ? object.centerY : window.innerHeight / 2
+            );
+        } else if (typeof object.x == "number" || typeof object.y == "number") {
+            this.move(
+                typeof object.x == "number" ? object.x : this.x,
+                typeof object.y == "number" ? object.y : this.y
+            );
+        } else {
+            this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
+        }
+    }
 }
 
 /**
@@ -1375,6 +1391,17 @@ Dialog.prototype.move = function (x, y) {
 Dialog.prototype.moveBy = function (deltaX, deltaY) {
 	this.move(this.x + deltaX, this.y + deltaY);
 };
+
+/**
+ * Move the dialog so its center point lands at the provided coordinates.
+ * @param {number} centerX
+ * @param {number} centerY
+ */
+Dialog.prototype.moveToCenter = function(centerX, centerY) {
+    if (typeof centerX != "number" || typeof centerY != "number") return;
+    this.move(centerX - this.width / 2, centerY - this.height / 2);
+};
+
 /** @param {number} z */
 Dialog.prototype.setZ = function(z) {
 	this._z = z;
