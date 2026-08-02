@@ -860,6 +860,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
+        if (top < 0) top = 0;
         var newHeight = this.y - top + this.height;
         if (newHeight > this.maxHeight) {
             this.y = this.bottomFromTop - this.maxHeight;
