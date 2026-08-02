@@ -2032,8 +2032,15 @@ function enableDialogDrag() {
 
 /** @param {number} [newZ]  */
 function updateTopZ(newZ) {
-    if (newZ) if (newZ > topZ) topZ = newZ;
-    else windowManager.forEachWindow(function(dialog) { if (dialog.z > topZ) topZ = dialog.z; });
+    if (typeof newZ == "number") {
+        topZ = Math.max(topZ, newZ + 1);
+        return;
+    }
+    windowManager.forEachWindow(function(dialog) {
+        if (dialog && typeof dialog.z == "number" && dialog.z >= topZ) {
+            topZ = dialog.z + 1;
+        }
+    });
 }
 
 /** @param {*} properties */
