@@ -135,11 +135,13 @@ function setTheme(theme) {
 	document.body.classList.add(theme);
 }
 
+// function
+
 function DesktopManager() {
 
 }
 
-
+// DesktopManager.hasTheme
 
 
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
