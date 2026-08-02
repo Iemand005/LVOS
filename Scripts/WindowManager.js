@@ -137,7 +137,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
     if (!this._windowStates && localStorage)
       try {
         var stringyy = localStorage.getItem("windowState");
-        if (!stringyy) return null;
+        if (stringyy == null) return null;
         /** @type {DesktopState} */
         var windowStates = JSON.parse(stringyy);
         this._windowStates = windowStates;
@@ -199,9 +199,17 @@ WindowManager.prototype.saveState = function() {
 /** @param {Dialog} [dialog] */
 WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
 	console.log("Loading window state.");
-	if (canSave) try {
-		if (!localStorage || !localStorage.windowState) return;
+	if (!canSave) {
+		console.log("Storage access is disabled for this session!");
+		return;
+	}
+	try {
+		if (!localStorage) return;
 		var windowStates = this.windowStates;
+		if (!windowStates) {
+			loaded = true;
+			return;
+		}
         loaded = true;
 		if (dialog && dialog.id) dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
 		else {
@@ -215,7 +223,7 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 		}
 	} catch (exception) {
 		handleStorageException(exception);
-	} else console.log("Storage access is disabled for this session!");
+	}
 };
 
 
