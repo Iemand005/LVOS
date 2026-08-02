@@ -446,7 +446,7 @@ function Dialog(object, create) {
 }
 
 Dialog.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
-Dialog.getWindowBounds = function() {
+WindowManager = function() {
     return {
         top: Dialog.windowBoundsInset.top,
         left: Dialog.windowBoundsInset.left,
@@ -870,7 +870,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
-        var bounds = Dialog.getWindowBounds();
+        var bounds = WindowManager();
         if (top < bounds.top) top = bounds.top;
         var newHeight = this.y - top + this.height;
         if (newHeight > this.maxHeight) {
@@ -889,7 +889,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
-        var bounds = Dialog.getWindowBounds();
+        var bounds = WindowManager();
         if (left < bounds.left) left = bounds.left;
         var newWidth  = this.x - left + this.width;
         if (newWidth > this.maxWidth) {
@@ -914,7 +914,7 @@ Object.defineProperty(Dialog.prototype, "right", {
     get: function() { return window.innerWidth - this.rightFromLeft; },
     set: function(right) {
         if (typeof right == "number") {
-            var bounds = Dialog.getWindowBounds();
+            var bounds = WindowManager();
             var minRight = window.innerWidth - bounds.right;
             if (right < minRight) right = minRight;
             this.width = (window.innerWidth - right) - this.x;
@@ -931,7 +931,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
     get: function() { return window.innerHeight - this.bottomFromTop; },
     set: function(bottom) {
         if (typeof bottom == "number") {
-            var bounds = Dialog.getWindowBounds();
+            var bounds = WindowManager();
             var minBottom = window.innerHeight - bounds.bottom;
             if (bottom < minBottom) bottom = minBottom;
             this.height = (window.innerHeight - bottom) - this.y;
