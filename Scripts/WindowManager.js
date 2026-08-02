@@ -883,15 +883,16 @@ Object.defineProperty(Dialog.prototype, "top", {
         if (top > maxTop) top = maxTop;
         var newHeight = bottom - top;
         if (newHeight > this.maxHeight) {
-            this.y = bottom - this.maxHeight;
-            this.height = this.maxHeight;
+            top = bottom - this.maxHeight;
+            newHeight = this.maxHeight;
         } else if (newHeight < this.minHeight) {
-            this.y = bottom - this.minHeight;
-            this.height = this.minHeight;
-        } else {
-            this.y = top;
-            this.height = newHeight;
+            top = bottom - this.minHeight;
+            newHeight = this.minHeight;
         }
+        this.height = newHeight;
+        this._y = top / window.innerHeight;
+        if (this.useTransform) this.updateTranslation();
+        else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
     }
 });
 
@@ -906,15 +907,16 @@ Object.defineProperty(Dialog.prototype, "left", {
         if (left > maxLeft) left = maxLeft;
         var newWidth  = right - left;
         if (newWidth > this.maxWidth) {
-            this.x = right - this.maxWidth;
-            this.width = this.maxWidth;
+            left = right - this.maxWidth;
+            newWidth = this.maxWidth;
         } else if (newWidth < this.minWidth) {
-            this.x = right - this.minWidth;
-            this.width = this.minWidth;
-        } else {
-            this.x = left;
-            this.width = newWidth;
+            left = right - this.minWidth;
+            newWidth = this.minWidth;
         }
+        this.width = newWidth;
+        this._x = left / window.innerWidth;
+        if (this.useTransform) this.updateTranslation();
+        else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
     }
 });
 
