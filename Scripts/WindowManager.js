@@ -211,42 +211,15 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 			return;
 		}
         loaded = true;
-		if (dialog && dialog.id) {
-			dialog.loadState(windowStates[dialog.id]);
-			updateTopZ(dialog.z);
-		} else {
+		if (dialog && dialog.id) dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
+		else {
 			var fails = [];
 			for (var id in windowStates) try {
-				if (windowManager.windows[id] && windowStates[id]) {
-					if (typeof windowStates[id].z == "number") {
-						topZ = Math.max(topZ, windowStates[id].z + 1);
-					}
+				if (windowManager.windows[id] && windowStates[id])
 					windowManager.windows[id].loadState(windowStates[id]);
-				}
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
 			updateTopZ();
-			var restoredDialogs = [];
-			windowManager.forEachWindow(function (restoredDialog) {
-				if (restoredDialog && typeof restoredDialog.z == "number" && restoredDialog.target) {
-					restoredDialog.setZ(restoredDialog.z);
-					restoredDialog.target.style.zIndex = String(restoredDialog.z);
-					restoredDialogs.push(restoredDialog);
-				}
-			});
-			var container = bodyCrawler.getDialogsContainer();
-			if (container) {
-				restoredDialogs.sort(function (a, b) {
-					var az = typeof a.z == "number" ? a.z : 0;
-					var bz = typeof b.z == "number" ? b.z : 0;
-					return az - bz;
-				});
-				restoredDialogs.forEach(function (restoredDialog) {
-					if (restoredDialog.target && restoredDialog.target.parentElement === container) {
-						container.appendChild(restoredDialog.target);
-					}
-				});
-			}
 		}
 	} catch (exception) {
 		handleStorageException(exception);
@@ -439,7 +412,6 @@ function Dialog(object, create) {
 	this._scaleY = 0;
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
-    this._restoreZ = false;
     
     if (!object) return;
     if (!create) create = false;
@@ -1141,15 +1113,7 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function() {
 	this.focus();
-	if (this._restoreZ) {
-		this.setZ(this.z);
-		this._restoreZ = false;
-	} else if (typeof this.z != "number" || this.z < topZ) {
-		this.setZ(topZ++);
-	} else {
-		this.setZ(this.z);
-	}
-	return this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
+	return this.setZ(topZ++), this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
@@ -1158,12 +1122,6 @@ Dialog.prototype.toggleTitlebar = function (force) {
 };
 Dialog.prototype.open = function () {
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
-};
-Dialog.prototype.restoreOpen = function () {
-	if (!this.target) return false;
-	this.target.classList.add("open");
-	this.target.classList.remove("animating");
-	return true;
 };
 Dialog.prototype.close = function () {
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
@@ -2078,13 +2036,11 @@ function updateTopZ(newZ) {
         topZ = Math.max(topZ, newZ + 1);
         return;
     }
-    var highestZ = topZ;
     windowManager.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z == "number" && dialog.z >= highestZ) {
-            highestZ = dialog.z + 1;
+        if (dialog && typeof dialog.z == "number" && dialog.z >= topZ) {
+            topZ = dialog.z + 1;
         }
     });
-    topZ = highestZ;
 }
 
 /** @param {*} properties */
@@ -2165,14 +2121,11 @@ Dialog.prototype.getState = function() {
 
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
+	if (state.open) this.launch();
 	this.title = state.title;
-	this.move(state.x, state.y);
+	this.move(state.x, state.y); 
+	this.setZ(state.z);
 	this.resize(state.width, state.height);
-	if (typeof state.z == "number") {
-		this._restoreZ = true;
-		this.setZ(state.z);
-	}
-	if (state.open) this.restoreOpen();
 	console.log(state.title, "window loaded width: ", state.width, state.height)
 	this.toggleMaximized(state.maximized);
 };
