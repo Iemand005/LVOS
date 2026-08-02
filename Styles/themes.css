@@ -16,6 +16,16 @@
 }
 }
 
+.window {
+	background-color: var(--bg);
+	color: var(--fg);
+	border-radius: var(--window-radius);
+}
+
+.window > content > article {
+	border-radius: calc(var(--window-radius) - var(--window-border-width));
+}
+
 .window.rounded-corners {
 	border-radius: var(--window-radius) !important;
 }
