@@ -447,11 +447,12 @@ function Dialog(object, create) {
 
 WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
 WindowManager.getWindowBounds = function() {
+    var inset = WindowManager.windowBoundsInset;
     return {
-        top: WindowManager.windowBoundsInset.top,
-        left: WindowManager.windowBoundsInset.left,
-        right: window.innerWidth - WindowManager.windowBoundsInset.right,
-        bottom: window.innerHeight - WindowManager.windowBoundsInset.bottom
+        top: inset.top >= 0 ? inset.top : -Infinity,
+        left: inset.left >= 0 ? inset.left : -Infinity,
+        right: inset.right >= 0 ? window.innerWidth - inset.right : Infinity,
+        bottom: inset.bottom >= 0 ? window.innerHeight - inset.bottom : Infinity
     };
 };
 /**
@@ -915,8 +916,7 @@ Object.defineProperty(Dialog.prototype, "right", {
     set: function(right) {
         if (typeof right == "number") {
             var bounds = WindowManager.getWindowBounds();
-            var minRight = window.innerWidth - bounds.right;
-            if (right < minRight) right = minRight;
+            if (right > bounds.right) right = bounds.right;
             this.width = (window.innerWidth - right) - this.x;
         }
     }
@@ -932,8 +932,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
     set: function(bottom) {
         if (typeof bottom == "number") {
             var bounds = WindowManager.getWindowBounds();
-            var minBottom = window.innerHeight - bounds.bottom;
-            if (bottom < minBottom) bottom = minBottom;
+            if (bottom > bounds.bottom) bottom = bounds.bottom;
             this.height = (window.innerHeight - bottom) - this.y;
         }
     }
@@ -1318,6 +1317,9 @@ Dialog.prototype.move = function (x, y) {
 	}
 	if (typeof x == "undefined" || x == null) x = this.x;
 	if (typeof y == "undefined" || y == null) y = this.y;
+	var bounds = WindowManager.getWindowBounds();
+	if (x < bounds.left) x = bounds.left;
+	if (y < bounds.top) y = bounds.top;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
