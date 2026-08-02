@@ -228,6 +228,12 @@ var applications = [
 		id: "foxyz.webgpufluidsim",
 		src: "./Applications/WebGPUFluidSim/index.html",
 		hidden: true
+	},
+	{
+		title: "Fur:Trash",
+		id: "foxyz.due:trash",
+		src: "https://open.spotify.com/embed/artist/1jp7cmyHDn5nuP3MMSwm1m?utm_source=generator&si=86b6cf864e0048c3",
+		hidden: true
 	}
 ]
 
