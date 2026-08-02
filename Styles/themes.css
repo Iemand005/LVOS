@@ -2,11 +2,11 @@
 /* .window themes */
 
 :root {
---bg: white;
---fg: black;
+	--bg: white;
+	--fg: black;
 
---main-radius: 20px;
-  --main-spacing: 10px;
+	--window-radius: 20px;
+	--window-border-width: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,11 +17,11 @@
 }
 
 .window.rounded-corners {
-	border-radius: 10px !important;
+	border-radius: var(--window-radius) !important;
 }
 
 .window.rounded-corners > content > article {
-	border-radius: 5px;
+	border-radius: calc(var(--window-radius) / 2);
 }
 
 .window.sharp-corners {
