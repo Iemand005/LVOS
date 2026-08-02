@@ -17,8 +17,6 @@
 }
 
 .window {
-	background-color: var(--bg);
-	color: var(--fg);
 	border-radius: var(--window-radius);
 }
 
