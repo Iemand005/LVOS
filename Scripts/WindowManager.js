@@ -327,7 +327,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
     this.reset();
 	this.clickX = x;
 	this.clickY = y;
-    if (!width || !height || !startX || !startY) return;
+    if (typeof width != "number" || typeof height != "number" || typeof startX != "number" || typeof startY != "number") return;
 	this.width = width;
 	this.height = height;
 	this.startX = startX;
