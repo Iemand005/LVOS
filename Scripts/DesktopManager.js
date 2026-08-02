@@ -130,15 +130,13 @@ window.addEventListener('keydown', function(event) {
         break;
   }
 }, false);
-/** @param {string} theme */
-function setTheme(theme) {
-	document.body.classList.add(theme);
-}
 
 /** @param {string} theme */
-function hasTheme(theme) {
-	return document.body.classList.contains(theme);
-}
+function setTheme(theme) { document.body.classList.add(theme); }
+/** @param {string} theme */
+function hasTheme(theme) { return document.body.classList.contains(theme); }
+/** @param {string} theme */
+function removeTheme(theme) { document.body.classList.remove(theme); }
 
 /** @constant */
 var isBlink = 'chrome' in window;
