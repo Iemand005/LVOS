@@ -15,17 +15,17 @@ var onLoad = function () {
 		applist.addEventListener("submit", eventPrevent, false);
 	}
 
-    var appButtons = document.getElementById("dockapplist");
+	var appButtons = document.getElementById("dockapplist");
 
-    if (appButtons) {
-        var startButton = document.createElement("button")
-        startButton.innerHTML = "Start";
-        startButton.addEventListener("click", function () {
-            launchpad.open();
-        }, false);
+	if (appButtons) {
+		var startButton = document.createElement("button")
+		startButton.innerHTML = "Start";
+		startButton.addEventListener("click", function () {
+			launchpad.open();
+		}, false);
 
-        appButtons.appendChild(startButton);
-    }
+		appButtons.appendChild(startButton);
+	}
 
 	document.body.ondragover = window.ondragover = function(ev) { 
 		ev.preventDefault(); 
@@ -33,18 +33,18 @@ var onLoad = function () {
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'copy';
 	}
 
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
+	if ('serviceWorker' in navigator) navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
 		console.log('Service Worker registered!', reg);
 	})["catch"](function(err) {
 		console.error('Registration of service worker failed:', err);
 	});
 
-    var clickOffset = new ClickOffset;
+	var clickOffset = new ClickOffset;
 
-    var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
+	var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
 
-    	if (tingeling instanceof HTMLElement) {
-        	var selector = document.createElement("div");
+		if (tingeling instanceof HTMLElement) {
+			var selector = document.createElement("div");
 		clickOffset.dragHandler = function(ev) {
 			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -56,29 +56,29 @@ var onLoad = function () {
 		};
 		
 		// if (supportsPointer)
-        	tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
-            clickOffset.init(ev.clientX, ev.clientY);
+			tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
+			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 			
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
-            
-            // translateElement(selector, ev.clientX, ev.clientY);
-            selector.className = "selector";
-            tingeling.appendChild(selector);
+			
+			// translateElement(selector, ev.clientX, ev.clientY);
+			selector.className = "selector";
+			tingeling.appendChild(selector);
 
-            clickOffset.toggleDragEventHandler(true);
-            // document.body.hasPointerCapture
+			clickOffset.toggleDragEventHandler(true);
+			// document.body.hasPointerCapture
 	}, false);
 
-        tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown",function() {
-            selector.remove();
-        }, false);
+		tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown",function() {
+			selector.remove();
+		}, false);
 
-        window.addEventListener(supportsPointer?"pointerup":"mouseup", function(ev) { selector.remove(); }, false);
-    }
+		window.addEventListener(supportsPointer?"pointerup":"mouseup", function(ev) { selector.remove(); }, false);
+	}
 
 };
 
