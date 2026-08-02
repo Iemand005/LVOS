@@ -1344,11 +1344,10 @@ Dialog.prototype.setZ = function(z) {
  * @param {number} [height]
  */
 Dialog.prototype.resize = function (width, height) {
-	// this.resizeWithAspect(width, height);
-	// return;
-	//if (this.body) this.body.style.boxSizing = "border-box";
-	if (typeof width == "number") this.width = width;
-	if (typeof height == "number") this.height = height;
+	if (typeof width == "undefined" || width == null) width = this.width;
+	if (typeof height == "undefined" || height == null) height = this.height;
+	this.width = width;
+	this.height = height;
 };
 Dialog.prototype.update = function () {
 	this.move();
@@ -2029,8 +2028,8 @@ Dialog.prototype.getState = function() {
 		x: this.x,
 		y: this.y,
 		z: this.z,
-		width: this.width || this.minHeight,
-		height: this.height || this.minWidth,
+		width: this.width || this.minWidth,
+		height: this.height || this.minHeight,
 		open: this.isOpen || false,
 		maximized: this.maximized
 	};
