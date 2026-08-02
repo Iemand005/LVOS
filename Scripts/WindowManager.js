@@ -1662,9 +1662,9 @@ DragAction.prototype.set = function (direction) {
 	this.execute = this.resizeFunctions[direction || 0] || function () {};
 };
 
-/** @param {HTMLDocument} document */
-function DocumentCrawler(document){
-    this.document = document;
+/** @param {HTMLDocument} [customDocument] */
+function DocumentCrawler(customDocument){
+    this.document = customDocument || document;
 }
 
 DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
@@ -1677,7 +1677,7 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager;
 windowManager.isWindowUpdatesEnabled = true;
-var bodyCrawler = new DocumentCrawler(document);;
+var bodyCrawler = new DocumentCrawler();
 
 function windowManagerInit() {
     bodyCrawler = new DocumentCrawler(document);
