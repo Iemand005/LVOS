@@ -226,11 +226,27 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
 			updateTopZ();
+			var restoredDialogs = [];
 			windowManager.forEachWindow(function (restoredDialog) {
-				if (restoredDialog && typeof restoredDialog.z == "number") {
+				if (restoredDialog && typeof restoredDialog.z == "number" && restoredDialog.target) {
 					restoredDialog.setZ(restoredDialog.z);
+					restoredDialog.target.style.zIndex = String(restoredDialog.z);
+					restoredDialogs.push(restoredDialog);
 				}
 			});
+			var container = bodyCrawler.getDialogsContainer();
+			if (container) {
+				restoredDialogs.sort(function (a, b) {
+					var az = typeof a.z == "number" ? a.z : 0;
+					var bz = typeof b.z == "number" ? b.z : 0;
+					return az - bz;
+				});
+				restoredDialogs.forEach(function (restoredDialog) {
+					if (restoredDialog.target && restoredDialog.target.parentElement === container) {
+						container.appendChild(restoredDialog.target);
+					}
+				});
+			}
 		}
 	} catch (exception) {
 		handleStorageException(exception);
@@ -1142,6 +1158,12 @@ Dialog.prototype.toggleTitlebar = function (force) {
 };
 Dialog.prototype.open = function () {
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
+};
+Dialog.prototype.restoreOpen = function () {
+	if (!this.target) return false;
+	this.target.classList.add("open");
+	this.target.classList.remove("animating");
+	return true;
 };
 Dialog.prototype.close = function () {
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
@@ -2150,7 +2172,7 @@ Dialog.prototype.loadState = function(state) {
 		this._restoreZ = true;
 		this.setZ(state.z);
 	}
-	if (state.open) this.launch();
+	if (state.open) this.restoreOpen();
 	console.log(state.title, "window loaded width: ", state.width, state.height)
 	this.toggleMaximized(state.maximized);
 };
