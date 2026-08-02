@@ -140,9 +140,8 @@ function hasTheme(theme) {
 	return document.body.classList.contains(theme);
 }
 
-function isBlink() {
-	return 'chrome' in window;
-}
+/** @constant */
+var isBlink = 'chrome' in window;
 
 // function
 
