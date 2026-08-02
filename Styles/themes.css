@@ -4,6 +4,9 @@
 :root {
 --bg: white;
 --fg: black;
+
+--main-radius: 20px;
+  --main-spacing: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
