@@ -1682,7 +1682,7 @@ var bodyCrawler = new DocumentCrawler();
 function windowManagerInit() {
     bodyCrawler = new DocumentCrawler(document);
 
-    if ('chrome' in window) setTheme("glass");
+    if (!isBlink()) setTheme("glass");
 
     initializeDialogs();
     toggleReflections(reflections);

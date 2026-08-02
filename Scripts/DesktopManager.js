@@ -140,6 +140,10 @@ function hasTheme(theme) {
 	return document.body.classList.contains(theme);
 }
 
+function isBlink() {
+	return 'chrome' in window;
+}
+
 // function
 
 function DesktopManager() {
