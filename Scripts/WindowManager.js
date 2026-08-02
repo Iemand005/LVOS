@@ -1288,8 +1288,8 @@ Dialog.prototype.move = function (x, y) {
 		this._previousX = this.x;
 		this._previousY = this.y;
 	}
-	if (typeof x == "undefined" || x == null) x = this.x || 0;
-	if (typeof y == "undefined" || y == null) y = this.y || 0;
+	if (typeof x == "undefined" || x == null) x = this.x;
+	if (typeof y == "undefined" || y == null) y = this.y;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
 	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
@@ -1347,8 +1347,8 @@ Dialog.prototype.resize = function (width, height) {
 	// this.resizeWithAspect(width, height);
 	// return;
 	//if (this.body) this.body.style.boxSizing = "border-box";
-	this.width = width || this.width;
-	this.height = height || this.height;
+	if (typeof width == "number") this.width = width;
+	if (typeof height == "number") this.height = height;
 };
 Dialog.prototype.update = function () {
 	this.move();
