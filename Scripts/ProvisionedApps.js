@@ -222,6 +222,12 @@ var applications = [
 		id: "foxyz.aione",
 		src: "./Applications/AIOneWeb/index.html",
 		hidden: true
+	},
+	{
+		title: "WebGPUFluidSim",
+		id: "foxyz.webgpufluidsim",
+		src: "./Applications/WebGPUFluidSim/index.html",
+		hidden: true
 	}
 ]
 

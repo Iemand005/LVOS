@@ -37,3 +37,6 @@
 [submodule "Applications/AIOneWeb"]
 	path = Applications/AIOneWeb
 	url = https://github.com/Iemand005/AIOneWeb
+[submodule "Applications/WebGPUFluidSim"]
+	path = Applications/WebGPUFluidSim
+	url = https://github.com/Iemand005/WebGPUFluidSim
