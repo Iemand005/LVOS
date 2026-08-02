@@ -879,22 +879,13 @@ Object.defineProperty(Dialog.prototype, "top", {
         var bottom = this.bottomFromTop;
         if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
-        var maxTop = bottom - this.minHeight;
-        if (top > maxTop) top = maxTop;
-        var newHeight = bottom - top;
-        if (newHeight > this.maxHeight) {
-            top = bottom - this.maxHeight;
-            newHeight = this.maxHeight;
-        } else if (newHeight < this.minHeight) {
-            top = bottom - this.minHeight;
-            newHeight = this.minHeight;
-        }
-        this._height = newHeight;
+        var height = max(min(bottom - top, this.maxHeight), this.minHeight);
+        top = bottom - height;
+        this._height = height;
         this._y = top / window.innerHeight;
-        if (this.useTransform || this.useScale) {
-            if (this.target) this.target.style.height = toPixels(this._height);
-        } else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
-        this._isMinHeight = this._height == this.minHeight;
+        if (this.useTransform || this.useScale) if (this.target) this.target.style.height = toPixels(height);
+        else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+        this._isMinHeight = height == this.minHeight;
         if (this.useTransform) this.updateTranslation();
     }
 });
@@ -906,22 +897,13 @@ Object.defineProperty(Dialog.prototype, "left", {
         var right = this.rightFromLeft;
         if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
         if (left < bounds.left) left = bounds.left;
-        var maxLeft = right - this.minWidth;
-        if (left > maxLeft) left = maxLeft;
-        var newWidth  = right - left;
-        if (newWidth > this.maxWidth) {
-            left = right - this.maxWidth;
-            newWidth = this.maxWidth;
-        } else if (newWidth < this.minWidth) {
-            left = right - this.minWidth;
-            newWidth = this.minWidth;
-        }
-        this._width = newWidth;
+        var width = max(min(right - left, this.maxWidth), this.minWidth);
+        left = right - width;
+        this._width = width;
         this._x = left / window.innerWidth;
-        if (this.useTransform || this.useScale) {
-            if (this.target) this.target.style.width = toPixels(this._width);
-        } else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
-        this._isMinWidth = this._width == this.minWidth;
+        if (this.useTransform || this.useScale) if (this.target) this.target.style.width = toPixels(width);
+        else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+        this._isMinWidth = width == this.minWidth;
         if (this.useTransform) this.updateTranslation();
     }
 });
