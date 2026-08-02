@@ -799,6 +799,8 @@ Object.defineProperty(Dialog.prototype, "width", {
 	set: function(width) {
 		if (typeof width != "number" || !this.target) return;
 
+		var bounds = WindowManager.getWindowBounds();
+		if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
 		this._width = max(min(width, this.maxWidth), this.minWidth);
 		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
@@ -812,6 +814,8 @@ Object.defineProperty(Dialog.prototype, "height", {
 	set: function(height) {
 		if (typeof height != "number" || !this.target) return;
 
+		var bounds = WindowManager.getWindowBounds();
+		if (bounds.bottom !== Infinity) height = min(height, bounds.bottom - this.y);
 		this._height = max(min(height, this.maxHeight), this.minHeight);
 		if (this.useTransform || this.useScale) {
 			this.target.style.height = toPixels(this._height);
@@ -1392,8 +1396,8 @@ Dialog.prototype.update = function () {
  * @param {number} [height]
  */
 Dialog.prototype.setMinSize = function (width, height) {
-	this._minWidth = width || 180;
-	this._minHeight = height || 200;
+	this._minWidth = typeof width == "number" ? width : 180;
+	this._minHeight = typeof height == "number" ? height : 200;
 	this.resize();
 }
 /**
@@ -1401,8 +1405,8 @@ Dialog.prototype.setMinSize = function (width, height) {
  * @param {number} [height]
  */
 Dialog.prototype.setMaxSize = function (width, height) {
-	this._maxWidth = width || 180;
-	this._maxHeight = height || 200;
+	this._maxWidth = typeof width == "number" ? width : 180;
+	this._maxHeight = typeof height == "number" ? height : 200;
 	this.resize();
 }
 /** @param {number} ratio */
