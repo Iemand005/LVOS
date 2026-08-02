@@ -172,7 +172,7 @@ function setColor(color){
 	settings.set("color", elements.color.value = color);
 	
 	var isWhite = isColorDark(color);
-	for (var index in windows) {
+	for (var index in 	windowManager.windows) {
 		var dialog = windowManager.windows[index];
 		if (!dialog || !dialog.target) continue;
 		var content = dialog.target.getElementsByTagName("content")[0];
