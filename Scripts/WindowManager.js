@@ -1684,6 +1684,8 @@ function windowManagerInit() {
 
     if (!isBlink) removeTheme("glass");
 
+	isBlink  = false;
+
     initializeDialogs();
     toggleReflections(reflections);
 
