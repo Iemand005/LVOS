@@ -24,6 +24,10 @@
 	border-radius: calc(var(--window-radius) - var(--window-border-width));
 }
 
+.window content {
+	padding: var(--window-border-width);
+}
+
 .window.rounded-corners {
 	border-radius: var(--window-radius) !important;
 }
@@ -151,7 +155,8 @@
 }
 
 .modern .window {
-	border-radius: 15px;
+	/* border-radius: 15px; */
+	--window-border-width: 7px;
 }
 
 .modern .window header {
@@ -206,7 +211,7 @@
 
 .modern .window content {
 	background: linear-gradient(358deg, #161616, #333232);
-	padding: 5px;
+	/* padding: 5px; */
 	border: 0px solid black;
 }
 
