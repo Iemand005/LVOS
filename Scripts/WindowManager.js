@@ -449,10 +449,10 @@ WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
 WindowManager.getWindowBounds = function() {
     var inset = WindowManager.windowBoundsInset;
     return {
-        top: inset.top >= 0 ? inset.top : -Infinity,
-        left: inset.left >= 0 ? inset.left : -Infinity,
-        right: inset.right >= 0 ? window.innerWidth - inset.right : Infinity,
-        bottom: inset.bottom >= 0 ? window.innerHeight - inset.bottom : Infinity
+        top: inset.top != null ? inset.top : -Infinity,
+        left: inset.left != null ? inset.left : -Infinity,
+        right: inset.right != null ? window.innerWidth - inset.right : Infinity,
+        bottom: inset.bottom != null ? window.innerHeight - inset.bottom : Infinity
     };
 };
 /**
@@ -917,6 +917,7 @@ Object.defineProperty(Dialog.prototype, "right", {
         if (typeof right == "number") {
             var bounds = WindowManager.getWindowBounds();
             if (right > bounds.right) right = bounds.right;
+            if (right < bounds.left) right = bounds.left;
             this.width = (window.innerWidth - right) - this.x;
         }
     }
@@ -933,6 +934,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
         if (typeof bottom == "number") {
             var bounds = WindowManager.getWindowBounds();
             if (bottom > bounds.bottom) bottom = bounds.bottom;
+            if (bottom < bounds.top) bottom = bounds.top;
             this.height = (window.innerHeight - bottom) - this.y;
         }
     }
@@ -1319,10 +1321,12 @@ Dialog.prototype.move = function (x, y) {
 	if (typeof y == "undefined" || y == null) y = this.y;
 	var bounds = WindowManager.getWindowBounds();
 	if (x < bounds.left) x = bounds.left;
+	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
 	if (y < bounds.top) y = bounds.top;
+	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
-	(this._x = max(x, 0) / windowWidth), (this._y = max(y, 0) / windowHeight);
+	(this._x = x / windowWidth), (this._y = y / windowHeight);
 	if (!this.target) return;
 	if (this.useTransform) this.updateTranslation();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
