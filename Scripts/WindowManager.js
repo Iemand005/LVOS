@@ -876,13 +876,17 @@ Object.defineProperty(Dialog.prototype, "top", {
     get: function() { return this.y; },
     set: function(top) {
         var bounds = WindowManager.getWindowBounds();
+        var bottom = this.bottomFromTop;
+        if (bounds.bottom !== Infinity && Math.abs(bottom - bounds.bottom) < 1) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
-        var newHeight = this.y - top + this.height;
+        var maxTop = bottom - this.minHeight;
+        if (top > maxTop) top = maxTop;
+        var newHeight = bottom - top;
         if (newHeight > this.maxHeight) {
-            this.y = this.bottomFromTop - this.maxHeight;
+            this.y = bottom - this.maxHeight;
             this.height = this.maxHeight;
         } else if (newHeight < this.minHeight) {
-            this.y = this.bottomFromTop - this.minHeight;
+            this.y = bottom - this.minHeight;
             this.height = this.minHeight;
         } else {
             this.y = top;
@@ -895,13 +899,17 @@ Object.defineProperty(Dialog.prototype, "left", {
     get: function() { return this.x; },
     set: function(left) {
         var bounds = WindowManager.getWindowBounds();
+        var right = this.rightFromLeft;
+        if (bounds.right !== Infinity && Math.abs(right - bounds.right) < 1) right = bounds.right;
         if (left < bounds.left) left = bounds.left;
-        var newWidth  = this.x - left + this.width;
+        var maxLeft = right - this.minWidth;
+        if (left > maxLeft) left = maxLeft;
+        var newWidth  = right - left;
         if (newWidth > this.maxWidth) {
-            this.x = this.rightFromLeft - this.maxWidth;
+            this.x = right - this.maxWidth;
             this.width = this.maxWidth;
         } else if (newWidth < this.minWidth) {
-            this.x = this.rightFromLeft - this.minWidth;
+            this.x = right - this.minWidth;
             this.width = this.minWidth;
         } else {
             this.x = left;
