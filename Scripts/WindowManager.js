@@ -877,7 +877,7 @@ Object.defineProperty(Dialog.prototype, "top", {
     set: function(top) {
         var bounds = WindowManager.getWindowBounds();
         var bottom = this.bottomFromTop;
-        if (bounds.bottom !== Infinity && Math.abs(bottom - bounds.bottom) < 1) bottom = bounds.bottom;
+        if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
         var maxTop = bottom - this.minHeight;
         if (top > maxTop) top = maxTop;
@@ -889,10 +889,13 @@ Object.defineProperty(Dialog.prototype, "top", {
             top = bottom - this.minHeight;
             newHeight = this.minHeight;
         }
-        this.height = newHeight;
+        this._height = newHeight;
         this._y = top / window.innerHeight;
+        if (this.useTransform || this.useScale) {
+            if (this.target) this.target.style.height = toPixels(this._height);
+        } else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+        this._isMinHeight = this._height == this.minHeight;
         if (this.useTransform) this.updateTranslation();
-        else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
     }
 });
 
@@ -901,7 +904,7 @@ Object.defineProperty(Dialog.prototype, "left", {
     set: function(left) {
         var bounds = WindowManager.getWindowBounds();
         var right = this.rightFromLeft;
-        if (bounds.right !== Infinity && Math.abs(right - bounds.right) < 1) right = bounds.right;
+        if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
         if (left < bounds.left) left = bounds.left;
         var maxLeft = right - this.minWidth;
         if (left > maxLeft) left = maxLeft;
@@ -913,10 +916,13 @@ Object.defineProperty(Dialog.prototype, "left", {
             left = right - this.minWidth;
             newWidth = this.minWidth;
         }
-        this.width = newWidth;
+        this._width = newWidth;
         this._x = left / window.innerWidth;
+        if (this.useTransform || this.useScale) {
+            if (this.target) this.target.style.width = toPixels(this._width);
+        } else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+        this._isMinWidth = this._width == this.minWidth;
         if (this.useTransform) this.updateTranslation();
-        else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
     }
 });
 
