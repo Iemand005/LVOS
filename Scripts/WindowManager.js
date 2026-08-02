@@ -882,11 +882,8 @@ Object.defineProperty(Dialog.prototype, "top", {
         var height = max(min(bottom - top, this.maxHeight), this.minHeight);
         top = bottom - height;
         this._height = height;
-        this._y = top / window.innerHeight;
-        if (this.useTransform || this.useScale) if (this.target) this.target.style.height = toPixels(height);
-        else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+        this.move(this.x, top);
         this._isMinHeight = height == this.minHeight;
-        if (this.useTransform) this.updateTranslation();
     }
 });
 
@@ -900,11 +897,8 @@ Object.defineProperty(Dialog.prototype, "left", {
         var width = max(min(right - left, this.maxWidth), this.minWidth);
         left = right - width;
         this._width = width;
-        this._x = left / window.innerWidth;
-        if (this.useTransform || this.useScale) if (this.target) this.target.style.width = toPixels(width);
-        else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+        this.move(left, this.y);
         this._isMinWidth = width == this.minWidth;
-        if (this.useTransform) this.updateTranslation();
     }
 });
 
