@@ -132,8 +132,14 @@ window.addEventListener('keydown', function(event) {
 }, false);
 /** @param {string} theme */
 function setTheme(theme) {
-  document.body.classList.add(theme);
+	document.body.classList.add(theme);
 }
+
+function DesktopManager() {
+
+}
+
+
 
 
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
