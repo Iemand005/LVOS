@@ -211,15 +211,23 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 			return;
 		}
         loaded = true;
-		if (dialog && dialog.id) dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
-		else {
+		if (dialog && dialog.id) {
+			dialog.loadState(windowStates[dialog.id]);
+			updateTopZ(dialog.z);
+		} else {
 			var fails = [];
 			for (var id in windowStates) try {
-				if (windowManager.windows[id] && windowStates[id])
+				if (windowManager.windows[id] && windowStates[id]) {
 					windowManager.windows[id].loadState(windowStates[id]);
+				}
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
 			updateTopZ();
+			windowManager.forEachWindow(function (restoredDialog) {
+				if (restoredDialog && typeof restoredDialog.z == "number") {
+					restoredDialog.setZ(restoredDialog.z);
+				}
+			});
 		}
 	} catch (exception) {
 		handleStorageException(exception);
@@ -1113,7 +1121,12 @@ Dialog.prototype.focus = function() {
 }
 Dialog.prototype.activate = function() {
 	this.focus();
-	return this.setZ(topZ++), this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
+	if (typeof this.z != "number" || this.z < topZ) {
+		this.setZ(topZ++);
+	} else {
+		this.setZ(this.z);
+	}
+	return this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
@@ -2036,11 +2049,13 @@ function updateTopZ(newZ) {
         topZ = Math.max(topZ, newZ + 1);
         return;
     }
+    var highestZ = topZ;
     windowManager.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z == "number" && dialog.z >= topZ) {
-            topZ = dialog.z + 1;
+        if (dialog && typeof dialog.z == "number" && dialog.z >= highestZ) {
+            highestZ = dialog.z + 1;
         }
     });
+    topZ = highestZ;
 }
 
 /** @param {*} properties */
@@ -2123,9 +2138,9 @@ Dialog.prototype.getState = function() {
 Dialog.prototype.loadState = function(state) {
 	if (state.open) this.launch();
 	this.title = state.title;
-	this.move(state.x, state.y); 
-	this.setZ(state.z);
+	this.move(state.x, state.y);
 	this.resize(state.width, state.height);
+	if (typeof state.z == "number") this.setZ(state.z);
 	console.log(state.title, "window loaded width: ", state.width, state.height)
 	this.toggleMaximized(state.maximized);
 };
@@ -2305,7 +2320,4 @@ window.addEventListener("drop", function(e) {
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
  *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
+ *   /  Internet Explorer 11 Trident + Edge
