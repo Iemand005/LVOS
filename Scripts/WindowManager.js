@@ -1678,8 +1678,8 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 var windowManager = new WindowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler(document);;
-window.onload=
-document.onload = function () {
+
+function windowManagerInit() {
     bodyCrawler = new DocumentCrawler(document);
 
     if ('chrome' in window) setTheme("glass");
@@ -1693,6 +1693,8 @@ document.onload = function () {
 	if (metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
 		window.__LVMessenger.accent = metaThemeColor;
 };
+
+window.addEventListener("load", windowManagerInit, false);
 
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
