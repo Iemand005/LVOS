@@ -227,7 +227,7 @@ var applications = [
 		title: "WebGPUFluidSim",
 		id: "foxyz.webgpufluidsim",
 		src: "./Applications/WebGPUFluidSim/index.html",
-		hidden: true
+		moveEvents: true
 	},
 	{
 		title: "Fur:Trash",
