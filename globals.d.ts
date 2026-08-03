@@ -16,6 +16,7 @@ interface Application {
   classes?: string[];
   minWidth?: number;
   minHeight?: number;
+  audioVisualizer?: boolean;
 }
 
 interface DialogState {
