@@ -5,6 +5,9 @@
 'use esnext';
 'use moz';
 
+const musicApp = new MusicApp(visualiser);
+
+
 {
 var frequencies = 128;
 
@@ -52,7 +55,6 @@ function MusicApp(visualizerElement) {
 	this.rotation = 0;
 }
 
-const musicApp = new MusicApp(visualiser);
 
 window.onresize = function() {
 	musicApp.graphics.resize();
