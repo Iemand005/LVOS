@@ -248,9 +248,10 @@ WindowManager.prototype.toggleDragging = function(enabled) {
 };
 
 WindowManager.prototype.getVisualizerApps = function() {
+	/** @type {Application[]} */
 	var apps = [];
-	this.forEachWindow(function (app) {
-
+	this.forEachWindow(function (dialog) {
+		if (dialog.application && dialog.application.audioVisualizer) apps.push(dialog.application);
 	});
 	return apps;
 };
