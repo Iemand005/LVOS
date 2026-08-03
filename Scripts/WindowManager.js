@@ -1872,7 +1872,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				// if (!targetElement) break;
 				// var sender 
 				// dialog.sen
-				dialog.messageFrame(LVMessenger.types.visualizers, windowManager.getVisualizerApps() || []send );
+				dialog.messageFrame(LVMessenger.types.visualizers, windowManager.getVisualizerApps());
 				break;
 		}
 		console.log("Received message " + type);

@@ -333,4 +333,16 @@ function refresh(){
     const text = (m<10?"0"+m:m) +":" +( s<10?"0"+s:s) + "."+ (ms<10?"0"+ms:ms);
     seekOutput.innerText = text;
 }
+
+LVMessenger.receive(function(type, data, id) {
+    if (type === "visualizers") {
+        if (data && Array.isArray(data)) {
+            console.log("visualizer apps:", data);
+            elements = data;
+        }
+    }
+});
+
 }
+
+// LVM
