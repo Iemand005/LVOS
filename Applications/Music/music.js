@@ -254,6 +254,10 @@ MusicApp.prototype.animateFrame = function(time) {
 
     this.prevTime = time;
     
+};
+
+MusicApp.prototype.loadVisualizerApps = function() {
+    LVMessenger.broadcastToParent("visualizers", null, "music");
 }
 
 if (visualiserOption) visualiserOption.onchange = function() {
