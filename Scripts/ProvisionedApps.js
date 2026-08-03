@@ -208,7 +208,8 @@ var applications = [
 	{
 		title: "Cake",
 		id: "fenix.cake",
-		src: "https://iemand005.github.io/FenixWeb/Cake/index.html"
+		src: "https://iemand005.github.io/FenixWeb/Cake/index.html",
+		audioVisualizer: true
 	},
 	{
 		title: "My Web Archive",
