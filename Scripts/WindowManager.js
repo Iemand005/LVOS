@@ -247,6 +247,14 @@ WindowManager.prototype.toggleDragging = function(enabled) {
     this.isDragging = enabled;
 };
 
+WindowManager.prototype.getVisualizerApps = function() {
+	var apps = [];
+	this.forEachWindow(function (app) {
+
+	});
+	return apps;
+};
+
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
