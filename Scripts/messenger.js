@@ -20,6 +20,7 @@ LVMessenger.types = {
     identify: "identify",
     identity: "identity",
     pip: "pip",
+    visualizers: "visualizers"
 };
 
 /** @typedef {keyof typeof LVMessenger.types} MessageType */
