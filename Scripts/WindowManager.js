@@ -417,8 +417,9 @@ function Dialog(object, create) {
 	this._useTransform = useTransform;
 	this._useScale = useScale;
 
-    	this._skew = 0;
+	this._skew = 0;
 	this._scaleY = 0;
+	this._rotation = 0;
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
@@ -698,8 +699,9 @@ function min(a, b) {
  * @param {number} y
  * @param {number} [skew]
  * @param {number} [scaleY]
+ * @param {number} [rotatioin]
  */
-function translateElement(element, x, y, skew, scaleY) {
+function translateElement(element, x, y, skew, scaleY, rotation) {
     var transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     if (skew) transform += " skewX(" + toDegree(skew) + ")";
     if (scaleY) transform += "scaleY(" + scaleY + ")";
@@ -1111,6 +1113,11 @@ Dialog.prototype.setScaleY = function(scaleY) {
 	this._scaleY = scaleY;
 	this.updateTranslation();
 };
+/** @param {number} rotation */
+Dialog.prototype.setRotation = function(rotation) {
+	this._rotation = rotation;
+	this.updateTranslation();
+};
 
 /** @type {Dialog?} */
 var focusedDialog = null;
@@ -1347,7 +1354,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 Dialog.prototype.updateTranslation = function () {
-	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew, this._scaleY);
+	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew, this._scaleY, this._rotation);
 };
 /**
  * @param {number} [x]
