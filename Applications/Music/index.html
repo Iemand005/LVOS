@@ -16,6 +16,124 @@
     <script src="../../Scripts/WebAura/Aura.js" defer></script>
     <script src="../../Scripts/messenger.js" defer></script>
     <script src="./music.js" defer></script>
+
+    
+    <script src="https://iemand005.github.io/FenixWeb/web_audio_visualizer.js"></script>
+    <script>
+      var canvasElement = document.getElementById("visualizer"),
+        Module = {
+          print: (...e) => console.log(...e),
+          printErr: (...e) => console.error(...e),
+          canvas: canvasElement,
+          setStatus: (text) => {
+            if (text) console.log(text);
+          },
+          monitorRunDependencies(e) {}
+        };
+
+      window.onerror = () => {};
+
+      function toggleImGui() {
+        if (typeof Module._ToggleImGui === 'function') {
+          Module._ToggleImGui();
+          var btn = document.getElementById('toggle-imgui');
+          var visible = Module._IsImGuiVisible();
+          btn.classList.toggle('active', visible === 1);
+        }
+      }
+
+      // ---------------------------------------------------------------
+      // Web Audio visualizer bridge: browser FFT -> wasm bins + waveform
+      // ---------------------------------------------------------------
+      var audioVis = null;
+
+      function ensureAudioVis() {
+        if (audioVis) return audioVis;
+        audioVis = new WebAudioVisualizer(Module);
+        audioVis.sourceType = null;
+        audioVis.onStateChange = function (ev) {
+          // Remember what's driving the analyser so the mic button can toggle.
+          audioVis.sourceType = (ev.state === 'mic' || ev.state === 'file' || ev.state === 'attach') ? ev.state : null;
+
+          var micBtn = document.getElementById('btn-mic');
+          if (micBtn) {
+            var micActive = ev.state === 'mic';
+            micBtn.textContent = micActive ? 'Stop Microphone' : 'Start Microphone';
+            micBtn.classList.toggle('active', micActive);
+          }
+
+          var el = document.getElementById('audio-status');
+          if (!el) return;
+          switch (ev.state) {
+            case 'mic': el.textContent = 'microphone ÔåÆ wasm analyser'; break;
+            case 'file': el.textContent = 'track playing ÔåÆ wasm analyser'; break;
+            case 'attach': el.textContent = 'analyser attached ÔåÆ wasm analyser'; break;
+            case 'stopped': el.textContent = 'audio stopped'; break;
+            case 'error': el.textContent = 'audio error: ' + ev.detail; break;
+            default: el.textContent = String(ev.detail || ev.state);
+          }
+        };
+        return audioVis;
+      }
+
+      function startMicrophone() {
+        var vis = ensureAudioVis();
+        // Already capturing on the mic? Toggle it off.
+        if (vis.sourceType === 'mic') {
+          vis.stop();
+          return;
+        }
+        vis.startMicrophone().catch(function () {
+          // mic denied/unavailable ÔÇö fall back to a local track
+          var btn = document.getElementById('btn-mic');
+          if (btn) {
+            btn.textContent = 'Start Microphone';
+            btn.classList.remove('active');
+          }
+          var fileBtn = document.getElementById('btn-file');
+          if (fileBtn) fileBtn.click();
+        });
+      }
+
+      function pickTrack() {
+        var input = document.getElementById('file-input');
+        if (input) input.click();
+      }
+
+      document.getElementById('file-input').addEventListener('change', function () {
+        if (this.files && this.files.length) ensureAudioVis().loadFile(this.files[0]);
+      });
+
+      // Drag & drop a track anywhere on the page
+      var controls = document.getElementById('audio-controls');
+      ['dragenter', 'dragover'].forEach(function (name) {
+        window.addEventListener(name, function (e) {
+          e.preventDefault();
+          controls.classList.add('dragging');
+        });
+      });
+      ['dragleave', 'drop'].forEach(function (name) {
+        window.addEventListener(name, function (e) {
+          e.preventDefault();
+          controls.classList.remove('dragging');
+        });
+      });
+      window.addEventListener('drop', function (e) {
+        var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) ensureAudioVis().loadFile(f);
+      });
+
+      // Live audio debug readout: linear peak, dB peak, AudioContext state.
+      setInterval(function () {
+        var el = document.getElementById('audio-level');
+        if (!el || !audioVis) { if (el) el.textContent = ''; return; }
+        var ctx = audioVis.audioContext;
+        var state = ctx ? ctx.state : 'none';
+        el.textContent = 'level ' + (audioVis.lastPeak ? audioVis.lastPeak.toFixed(3) : '0.000') +
+          ' / ' + (audioVis.lastDbPeak ? audioVis.lastDbPeak.toFixed(1) : '-Inf') + ' dB / ctx ' + state;
+      }, 200);
+    </script>
+    <script async src="https://iemand005.github.io/FenixWeb/Cake/Cake.js"></script>
 </head>
 <body class="transparent">
     <audio></audio>
@@ -46,6 +164,12 @@
                 <output id="seek-output">&#8209;&#8209;:&#8209;&#8209;.&#8209;&#8209;</output> <!-- Non breaking hyphens! -->
             </section>
         </section>
-    </form>
-</body>
-</html>
+
+        <button id="toggle-imgui" onclick="toggleImGui()">Debug UI (F3)</button>
+        <div id="audio-controls">
+          <button id="btn-mic" onclick="startMicrophone()">Start Microphone</button>
+          <button id="btn-file" onclick="pickTrack()">Load Track...</button>
+          <input type="file" id="file-input" accept="audio/*" hidden />
+          <span id="audio-status">click a button or drop a track to feed the wasm analyser</span>
+          <span id="audio-level"></span>
+        </div

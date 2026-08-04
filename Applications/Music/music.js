@@ -5,7 +5,7 @@
 'use esnext';
 'use moz';
 
-const musicApp = null;
+let musicApp = null;
 
 
 {
@@ -55,7 +55,7 @@ function MusicApp(visualizerElement) {
 	this.rotation = 0;
 }
 
-musicApp =  = new MusicApp(visualiser);
+musicApp = new MusicApp(visualiser);
 
 
 window.onresize = function() {
