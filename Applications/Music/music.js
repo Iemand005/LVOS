@@ -98,12 +98,12 @@ if (dispAudioBtn) dispAudioBtn.onclick = function() {
 }
 
 if (auraButton) auraButton.onclick = function(){
-    aura && aura.init().then(function() {
+    aura && aura.init(true).then(function() {
         console.log("Aura loaded!");
     });
 };
 
-// ctx.globalAlpha = 0.1;
+if (aura) aura.init();
 
 function localFullscreen() {
     // document.body.requestFullscreen({navigationUI: ""});
