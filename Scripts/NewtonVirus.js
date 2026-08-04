@@ -17,5 +17,9 @@ NewtonManager.prototype.loop = function (time) {
 
 /** @param {DOMHighResTimeStamp} time */
 NewtonManager.prototype.step = function(time) {
-	var currentTime = Date.now();
-	var deltaTime = this.lastTime - currentTi
+	var currentTime = time;
+	var deltaTime = this.lastTime - currentTime;
+	this.lastTime = currentTime;
+
+
+};
