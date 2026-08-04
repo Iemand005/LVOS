@@ -229,6 +229,65 @@
 	padding: 5px 10px;
 }
 
+
+.window > .sizer-1, .window > div.touch-sizer-1 {
+    background-color: red;
+}
+
+.window > .sizer-2, .window > div.touch-sizer-2 {
+	background-color: green;
+}
+
+.window > .sizer-3, .window > div.touch-sizer-3 {
+	background-color: yellow;
+}
+
+.window > .sizer-4, .window > div.touch-sizer-4 {
+	background-color: blue;
+}
+
+.window > .sizer-5 {
+	background-color: purple;
+}
+
+.window > .sizer-6 {
+	background-color: orange;
+}
+
+.window > .sizer-7 {sizer
+}
+
+.window > .sizer-8 {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+}
+
+.window > div.touch-sizer-6,
+.window > div.touch-sizer-5,
+.window > div.touch-sizer-1 {
+    top: -20px;
+}
+
+.window > div.touch-sizer-7,
+.window > div.touch-sizer-6,
+.window > div.touch-sizer-2 {
+    right: -20px;
+}
+
+.window > div.touch-sizer-8,
+.window > div.touch-sizer-7,
+.window > div.touch-sizer-3 {
+    bottom: -20px;
+}
+
+.window > div.touch-sizer-8,
+.window > div.touch-sizer-5,
+.window > div.touch-sizer-4 {
+    left: -20px;
+}
+
+
 @keyframes flip {
 0%     { transform: rotateY(0deg); }
 50%    { transform: rotateY(90deg); }
