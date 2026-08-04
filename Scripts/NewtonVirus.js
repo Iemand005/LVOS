@@ -1,22 +1,21 @@
 
 
 function NewtonManager() {
+	/** @type {DOMHighResTimeStamp} */
 	this.lastTime = 0;
 }
 
 NewtonManager.prototype.start = function () {
 	requestAnimationFrame(this.loop);
 };
-// anim8
 
-NewtonManager.prototype.loop = function () {
+/** @param {DOMHighResTimeStamp} time */
+NewtonManager.prototype.loop = function (time) {
+	this.step(time);
 	requestAnimationFrame(this.loop);
-}
-
-NewtonManager.prototype.step = function() {
-	var currentTime = Date.now();
-	var deltaTime = this.lastTime - currentTime;
-	this.lastTime = currentTime;
-
-
 };
+
+/** @param {DOMHighResTimeStamp} time */
+NewtonManager.prototype.step = function(time) {
+	var currentTime = Date.now();
+	var deltaTime = this.lastTime - currentTi
