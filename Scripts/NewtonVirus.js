@@ -28,7 +28,11 @@ NewtonManager.prototype.step = function(time) {
 		if (!window.velocity) window.velocity = new Vector();
 		window.velocity.y -= deltaTime;
 		// window.velocity.x -= deltaTime;
+		var lastY = window.y;
+
 		window.y += window.velocity.y;
 		window.x += window.velocity.x;
+
+		if (window.y == lastY) window.velocity.y = 0;
 	});
 };
