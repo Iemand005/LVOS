@@ -4,6 +4,7 @@ function NewtonManager() {
 	/** @type {DOMHighResTimeStamp} */
 	this.lastTime = 0;
 
+	this.gravity = 0.2;
 }
 
 NewtonManager.prototype.start = function () {
@@ -22,11 +23,13 @@ NewtonManager.prototype.step = function(time) {
 	var deltaTime = this.lastTime - currentTime;
 	this.lastTime = currentTime;
 
+	var self = this;
+
 	windowManager.forEachWindow(function (window) {
 		if (window.dragging) return;
 
 		if (!window.velocity) window.velocity = new Vector();
-		window.velocity.y -= deltaTime;
+		window.velocity.y -= self.gravity * deltaTime;
 		// window.velocity.x -= deltaTime;
 		var lastY = window.y;
 
