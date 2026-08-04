@@ -5,8 +5,13 @@ function NewtonManager() {
 }
 
 NewtonManager.prototype.start = function () {
-	requestAnimationFrame(this.start);
-};anim
+	requestAnimationFrame(this.loop);
+};
+// anim8
+
+NewtonManager.prototype.loop = function () {
+	requestAnimationFrame(this.loop);
+}
 
 NewtonManager.prototype.step = function() {
 	var currentTime = Date.now();
