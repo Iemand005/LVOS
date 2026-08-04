@@ -160,14 +160,9 @@
 }
 
 .window > div {
-    width: var(--window-radius);
-    height: var(--window-radius);
+    width: calc(var(--window-radius) * 0.75);
+    height: calc(var(--window-radius) * 0.75);
 }
-
-/* .modern .window div {
-    width: 15px;
-    height: 15px;
-} */
 
 .modern .window header {
 	display: flex;
@@ -236,7 +231,8 @@
 }
 
 
-.color-debug .window header {
+.color-debug .window header,
+.color-debug .window article {
 	background-color: black;
 }
 
