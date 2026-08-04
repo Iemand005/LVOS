@@ -1102,6 +1102,9 @@ Object.defineProperty(Dialog.prototype, "skew", {
 Object.defineProperty(Dialog.prototype, "scaleY", {
 	set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); }
 });
+Object.defineProperty(Dialog.prototype, "rotation", {
+	set: function(/** @type {number} */rotation) { this.setRotation(rotation); }
+});
 /** @param {number} skew */
 Dialog.prototype.setSkew = function(skew) {
 	this._skew = skew;
