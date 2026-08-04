@@ -83,13 +83,16 @@
         };
 
       // Visualizer switching: "cake" shows the wasm renderer on #canvas; bars
-      // and circle draw in 2D on the #visualizer overlay via music.js. Pausing
-      // the wasm loop keeps the frozen cake from showing through the overlay.
+      // and circle draw in 2D on the #visualizer via music.js. Only one canvas
+      // is visible at a time — the other gets display:none (Cake's surface has
+      // transparency, so it must be hidden behind the 2D one and vice versa).
       function syncVisualizers() {
         var style = document.getElementById('style');
         if (!style) return;
+        var canvas = document.getElementById('canvas');
         var visCanvas = document.getElementById('visualizer');
         var isCake = style.value === 'cake';
+        if (canvas) canvas.style.display = isCake ? '' : 'none';
         if (visCanvas) visCanvas.style.display = isCake ? 'none' : '';
         if (isCake) {
           if (typeof Module._ResumeMainLoop === 'function') Module._ResumeMainLoop();
