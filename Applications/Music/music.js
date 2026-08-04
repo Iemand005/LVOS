@@ -59,9 +59,9 @@ function MusicApp(visualizerElement) {
 // musicApp = new MusicApp(visualiser);
 
 
-window.onresize = function() {
-	musicApp.graphics.resize();
-}
+// window.onresize = function() {
+// 	musicApp.graphics.resize();
+// }
 
 if (micButton)
 micButton.onclick = function(ev){
