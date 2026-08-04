@@ -35,6 +35,7 @@
             <select name="style" id="style">
                 <option value="bars">Bars</option>
                 <option value="circle">Circle</option>
+                <option value="cake">Cake</option>
             </select>
         </section>
         <section id="playcontrols">
@@ -80,8 +81,24 @@
           setStatus: function(text) {
             if (text) console.log(text);
           },
-          monitorRunDependencies(e) {}
+          monitorRunDependencies(e) {},
+          onRuntimeInitialized: function() {
+            // Cake boots with its main loop running; enforce the dropdown's
+            // selection (default bars -> loop paused) once the module is up.
+            setTimeout(syncCakeLoop, 250);
+          }
         };
+
+      // Pause/resume the wasm render loop to match the #style dropdown:
+      // Cake runs only while it's the selected visualizer.
+      function syncCakeLoop() {
+        var style = document.getElementById('style');
+        if (!style || typeof Module._PauseMainLoop !== 'function') return;
+        if (style.value === 'cake') Module._ResumeMainLoop();
+        else Module._PauseMainLoop();
+      }
+      var styleEl = document.getElementById('style');
+      if (styleEl) styleEl.addEventListener('change', syncCakeLoop);
 
       window.onerror = () => {};
 
