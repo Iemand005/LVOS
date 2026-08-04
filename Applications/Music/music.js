@@ -65,10 +65,8 @@ function MusicApp(visualizerElement) {
  * @param {number} b 0-255
  */
 MusicApp.prototype.setAuraColor = function (r, g, b) {
-    if (aura && aura.device) {
-        console.log("Setting aura color from wasm:", r, g, b);
-        aura.setColor(r, g, b).catch(function () {});
-    }
+    if (!aura || !aura.device) return;
+    aura.setColor(r, g, b).catch(function () {});
 };
 
 if (visualiser instanceof HTMLCanvasElement) {
