@@ -461,6 +461,8 @@ function Dialog(object, create) {
     if (create || isElement(object)) this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
+
+	this.dragging = false;
 }
 
 WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -1201,6 +1203,8 @@ Dialog.prototype.togglePointerEvents = function(enable) {
 	if (enable == null) enable = target.style.pointerEvents == "none";
 	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
 	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
+
+	this.dragging = !enable;
 
 	var events = enable ? "auto" : "none";
 	target.style.pointerEvents = events;
