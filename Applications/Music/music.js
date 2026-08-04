@@ -48,7 +48,7 @@ function MusicApp(visualizerElement) {
 	// this.ctx = visualizerElement.getContext("2d");
 	console.log("graphics canvas found:", this.graphics.ctx);
 
-	/** @type {"bars" | "circle"} */
+	/** @type {"bars" | "circle" | "cake"} */
 	this.visualizer = "bars";
 
 	this.prevTime = 0;
