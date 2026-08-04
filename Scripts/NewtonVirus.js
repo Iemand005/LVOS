@@ -22,7 +22,7 @@ NewtonManager.prototype.step = function(time) {
 	this.lastTime = currentTime;
 
 	windowManager.forEachWindow(function (window) {
-if (window.dragging)
+		if (window.dragging) return;
 		window.y -= deltaTime;
 	});
 };
