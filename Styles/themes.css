@@ -236,43 +236,43 @@
 }
 
 
-.window header {
+.color-debug .window header {
 	background-color: black;
 }
 
-.window content {
+.color-debug .window content {
 	background: transparent !important;
 }
 
-.window > .sizer-1, .window > div.touch-sizer-1 {
+.color-debug .window > .sizer-1, .window > div.touch-sizer-1 {
     background-color: red;
 }
 
-.window > .sizer-2, .window > div.touch-sizer-2 {
+.color-debug .window > .sizer-2, .window > div.touch-sizer-2 {
 	background-color: green;
 }
 
-.window > .sizer-3, .window > div.touch-sizer-3 {
+.color-debug .window > .sizer-3, .window > div.touch-sizer-3 {
 	background-color: yellow;
 }
 
-.window > .sizer-4, .window > div.touch-sizer-4 {
+.color-debug .window > .sizer-4, .window > div.touch-sizer-4 {
 	background-color: blue;
 }
 
-.window > .sizer-5, .window > div.touch-sizer-5 {
+.color-debug .window > .sizer-5, .window > div.touch-sizer-5 {
 	background-color: purple;
 }
 
-.window > .sizer-6, .window > div.touch-sizer-6 {
+.color-debug .window > .sizer-6, .window > div.touch-sizer-6 {
 	background-color: orange;
 }
 
-.window > .sizer-7, .window > div.touch-sizer-7 {
+.color-debug .window > .sizer-7, .window > div.touch-sizer-7 {
 	background-color: cyan;
 }
 
-.window > .sizer-8, .window > div.touch-sizer-8 {
+.color-debug .window > .sizer-8, .window > div.touch-sizer-8 {
 	background-color: pink;
 }
 
