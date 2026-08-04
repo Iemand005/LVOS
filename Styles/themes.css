@@ -159,6 +159,11 @@
 	--window-border-width: 7px;
 }
 
+.window > div {
+    width: var(--window-radius);
+    height: var(--window-radius);
+}
+
 /* .modern .window div {
     width: 15px;
     height: 15px;
@@ -167,6 +172,7 @@
 .modern .window header {
 	display: flex;
 	padding: 0;
+	border-radius: calc(var(--window-radius) - var(--window-border-width));
 }
 
 .modern .window header button {
@@ -266,15 +272,13 @@
 }
 
 .window > .sizer-8 {
-    bottom: 0;
-    left: 0;
-    cursor: sw-resize;
+	background-color: pink;
 }
 
 .window > div.touch-sizer-6,
 .window > div.touch-sizer-5,
 .window > div.touch-sizer-1 {
-    top: -20px;
+	/* background-color: #0d0d0d57; */
 }
 
 .window > div.touch-sizer-7,
