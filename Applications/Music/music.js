@@ -36,14 +36,6 @@ var clear = true;
 const media = new Media;
 const aura = typeof Aura !== "undefined" ? new Aura : null;
 
-// Bridge: when the wasm renderer (Cake) requests a colour, forward it to the
-// same WebAura instance the music app already drives.
-if (typeof Module !== "undefined" && Module) {
-    Module.onAuraColor = function (r, g, b) {
-        if (aura && aura.device) aura.setColor(r, g, b).catch(function () {});
-    };
-}
-
 const THROTTLE_MS = 20;
 
 const colorTitlebar = false;
@@ -64,8 +56,22 @@ function MusicApp(visualizerElement) {
 	this.rotation = 0;
 }
 
-if (visualiser instanceof HTMLCanvasElement)
+/**
+ * Setter used by the wasm Aura bridge: the game engine forwards a colour
+ * through Module.onAuraColor; this pushes it to the same WebAura instance the
+ * music app drives.
+ * @param {number} r 0-255
+ * @param {number} g 0-255
+ * @param {number} b 0-255
+ */
+MusicApp.prototype.setAuraColor = function (r, g, b) {
+    if (aura && aura.device) aura.setColor(r, g, b).catch(function () {});
+};
+
+if (visualiser instanceof HTMLCanvasElement) {
     musicApp = new MusicApp(visualiser);
+    window.musicApp = musicApp;
+}
 
 
 // window.onresize = function() {

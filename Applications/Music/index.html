@@ -82,6 +82,15 @@
           }
         };
 
+      // Aura colour bridge: the wasm renderer forwards its requested colour
+      // here (Module.onAuraColor), and we hand it to the music app's WebAura
+      // instance. Module is certain to be declared at this point; the music app
+      // may still be loading, so look it up lazily when the event fires.
+      Module.onAuraColor = function (r, g, b) {
+        var app = window.musicApp;
+        if (app && typeof app.setAuraColor === 'function') app.setAuraColor(r, g, b);
+      };
+
       // Visualizer switching: "cake" shows the wasm renderer on #canvas; bars
       // and circle draw in 2D on the #visualizer via music.js. Only one canvas
       // is visible at a time — the other gets display:none (Cake's surface has
