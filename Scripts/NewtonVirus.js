@@ -5,5 +5,9 @@ function NewtonManager() {
 }
 
 NewtonManager.prototype.step = function() {
-	var deltaTime = this.lastTime - step;
+	var currentTime = Date.now();
+	var deltaTime = this.lastTime - currentTime;
+	this.lastTime = currentTime;
+
+	
 };
