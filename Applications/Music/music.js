@@ -157,7 +157,7 @@ function openCanvasPip() {
 			pipWindow = null;
 		}, { once: true });
 	}).catch(function(ex) {
-		LVMessenger.broadcastToParent("pip", {id: this.visualizer === "cake" ? "canvas" : "visualizer"}, "music");
+		LVMessenger.broadcastToParent("pip", {id: musicApp.visualizer === "cake" ? "canvas" : "visualizer"}, "music");
 	});
 }
 
@@ -412,4 +412,4 @@ LVMessenger.receive(function(type, data, id) {
 
 }
 
-// LVM
+// 
