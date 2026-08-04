@@ -12,7 +12,7 @@ NewtonManager.prototype.start = function () {
 /** @param {DOMHighResTimeStamp} time */
 NewtonManager.prototype.loop = function (time) {
 	this.step(time);
-	requestAnimationFrame(this.loop);
+	requestAnimationFrame(this.loop.bind(this));
 };
 
 /** @param {DOMHighResTimeStamp} time */
