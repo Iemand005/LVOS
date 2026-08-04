@@ -1,90 +1,95 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Music</title>
-    <link rel="stylesheet" href="./music.css">
-    <link rel="stylesheet" href="../../Styles/general.css">
-    <script src="../../Scripts/CustomPrototypes.js"></script>
-    <script src="../../Scripts/messenger.js"></script>
-    <script src="../../Scripts/WebAudioVisualizer/AudioVisualizer.js" defer></script>
-    <script src="../../Scripts/WebGraphics/Graphics.js" defer></script>
-    <script src="../../Scripts/WebGraphics/Graphics2D.js" defer></script>
-    <script src="../../Scripts/WebMedia/Media.js" defer></script>
-    <script src="../../Scripts/WebAura/Aura.js" defer></script>
-    <script src="../../Scripts/messenger.js" defer></script>
-    <!-- <script src="./music.js"bro the o defer></script> -->
+  <head>
+    <meta charset="utf-8" />
+    <title>Fenix</title>
+    <style>
+      * { margin: 0; padding: 0; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #canvas { display: block; width: 100%; height: 100%; }
+      #toggle-imgui {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 100;
+        padding: 8px 16px;
+        background: rgba(30, 30, 30, 0.85);
+        color: #ff6600;
+        border: 1px solid #ff6600;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s;
+      }
+      #toggle-imgui:hover { background: rgba(255, 102, 0, 0.2); }
+      #toggle-imgui.active { background: rgba(255, 102, 0, 0.35); }
 
-    
-   
-</head>
-<body class="transparent">
-    <audio></audio>
-    <canvas id="visualizer" style="width: 100%; height: 100%;"></canvas>
-    <form id="options">
-        <section>
-            <input type="file" name="file" id="file" value="Open" accept="audio/*"> <!-- file -->
-            <button id="mic">Microphone</button>
-            <button id="display-audio">Display audio</button>
-            <button id="aura-button">Connect Aura</button>
-            <button id="pip-button">Open Picture In Picture</button>
-            <button id="fullscreen">Fullscreen</button>
-            <input min="5" step="1" max="15" type="range" name="fft" id="fft">
-            <select name="style" id="style">
-                <option value="bars">Bars</option>
-                <option value="circle">Circle</option>
-            </select>
-        </section>
-        <section id="playcontrols">
-            <section>
-                <label for="volume">🔊</label>
-                <input min="0" step="0.0000001" max="100" type="range" name="volume" id="volume">
-                <output id="volume-output"></output>
-            </section>
-            <button id="play">⏵︎</button>
-            <section>
-                <input min="0" step="0.0000001" max="0" type="range" name="seek" id="seek">
-                <output id="seek-output">&#8209;&#8209;:&#8209;&#8209;.&#8209;&#8209;</output> <!-- Non breaking hyphens! -->
-            </section>
-        </section>
-
-        <button id="toggle-imgui" onclick="toggleImGui()">Debug UI (F3)</button>
-        <div id="audio-controls">
-          <button id="btn-mic" onclick="startMicrophone()">Start Microphone</button>
-          <button id="btn-file" onclick="pickTrack()">Load Track...</button>
-          <input type="file" id="file-input" accept="audio/*" hidden />
-          <span id="audio-status">click a button or drop a track to feed the wasm analyser</span>
-          <span id="audio-level"></span>
-        </div>
-    </form>
-
-
-     <script src="https://iemand005.github.io/FenixWeb/web_audio_visualizer.js"></script>
+      #audio-controls {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: monospace;
+        font-size: 13px;
+      }
+      #audio-controls button {
+        padding: 8px 16px;
+        background: rgba(30, 30, 30, 0.85);
+        color: #66ff88;
+        border: 1px solid #66ff88;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s;
+      }
+      #audio-controls button:hover { background: rgba(102, 255, 136, 0.2); }
+      #audio-controls button:disabled { opacity: 0.4; cursor: default; }
+      #audio-controls button.active { background: rgba(102, 255, 136, 0.35); }
+      #audio-status {
+        color: #aaa;
+        max-width: 260px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #audio-level {
+        color: #88ccff;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+      #audio-controls.dragging { outline: 2px dashed #66ff88; }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+    <button id="toggle-imgui" onclick="toggleImGui()">Debug UI (F3)</button>
+    <div id="audio-controls">
+      <button id="btn-mic" onclick="startMicrophone()">Start Microphone</button>
+      <button id="btn-file" onclick="pickTrack()">Load Track...</button>
+      <input type="file" id="file-input" accept="audio/*" hidden />
+      <span id="audio-status">click a button or drop a track to feed the wasm analyser</span>
+      <span id="audio-level"></span>
+    </div>
+    <script src="https://iemand005.github.io/FenixWeb/web_audio_visualizer.js"></script>
     <script>
-      var canvasElement = document.getElementById("visualizer"),
+      var canvasElement = document.getElementById("canvas"),
         Module = {
           print: (...e) => console.log(...e),
           printErr: (...e) => console.error(...e),
           canvas: canvasElement,
-          /**
-             * Intercepts and overrides paths for runtime dependencies (.wasm, .worker.js, etc.)
-             * @param {string} path - The default filename or relative path
-             * @param {string} prefix - The default folder prefix
-             * @returns {string} The final resolved URL/path
-             */
-            locateFile: function(path, prefix) {
+          locateFile: (path, prefix) => {
 
-                return "https://iemand005.github.io/FenixWeb/Cake/" + path; 
-                // Redirect the WebAssembly binary path
-                if (path.endsWith('.wasm')) {
-                    return '/my-custom-wasm-folder/' + path;
-                }
-                
-                // Return default path for other framework files
-                return prefix + path;
-            },
+            console.log("locateFile", path, prefix);
+            return "https://iemand005.github.io/FenixWeb/Cake/" + path;
+            return prefix + path;
+          },
           setStatus: (text) => {
             if (text) console.log(text);
           },
@@ -194,5 +199,5 @@
       }, 200);
     </script>
     <script async src="https://iemand005.github.io/FenixWeb/Cake/Cake.js"></script>
-</body>
+  </body>
 </html>
