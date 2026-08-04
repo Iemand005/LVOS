@@ -157,7 +157,7 @@ function openCanvasPip() {
 			pipWindow = null;
 		}, { once: true });
 	}).catch(function(ex) {
-		LVMessenger.broadcastToParent("pip", {id: "visualizer"}, "music");
+		LVMessenger.broadcastToParent("pip", {id: this.visualizer === "cake" ? "canvas" : "visualizer"}, "music");
 	});
 }
 
@@ -231,7 +231,7 @@ MusicApp.prototype.animateFrame = function(time) {
     const freqData = audioVisualiser.frequencyData;
     const timeData = audioVisualiser.timeDomainData;
     this.pushBinsToWasm(freqData, timeData);
-    if (this.visualizer === "cake")actully
+    if (this.visualizer === "cake") { this.prevTime = time; return; }
 
     const ctx = this.graphics.ctx;
     if(clear) this.graphics.ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -307,7 +307,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
             rad += inc;
         }
-    } else if (this.visualizer === "bars") for(let index in freqData){
+    } else for(let index in freqData){
         // count = freqData.length;    
         ctx.beginPath();
 
