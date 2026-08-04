@@ -479,7 +479,7 @@ aside#charms form {
 
 	transition: all 240ms ease-out;
 
-	/* display: none; */
+	display: none;fix lnchpad 
 }
 
 #launchpad.open {
