@@ -25,6 +25,21 @@
           print: (...e) => console.log(...e),
           printErr: (...e) => console.error(...e),
           canvas: canvasElement,
+          /**
+             * Intercepts and overrides paths for runtime dependencies (.wasm, .worker.js, etc.)
+             * @param {string} path - The default filename or relative path
+             * @param {string} prefix - The default folder prefix
+             * @returns {string} The final resolved URL/path
+             */
+            locateFile: function(path, prefix) {
+                // Redirect the WebAssembly binary path
+                if (path.endsWith('.wasm')) {
+                    return '/my-custom-wasm-folder/' + path;
+                }
+                
+                // Return default path for other framework files
+                return prefix + path;
+            },
           setStatus: (text) => {
             if (text) console.log(text);
           },
@@ -172,4 +187,8 @@
           <input type="file" id="file-input" accept="audio/*" hidden />
           <span id="audio-status">click a button or drop a track to feed the wasm analyser</span>
           <span id="audio-level"></span>
-        </div
+        </div>
+    </form>
+
+</body>
+</html>
