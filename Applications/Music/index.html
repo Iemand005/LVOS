@@ -68,7 +68,9 @@
     </style>
   </head>
   <body>
-    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+    <audio></audio>
+    <!-- <canvas id="visualizer" style="width: 100%; height: 100%;"></canvas> -->
+    <canvas id="visualizer"></canvas>
     <button id="toggle-imgui" onclick="toggleImGui()">Debug UI (F3)</button>
     <div id="audio-controls">
       <button id="btn-mic" onclick="startMicrophone()">Start Microphone</button>
@@ -79,7 +81,7 @@
     </div>
     <script src="https://iemand005.github.io/FenixWeb/web_audio_visualizer.js"></script>
     <script>
-      var canvasElement = document.getElementById("canvas"),
+      var canvasElement = document.getElementById("visualizer"),
         Module = {
           print: (...e) => console.log(...e),
           printErr: (...e) => console.error(...e),
