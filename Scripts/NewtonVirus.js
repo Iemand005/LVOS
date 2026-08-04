@@ -3,6 +3,7 @@
 function NewtonManager() {
 	/** @type {DOMHighResTimeStamp} */
 	this.lastTime = 0;
+
 }
 
 NewtonManager.prototype.start = function () {
@@ -23,6 +24,8 @@ NewtonManager.prototype.step = function(time) {
 
 	windowManager.forEachWindow(function (window) {
 		if (window.dragging) return;
+
+		if (!window.velocity) window.velocity = {}
 		window.y -= deltaTime;
 	});
 };
