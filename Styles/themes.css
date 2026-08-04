@@ -276,8 +276,8 @@
 	background-color: pink;
 }
 
-.window > div.touch{
-
+.window > div.touch {
+	opacity: 0.5;
 }
 
 
