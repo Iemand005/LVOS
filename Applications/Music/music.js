@@ -142,18 +142,46 @@ function openCanvasPip() {
     return;
   }
 
+	const originalParent = visualiser.parentNode;
+
 	window.documentPictureInPicture.requestWindow({
 		width: visualiser.width,
 		height: visualiser.height,
 	}).then(function(/** @type {Window} */pipWindow) {
+		const doc = pipWindow.document;
+		const body = doc.body;
 
-		pipWindow.document.body.style.margin = '0';
-		pipWindow.document.body.style.overflow = 'hidden';
+		// The app's CSS (music.css) is NOT loaded in the PiP window's separate
+		// document, so style html/body and the canvas inline to fill the window.
+		doc.documentElement.style.height = '100%';
+		body.style.height = '100%';
+		body.style.margin = '0';
+		body.style.width = '100%';
+		body.style.overflow = 'hidden';
+		body.style.position = 'relative';
+		body.style.background = '#000';
 
-		pipWindow.document.body.appendChild(visualiser);
+		visualiser.style.position = 'absolute';
+		visualiser.style.top = '0';
+		visualiser.style.left = '0';
+		visualiser.style.width = '100%';
+		visualiser.style.height = '100%';
+
+		/** Fit the canvas backing store to the PiP window (× devicePixelRatio). */
+		function fitCanvas() {
+			const dpr = pipWindow.devicePixelRatio || 1;
+			visualiser.width = Math.round(body.clientWidth * dpr);
+			visualiser.height = Math.round(body.clientHeight * dpr);
+		}
+		fitCanvas();
+		pipWindow.addEventListener('resize', fitCanvas);
+
+		body.appendChild(visualiser);
 
 		pipWindow.addEventListener('pagehide', function() {
-			document.getElementById('visualiser-container').appendChild(visualiser);
+			pipWindow.removeEventListener('resize', fitCanvas);
+			if (originalParent && visualiser.parentNode !== originalParent)
+				originalParent.appendChild(visualiser);
 			pipWindow = null;
 		}, { once: true });
 	}).catch(function(ex) {
