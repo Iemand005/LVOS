@@ -23,6 +23,7 @@
 <body class="transparent">
     <audio></audio>
     <canvas id="canvas" style="width: 100%; height: 100%;"></canvas>
+    <canvas id="visualizer" style="background: #000;"></canvas>
     <form id="options">
         <section>
             <input type="file" name="file" id="file" value="Open" accept="audio/*"> <!-- file -->
@@ -85,20 +86,97 @@
           onRuntimeInitialized: function() {
             // Cake boots with its main loop running; enforce the dropdown's
             // selection (default bars -> loop paused) once the module is up.
-            setTimeout(syncCakeLoop, 250);
+            setTimeout(syncVisualizers, 250);
           }
         };
 
-      // Pause/resume the wasm render loop to match the #style dropdown:
-      // Cake runs only while it's the selected visualizer.
-      function syncCakeLoop() {
+      // Visualizer switching: "cake" shows the wasm renderer on #canvas; anything
+      // else draws bars/circle in 2D on the #visualizer overlay (and pauses the
+      // wasm loop so the frozen cake never shows through the opaque background).
+      var visCanvas = document.getElementById('visualizer');
+      var visCtx = visCanvas ? visCanvas.getContext('2d') : null;
+      var anim2d = false;
+
+      function sizeVisCanvas() {
+        if (!visCanvas) return;
+        var dpr = window.devicePixelRatio || 1;
+        var w = visCanvas.clientWidth, h = visCanvas.clientHeight;
+        var nw = Math.round(w * dpr), nh = Math.round(h * dpr);
+        if (nw && nh && (visCanvas.width !== nw || visCanvas.height !== nh)) {
+          visCanvas.width = nw;
+          visCanvas.height = nh;
+        }
+      }
+
+      function render2d() {
+        if (!visCtx) return;
+        sizeVisCanvas();
+        var w = visCanvas.width, h = visCanvas.height;
+        visCtx.clearRect(0, 0, w, h);
+        if (!audioVis) return;
+        var bins = audioVis.frequencyBins;
+        var td = audioVis.timeDomain;
+        var count = audioVis.binCount || 0;
+        if (!count) return;
+        var hue = (Date.now() / 20) % 360;
+        if (styleEl && styleEl.value === 'circle') {
+          var cx = w / 2, cy = h / 2;
+          var rad = 0, inc = Math.PI * 2 / count;
+          var n = td ? td.length : count;
+          var r0 = Math.min(w, h) * 0.45;
+          for (var i = 0; i < n; i++) {
+            var amp = td ? td[i] : 0; // -1..1
+            var r = (amp * 0.5 + 0.5) * r0;
+            visCtx.fillStyle = 'hsl(' + hue + ',100%,60%)';
+            visCtx.beginPath();
+            visCtx.arc(r * Math.cos(rad) + cx, r * Math.sin(rad) + cy, Math.max(1.5, h / 300), 0, Math.PI * 2);
+            visCtx.fill();
+            rad += inc;
+          }
+        } else {
+          var bw = w / count;
+          for (var j = 0; j < count; j++) {
+            var m = bins ? bins[j] : 0; // 0..1
+            var bh = m * h;
+            visCtx.fillStyle = 'hsl(' + ((hue + j * 360 / count) % 360) + ',100%,60%)';
+            visCtx.fillRect(j * bw, h - bh, Math.max(1, bw - 1), bh);
+          }
+        }
+      }
+
+      function start2d() {
+        if (anim2d) return;
+        anim2d = true;
+        var step = function () {
+          if (!anim2d) return;
+          render2d();
+          requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+
+      function stop2d() {
+        anim2d = false;
+        if (visCtx) visCtx.clearRect(0, 0, visCanvas.width, visCanvas.height);
+      }
+
+      // Pause/resume the wasm render loop + swap canvases to match the dropdown.
+      function syncVisualizers() {
         var style = document.getElementById('style');
-        if (!style || typeof Module._PauseMainLoop !== 'function') return;
-        if (style.value === 'cake') Module._ResumeMainLoop();
-        else Module._PauseMainLoop();
+        if (!style) return;
+        var isCake = style.value === 'cake';
+        if (visCanvas) visCanvas.style.display = isCake ? 'none' : '';
+        if (isCake) {
+          stop2d();
+          if (typeof Module._ResumeMainLoop === 'function') Module._ResumeMainLoop();
+        } else {
+          if (typeof Module._PauseMainLoop === 'function') Module._PauseMainLoop();
+          start2d();
+        }
       }
       var styleEl = document.getElementById('style');
-      if (styleEl) styleEl.addEventListener('change', syncCakeLoop);
+      if (styleEl) styleEl.addEventListener('change', syncVisualizers);
+      syncVisualizers();
 
       window.onerror = () => {};
 
