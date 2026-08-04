@@ -88,8 +88,9 @@ main {
 .window header,
 .window header section,
 .window header nav {
-    border-top-right-radius: inherit;
-    border-bottom-left-radius: inherit;
+    /* border-top-right-radius: inherit;
+    border-bottom-left-radius: inherit; */
+	border-radius: inherit;allcorner ra
 }
 
 .window header,

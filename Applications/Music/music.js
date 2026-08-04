@@ -266,7 +266,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
     const rgb = getRainbowRGB(hue);
 
-    if (aura && aura.device) aura.setColor(rgb.r, rgb.g, rgb.b);
+    this.setAuraColor(rgb.r, rgb.g, rgb.b);
 	if (colorTitlebar) {
 		var parentWindow = getParentWindow();
 		if (parentWindow && parentWindow.__LVMessenger.accent) {
