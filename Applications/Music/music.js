@@ -159,6 +159,46 @@ function rgbToHex(r, g, b) {
 
 let lastUpdateTime = 0;
 
+/**
+ * Extension: hand the browser analyser's bins over to the Emscripten module so
+ * the wasm renderer (Cake) draws from the exact same data as the 2D bars/circle.
+ * The AudioVisualizer class produces Uint8 bytes; convert them to the floats the
+ * wasm expects (magnitudes 0..1, time-domain -1..1).
+ * @param {Uint8Array} freqData
+ * @param {Uint8Array} timeData
+ */
+MusicApp.prototype.pushBinsToWasm = function (freqData, timeData) {
+    var m = typeof Module !== 'undefined' ? Module : null;
+    if (!m) return;
+    if (typeof m._FE_AudioSetFrequencyBins !== 'function' ||
+        typeof m._FE_AudioSetTimeDomain !== 'function' ||
+        typeof m._malloc !== 'function') return;
+
+    var n = freqData.length, nt = timeData.length;
+    if (this._wasmBinsPtr === undefined || this._wasmBinsCap < n) {
+        if (typeof this._wasmBinsPtr === 'number') m._free(this._wasmBinsPtr);
+        this._wasmBinsPtr = m._malloc(n * 4);
+        this._wasmBinsCap = n;
+    }
+    if (this._wasmTimePtr === undefined || this._wasmTimeCap < nt) {
+        if (typeof this._wasmTimePtr === 'number') m._free(this._wasmTimePtr);
+        this._wasmTimePtr = m._malloc(nt * 4);
+        this._wasmTimeCap = nt;
+    }
+    if (this._wasmBinsPtr === 0 || this._wasmTimePtr === 0) return;
+
+    var heap = m.HEAPF32;
+    if (!heap) return;
+
+    var i, base = this._wasmBinsPtr >> 2;
+    for (i = 0; i < n; i++) heap[base + i] = freqData[i] / 255;
+    base = this._wasmTimePtr >> 2;
+    for (i = 0; i < nt; i++) heap[base + i] = (timeData[i] - 128) / 128;
+
+    m._FE_AudioSetFrequencyBins(this._wasmBinsPtr, n);
+    m._FE_AudioSetTimeDomain(this._wasmTimePtr, nt);
+};
+
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
 
@@ -169,6 +209,14 @@ MusicApp.prototype.animateFrame = function(time) {
     // requestAnimationFrame(animateFrame.bind(this, audioVisualiser));
     window.requestAnimationFrame(this.animateFrame.bind(musicApp));
     if (!this.graphics.ctx) return;
+
+    // Extension: feed the wasm renderer, and hand the canvas to Cake while the
+    // "cake" style is selected (music.js only draws bars/circle).
+    const freqData = audioVisualiser.frequencyData;
+    const timeData = audioVisualiser.timeDomainData;
+    this.pushBinsToWasm(freqData, timeData);
+    if (this.visualizer === "cake") { this.prevTime = time; return; }
+
     const ctx = this.graphics.ctx;
     if(clear) this.graphics.ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     else {
@@ -184,8 +232,6 @@ MusicApp.prototype.animateFrame = function(time) {
     const height = ctx.canvas.height;
     seek.value = audio.currentTime;
 
-    const freqData = audioVisualiser.frequencyData;
-    const timeData = audioVisualiser.timeDomainData;
     // const count = visualiserOption.frequ;
     const count = audioVisualiser.frequencyBinCount;
 
@@ -266,7 +312,7 @@ MusicApp.prototype.loadVisualizerApps = function() {
 }
 
 if (visualiserOption) visualiserOption.onchange = function() {
-	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.selectedIndex === 1 ? "circle" : "bars";
+	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.value || "bars";
 }
 
 function startAnimation(){

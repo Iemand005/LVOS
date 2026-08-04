@@ -15,7 +15,7 @@
     <script src="../../Scripts/WebMedia/Media.js" defer></script>
     <script src="../../Scripts/WebAura/Aura.js" defer></script>
     <script src="../../Scripts/messenger.js" defer></script>
-    <script src="./music.js"bro the o defer></script>
+    <script src="./music.js" defer></script>
 
     
    
@@ -23,7 +23,7 @@
 <body class="transparent">
     <audio></audio>
     <canvas id="canvas" style="width: 100%; height: 100%;"></canvas>
-    <canvas id="visualizer" style="background: #000;"></canvas>
+    <canvas id="visualizer"></canvas>
     <form id="options">
         <section>
             <input type="file" name="file" id="file" value="Open" accept="audio/*"> <!-- file -->
@@ -53,17 +53,9 @@
         </section>
 
         <button id="toggle-imgui" onclick="toggleImGui()">Debug UI (F3)</button>
-        <div id="audio-controls">
-          <button id="btn-mic" onclick="startMicrophone()">Start Microphone</button>
-          <button id="btn-file" onclick="pickTrack()">Load Track...</button>
-          <input type="file" id="file-input" accept="audio/*" hidden />
-          <span id="audio-status">click a button or drop a track to feed the wasm analyser</span>
-          <span id="audio-level"></span>
-        </div>
     </form>
 
 
-     <script src="https://iemand005.github.io/FenixWeb/web_audio_visualizer.js"></script>
     <script>
       var canvasElement = document.getElementById("canvas"),
         Module = {
@@ -90,88 +82,19 @@
           }
         };
 
-      // Visualizer switching: "cake" shows the wasm renderer on #canvas; anything
-      // else draws bars/circle in 2D on the #visualizer overlay (and pauses the
-      // wasm loop so the frozen cake never shows through the opaque background).
-      var visCanvas = document.getElementById('visualizer');
-      var visCtx = visCanvas ? visCanvas.getContext('2d') : null;
-      var anim2d = false;
-
-      function sizeVisCanvas() {
-        if (!visCanvas) return;
-        var dpr = window.devicePixelRatio || 1;
-        var w = visCanvas.clientWidth, h = visCanvas.clientHeight;
-        var nw = Math.round(w * dpr), nh = Math.round(h * dpr);
-        if (nw && nh && (visCanvas.width !== nw || visCanvas.height !== nh)) {
-          visCanvas.width = nw;
-          visCanvas.height = nh;
-        }
-      }
-
-      function render2d() {
-        if (!visCtx) return;
-        sizeVisCanvas();
-        var w = visCanvas.width, h = visCanvas.height;
-        visCtx.clearRect(0, 0, w, h);
-        if (!audioVis) return;
-        var bins = audioVis.frequencyBins;
-        var td = audioVis.timeDomain;
-        var count = audioVis.binCount || 0;
-        if (!count) return;
-        var hue = (Date.now() / 20) % 360;
-        if (styleEl && styleEl.value === 'circle') {
-          var cx = w / 2, cy = h / 2;
-          var rad = 0, inc = Math.PI * 2 / count;
-          var n = td ? td.length : count;
-          var r0 = Math.min(w, h) * 0.45;
-          for (var i = 0; i < n; i++) {
-            var amp = td ? td[i] : 0; // -1..1
-            var r = (amp * 0.5 + 0.5) * r0;
-            visCtx.fillStyle = 'hsl(' + hue + ',100%,60%)';
-            visCtx.beginPath();
-            visCtx.arc(r * Math.cos(rad) + cx, r * Math.sin(rad) + cy, Math.max(1.5, h / 300), 0, Math.PI * 2);
-            visCtx.fill();
-            rad += inc;
-          }
-        } else {
-          var bw = w / count;
-          for (var j = 0; j < count; j++) {
-            var m = bins ? bins[j] : 0; // 0..1
-            var bh = m * h;
-            visCtx.fillStyle = 'hsl(' + ((hue + j * 360 / count) % 360) + ',100%,60%)';
-            visCtx.fillRect(j * bw, h - bh, Math.max(1, bw - 1), bh);
-          }
-        }
-      }
-
-      function start2d() {
-        if (anim2d) return;
-        anim2d = true;
-        var step = function () {
-          if (!anim2d) return;
-          render2d();
-          requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }
-
-      function stop2d() {
-        anim2d = false;
-        if (visCtx) visCtx.clearRect(0, 0, visCanvas.width, visCanvas.height);
-      }
-
-      // Pause/resume the wasm render loop + swap canvases to match the dropdown.
+      // Visualizer switching: "cake" shows the wasm renderer on #canvas; bars
+      // and circle draw in 2D on the #visualizer overlay via music.js. Pausing
+      // the wasm loop keeps the frozen cake from showing through the overlay.
       function syncVisualizers() {
         var style = document.getElementById('style');
         if (!style) return;
+        var visCanvas = document.getElementById('visualizer');
         var isCake = style.value === 'cake';
         if (visCanvas) visCanvas.style.display = isCake ? 'none' : '';
         if (isCake) {
-          stop2d();
           if (typeof Module._ResumeMainLoop === 'function') Module._ResumeMainLoop();
         } else {
           if (typeof Module._PauseMainLoop === 'function') Module._PauseMainLoop();
-          start2d();
         }
       }
       var styleEl = document.getElementById('style');
@@ -188,97 +111,6 @@
           btn.classList.toggle('active', visible === 1);
         }
       }
-
-      // ---------------------------------------------------------------
-      // Web Audio visualizer bridge: browser FFT -> wasm bins + waveform
-      // ---------------------------------------------------------------
-      var audioVis = null;
-
-      function ensureAudioVis() {
-        if (audioVis) return audioVis;
-        audioVis = new WebAudioVisualizer(Module);
-        audioVis.sourceType = null;
-        audioVis.onStateChange = function (ev) {
-          // Remember what's driving the analyser so the mic button can toggle.
-          audioVis.sourceType = (ev.state === 'mic' || ev.state === 'file' || ev.state === 'attach') ? ev.state : null;
-
-          var micBtn = document.getElementById('btn-mic');
-          if (micBtn) {
-            var micActive = ev.state === 'mic';
-            micBtn.textContent = micActive ? 'Stop Microphone' : 'Start Microphone';
-            micBtn.classList.toggle('active', micActive);
-          }
-
-          var el = document.getElementById('audio-status');
-          if (!el) return;
-          switch (ev.state) {
-            case 'mic': el.textContent = 'microphone ÔåÆ wasm analyser'; break;
-            case 'file': el.textContent = 'track playing ÔåÆ wasm analyser'; break;
-            case 'attach': el.textContent = 'analyser attached ÔåÆ wasm analyser'; break;
-            case 'stopped': el.textContent = 'audio stopped'; break;
-            case 'error': el.textContent = 'audio error: ' + ev.detail; break;
-            default: el.textContent = String(ev.detail || ev.state);
-          }
-        };
-        return audioVis;
-      }
-
-      function startMicrophone() {
-        var vis = ensureAudioVis();
-        // Already capturing on the mic? Toggle it off.
-        if (vis.sourceType === 'mic') {
-          vis.stop();
-          return;
-        }
-        vis.startMicrophone().catch(function () {
-          // mic denied/unavailable ÔÇö fall back to a local track
-          var btn = document.getElementById('btn-mic');
-          if (btn) {
-            btn.textContent = 'Start Microphone';
-            btn.classList.remove('active');
-          }
-          var fileBtn = document.getElementById('btn-file');
-          if (fileBtn) fileBtn.click();
-        });
-      }
-
-      function pickTrack() {
-        var input = document.getElementById('file-input');
-        if (input) input.click();
-      }
-
-      document.getElementById('file-input').addEventListener('change', function () {
-        if (this.files && this.files.length) ensureAudioVis().loadFile(this.files[0]);
-      });
-
-      // Drag & drop a track anywhere on the page
-      var controls = document.getElementById('audio-controls');
-      ['dragenter', 'dragover'].forEach(function (name) {
-        window.addEventListener(name, function (e) {
-          e.preventDefault();
-          controls.classList.add('dragging');
-        });
-      });
-      ['dragleave', 'drop'].forEach(function (name) {
-        window.addEventListener(name, function (e) {
-          e.preventDefault();
-          controls.classList.remove('dragging');
-        });
-      });
-      window.addEventListener('drop', function (e) {
-        var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-        if (f) ensureAudioVis().loadFile(f);
-      });
-
-      // Live audio debug readout: linear peak, dB peak, AudioContext state.
-      setInterval(function () {
-        var el = document.getElementById('audio-level');
-        if (!el || !audioVis) { if (el) el.textContent = ''; return; }
-        var ctx = audioVis.audioContext;
-        var state = ctx ? ctx.state : 'none';
-        el.textContent = 'level ' + (audioVis.lastPeak ? audioVis.lastPeak.toFixed(3) : '0.000') +
-          ' / ' + (audioVis.lastDbPeak ? audioVis.lastDbPeak.toFixed(1) : '-Inf') + ' dB / ctx ' + state;
-      }, 200);
     </script>
     <script async src="https://iemand005.github.io/FenixWeb/Cake/Cake.js"></script>
 </body>
