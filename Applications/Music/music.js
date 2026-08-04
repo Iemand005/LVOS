@@ -149,14 +149,32 @@ function openCanvasPip() {
 		height: visualiser.height,
 	}).then(function(/** @type {Window} */pipWindow) {
 		const doc = pipWindow.document;
-		const body = doc.body;
+		// In a freshly created PiP document the <body> may not exist yet; create
+		// it so appending + styling the canvas works reliably.
+		let html = doc.documentElement;
+		if (!html) { html = doc.createElement('html'); doc.appendChild(html); }
+		let body = doc.body;
+		if (!body) { body = doc.createElement('body'); html.appendChild(body); }
+		let head = doc.head;
+		if (!head) { head = doc.createElement('head'); html.appendChild(head); }
 
 		// The app's CSS (music.css) is NOT loaded in the PiP window's separate
-		// document, so style html/body and the canvas inline to fill the window.
-		doc.documentElement.style.height = '100%';
+		// document, so inject a stylesheet that FORCES html/body to 100%, plus
+		// matching inline styles for the canvas so it fills the whole window.
+		const styleEl = doc.createElement('style');
+		styleEl.textContent =
+			'html{-webkit-text-size-adjust:none}' +
+			'html,body{width:100%!important;height:100%!important;' +
+			'margin:0!important;padding:0!important;overflow:hidden!important;' +
+			'position:relative!important;background:#000!important}';
+		head.appendChild(styleEl);
+
+		html.style.width = '100%';
+		html.style.height = '100%';
+		body.style.width = '100%';
 		body.style.height = '100%';
 		body.style.margin = '0';
-		body.style.width = '100%';
+		body.style.padding = '0';
 		body.style.overflow = 'hidden';
 		body.style.position = 'relative';
 		body.style.background = '#000';
