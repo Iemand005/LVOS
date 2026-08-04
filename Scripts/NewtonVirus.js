@@ -6,7 +6,7 @@ function NewtonManager() {
 }
 
 NewtonManager.prototype.start = function () {
-	requestAnimationFrame(this.loop);
+	requestAnimationFrame(this.loop.bind(this));
 };
 
 /** @param {DOMHighResTimeStamp} time */
