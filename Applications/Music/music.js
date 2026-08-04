@@ -43,6 +43,7 @@ const colorTitlebar = false;
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
+    return;
 	this.graphics = new Graphics2D(visualizerElement);
 	// this.ctx = visualizerElement.getContext("2d");
 	console.log("graphics canvas found:", this.graphics.ctx);
@@ -55,7 +56,7 @@ function MusicApp(visualizerElement) {
 	this.rotation = 0;
 }
 
-musicApp = new MusicApp(visualiser);
+// musicApp = new MusicApp(visualiser);
 
 
 window.onresize = function() {
