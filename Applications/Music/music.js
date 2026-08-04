@@ -36,6 +36,14 @@ var clear = true;
 const media = new Media;
 const aura = typeof Aura !== "undefined" ? new Aura : null;
 
+// Bridge: when the wasm renderer (Cake) requests a colour, forward it to the
+// same WebAura instance the music app already drives.
+if (typeof Module !== "undefined" && Module) {
+    Module.onAuraColor = function (r, g, b) {
+        if (aura && aura.device) aura.setColor(r, g, b).catch(function () {});
+    };
+}
+
 const THROTTLE_MS = 20;
 
 const colorTitlebar = false;

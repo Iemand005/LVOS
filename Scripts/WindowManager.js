@@ -1863,15 +1863,6 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				})
 				break;
 			case types.visualizers:
-				// var id = data.id;
-				// console.log("Element ID to rip from app guts: " + id, dialog);
-				// var doc = dialog.contentDocument;
-				// if (!doc) break;
-				// var targetElement = doc.getElementById(id);
-				// console.log("Ripped out element:", targetElement);
-				// if (!targetElement) break;
-				// var sender 
-				// dialog.sen
 				dialog.messageFrame(LVMessenger.types.visualizers, windowManager.getVisualizerApps());
 				break;
 		}

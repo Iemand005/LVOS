@@ -159,6 +159,11 @@
 	--window-border-width: 7px;
 }
 
+/* .modern .window div {
+    width: 15px;
+    height: 15px;
+} */
+
 .modern .window header {
 	display: flex;
 	padding: 0;

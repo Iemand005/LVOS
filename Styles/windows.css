@@ -444,8 +444,8 @@ button:hover {
 }
 
 .window > div {
-	width: 5px;
-	height: 5px;
+	width: 15px;
+	height: 15px;
 	z-index: 0;
 }
 
