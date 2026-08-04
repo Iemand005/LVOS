@@ -705,7 +705,7 @@ function translateElement(element, x, y, skew, scaleY, rotation) {
     var transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     if (skew) transform += " skewX(" + toDegree(skew) + ")";
     if (scaleY) transform += "scaleY(" + scaleY + ")";
-    if (rotation) transform += "rotation(" + scaleY + ")";
+    if (rotation) transform += "rotate(" + rotation + "deg)";
     element.style.transform = transform;
     element.style.webkitTransform = transform;
 }
