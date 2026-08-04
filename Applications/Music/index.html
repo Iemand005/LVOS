@@ -32,6 +32,8 @@
              * @returns {string} The final resolved URL/path
              */
             locateFile: function(path, prefix) {
+
+                return "https://iemand005.github.io/FenixWeb/Cake/" + path; 
                 // Redirect the WebAssembly binary path
                 if (path.endsWith('.wasm')) {
                     return '/my-custom-wasm-folder/' + path;
