@@ -276,28 +276,8 @@
 	background-color: pink;
 }
 
-.window > div.touch-sizer-6,
-.window > div.touch-sizer-5,
-.window > div.touch-sizer-1 {
-	/* background-color: #0d0d0d57; */
-}
+.window > div.touch{
 
-.window > div.touch-sizer-7,
-.window > div.touch-sizer-6,
-.window > div.touch-sizer-2 {
-    right: -20px;
-}
-
-.window > div.touch-sizer-8,
-.window > div.touch-sizer-7,
-.window > div.touch-sizer-3 {
-    bottom: -20px;
-}
-
-.window > div.touch-sizer-8,
-.window > div.touch-sizer-5,
-.window > div.touch-sizer-4 {
-    left: -20px;
 }
 
 
