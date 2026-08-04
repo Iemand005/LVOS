@@ -230,6 +230,14 @@
 }
 
 
+.window header {
+	background-color: black;
+}
+
+.window content {
+	background: transparent !important;
+}
+
 .window > .sizer-1, .window > div.touch-sizer-1 {
     background-color: red;
 }
