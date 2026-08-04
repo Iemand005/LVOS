@@ -25,7 +25,10 @@ NewtonManager.prototype.step = function(time) {
 	windowManager.forEachWindow(function (window) {
 		if (window.dragging) return;
 
-		if (!window.velocity) window.velocity = {}
-		window.y -= deltaTime;
+		if (!window.velocity) window.velocity = new Vector();
+		window.velocity.y -= deltaTime;
+		// window.velocity.x -= deltaTime;
+		window.y += window.velocity.y;
+		window.x += window.velocity.x;
 	});
 };
