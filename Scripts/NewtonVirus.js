@@ -21,5 +21,7 @@ NewtonManager.prototype.step = function(time) {
 	var deltaTime = this.lastTime - currentTime;
 	this.lastTime = currentTime;
 
-	windowManager.forEachWindow(this, function (window) {})wy
+	windowManager.forEachWindow(function (window) {
+		window.y += deltaTime;
+	});
 };
