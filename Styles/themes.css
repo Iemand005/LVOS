@@ -260,18 +260,19 @@
 	background-color: blue;
 }
 
-.window > .sizer-5 {
+.window > .sizer-5, .window > div.touch-sizer-5 {
 	background-color: purple;
 }
 
-.window > .sizer-6 {
+.window > .sizer-6, .window > div.touch-sizer-6 {
 	background-color: orange;
 }
 
-.window > .sizer-7 {sizer
+.window > .sizer-7, .window > div.touch-sizer-7 {
+	background-color: cyan;
 }
 
-.window > .sizer-8 {
+.window > .sizer-8, .window > div.touch-sizer-8 {
 	background-color: pink;
 }
 
