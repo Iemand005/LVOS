@@ -56,8 +56,8 @@ function MusicApp(visualizerElement) {
 	this.rotation = 0;
 }
 
-if (visualiser typeof HTMLCanvasElement)
-musicApp = new MusicApp(visualiser);
+if (visualiser instanceof HTMLCanvasElement)
+    musicApp = new MusicApp(visualiser);
 
 
 // window.onresize = function() {
