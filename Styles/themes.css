@@ -19,6 +19,7 @@
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
+	transition: all 0.2s ease-in-out;
 }
 
 .window > content > article,
@@ -293,7 +294,7 @@
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0.02) 65%, transparent 85%);
 }
 
-body.no-blur .modern.blur .window content {
+body.no-blur.modern.blur .window content {
 	background: linear-gradient(180deg, #2c2c32 0%, #1e1e22 50%, #141418 100%);
 }
 
@@ -304,7 +305,7 @@ body.no-blur .modern.blur .window content {
 	box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-body.no-blur .modern.blur .window content {
+body.no-blur.modern.blur .window content {
 	background: linear-gradient(180deg, #f6f6fa 0%, #e6e6ec 50%, #d4d4da 100%);
 }
 
