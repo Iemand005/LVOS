@@ -140,7 +140,7 @@ function setThemeOption(theme) {
 		if (previousBase) removeTheme(previousBase);
 	}
 	if (theme && THEMES.indexOf(theme) != -1) {
-		setTheme(theme);
+		if (theme != "modern-blur") setTheme(theme);
 		if (theme == "glass") setTheme("blur");
 		if (theme == "modern-blur") {
 			setTheme("modern");
@@ -257,7 +257,7 @@ function loadSettings() {
 function loadThemeSetting() {
 	var theme = settings.get("theme");
 	if (THEMES.indexOf(theme) != -1) {
-		setTheme(theme);
+		if (theme != "modern-blur") setTheme(theme);
 		if (theme == "glass") setTheme("blur");
 		if (theme == "modern-blur") {
 			setTheme("modern");

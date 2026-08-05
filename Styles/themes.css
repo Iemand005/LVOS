@@ -262,15 +262,19 @@
 }
 
 
-.blur.modern .window content {
-	background: linear-gradient(358deg, rgba(22, 22, 22, 0.72), rgba(51, 50, 50, 0.72));
+.modern.blur .window {
+	--window-outer-radius: 20px;
+}
+
+.modern.blur .window content {
+	background: linear-gradient(358deg, rgba(10, 10, 10, 0.8), rgba(28, 28, 28, 0.8));
 	backdrop-filter: blur(20px) saturate(150%);
 	-webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 
 @media (prefers-color-scheme: light) {
 
-.blur.modern .window content {
+.modern.blur .window content {
 	background: linear-gradient(358deg, rgba(217, 217, 217, 0.72), rgba(247, 247, 247, 0.72));
 }
 
