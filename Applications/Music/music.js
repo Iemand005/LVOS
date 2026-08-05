@@ -19,7 +19,6 @@ var virtualAudio = document.createElement("audio");
 var file = document.getElementById("file");
 var audio = document.getElementsByTagName("audio")[0];
 var visualiser = document.getElementById("visualizer");
-// var ctx = visualiser instanceof HTMLCanvasElement ? visualiser.getContext("2d") : null;
 var fullscreen = document.getElementById("fullscreen");
 var volume = document.getElementById("volume");
 var seek = document.getElementById("seek");
@@ -29,8 +28,9 @@ var seekOutput = document.getElementById("seek-output");
 var volumeOutput = document.getElementById("volume-output");
 var fft = document.getElementById("fft");
 var visualiserOption = document.getElementById("style");
-let elements = [];
+
 var audioVisualiser = new AudioVisualizer(frequencies);
+
 var circular = true;
 var clear = true;
 
