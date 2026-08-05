@@ -295,6 +295,11 @@
 	corner-shape: squircle; 
 }
 
+.squircles .window > content > article {
+	border-radius: calc(var(--window-radius) * 2 - var(--window-border-width));
+	corner-shape: squircle; 
+}
+
 @keyframes flip {
 0%     { transform: rotateY(0deg); }
 50%    { transform: rotateY(90deg); }
