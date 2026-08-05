@@ -116,6 +116,33 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	if (settingsElement) settingsElement.appendChild(flagsElement);
 };
 
+/** The body-level theme classes available in Styles/themes.css. */
+var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mica", "modern", "windows", "windows-11", "windows-95"];
+
+/** @param {string} theme */
+function setThemeOption(theme) {
+	var previous = settings.get("theme");
+	if (previous && previous != theme) {
+		if (THEMES.indexOf(previous) != -1) removeTheme(previous);
+		if (previous == "glass") removeTheme("blur");
+	}
+	if (theme && THEMES.indexOf(theme) != -1) {
+		setTheme(theme);
+		if (theme == "glass") setTheme("blur");
+		settings.set("theme", theme);
+	} else {
+		removeTheme("blur");
+		removeTheme("glass");
+		settings.set("theme", "");
+	}
+}
+
+/** @param {boolean} enabled */
+function toggleColorDebug(enabled) {
+	document.body.classList.toggle("color-debug", enabled);
+	settings.set("color-debug", enabled);
+}
+
 /** @param {number} id */
 function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
@@ -196,9 +223,23 @@ function setAccentColor(color) {
 function loadSettings() {
 	setColor(settings.get("color"));
 	setAccentColor(settings.get("accentColor"));
-	setTheme(settings.get("theme"));
+	loadThemeSetting();
 	// getBorderSize(settings.get("borderSize"));
 	updateBlurState();
+}
+
+function loadThemeSetting() {
+	var theme = settings.get("theme");
+	if (THEMES.indexOf(theme) != -1) {
+		setTheme(theme);
+		if (theme == "glass") setTheme("blur");
+		if (elements.theme) elements.theme.value = theme;
+	}
+	var colorDebug = settings.get("color-debug");
+	if (typeof colorDebug == "boolean") {
+		document.body.classList.toggle("color-debug", colorDebug);
+		if (elements.colorDebug) elements.colorDebug.checked = colorDebug;
+	}
 }
 
 function updateBlurState() {
@@ -217,7 +258,9 @@ var elements = {
 	resetColor: null,
 	resetAccent: null,
 	border: null,
-	dockAppList: null
+	dockAppList: null,
+	theme: null,
+	colorDebug: null
 };
 
 function loadElements() {
@@ -229,6 +272,8 @@ function loadElements() {
 	elements.resetAccent = document.getElementById("resetaccent");
 	elements.border = document.getElementById("border");
 	elements.dockAppList = document.getElementById("dockapplist");
+	elements.theme = document.getElementById("theme");
+	elements.colorDebug = document.getElementById("color-debug");
 
 	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
@@ -238,6 +283,8 @@ function loadElements() {
 	if (elements.border) elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 	if (elements.accent) elements.accent.oninput = elements.accent.onchange = function () { setAccentColor(this.value); };
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
+	if (elements.theme) elements.theme.onchange = function () { setThemeOption(this.value); };
+	if (elements.colorDebug) elements.colorDebug.onchange = function () { toggleColorDebug(this.checked); };
 	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
 
 

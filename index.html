@@ -138,10 +138,20 @@
             <form id="settings">
 				<label for="theme">Theme: </label>
                 <select name="theme" id="theme">
-                    <option value="square">Square</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="round">Rounded</option>
+                    <option value="">None</option>
+                    <option value="default-theme">Default</option>
+                    <option value="blur">Blur</option>
+                    <option value="flippy">Flippy</option>
+                    <option value="glass">Glass (Blur)</option>
+                    <option value="gnome">Gnome</option>
+                    <option value="mica">Mica</option>
+                    <option value="modern">Modern</option>
+                    <option value="windows">Windows</option>
+                    <option value="windows-11">Windows 11</option>
+                    <option value="windows-95">Windows 95</option>
                 </select>
+                <label for="color-debug">Color debug</label>
+                <input type="checkbox" name="color-debug" id="color-debug">
                 <label for="color">Color: </label>
                 <input type="color" name="color" id="color">
                 <input type="button" id="resetcolor" value="Reset color">
