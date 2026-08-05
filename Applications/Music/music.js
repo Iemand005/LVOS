@@ -112,7 +112,7 @@ function localFullscreen() {
 	else if (document.body.msRequestFullscreen) document.body.msRequestFullscreen();
 }
 
-fullscreen.onclick = function(){
+if (fullscreen) fullscreen.onclick = function(){
 	localFullscreen();
 	LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
 }
@@ -147,7 +147,7 @@ function openCanvasPip() {
 
 	const visualiser = document.getElementById(visualiserCanvasId);
 
-	if (!visualiser) return;
+	if (!visualiser || !(visualiser instanceof HTMLCanvasElement)) return;
 
 	const originalParent = visualiser.parentNode;
 
