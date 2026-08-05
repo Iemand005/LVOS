@@ -219,7 +219,6 @@
 	background: linear-gradient(358deg, #161616, #333232);
 	/* padding: 5px; */
 	border: 0px solid black;
-	corner-shape: squircle;
 }
 
 .modern button {
@@ -285,6 +284,9 @@
 	opacity: 0.5;
 }
 
+.squircles .window {
+	border-radius: 50% / 10%;
+}
 
 @keyframes flip {
 0%     { transform: rotateY(0deg); }
