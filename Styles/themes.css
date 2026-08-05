@@ -284,8 +284,8 @@
 	opacity: 0.5;
 }
 
-.squircles .window {
-	border-radius: 50% / 10%;
+.squircles .window > content {
+	corner-shape: squircle; 
 }
 
 @keyframes flip {
@@ -329,6 +329,4 @@
 	}
 
 	/* .glass content {
-	background: none !important;
-} */
-}
+	background: none !important
