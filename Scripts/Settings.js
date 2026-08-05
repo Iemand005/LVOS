@@ -122,6 +122,7 @@ var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mica", "mode
 /** @param {string} theme */
 function setThemeOption(theme) {
 	var previous = settings.get("theme");
+	var blurWasOn = previous == "blur" || previous == "glass";
 	if (previous && previous != theme) {
 		if (THEMES.indexOf(previous) != -1) removeTheme(previous);
 		if (previous == "glass") removeTheme("blur");
@@ -135,6 +136,8 @@ function setThemeOption(theme) {
 		removeTheme("glass");
 		settings.set("theme", "");
 	}
+	if (theme == "blur" || theme == "glass") removeTheme("modern");
+	else if (blurWasOn) setTheme("modern");
 }
 
 /** @param {boolean} enabled */
@@ -233,6 +236,7 @@ function loadThemeSetting() {
 	if (THEMES.indexOf(theme) != -1) {
 		setTheme(theme);
 		if (theme == "glass") setTheme("blur");
+		if (theme == "blur" || theme == "glass") removeTheme("modern");
 		if (elements.theme) elements.theme.value = theme;
 	}
 	var colorDebug = settings.get("color-debug");
