@@ -555,9 +555,13 @@ button:hover {
     body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);
         /* backdrop-filter: saturate(150%) blur(20px); */
-        padding: 0;
+        /* padding: 0; */
         border: 1px solid rgba(255, 255, 255, 0.267);
     }
+
+	body.blur:not(.modern) .window > content {
+		padding: 0;
+	}
 
     .blur .backdrop-filter {
         backdrop-filter: saturate(150%) blur(20px);
