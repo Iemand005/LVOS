@@ -334,17 +334,19 @@
 	opacity: 0.5;
 }
 
-.squircles .window {
-	--window-outer-radius: calc(var(--window-radius) * 2);
-}
+@supports (corner-shape: squircle) {
+	.squircles .window {
+		--window-outer-radius: calc(var(--window-radius) * 2);
+	}
 
-.squircles .window > content::before,
-.squircles .window > content::after,
-.squircles .window > content,
-.squircles .window > content > article,
-.squircles .backdrop-clip,
-.squircles .backdrop-filter {
-	corner-shape: squircle; 
+	.squircles .window > content::before,
+	.squircles .window > content::after,
+	.squircles .window > content,
+	.squircles .window > content > article,
+	.squircles .backdrop-clip,
+	.squircles .backdrop-filter {
+		corner-shape: squircle; 
+	}
 }
 
 @keyframes flip {
