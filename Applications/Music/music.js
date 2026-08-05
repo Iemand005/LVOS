@@ -137,6 +137,8 @@ function openCanvasPip() {
     return;
   }
 
+  if (!window.documentPictureInPicture) return;
+
   if (window.documentPictureInPicture.window) {
     window.documentPictureInPicture.window.close();
     return;
