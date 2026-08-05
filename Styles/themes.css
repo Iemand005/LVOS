@@ -323,7 +323,8 @@
 .squircles .window > content::after,
 .squircles .window > content,
 .squircles .window > content > article,
-.backdrop-clip, .backdrop-filter {
+.squircles .backdrop-clip,
+.squircles .backdrop-filter {
 	corner-shape: squircle; 
 }
 
