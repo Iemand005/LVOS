@@ -34,6 +34,16 @@ select:hover {
     background-color: #ffffff2b;
 }
 
+select {
+    color-scheme: light;
+}
+
+select option,
+select optgroup {
+    background-color: var(--bg, #ffffff);
+    color: var(--fg, #000000);
+}
+
 button:active,
 .button:active {
     background-color: #0000002b;
@@ -48,6 +58,10 @@ input[type="number"] {
 
     * {
         color: white;
+    }
+
+    select {
+        color-scheme: dark;
     }
 
     button, .button, input, select {
