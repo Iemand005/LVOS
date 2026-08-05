@@ -223,7 +223,7 @@
 .modern .window content {
 	background: linear-gradient(358deg, #161616, #333232);
 	/* padding: 5px; */
-	border: 0px solid black;
+	border: 0px solid black !important;
 }
 
 .modern button {
@@ -243,7 +243,6 @@
 
 .modern .window content {
 	background: linear-gradient(358deg, #d9d9d9, #f7f7f7);
-	border: none !important;
 }
 
 .modern button {
