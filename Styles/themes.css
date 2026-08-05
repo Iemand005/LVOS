@@ -225,6 +225,7 @@
 	background: linear-gradient(358deg, #161616, #333232);
 	/* padding: 5px; */
 	border: 0px solid black !important;
+	z-index: 1;
 }
 
 .modern button {
@@ -313,6 +314,10 @@
 .mac-os .window header {
     display: flex;
     flex-direction: row-reverse;
+}
+
+.mac-os .window header button {
+	margin: 0 5px;
 }
 
 .color-debug .window header,

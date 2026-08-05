@@ -217,7 +217,7 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
 .window[focus].dragging > content {
@@ -566,6 +566,13 @@ button:hover {
     .blur .backdrop-filter {
         backdrop-filter: saturate(150%) blur(20px);
         -webkit-backdrop-filter: saturate(150%) blur(20px);
+    }
+
+    body.no-blur *,
+    body.no-blur *::before,
+    body.no-blur *::after {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     body.blur .window > content > *, body.blur .window > content > article > * {

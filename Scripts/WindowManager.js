@@ -1308,6 +1308,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		updateFullscreenBlurState();
 	});
 	else {
 		var startPos = this.position;
@@ -1322,6 +1323,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.width = startSize.x;
 			self.height = startSize.y;
 			if ( self.target) self.target.classList.toggle("maximized", enable);
+			updateFullscreenBlurState();
 		}
 		if (!enable) toggleThingie();
 		animate(300, function(t) {
@@ -2125,6 +2127,11 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.classList.toggle("blur");
     else document.body.classList.toggle("blur", enabled);
     settings.set("blur", enabled);
+}
+
+/** Disables backdrop-filter on everything while any window is fullscreen/maximized */
+function updateFullscreenBlurState(){
+    document.body.classList.toggle("no-blur", !!document.querySelector(".window.maximized"));
 }
 
 /** @param {*} exception */
