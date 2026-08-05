@@ -210,7 +210,7 @@ function openCanvasPip() {
 			pipWindow = null;
 		}, { once: true });
 	}).catch(function(ex) {
-		LVMessenger.broadcastToParent("pip", {id: musicApp.visualizer === "cake" ? "canvas" : "visualizer"}, "music");
+		LVMessenger.broadcastToParent("pip", {id: visualiser.id}, "music");
 	});
 }
 

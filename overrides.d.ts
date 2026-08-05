@@ -3,25 +3,25 @@ export {};
 export {};
 
 interface DocumentPictureInPictureOptions {
-  width?: number;
-  height?: number;
-  disallowReturnToOpener?: boolean;
-  preferInitialWindowPlacement?: boolean;
+width?: number;
+height?: number;
+disallowReturnToOpener?: boolean;
+preferInitialWindowPlacement?: boolean;
 }
 
 interface DocumentPictureInPictureEvent extends Event {
-  window: Window;
+window: Window;
 }
 
 interface DocumentPictureInPicture extends EventTarget {
-  window: Window | null;
-  requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
-  onenter: ((this: DocumentPictureInPicture, ev: DocumentPictureInPictureEvent) => any) | null;
-  addEventListener(
-    type: "enter",
-    listener: (this: DocumentPictureInPicture, ev: DocumentPictureInPictureEvent) => any,
-    options?: boolean | AddEventListenerOptions
-  ): void;
+window: Window | null;
+requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
+onenter: ((this: DocumentPictureInPicture, ev: DocumentPictureInPictureEvent) => any) | null;
+addEventListener(
+	type: "enter",
+	listener: (this: DocumentPictureInPicture, ev: DocumentPictureInPictureEvent) => any,
+	options?: boolean | AddEventListenerOptions
+): void;
 }
 
 declare global {
@@ -53,7 +53,7 @@ declare global {
 	}
 
 	interface Document {
-        documentMode?: number;
+		documentMode?: number;
 	}
 
 	interface Navigator {
@@ -64,6 +64,10 @@ declare global {
 		): void;
 		webkitGetUserMedia?: Navigator['getUserMedia'];
 		mozGetUserMedia?: Navigator['getUserMedia'];
+	}
+
+	interface HTMLElement {
+		msRequestFullscreen?: () => Promise<void> | void;
 	}
 
 	interface HTMLElementEventMap {
