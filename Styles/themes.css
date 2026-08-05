@@ -243,6 +243,7 @@
 
 .modern .window content {
 	background: linear-gradient(358deg, #d9d9d9, #f7f7f7);
+	border: none !important;
 }
 
 .modern button {
