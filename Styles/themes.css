@@ -262,6 +262,13 @@
 
 }
 
+.window {
+	transition: opacity 0.2s ease-in-out;
+}
+
+.window:not(:hover) {
+	opacity: 0.9;
+}
 
 .modern.blur .window {
 	/* --window-outer-radius: 20px; */
