@@ -147,7 +147,7 @@ function openCanvasPip() {
 
 	const visualiser = document.getElementById(visualiserCanvasId);
 
-	if (!visualiser || !(visualiser instanceof HTMLCanvasElement)) return;
+	if (!(visualiser instanceof HTMLCanvasElement)) return;
 
 	const originalParent = visualiser.parentNode;
 
@@ -194,6 +194,8 @@ function openCanvasPip() {
 
 		/** Fit the canvas backing store to the PiP window (× devicePixelRatio). */
 		function fitCanvas() {
+			if (!(visualiser instanceof HTMLCanvasElement)) return;
+
 			const dpr = pipWindow.devicePixelRatio || 1;
 			visualiser.width = Math.round(body.clientWidth * dpr);
 			visualiser.height = Math.round(body.clientHeight * dpr);
@@ -215,7 +217,7 @@ function openCanvasPip() {
 }
 
 const pipBtn = document.getElementById("pip-button");
-pipBtn.onclick = openCanvasPip;
+if (pipBtn) pipBtn.onclick = openCanvasPip;
 
 function componentToHex(c) {
 var hex = c.toString(16);
