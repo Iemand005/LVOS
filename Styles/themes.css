@@ -355,6 +355,10 @@
     body.blur .window {
         --window-radius: 8px;
 	}
+
+	body.blur .window > content {
+		z-index: 0;
+	}
 }
 
 @media (prefers-color-scheme: dark) {
