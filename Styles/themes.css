@@ -284,6 +284,12 @@
 	opacity: 0.5;
 }
 
+.squircles .window {
+	--window-radius: 40px;
+}
+
+.squircles .window > content::before,
+.squircles .window > content::after,
 .squircles .window > content {
 	corner-shape: squircle; 
 }
@@ -329,4 +335,6 @@
 	}
 
 	/* .glass content {
-	background: none !important
+	background: none !important;
+} */
+}
