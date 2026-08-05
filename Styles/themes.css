@@ -264,7 +264,7 @@
 
 
 .modern.blur .window {
-	--window-outer-radius: 20px;
+	/* --window-outer-radius: 20px; */
 }
 
 .modern.blur .window content {
@@ -375,11 +375,11 @@
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
 
-    body.blur .window {
+    body.blur:not(.modern) .window {
         --window-radius: 8px;
 	}
 
-	body.blur .window > content {
+	body.blur:not(.modern) .window > content {
 		z-index: 0;
 	}
 }
