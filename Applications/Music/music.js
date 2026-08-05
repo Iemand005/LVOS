@@ -72,7 +72,7 @@ MusicApp.prototype.setAuraColor = function (r, g, b) {
 
 if (visualiser instanceof HTMLCanvasElement) {
 	musicApp = new MusicApp(visualiser);
-	window.musicApp = musicApp;
+	musicApp = musicApp;
 }
 
 
@@ -144,6 +144,10 @@ function openCanvasPip() {
 	}
 
 	const visualiserCanvasId = musicApp.visualizer === "cake" ? "canvas" : "visualizer";
+
+	const visualiser = document.getElementById(visualiserCanvasId);
+
+	if (!visualiser) return;
 
 	const originalParent = visualiser.parentNode;
 
