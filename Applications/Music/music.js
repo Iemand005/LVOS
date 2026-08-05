@@ -6,7 +6,7 @@
 'use moz';
 
 /** @type {MusicApp | null} */
-let musicApp = null;
+window.musicApp = null;
 
 
 {
@@ -71,8 +71,7 @@ MusicApp.prototype.setAuraColor = function (r, g, b) {
 };
 
 if (visualiser instanceof HTMLCanvasElement) {
-	musicApp = new MusicApp(visualiser);
-	musicApp = musicApp;
+	window.musicApp = new MusicApp(visualiser);
 }
 
 
