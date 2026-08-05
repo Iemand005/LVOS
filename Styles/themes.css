@@ -285,7 +285,8 @@
 }
 
 .squircles .window {
-	--window-radius: 40px;
+	/* --window-radius: 40px; */
+	border-radius: calc(var(--window-radius) * 2);
 }
 
 .squircles .window > content::before,
