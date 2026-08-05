@@ -1108,9 +1108,8 @@ Object.defineProperty(Dialog.prototype, "rotation", {
 	set: function(/** @type {number} */rotation) { this.setRotation(rotation); }
 });
 Object.defineProperty(Dialog.prototype, "opacity", {
-	set: function(/** @type {number} */opacity) { this.target && (this.target.style.opacity = String(opacity));
-	}
-	get: function() { return this.target ? Number(this.target.style.opacity) : 1; }
+	set: function(/** @type {number} */opacity) { this.target && (this.target.style.opacity = String(opacity)); },
+	get: function() { return this.target && this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
 });
 /** @param {number} skew */
 Dialog.prototype.setSkew = function(skew) {
