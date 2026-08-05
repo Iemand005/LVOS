@@ -293,11 +293,19 @@
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0.02) 65%, transparent 85%);
 }
 
+body.no-blur .modern.blur .window content {
+	background: linear-gradient(180deg, #2c2c32 0%, #1e1e22 50%, #141418 100%);
+}
+
 @media (prefers-color-scheme: light) {
 
 .modern.blur .window content {
 	background: linear-gradient(180deg, rgba(246, 246, 250, 0.7) 0%, rgba(230, 230, 236, 0.66) 50%, rgba(212, 212, 218, 0.62) 100%);
 	box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+body.no-blur .modern.blur .window content {
+	background: linear-gradient(180deg, #f6f6fa 0%, #e6e6ec 50%, #d4d4da 100%);
 }
 
 .modern.blur .window content::before {
