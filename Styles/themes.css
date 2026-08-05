@@ -242,11 +242,11 @@
 }
 
 .modern .window content {
-	background: linear-gradient(358deg, #f7f7f7, #d9d9d9);
+	background: linear-gradient(358deg, #d9d9d9, #f7f7f7);
 }
 
 .modern button {
-	background: linear-gradient(358deg, #f7f7f7, #d9d9d9);
+	background: linear-gradient(358deg, #d9d9d9, #f7f7f7);
 	color: #161616;
 }
 
@@ -322,7 +322,8 @@
 .squircles .window > content::before,
 .squircles .window > content::after,
 .squircles .window > content,
-.squircles .window > content > article {
+.squircles .window > content > article,
+.backdrop-clip, .backdrop-filter {
 	corner-shape: squircle; 
 }
 
@@ -347,6 +348,13 @@
 	backdrop-filter: blur(3px) !important;
 	filter: url(#glass) !important;
 }
+}
+
+@supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
+
+    body.blur .window {
+        --window-radius: 8px;
+	}
 }
 
 @media (prefers-color-scheme: dark) {

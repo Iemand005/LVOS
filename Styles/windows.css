@@ -549,7 +549,7 @@ button:hover {
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
 
     body.blur .window {
-        border-radius: 8px;
+        /* border-radius: 8px; */
     }
 
     body.blur .window > content {
