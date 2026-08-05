@@ -219,6 +219,7 @@
 	background: linear-gradient(358deg, #161616, #333232);
 	/* padding: 5px; */
 	border: 0px solid black;
+	corner-shape: squircle;
 }
 
 .modern button {

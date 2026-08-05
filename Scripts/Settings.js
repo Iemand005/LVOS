@@ -119,17 +119,26 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 /** The body-level theme classes available in Styles/themes.css. */
 var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mica", "modern", "windows", "windows-11", "windows-95"];
 
+/** Base themes that other themes rely on. */
+var BASE_THEMES = {
+	"windows-11": "windows",
+	"windows-95": "windows"
+};
+
 /** @param {string} theme */
 function setThemeOption(theme) {
 	var previous = settings.get("theme");
 	var blurWasOn = previous == "blur" || previous == "glass";
+	var previousBase = BASE_THEMES[previous];
 	if (previous && previous != theme) {
 		if (THEMES.indexOf(previous) != -1) removeTheme(previous);
 		if (previous == "glass") removeTheme("blur");
+		if (previousBase) removeTheme(previousBase);
 	}
 	if (theme && THEMES.indexOf(theme) != -1) {
 		setTheme(theme);
 		if (theme == "glass") setTheme("blur");
+		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
 		settings.set("theme", theme);
 	} else {
 		removeTheme("blur");
@@ -236,6 +245,7 @@ function loadThemeSetting() {
 	if (THEMES.indexOf(theme) != -1) {
 		setTheme(theme);
 		if (theme == "glass") setTheme("blur");
+		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
 		if (theme == "blur" || theme == "glass") removeTheme("modern");
 		if (elements.theme) elements.theme.value = theme;
 	}
