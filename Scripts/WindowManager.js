@@ -108,10 +108,10 @@ function WindowManager() {
 
 	/** @param {PointerEvent | MouseEvent} event */
 	this.windowDragEvent = function(event) {
-		if (!event.buttons) {
-			disableDialogDrag();
-			return;
-		}
+		// if (!event.buttons) {
+		// 	disableDialogDrag();
+		// 	return;
+		// }
 		try {
 			cancelDomEvent(event);
 			if (flags.updateRateLimit) {
