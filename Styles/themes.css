@@ -17,11 +17,12 @@
 }
 
 .window {
-	border-radius: var(--window-radius);
+	--window-outer-radius: var(--window-radius);
+	border-radius: var(--window-outer-radius);
 }
 
 .window > content > article {
-	border-radius: calc(var(--window-radius) - var(--window-border-width));
+	border-radius: calc(var(--window-outer-radius) - var(--window-border-width));
 }
 
 .window content {
