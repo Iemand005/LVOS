@@ -5,6 +5,7 @@
 'use esnext';
 'use moz';
 
+/** @type {MusicApp | null} */
 let musicApp = null;
 
 
@@ -141,6 +142,8 @@ function openCanvasPip() {
 		window.documentPictureInPicture.window.close();
 		return;
 	}
+
+	const visualiserCanvasId = musicApp.visualizer === "cake" ? "canvas" : "visualizer";
 
 	const originalParent = visualiser.parentNode;
 
