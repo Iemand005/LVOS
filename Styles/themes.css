@@ -235,6 +235,32 @@
 	padding: 5px 10px;
 }
 
+@media (prefers-color-scheme: light) {
+
+.modern .window {
+	color: #161616;
+}
+
+.modern .window content {
+	background: linear-gradient(358deg, #f7f7f7, #d9d9d9);
+}
+
+.modern button {
+	background: linear-gradient(358deg, #f7f7f7, #d9d9d9);
+	color: #161616;
+}
+
+.modern .window content::before,
+.modern button::after {
+	background: linear-gradient(rgba(0, 0, 0, 0.06), transparent 75%);
+}
+
+.modern .window content::after {
+	background: rgba(0, 0, 0, 0.06);
+}
+
+}
+
 
 .color-debug .window header,
 .color-debug .window article {
