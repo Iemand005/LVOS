@@ -21,7 +21,8 @@
 	border-radius: var(--window-outer-radius);
 }
 
-.window > content > article {
+.window > content > article,
+.modern .window header {
 	border-radius: calc(var(--window-outer-radius) - var(--window-border-width));
 }
 
@@ -172,7 +173,6 @@
 .modern .window header {
 	display: flex;
 	padding: 0;
-	border-radius: calc(var(--window-radius) - var(--window-border-width));
 }
 
 .modern .window header button {

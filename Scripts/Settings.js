@@ -155,6 +155,12 @@ function toggleColorDebug(enabled) {
 	settings.set("color-debug", enabled);
 }
 
+/** @param {boolean} enabled */
+function toggleSquircles(enabled) {
+	document.body.classList.toggle("squircles", enabled);
+	settings.set("squircles", enabled);
+}
+
 /** @param {number} id */
 function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
@@ -254,6 +260,11 @@ function loadThemeSetting() {
 		document.body.classList.toggle("color-debug", colorDebug);
 		if (elements.colorDebug) elements.colorDebug.checked = colorDebug;
 	}
+	var squircles = settings.get("squircles");
+	if (typeof squircles == "boolean") {
+		document.body.classList.toggle("squircles", squircles);
+		if (elements.squircles) elements.squircles.checked = squircles;
+	}
 }
 
 function updateBlurState() {
@@ -274,7 +285,8 @@ var elements = {
 	border: null,
 	dockAppList: null,
 	theme: null,
-	colorDebug: null
+	colorDebug: null,
+	squircles: null
 };
 
 function loadElements() {
@@ -288,6 +300,7 @@ function loadElements() {
 	elements.dockAppList = document.getElementById("dockapplist");
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
+	elements.squircles = document.getElementById("squircles");
 
 	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
@@ -299,6 +312,7 @@ function loadElements() {
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
 	if (elements.theme) elements.theme.onchange = function () { setThemeOption(this.value); };
 	if (elements.colorDebug) elements.colorDebug.onchange = function () { toggleColorDebug(this.checked); };
+	if (elements.squircles) elements.squircles.onchange = function () { toggleSquircles(this.checked); };
 	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
 
 
