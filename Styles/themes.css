@@ -236,6 +236,10 @@
 	padding: 5px 10px;
 }
 
+.modern .backdrop-clip {
+	display: none;
+}
+
 @media (prefers-color-scheme: light) {
 
 .modern .window {
@@ -306,8 +310,9 @@
 }
 
 
-.mac-os {
-	
+.mac-os .window header {
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .color-debug .window header,
