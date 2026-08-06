@@ -35,7 +35,11 @@ var circular = true;
 var clear = true;
 
 const media = new Media;
-lat aura = typeof Aura !== "undefined" ? new Aura : null;
+/** @type {Aura | null} */
+let aura = null;
+if (typeof Aura !== "undefined") try { aura = new Aura(); } catch (ex) { console.warn("WebAura not supported:", ex); }
+	aura = new Aura();
+}
 
 const THROTTLE_MS = 20;
 
