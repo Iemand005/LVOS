@@ -35,7 +35,7 @@ var circular = true;
 var clear = true;
 
 const media = new Media;
-const aura = typeof Aura !== "undefined" ? new Aura : null;
+lat aura = typeof Aura !== "undefined" ? new Aura : null;
 
 const THROTTLE_MS = 20;
 
