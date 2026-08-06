@@ -53,9 +53,7 @@ const colorTitlebar = false;
 
 /** @param {HTMLCanvasElement} visualizerElement  */
 function MusicApp(visualizerElement) {
-	// return;
 	this.graphics = new Graphics2D(visualizerElement);
-	// this.ctx = visualizerElement.getContext("2d");
 	console.log("graphics canvas found:", this.graphics.ctx);
 
 	/** @type {"bars" | "circle" | "cake"} */
