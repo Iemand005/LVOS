@@ -38,7 +38,7 @@ const media = new Media;
 /** @type {Aura | null} */
 let aura = null;
 
-if (options instanceof HTMLFormElement) options.onsubmit = function(ev){
+if (options instanceof HTMLFormElement) options.onsubmit = function(ev) {
 	ev.preventDefault();
 };
 
