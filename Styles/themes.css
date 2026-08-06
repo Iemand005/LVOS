@@ -323,14 +323,25 @@ body.no-blur.modern.blur .window content {
 .mac-os .window header {
     display: flex;
     flex-direction: row-reverse;
+    position: relative;
+}
+
+.mac-os .window header h1 {
+    width: 100%;
+    margin: 0;
+    text-align: center;
 }
 
 .mac-os .window header section {
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 0;
+    bottom: 0;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
     gap: 8px;
-    padding-left: 12px;
 }
 
 .mac-os .window header section button {
@@ -353,6 +364,24 @@ body.no-blur.modern.blur .window content {
 
 .mac-os .window header section button:active {
     filter: brightness(0.7);
+}
+
+/* macOS-style: hovering the pill reveals the buttons' symbols */
+.mac-os .window header section:hover button {
+    font-size: 10px;
+    line-height: 13px;
+}
+
+.mac-os .window header section:hover button:nth-child(1) {
+    color: #177a2e;
+}
+
+.mac-os .window header section:hover button:nth-child(2) {
+    color: #8a6400;
+}
+
+.mac-os .window header section:hover button:nth-child(3) {
+    color: #a02823;
 }
 
 /* Traffic lights — the header section is reversed, so DOM 1/2/3 render right-to-left as green/yellow/red. */
