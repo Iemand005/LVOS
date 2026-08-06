@@ -69,7 +69,12 @@ function SettingsHandler() { // First class declarations, then the functions and
 	this.storage = typeof localStorage != "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
 }
 
-SettingsHandler.prototype.get = function (key) { if (this.storage) return this.storage.getItem(key) },
+SettingsHandler.prototype.get = function (key) {
+	if (!this.storage) return null;
+	var value = this.storage.getItem(key);
+	if (value == null) return null;
+	try { return JSON.parse(value); } catch (ex) { return value; }
+};
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 /** @param {{[key:string]: boolean}} flags */
@@ -169,6 +174,12 @@ function toggleSquircles(enabled) {
 	settings.set("squircles", enabled);
 }
 
+/** @param {boolean} enabled */
+function toggleNoBlurFullscreen(enabled) {
+	settings.set("no-blur-fullscreen", enabled);
+	updateFullscreenBlurState();
+}
+
 /** @param {number} id */
 function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
@@ -257,6 +268,11 @@ function loadSettings() {
 function loadThemeSetting() {
 	var theme = settings.get("theme");
 	if (THEMES.indexOf(theme) != -1) {
+		// Clear any hardcoded/default theme classes on <body> so the stored theme applies cleanly.
+		for (var i = 0; i < THEMES.length; i++) document.body.classList.remove(THEMES[i]);
+		for (var base in BASE_THEMES) {
+			if (BASE_THEMES.hasOwnProperty(base)) document.body.classList.remove(BASE_THEMES[base]);
+		}
 		if (theme != "modern-blur") setTheme(theme);
 		if (theme == "glass") setTheme("blur");
 		if (theme == "modern-blur") {
@@ -277,6 +293,9 @@ function loadThemeSetting() {
 		document.body.classList.toggle("squircles", squircles);
 		if (elements.squircles) elements.squircles.checked = squircles;
 	}
+	var noBlurFullscreen = settings.get("no-blur-fullscreen");
+	if (elements.noBlurFullscreen) elements.noBlurFullscreen.checked = noBlurFullscreen !== false;
+	updateFullscreenBlurState();
 }
 
 function updateBlurState() {
@@ -298,7 +317,8 @@ var elements = {
 	dockAppList: null,
 	theme: null,
 	colorDebug: null,
-	squircles: null
+	squircles: null,
+	noBlurFullscreen: null
 };
 
 function loadElements() {
@@ -313,6 +333,7 @@ function loadElements() {
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
 	elements.squircles = document.getElementById("squircles");
+	elements.noBlurFullscreen = document.getElementById("no-blur-fullscreen");
 
 	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
@@ -325,6 +346,7 @@ function loadElements() {
 	if (elements.theme) elements.theme.onchange = function () { setThemeOption(this.value); };
 	if (elements.colorDebug) elements.colorDebug.onchange = function () { toggleColorDebug(this.checked); };
 	if (elements.squircles) elements.squircles.onchange = function () { toggleSquircles(this.checked); };
+	if (elements.noBlurFullscreen) elements.noBlurFullscreen.onchange = function () { toggleNoBlurFullscreen(this.checked); };
 	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
 
 

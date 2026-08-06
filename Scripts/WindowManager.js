@@ -2129,9 +2129,11 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     settings.set("blur", enabled);
 }
 
-/** Disables backdrop-filter on everything while any window is fullscreen/maximized */
+/** Disables backdrop-filter on everything while any window is fullscreen/maximized (if the setting is on) */
 function updateFullscreenBlurState(){
-    document.body.classList.toggle("no-blur", !!document.querySelector(".window.maximized"));
+	var anyFullscreen = !!document.querySelector(".window.maximized");
+	var settingOn = settings.get("no-blur-fullscreen") !== false;
+	document.body.classList.toggle("no-blur", anyFullscreen && settingOn);
 }
 
 /** @param {*} exception */
