@@ -37,6 +37,11 @@ var clear = true;
 const media = new Media;
 /** @type {Aura | null} */
 let aura = null;
+
+if (options instanceof HTMLFormElement) options.onsubmit = function(ev){
+	ev.preventDefault();
+};
+
 if (typeof Aura !== "undefined") try {
 	aura = new Aura;
 } catch (ex) { console.warn("WebAura not supported:", ex); }
@@ -408,10 +413,6 @@ file.onchange = function(){
 
 audio.oncanplay = function(){
 	seek.max = audio.duration;
-};
-
-options.onsubmit = function(ev){
-	ev.preventDefault();
 };
 
 // const playHandler = 
