@@ -19,7 +19,6 @@
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
-	transition: all 0.2s ease-in-out;
 }
 
 .window > content > article,
