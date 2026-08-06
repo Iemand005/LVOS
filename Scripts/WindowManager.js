@@ -1797,9 +1797,9 @@ function windowManagerInit() {
 
 	
 	LVMessenger.receive(messageReceived);
-	var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-	if (metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
-		window.__LVMessenger.accent = metaThemeColor;
+	window.metaThemeColor = document.querySelector('meta[name="theme-color"]');
+	if (window.metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
+		window.__LVMessenger.accent = window.metaThemeColor;
 };
 
 window.addEventListener("load", windowManagerInit, false);

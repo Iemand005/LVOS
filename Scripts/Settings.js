@@ -122,12 +122,13 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 };
 
 /** The body-level theme classes available in Styles/themes.css. */
-var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mica", "modern", "modern-blur", "windows", "windows-11", "windows-95"];
+var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mac-os", "mica", "modern", "modern-blur", "windows", "windows-11", "windows-95"];
 
 /** Base themes that other themes rely on. */
 var BASE_THEMES = {
 	"windows-11": "windows",
-	"windows-95": "windows"
+	"windows-95": "windows",
+	"mac-os": "modern"
 };
 
 /** @param {string} theme */
@@ -244,7 +245,7 @@ function setColor(color){
 		content.style.backgroundColor = color;
 		content.style.color = isWhite ? "white" : "black";
 	}
-	if (metaThemeColor) metaThemeColor.setAttribute('content', color);
+	if (window.metaThemeColor) window.metaThemeColor.setAttribute('content', color);
 }
 
 function setAccentColor(color) {
@@ -258,9 +259,9 @@ function setAccentColor(color) {
 }
 
 function loadSettings() {
+	loadThemeSetting();
 	setColor(settings.get("color"));
 	setAccentColor(settings.get("accentColor"));
-	loadThemeSetting();
 	// getBorderSize(settings.get("borderSize"));
 	updateBlurState();
 }
