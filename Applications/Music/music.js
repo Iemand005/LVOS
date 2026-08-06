@@ -37,9 +37,9 @@ var clear = true;
 const media = new Media;
 /** @type {Aura | null} */
 let aura = null;
-if (typeof Aura !== "undefined") try { aura = new Aura(); } catch (ex) { console.warn("WebAura not supported:", ex); }
-	aura = new Aura();
-}
+if (typeof Aura !== "undefined") try {
+	aura = new Aura;
+} catch (ex) { console.warn("WebAura not supported:", ex); }
 
 const THROTTLE_MS = 20;
 
