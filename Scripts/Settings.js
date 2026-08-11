@@ -122,12 +122,13 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 };
 
 /** The body-level theme classes available in Styles/themes.css. */
-var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mac-os", "mica", "modern", "modern-blur", "windows", "windows-11", "windows-95"];
+var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mac-os", "mica", "modern", "modern-blur", "windows", "windows-10", "windows-11", "windows-95"];
 
 /** Base themes that other themes rely on. */
 var BASE_THEMES = {
-	"windows-11": "windows",
 	"windows-95": "windows",
+	"windows-10": "windows",
+	"windows-11": "windows",
 	"mac-os": "modern"
 };
 
