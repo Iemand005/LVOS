@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Monaco Editor — pure HTML/JS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --bar: #252526;
+    --border: #3c3c3c;
+    --text: #cccccc;
+    --accent: #007acc;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", sans-serif;
+  }
+  #toolbar {
+    height: 44px;
+    background: var(--bar);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px;
+  }
+  #toolbar select, #toolbar button {
+    background: #3c3c3c;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  #toolbar button:hover, #toolbar select:hover { background: #4a4a4a; }
+  #toolbar .title {
+    font-size: 13px;
+    color: #8a8a8a;
+    margin-right: auto;
+  }
+  #editor {
+    height: calc(100% - 44px);
+    width: 100%;
+  }
+  #loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #8a8a8a;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <span class="title">Monaco Editor</span>
+  <select id="language">
+    <option value="javascript" selected>JavaScript</option>
+    <option value="typescript">TypeScript</option>
+    <option value="html">HTML</option>
+    <option value="css">CSS</option>
+    <option value="json">JSON</option>
+    <option value="python">Python</option>
+    <option value="markdown">Markdown</option>
+  </select>
+  <select id="theme">
+    <option value="vs-dark" selected>Dark</option>
+    <option value="vs">Light</option>
+    <option value="hc-black">High Contrast</option>
+  </select>
+  <button id="format-btn">Format</button>
+  <button id="copy-btn">Copy</button>
+</div>
+
+<div id="editor"><div id="loading">Loading editor…</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.48.0/min/vs/loader.min.js"></script>
+<script>
+  require.config({
+    paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.48.0/min/vs' }
+  });
+
+  require(['vs/editor/editor.main'], function () {
+    document.getElementById('loading').remove();
+
+    const editor = monaco.editor.create(document.getElementById('editor'), {
+      value: [
+        '// Monaco Editor running in plain HTML + JavaScript.',
+        '// No build step, no framework — just the CDN loader above.',
+        '',
+        'function greet(name) {',
+        '  return `Hello, ${name}!`;',
+        '}',
+        '',
+        'console.log(greet("world"));'
+      ].join('\n'),
+      language: 'javascript',
+      theme: 'vs-dark',
+      automaticLayout: true,
+      fontSize: 14,
+      minimap: { enabled: true },
+      scrollBeyondLastLine: false
+    });
+
+    document.getElementById('language').addEventListener('change', (e) => {
+      monaco.editor.setModelLanguage(editor.getModel(), e.target.value);
+    });
+
+    document.getElementById('theme').addEventListener('change', (e) => {
+      monaco.editor.setTheme(e.target.value);
+    });
+
+    document.getElementById('format-btn').addEventListener('click', () => {
+      editor.getAction('editor.action.formatDocument').run();
+    });
+
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(editor.getValue()).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => (btn.textContent = original), 1200);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
