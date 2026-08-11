@@ -271,6 +271,7 @@ aside#charms {
 	z-index: 10000;
 	box-sizing: border-box;
 	user-select: none;
+	overflow-y: auto;
 }
 
 aside#charms.open {
