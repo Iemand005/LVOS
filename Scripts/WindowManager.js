@@ -1319,14 +1319,14 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = dialog.target;
 		if (!target) return;
 
-		target.style.transition = 'none'; // Lock transitions instantly
-		target.style.transform = 'none';   // Clear the fake scale
-		target.style.width = '';           // Let CSS fullscreen take over
+		target.style.transition = 'none';
+		target.style.transform = 'none'; 
+		target.style.width = '';         
 		target.style.height = '';
-		target.style.pointerEvents = 'auto'; // Unlock the iframe mouse
+		target.style.pointerEvents = 'auto';
 
-		try { void target.offsetWidth; } catch (e) {} // Commit swap
-		target.style.transition = ''; // Restore default animations
+		try { void target.offsetWidth; } catch (e) {}
+		target.style.transition = '';
 	}, null, // onToggled
 	function() {
 		var target = this.target;
