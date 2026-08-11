@@ -1307,7 +1307,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
-	if (supportsTransitions) !znoothRezize ? this.toggleClassAnimated("maximized", enable, function(name) {
+	if (supportsTransitions) !flags.znoothRezize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
