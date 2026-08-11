@@ -6,6 +6,19 @@
 'use strict';
 'use esnext';
 
+function changeTitlebarColor(newColor) {
+  let metaTag = document.querySelector('meta[name="theme-color"]');
+
+  if (!metaTag) {
+    metaTag = document.createElement('meta');
+    metaTag.setAttribute('name', 'theme-color');
+    document.head.appendChild(metaTag);
+  }
+
+  metaTag.setAttribute('content', newColor);
+}
+
+
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
 var onLoad = function () {
