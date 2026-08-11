@@ -1318,8 +1318,19 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		updateFullscreenBlurState();
 	}, function() {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-		updateFullscreenBlurState();
+		var target = this.target;
+		if (!target) return;
+
+		var startWidth = target.offsetWidth;
+		var startHeight = target.offsetHeight;
+
+		scaleX = window.innerWidth / startWidth;
+		scaleY = window.innerHeight / startHeight;
+
+		target.style.transformOrigin = 'top left';
+		target.style.pointerEvents = 'none';
+
+		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
 	});
 	else {
 		var startPos = this.position;
