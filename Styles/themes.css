@@ -532,10 +532,12 @@ body.no-blur.modern.blur .window content {
 
 @media (prefers-color-scheme: dark) {
 
+	.windows-10 .window,
 	.windows-11 .window {
 		color: white;
 	}
 
+	.windows-10 .window content,
 	.windows-11 .window content,
 	button {
 		background-color: rgb(32, 32, 32);
@@ -543,7 +545,10 @@ body.no-blur.modern.blur .window content {
 		backdrop-filter: none;
 	}
 
-	.windows-11 .window article, .windows-11 .window article > * {
+	.windows-10 .window article,
+	.windows-10 .window article > *,
+	.windows-11 .window article,
+	.windows-11 .window article > * {
 		background-color: rgb(25, 25, 25);
 	}
 
