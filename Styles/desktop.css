@@ -22,6 +22,16 @@ body {
 	-webkit-user-drop: element;
 }
 
+header {
+  padding-top: env(titlebar-area-y, 0px);
+  height: env(titlebar-area-height, 40px);
+}
+
+header h1 {
+  left: env(titlebar-area-x, 0px);
+  width: env(titlebar-area-width, 100%);
+}
+
 #dock {
 	position: absolute;
 	height: 50px;
