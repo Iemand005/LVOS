@@ -1269,7 +1269,7 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
  * @param {string} className 
  * @param {boolean} [force] 
  * @param {(name:string)=>boolean} [onTransitionEnd] 
- * @param {()=>void} [onEnd] 
+ * @param {(this:Dialog)=>void} [onEnd] 
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled] 
  * @param {(this:Dialog)=>void} [onZtart] 
  * @returns 
@@ -1287,7 +1287,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 			dialog.stopAnimating();
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd();
+			if (onEnd) onEnd.call(dialog);
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
@@ -1315,7 +1315,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}) : this.toggleClassAnimated("maximizede", enable, function(name) {
 		return name == "transform";
 	}, function onEnd() {
-		// --- THE END/SWAP PHASE ---
 		var target = dialog.target;
 		if (!target) return;
 
