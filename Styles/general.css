@@ -69,3 +69,28 @@ input[type="number"] {
         background-color: #0000004a;
     }
 }
+
+/* Global focus ring — apply to all interactive elements */
+:focus-visible {
+  outline: 2px solid oklch(0.52 0.22 265);
+  outline-offset: 3px;
+}
+
+/* Remove ring on mouse/touch click */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Dark mode: brighter ring for contrast */
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: oklch(0.7 0.2 265);
+  }
+}
+
+/* High contrast: thicker ring */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid LinkText;
+  }
+}
