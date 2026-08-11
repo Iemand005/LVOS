@@ -47,8 +47,8 @@ jobs:
           git submodule update --init Scripts/WebAudioVisualizer
           git submodule update --init Scripts/WebMedia
           git submodule update --init Applications/FrostedColours
-          git submodule update --init Applications/StereogramMaker
-          git submodule update --init Applications/Cyanide
+          # git submodule update --init Applications/StereogramMaker
+          # git submodule update --init Applications/Cyanide
 
       - name: Build Pages folder
         run: |
