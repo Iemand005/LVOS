@@ -88,8 +88,6 @@
 	border-bottom-color: rgb(186, 186, 186);
 	border-radius: 4px;
 	border-width: 1px;
-
-	width: 45px;
 }
 
 .windows-11 .window {
@@ -98,6 +96,11 @@
 
 .windows-11 .window header button {
 	background: transparent;
+
+	display: flex;
+    place-content: center;
+    place-items: center;
+    width: 45px;
 }
 
 .windows-11 .window content,
