@@ -1318,6 +1318,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
+		target.classList.toggle
+
 		target.style.transition = 'none';
 		target.style.transform = 'none'; 
 		target.style.width = '';         
