@@ -82,6 +82,7 @@
 	display: none;
 }
 
+.windows-10 button,
 .windows-11 button {
 	background-color: rgb(253, 253, 253);
 	border-color: rgb(208, 208, 208);
@@ -90,12 +91,14 @@
 	border-width: 1px;
 }
 
+.windows-10 .window,
 .windows-11 .window {
 	color: black;
 
 	--window-radius: 10px;
 }
 
+.windows-10 .window header button,
 .windows-11 .window header button {
 	background: transparent;
 
@@ -105,6 +108,8 @@
     width: 45px;
 }
 
+.windows-10 .window content,
+.windows-10 .window .content,
 .windows-11 .window content,
 .windows-11 .window .content {
 	background-color: rgb(243, 243, 243);
@@ -113,11 +118,20 @@
 	padding: 0;
 }
 
+.windows-10 .window content,
+.windows-10 .window .content {
+	border-radius: 0px;
+}
+
+.windows-10 .window header,
+.windows-10 .window .header,
 .windows-11 .window header,
 .windows-11 .window .header {
 	align-content: center;
 }
 
+.windows-10 .window header h1,
+.windows-10 .window .header h1,
 .windows-11 .window header h1,
 .windows-11 .window .header h1 {
 	margin-left: 10px;
@@ -125,12 +139,20 @@
 	font-weight: 500;
 }
 
+.windows-10 .window header section,
+.windows-10 .window .header section,
 .windows-11 .window header section,
 .windows-11 .window .header section {
 	border-radius: 0;
 	background-color: unset;
 }
 
+.windows-10 .window header button,
+.windows-10 .window header section,
+.windows-10 .window .header button,
+.windows-10 .window .header section,
+.windows-10 .window .header,
+.windows-10 .window header,
 .windows-11 .window header button,
 .windows-11 .window header section,
 .windows-11 .window .header button,
@@ -142,6 +164,7 @@
 	padding: 0;
 }
 
+.windows-10 .window article > *,
 .windows-11 .window article > * {
 	background-color: rgb(240, 240, 240);
 }
