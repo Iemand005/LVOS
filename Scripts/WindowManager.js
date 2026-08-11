@@ -1318,7 +1318,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		target.classList.toggle
+		if (enable !== false) {
+			target.classList.add("maximized");
+		} else {
+			target.classList.remove("maximized");
+		}
 
 		target.style.transition = 'none';
 		target.style.transform = 'none'; 
