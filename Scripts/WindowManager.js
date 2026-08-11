@@ -36,7 +36,7 @@ var flags = {
 	set useTransform(value) {
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
-	znoothRezize: true
+	znoothRezize: false
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
