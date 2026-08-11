@@ -98,6 +98,10 @@
 	--window-radius: 10px;
 }
 
+.windows-10 .window {
+	--window-radius: 0px;
+}
+
 .windows-10 .window header button,
 .windows-11 .window header button {
 	background: transparent;
