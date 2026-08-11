@@ -68,6 +68,7 @@ main {
     /* border: 5px; */
     /* transform: rotateY(0deg); */
     /* transform-style: preserve-3d; */
+    contain: strict;
 }
 
 .window.flipped {
