@@ -240,6 +240,11 @@ var applications = [
 		id: "foxyz.due:trash",
 		src: "https://open.spotify.com/embed/artist/1jp7cmyHDn5nuP3MMSwm1m?utm_source=generator&si=86b6cf864e0048c3",
 		hidden: true
+	},
+	{
+		title: "Monaco",
+		id: "foxyz.monaco",
+		src: "./Applications/Monaco/monaco.html"
 	}
 ]
 
