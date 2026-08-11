@@ -1313,8 +1313,22 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		updateFullscreenBlurState();
 	}) : this.toggleClassAnimated("maximizede", enable, function(name) {
-		return name == "transform" || name == "width";
-	}, undefined, null, function() {
+		return name == "transform";
+	}, function onEnd() {
+		// --- THE END/SWAP PHASE ---
+		var target = dialog.target;
+		if (!target) return;
+
+		target.style.transition = 'none'; // Lock transitions instantly
+		target.style.transform = 'none';   // Clear the fake scale
+		target.style.width = '';           // Let CSS fullscreen take over
+		target.style.height = '';
+		target.style.pointerEvents = 'auto'; // Unlock the iframe mouse
+
+		try { void target.offsetWidth; } catch (e) {} // Commit swap
+		target.style.transition = ''; // Restore default animations
+	}, null, // onToggled
+	function() {
 		var target = this.target;
 		if (!target) return;
 
