@@ -1315,7 +1315,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}) : this.toggleClassAnimated("maximizede", enable, function(name) {
 		return name == "transform";
 	}, function onEnd() {
-		var target = dialog.target;
+		var target = this.target;
 		if (!target) return;
 
 		target.style.transition = 'none';
