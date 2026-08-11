@@ -118,9 +118,10 @@
 	padding: 0;
 }
 
-.windows-10 .window content,
-.windows-10 .window .content {
-	border-radius: 0px;
+.windows-10 {
+	/* border-radius: 0px; */
+	--window-radius: 0px;
+	--window-border-width: 0px;
 }
 
 .windows-10 .window header,
