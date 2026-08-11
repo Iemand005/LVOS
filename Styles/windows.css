@@ -10,7 +10,7 @@ html, body {
     /* transition: all 1s; */
 }
 
-body > header, body > footer, header.hidden {
+body > footer, header.hidden {
     display: none;
 }
 
