@@ -92,6 +92,8 @@
 
 .windows-11 .window {
 	color: black;
+
+	--window-radius: 10px;
 }
 
 .windows-11 .window header button {
