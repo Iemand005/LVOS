@@ -18,6 +18,13 @@ function changeTitlebarColor(newColor) {
   metaTag.setAttribute('content', newColor);
 }
 
+function vibrate() {
+	navigator.vibrate(500);
+}
+
+function stopVibrations() {
+  navigator.vibrate(0);
+}
 
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
