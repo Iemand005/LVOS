@@ -1270,14 +1270,16 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
  * @param {(name:string)=>boolean} [onTransitionEnd] 
  * @param {()=>void} [onEnd] 
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled] 
+ * @param {(this:Dialog)=>void} [onZtart] 
  * @returns 
  */
-Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
+Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled, onZtart) {
 	var target = this.target;
 	if (!target) return;
 	var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
+		if (onZtart) onZtart.call(dialog);
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
