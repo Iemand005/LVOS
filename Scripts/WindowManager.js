@@ -1307,9 +1307,17 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
-	if (supportsTransitions) this.toggleClassAnimated("maximized", enable, function(name) {
+	if (supportsTransitions) !znoothRezize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		updateFullscreenBlurState();
+	}) : this.toggleClassAnimated("maximizede", enable, function(name) {
+		return name == "transform" || name == "width";
+	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		updateFullscreenBlurState();
+	}, function() {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		updateFullscreenBlurState();
 	});
