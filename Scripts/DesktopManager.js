@@ -7,15 +7,15 @@
 'use esnext';
 
 function changeTitlebarColor(newColor) {
-  let metaTag = document.querySelector('meta[name="theme-color"]');
+	let metaTag = document.querySelector('meta[name="theme-color"]');
 
-  if (!metaTag) {
-    metaTag = document.createElement('meta');
-    metaTag.setAttribute('name', 'theme-color');
-    document.head.appendChild(metaTag);
-  }
+	if (!metaTag) {
+		metaTag = document.createElement('meta');
+		metaTag.setAttribute('name', 'theme-color');
+		document.head.appendChild(metaTag);
+	}
 
-  metaTag.setAttribute('content', newColor);
+	metaTag.setAttribute('content', newColor);
 }
 
 function vibrate() {
