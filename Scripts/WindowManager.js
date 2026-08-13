@@ -1280,7 +1280,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	var dialog = this;
 	if (supportsTransitions) {
 		target.classList.add("animating");
-		if (onZtart) onZtart.call(dialog);
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
@@ -1296,6 +1295,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (!target) return;
 		try { void target.offsetWidth; } catch (e) {}
 		var enabled = setClass(target, className, force);
+		// if (onZtart) onZtart.call(dialog);
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
 };
