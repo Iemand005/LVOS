@@ -1321,7 +1321,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.toggle("maximized", enable);
 
 		target.style.transition = 'none';
-		target.style.transform = 'none'; 
+		// target.style.transform = 'none'; 
 		target.style.width = '';         
 		target.style.height = '';
 		target.style.pointerEvents = 'auto';
@@ -1342,11 +1342,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
+			target.classList.remove("maximized");
 			scaleX = 1;
 			scaleY = 1;
 		}
 
-		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
+		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ') !important';
 	});
 	else {
 		var startPos = this.position;
