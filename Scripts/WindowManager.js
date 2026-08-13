@@ -1347,7 +1347,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = startHeight / window.innerHeight;
 		}
 
-		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ') !important';
+		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
 	});
 	else {
 		var startPos = this.position;
