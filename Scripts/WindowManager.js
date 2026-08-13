@@ -1713,6 +1713,7 @@ Dialog.prototype.createPopout = function() {
 		}
 	}, 100);
 };
+Dialog.prototype.inspect = function() { inspect(this.target); };
 /** @param {Window} window */
 function getWindowChromeHeight(window) {
 	return window.outerHeight - window.innerHeight;
