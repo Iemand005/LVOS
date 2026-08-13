@@ -1344,12 +1344,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		// target.style.transition = '';
-		// // target.style.transform = ''; 
-		// target.style.width = '';         
-		// target.style.height = '';
-		// target.style.pointerEvents = 'auto';
-
 		this.setScale(1, 1);
 
 		try { void target.offsetWidth; } catch (e) {}
@@ -1370,12 +1364,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-			// target.classList.remove("maximized");
+			target.classList.remove("maximized");
 			scaleX = startWidth / window.innerWidth;
 			scaleY = startHeight / window.innerHeight;
 		}
 
-		// target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
 		this.setScale(scaleX, scaleY);
 	});
 	else {
