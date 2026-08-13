@@ -1129,11 +1129,12 @@ Dialog.prototype.setSkew = function(skew) {
 /**
  * @param {number} scaleX
  * @param {number} scaleY
+ * @param {boolean} [update]
  */
-Dialog.prototype.setScale = function(scaleX, scaleY) {
+Dialog.prototype.setScale = function(scaleX, scaleY, update) {
 	this._scaleX = scaleX;
 	this._scaleY = scaleY;
-	this.updateTranslation();
+	if (update !== false) this.updateTranslation();
 };
 /** @param {number} scaleX */
 Dialog.prototype.setScaleX = function(scaleX) {
