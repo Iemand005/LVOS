@@ -1358,6 +1358,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
+		this._maximizing = enabled;
+
 		var startWidth = this.width;
 		var startHeight = this.height;
 
@@ -1434,7 +1436,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 Dialog.prototype.updateTranslation = function () {
-	if (this.useTransform && this.target) translateElement(this.target, this.maximized ? 0 : this.x, this.maximized ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
+	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 /**
  * @param {number} [x]
