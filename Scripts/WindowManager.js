@@ -1365,8 +1365,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		if (!enabled) {
 			target.classList.remove("maximized");
-			scaleX = startWidth / window.innerWidth;
-			scaleY = startHeight / window.innerHeight;
+			// scaleX = 1 / ZassS;
+			scaleX = 1 / scaleX;
+			scaleY = 1 / scaleY;
 		}
 
 		this.setScale(scaleX, scaleY);
