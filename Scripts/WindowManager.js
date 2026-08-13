@@ -1328,8 +1328,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		try { void target.offsetWidth; } catch (e) {}
 		target.style.transition = '';
-	}, null, // onToggled
-	function onZtart() {
+	}, function onToggled(enabled) {
 		var target = this.target;
 		if (!target) return;
 
@@ -1342,7 +1341,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.transformOrigin = 'top left';
 		target.style.pointerEvents = 'none';
 
-		if (!enable) {
+		if (!enabled) {
 			scaleX = 1;
 			scaleY = 1;
 		}
