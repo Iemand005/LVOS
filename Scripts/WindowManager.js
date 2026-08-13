@@ -1293,15 +1293,15 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
  * @param {string} className 
  * @param {boolean} [force] 
  * @param {(name:string)=>boolean} [onTransitionEnd] 
- * @param {(this:Dialog)=>void} [onEnd] 
+ * @param {(this:Dialog,enabled:boolean)=>void} [onEnd] 
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled] 
- * @param {(this:Dialog)=>void} [onZtart] 
  * @returns 
  */
-Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled, onZtart) {
+Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
 	var target = this.target;
 	if (!target) return;
 	var dialog = this;
+	var enabled;
 	if (supportsTransitions) {
 		target.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
@@ -1310,7 +1310,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 			dialog.stopAnimating();
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(dialog);
+			if (onEnd) onEnd.call(dialog, enabled);
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
@@ -1318,7 +1318,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	window.requestAnimationFrame(function() {
 		if (!target) return;
 		try { void target.offsetWidth; } catch (e) {}
-		var enabled = setClass(target, className, force);
+		enabled = setClass(target, className, force);
 		// if (onZtart) onZtart.call(dialog);
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
@@ -1338,11 +1338,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		updateFullscreenBlurState();
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name == "transform";
-	}, function onEnd() {
+	}, function onEnd(enabled) {
 		var target = this.target;
 		if (!target) return;
 
-		if (enable) target.classList.toggle("maximized", enable);
+		if (enabled) target.classList.toggle("maximized", enable);
 
 		this.setScale(1, 1);
 
