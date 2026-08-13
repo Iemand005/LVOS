@@ -1329,7 +1329,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		try { void target.offsetWidth; } catch (e) {}
 		target.style.transition = '';
 	}, null, // onToggled
-	function() {
+	function onZtart() {
 		var target = this.target;
 		if (!target) return;
 
@@ -1341,6 +1341,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.style.transformOrigin = 'top left';
 		target.style.pointerEvents = 'none';
+
+		if (!enable) {
+			scaleX = 1;
+			scaleY = 1;
+		}
 
 		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
 	});
