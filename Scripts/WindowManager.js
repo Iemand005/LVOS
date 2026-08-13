@@ -1344,11 +1344,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		target.style.transition = '';
-		// target.style.transform = ''; 
-		target.style.width = '';         
-		target.style.height = '';
-		target.style.pointerEvents = 'auto';
+		// target.style.transition = '';
+		// // target.style.transform = ''; 
+		// target.style.width = '';         
+		// target.style.height = '';
+		// target.style.pointerEvents = 'auto';
 
 		this.setScale(1, 1);
 
@@ -1434,7 +1434,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, message, frame);
 };
 Dialog.prototype.updateTranslation = function () {
-	if (this.useTransform && this.target) translateElement(this.target, this.x, this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
+	if (this.useTransform && this.target) translateElement(this.target, this.maximized ? 0 : this.x, this.maximized ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 /**
  * @param {number} [x]
