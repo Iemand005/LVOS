@@ -201,8 +201,8 @@
 }
 
 .window > div {
-    width: calc(var(--window-radius) * 0.75);
-    height: calc(var(--window-radius) * 0.75);
+    width: calc(max(var(--window-radius) * 0.75, 5px));
+    height: calc(max(var(--window-radius) * 0.75, 5px));
 }
 
 .modern .window header {
