@@ -710,6 +710,8 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
     var transform = "translate(" + toPixels(x) + "," + toPixels(y) + ")";
     if (skew) transform += " skewX(" + toDegree(skew) + ")";
 	//..>>>i
+	if (scaleX == 1) scaleX = undefined;
+	if (scaleY == 1) scaleY = undefined;
     if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
     else {
 		if (scaleX) transform += "scaleX(" + scaleX + ")";
