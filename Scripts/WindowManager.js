@@ -1320,8 +1320,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		target.style.transition = 'none';
-		// target.style.transform = 'none'; 
+		target.style.transition = '';
+		target.style.transform = ''; 
 		target.style.width = '';         
 		target.style.height = '';
 		target.style.pointerEvents = 'auto';
@@ -1342,9 +1342,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-			target.classList.remove("maximized");
-			scaleX = 1;
-			scaleY = 1;
+			// target.classList.remove("maximized");
+			scaleX = startWidth / window.innerWidth;
+			scaleY = startHeight / window.innerHeight;
 		}
 
 		target.style.transform = 'scale(' + scaleX + ', ' + scaleY + ') !important';
