@@ -1336,7 +1336,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		updateFullscreenBlurState();
-	}) : this.toggleClassAnimated("maximizede", enable, function(name) {
+	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name == "transform";
 	}, function onEnd() {
 		var target = this.target;
