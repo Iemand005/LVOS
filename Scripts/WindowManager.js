@@ -1332,8 +1332,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		var startWidth = target.offsetWidth;
-		var startHeight = target.offsetHeight;
+		var startWidth = this.width;
+		var startHeight = this.height;
 
 		var scaleX = window.innerWidth / startWidth;
 		var scaleY = window.innerHeight / startHeight;
