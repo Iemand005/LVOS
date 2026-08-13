@@ -1343,10 +1343,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.toggle("maximized", enable);
 
 		target.style.transition = '';
-		target.style.transform = ''; 
+		// target.style.transform = ''; 
 		target.style.width = '';         
 		target.style.height = '';
 		target.style.pointerEvents = 'auto';
+
+		this.setScale(1, 1);
 
 		try { void target.offsetWidth; } catch (e) {}
 		target.style.transition = '';
