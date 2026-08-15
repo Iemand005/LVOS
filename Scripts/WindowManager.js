@@ -263,14 +263,18 @@ WindowManager.prototype.loadApp = function(app) {
 };
 /**
  * @param {string} url
+ * @param {string} [title]
+ * @param {string} [id]
+ * @param {string} [iconUrl]
  */
-WindowManager.prototype.installApp = function (url) {
+WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	/** @type {Application} */
 	var application = {
 		src: url,
-		id: "custom." + getDomain(url),
-		title: getSiteName(url)
+		id: id|| "custom." + getDomain(url),
+		title: title || getSiteName(url)
 	};
+	if (iconUrl) application.iconUrl = iconUrl;
 	this.loadApp(application);
 };
 /**
