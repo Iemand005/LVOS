@@ -1142,7 +1142,6 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 
 Object.defineProperty(Dialog.prototype, "icon", {
 	get: function() { return this._appIcon; },
-	set: function(appIcon) {  }
 });
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
