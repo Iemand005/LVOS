@@ -429,6 +429,8 @@ body.no-blur.modern.blur .window content {
     display: flex;
     flex-direction: row-reverse;
     position: relative;
+
+	padding: 3px;
 }
 
 .mac-os .window header img {
