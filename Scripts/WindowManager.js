@@ -273,6 +273,21 @@ WindowManager.prototype.installApp = function (url) {
 	};
 	this.loadApp(application);
 };
+/**
+ * @param {string} url
+ * @param {string} [proxyUrl]
+ */
+WindowManager.prototype.installProxied = function (url, proxyUrl) {
+	if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
+	/** @type {Application} */
+	var application = {
+		src: proxyUrl,
+		id: "custom." + getDomain(url),
+		title: getSiteName(url),
+		iconUrl: getFaviconUrl(url)
+	};
+	this.loadApp(application);
+};
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
