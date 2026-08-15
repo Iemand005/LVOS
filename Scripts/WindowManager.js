@@ -466,7 +466,7 @@ function Dialog(object, create) {
 
 	this.dragging = false;
 
-	/** @type {Image?} */
+	/** @type {HTMLImageElement?} */
 	this._appIcon = null;
 }
 
@@ -539,11 +539,21 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			var iconUrl = this.application.src + "/Logo.png";
+			if (this.application.hasIcon) {
+				var iconUrl = this.application.src + "/Logo.png";
+	
+				this._appIcon = document.createElement("img");
+				this._appIcon.onload = function () {
+					console.log("App icon loaded!!");
+				};
 
-			this._appIcon = new Image(32, 32);
+				this._appIcon.src = iconUrl;
 
-			
+			}
+
+
+
+
         }
     }
 

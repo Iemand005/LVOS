@@ -18,6 +18,7 @@ interface Application {
   minHeight?: number;
   audioVisualizer?: boolean;
   screensaver?: boolean;
+  hasIcon?: boolean;
 }
 
 interface DialogState {
