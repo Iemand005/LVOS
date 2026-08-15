@@ -247,6 +247,16 @@ WindowManager.prototype.loadApp = function(app) {
         this._windows[app.id].mica = this.isMicaEnabled || false;
     } catch(ex) { console.warn("Appleload failed", ex); }
 };
+/**
+ * @param {string} url
+ */
+WindowManager.prototype.installApp = function (url) {
+	/** @param {Application} */
+	var application = {
+		src
+	};
+	this.loadApp()
+};
 
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
