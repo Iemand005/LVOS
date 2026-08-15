@@ -1156,7 +1156,7 @@ Dialog.prototype.setIcon = function(iconUrl) {
 	this._appIcon.onerror = function (e) {
 		console.warn("App icon errror!", e);
 		if (self._appIcon) self._appIcon.className = "";
-	}
+	};
 
 	this._appIcon.src = iconUrl;
 };
