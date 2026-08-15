@@ -276,6 +276,47 @@ WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	};
 	if (iconUrl) application.iconUrl = iconUrl;
 	this.loadApp(application);
+	this.saveInstalledApp(application);
+};
+
+Object.defineProperty(WindowManager.prototype, "installedApps", {
+	get: function() {
+		if (typeof localStorage == "undefined") return [];
+		try {
+			var string = localStorage.getItem("installedApps");
+			if (string == null) return [];
+			var apps = JSON.parse(string);
+			return apps instanceof Array ? apps : [];
+		} catch (exception) {
+			if (exception instanceof Error) console.error(exception.message);
+			return [];
+		}
+	}
+});
+
+/** @param {Application} application */
+WindowManager.prototype.saveInstalledApp = function(application) {
+	if (!canSave || typeof localStorage == "undefined") return;
+	try {
+		var apps = this.installedApps;
+		for (var i = 0; i < apps.length; i++)
+			if (apps[i].id == application.id) return;
+		apps.push(application);
+		localStorage.setItem("installedApps", JSON.stringify(apps));
+	} catch (exception) {
+		handleStorageException(exception);
+	}
+};
+
+WindowManager.prototype.loadInstalledApps = function() {
+	if (!canSave || typeof localStorage == "undefined") return;
+	try {
+		this.installedApps.forEach(function(application) {
+			if (application && application.src) this.loadApp(application);
+		}, this);
+	} catch (exception) {
+		handleStorageException(exception);
+	}
 };
 /**
  * @param {string} url

@@ -308,6 +308,8 @@ var initApps = function () {
 
 	injectApplications(applications);
   	injectApplications(games);
+	windowManager.loadInstalledApps();
+	windowManager.loadState();
 }
 
 /** @param {Dialog} dialog */
