@@ -271,7 +271,7 @@ WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	/** @type {Application} */
 	var application = {
 		src: url,
-		id: id|| "custom." + getDomain(url),
+		id: id || "custom." + getDomain(url),
 		title: title || getSiteName(url)
 	};
 	if (iconUrl) application.iconUrl = iconUrl;
@@ -283,14 +283,7 @@ WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
  */
 WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 	if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
-	/** @type {Application} */
-	var application = {
-		src: proxyUrl + url,
-		id: "custom." + getDomain(url),
-		title: getSiteName(url),
-		iconUrl: getFaviconUrl(url)
-	};
-	this.loadApp(application);
+	this.installApp(proxyUrl + url, getSiteName(url), "custom." + getDomain(url), getFaviconUrl(url));
 };
 
 /** @param {boolean} enabled */
