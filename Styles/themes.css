@@ -96,12 +96,14 @@
 .windows-10 .window,
 .windows-11 .window {
 	color: black;
-
-	--window-radius: 10px;
 }
 
 .windows .window,
 .windows-10 .window {
+	--window-radius: 0px;
+}
+
+.windows-11 .window {
 	--window-radius: 0px;
 }
 
@@ -424,6 +426,10 @@ body.no-blur.modern.blur .window content {
     position: relative;
 }
 
+.mac-os .window header img {
+	display: none;
+}
+
 .mac-os .window header h1 {
     width: 100%;
     margin: 0;
@@ -440,6 +446,7 @@ body.no-blur.modern.blur .window content {
     flex-direction: row-reverse;
     align-items: center;
     gap: 8px;
+	margin-left: 5px;
 }
 
 .mac-os .window header section button {
