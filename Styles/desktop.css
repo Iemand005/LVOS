@@ -22,14 +22,14 @@ body {
 	-webkit-user-drop: element;
 }
 
-header {
-  padding-top: env(titlebar-area-y, 0px);
-  height: env(titlebar-area-height, 0px);
+body > header {
+	padding-top: env(titlebar-area-y, 0px);
+	height: env(titlebar-area-height, 0px);
 }
 
-header h1 {
-  left: env(titlebar-area-x, 0px);
-  width: env(titlebar-area-width, 100%);
+body > header h1 {
+	left: env(titlebar-area-x, 0px);
+	width: env(titlebar-area-width, 100%);
 }
 
 #dock {
