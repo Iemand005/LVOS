@@ -122,8 +122,8 @@
 .windows-11 .window content,
 .windows-11 .window .content {
 	background-color: rgb(243, 243, 243);
-	border-radius: 8px;
-	border: 1px solid rgba(255, 255, 255, 0.267);
+	/* border-radius: 8px; */
+	border: 2px solid rgba(255, 255, 255, 0.511);
 	padding: 0;
 }
 
@@ -550,7 +550,7 @@ body.no-blur.modern.blur .window content {
 	.windows-11 .window content,
 	button {
 		background-color: rgb(32, 32, 32);
-		border: 1px solid rgba(255, 255, 255, 0.267);
+		/* border: 1px solid rgba(255, 255, 255, 0.267); */
 		backdrop-filter: none;
 	}
 
