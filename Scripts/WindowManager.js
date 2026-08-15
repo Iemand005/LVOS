@@ -36,7 +36,7 @@ var flags = {
 	set useTransform(value) {
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
-	smoothResize: false
+	compositorResize: false
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
@@ -1450,7 +1450,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
-	if (supportsTransitions) !flags.smoothResize ? this.toggleClassAnimated("maximized", enable, function(name) {
+	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
