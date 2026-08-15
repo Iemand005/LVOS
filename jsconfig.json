@@ -1,23 +1,23 @@
 {
 	"compilerOptions": {
 		"target": "es2025",
-    "lib": ["ES2015", "DOM"],
-    "checkJs": true,
-    "allowJs": true,
-    "strict": true,
-    "typeRoots": [
-      "./Types",
-      "./node_modules/@types"
-    ],
-    "types": ["w3c-web-hid"]
-  },
-  "ignoreDeprecations": "6.0",
-  "include": [
-    "./Scripts/WebGraphics",
-    "*.d.ts",
-    "**/*.js",
-    "**/*.d.ts"
-  ],
+		"lib": ["ES2015", "DOM"],
+		"checkJs": true,
+		"allowJs": true,
+		"strict": true,
+		"typeRoots": [
+			"./Types",
+			"./node_modules/@types"
+		],
+		"types": ["w3c-web-hid"]
+	},
+	"ignoreDeprecations": "6.0",
+	"include": [
+		"./Scripts/WebGraphics",
+		"*.d.ts",
+		"**/*.js",
+		"**/*.d.ts"
+	],
 	"exclude": [
 		"node_modules",
 		"./Applications/**/WebGraphics",
