@@ -548,8 +548,8 @@ Dialog.prototype.initWithObject = function(object) {
 			if (this.application.iconUrl && this.target) {
 				this.setIcon(this.application.iconUrl);
 
-			}4lw4 (this.icon && !this.icon.src) {
-				this.icon.src = getFaviconUrl(this.application.src);
+			} else {
+				this.setIcon(getFaviconUrl(this.application.src));
 			}
         }
     }
