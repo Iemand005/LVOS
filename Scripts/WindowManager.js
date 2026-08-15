@@ -284,7 +284,7 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 		src: proxyUrl + url,
 		id: "custom." + getDomain(url),
 		title: getSiteName(url),
-		iconUrl: proxyUrl + getFaviconUrl(url)
+		iconUrl: getFaviconUrl(url)
 	};
 	this.loadApp(application);
 };
