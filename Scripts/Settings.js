@@ -322,13 +322,14 @@ var elements = {
 	squircles: null,
 	noBlurFullscreen: null,
 	installAppUrl: null,
-	installAppButton: null
+	installAppButton: null,
+	installAppProxiedButton: null
 };
 
-function installAppFromUrl() {
+function installAppFromUrl(useProxy) {
 	var url = (elements.installAppUrl && elements.installAppUrl.value || "").trim();
 	if (!url) return;
-	if (windowManager && typeof windowManager.installAppProxied == "function") {
+	if (useProxy && windowManager && typeof windowManager.installAppProxied == "function") {
 		windowManager.installAppProxied(url);
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 		return;
@@ -354,6 +355,7 @@ function loadElements() {
 	elements.noBlurFullscreen = document.getElementById("no-blur-fullscreen");
 	elements.installAppUrl = document.getElementById("install-app-url");
 	elements.installAppButton = document.getElementById("install-app-button");
+	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");
 
 	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
@@ -367,11 +369,12 @@ function loadElements() {
 	if (elements.colorDebug) elements.colorDebug.onchange = function () { toggleColorDebug(this.checked); };
 	if (elements.squircles) elements.squircles.onchange = function () { toggleSquircles(this.checked); };
 	if (elements.noBlurFullscreen) elements.noBlurFullscreen.onchange = function () { toggleNoBlurFullscreen(this.checked); };
-	if (elements.installAppButton) elements.installAppButton.onclick = installAppFromUrl;
+	if (elements.installAppButton) elements.installAppButton.onclick = function () { installAppFromUrl(false); };
+	if (elements.installAppProxiedButton) elements.installAppProxiedButton.onclick = function () { installAppFromUrl(true); };
 	if (elements.installAppUrl && elements.installAppUrl.form) {
 		elements.installAppUrl.form.addEventListener("submit", function (event) {
 			event.preventDefault();
-			installAppFromUrl();
+			installAppFromUrl(false);
 		}, false);
 	}
 	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
