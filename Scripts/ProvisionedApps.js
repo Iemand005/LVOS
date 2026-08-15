@@ -248,9 +248,9 @@ var applications = [
 	},
 	{
 		title: "Furzona Lite",
-		id : "furzona",
-		src : "https://iemand005.github.io/FurzonaWeb",
-		hasIcon: true
+		id: "furzona",
+		src: "https://iemand005.github.io/FurzonaWeb",
+		iconUrl: "https://iemand005.github.io/FurzonaWeb/Logo.png"
 	}
 ]
 

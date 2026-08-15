@@ -545,18 +545,8 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			if (this.application.hasIcon && this.target) {
-				var iconUrl = this.application.src + "/Logo.png";
-
-				
-	
-				this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
-				this._appIcon.onload = function () {
-					console.log("App icon loaded!!");
-					// TOdo uh add a class?
-				};
-
-				this._appIcon.src = iconUrl;
+			if (this.application.iconUrl && this.target) {
+				this.setIcon(this.application.iconUrl);
 
 			}
 
@@ -1154,9 +1144,17 @@ Object.defineProperty(Dialog.prototype, "icon", {
 	get: function() { return this._appIcon; },
 	set: function(appIcon) {  }
 });
+/** @param {string} iconUrl */
+Dialog.prototype.setIcon = function(iconUrl) {
+	if (!this.target) return;
+	this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
 
-Dialog.prototype.setIcon = function(icon) {
-	this._appIcon = icon;
+	this._appIcon.onload = function () {
+		console.log("App icon loaded!!");
+		// TOdo uh add a class?
+	};
+
+	this._appIcon.src = iconUrl;
 };
 
 /** @param {number} skew */
