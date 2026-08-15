@@ -281,7 +281,7 @@ WindowManager.prototype.installProxied = function (url, proxyUrl) {
 	if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
 	/** @type {Application} */
 	var application = {
-		src: proxyUrl + url,
+		src: proxyUrl + encodeURI url,
 		id: "custom." + getDomain(url),
 		title: getSiteName(url),
 		iconUrl: getFaviconUrl(url)
