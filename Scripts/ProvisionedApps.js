@@ -245,6 +245,11 @@ var applications = [
 		title: "Monaco",
 		id: "foxyz.monaco",
 		src: "./Applications/Monaco/monaco.html"
+	},
+	{
+		title: "Furzona Lite",
+		id : "furzona",
+		src : "https://iemand005.github.io/FurzonaWeb",
 	}
 ]
 
