@@ -465,6 +465,9 @@ function Dialog(object, create) {
 	this._popupPositionInterval = 0;
 
 	this.dragging = false;
+
+	/** @type {Image?} */
+	this._appIcon = null;
 }
 
 WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -535,6 +538,12 @@ Dialog.prototype.initWithObject = function(object) {
             }
 
             this.moveEvents = object.moveEvents || false;
+
+			var iconUrl = this.application.src + "/Logo.png";
+
+			this._appIcon = new Image(32, 32);
+
+			
         }
     }
 
