@@ -1149,6 +1149,12 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 	set: function(/** @type {number} */opacity) { this.target && (this.target.style.opacity = String(opacity)); },
 	get: function() { return this.target && this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
 });
+
+Object.defineProperty(Dialog.prototype, "iconUrl", {
+	get: function() { return this._appIcon; },
+	set: function(appIcon) { this._appIcon = appIcon; }
+})
+
 /** @param {number} skew */
 Dialog.prototype.setSkew = function(skew) {
 	this._skew = skew;
