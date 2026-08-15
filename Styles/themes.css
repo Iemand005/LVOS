@@ -120,11 +120,23 @@
 .windows-10 .window content,
 .windows-10 .window .content,
 .windows-11 .window content,
-.windows-11 .window .content {
+.windows-11 .window .content,
+.windows-11 button {
 	background-color: rgb(243, 243, 243);
-	/* border-radius: 8px; */
 	border: 1px solid rgba(255, 255, 255, 0.301);
+}
+
+
+.windows-10 .window content,
+.windows-10 .window .content,
+.windows-11 .window content,
+.windows-11 .window .content {
 	padding: 0;
+}
+
+button {
+	margin: 3px;
+	padding: 5px;
 }
 
 .windows-10 {
