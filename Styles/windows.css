@@ -207,6 +207,10 @@ main {
     border-radius: 5px;
 }
 
+.window header img + h1 {
+    margin-left: 0;
+}
+
 .window > content,
 .window > .content {
     display: -webkit-box;
