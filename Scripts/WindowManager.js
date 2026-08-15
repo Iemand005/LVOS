@@ -556,6 +556,10 @@ Dialog.prototype.initWithObject = function(object) {
         }
     }
 
+	if (this.icon && this.icon.src) {
+		
+	}
+
     this.setMinSize(180, 250);
     
     this.originalBody = this.body;
