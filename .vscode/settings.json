@@ -1,19 +1,28 @@
 {
-  "editor.tabSize": 4,
-  "editor.indentSize": "tabSize",
-  "editor.insertSpaces": false,
-  "chat.disableAIFeatures": false,
-  "editor.inlineSuggest.enabled": true,
-  "files.associations": {
-    "*.hta": "html"
-  },
-  "cSpell.words": [
-    "devel"
-  ],
-  "workbench.colorCustomizations": {
-    "statusBar.noFolderBackground": "#9B4207",
-    "statusBar.noFolderForeground": "#FFF8F4"
-  },
-  "git.detectSubmodulesLimit": 20,
-  "liveServer.settings.port": 5501
+	"editor.tabSize": 4,
+	"editor.indentSize": "tabSize",
+	"editor.insertSpaces": false,
+	"chat.disableAIFeatures": false,
+	"editor.inlineSuggest.enabled": true,
+	"files.associations": {
+		"*.hta": "html"
+	},
+	"cSpell.words": [
+		"devel"
+	],
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#9B4207",
+		"titleBar.activeBackground": "#D95D0A",
+		"titleBar.activeForeground": "#FFF8F4",
+		"titleBar.inactiveBackground": "#9B4207",
+		"titleBar.inactiveForeground": "#FFF8F4",
+		"statusBar.background": "#9B4207",
+		"statusBar.foreground": "#FFF8F4",
+		"statusBar.debuggingBackground": "#9B4207",
+		"statusBar.debuggingForeground": "#FFF8F4",
+		"statusBar.noFolderBackground": "#9B4207",
+		"statusBar.noFolderForeground": "#FFF8F4"
+	},
+	"git.detectSubmodulesLimit": 20,
+	"liveServer.settings.port": 5501
 }
