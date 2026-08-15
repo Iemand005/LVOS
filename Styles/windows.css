@@ -208,7 +208,7 @@ main {
 }
 
 .window header img + h1 {
-    margin-left: 0;
+    margin-left: 0 !important;
 }
 
 .window > content,
