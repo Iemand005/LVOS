@@ -207,7 +207,11 @@ main {
     border-radius: 5px;
 }
 
-.window header img + h1 {
+.window header > img:not([src]) {
+	display: none;
+}
+
+.window header > img[src] + h1 {
     margin-left: 0 !important;
 }
 
