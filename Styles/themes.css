@@ -272,7 +272,8 @@ button {
 
 .modern .window header {
 	display: flex;
-	padding: 0;
+    padding: 0;
+    justify-content: space-between;
 }
 
 .modern .window header button {
