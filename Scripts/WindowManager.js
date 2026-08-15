@@ -556,8 +556,8 @@ Dialog.prototype.initWithObject = function(object) {
         }
     }
 
-	if (this.icon && this.icon.src) {
-		
+	if (this.icon && !this.icon.src) {
+		this.icon.src = getFaviconUrl(this.application?.src);
 	}
 
     this.setMinSize(180, 250);
