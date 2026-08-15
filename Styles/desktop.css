@@ -92,12 +92,12 @@ body:not(.blur) .window > article {
 		pointer-events: none !important;
 }*/
 
-#desktop img {
+/* #desktop img {
 	-o-object-fit: cover;
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
-}
+} */
 
 /* #wallpaper {
 	background-color: orange;
