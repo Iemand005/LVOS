@@ -420,6 +420,11 @@ body.no-blur.modern.blur .window content {
 }
 
 
+.mac-os .window {
+	--window-radius: 10px;
+	--window-border-width: 0;
+}
+
 .mac-os .window header {
     display: flex;
     flex-direction: row-reverse;
