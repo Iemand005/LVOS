@@ -539,10 +539,12 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			if (this.application.hasIcon) {
+			if (this.application.hasIcon && this.target) {
 				var iconUrl = this.application.src + "/Logo.png";
+
+				
 	
-				this._appIcon = document.createElement("img");
+				this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
 				this._appIcon.onload = function () {
 					console.log("App icon loaded!!");
 				};
