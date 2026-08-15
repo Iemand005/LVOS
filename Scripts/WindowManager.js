@@ -78,6 +78,12 @@ function cancelDomEvent(event) {
 	return false;
 }
 
+/** @param {string} url */
+function getFaviconUrl(url) {
+	var m = url.match(/^([a-z]+:\/\/[^\/]+)/i);
+	return (m ? m[1] : url) + '/favicon.ico';
+}
+
 /** @param {Element} element */
 function isDialog(element) {
 	return element && element.classList && element.classList.contains("window");
@@ -547,6 +553,7 @@ Dialog.prototype.initWithObject = function(object) {
 				this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
 				this._appIcon.onload = function () {
 					console.log("App icon loaded!!");
+					// TOdo uh add a class?
 				};
 
 				this._appIcon.src = iconUrl;
