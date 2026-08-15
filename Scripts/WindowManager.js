@@ -1146,10 +1146,16 @@ Dialog.prototype.setIcon = function(iconUrl) {
 	if (!this.target) return;
 	this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
 
+	var self = this;
 	this._appIcon.onload = function () {
 		console.log("App icon loaded!!");
 		// TOdo uh add a class?
+		if (self._appIcon) self._appIcon.className = "loaded";
 	};
+
+	this._appIcon.onerror = function () {
+		if (self._appIcon) self._appIcon.className = "";
+	}
 
 	this._appIcon.src = iconUrl;
 };
