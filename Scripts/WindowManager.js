@@ -1464,7 +1464,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		if (enabled) target.classList.toggle("maximized", enable);
+		target.classList.toggle("maximized", enable);
 
 		// this.setScale(1, 1);
 
@@ -1486,7 +1486,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-			target.classList.remove("maximized");
+
+			// target.style.width = ""
+
+			// target.classList.remove("maximized");
 			// scaleX = 1 / ZassS;
 			// scaleX = 1 / scaleX;
 			// scaleY = 1 / scaleY;
