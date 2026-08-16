@@ -54,7 +54,6 @@ try {
 
 if (isIE) {
     useTransform = true;
-    document.body.classList.add("use-transform");
 }
 
 // flags.compositorResize = true;
