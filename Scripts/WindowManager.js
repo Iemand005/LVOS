@@ -30,16 +30,12 @@ var flags = {
 	updateRateLimit: false,
 	useDragOverlay: false,
 	_useTransform: useTransform,
-	get useTransform() {
-		return this._useTransform;
-	},
+	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: false,
-	get compositorResize() {
-		return this._compositorResize;
-	},
+	get compositorResize() { return this._compositorResize; },
 	set compositorResize(value) {
 		document.body.classList.toggle("compositor-animations", value);
 		this._compositorResize = value;
