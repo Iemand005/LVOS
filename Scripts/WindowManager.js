@@ -1474,8 +1474,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this.setScale(1, 1);
 		if (!content) return;
 		translateElement(content, 0, 0, 0, 1, 1);
-		content.style.width = toPixels(self.width);
-		content.style.height = toPixels(self.height);
+		content.style.width = '';
+		content.style.height = '';
 		
 	}, function onToggled(enabled) {
 		var target = this.target;
