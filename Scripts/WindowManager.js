@@ -32,6 +32,7 @@ var flags = {
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
+		this._useTransform = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: false,
