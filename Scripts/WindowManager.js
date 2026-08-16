@@ -20,7 +20,7 @@ var useBlur = false,
 	canSave = true,
 	loadingOverlay = false,
 	flipped = false,
-	useTransform = false,
+	useTransform = true,
 	useScale = false,
 	hasLocalStorage = false;
 
@@ -52,6 +52,8 @@ if (isIE) {
     useTransform = true;
     document.body.classList.add("use-transform");
 }
+
+flags.compositorResize = true;
 
 if (!hasLocalStorage) canSave  = false;
 
@@ -1466,7 +1468,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		// this.setScale(1, 1);
+		this.setScale(1, 1);
 
 		// try { void target.offsetWidth; } catch (e) {}
 		// target.style.transition = '';
