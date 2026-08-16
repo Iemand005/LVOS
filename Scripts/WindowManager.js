@@ -1508,12 +1508,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.width = toPixels(targetWidth);
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
-				requestAnimationFrame(function() {
-		content.style.transition = '';
-		requestAnimationFrame(function() {
-			translateElement(content, 0, 0, 0, 1, 1);
-		});
-	});
+				
+				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 			});
 		}, 200);
 	});
