@@ -1499,18 +1499,15 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this.setScale(scaleX, scaleY);
 
+		var targetWidth = enabled ? window.innerWidth : self.width;
+		var targetHeight = enabled ? window.innerWidth : self.height;
+
 		setTimeout(function() {
 			requestAnimationFrame(function() {
 				if (!content) return;
-				if (enabled) {
-					translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-					content.style.width = toPixels(window.innerWidth);
-					content.style.height = toPixels(window.innerHeight);
-				} else {
-					translateElement(content, 0, 0, 0, 1/ scaleX, 1/ scaleY);
-					content.style.width = toPixels(self.width);
-					content.style.height = toPixels(self.height);
-				}
+				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+				content.style.width = toPixels(targetWidth);
+				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 			});
 		}, 200);
