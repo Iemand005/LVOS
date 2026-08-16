@@ -1513,9 +1513,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 					content.style.width = toPixels(self.width * scaleX);
 					content.style.height = toPixels(self.height * scaleY);
 				} else {
-					translateElement(content, 0, 0, 0, 1, 1);
-					content.style.width = toPixels(self.width / scaleX);
-					content.style.height = toPixels(self.height / scaleY);
+					translateElement(content, 0, 0, 0, 1 / scaleX, 1 /scaleY);
+					content.style.width = toPixels(self.width);
+					content.style.height = toPixels(self.height);
 				}
 				void content.offsetWidth;
 			});
