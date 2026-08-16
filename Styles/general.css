@@ -5,6 +5,11 @@
  * Modified on: 18/06/2026 *
 \***************************/
 
+html, body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 * {
     transition: color 100ms ease-in-out, background-color 90ms ease-out;
 }
