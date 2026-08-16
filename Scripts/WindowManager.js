@@ -53,7 +53,7 @@ if (isIE) {
     document.body.classList.add("use-transform");
 }
 
-flags.compositorResize = true;
+// flags.compositorResize = true;
 
 if (!hasLocalStorage) canSave  = false;
 
@@ -1493,10 +1493,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 			// target.classList.remove("maximized");
 			// scaleX = 1 / ZassS;
-			// scaleX = 1 / scaleX;
-			// scaleY = 1 / scaleY;
-			scaleX = 1;
-			scaleY = 1;
+			scaleX = 1 / scaleX;
+			scaleY = 1 / scaleY;
+			// scaleX = 1;
+			// scaleY = 1;
 		}
 
 		this.setScale(scaleX, scaleY);
