@@ -372,6 +372,11 @@ article, .article {
     transition: none;
 }
 
+.compositor-animations .window > content {
+    transition: none;
+    transform-origin: left top;
+}
+
 .window.maximized {
     top: 0 !important;
     left: 0 !important;
