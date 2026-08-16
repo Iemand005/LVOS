@@ -1511,7 +1511,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				
 				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 			});
-		}, 200);
+		}, 300);
 	});
 	else {
 		var startPos = this.position;
