@@ -373,7 +373,7 @@ article, .article {
 }
 
 .compositor-animations .window > content {
-    transition: none;
+    transition: none !important;
     transform-origin: left top;
 }
 
