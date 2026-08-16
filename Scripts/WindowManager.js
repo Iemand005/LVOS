@@ -1456,6 +1456,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
 	var self = this;
+	var content = this.content;
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
@@ -1470,10 +1471,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		// this.setScale(1, 1);
-// 
-		// try { void target.offsetWidth; } catch (e) {}
-		// target.style.transition = '';
+		this.setScale(1, 1);
+		if (!content) return;
+		translateElement(content, 0, 0, 0, 1, 1);
+		content.style.width = toPixels(self.width);
+		content.style.height = toPixels(self.height);
+		
 	}, function onToggled(enabled) {
 		var target = this.target;
 		if (!target) return;
@@ -1490,33 +1493,18 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-
-			// target.style.width = ""
-
-			// target.classList.remove("maximized");
-			// scaleX = 1 / ZassS;
 			scaleX = 1 / scaleX;
 			scaleY = 1 / scaleY;
-			// scaleX = 1;
-			// scaleY = 1;
 		}
 
 		this.setScale(scaleX, scaleY);
 
-		var content = this.content;
 		setTimeout(function() {
 			requestAnimationFrame(function() {
 				if (!content) return;
-				if (enabled) {
-
-					translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-					content.style.width = toPixels(self.width * scaleX);
-					content.style.height = toPixels(self.height * scaleY);
-				} else {
-					translateElement(content, 0, 0, 0, 1 / scaleX, 1 /scaleY);
-					content.style.width = toPixels(self.width);
-					content.style.height = toPixels(self.height);
-				}
+				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+				content.style.width = toPixels(self.width * scaleX);
+				content.style.height = toPixels(self.height * scaleY);
 				void content.offsetWidth;
 			});
 		}, 200);
