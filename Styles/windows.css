@@ -363,14 +363,13 @@ article, .article {
     transition: all 400ms cubic-bezier(.86,0,.07,1) !important;
 }
 
-.compositor-animations .window.animating,
-.compositor-animations .window.animating > content {
+.compositor-animations .window.animating {
     transition-property: transform !important;
     will-change: transform !important;
 }
 
 .compositor-animations .window.animating > content {
-    transition: ;
+    transition: none;
 }
 
 .window.maximized {
