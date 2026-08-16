@@ -1478,6 +1478,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		content.style.height = '';
 		
 	}, function onToggled(enabled) {
+		var timeOffsetMs = 100;
+		var totalDuration = 400; //Can I uh get this from uh the css somehow
+		
 		var target = this.target;
 		if (!target) return;
 
@@ -1493,6 +1496,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
+			target.classList.remove("maximized");
+			totalDuration - timeOffsetMs;
+
 			scaleX = 1 / scaleX;
 			scaleY = 1 / scaleY;
 		}
@@ -1502,10 +1508,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var targetWidth = enabled ? window.innerWidth : self.width;
 		var targetHeight = enabled ? window.innerHeight : self.height;
 
-		var timeOffsetMs = 100;
-		var totalDuration = 400; //Can I uh get this from uh the css somehow
 
-		if (!enabled) 400 - timeOffsetMs;
 
 		setTimeout(function() {
 			requestAnimationFrame(function() {
