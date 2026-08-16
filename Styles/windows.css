@@ -387,6 +387,10 @@ article, .article {
     z-index: 9999 !important;
 }
 
+:not(.compositor-animations) .window.maximized:not(.scaled-max) {
+    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
+}
+
 .window.maximized:not(.scaled-max) {
     transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg);
 }
