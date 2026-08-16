@@ -1502,6 +1502,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var targetWidth = enabled ? window.innerWidth : self.width;
 		var targetHeight = enabled ? window.innerHeight : self.height;
 
+		var timeOffsetMs = 100;
+		var totalDuration = 400; //Can I uh get this from uh the css somehow
+
+		if (!enabled) 400 - timeOffsetMs;
+
 		setTimeout(function() {
 			requestAnimationFrame(function() {
 				if (!content) return;
@@ -1511,7 +1516,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				
 				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 			});
-		}, 300);
+		}, timeOffsetMs);
 	});
 	else {
 		var startPos = this.position;
