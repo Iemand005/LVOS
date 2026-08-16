@@ -237,9 +237,13 @@ var applications = [
 	},
 	{
 		title: "Fur:Trash",
-		id: "foxyz.due:trash",
-		src: "https://open.spotify.com/embed/artist/1jp7cmyHDn5nuP3MMSwm1m?utm_source=generator&si=86b6cf864e0048c3",
-		hidden: true
+		id: "foxyz.fur:trash",
+		src: "https://open.spotify.com/embed/artist/1jp7cmyHDn5nuP3MMSwm1m?utm_source=generator&si=86b6cf864e0048c3"
+	},
+	{
+		title: "Cavetown",
+		id: "foxyz.cavetown",
+		src: "https://open.spotify.com/embed/artist/2hR4h1Cao2ueuI7Cx9c7V8?utm_source=generator&theme=0&si=714602d32e764d47"
 	},
 	{
 		title: "Monaco",
