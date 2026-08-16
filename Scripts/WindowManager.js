@@ -513,6 +513,8 @@ function Dialog(object, create) {
 	this._scaleY = 0;
 	this._rotation = 0;
 
+	this._maximizing = false;
+
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
     if (!object) return;
@@ -1458,7 +1460,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var self = this;
 	var content = this.content;
 
-	var fsTimeout = null;
+	var fsTimeout = 0;
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
@@ -1468,6 +1470,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name == "transform";
 	}, function onEnd(enabled) {
+		if (fsTimeout) clearTimeout(fsTimeout);
 		var target = this.target;
 		if (!target) return;
 

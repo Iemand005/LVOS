@@ -124,6 +124,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
                 (function(currentKey) {
                     toggle.addEventListener("change", function() {
                         flags[currentKey] = toggle.checked;
+                        handler.saveFlags(flags);
                     }, false);
                 })(flagId);
 
