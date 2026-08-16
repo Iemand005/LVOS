@@ -1234,7 +1234,9 @@ Object.defineProperty(Dialog.prototype, "icon", {
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
 	if (!this.target) return;
-	this._appIcon = this.target.getElementsByTagName("header")[0].getElementsByTagName("img")[0];
+	var headers = this.target.getElementsByTagName("header");
+	if (!headers.length) return;
+	this._appIcon = headers[0].getElementsByTagName("img")[0];
 
 	var self = this;
 	this._appIcon.onload = function () {
