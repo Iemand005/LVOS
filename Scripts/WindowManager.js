@@ -1504,12 +1504,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				if (!content) return;
 				if (enabled) {
 					translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-					content.style.width = toPixels(self.width * scaleX);
-					content.style.height = toPixels(self.height * scaleY);
+					content.style.width = toPixels(window.innerWidth);
+					content.style.height = toPixels(window.innerHeight);
 				} else {
-					translateElement(content, 0, 0, 0, scaleX, scaleY);
-					content.style.width = toPixels(self.width / scaleX);
-					content.style.height = toPixels(self.height / scaleY);
+					translateElement(content, 0, 0, 0, 1/ scaleX, 1/ scaleY);
+					content.style.width = toPixels(self.width);
+					content.style.height = toPixels(self.height);
 				}
 				void content.offsetWidth;
 			});
