@@ -1455,6 +1455,8 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
+	var self = this;
+
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
@@ -1501,11 +1503,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this.setScale(scaleX, scaleY);
 
-		var self = this;
 		var content = this.content;
 		setTimeout(function() {
 			if (!content) return;
 			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+			content.style.width = toPixels(self.width);
+			content.style.height = toPixels(self.height);
+			void content.offsetWidth;
 		}, 200);
 	});
 	else {
