@@ -2355,7 +2355,11 @@ function toggleBlur(enabled){ // Does not work on Chrome!
 function updateFullscreenBlurState(){
 	var anyFullscreen = !!document.querySelector(".window.open.maximized");
 	var settingOn = settings.get("no-blur-fullscreen") !== false;
-	document.body.classList.toggle("no-blur", anyFullscreen && settingOn);
+	if (anyFullscreen && settingOn) {
+		document.body.classList.add("no-blur");
+	} else {
+		document.body.classList.remove("no-blur");
+	}
 	ensureFullscreenBlurWatch();
 }
 
