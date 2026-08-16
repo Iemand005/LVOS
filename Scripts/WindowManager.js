@@ -36,7 +36,14 @@ var flags = {
 	set useTransform(value) {
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
-	compositorResize: false
+	_compositorResize: false,
+	get compositorResize() {
+		return this._compositorResize;
+	},
+	set compositorResize(value) {
+		document.body.classList.toggle("compositor-animations", value);
+		this._compositorResize = value;
+	}
 };
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
