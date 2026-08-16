@@ -78,7 +78,31 @@ SettingsHandler.prototype.get = function (key) {
 SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
 
 /** @param {{[key:string]: boolean}} flags */
+SettingsHandler.prototype.saveFlags = function (flags) {
+	var saved = {};
+	for (var flagId in flags) {
+		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
+		saved[flagId] = flags[flagId];
+	}
+	this.set("flags", JSON.stringify(saved));
+};
+
+/** @param {{[key:string]: boolean}} flags */
+SettingsHandler.prototype.restoreFlags = function (flags) {
+	var saved = this.get("flags");
+	if (!saved || typeof saved != "object") return;
+	for (var flagId in saved) {
+		if (!saved.hasOwnProperty(flagId)) continue;
+		if (typeof flags[flagId] == "boolean" && typeof saved[flagId] == "boolean") {
+			flags[flagId] = saved[flagId];
+		}
+	}
+};
+
+/** @param {{[key:string]: boolean}} flags */
 SettingsHandler.prototype.loadFlags = function (flags) {
+	var handler = this;
+	handler.restoreFlags(flags);
 	var flagsElement = document.createElement("ul");
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;

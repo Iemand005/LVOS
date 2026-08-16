@@ -1458,6 +1458,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var self = this;
 	var content = this.content;
 
+	var fsTimeout = null;
+
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
@@ -1478,7 +1480,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		content.style.height = '';
 		
 	}, function onToggled(enabled) {
-		var timeOffsetMs = 0;
+		var timeOffsetMs = 100;
 		var totalDuration = 400; //Can I uh get this from uh the css somehow
 		
 		var target = this.target;
@@ -1509,7 +1511,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 
 
-		setTimeout(function() {
+		fsTimeout = setTimeout(function() {
 			requestAnimationFrame(function() {
 				if (!content) return;
 				content.style.width = toPixels(targetWidth);
@@ -2573,4 +2575,5 @@ window.addEventListener("drop", function(e) {
  *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
  *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
  *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac 
+ * /  Safari 5+ (Windows and Mac OS X)
+\*/
