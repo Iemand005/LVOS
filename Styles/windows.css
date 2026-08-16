@@ -468,8 +468,8 @@ button:hover {
 /* Resize grabbers */
 
 .window > div.touch {
-	width: 20px;
-	height: 20px;
+	width: 25px;
+    height: 25px;
 	z-index: 1000;
 	cursor: unset !important;
 }
@@ -646,11 +646,4 @@ button:hover {
     color: black;
     /* background-color: #ffffff2b; */
   }
-}
-
-
-@media (pointer: coarse) {
-	.window {
-        contain: size layout !important;
-	}
 }
