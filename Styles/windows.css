@@ -647,3 +647,12 @@ button:hover {
     /* background-color: #ffffff2b; */
   }
 }
+
+
+@media (hover: none) and (pointer: coarse) {
+	.window {
+		contain: unset;
+
+            contain: size layout;
+	}
+}
