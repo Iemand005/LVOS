@@ -1500,6 +1500,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}
 
 		this.setScale(scaleX, scaleY);
+
+		var self = this;
+		var content = this.content;
+		setTimeout(function() {
+			if (!content) return;
+			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+		}, 200);
 	});
 	else {
 		var startPos = this.position;

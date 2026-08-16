@@ -369,6 +369,10 @@ article, .article {
     will-change: transform !important;
 }
 
+.compositor-animations .window.animating > content {
+    transition: ;
+}
+
 .window.maximized {
     top: 0 !important;
     left: 0 !important;
