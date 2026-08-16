@@ -7,7 +7,7 @@
 'use esnext';
 
 function changeTitlebarColor(newColor) {
-	let metaTag = document.querySelector('meta[name="theme-color"]');
+	var metaTag = document.querySelector('meta[name="theme-color"]');
 
 	if (!metaTag) {
 		metaTag = document.createElement('meta');
@@ -158,8 +158,7 @@ function hasTheme(theme) { return document.body.classList.contains(theme); }
 /** @param {string} theme */
 function removeTheme(theme) { document.body.classList.remove(theme); }
 
-/** @constant */
-var isBlink = 'chrome' in window;
+
 
 // function
 
