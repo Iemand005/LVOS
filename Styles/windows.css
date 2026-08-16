@@ -380,7 +380,7 @@ article, .article {
 }
 
 .window.maximized:not(.scaled-max) {
-    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
+    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg);
 }
 
 .use-scale .window.maximized,
