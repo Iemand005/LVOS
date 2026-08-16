@@ -1468,8 +1468,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enable);
 
-		this.setScale(1, 1);
-
+		// this.setScale(1, 1);
+// 
 		// try { void target.offsetWidth; } catch (e) {}
 		// target.style.transition = '';
 	}, function onToggled(enabled) {
