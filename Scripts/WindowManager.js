@@ -1469,7 +1469,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		if (enabled) target.classList.toggle("maximized", enabled);
+		target.classList.toggle("maximized", enabled);
 
 		this.setScale(1, 1);
 		if (!content) return;
@@ -1496,7 +1496,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-			target.classList.remove("maximized");
 			totalDuration - timeOffsetMs;
 
 			scaleX = 1 / scaleX;
