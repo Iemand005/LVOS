@@ -25,6 +25,8 @@ body {
 body > header {
 	padding-top: env(titlebar-area-y, 0px);
 	height: env(titlebar-area-height, 0px);
+	-webkit-app-region: drag;
+	app-region: drag;
 }
 
 body > header h1 {
