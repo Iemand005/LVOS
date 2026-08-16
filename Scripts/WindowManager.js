@@ -1500,7 +1500,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this.setScale(scaleX, scaleY);
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
-		var targetHeight = enabled ? window.innerWidth : self.height;
+		var targetHeight = enabled ? window.innerHeight : self.height;
 
 		setTimeout(function() {
 			requestAnimationFrame(function() {
