@@ -18,6 +18,8 @@
 		}
 	],
   "display_override": [
-    "window-controls-overlay"
+    "window-controls-overlay",
+	"fullscreen",
+	"minimal-ui"
   ]
 }
