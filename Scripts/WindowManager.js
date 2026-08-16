@@ -1489,7 +1489,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			// scaleY = 1 / scaleY;
 			scaleX = 1;
 			scaleY = 1;
-		}
+		} else target.classList.add("compositor-animating");
 
 		this.setScale(scaleX, scaleY);
 	});
