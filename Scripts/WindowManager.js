@@ -2350,32 +2350,32 @@ function toggleBlur(enabled){ // Does not work on Chrome!
     settings.set("blur", enabled);
 }
 
-/** Disables backdrop-filter on everything while any open window is fullscreen/maximized (if the setting is on).
- *  Closed windows keep the .maximized class in the DOM (close() only hides them), so only .open windows count as fullscreen. */
-function updateFullscreenBlurState(){
-	var anyFullscreen = !!document.querySelector(".window.open.maximized");
-	var settingOn = settings.get("no-blur-fullscreen") !== false;
-	if (anyFullscreen && settingOn) {
-		document.body.classList.add("no-blur");
-	} else {
-		document.body.classList.remove("no-blur");
-	}
-	ensureFullscreenBlurWatch();
-}
+// /** Disables backdrop-filter on everything while any open window is fullscreen/maximized (if the setting is on).
+//  *  Closed windows keep the .maximized class in the DOM (close() only hides them), so only .open windows count as fullscreen. */
+// function updateFullscreenBlurState(){
+// 	var anyFullscreen = !!document.querySelector(".window.open.maximized");
+// 	var settingOn = settings.get("no-blur-fullscreen") !== false;
+// 	if (anyFullscreen && settingOn) {
+// 		document.body.classList.add("no-blur");
+// 	} else {
+// 		document.body.classList.remove("no-blur");
+// 	}
+// 	ensureFullscreenBlurWatch();
+// }
 
-/** Installs a MutationObserver that keeps the body "no-blur" class in sync with the DOM, so no code path
- *  (close, kill, eject, drag-restore, ...) can leave it stale. Re-runs on any class change or add/remove of nodes. */
-var _fullscreenBlurWatchInstalled = false;
-function ensureFullscreenBlurWatch(){
-	if (_fullscreenBlurWatchInstalled || typeof MutationObserver == "undefined" || !document.body) return;
-	_fullscreenBlurWatchInstalled = true;
-	new MutationObserver(updateFullscreenBlurState).observe(document.body, {
-		childList: true,
-		subtree: true,
-		attributes: true,
-		attributeFilter: ["class"]
-	});
-}
+// /** Installs a MutationObserver that keeps the body "no-blur" class in sync with the DOM, so no code path
+//  *  (close, kill, eject, drag-restore, ...) can leave it stale. Re-runs on any class change or add/remove of nodes. */
+// var _fullscreenBlurWatchInstalled = false;
+// function ensureFullscreenBlurWatch(){
+// 	if (_fullscreenBlurWatchInstalled || typeof MutationObserver == "undefined" || !document.body) return;
+// 	_fullscreenBlurWatchInstalled = true;
+// 	new MutationObserver(updateFullscreenBlurState).observe(document.body, {
+// 		childList: true,
+// 		subtree: true,
+// 		attributes: true,
+// 		attributeFilter: ["class"]
+// 	});
+// }
 
 /** @param {*} exception */
 function handleStorageException(exception){
