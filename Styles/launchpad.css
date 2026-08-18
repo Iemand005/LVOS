@@ -9,6 +9,9 @@
     padding: 10px;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
+
+	height: 100%;
+    overflow: scroll;
 }
 /* Disable the close btn */
 #launchpad > button {
