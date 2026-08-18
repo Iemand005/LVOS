@@ -25,3 +25,7 @@ footer nav {
 	display: flex;
     justify-content: center;
 }
+
+footer button {
+	min-width: 4rem;
+}
