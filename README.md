@@ -17,3 +17,5 @@ wallpaper share between desktop and mobile uh
 
 custom back fwd handling to nav the apps in iframe maybe?
 - share d uh pagination/ tab control fo r launcpad, geodetahbs and frzona
+
+lunchpd stylingz omg I need a blw overlay liie macos had and like hide the windows hehind t and then a win10 fullscreen style version design as well and hovbou live tiles

@@ -7,6 +7,8 @@
 	display: flex;
 	margin: 0;
     padding: 10px;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
 }
 /* Disable the close btn */
 #launchpad > button {
@@ -15,4 +17,6 @@
 
 #launchpad li {
 	display: block;
+
+	    width: 25%;
 }
