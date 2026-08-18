@@ -5,3 +5,14 @@
 #applist, #dockapplist, #dock {
 	display: none;
 }
+
+#footer , footer {
+	display: block !important;
+	height: 32px;
+	position: sticky;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
