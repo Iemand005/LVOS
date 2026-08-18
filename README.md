@@ -16,3 +16,4 @@ uh
 wallpaper share between desktop and mobile uh
 
 custom back fwd handling to nav the apps in iframe maybe?
+- share d uh pagination/ tab control fo r launcpad, geodetahbs and frzona
