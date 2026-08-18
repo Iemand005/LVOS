@@ -1,3 +1,7 @@
 #desktop {
 	/* display: none; */
 }
+
+#applist, #dockapplist, #dock {
+	display: none;
+}
