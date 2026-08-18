@@ -483,3 +483,5 @@ window.addEventListener('keyup', function(event) {
     document.body.classList.remove('slow-animations');
   }
 }, false);
+
+launchpad.open();
