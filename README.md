@@ -14,3 +14,5 @@ uh
 - view transitipn api opening app from uh aunchpad
 - default appicon (letter as ion the icomn?)
 wallpaper share between desktop and mobile uh
+
+custom back fwd handling to nav the apps in iframe maybe?
