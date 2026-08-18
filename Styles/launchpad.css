@@ -8,7 +8,7 @@
 	margin: 0;
     padding: 10px;
 	flex-wrap: wrap;
-	justify-content: space-evenly;
+	justify-content: center;
 
 	height: 100%;
     overflow: scroll;
@@ -31,4 +31,6 @@
 #launchpad li button {
 	width: 100%;
 	height: 100%;
+
+	border-radius: 20px;
 }
