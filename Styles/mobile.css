@@ -21,7 +21,7 @@ body {
 	background-color: gray;
 }
 
-#footer nav {
+footer nav {
 	display: flex;
     justify-content: center;
 }
