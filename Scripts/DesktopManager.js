@@ -100,6 +100,8 @@ var onLoad = function () {
 		window.addEventListener(supportsPointer?"pointerup":"mouseup", function(ev) { selector.remove(); }, false);
 	}
 
+    
+    launchpad.open();
 };
 
 window.addEventListener("load", onLoad, false);
@@ -483,5 +485,3 @@ window.addEventListener('keyup', function(event) {
     document.body.classList.remove('slow-animations');
   }
 }, false);
-
-launchpad.open();

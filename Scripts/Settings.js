@@ -201,12 +201,6 @@ function toggleSquircles(enabled) {
 	settings.set("squircles", enabled);
 }
 
-/** @param {boolean} enabled */
-function toggleNoBlurFullscreen(enabled) {
-	settings.set("no-blur-fullscreen", enabled);
-	updateFullscreenBlurState();
-}
-
 /** @param {number} id */
 function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
@@ -320,9 +314,6 @@ function loadThemeSetting() {
 		document.body.classList.toggle("squircles", squircles);
 		if (elements.squircles) elements.squircles.checked = squircles;
 	}
-	var noBlurFullscreen = settings.get("no-blur-fullscreen");
-	if (elements.noBlurFullscreen) elements.noBlurFullscreen.checked = noBlurFullscreen !== false;
-	updateFullscreenBlurState();
 }
 
 function updateBlurState() {

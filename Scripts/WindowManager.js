@@ -1471,7 +1471,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		return name == "transform" || name == "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-		updateFullscreenBlurState();
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name == "transform";
 	}, function onEnd(enabled) {
@@ -1543,7 +1542,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.width = startSize.x;
 			self.height = startSize.y;
 			if ( self.target) self.target.classList.toggle("maximized", enable);
-			updateFullscreenBlurState();
 		}
 		if (!enable) toggleThingie();
 		animate(300, function(t) {
