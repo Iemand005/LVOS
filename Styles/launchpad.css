@@ -6,3 +6,7 @@
 #launchpad > ul{
 	display: flex;
 }
+/* Disable the close btn */
+#launchpad > button {
+	display: none;
+}
