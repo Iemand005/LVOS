@@ -16,3 +16,7 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+#launchpad ul button {
+	background-color: gray;
+}
