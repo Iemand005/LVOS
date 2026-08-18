@@ -20,3 +20,8 @@ body {
 #launchpad ul button {
 	background-color: gray;
 }
+
+#footer nav {
+	display: flex;
+    justify-content: center;
+}
