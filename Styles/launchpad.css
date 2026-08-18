@@ -5,8 +5,14 @@
 
 #launchpad > ul{
 	display: flex;
+	margin: 0;
+    padding: 10px;
 }
 /* Disable the close btn */
 #launchpad > button {
 	display: none;
+}
+
+#launchpad li {
+	display: block;
 }
