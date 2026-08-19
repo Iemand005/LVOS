@@ -947,7 +947,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
-	set: function(height) {
+	set: function(/** @type {number | any} */height) {
 		if (typeof height != "number" || !this.target) return;
 
 		var bounds = WindowManager.getWindowBounds();
