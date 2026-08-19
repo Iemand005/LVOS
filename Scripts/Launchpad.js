@@ -36,7 +36,7 @@ Launchpad.prototype.addApp = function(app) {
 	var openButton = app.createOpenButton();
 
 	if (this._isMobile) openButton.onclick = function() {
-		app.launch();
+		// app.launch();
 		var mainFrame = document.getElementById("main-frame");
 		if (!(mainFrame instanceof HTMLIFrameElement)) return;
 		if (app.src)
