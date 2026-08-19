@@ -35,6 +35,9 @@ Launchpad.prototype.addApp = function(app) {
 	// appElement.textContent = app.id;
 	var openButton = app.createOpenButton();
 
+	appElement.appendChild(openButton);
+
+
 	if (this._isMobile) {
 		openButton.textContent = openButton.textContent.charAt(0).toUpperCase()
 		openButton.onclick = function() {
@@ -56,10 +59,9 @@ Launchpad.prototype.addApp = function(app) {
 		}
 
 		var appLabel = document.createElement("label");
-		if (app.title) appLabel.textContent = app.title;
+		appLabel.textContent = app.title || "Unknown";
 
 		appElement.appendChild(appLabel);
 	}
-	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
 };
