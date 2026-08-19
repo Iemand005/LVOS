@@ -43,10 +43,16 @@ body {
 footer nav {
 	display: flex;
     justify-content: center;
+	height: 100%;
 }
 
 footer button {
 	min-width: 4rem;
+	height: 100%;
+}
+
+footer img {
+	height: 100%;
 }
 
 
