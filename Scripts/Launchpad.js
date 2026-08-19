@@ -35,14 +35,17 @@ Launchpad.prototype.addApp = function(app) {
 	// appElement.textContent = app.id;
 	var openButton = app.createOpenButton();
 
-	if (this._isMobile) openButton.onclick = function() {
-		// app.launch();
-		var mainFrame = document.getElementById("main-frame");
-		if (!(mainFrame instanceof HTMLIFrameElement)) return;
-		if (app.src)
-			mainFrame.src = app.src;
-		mainFrame.classList.add("open");
-	};
+	if (this._isMobile) {
+		openButton.textContent = openButton.textContentword.charAt(0).toUpperCase()
+		openButton.onclick = function() {
+			// app.launch();
+			var mainFrame = document.getElementById("main-frame");
+			if (!(mainFrame instanceof HTMLIFrameElement)) return;
+			if (app.src)
+				mainFrame.src = app.src;
+			mainFrame.classList.add("open");
+		};
+	}
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
 };
