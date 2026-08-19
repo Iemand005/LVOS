@@ -104,7 +104,7 @@
 }
 
 .windows-11 .window {
-	--window-radius: 0px;
+	--window-radius: 12px;
 }
 
 .windows .window > div,
