@@ -233,14 +233,10 @@ section#desktop[flipped] article#metrobody {
 
 #desktop[flipped] > #windows {
 	translate: 0 0 1px;
-	opacity: 1;
 }
 
-#desktop[flipped] > #metro {
-	opacity: 1;
-}
-
-#desktop:not([flipped]) > #windows {
+#desktop[flipped] > #metro,
+#desktop > #windows {
 	opacity: 1;
 }
 
@@ -249,6 +245,21 @@ section#desktop[flipped] article#metrobody {
 	opacity: 0;
     pointer-events: auto;
 
+}
+
+@media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
+	#desktop {
+		transform: rotateY(180deg) !important;
+	}
+
+	#windows {
+		translate: 0 0 1px;
+		opacity: 0 !important;
+	}
+
+	#metro {
+		opacity: 1 !important;
+	}
 }
 
 aside#charms {
@@ -494,25 +505,6 @@ aside#charms form {
 .blur #launchpad {
 	backdrop-filter: blur(1rem);
 	background-color: transparent;
-}
-
-@media (pointer: none), (pointer: coarse) {
-}
-
-@media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
-	#desktop {
-		transform: rotateY(180deg) !important;
-	}
-
-	#windows {
-		translate: 0 0 1px;
-		opacity: 0 !important;
-	}
-
-	#metro {
-		/* translate: none !important; */
-		opacity: 1 !important;
-	}
 }
 
 @keyframes opensesame {
