@@ -41,6 +41,7 @@ Launchpad.prototype.addApp = function(app) {
 		if (!(mainFrame instanceof HTMLIFrameElement)) return;
 		if (app.src)
 			mainFrame.src = app.src;
+		mainFrame.classList.add("open");
 	};
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);

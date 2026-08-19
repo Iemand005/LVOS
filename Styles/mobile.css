@@ -34,3 +34,15 @@ footer button {
 	corner-shape: squircle;
 	border-radius: 100%;
 }
+
+#main-frame {
+	z-index: 100;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#main-frame:not(.open) {
+	display: none;
+}
