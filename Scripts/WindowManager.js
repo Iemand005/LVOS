@@ -947,42 +947,45 @@ Object.defineProperty(Dialog.prototype, "width", {
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
+	/** @param {number} height */
 	set: function(/** @type {number | any} */height) {
 		if (typeof height != "number" || !this.target) return;
 
 		var bounds = WindowManager.getWindowBounds();
-		if (bounds.bottom !== Infinity) height = min(height, bounds.bottom - this.y);
-		this._height = max(min(height, this.maxHeight), this.minHeight);
+		var finalHeight = height; 
+		if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
+		
+		this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
 		if (this.useTransform || this.useScale) {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
 
-		this._isMinHeight = this._height == this.minHeight
+		this._isMinHeight = this._height == this.minHeight;
 	}
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
-    get: function() { return this._minWidth; },
-    set: function(width) { this.setMinSize(width); }
+	get: function() { return this._minWidth; },
+	set: function(width) { this.setMinSize(width); }
 });
 Object.defineProperty(Dialog.prototype, "minHeight", {
-    get: function() { return this._minHeight; },
-    set: function(height) { this.setMinSize(this.minWidth, height); }
+	get: function() { return this._minHeight; },
+	set: function(height) { this.setMinSize(this.minWidth, height); }
 });
 Object.defineProperty(Dialog.prototype, "maxWidth", {
-    get: function() { return this._maxWidth; },
-    set: function(width) { this.setMaxSize(width); }
+	get: function() { return this._maxWidth; },
+	set: function(width) { this.setMaxSize(width); }
 });
 Object.defineProperty(Dialog.prototype, "maxHeight", {
-    get: function() { return this._maxHeight; },
-    set: function(height) { this.setMaxSize(this.maxWidth, height); }
+	get: function() { return this._maxHeight; },
+	set: function(height) { this.setMaxSize(this.maxWidth, height); }
 });
 /** @type {{x:number,y:number}} */
 Object.defineProperty(Dialog.prototype, "position", {
-    get: function() { return new Vector(this.x, this.y); },
-    set: function(position) {
-        if (position instanceof Vector)
-            this.move(position.x, position.y);
-    }
+	get: function() { return new Vector(this.x, this.y); },
+	set: function(position) {
+		if (position instanceof Vector)
+			this.move(position.x, position.y);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "size", {
