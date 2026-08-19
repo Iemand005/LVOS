@@ -1,8 +1,8 @@
 # LVOS
 
 Web OS
-[Open](https://iemand005.github.io/LVOS/)
-[Mobile version](https://iemand005.github.io/LVOS/mobile.html)
+[Open](https://iemand005.github.io/LVOS)
+[Mobile version](https://iemand005.github.io/LVOS/Mobile)
 
 
 Netscape 6-9: [Open](https://iemand005.github.io/LVOS/indexIE8.html)
