@@ -765,12 +765,10 @@ Dialog.prototype.initWithObject = function(object) {
 
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
-    // this.useTransform = this.useTransform;
-    // this.useScale = this.useScale;
     this.update();
 
     if (!isElement(object)) {
-        if (typeof object.centerX == "number" || typeof object.centerY == "number") {
+        if (!(object instanceof Dialog) && (typeof object.centerX == "number" || typeof object.centerY == "number")) {
             this.moveToCenter(
                 typeof object.centerX == "number" ? object.centerX : window.innerWidth / 2,
                 typeof object.centerY == "number" ? object.centerY : window.innerHeight / 2
