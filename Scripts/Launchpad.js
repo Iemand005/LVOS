@@ -34,9 +34,12 @@ Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
 	// appElement.textContent = app.id;
 	var openButton = app.createOpenButton();
-	openButton.onclick = function() {
+
+	if (this._isMobile) openButton.onclick = function() {
 		app.launch();
-		app.maximize();
+		var mainFrame = document.getElementById("main-frame");
+		if (!mainFrame) return;
+		mainFrame.sr
 	};
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
