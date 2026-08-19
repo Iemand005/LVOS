@@ -936,16 +936,16 @@ Object.defineProperty(Dialog.prototype, "z", {
     
 Object.defineProperty(Dialog.prototype, "width", {
 	get: function() { return this._width; },
-	set: function(/** @type {number} */width) {
-		// if (typeof width != "number" || !this.target) return;
+	set: function(width) {
+		if (typeof width != "number" || !this.target) return;
 
-		// var bounds = WindowManager.getWindowBounds();
-		// if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
-		// this._width = max(min(width, this.maxWidth), this.minWidth);
-		// if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
-		// else this.target.style.right = toPixels(this.right);
+		var bounds = WindowManager.getWindowBounds();
+		if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
+		this._width = max(min(width, this.maxWidth), this.minWidth);
+		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+		else this.target.style.right = toPixels(this.right);
 
-		// this._isMinWidth = this._width == this.minWidth;
+		this._isMinWidth = this._width == this.minWidth;
 	}
 });
 
