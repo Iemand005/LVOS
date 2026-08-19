@@ -212,7 +212,7 @@ section#desktop[flipped] article#metrobody {
 }
 
 #desktop[flipped] > #metro {
-	animation: forwards 1s ease-in flip;
+	/* animation: forwards 1s ease-in flip; */
 }
 
 #desktop:not([flipped]) #metroapplist {
