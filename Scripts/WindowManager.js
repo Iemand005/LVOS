@@ -908,30 +908,28 @@ Object.defineProperty(Dialog.prototype, "mica", {
 
 
 Object.defineProperty(Dialog.prototype, "x", {
-  get: function () {
-    return this._x * window.innerWidth;
-  },
-  /** @param {number} x */
-  set: function (x) {
-    if (typeof x == "number") this.move(x, this.y);
-  }
+	get: function () {
+		return this._x * window.innerWidth;
+	},
+	set: function (x) {
+		if (typeof x == "number") this.move(x, this.y);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "y", {
-  /** @returns {number} */
-  get: function () {
-    return this._y * window.innerHeight;
-  },
-  set: function (y) {
-    if (typeof y == "number") this.move(this.x, y);
-  }
+	get: function () {
+		return this._y * window.innerHeight;
+	},
+	set: function (y) {
+		if (typeof y == "number") this.move(this.x, y);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
-  get: function () { return this._z; },
-  set: function (z) {
-    if (typeof z == "number") this.setZ(z);
-  }
+	get: function () { return this._z; },
+	set: function (z) {
+		if (typeof z == "number") this.setZ(z);
+	}
 });
     
 Object.defineProperty(Dialog.prototype, "width", {
