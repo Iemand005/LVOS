@@ -220,7 +220,7 @@ section#desktop[flipped] article#metrobody {
 
 #desktop[flipped],
 #metro {
-	transform: rotateY(180deg);
+	/* transform: rotateY(180deg); */
 }
 
 #desktop[flipped] > #windows {
@@ -233,10 +233,14 @@ section#desktop[flipped] article#metrobody {
 }
 
 #desktop:not([flipped]) > #metro {
-	translate: 0 0 -1px;
+	/* translate: 0 0 -1px; */
 	opacity: 0;
     pointer-events: auto;
 
+}
+
+#desktop[flipped] #dockapplist {
+	z-index: 0 !important;
 }
 
 @media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
@@ -252,6 +256,10 @@ section#desktop[flipped] article#metrobody {
 	#metro {
 		opacity: 1 !important;
 		transform: rotateY(0deg);
+	}
+
+	#dockapplist {
+		z-index: 0 !important;
 	}
 }
 
