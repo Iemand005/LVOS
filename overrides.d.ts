@@ -37,6 +37,8 @@ declare global {
 		} | {} | undefined;
 
 		documentPictureInPicture: DocumentPictureInPicture | undefined;
+
+		inspect?: (value: any) => void;
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
