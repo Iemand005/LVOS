@@ -18,3 +18,13 @@ window.addEventListener("load", function(e){
 	if (launchpad) launchpad.isMobile = true;
 });
 
+
+
+window.history.pushState(null, "", window.location.href);
+
+window.addEventListener('popstate', function (event) {
+    
+    window.history.pushState(null, "", window.location.href);
+    
+	console.log("I gotta handle backnav!");
+});
