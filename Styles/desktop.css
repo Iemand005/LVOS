@@ -234,9 +234,8 @@ section#desktop[flipped] article#metrobody {
 }
 
 #desktop:not([flipped]) > #metro {
-	/* translate: 0 0 -1px; */
 	opacity: 0;
-    pointer-events: NONE;
+    pointer-events: none;
 
 }
 
