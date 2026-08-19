@@ -9,5 +9,7 @@ window.addEventListener("load", function(e){
 		mainFrame.classList.remove("open");
 	};
 
-	if (backButton) backButton.onclick = function() {};
+	if (backButton) backButton.onclick = function() {
+		
+	};
 });
