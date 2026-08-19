@@ -12,7 +12,7 @@ window.addEventListener("load", function(e){
 	};
 	
 	if (homeButton) homeButton.onclick = function() {
-		if (!(mainFrame instanceof HTMLIFrameElement)) return;
+		if (!(mainFrame instanceof HTMLElement)) return;
 		mainFrame.classList.remove("open");
 	};
 
