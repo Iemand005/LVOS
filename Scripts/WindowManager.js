@@ -1415,7 +1415,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	var target = this.target;
 	if (!target) return;
 	var dialog = this;
-	var enabled;
+	var enabled = false;
 	if (supportsTransitions) {
 		target.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
