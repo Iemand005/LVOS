@@ -60,9 +60,9 @@ iframe {
 }
 
 #reflection {
-	transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
+	transform: scaleY(-1) rotateX(45deg);
 	transform-origin: top;
-	-webkit-transform: scaleY(-1) rotateX(45deg) /*rotateX(325deg)*/;
+	-webkit-transform: scaleY(-1) rotateX(45deg);
 	-webkit-transform-origin: top;
 	position: absolute;
 	width: 100%;
