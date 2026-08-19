@@ -213,22 +213,14 @@ section#desktop[flipped] article#metrobody {
 	transition: opacity 50ms ease-out 200ms;
 }
 
-#desktop[flipped] > #metro {
-	/* animation: forwards 1s ease-in flip; */
-}
-
 #desktop:not([flipped]) #metroapplist {
 	display: none;
 }
 
-#desktop[flipped] > #windows {
-	/* animation: forwards 1s ease-in flip; */
-}
 
 #desktop[flipped],
 #metro {
 	transform: rotateY(180deg);
-	    /* transform: rotateY(0deg); */
 }
 
 #desktop[flipped] > #windows {
@@ -259,6 +251,7 @@ section#desktop[flipped] article#metrobody {
 
 	#metro {
 		opacity: 1 !important;
+		transform: rotateY(0deg);
 	}
 }
 
