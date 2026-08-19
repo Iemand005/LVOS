@@ -38,8 +38,8 @@ Launchpad.prototype.addApp = function(app) {
 	if (this._isMobile) openButton.onclick = function() {
 		app.launch();
 		var mainFrame = document.getElementById("main-frame");
-		if (!mainFrame) return;
-		mainFrame.sr
+		if (!(mainFrame instanceof HTMLFormElement)) return;
+		mainFrame.src
 	};
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
