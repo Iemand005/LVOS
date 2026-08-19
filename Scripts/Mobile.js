@@ -14,4 +14,7 @@ window.addEventListener("load", function(e){
 		if (!(mainFrame instanceof HTMLIFrameElement) || !mainFrame.contentWindow) return;
 		mainFrame.contentWindow.history.back();
 	};
+
+	if (launchpad) launchpad.isMobile = true;
 });
+
