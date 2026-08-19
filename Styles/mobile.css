@@ -71,7 +71,7 @@ footer button {
 }
 
 
-#launchpad:not(.open) ~ #main-frame {
+#main-frame:not(.open) {
 	transform: scale(0.5);
 	pointer-events: none;
 	/* display: ; */
