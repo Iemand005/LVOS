@@ -8,7 +8,7 @@
 	margin: 0;
     padding: 10px;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: space-evenly;
 
 	height: 100%;
     overflow: scroll;
@@ -33,4 +33,8 @@
 	height: 100%;
 
 	border-radius: 20px;
+}
+
+#launchpad.open {
+	pointer-events: auto;
 }
