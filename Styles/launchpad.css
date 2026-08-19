@@ -41,19 +41,3 @@
 	text-overflow: ellipsis;
     overflow: hidden;
 }
-
-#launchpad.open, #main-frame {
-	pointer-events: auto;
-	transition: all 1s linear;
-}
-
-#launchpad.open  ~ #main-frame {
-	pointer-events: auto;
-}
-
-#launchpad:not(.open) ~ #main-frame {
-	transform: scale(0.5);
-	pointer-events: none;
-	/* display: ; */
-	opacity: 0;
-}
