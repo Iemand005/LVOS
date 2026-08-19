@@ -29,3 +29,8 @@ footer nav {
 footer button {
 	min-width: 4rem;
 }
+
+.android #launchpad ul button {
+	corner-shape: squircle;
+	border-radius: 100%;
+}
