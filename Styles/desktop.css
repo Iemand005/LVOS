@@ -90,7 +90,7 @@ body:not(.blur) .window > article {
 	z-index: -1000;
 	pointer-events: none;
 	overflow: visible;
-	transform-style: preserve-3d;
+	/* transform-style: preserve-3d; */
 	-webkit-user-drop: element;
 	transition: transform 600ms ease-out;
 }
