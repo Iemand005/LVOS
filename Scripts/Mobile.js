@@ -3,13 +3,15 @@ window.addEventListener("load", function(e){
 	const backButton = document.getElementById("back-button");
 	const appsButton = document.getElementById("apps-button");
 
+	var mainFrame = document.getElementById("main-frame");
+	
 	if (homeButton) homeButton.onclick = function() {
-		var mainFrame = document.getElementById("main-frame");
 		if (!(mainFrame instanceof HTMLIFrameElement)) return;
 		mainFrame.classList.remove("open");
 	};
 
 	if (backButton) backButton.onclick = function() {
-		
+		if (!(mainFrame instanceof HTMLIFrameElement) || !mainFrame.contentWindow) return;
+		mainFrame.contentWindow.history.back();
 	};
 });
