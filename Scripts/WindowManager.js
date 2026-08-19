@@ -835,9 +835,7 @@ function scaleElement(element, width, height) {
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
-    set: function(open) {
-        this.toggleOpen(open);
-    }
+    set: function(open) { this.toggleOpen(open); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
@@ -882,7 +880,7 @@ Object.defineProperty(Dialog.prototype, "body", {
     }
 });
 Object.defineProperty(Dialog.prototype, "titleBar", {
-    	get: function() { return this.getElementByTagOrClassName("header"); },
+	get: function() { return this.getElementByTagOrClassName("header"); },
 });
 Object.defineProperty(Dialog.prototype, "contentDocument", {
     get: function() {
