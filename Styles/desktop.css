@@ -364,7 +364,7 @@ aside#metroapplist > button {
 
 #metro, #overlay {
 	/* display: none; */
-
+    pointer-events: auto;
 }
 
 #overlay.open {
