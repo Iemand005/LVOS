@@ -1,7 +1,7 @@
 {
 	"name": "LVOS Mobile",
 	"short_name": "LVOS Mobile",
-	"id": ""
+	"id": "/Mobile/",
 	"start_url": "./index.html",
 	"display": "standalone",
 	"background_color": "#ffffff",
