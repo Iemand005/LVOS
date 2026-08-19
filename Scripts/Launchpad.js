@@ -42,10 +42,11 @@ Launchpad.prototype.addApp = function(app) {
 		openButton.textContent = openButton.textContent.charAt(0).toUpperCase()
 		openButton.onclick = function() {
 			var mainFrame = document.getElementById("app-frame");
+			var appFrame = document.getElementById("main-frame");
 			if (!(mainFrame instanceof HTMLIFrameElement)) return;
 			if (app.src && mainFrame.src !== app.src)
 				mainFrame.src = app.src;
-			mainFrame.classList.add("open");
+			appFrame.classList.add("open");
 		};
 		if (app.application && app.application.iconUrl) {
 			var icon = document.createElement("img");
