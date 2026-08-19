@@ -1,6 +1,6 @@
 
 #launchpad, .launchpad {
-	transition: transform 1s linear;
+	transition: all 1s linear;
 }
 
 #launchpad > ul {
@@ -44,9 +44,16 @@
 
 #launchpad.open, #main-frame {
 	pointer-events: auto;
+	transition: all 1s linear;
 }
 
-#launchpad:not(.open) {
+#launchpad.open  ~ #main-frame {
+	pointer-events: auto;
+}
+
+#launchpad:not(.open) ~ #main-frame {
 	transform: scale(0.5);
 	pointer-events: none;
+	/* display: ; */
+	opacity: 0;
 }
