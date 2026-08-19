@@ -198,6 +198,7 @@ button {
 	margin-left: 10px;
 	font-size: 12px;
 	font-weight: 500;
+	width: 100%;
 }
 
 .windows .window header section,
