@@ -54,6 +54,11 @@ Launchpad.prototype.addApp = function(app) {
 			};
 			icon.src = app.application.iconUrl;
 		}
+
+		var appLabel = document.createElement("label");
+		if (app.title) appLabel.textContent = app.title;
+
+		appElement.appendChild(appLabel);
 	}
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
