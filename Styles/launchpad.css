@@ -38,6 +38,8 @@
 	width: 70px;
 	display: block;
 	text-align: center;
+	text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 #launchpad.open, #main-frame {
