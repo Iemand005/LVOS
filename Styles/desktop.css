@@ -472,6 +472,8 @@ aside#charms form {
 	transition: all 240ms ease-out;
 
 	display: none;
+
+	padding: 10px 0;
 }
 
 #launchpad.open {

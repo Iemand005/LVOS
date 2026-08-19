@@ -29,15 +29,7 @@ body {
 	padding: 0;
 	overflow: hidden;
 
-	display
-In combination with 'float' and 'position', determines the type of box or boxes that are generated for an element.
-
-Widely available across major browsers (Baseline since January 2018)
-Learn more
-
-Don't show
-: flex;
-    align-content: center;
+	display: flex;
     justify-content: center;
     align-items: center;
 }
