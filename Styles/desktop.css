@@ -27,7 +27,7 @@ body > header {
 	height: env(titlebar-area-height, 0px);
 	-webkit-app-region: drag;
 	app-region: drag;
-	OVERFLOW: hidden;
+	overflow: hidden;
 }
 
 body > header h1 {
