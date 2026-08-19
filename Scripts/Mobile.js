@@ -4,6 +4,7 @@ window.addEventListener("load", function(e){
 	const appsButton = document.getElementById("apps-button");
 
 	var mainFrame = document.getElementById("main-frame");
+	var appFrame = document.getElementById("app-frame");
 
 	var goBack = function() {
 		if (!(mainFrame instanceof HTMLIFrameElement) || !mainFrame.contentWindow) return;
