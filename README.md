@@ -2,6 +2,7 @@
 
 Web OS
 [Open](https://iemand005.github.io/LVOS/)
+[Mobile version](https://iemand005.github.io/LVOS/mobile.html)
 
 
 Netscape 6-9: [Open](https://iemand005.github.io/LVOS/indexIE8.html)
