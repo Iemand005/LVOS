@@ -3,6 +3,7 @@ function Launchpad() {
 	/** @type {HTMLElement?} */
 	this.launchpad = null;
 	this.list = document.createElement("ul");
+	this._isMobile = true;
 }
 /** @param {HTMLElement} launchpad */
 Launchpad.prototype.init = function(launchpad) {
@@ -32,6 +33,10 @@ Launchpad.prototype.close = function() {
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
 	// appElement.textContent = app.id;
-	appElement.appendChild(app.createOpenButton());
+	var openButton = app.createOpenButton();
+	openButton.onclick = function() {
+		app.launch();
+	};
+	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
 };
