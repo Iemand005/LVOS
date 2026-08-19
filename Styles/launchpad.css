@@ -1,9 +1,9 @@
 
 #launchpad, .launchpad {
-
+	transition: transform 1s linear;
 }
 
-#launchpad > ul{
+#launchpad > ul {
 	display: flex;
 	margin: 0;
 	padding: 10px;
@@ -44,4 +44,9 @@
 
 #launchpad.open, #main-frame {
 	pointer-events: auto;
+}
+
+#launchpad:not(.open) {
+	transform: scale(0.5);
+	pointer-events: none;
 }
