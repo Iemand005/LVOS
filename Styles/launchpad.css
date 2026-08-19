@@ -34,6 +34,12 @@
 	border-radius: 20px;
 }
 
+#launchpad label {
+	    width: 100%;
+    display: block;
+    text-align: center;
+}
+
 #launchpad.open, #main-frame {
 	pointer-events: auto;
 }
