@@ -880,7 +880,7 @@ Dialog.prototype.getOrCreateFrame = function(create) {
     return this.body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "src", {
-    get: function() { return this._src; },
+    get: function() { return this._src || this.application && this.application.src; },
     set: function(url) {
         var frame = this.getOrCreateFrame(true);
         if (frame) frame.src = url;
