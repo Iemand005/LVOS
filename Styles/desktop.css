@@ -402,9 +402,6 @@ aside#metroapplist > button {
 #dockapplist {
 	/* ToDo: Implement moving apps in and out the dock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
 	position: absolute;
-	height: 50px;
-	bottom: 0;
-	width: 300px;
 	display: flex;
 	justify-content: center;
 	position: absolute;
