@@ -768,7 +768,7 @@ Dialog.prototype.initWithObject = function(object) {
     this.update();
 
     if (!isElement(object))
-        if (object instanceof Dialog && (typeof object.x == "number" || typeof object.y == "number"))
+        if (object instanceof Dialog)
             this.move(object.x, object.y);
         else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 }
