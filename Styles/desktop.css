@@ -510,7 +510,7 @@ aside#charms form {
 	}
 
 	#metro {
-		translate: none !important;
+		/* translate: none !important; */
 		opacity: 1 !important;
 	}
 }
