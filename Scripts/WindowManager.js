@@ -775,7 +775,7 @@ Dialog.prototype.initWithObject = function(object) {
                 typeof object.centerX == "number" ? object.centerX : window.innerWidth / 2,
                 typeof object.centerY == "number" ? object.centerY : window.innerHeight / 2
             );
-        } else if (typeof object.x == "number" || typeof object.y == "number") {
+        } else if (object instanceof Dialog && (typeof object.x == "number" || typeof object.y == "number")) {
             this.move(
                 typeof object.x == "number" ? object.x : this.x,
                 typeof object.y == "number" ? object.y : this.y
