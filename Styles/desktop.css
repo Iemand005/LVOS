@@ -246,6 +246,8 @@ section#desktop[flipped] article#metrobody {
 #desktop:not([flipped]) > #metro {
 	translate: 0 0 -1px;
 	opacity: 0;
+    pointer-events: auto;
+
 }
 
 aside#charms {
@@ -364,7 +366,6 @@ aside#metroapplist > button {
 
 #metro, #overlay {
 	/* display: none; */
-    pointer-events: auto;
 }
 
 #overlay.open {
