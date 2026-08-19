@@ -308,6 +308,8 @@ button {
 	-webkit-mask-componsite: xor;
 	mask-composite: exclude;
 	pointer-events: none;
+
+
 }
 
 .modern .window content::after
@@ -566,6 +568,12 @@ body.no-blur.modern.blur .window content {
 @supports (corner-shape: squircle) {
 	.squircles .window {
 		--window-outer-radius: calc(var(--window-radius) * 2);
+	}
+
+	.window > content::before,
+	.window > content::after,
+	.modern button::after {
+		    corner-shape: inherit;
 	}
 
 	.squircles .window > content::before,
