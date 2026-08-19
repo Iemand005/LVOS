@@ -25,13 +25,18 @@ body {
 	corner-shape: squircle;
 	border-radius: 100%;
 	font-size: 30px;
-	color: lightgray;
 	padding: 0;
 	overflow: hidden;
 
 	display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+	#launchpad ul button {
+		color: lightgray;
+	}
 }
 
 #launchpad ul button img {
