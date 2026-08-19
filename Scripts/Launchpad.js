@@ -41,10 +41,9 @@ Launchpad.prototype.addApp = function(app) {
 	if (this._isMobile) {
 		openButton.textContent = openButton.textContent.charAt(0).toUpperCase()
 		openButton.onclick = function() {
-			// app.launch();
 			var mainFrame = document.getElementById("main-frame");
 			if (!(mainFrame instanceof HTMLIFrameElement)) return;
-			if (app.src)
+			if (app.src && mainFrame.src !== app.src)
 				mainFrame.src = app.src;
 			mainFrame.classList.add("open");
 		};
