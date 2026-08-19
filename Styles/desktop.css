@@ -195,6 +195,8 @@ section#desktop[flipped] article#metrobody {
 	justify-content: center;
 	align-items: center;
 	display: flex;
+
+	transform: rotateY(180deg);
 }
 
 #metro > * {
@@ -220,7 +222,7 @@ section#desktop[flipped] article#metrobody {
 }
 
 #desktop[flipped] > #windows {
-	animation: forwards 1s ease-in flip;
+	/* animation: forwards 1s ease-in flip; */
 }
 
 #desktop[flipped],
@@ -230,7 +232,7 @@ section#desktop[flipped] article#metrobody {
 
 #desktop[flipped] > #windows {
 	translate: 0 0 1px;
-	opacity: 0;
+	opacity: 1;
 }
 
 #desktop[flipped] > #metro {
@@ -361,7 +363,7 @@ aside#metroapplist > button {
 }
 
 #metro, #overlay {
-	display: none;
+	/* display: none; */
 
 }
 
