@@ -35,6 +35,6 @@
 	border-radius: 20px;
 }
 
-#launchpad.open {
+#launchpad.open, #main-frame {
 	pointer-events: auto;
 }
