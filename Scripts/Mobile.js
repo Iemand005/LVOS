@@ -15,8 +15,7 @@ window.addEventListener("load", function(e){
 		mainFrame.classList.remove("open");
 	};
 
-	if (backButton) backButton.onclick = function() {
-	};
+	if (backButton) backButton.onclick = goBack;
 
 	if (launchpad) launchpad.isMobile = true;
 	
@@ -27,6 +26,8 @@ window.addEventListener("load", function(e){
 		window.history.pushState(null, "", window.location.href);
 		
 		console.log("I gotta handle backnav!");
+
+		goBack();
 	});
 });
 
