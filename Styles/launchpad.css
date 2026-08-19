@@ -6,12 +6,12 @@
 #launchpad > ul{
 	display: flex;
 	margin: 0;
-    padding: 10px;
+	padding: 10px;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
 
 	height: 100%;
-    overflow: scroll;
+	overflow: scroll;
 }
 /* Disable the close btn */
 #launchpad > button {
@@ -29,15 +29,15 @@
 
 #launchpad li button {
 	width: 70px;
-    height: 70px;
+	height: 70px;
 
 	border-radius: 20px;
 }
 
 #launchpad label {
-	    width: 100%;
-    display: block;
-    text-align: center;
+	width: 70px;
+	display: block;
+	text-align: center;
 }
 
 #launchpad.open, #main-frame {
