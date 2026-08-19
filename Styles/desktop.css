@@ -227,7 +227,8 @@ section#desktop[flipped] article#metrobody {
 
 #desktop[flipped],
 #metro {
-	transform: rotateY(180deg);
+	/* transform: rotateY(180deg); */
+	    transform: rotateY(0deg);
 }
 
 #desktop[flipped] > #windows {
