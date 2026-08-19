@@ -36,6 +36,7 @@ Launchpad.prototype.addApp = function(app) {
 	var openButton = app.createOpenButton();
 	openButton.onclick = function() {
 		app.launch();
+		app.maximize();
 	};
 	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
