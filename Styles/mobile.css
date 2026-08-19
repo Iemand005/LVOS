@@ -21,6 +21,13 @@ body {
 	background-color: gray;
 }
 
+.android #launchpad ul button {
+	corner-shape: squircle;
+	border-radius: 100%;
+	font-size: 30px;
+	    color: lightgray;
+}
+
 footer nav {
 	display: flex;
     justify-content: center;
@@ -30,10 +37,6 @@ footer button {
 	min-width: 4rem;
 }
 
-.android #launchpad ul button {
-	corner-shape: squircle;
-	border-radius: 100%;
-}
 
 #main-frame {
 	z-index: 100;
