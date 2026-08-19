@@ -767,21 +767,10 @@ Dialog.prototype.initWithObject = function(object) {
 	this.updateScale(this.useScale);
     this.update();
 
-    if (!isElement(object)) {
-        if (!(object instanceof Dialog) && (typeof object.centerX == "number" || typeof object.centerY == "number")) {
-            this.moveToCenter(
-                typeof object.centerX == "number" ? object.centerX : window.innerWidth / 2,
-                typeof object.centerY == "number" ? object.centerY : window.innerHeight / 2
-            );
-        } else if (object instanceof Dialog && (typeof object.x == "number" || typeof object.y == "number")) {
-            this.move(
-                typeof object.x == "number" ? object.x : this.x,
-                typeof object.y == "number" ? object.y : this.y
-            );
-        } else {
-            this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
-        }
-    }
+    if (!isElement(object))
+        if (object instanceof Dialog && (typeof object.x == "number" || typeof object.y == "number"))
+            this.move(object.x, object.y);
+        else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 }
 
 /**
