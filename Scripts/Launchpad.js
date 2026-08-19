@@ -65,3 +65,8 @@ Launchpad.prototype.addApp = function(app) {
 	}
 	this.list.appendChild(appElement);
 };
+
+Object.defineProperty(Launchpad.prototype, "isMobile", {
+	get: function() { return this._isMobile; },
+	set: function(value) { this._isMobile = value; }
+});
