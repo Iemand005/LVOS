@@ -672,7 +672,7 @@ Dialog.prototype.initWithObject = function(object) {
     // if (object.body) this.body.appendChild(object.body);
     /** @type {(ev:MouseEvent|PointerEvent)=>void} */
     var activationHandler = function (ev) {
-        windowActivationEvent(ev, self)
+        windowActivationEvent(ev, self);
     };
 
     var target = this.target;
@@ -725,7 +725,7 @@ Dialog.prototype.initWithObject = function(object) {
 							// ev.pointerType = "";
 							if (ev.target && isElement(ev.target)) dragAction.set(id);
 							activationHandler(ev);
-						}
+						};
 					}(id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
 					if (supportsPointer) div.onpointerdown = touchDown;
 					target.appendChild(div);
@@ -773,7 +773,7 @@ Dialog.prototype.initWithObject = function(object) {
         if (object instanceof Dialog)
             this.move(object.x, object.y);
         else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
-}
+};
 
 /**
  * @param {number} a
@@ -856,7 +856,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     }, function (enabled) {
         if (enabled) self.activate();
     });
-}
+};
 /**
  * @param {boolean} [create]
  * @returns {HTMLIFrameElement?}
@@ -1183,7 +1183,7 @@ Object.defineProperty(Dialog.prototype, "micaElement", {
             if (!clipElem.length) return null;
             var clip = clipElem[0];
             if (isElement(clip)) return clip;
-        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
+        } catch(ex) { if (ex instanceof Error) console.log(ex.message); }
         return null;
     }
 });
