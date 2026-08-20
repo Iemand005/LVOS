@@ -256,6 +256,7 @@ section#desktop[flipped] article#metrobody {
 	#metro {
 		opacity: 1 !important;
 		transform: rotateY(0deg);
+		pointer-events: auto;
 	}
 
 	#dockapplist {
