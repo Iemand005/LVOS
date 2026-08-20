@@ -166,6 +166,51 @@ function removeTheme(theme) { document.body.classList.remove(theme); }
 
 function DesktopManager() {
 
+    /** @type {HTMLImageElement?} */
+    this.wallpaperImage = null;
+}
+
+
+/**
+ * @param {string} url
+ * @param {string} [blurredUrl]
+ * @param {()=>void | null} [onError]
+ */
+DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError) {
+    this.wallpaperImage = document.createElement("img");
+    this.wallpaperImage.onerror = function () {
+        console.warn("Failed to load wallpaper image!");
+		if (onError) onError();
+    };
+
+    var self = this;
+
+    var loadHandler = function() {
+        var wallpaper = getWallpaper();
+        if (!wallpaper || !self.wallpaperImage) return;
+        while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+        // wallpaper.setAttribute("data-wallpaper-src", url);
+        if (typeof blurredUrl == "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
+        else wallpaper.removeAttribute("data-blurred-src");
+    
+        wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
+        wallpaper.style.backgroundImage = "";
+        wallpaper.appendChild(self.wallpaperImage);
+    };
+
+	this.wallpaperImage.onload = loadHandler;
+
+    if (supportsObjectFit) {
+        this.wallpaperImage.src = url;
+        this.wallpaperImage.className = "wallpaper-image";
+    } else {
+        this.wallpaperImage.className = "wallpaper-image legacy-wallpaper-image";
+        this.wallpaperImage.removeAttribute("src");
+        this.wallpaperImage.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+       	loadHandler();
+    }
+    if (blurredUrl) this.wallpaperImage.setAttribute("blurred-src", blurredUrl);
+
 }
 
 // DesktopManager.hasTheme
