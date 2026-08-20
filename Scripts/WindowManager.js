@@ -133,7 +133,7 @@ function WindowManager() {
 	/** @type {(ev:Event)=>void} */
 	this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
-	}
+	};
 
 	/** @param {PointerEvent | MouseEvent} event */
 	this.windowDragEvent = function(event) {
@@ -154,7 +154,7 @@ function WindowManager() {
 		} catch (ex) {
 			console.error(ex);
 		}
-	}
+	};
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -376,7 +376,7 @@ ClickOffset.disableOverlay = function (ev) {
 	if (ev && ev.buttons) return;
 	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
 	else if (ClickOffset._overlay.parentNode) ClickOffset._overlay.parentNode.removeChild(ClickOffset._overlay);
-}
+};
 window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
@@ -466,7 +466,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	else this._overlay.style.cursor = "";
 	if (enable) document.body.appendChild(this._overlay);
 	else this.disableOverlay();
-}
+};
 
 /**
  * @param {boolean} enable
@@ -474,7 +474,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
  */
 ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
-}
+};
 
 /**
  * A window that can be moved around and resized and stuff.
@@ -594,7 +594,7 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
     var element = elements.length ? elements[0] : null;
     if (isElement(element)) return element;
     return null;
-}
+};
 
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
