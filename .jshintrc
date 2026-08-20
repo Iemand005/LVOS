@@ -5,5 +5,7 @@
   "-W058": true,
   "globals": {
     "Vector": true
-  }
+  },
+  "varstmt": false,
+  "esversion": 6
 }
