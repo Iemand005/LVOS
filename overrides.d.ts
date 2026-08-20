@@ -31,10 +31,12 @@ declare global {
 
 		windows: Dialog[]?;
 
-		__LVMessengerReceive: (type: MessageType, data: any, source: string) => void;
-		__LVMessenger: {
+		__LVMessengerReceive?: (type: MessageType, data: any, source: string) => void;
+		__LVMessenger?: {
 			accent: HTMLMetaElement | undefined;
-		} | {} | undefined;
+		} | {};
+
+		desktopManager?: DesktopManager;
 
 		documentPictureInPicture: DocumentPictureInPicture | undefined;
 

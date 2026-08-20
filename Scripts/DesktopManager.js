@@ -215,7 +215,7 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
 
 // DesktopManager.hasTheme
 
-window.desktopManager = new DesktopManager(this);
+window.desktopManager = new DesktopManager();
 
 
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
