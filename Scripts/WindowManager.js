@@ -616,8 +616,7 @@ Dialog.prototype.initWithObject = function(object) {
         } else {
             this.application = object;
             // this.closeable = true;
-            var newDialog = createDialog();
-            this.target = newDialog;
+            this.target = createDialog();
             try {
 
                 // windowManager.loadState(this);
