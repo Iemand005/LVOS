@@ -240,8 +240,9 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 			return;
 		}
         loaded = true;
-		if (dialog && dialog.id) dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
-		else {
+		if (dialog && dialog.id) {
+			dialog.loadState(windowStates[dialog.id]), updateTopZ(dialog.z);
+		} else {
 			var fails = [];
 			for (var id in windowStates) try {
 				if (windowManager.windows[id] && windowStates[id])
