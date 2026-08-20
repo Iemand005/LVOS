@@ -3,6 +3,7 @@
   "devel": true,
 
   "-W058": true,
+  "-W097": true,
   "globals": {
     "Vector": true
   },
