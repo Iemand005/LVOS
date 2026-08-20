@@ -2465,15 +2465,6 @@ function removeWallpaper() {
 }
 
 
-// enableMica();
-// initializeDialogs();
-// toggleReflections(reflections);
-
-applyWallpaperImage(
-  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
-  "file:///C:/Users/Lasse/Downloads/fox-blur.jpg"
-);
-
 var wallpaper = getWallpaper();
 if (wallpaper) {
 	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")}

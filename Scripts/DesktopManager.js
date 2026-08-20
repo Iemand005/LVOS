@@ -217,6 +217,11 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
 
 window.desktopManager = new DesktopManager();
 
+window.desktopManager.applyWallpaperImage(
+  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
+  "file:///C:/Users/Lasse/Downloads/fox-blur.jpg"
+);
+
 
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
 window.ondrag = document.ondrag = function(ev){
