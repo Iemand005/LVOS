@@ -1997,8 +1997,6 @@ function windowManagerInit() {
 
     if (!isBlink) removeTheme("glass");
 
-	isBlink  = false;
-
     initializeDialogs();
     toggleReflections(reflections);
 
@@ -2324,7 +2322,7 @@ function pixelsToCentimeters(pixels){
 /** @param {string} text */
 function fromPixels(text){
     if (text != null) try {
-        return typeof text == 'number' ? text : parseInt(text.replace("px", ''))
+        return typeof text == 'number' ? text : parseInt(text.replace("px", ''));
     } catch (ex) { console.warn("Failed to parse pixels:", ex); }
     return 0;
 }
@@ -2365,7 +2363,7 @@ Dialog.prototype.loadState = function(state) {
 	this.move(state.x, state.y); 
 	this.setZ(state.z);
 	this.resize(state.width, state.height);
-	console.log(state.title, "window loaded width: ", state.width, state.height)
+	console.log(state.title, "window loaded width: ", state.width, state.height);
 	this.toggleMaximized(state.maximized);
 };
 
@@ -2435,7 +2433,7 @@ var injectApplications = WindowManager.prototype.injectApplications = function()
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
-}
+};
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
@@ -2469,8 +2467,8 @@ function removeWallpaper() {
 
 var wallpaper = getWallpaper();
 if (wallpaper) {
-	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")}
-	wallpaper.ondrop = function(ev) { ev.preventDefault(); }
+	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")};
+	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
 }
 
 window.addEventListener("unload", function() {
