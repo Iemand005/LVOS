@@ -1688,7 +1688,7 @@ Dialog.prototype.setMaxSize = function (width, height) {
 Dialog.prototype.setMinAspectRatio = function (ratio) {
 	this._minAspectRatio = ratio;
 	this.resize();
-}
+};
 /** @typedef {"left" | "right" | "top" | "bottom" } Side */
 /**
  * @param {number} ratio
@@ -1700,7 +1700,7 @@ Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideCons
 	if (sideConstraint1 != undefined) {
 
 	}
-}
+};
 /**
  * @param {number} width
  * @param {number} height
@@ -1758,7 +1758,7 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 			this.target.style.bottom = toPixels(bottom);
 		}
 	}
-}
+};
 /** @param {string} url */
 Dialog.prototype.openUrl = function(url) {
 	var frame = this.getOrCreateFrame(true);
@@ -1809,7 +1809,7 @@ Dialog.prototype.createPopout = function() {
 		height: rect.height,
 		left: rect.left + viewboxPosition.left,
 		top: rect.top + viewboxPosition.top + titleBarHeight
-	}
+	};
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
 	if (!this._popupWindow) return;
@@ -1874,7 +1874,7 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	}
 
 	this.update();
-}
+};
 /** @param {boolean} useScale */
 Dialog.prototype.updateScale = function(useScale) {
 	this._useScale = useScale;
@@ -1891,7 +1891,7 @@ Dialog.prototype.updateScale = function(useScale) {
 	}
 
 	this.update();
-}
+};
 
 function getWallpaper() {
 	return document.getElementById("wallpaper");
@@ -1959,14 +1959,14 @@ function DragAction() {
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function(dialog, offset, difference){ dialog.move(offset.startX + difference.x, offset.startY + difference.y); }, // Move
-		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y }, // Top
-		function(dialog, offset, difference){ dialog.width = offset.width + difference.x }, // Right
-		function(dialog, offset, difference){ dialog.height = offset.height + difference.y }, // Bottom
+		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y; }, // Top
+		function(dialog, offset, difference){ dialog.width = offset.width + difference.x; }, // Right
+		function(dialog, offset, difference){ dialog.height = offset.height + difference.y; }, // Bottom
 		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
 		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
-		function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y },// Top right
-		function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y) }, // Bottom right
-		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y }, // Bottom left
+		function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y; },// Top right
+		function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y); }, // Bottom right
+		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y; }, // Bottom left
 	];
 }
 
@@ -1982,8 +1982,8 @@ function DocumentCrawler(customDocument){
 
 DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
 DocumentCrawler.prototype.getMetroBody = function () { var metro = this.getMetro(); return metro && metro.firstChild; };
-DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window") };
-DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section") };
+DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
+DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); }; // I don't know why I d;dn't use getters to start with.
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
