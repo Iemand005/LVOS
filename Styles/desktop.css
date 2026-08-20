@@ -245,7 +245,7 @@ section#desktop[flipped] article#metrobody {
 
 @media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
 	body:not(.desktop) #desktop {
-		transform: rotateY(180deg) !important;
+		transform: rotateY(179deg) !important;
 	}
 
 	body:not(.desktop) #windows {
@@ -255,7 +255,7 @@ section#desktop[flipped] article#metrobody {
 
 	body:not(.desktop) #metro {
 		opacity: 1 !important;
-		transform: rotateY(180deg);
+		transform: rotateY(181deg);
 		pointer-events: auto !important;
 	}
 
