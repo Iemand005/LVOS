@@ -2082,11 +2082,11 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 						// if (!(targetElement instanceof HTMLCanvasElement)) return;
 						targetElement.width = targetElement.clientWidth;
 						targetElement.height = targetElement.clientHeight;
-					}
+					};
 					if (!targetElement) return;
 					targetElement.style.width = "100%";
 					targetElement.style.height = "100%";
-				})
+				});
 				break;
 			case types.visualizers:
 				dialog.messageFrame(LVMessenger.types.visualizers, windowManager.getVisualizerApps());
@@ -2293,7 +2293,7 @@ function getDialogBody(target) { // I am specifically not using querySelector in
 }
 
 function getViewboxPosition() {
-	return { left: window.screenLeft, top: window.screenTop }
+	return { left: window.screenLeft, top: window.screenTop };
 }
 
 /** @param {HTMLElement | Event | null} object */
