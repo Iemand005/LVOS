@@ -1674,7 +1674,7 @@ Dialog.prototype.setMinSize = function (width, height) {
 	this._minWidth = typeof width == "number" ? width : 180;
 	this._minHeight = typeof height == "number" ? height : 200;
 	this.resize();
-}
+};
 /**
  * @param {number} [width]
  * @param {number} [height]
@@ -1683,7 +1683,7 @@ Dialog.prototype.setMaxSize = function (width, height) {
 	this._maxWidth = typeof width == "number" ? width : 180;
 	this._maxHeight = typeof height == "number" ? height : 200;
 	this.resize();
-}
+};
 /** @param {number} ratio */
 Dialog.prototype.setMinAspectRatio = function (ratio) {
 	this._minAspectRatio = ratio;
