@@ -622,7 +622,7 @@ Dialog.prototype.initWithObject = function(object) {
                 // windowManager.loadState(this);
             } finally {}
             if (object.classes && typeof object.classes == 'object'){
-                object.classes.forEach(function (someclass) { this.target && this.target.classList.add(someclass); }, this); // We can't use class since it's a keyword!!
+                object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // We can't use class since it's a keyword!!
             }
             this.openUrl(object.src);
             this.setTitle(object.title);
