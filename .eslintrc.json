@@ -4,6 +4,7 @@
     "es6": false
   },
   "rules": {
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "no-var": "off"
   }
 }
