@@ -370,10 +370,10 @@ function loadWallpaperFromCache() {
         
         request.onsuccess = function() {
             var result = request.result;
-            if (result && result.blob && typeof applyWallpaperImage == 'function') {
+            if (result && result.blob && window.desktopManager) {
                 var objectUrl = URL.createObjectURL(result.blob);
                 console.log("Loading cached wallpaper from IndexedDB");
-                applyWallpaperImage(objectUrl, null);
+                window.desktopManager.applyWallpaperImage(objectUrl);
             } else {
                 // Try localStorage fallback if IndexedDB is empty
                 loadWallpaperFromLocalStorage();
@@ -400,9 +400,9 @@ function loadWallpaperFromLocalStorage() {
         console.warn("Settings not available yet, trying direct localStorage access");
         try {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
-            if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
+            if (cachedWallpaper && window.desktopManager) {
                 console.log("Loading cached wallpaper from direct localStorage");
-                applyWallpaperImage(cachedWallpaper);
+                window.desktopManager.applyWallpaperImage(cachedWallpaper);
             } else {
                 console.log("No cached wallpaper found in localStorage, or applyWallpaperImage not available");
             }
@@ -415,9 +415,9 @@ function loadWallpaperFromLocalStorage() {
     try {
         var cachedWallpaper = settings.get('wallpaperImage');
         console.log("Retrieved from settings.get():", cachedWallpaper ? 'found' : 'not found');
-        if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
+        if (cachedWallpaper && window.desktopManager) {
             console.log("Loading cached wallpaper from localStorage via settings");
-            applyWallpaperImage(cachedWallpaper);
+            window.desktopManager.applyWallpaperImage(cachedWallpaper);
         } else {
             console.log("No cached wallpaper found in settings, or applyWallpaperImage not available");
         }
@@ -426,9 +426,9 @@ function loadWallpaperFromLocalStorage() {
         // Try direct localStorage as last resort
         try {
             var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
-            if (cachedWallpaper && typeof applyWallpaperImage == 'function') {
+            if (cachedWallpaper && window.desktopManager) {
                 console.log("Loading cached wallpaper from direct localStorage (fallback)");
-                applyWallpaperImage(cachedWallpaper);
+                window.desktopManager.applyWallpaperImage(cachedWallpaper);
             }
         } catch (ex2) {
             console.warn("Direct localStorage fallback also failed:", ex2.message);
