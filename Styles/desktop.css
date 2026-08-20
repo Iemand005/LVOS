@@ -259,8 +259,9 @@ section#desktop[flipped] article#metrobody {
 		pointer-events: auto !important;
 	}
 
-	:not(.desktop) #dockapplist {
+	:not(.desktop) #dockapplist, :not(.desktop) #dock {
 		z-index: 0 !important;
+		display: none;
 	}
 }
 
