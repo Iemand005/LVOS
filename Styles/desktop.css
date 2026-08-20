@@ -255,7 +255,7 @@ section#desktop[flipped] article#metrobody {
 
 	body:not(.desktop) #metro {
 		opacity: 1 !important;
-		transform: rotateY(0deg);
+		transform: rotateY(180deg);
 		pointer-events: auto !important;
 	}
 
