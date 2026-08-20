@@ -461,8 +461,8 @@ function handleWallpaperDrop(ev) {
 			if (!(typeof dataUrl === "string")) return;
 
             try {
-                if (typeof applyWallpaperImage == 'function') {
-                    applyWallpaperImage(dataUrl, undefined, function() {
+                if (window.desktopManager) {
+                    window.desktopManager.applyWallpaperImage(dataUrl, undefined, function() {
                         console.warn("Failed to apply dropped wallpaper image");
                     });
 
