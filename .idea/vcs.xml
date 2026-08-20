@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/AIOneWeb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/Cyanide" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/FrostedColours" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/GeodeWeb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/MPTool" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/RenderDonkey/WebGraphics" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/StereogramMaker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/StereogramMaker/WebGraphics" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/Tappy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Applications/WebGPUFluidSim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Scripts/WebAudioVisualizer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Scripts/WebAura" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Scripts/WebGraphics" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Scripts/WebMedia" vcs="Git" />
+  </component>
+</project>
