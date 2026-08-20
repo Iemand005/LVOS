@@ -9,7 +9,7 @@
    /
 \*/
 
-"use strict"; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both destkop and Metro mode).
+"use strict"; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both desktop and Metro mode).
 "use esnext"; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of /*let*/var and const.
 "use moz"; // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
@@ -2201,7 +2201,7 @@ function windowActivationEvent(event, dialog) {
         var isInteractive = false;
         while (node && isElement(node) && node.nodeType == 1) {
             var tn = (node.tagName || "").toLowerCase();
-            if (tn == "input" || tn == "textarea" || tn == "select" || tn == "button" || tn == "a" || tn == "label" || tn == "output") { isInteractive = true; break; }
+            if (tn === "input" || tn == "textarea" || tn == "select" || tn == "button" || tn == "a" || tn == "label" || tn === "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
             node = node.parentElement;
         }
@@ -2298,7 +2298,7 @@ function getViewboxPosition() {
 /** @param {HTMLElement | Event | null} object */
 function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
     if (!object) return console.log(object);
-    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName)!=-1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
+    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
     else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
     else if (isElement(object)) return getObjectDialog(object.parentElement);
 }
@@ -2402,7 +2402,7 @@ function createDialog() {
 /** @param {Element} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
     element.childNodes.forEach(function (child) {
-        if (child.nodeName=="#comment") element.removeChild(child);
+        if (child.nodeName === "#comment") element.removeChild(child);
         else if (isElement(child)) removeComments(child);
     });
     return element;
@@ -2450,11 +2450,6 @@ function enableMica() {
 WindowManager.prototype.toggleMica = function(enabled) {
     this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
-
-/** @param {boolean} enabled */
-function toggleMica(enabled) {
-    windowManager.toggleMica(enabled);
-}
 
 function removeWallpaper() {
 	var wallpaper = getWallpaper();
