@@ -244,22 +244,22 @@ section#desktop[flipped] article#metrobody {
 }
 
 @media only screen and (max-width: 300px), (pointer: none), (pointer: coarse) {
-	:not(.desktop) #desktop {
+	body:not(.desktop) #desktop {
 		transform: rotateY(180deg) !important;
 	}
 
-	:not(.desktop) #windows {
+	body:not(.desktop) #windows {
 		translate: 0 0 1px;
 		opacity: 0 !important;
 	}
 
-	:not(.desktop) #metro {
+	body:not(.desktop) #metro {
 		opacity: 1 !important;
 		transform: rotateY(0deg);
 		pointer-events: auto !important;
 	}
 
-	:not(.desktop) #dockapplist, :not(.desktop) #dock {
+	body:not(.desktop) #dockapplist, body:not(.desktop) #dock {
 		z-index: 0 !important;
 		display: none;
 	}
