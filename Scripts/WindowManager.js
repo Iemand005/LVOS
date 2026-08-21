@@ -2113,11 +2113,11 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				overlay.classList.toggle("open");
 				break;
 			case types.readyToLaunchOverlay:
-				var overlay = bodyCrawler.getOverlay();
-				if (!overlay) break;
+				var overlay1 = bodyCrawler.getOverlay();
+				if (!overlay1) break;
 				var dialog = windowManager.windows[source];
-				if (dialog.body) overlay.appendChild(dialog.body);
-				window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				if (dialog.body) overlay1.appendChild(dialog.body);
+				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
 			case types.pip:
 				var id = data.id;
@@ -2383,7 +2383,7 @@ function fromPixels(text){
 function toggleBlur(enabled){ // Does not work on Chrome!
     if (enabled == null) document.body.classList.toggle("blur");
     else document.body.classList.toggle("blur", enabled);
-    settings.set("blur", enabled);
+    // settings.set("blur", enabled);
 }
 
 /** @param {*} exception */
