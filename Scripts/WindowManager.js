@@ -706,7 +706,9 @@ Dialog.prototype.initWithObject = function(object) {
 
 					var div2 = this.getElementByTagOrClassName(touchSizerId);
 					if (!div2 || !(isElement(div2))) div2 = document.createElement("div");
-					div2.draggable = false, div2.id = "touch-" + (i + 1), div2.classList.add(touchSizerId);
+					div2.draggable = false;
+					div2.id = "touch-" + (i + 1);
+					div2.classList.add(touchSizerId);
 					div2.classList.add("touch");
 					
 					var touchDown = function(id) {
