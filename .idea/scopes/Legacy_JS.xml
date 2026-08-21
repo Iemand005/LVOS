@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Legacy JS" pattern="file:**/*.js" />
+</component>
