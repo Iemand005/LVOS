@@ -260,6 +260,11 @@ var applications = [
 		id: "furzona",
 		src: "https://iemand005.github.io/FurzonaWeb",
 		iconUrl: "https://iemand005.github.io/FurzonaWeb/Logo.png"
+	},
+	{
+		title : "The Useless Web",
+		id: "theuselessweb",
+		src : "https://theuselessweb.com/",
 	}
 ]
 
