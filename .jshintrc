@@ -7,9 +7,7 @@
   "-W083": true,
   "globals": {
     "Vector": true,
-    "globals": {
-      "windowManager": false
-    }
+    "windowManager": false
   },
   "varstmt": false,
   "esversion": 5

@@ -314,7 +314,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 	try {
 		var apps = this.installedApps;
 		for (var i = 0; i < apps.length; i++)
-			if (apps[i].id == application.id) return;
+			if (apps[i].id === application.id) return;
 		apps.push(application);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
 	} catch (exception) {
@@ -498,10 +498,10 @@ function Dialog(object, create) {
     this._isMinWidth = false;
     this._isMinHeight = false;
 
-    /** @type {Window?} */
+    /** @type {Window | null} */
     this._popupWindow = null;
 
-    /** @type {string?} */
+    /** @type {string| null} */
     this._src = null;
 
     this._previousX = 0;
@@ -532,11 +532,11 @@ function Dialog(object, create) {
     if (!object) return;
     if (!create) create = false;
 
-    /** @type {HTMLElement?} */
+    /** @type {HTMLElement| null} */
     this.target = null;
     var id = object.id;
 
-    /** @type {Application?} */
+    /** @type {Application| null} */
     this.application = null;
     if (!isElement(object))
         this.application = object;
@@ -570,7 +570,7 @@ function Dialog(object, create) {
 
 	this.dragging = false;
 
-	/** @type {HTMLImageElement?} */
+	/** @type {HTMLImageElement| null} */
 	this._appIcon = null;
 }
 
@@ -864,7 +864,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 };
 /**
  * @param {boolean} [create]
- * @returns {HTMLIFrameElement?}
+ * @returns {HTMLIFrameElement| null}
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
     var frame = this.frame;
@@ -1304,7 +1304,7 @@ Dialog.prototype.setRotation = function(rotation) {
 	this.updateTranslation();
 };
 
-/** @type {Dialog?} */
+/** @type {Dialog| null} */
 var focusedDialog = null;
 Dialog.prototype.focus = function() {
     if (focusedDialog != null && focusedDialog.target)
@@ -1341,7 +1341,7 @@ Dialog.prototype.getInnerRect = function () {
 	};
 }; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
 /**
- * @param {HTMLElement?} element
+ * @param {HTMLElement| null} element
  * @param {number} [index]
  */
 function getRect(element, index) {
@@ -2068,13 +2068,13 @@ var windowButtons = {
     full: 1,
     close: 2
 };
-/** @type {string?} */
+/** @type {string| null} */
 var activeDialogId = null;
-/** @type {Dialog?} */
+/** @type {Dialog| null} */
 var activeDialog = null;
 var resizeDirection = 0;
 var topZ = 100;
-/** @type {string?} */
+/** @type {string| null} */
 var metroBodyOrigin;
 var loaded = false;
 /** @type {number} */
@@ -2083,7 +2083,7 @@ var timeout = -1;
 /**
  * @param {MessageType} type
  * @param {any} data
- * @param {string?} source
+ * @param {string| null} source
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
 	var types = LVMessenger.types;
@@ -2335,7 +2335,7 @@ function stringifyDialogProperties(properties){
     return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '') : "No JSON!";
 }
 
-/** @param {Element?} target */
+/** @param {Element| null} target */
 function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     if (!target) return null;
     var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
