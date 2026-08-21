@@ -49,6 +49,7 @@ Launchpad.prototype.addApp = function(app) {
 				appFrame.src = app.src;
 			mainFrame.classList.add("open");
 		};
+
 		var iconUrl = app.iconUrl;
 		if (iconUrl) {
 			var icon = document.createElement("img");
