@@ -1312,16 +1312,10 @@ Dialog.prototype.toggleTitleBar = function (force) {
 	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force != "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
-	this._stateOpen = true;
-	this.isOpen = true;
-	windowManager.saveState();
-	return this.isOpen;
+	return this.toggleOpen(true);
 };
 Dialog.prototype.close = function () {
-	this._stateOpen = false;
-	this.isOpen = false;
-	windowManager.saveState();
-	return this.isOpen;
+	return this.toggleOpen(false);
 };
 Dialog.prototype.getInnerRect = function () {
   	if (!this.target) return;
