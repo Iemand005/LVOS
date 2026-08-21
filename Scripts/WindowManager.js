@@ -1304,7 +1304,7 @@ Dialog.prototype.activate = function() {
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
-Dialog.prototype.toggleTitlebar = function (force) {
+Dialog.prototype.toggleTitleBar = function (force) {
 	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force != "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
@@ -1388,9 +1388,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 	var button = this.getButton(buttonId);
 	return button && button.toggleAttribute("disabled", !enable);
 };
-Dialog.prototype.clearClickOffset = function () {
-	this.clickOffset && this.clickOffset.clear();
-};
+
 /** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
 
