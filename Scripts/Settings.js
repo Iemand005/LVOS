@@ -186,10 +186,10 @@ function setThemeOption(theme) {
 				logoIcon.onload = function () {
 					if (startButton){
 						startButton.innerText = "";
+						startButton.appendChild(logoIcon);
 					}
 				}
 				logoIcon.src = "Assets/Windows-10.svg";
-				startButton.appendChild(logoIcon);
 			}
 		} else {
 
