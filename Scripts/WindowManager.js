@@ -49,7 +49,7 @@ var flags = {
 /** @constant */
 var isBlink = 'chrome' in window;
 
-var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode == 11;
+var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 try {
     hasLocalStorage = typeof localStorage != "undefined";
@@ -170,9 +170,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
       try {
         var stringyy = localStorage.getItem("windowState");
         if (stringyy == null) return null;
-        /** @type {DesktopState} */
-        var windowStates = JSON.parse(stringyy);
-        this._windowStates = windowStates;
+		  this._windowStates = JSON.parse(stringyy);
       } catch (ex) {
         if (ex instanceof Error) console.error(ex.message);
       }
@@ -219,7 +217,7 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 
 WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
-	if (window.top != window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
+	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
 		if (canSave && typeof localStorage != "undefined")
@@ -371,7 +369,7 @@ function ClickOffset() {
 	this.lastPosition = new Vector;
 	this.difference = new Vector;
 
-    /** @type {((ev:PointerEvent|MouseEvent)=>void)?} */
+    /** @type {((ev:PointerEvent|MouseEvent)=>void) | null} */
     this.dragHandler = null;
 }
 
