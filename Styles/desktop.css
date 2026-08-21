@@ -272,6 +272,10 @@ section#desktop[flipped] article#metrobody {
 	width: 100%;
 }
 
+#window-section {
+	height: 100%;
+}
+
 aside#charms {
 	animation: none;
 	position: fixed;
