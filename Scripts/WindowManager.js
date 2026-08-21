@@ -2111,7 +2111,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				var targetElement = doc.getElementById(id);
 				console.log("Ripped out element:", targetElement);
 				if (!targetElement) break;
-				toggleElementPip(targetElement, function (pipWindow) {
+				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
 					if (!pipWindow) return;
 					pipWindow.onresize = function() {
 						// if (!(targetElement instanceof HTMLCanvasElement)) return;
