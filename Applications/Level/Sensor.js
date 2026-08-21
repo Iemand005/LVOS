@@ -3,8 +3,6 @@
 
 
 'use strict';
-'use esnext';
-'use moz';
 
 /** @type {HTMLCanvasElement} */
 var horizon = document.getElementById("horizon");

@@ -2,8 +2,6 @@
 // Lasse Lauwerys © 2023
 
 'use strict';
-'use esnext';
-'use moz';
 
 /** @type {MusicApp | null} */
 window.musicApp = null;

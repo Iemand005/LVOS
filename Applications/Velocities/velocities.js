@@ -1,7 +1,7 @@
 // Velocity API demo!
 
 'use strict';
-'use esnext';
+
 window.addEventListener('message', function (event) {
     /*const*/var stats = JSON.parse(event.data).data;
     if(!stats) return;

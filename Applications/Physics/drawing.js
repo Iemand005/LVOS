@@ -3,10 +3,9 @@
 // 30/12/2023
 
 'use strict';
-'use esnext';
 
-/*const*/var canvas = document.querySelector("canvas");
-/*const*/var ctx = canvas.getContext("2d");
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
 
 function drawCircle(ball){
     ctx.beginPath();
