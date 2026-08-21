@@ -1557,14 +1557,14 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = self.target;
 		if (!target) return;
 		enable = !target.classList.contains("maximized");
-		var toggleThingie = function() {
+		var toggleMaximized = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
-			if ( self.target) self.target.classList.toggle("maximized", enable);
+			if (self.target) self.target.classList.toggle("maximized", enable);
 		};
-		if (!enable) toggleThingie();
+		if (!enable) toggleMaximized();
 		Animation.animate(300, function(t) {
 			var ease = Animation.easeSharpCenterStrong;
 			if (enable) {
@@ -1579,7 +1579,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.height = lerp(window.innerHeight, startSize.y, ease(t));
 			}
 		}, function() {
-			if (enable) toggleThingie();
+			if (enable) toggleMaximized();
 		});
 	}
 };
