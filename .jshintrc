@@ -4,6 +4,7 @@
 
   "-W058": true,
   "-W097": true,
+  "-W083": true,
   "globals": {
     "Vector": true
   },
