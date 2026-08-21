@@ -3,8 +3,6 @@
 // 24/12/2023, cleaned up 8/1/2024 ready for producton support for ES5 and higher (2009+).
 
 'use strict';
-'use esnext';
-'use moz';
 
 /** @param {HTMLElement} element */
 function Reflector(element) {

@@ -2,7 +2,6 @@
 // Lasse Lauwerys © 2024
 
 'use strict';
-'use esnext';
 
 var STORAGE_FILE = "app_storage.json";
 
