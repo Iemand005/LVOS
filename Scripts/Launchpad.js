@@ -1,6 +1,6 @@
 
 function Launchpad() {
-	/** @type {HTMLElement?} */
+	/** @type {HTMLElement | null} */
 	this.launchpad = null;
 	this.list = document.createElement("ul");
 	this._isMobile = true;

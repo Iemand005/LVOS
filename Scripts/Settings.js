@@ -51,7 +51,7 @@ ActiveXStorage.prototype.getItem = function(key) {
 		var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
 		var data = JSON.parse(readFile.ReadAll());
 		readFile.Close();
-		return data[key] != undefined ? data[key] : null;
+		return data[key] !== undefined ? data[key] : null;
 	} catch(e) {
 		return null;
 	}
@@ -161,7 +161,7 @@ var BASE_THEMES = {
 function applyStartButtonIcon(theme) {
 	var startButton = document.getElementById("start-button");
 	if (!startButton) return;
-	if (theme == "windows-10") {
+	if (theme ==="windows-10") {
 		var logoIcon = document.createElement("img");
 		logoIcon.onload = function () {
 			if (startButton){
@@ -178,21 +178,21 @@ function applyStartButtonIcon(theme) {
 /** @param {string} theme */
 function setThemeOption(theme) {
 	var previous = settings.get("theme");
-	var blurWasOn = previous == "blur" || previous == "glass" || previous == "modern-blur";
+	var blurWasOn = previous === "blur" || previous === "glass" || previous === "modern-blur";
 	var previousBase = BASE_THEMES[previous];
-	if (previous && previous != theme) {
-		if (THEMES.indexOf(previous) != -1) removeTheme(previous);
-		if (previous == "glass") removeTheme("blur");
-		if (previous == "modern-blur") {
+	if (previous && previous !== theme) {
+		if (THEMES.indexOf(previous) !== -1) removeTheme(previous);
+		if (previous === "glass") removeTheme("blur");
+		if (previous === "modern-blur") {
 			removeTheme("blur");
 			removeTheme("modern");
 		}
 		if (previousBase) removeTheme(previousBase);
 	}
 	if (theme && THEMES.indexOf(theme) != -1) {
-		if (theme != "modern-blur") setTheme(theme);
-		if (theme == "glass") setTheme("blur");
-		if (theme == "modern-blur") {
+		if (theme !== "modern-blur") setTheme(theme);
+		if (theme === "glass") setTheme("blur");
+		if (theme === "modern-blur") {
 			setTheme("modern");
 			setTheme("blur");
 		}
@@ -204,8 +204,8 @@ function setThemeOption(theme) {
 		removeTheme("glass");
 		settings.set("theme", "");
 	}
-	if (theme == "blur" || theme == "glass") removeTheme("modern");
-	else if (blurWasOn && theme != "modern-blur") setTheme("modern");
+	if (theme === "blur" || theme === "glass") removeTheme("modern");
+	else if (blurWasOn && theme !== "modern-blur") setTheme("modern");
 }
 
 /** @param {boolean} enabled */
@@ -224,8 +224,8 @@ function toggleSquircles(enabled) {
 function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
 	settings.set("theme", id);
-	for(var index in windowManager.windows){
-		var window = windowManager.windows[index];
+	for(var index in window.windowManager.windows){
+		var window = window.windowManager.windows[index];
 	var target = window.target;
 	if (!target) continue;
 		switch (id) {
