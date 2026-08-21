@@ -2424,9 +2424,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     return element;
 }
 
-/**
- * @param {boolean} force
- */
+/** @param {boolean} force */
 function toggleCharms(force){
     var charms = document.getElementById("charms");
     return charms && charms.classList.toggle("open", force);
