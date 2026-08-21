@@ -774,6 +774,8 @@ Dialog.prototype.initWithObject = function(object) {
         else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 };
 
+// Dialog.prototype.getIconUrl 
+
 /**
  * @param {number} a
  * @param {number} b
@@ -1217,6 +1219,16 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 Object.defineProperty(Dialog.prototype, "icon", {
 	get: function() { return this._appIcon; },
 });
+
+Object.defineProperty(Dialog.prototype, "iconUrl", {
+	get: function() { if (this.application.iconUrl && this.target) {
+				this.setIcon(this.application.iconUrl);
+
+			} else {
+				this.setIcon(getFaviconUrl(this.application.src));
+			}}
+		}
+}
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
 	if (!this.target) return;
