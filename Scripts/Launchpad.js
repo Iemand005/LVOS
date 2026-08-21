@@ -40,7 +40,7 @@ Launchpad.prototype.addApp = function(app) {
 
 	if (this._isMobile) {
 		openButton.textContent = openButton.textContent.charAt(0).toUpperCase();
-		if (app.application && app.application.accentColor) openButton.style.backgroundColor = app.application.accentColor;
+		if (app.application && app.application.accentColor) openButton.style.background = app.application.accentColor;
 		openButton.onclick = function() {
 			var appFrame = document.getElementById("app-frame");
 			var mainFrame = document.getElementById("main-frame");
