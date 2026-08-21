@@ -2133,12 +2133,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 
 function swapMetroBody() {
     if (!flipped) return;
-    restoreMetroBody();
     activeDialogToMetro();
-}
-
-function restoreMetroBody() {
-    // if (metroBodyOrigin) retrieveDialogBodyFromMetro(windowManager.windows[metroBodyOrigin]);
 }
 
 function activeDialogToMetro() {
