@@ -193,6 +193,10 @@ button {
 	--window-border-width: 0px;
 }
 
+.windows #dockapplist {
+	height: 40px;
+}
+
 .windows #dockapplist > button {
 	height: 100%;
 	margin: 0;
@@ -204,7 +208,7 @@ button {
 }
 
 .windows #dockapplist > button:hover {
-	background-color: red;
+	background-color: #ffffff1c;
 }
 
 .windows .window header,
