@@ -265,6 +265,13 @@ section#desktop[flipped] article#metrobody {
 	}
 }
 
+#desktop-area {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+}
+
 aside#charms {
 	animation: none;
 	position: fixed;

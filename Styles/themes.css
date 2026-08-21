@@ -193,7 +193,7 @@ button {
 	--window-border-width: 0px;
 }
 
-.windows #dockapplist {
+.windows #dockapplist, #dock-area {
 	height: 40px;
 }
 
