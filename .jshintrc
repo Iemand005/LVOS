@@ -12,7 +12,8 @@
     "DesktopManager": true,
     "lerp": true,
     "windowManager": false,
-    "toggleReflections": true
+    "toggleReflections": true,
+    "setTheme": true
   },
   "expr": true,
   "varstmt": false,
