@@ -490,6 +490,11 @@ aside#charms form {
 	height: 100%;
 }
 
+#start-button > img {
+	width: 15px;
+    padding: 10px;
+}
+
 #launchpad {
 	position: absolute;
 	width: 100%;
