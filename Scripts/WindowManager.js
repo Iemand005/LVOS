@@ -2075,12 +2075,14 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 	
 	if (source) {
 
-		if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+		var dialog = windowManager.windows[source];
+
+		if (type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
 		switch (type) {
 			case types.launchOverlay:
 				var overlay = bodyCrawler.getOverlay();
 				if (!overlay) break;
-				var dialog = windowManager.windows[source];
+
 				overlay.ontransitionend = function () {
 					dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
 					if (dialog.frame) {
@@ -2099,8 +2101,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 			case types.readyToLaunchOverlay:
 				var overlay1 = bodyCrawler.getOverlay();
 				if (!overlay1) break;
-				var dialog1 = windowManager.windows[source];
-				if (dialog1.body) overlay1.appendChild(dialog1.body);
+				if (dialog.body) overlay1.appendChild(dialog.body);
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
 			case types.pip:
