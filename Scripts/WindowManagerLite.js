@@ -9,13 +9,13 @@ function DialogLite(target) {
 DialogLite.prototype.move = function(x, y) {
     this.target.left = x;
     this.target.top = y;
-}
+};
 /**
  * @param {number} width 
  * @param {number} height 
  */
 DialogLite.prototype.resize = function(width, height) {
     this.target.resizeTo(width, height);
-}
+};
 
 alert("IM GOOD");

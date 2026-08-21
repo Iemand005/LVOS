@@ -26,11 +26,11 @@ browserform.addEventListener("submit", function(event){
     } catch (e) {
         // if(e.code == )
         console.log(url, url.hostname)
-        if(url.hostname.indexOf("youtube")!=-1) {
+        if(url.hostname.indexOf("youtube")!==-1) {
             console.log("yoututbe!", url.pathname);
-            if(url.pathname == "/watch"){
+            if(url.pathname === "/watch"){
                 console.log("wanna watch??");
-                windowManager.windows["video"].openUrl(url.href);
+                windowManager.windows.video.openUrl(url.href);
             }
         }
 

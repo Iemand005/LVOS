@@ -221,15 +221,15 @@ function toggleSquircles(enabled) {
 }
 
 function toggleCharmsEvent(ev) {
-	if (!document.elementFromPoint) return;
-	var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-	if (!isCharmsOpen() || clickedElement === charmsButton) return;
-
-	if(!(clickedElement === elements.charms || elements.charms.contains(clickedElement))) {
-		//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
-	//else 
-		toggleCharms(false);
-	}
+	// if (!document.elementFromPoint) return;
+	// var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
+	// if (!isCharmsOpen() || clickedElement === charmsButton) return;
+	//
+	// if(!(clickedElement === elements.charms || elements.charms.contains(clickedElement))) {
+	// 	//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
+	// //else
+	// 	toggleCharms(false);
+	// }
 }
 
 /** @param {number} size */
