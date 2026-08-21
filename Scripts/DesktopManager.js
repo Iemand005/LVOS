@@ -40,6 +40,7 @@ var onLoad = function () {
 	if (appButtons) {
 		var startButton = document.createElement("button")
 		startButton.innerHTML = "Start";
+        startButton.id = "start-button";
 		startButton.addEventListener("click", function () {
 			launchpad.open();
 		}, false);
