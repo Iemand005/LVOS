@@ -201,7 +201,7 @@ var applications = [
 		id: "theuselessweb",
 		src: "https://theuselessweb.com/",
 	}
-]
+];
 
 /** @type {Application[]} */
 var games = [
