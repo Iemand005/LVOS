@@ -719,7 +719,7 @@ Dialog.prototype.initWithObject = function(object) {
 					var touchDown = function(id) {
 						/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
 						return function (ev) {
-							if (ev.pointerType != "touch") {
+							if (ev.pointerType !== "touch") {
 								dragAction.set(-1);
 								return;
 							}
@@ -948,7 +948,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
 
-		this._isMinWidth = this._width == this.minWidth;
+		this._isMinWidth = this._width === this.minWidth;
 	}
 });
 
@@ -967,7 +967,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
 
-		this._isMinHeight = this._height == this.minHeight;
+		this._isMinHeight = this._height === this.minHeight;
 	}
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
@@ -1035,7 +1035,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         } else {
             this.setInset(top, this.left, this.right, window.innerHeight - bottom);
         }
-        this._isMinHeight = height == this.minHeight;
+        this._isMinHeight = height === this.minHeight;
     }
 });
 
@@ -1056,7 +1056,7 @@ Object.defineProperty(Dialog.prototype, "left", {
         } else {
             this.setInset(this.top, left, window.innerWidth - right, this.bottom);
         }
-        this._isMinWidth = width == this.minWidth;
+        this._isMinWidth = width === this.minWidth;
     }
 });
 
