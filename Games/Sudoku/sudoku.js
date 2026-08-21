@@ -47,7 +47,7 @@ function SudokuCell(row, col, fixed) {
     this.value = 0;
     this.fixed = !!fixed;
 
-	/** @type {HTMLElement?} */
+	/** @type {HTMLElement | null} */
 	this._element = null;
 
 	this.textNode = document.createTextNode("");
@@ -55,7 +55,7 @@ function SudokuCell(row, col, fixed) {
 
 Object.defineProperty(SudokuCell.prototype, "element", {
 	get: function() { return this._element; },
-	set: function(/** @type {HTMLElement?} */value) {
+	set: function(/** @type {HTMLElement | null} */value) {
 		if (this._element = value) this._element.appendChild(this.textNode);
 	}
 });
@@ -73,7 +73,7 @@ function Sudoku() {
 	/** @type {SudokuCell[]} */
     this.cells = [];
 
-	/** @type {number?} */
+	/** @type {number | null} */
 	this.selectedNumber = 1;
 
 	this._emptyCells = 10;

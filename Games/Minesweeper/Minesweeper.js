@@ -48,7 +48,7 @@ function Tile(minesweeper, button, x, y, mine){
     this.disable = this.toggleDisabled.bind(this, false);
     this.enable = this.toggleDisabled.bind(this, true);
     this.mine = mine || false;
-    /** @type {HTMLButtonElement?} */
+    /** @type {HTMLButtonElement | null} */
     this.button = button;
     this.flagged = false;
     this.position = { x: x, y: y };
@@ -58,7 +58,7 @@ function Tile(minesweeper, button, x, y, mine){
 }
 
 Tile.prototype.generate = function() { // This generates the mines, the algorithm can also be modified to generate a specified amount of mines instead of random.
-    this.mine = 1 == Math.round(Math.random() * 0.6);
+    this.mine = 1 === Math.round(Math.random() * 0.6);
 };
 
 Tile.prototype.reveal = function() {

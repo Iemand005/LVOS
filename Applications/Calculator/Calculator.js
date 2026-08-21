@@ -48,7 +48,7 @@ Calculator.prototype.press = function (value) {
 var output;
 var cells;
 
-/** @type {Calculator?} */
+/** @type {Calculator | null} */
 var calculator = null;
 
 function load() {

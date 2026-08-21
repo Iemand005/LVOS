@@ -122,7 +122,7 @@ function Tetris() {
   this.table = document.createElement("table");
   /** @type {HTMLElement[][]} */
   this.rows = [];
-  /** @type {Tetromino?} */
+  /** @type {Tetromino | null} */
   this.fallingTetromino = null;
 
   this.intervalId = -1;

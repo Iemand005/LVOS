@@ -25,9 +25,8 @@ function tokenizeNumber(number){ // There are probably better ways to do this bu
 
 /**
  * These define what cells should be on and off for numbers from 0-9 corresponding to their index in the array. 10 is "-" and 11 is " "
- * @type Array<Array<boolean>, 7>
  */
-/*const*/var displayNumbers = [
+var displayNumbers = [
     [true, true, true, false, true, true, true],
     [false, false, true, false, false, true, false],
     [true, false, true, true, true, false, true],
@@ -40,7 +39,7 @@ function tokenizeNumber(number){ // There are probably better ways to do this bu
     [true, true, true, true, false, true, true],
     [false, false, false, true, false, false, false],
     [false, false, false, false, false, false, false],
-]
+];
 
 DisplayBuilder.prototype = {
     number: 1,
