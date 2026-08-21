@@ -410,7 +410,8 @@ ClickOffset.prototype.reset = function () {
 	var self = this;
 	self.start = Date.now();
 	self.last = self.start;
-	self.position.x = 0, self.position.y = 0;
+	self.position.x = 0;
+	self.position.y = 0;
 	return this;
 };
 /**
@@ -420,7 +421,8 @@ ClickOffset.prototype.reset = function () {
 ClickOffset.prototype.update = function(x, y){
 	var self = this;
 	self.last = Date.now();
-	self.position.x = x, self.position.y = y;
+	self.position.x = x;
+	self.position.y = y;
     var lastPosition = self.position.clone();
 	self.difference = self.lastPosition.clone().sub(self.position);
 

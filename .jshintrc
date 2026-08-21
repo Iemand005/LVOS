@@ -9,6 +9,7 @@
     "Vector": true,
     "windowManager": false
   },
+  "expr": true,
   "varstmt": false,
   "esversion": 5
 }
