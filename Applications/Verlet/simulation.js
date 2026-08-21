@@ -134,9 +134,9 @@ Ball.prototype = {
         else if (this.position.x > boundaries.right - this.radius) this.position.x = 2*(boundaries.right-this.radius )- (this.position.x), this.oldPosition.x = bounce? 2*(boundaries.right-this.radius ) - (this.oldPosition.x ): this.position.x;//, this.oldPosition.y = boundaries.bottom - this.radius;
         if (this.position.y > boundaries.bottom - this.radius) this.position.y = 2*(boundaries.bottom-this.radius )- (this.position.y), this.oldPosition.y = bounce? 2*(boundaries.bottom-this.radius ) - (this.oldPosition.y ): this.position.y;//, this.oldPosition.y = boundaries.bottom - this.radius;
         else if (this.position.y < this.radius) this.position.y = 2*this.radius - this.position.y, this.oldPosition.y = bounce? 2*this.radius - this.oldPosition.y: this.position.y;//, this.oldPosition.y = boundaries.bottom - this.radius;
-        collision: for (/*let*/var i in simulation.objects) {
+        for (/*let*/var i in simulation.objects) {
             /*const*/var object = simulation.objects[i];
-            if(this==object) break collision;
+            if(this==object) break;
             /*const*/var dx = this.position.x - object.position.x;
             /*const*/var dy = this.position.y - object.position.y;
             /*const*/var dist = Math.sqrt(dx*dx + dy*dy);
@@ -359,7 +359,7 @@ simulation.objects.push(b);
 simulation.start(framerate);
 
 
-ballcount: for (/*let*/var index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
+for (/*let*/var index = 0; index < 20; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), random(5, 10)));
 for (/*let*/var index = 0; index < 100; index++) simulation.objects.push(new Ball(random(0, boundaries.right), random(0, boundaries.bottom), 10));
 //console.log(ballcount);
 

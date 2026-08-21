@@ -59,8 +59,7 @@ function getPhoto(videa, width, height){
     captureCard.width = width;
     captureCard.height = height;
     captureCard.getContext("2d").drawImage(videa, 0, 0, width, height);
-    return captureCard.toDataURL("image/png");
-    photo.setAttribute("src", data);
+    return captureCard.toDataURL("image/png");W
 }
 
 //getCamera();
