@@ -635,7 +635,7 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			var iconUrl = this.getIconUrl();
+			var iconUrl = this.getMiniIconUrl();
 			if (iconUrl) this.setIcon(iconUrl);
         }
     }
@@ -1236,8 +1236,8 @@ Dialog.prototype.getMiniIconUrl = function() {
 	return getFaviconUrl(this.application.src);
 };
 
-/** @param {string} iconUrl */
-Dialog.prototype.setIcon = function(iconUrl) {
+/** @param {string} iconUrl @param {()=>void} onError */
+Dialog.prototype.setIcon = function(iconUrl, onError) {
 	if (!this.target) return;
 	var headers = this.target.getElementsByTagName("header");
 	if (!headers.length) return;
@@ -1253,6 +1253,7 @@ Dialog.prototype.setIcon = function(iconUrl) {
 	this._appIcon.onerror = function (e) {
 		console.warn("App icon errror!", e);
 		if (self._appIcon) self._appIcon.className = "";
+		onError();
 	};
 
 	this._appIcon.src = iconUrl;
