@@ -34,7 +34,7 @@ Vector.prototype.product = function (vector) { return new Vector(this.x * vector
 Vector.prototype.quotient = function (vector) { return new Vector(this.x / vector.x, this.y / vector.y); };
 /** @param {Vector} vector */
 Vector.prototype.set = function (vector) { return this.x = vector.x, this.y = vector.y, this; };
-Vector.prototype.clone = function () { return new Vector(this.x, this.y); }
+Vector.prototype.clone = function () { return new Vector(this.x, this.y); };
 
 /**
  * 
@@ -60,11 +60,11 @@ function Vector3D(x, y, z) {
 Vector3D.prototype.div = function (amount) {
     this.x /= amount, this.y /= amount, this.z /= amount;
     return this;
-}
+};
 
 Vector3D.prototype.normalize = function () {
     return this.div(this.x + this.y + this.z);
-}
+};
 
 /**
  * @param {number} x 
@@ -85,6 +85,6 @@ Rectangle.prototype = {
     /** @this {Rectangle} */
     get x() { return this.position.x; },
     get y() { return this.position.y; },
-    set x(value) { return this.position.x = value; },
-    set y(value) { return this.position.y = value; }
+    set x(value) { return (this.position.x = value); },
+    set y(value) { return (this.position.y = value); }
 };
