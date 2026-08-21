@@ -45,6 +45,18 @@ var onLoad = function () {
 		}, false);
 
 		appButtons.appendChild(startButton);
+
+		var clock = document.createElement("time");
+		clock.id = "clock";
+
+		function updateClock() {
+			clock.innerHTML = new Date().toLocaleTimeString();
+		}
+
+		updateClock();
+		setInterval(updateClock, 1000);
+
+		appButtons.appendChild(clock);
 	}
 
 	document.body.ondragover = window.ondragover = function(ev) { 

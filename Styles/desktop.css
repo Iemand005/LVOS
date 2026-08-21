@@ -418,6 +418,27 @@ aside#metroapplist > button {
 	-webkit-transform: translateX(-50%) translateY(-50%);
 }
 
+#clock {
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	margin: auto 0;
+	height: fit-content;
+	font-size: 14px;
+	white-space: nowrap;
+	pointer-events: none;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.windows #clock,
+.windows-10 #clock,
+.windows-11 #clock {
+	font-size: 12px;
+}
+
 aside#charms form {
 	display: flex;
 	flex-direction: column;
