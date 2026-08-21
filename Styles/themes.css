@@ -16,9 +16,16 @@
 }
 }
 
+::view-transition-old(window-fullscreen),
+::view-transition-new(window-fullscreen) {
+	animation-duration: 0.35s;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
+	view-transition-name: window-fullscreen;
 }
 
 .window > content > article,
