@@ -3,7 +3,6 @@
 //      23/12/2023
 
 'use strict';
-'use esnext';
 
 if (typeof HTMLElement != 'undefined') {
     if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {

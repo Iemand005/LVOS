@@ -4,7 +4,6 @@
  * @copyright Lasse Lauwerys © 2026
  */
 'use strict';
-'use esnext';
 
 function changeTitlebarColor(newColor) {
 	var metaTag = document.querySelector('meta[name="theme-color"]');

@@ -4,7 +4,6 @@
 */
 
 "use strict";
-"use esnext";
 
 var dockAppList = document.getElementById("dockapplist");
 // var windows = windowManager.windows;

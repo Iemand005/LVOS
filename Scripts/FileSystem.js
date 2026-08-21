@@ -1,4 +1,3 @@
-"use moz";
 
 /** @typedef {"WebKitFS"} StorageAPI */
 

@@ -3,8 +3,6 @@
 // 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS -> patch 01/02/2026, don't parse if not a string, did other stuff ya kno -> patch 08/03/2026, remove duplicate function
 
 'use strict';
-'use esnext';
-'use moz';
 
 function LVMessenger(){
 }
