@@ -242,10 +242,10 @@ function setThemeOld(id) {
 function toggleCharmsEvent(ev) {
 	if (!document.elementFromPoint) return;
 	var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-	if (!isCharmsOpen() || clickedElement == charmsbutton) return;
+	if (!isCharmsOpen() || clickedElement == charmsButton) return;
 
 	if(!(clickedElement == elements.charms || elements.charms.contains(clickedElement))) {
-		//if(clickedElement == charmsbutton || clickedElement == charmsbutton2) toggleCharms();
+		//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
 	//else 
 		toggleCharms(false);
 	}
@@ -413,11 +413,11 @@ function loadElements() {
 			installAppFromUrl(false);
 		}, false);
 	}
-	if (charmsbutton) charmsbutton.onclick  = toggleCharms;
+	if (charmsButton) charmsButton.onclick  = toggleCharms;
 
 
 	settings.loadFlags(flags);
-};
+}
 
 addEventListener("load", function() {
 	loadElements();
@@ -428,7 +428,7 @@ var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
 // var reflectionToggle = document.getElementById("reflectiontoggle");
 
-var charmsbutton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
+var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
 // var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
 // if (windowManager.windows && windowManager.windows.browser)
@@ -438,7 +438,7 @@ var charmsbutton = applist ? applist.appendChild(document.createElement("button"
 
 // metroAppList.classList.toggle("bottom", true);
 
-charmsbutton.textContent = "Settings";
+charmsButton.textContent = "Settings";
 // charmsbutton2.innerText = "Settings";
 
 window.addEventListener("mousedown", toggleCharmsEvent, false);
