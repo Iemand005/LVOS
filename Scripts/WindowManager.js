@@ -1222,14 +1222,19 @@ Object.defineProperty(Dialog.prototype, "icon", {
 
 Object.defineProperty(Dialog.prototype, "iconUrl", {
 	get: function() {
-		if (this.application.iconUrl && this.target) {
-			return this.application.iconUrl;
-
-		} else {
-			return getFaviconUrl(this.application.src);
-		}
+		return this.getIconUrl();
 	}
-}
+});
+
+Dialog.prototype.getIconUrl = function() {
+	if (this.application.iconUrl && this.target) {
+		return this.application.iconUrl;
+
+	} else {
+		return getFaviconUrl(this.application.src);
+	}
+};
+
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
 	if (!this.target) return;
