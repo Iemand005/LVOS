@@ -19,7 +19,7 @@
 ::view-transition-old(window-fullscreen),
 ::view-transition-new(window-fullscreen) {
 	animation-duration: 280ms;
-	animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
 }
 
 .window {
