@@ -189,7 +189,7 @@ function setThemeOption(theme) {
 		}
 		if (previousBase) removeTheme(previousBase);
 	}
-	if (theme && THEMES.indexOf(theme) != -1) {
+	if (theme && THEMES.indexOf(theme) !== -1) {
 		if (theme !== "modern-blur") setTheme(theme);
 		if (theme === "glass") setTheme("blur");
 		if (theme === "modern-blur") {
