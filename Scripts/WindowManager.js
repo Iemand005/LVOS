@@ -1515,7 +1515,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var startWidth = this.width;
 		var startHeight = this.height;
 
-		var height = 0;
+		/** @type {number} */
+		var height;
 		var windowSection = document.getElementById("window-section");
 		if (windowSection) height = windowSection.clientHeight;
 		else height = window.innerHeight;
