@@ -1,7 +1,5 @@
 export {};
 
-export {};
-
 interface DocumentPictureInPictureOptions {
 width?: number;
 height?: number;
@@ -41,6 +39,8 @@ declare global {
 		documentPictureInPicture: DocumentPictureInPicture | undefined;
 
 		inspect?: (value: any) => void;
+
+		GearsFactory?: unknown;
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
