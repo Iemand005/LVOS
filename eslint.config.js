@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config({
