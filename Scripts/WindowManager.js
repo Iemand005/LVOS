@@ -1200,7 +1200,7 @@ Object.defineProperty(Dialog.prototype, "micaBackdrop", {
             if (!micaElement) return null;
             var backdrop = micaElement.children[0];
             if (isElement(backdrop)) return backdrop;
-        } catch(ex) { if (ex instanceof Error) console.log(ex.message) }
+        } catch(ex) { if (ex instanceof Error) console.log(ex.message); }
         return null;
     }
 });
@@ -1311,7 +1311,7 @@ Dialog.prototype.focus = function() {
         focusedDialog.target.removeAttribute("focus");
     if (this.target) this.target.setAttribute("focus", String(true));
     focusedDialog = this;
-}
+};
 Dialog.prototype.activate = function() {
 	this.focus();
 	return this.setZ(topZ++), this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
@@ -1370,8 +1370,8 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
 	var rect = this.getRect();
 	if (!this.clickOffset || !rect) return;
-	return this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y)
-}
+	return this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y);
+};
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
 	if (!this.application) return null;
@@ -2172,7 +2172,8 @@ function flip(enable){
 function flipHandler(enable){
     toggleCharms(false);
     swapMetroBody();
-    return flipped = enable;
+    flipped = enable;
+	return flipped;
 }
 
 /** @param {boolean} [enable] */
