@@ -2395,12 +2395,6 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 
 };
 
-Dialog.prototype.retrieveBodyFromMetro = function() {
-    var metroBody = bodyCrawler.getMetroBody();
-    if (!metroBody) return;
-    if (this.content) this.content.appendChild(metroBody);
-};
-
 function getDialogTemplate(){
     var template = document.querySelector("template") || document.getElementById("window-template");
     if (!template ) return void console.warn("Couldn't find template!");
