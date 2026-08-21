@@ -2,3 +2,4 @@ version: "1.0"
 
 exclude:
   - name: ES6ConvertVarToLetConst
+  - name: JSCommaExpressionJS
