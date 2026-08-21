@@ -14,8 +14,7 @@
 "use moz"; // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
 // Modifiable settings
-var useBlur = false,
-	useMica = false,
+var useMica = false,
 	reflections = false,
 	canSave = true,
 	flipped = false,
@@ -111,11 +110,6 @@ function getSiteName(url) {
 /** @param {Element} element */
 function isDialog(element) {
 	return element && element.classList && element.classList.contains("window");
-}
-
-/** @param {string} title */
-function titlify(title) {
-	return title.toLowerCase().split(" ").join("-");
 }
 
 function WindowManager() {
@@ -749,7 +743,7 @@ Dialog.prototype.initWithObject = function(object) {
         if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
         else target.addEventListener("mousedown", activationHandler, false);
 
-        target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function(event) {
+        target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function() {
             self.createPopout();
             self.quit();
         }, false);
@@ -827,16 +821,6 @@ function skewElement(element, skew) {
 	var transform = " skewX(" + toDegree(skew) + ")";
 	element.style.transform = transform;
 	element.style.webkitTransform = transform;
-}
-
-/**
- * @param {HTMLElement} element
- * @param {number} width
- * @param {number} height
- */
-function scaleElement(element, width, height) {
-    element.style.width = toPixels(width);
-    element.style.height = toPixels(height);
 }
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
