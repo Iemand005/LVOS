@@ -1747,9 +1747,9 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
  */
 Dialog.prototype.enforceAspectRatio = function (ratio, sideConstraint1, sideConstraint2) {
 	// this.aspectRatio = ratio;
-	if (sideConstraint1 != undefined) {
-
-	}
+	// if (sideConstraint1 != undefined) {
+	//
+	// }
 };
 /**
  * @param {number} width
@@ -2055,7 +2055,7 @@ function windowManagerInit() {
 	window.metaThemeColor = document.querySelector('meta[name="theme-color"]');
 	if (window.metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
 		window.__LVMessenger.accent = window.metaThemeColor;
-};
+}
 
 window.addEventListener("load", windowManagerInit, false);
 

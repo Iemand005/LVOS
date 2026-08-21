@@ -8,6 +8,7 @@
   "globals": {
     "Vector": true,
     "LVMessenger": true,
+    "lerp": true,
     "windowManager": false
   },
   "expr": true,
