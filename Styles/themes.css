@@ -193,9 +193,14 @@ button {
 	--window-border-width: 0px;
 }
 
-.windows-10 #dockapplist > button {
+.windows #dockapplist > button {
 	height: 100%;
 	margin: 0;
+	    height: 100%;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;	
 }
 
 .windows .window header,
