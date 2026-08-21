@@ -71,7 +71,7 @@ async function networkFirst(request) {
 	try {
 		var response = await fetch(request);
 		if (response.ok) {
-			cache.put(request, response.clone());
+			await cache.put(request, response.clone());
 		}
 		return response;
 	} catch (error) {
