@@ -147,7 +147,7 @@ window.addEventListener('keydown', function(event) {
       event.preventDefault();
       console.log("F11 captured! Custom action goes here.");
       
-      document.documentElement.requestFullscreen();
+      void document.documentElement.requestFullscreen();
       break;
     case "F10":
       event.preventDefault();
