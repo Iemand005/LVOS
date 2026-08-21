@@ -635,12 +635,8 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			if (this.application.iconUrl && this.target) {
-				this.setIcon(this.application.iconUrl);
-
-			} else {
-				this.setIcon(getFaviconUrl(this.application.src));
-			}
+			var iconUrl = this.getIconUrl();
+			if (iconUrl) this.setIcon(iconUrl);
         }
     }
 
@@ -1227,6 +1223,7 @@ Object.defineProperty(Dialog.prototype, "iconUrl", {
 });
 
 Dialog.prototype.getIconUrl = function() {
+	if (!this.application) return null;
 	if (this.application.iconUrl && this.target) {
 		return this.application.iconUrl;
 
