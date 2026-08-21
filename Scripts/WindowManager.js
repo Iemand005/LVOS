@@ -38,7 +38,9 @@ var flags = {
 	_compositorResize: false,
 	get compositorResize() { return this._compositorResize; },
 	set compositorResize(value) {
+
 		document.body.classList.toggle("compositor-animations", value);
+		if (value === false) document.body.classList.remove("compositor-animations");
 		this._compositorResize = value;
 	},
 	useViewTransitionMaximize: true
