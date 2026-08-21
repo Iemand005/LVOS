@@ -1,7 +1,7 @@
 
 
 function loadStyleSheet(url) {
-  const link = document.createElement('link');
+  var link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
   link.href = url;
@@ -11,7 +11,7 @@ function loadStyleSheet(url) {
 }
 
 function loadScript(url, callback) {
-  const script = document.createElement('script');
+  var script = document.createElement('script');
   script.src = url;
   
   script.onload = callback;

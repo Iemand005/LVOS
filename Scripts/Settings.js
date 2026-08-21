@@ -22,8 +22,8 @@ function formatCamelCase(text) {
 var supportsActiveX = typeof ActiveXObject != "undefined";
 
 function ActiveXStorage() {
-	if (!ActiveXObject) throw new Error("ActiveX not supported!");
-	this.fso = new ActiveXObject("Scripting.FileSystemObject");
+	if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
+	this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
 }
 
 ActiveXStorage.prototype.setItem = function(key, value) {
@@ -75,7 +75,7 @@ SettingsHandler.prototype.get = function (key) {
 	if (value == null) return null;
 	try { return JSON.parse(value); } catch (ex) { return value; }
 };
-SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); }
+SettingsHandler.prototype.set = function (key, value) { if (this.storage) this.storage.setItem(key, value); };
 
 /** @param {{[key:string]: boolean}} flags */
 SettingsHandler.prototype.saveFlags = function (flags) {
@@ -168,7 +168,7 @@ function applyStartButtonIcon(theme) {
 				startButton.innerText = "";
 				startButton.appendChild(logoIcon);
 			}
-		}
+		};
 		logoIcon.src = "Assets/Windows-10.svg";
 	} else if (startButton.getElementsByTagName("img").length) {
 		startButton.innerText = "Start";
