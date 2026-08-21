@@ -1507,6 +1507,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 100;
 		var totalDuration = 280; //Can I uh get this from uh the css somehow
+		var invertDurationOnShrink = false;
 		
 		var target = this.target;
 		if (!target) return;
@@ -1528,7 +1529,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = 'none';
 
 		if (!enabled) {
-			timeOffsetMs = totalDuration - timeOffsetMs;
+			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
 
 			scaleX = 1 / scaleX;
 			scaleY = 1 / scaleY;
