@@ -31,7 +31,7 @@ function BallCollection(amount){
 }
 
 BallCollection.prototype = {
-    balls: new Array,
+    balls: [],
     updateAll: function () {
         balls.forEach(function (ball) {
             ball.update();

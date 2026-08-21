@@ -46,7 +46,7 @@ function createCitate(title, message, author){
 function submitCitate(form){
     /*const*/var citate = createCitate(form.title.value, form.message.value, form.author.value);
     injectCitate(form.title.value, form.message.value, form.author.value, form);
-    /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
+    /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || [];
     citates.push(citate);
     localStorage.setItem(citateStore, JSON.stringify(citates));
 
@@ -64,13 +64,13 @@ function storeCitate(citate){
 
 function loadCitates(){
     try{
-        /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || new Array();
+        /*const*/var citates = JSON.parse(localStorage.getItem(citateStore)) || [];
         JSON.stringify(citates);
         //citates = removeDuplicateCitates(citates);
         return citates;
     }
     catch{
-        return new Array();
+        return [];
     }
 }
 

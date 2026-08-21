@@ -122,7 +122,7 @@ Minesweeper.prototype.startGame = function () {
     var self = this;
     while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
     for (var y = 0; y < height; y++) {
-        tiles[y] = new Array();
+        tiles[y] = [];
         var row = table.appendChild(document.createElement("tr"));
         for (var x = 0; x < width; x++) (
             function(x, y) {
