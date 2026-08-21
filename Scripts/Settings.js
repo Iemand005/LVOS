@@ -435,10 +435,6 @@ var charmsButton = applist ? applist.appendChild(document.createElement("button"
 // if (windowManager.windows && windowManager.windows.browser)
 //     elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
 
-// // var settingsThing = bodyCrawler.getS
-
-// metroAppList.classList.toggle("bottom", true);
-
 charmsButton.textContent = "Settings";
 // charmsbutton2.innerText = "Settings";
 
