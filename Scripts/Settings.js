@@ -179,7 +179,19 @@ function setThemeOption(theme) {
 			setTheme("blur");
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
-		if BASE_THEMES[theme]
+		if (BASE_THEMES[theme] === "windows-10") {
+			var startButton = document.getElementById("start-button");
+			if (startButton) {
+				var logoIcon = document.createElement("img");
+				logoIcon.src = "Assets/Windows-10.svg";
+				logoIcon.onload = function () {
+					if (startButton)
+					startButton.appendChild(logoIcon);
+				}
+			}
+		} else {
+
+		}
 		settings.set("theme", theme);
 	} else {
 		removeTheme("blur");
