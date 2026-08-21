@@ -1239,9 +1239,13 @@ Dialog.prototype.getMiniIconUrl = function() {
 	return getFaviconUrl(this.application.src);
 };
 
-/** @param {string} iconUrl @param {()=>void} [onError] */
+/** @param {string | null} iconUrl @param {()=>void} [onError] */
 Dialog.prototype.setIcon = function(iconUrl, onError) {
 	if (!this.target) return;
+	if (!iconUrl) {
+		if (onError) onError();
+		return;
+	}
 	var headers = this.target.getElementsByTagName("header");
 	if (!headers.length) return;
 	this._appIcon = headers[0].getElementsByTagName("img")[0];
