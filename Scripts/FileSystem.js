@@ -1,3 +1,4 @@
+"use moz";
 
 /** @typedef {"WebKitFS"} StorageAPI */
 
@@ -73,7 +74,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
           
           fileWriter.onwriteend = function () {
 			resolve("Saved via Chrome Legacy FS to" + fileEntry.toURL());
-		  }
+		  };
           fileWriter.onerror = reject;
           
           const blob = new Blob([textData], { type: 'text/plain' });
@@ -82,7 +83,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
         }, reject);
       }, reject);
     });
-}
+};
 
 OmniFS.prototype.readFromChromeLegacyFS = function (fileName) {
 	var self = this;

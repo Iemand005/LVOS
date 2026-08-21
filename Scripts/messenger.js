@@ -56,7 +56,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
     var messageListener = function (ev) {
         try {
             /** @type {LVMessage} */
-            var data = typeof ev.data == "string" ? JSON.parse(ev.data) : ev.data;
+            var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
             
             if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id); break;
