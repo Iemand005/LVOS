@@ -2392,10 +2392,7 @@ Dialog.prototype.loadState = function(state) {
 };
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
-    if (bodyCrawler.getMetroBody()) restoreMetroBody();//return;//retrieveDialogBodyFromMetro();
-    // On modern browsers we can use the new shadow DOM in combination with slots to prevent iframes from firing a load event causing it to lose its state after being moved. On IE 9 and below it does not fire a reload for iframes, this functionality is inconsistent. Other option is css.
-    var metro = bodyCrawler.getMetro();
-    if (metro && this.body) metroBodyOrigin = this.id, metro.appendChild(this.body);
+
 };
 
 Dialog.prototype.retrieveBodyFromMetro = function() {
