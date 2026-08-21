@@ -189,7 +189,8 @@ var applications = [
 		title: "OPC",
 		id: "opc",
 		src: "https://bypass-online.netlify.app/",
-		iconUrl: "https://iemand005.github.io/OPC/files/apps/me.flexan.terminal/terminal.png"
+		iconUrl: "https://iemand005.github.io/OPC/files/apps/me.flexan.terminal/terminal.png",
+		accentColor: "rgb(37, 104, 245)"
 	},
 	{
 		title: "daedalOS",

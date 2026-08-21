@@ -19,6 +19,7 @@ interface Application {
   audioVisualizer?: boolean;
   screensaver?: boolean;
   iconUrl?: string;
+  accentColor?: string;
 }
 
 interface DialogState {
