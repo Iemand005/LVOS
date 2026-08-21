@@ -1516,8 +1516,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var startWidth = this.width;
 		var startHeight = this.height;
 
+		var height = 0;
+		var windowSection = document.getElementById("window-section");
+		if (windowSection) height = windowSection.clientHeight;
+		else height = window.innerHeight;
+
 		var scaleX = window.innerWidth / startWidth;
-		var scaleY = window.innerHeight / startHeight;
+		var scaleY = height / startHeight;
 
 		target.style.transformOrigin = 'top left';
 		target.style.pointerEvents = 'none';
@@ -1532,7 +1537,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this.setScale(scaleX, scaleY);
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
-		var targetHeight = enabled ? window.innerHeight : self.height;
+		var targetHeight = enabled ? height : self.height;
 
 
 
