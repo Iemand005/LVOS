@@ -19,9 +19,9 @@ var ConsoleOutType = {
 function ConsoleInterceptor() {
 	/** @type {ConsoleOutput[]} */
 	this.results = [];
-	/** @type {HTMLElement?} */
+	/** @type {HTMLElement | null} */
 	this.stdout = null;
-	/** @type {HTMLInputElement?} */
+	/** @type {HTMLInputElement | null} */
 	this.stdin = null;
 }
 

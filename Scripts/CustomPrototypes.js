@@ -31,17 +31,16 @@ if(typeof MutationObserver == "undefined") window.MutationObserver = function(ca
     this.observe = function(target, options){
         target.addEventListener('DOMNodeInserted', callback, false);
     }
-    /** @type {} */
-    this.disconnect = function(target, options) {}
+    this.disconnect = function(target, options) {};
     /** @returns {MutationRecord[]} */
-    this.takeRecords = function() { return []; }
+    this.takeRecords = function() { return []; };
 };
 
 function CompatibilityChecker(){
     this.checkClasses = function(){
-        try { eval("class c{}") } catch(e) { return false }
+        try { eval("class c{}"); } catch(e) { return false; }
         return true;
-    }
+    };
 }
 
 if (!Object.hasOwn) Object.hasOwn = function(o, v) { return o.hasOwnProperty(v); };
