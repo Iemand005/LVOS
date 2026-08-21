@@ -51,10 +51,10 @@ DisplayBuilder.prototype = {
             /*const*/var segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
             if(this.singular) continue classifier; // Labelled for loop, similar to a goto command. CSS takes care of the styling automatically, so we don't need the rest anymore.
-            if(i==0 || i==3 || i==6) segment.classList.add("segmentx");
-            if(i==1 || i==2 || i==4 || i==5) segment.classList.add("segmenty");
-            if(i==2 || i==5) segment.classList.add("segmentr");
-            if(i==3 || i==6) segment.classList.add("segmenth");
+            if(i===0 || i===3 || i===6) segment.classList.add("segmentx");
+            if(i===1 || i===2 || i===4 || i===5) segment.classList.add("segmenty");
+            if(i===2 || i===5) segment.classList.add("segmentr");
+            if(i===3 || i===6) segment.classList.add("segmenth");
         }
         return display;
     },
