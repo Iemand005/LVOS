@@ -179,17 +179,17 @@ function setThemeOption(theme) {
 			setTheme("blur");
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
-		if (BASE_THEMES[theme] === "windows-10") {
+		if (theme === "windows-10") {
 			var startButton = document.getElementById("start-button");
 			if (startButton) {
 				var logoIcon = document.createElement("img");
-				logoIcon.src = "Assets/Windows-10.svg";
 				logoIcon.onload = function () {
 					if (startButton){
 						startButton.innerText = "";
-						startButton.appendChild(logoIcon);
 					}
 				}
+				logoIcon.src = "Assets/Windows-10.svg";
+				startButton.appendChild(logoIcon);
 			}
 		} else {
 
