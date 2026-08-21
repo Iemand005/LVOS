@@ -203,6 +203,10 @@ button {
     background: transparent;	
 }
 
+.windows #dockapplist > button:hover {
+	background-color: red;
+}
+
 .windows .window header,
 .windows .window .header,
 .windows-10 .window header,
