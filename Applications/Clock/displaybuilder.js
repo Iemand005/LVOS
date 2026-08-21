@@ -44,11 +44,11 @@ var displayNumbers = [
 DisplayBuilder.prototype = {
     number: 1,
     build: function(){
-        /*const*/var display = document.createElement("div");
+        var display = document.createElement("div");
         display.classList.add("segmentdisplay");
         if(this.singular) display.classList.add("singular");
-        for (/*let*/var i = 0; i < 7; i++) {
-            /*const*/var segment = display.appendChild(document.createElement("div"));
+        for (var i = 0; i < 7; i++) {
+            var segment = display.appendChild(document.createElement("div"));
             this.segments.push(segment);
             if(this.singular) continue; // Labelled for loop, similar to a goto command. CSS takes care of the styling automatically, so we don't need the rest anymore.
             if(i===0 || i===3 || i===6) segment.classList.add("segmentx");
@@ -58,14 +58,14 @@ DisplayBuilder.prototype = {
         }
         return display;
     },
-    /** @type (number:number)=>void */
+    /** @type {(number:number)=>void} */
     update: function(number){
         this.segments.forEach(function(segment, index){
             if(!displayNumbers[number>=0 && number<=11?number: 0][index]) segment.style.opacity = "0.1";
             else segment.style.opacity = "1";
         });
     },
-    /** @type (size: number, fat: boolean)=>void */
+    /** @type {(size: number, fat: boolean)=>void} */
     resize: function(size, fat){
 
         document.querySelectorAll("div.segmentdisplay > div").forEach(function(element){
