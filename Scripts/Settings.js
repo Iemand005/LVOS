@@ -107,7 +107,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
 		var flag = flags[flagId];
-		/** @type {HTMLElement?} */
+		/** @type {HTMLElement | null} */
 		var settingElement = document.createElement("label");
 
 		var flagValue = flags[flagId];
