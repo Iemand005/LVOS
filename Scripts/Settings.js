@@ -185,8 +185,10 @@ function setThemeOption(theme) {
 				var logoIcon = document.createElement("img");
 				logoIcon.src = "Assets/Windows-10.svg";
 				logoIcon.onload = function () {
-					if (startButton)
-					startButton.appendChild(logoIcon);
+					if (startButton){
+						startButton.innerText = "";
+						startButton.appendChild(logoIcon);
+					}
 				}
 			}
 		} else {
