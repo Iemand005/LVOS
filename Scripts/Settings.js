@@ -246,9 +246,9 @@ function setThemeOld(id) {
 function toggleCharmsEvent(ev) {
 	if (!document.elementFromPoint) return;
 	var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-	if (!isCharmsOpen() || clickedElement == charmsButton) return;
+	if (!isCharmsOpen() || clickedElement === charmsButton) return;
 
-	if(!(clickedElement == elements.charms || elements.charms.contains(clickedElement))) {
+	if(!(clickedElement === elements.charms || elements.charms.contains(clickedElement))) {
 		//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
 	//else 
 		toggleCharms(false);
@@ -311,20 +311,20 @@ function loadSettings() {
 
 function loadThemeSetting() {
 	var theme = settings.get("theme");
-	if (THEMES.indexOf(theme) != -1) {
+	if (THEMES.indexOf(theme) !== -1) {
 		// Clear any hardcoded/default theme classes on <body> so the stored theme applies cleanly.
 		for (var i = 0; i < THEMES.length; i++) document.body.classList.remove(THEMES[i]);
 		for (var base in BASE_THEMES) {
 			if (BASE_THEMES.hasOwnProperty(base)) document.body.classList.remove(BASE_THEMES[base]);
 		}
-		if (theme != "modern-blur") setTheme(theme);
-		if (theme == "glass") setTheme("blur");
-		if (theme == "modern-blur") {
+		if (theme !== "modern-blur") setTheme(theme);
+		if (theme === "glass") setTheme("blur");
+		if (theme === "modern-blur") {
 			setTheme("modern");
 			setTheme("blur");
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
-		if (theme == "blur" || theme == "glass") removeTheme("modern");
+		if (theme === "blur" || theme === "glass") removeTheme("modern");
 		applyStartButtonIcon(theme);
 		if (elements.theme) elements.theme.value = theme;
 	}
@@ -341,13 +341,13 @@ function loadThemeSetting() {
 }
 
 function updateBlurState() {
-	var a = settings.get("blur");
+	// var a = settings.get("blur");
 	// toggleBlur(JSON.parse(a));
 }
 
 var settings = new SettingsHandler();
 
-/** @type {{[key:string]: HTMLElement?}} */
+/** @type {{[key:string]: HTMLElement | null}} */
 var elements = {
 	desktop: null,
 	charms: null,
