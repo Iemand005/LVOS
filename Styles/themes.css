@@ -193,6 +193,11 @@ button {
 	--window-border-width: 0px;
 }
 
+.windows-10 #dockapplist > button {
+	height: 100%;
+	margin: 0;
+}
+
 .windows .window header,
 .windows .window .header,
 .windows-10 .window header,
@@ -658,6 +663,20 @@ body.no-blur.modern.blur .window content {
 	.windows-11 .window article,
 	.windows-11 .window article > * {
 		background-color: rgb(25, 25, 25);
+	}
+
+	.windows-10 button {
+		background-color: rgb(51, 51, 51);
+		border-color: rgb(90, 90, 90);
+		border-bottom-color: rgb(74, 74, 74);
+	}
+
+	.windows-10 button:hover {
+		background-color: rgb(61, 61, 61);
+	}
+
+	.windows-10 button:active {
+		background-color: rgb(69, 69, 69);
 	}
 
 	/* .glass content {
