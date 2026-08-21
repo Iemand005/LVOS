@@ -428,6 +428,7 @@ var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
 // var reflectionToggle = document.getElementById("reflectiontoggle");
 
+var applist = document.getElementById("applist");
 var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
 // var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
