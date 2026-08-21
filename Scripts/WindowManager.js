@@ -845,7 +845,7 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
     set: function(open) { this.toggleOpen(open); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; },
+    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 /**
  * @param {boolean} [forceOpen] 
@@ -887,7 +887,7 @@ Object.defineProperty(Dialog.prototype, "body", {
     }
 });
 Object.defineProperty(Dialog.prototype, "titleBar", {
-	get: function() { return this.getElementByTagOrClassName("header"); },
+	get: function() { return this.getElementByTagOrClassName("header"); }
 });
 Object.defineProperty(Dialog.prototype, "contentDocument", {
     get: function() {
@@ -1173,7 +1173,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 		this.content.style.border = toPixels(value);
 		this.content.style.borderRadius = toPixels(value);
 	},
-	get: function () { return this.content && fromPixels(this.content.style.padding); },
+	get: function () { return this.content && fromPixels(this.content.style.padding); }
 });
 
 Object.defineProperty(Dialog.prototype, "popup", {
@@ -1244,7 +1244,10 @@ Dialog.prototype.getMiniIconUrl = function() {
 	return getFaviconUrl(this.application.src);
 };
 
-/** @param {string | null} iconUrl @param {()=>void} [onError] */
+/**
+ * @param {string | null} iconUrl
+ * @param {()=>void} [onError]
+ */
 Dialog.prototype.setIcon = function(iconUrl, onError) {
 	if (!this.target) return;
 	if (!iconUrl) {
