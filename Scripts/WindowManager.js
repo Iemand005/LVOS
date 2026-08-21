@@ -2047,7 +2047,7 @@ var bodyCrawler = new DocumentCrawler();
 function windowManagerInit() {
     bodyCrawler = new DocumentCrawler(document);
 
-    if (!isBlink) removeTheme("glass");
+    if (!isBlink) DesktopManager.removeTheme("glass");
 
     initializeDialogs();
     toggleReflections(reflections);

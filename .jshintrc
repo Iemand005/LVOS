@@ -9,8 +9,10 @@
     "Vector": true,
     "LVMessenger": true,
     "Animation": true,
+    "DesktopManager": true,
     "lerp": true,
-    "windowManager": false
+    "windowManager": false,
+    "toggleReflections": true
   },
   "expr": true,
   "varstmt": false,
