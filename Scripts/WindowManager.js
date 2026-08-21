@@ -709,12 +709,12 @@ Dialog.prototype.initWithObject = function(object) {
 				for (var i = 0; i < 8; i++) {
 
 					var id = i + 1;
-					var sizerId = "touch-sizer-" + id;
+					var touchSizerId = "touch-sizer-" + id;
 
-					var div = this.getElementByTagOrClassName(sizerId);
-					if (!div || !(isElement(div))) div = document.createElement("div");
-					div.draggable = false, div.id = "touch-" + (i + 1), div.classList.add(sizerId);
-					div.classList.add("touch");
+					var div2 = this.getElementByTagOrClassName(touchSizerId);
+					if (!div2 || !(isElement(div2))) div2 = document.createElement("div");
+					div2.draggable = false, div2.id = "touch-" + (i + 1), div2.classList.add(touchSizerId);
+					div2.classList.add("touch");
 					
 					var touchDown = function(id) {
 						/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
@@ -730,8 +730,8 @@ Dialog.prototype.initWithObject = function(object) {
 							activationHandler(ev);
 						};
 					}(id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-					if (supportsPointer) div.onpointerdown = touchDown;
-					target.appendChild(div);
+					if (supportsPointer) div2.onpointerdown = touchDown;
+					target.appendChild(div2);
 				}
 			}
         }
