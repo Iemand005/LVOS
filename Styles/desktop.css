@@ -492,6 +492,7 @@ aside#charms form {
 
 #start-button > img {
 	height: 18px; /* fo win10 */
+	filter: invert(1);
     padding: 10px;
 }
 
