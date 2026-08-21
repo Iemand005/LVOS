@@ -25,7 +25,7 @@
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
-	view-transition-name: window-fullscreen;
+	/*view-transition-name: window-fullscreen;*/
 }
 
 .window > content > article,
