@@ -18,7 +18,6 @@ var useBlur = false,
 	useMica = false,
 	reflections = false,
 	canSave = true,
-	loadingOverlay = false,
 	flipped = false,
 	useTransform = true,
 	useScale = false,
@@ -1585,8 +1584,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if ( self.target) self.target.classList.toggle("maximized", enable);
 		};
 		if (!enable) toggleThingie();
-		animate(300, function(t) {
-			var ease = easeSharpCenterStrong;
+		Animation.animate(300, function(t) {
+			var ease = Animation.easeSharpCenterStrong;
 			if (enable) {
 				self.x = lerp(startPos.x, 0, ease(t));
 				self.y = lerp(startPos.y, 0, ease(t));
