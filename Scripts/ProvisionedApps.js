@@ -158,8 +158,7 @@ var applications = [
 	{
 		title: "Browser",
 		id: "browser",
-		src: "./Applications/Browser/index.html",
-		hidden: true
+		src: "./Applications/Browser/index.html"
 	},
 	{
 		title: "MPTool",
