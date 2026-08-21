@@ -44,7 +44,7 @@ function OmniFS() {
 OmniFS.prototype.init = function (api) {
 	var self = this;
 
-	if (this.apis.indexOf(api) != -1) return;
+	if (this.apis.indexOf(api) !== -1) return;
 
 	this.apis.push(api);
 

@@ -46,7 +46,7 @@ LVMessenger.broadcast = function (target, type, message, id){
 };
 
 /**
- * @param {(type:MessageType,data:*,id:string|nul   )=>void} callback
+ * @param {(type:MessageType,data:*,id:string|null)=>void} callback
  * @param {MessageType} [destroyWhenType]
  */
 LVMessenger.receive = function (callback, destroyWhenType) {
@@ -67,7 +67,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
                     break;
             }
             // else console.warn("Missing data property", data);
-            if (data.type == destroyWhenType) this.window.removeEventListener("message", messageListener);
+            if (data.type === destroyWhenType) this.window.removeEventListener("message", messageListener);
         } catch (ex) {
             console.warn("Error decoding data", ev.data, ex);
         }
@@ -79,7 +79,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
 };
 
 function getParentWindow() {
-    return window.parent && window.parent != window ? window.parent : window.top;
+    return window.parent && window.parent !== window ? window.parent : window.top;
 }
 
 /**
@@ -113,7 +113,7 @@ LVMessenger.broadcastToChild = function (type, message, iFrame) {
 /** @param {()=>void} callback */
 LVMessenger.onHostBeingLVOS = function (callback) {
     LVMessenger.receive(function(type, data) {
-        if (type == "identity" && data.name == "LVOS") callback();
+        if (type === "identity" && data.name === "LVOS") callback();
     }, "identity");
     LVMessenger.broadcastToParent(LVMessenger.types.identify);
 }

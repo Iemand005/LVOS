@@ -252,7 +252,7 @@ window.ondragleave = document.ondragleave = function(ev){
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
     // IndexedDB is only available over http/https, not file:// scheme
-    var isFileScheme = window.location.protocol == 'file:';
+    var isFileScheme = window.location.protocol === 'file:';
     if (isFileScheme) {
         console.log("File scheme detected (HTA/local file). Using localStorage only.");
         if (onFailure) onFailure(new Error("IndexedDB not available for file:// scheme"));

@@ -343,7 +343,7 @@ if (typeof Array.from != "function") {
           }
         }
         
-        if (self._state != PENDING) return;
+        if (self._state !== PENDING) return;
         self._state = FULFILLED;
         self._value = newValue;
         self._handleDeferreds();
@@ -353,7 +353,7 @@ if (typeof Array.from != "function") {
     }
 
     function reject(reason) {
-      if (self._state != PENDING) return;
+      if (self._state !== PENDING) return;
       self._state = REJECTED;
       self._value = reason;
       self._handleDeferreds();
@@ -368,15 +368,15 @@ if (typeof Array.from != "function") {
 
   ES3Promise.prototype._handleDeferreds = function () {
     var self = this;
-    if (self._state == PENDING) return;
+    if (self._state === PENDING) return;
 
     setTimeout(function () {
       while (self._deferreds.length > 0) {
         var deferred = self._deferreds.shift(); 
-        var callback = self._state == FULFILLED ? deferred.onFulfilled : deferred.onRejected;
+        var callback = self._state === FULFILLED ? deferred.onFulfilled : deferred.onRejected;
 
         if (typeof callback != 'function') {
-          if (self._state == FULFILLED) {
+          if (self._state === FULFILLED) {
             deferred.resolve(self._value);
           } else {
             deferred.reject(self._value);
@@ -487,7 +487,7 @@ if (typeof Array.from != "function") {
             for (var i = 0; i < this._ieListeners.length; i++) {
                 var item = this._ieListeners[i];
 
-                if (item.type == type && item.original == listener) {
+                if (item.type === type && item.original === listener) {
                     this.detachEvent(eventType, item.wrapped);
                     this._ieListeners.splice(i, 1);
                     return;
@@ -544,5 +544,5 @@ if (typeof Array.from != "function") {
 })();
 
 // if (typeof module != "undefined" && module.)
-if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element
-if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {}
+if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element;
+if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {};

@@ -26,7 +26,7 @@ Reflector.prototype.reflect = function (target) {
 
         this.observer = new MutationObserver(function (mutations) {
             mutations.forEach(function(mutation) {
-                if (mutation.type == "attributes" && mutation.target instanceof HTMLElement) {
+                if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
 			var rect = target.getBoundingClientRect();
 			refElement.style.top = toPixels(rect.top - dock.offsetTop + (dock.offsetHeight*0));
 			refElement.style.left = toPixels((rect.left - dock.offsetLeft) + (dock.offsetWidth /2));

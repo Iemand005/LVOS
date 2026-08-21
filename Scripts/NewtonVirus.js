@@ -36,6 +36,6 @@ NewtonManager.prototype.step = function(time) {
 		window.y += window.velocity.y;
 		window.x += window.velocity.x;
 
-		if (window.y == lastY) window.velocity.y = 0;
+		if (window.y === lastY) window.velocity.y = 0;
 	});
 };
