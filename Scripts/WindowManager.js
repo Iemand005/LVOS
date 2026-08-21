@@ -40,7 +40,7 @@ var flags = {
 	set compositorResize(value) {
 		document.body.classList.toggle("compositor-animations", value);
 		this._compositorResize = value;
-	}
+	},
 	useViewTransitionMaximize: true
 };
 
@@ -1485,6 +1485,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var content = this.content;
 
 	var fsTimeout = 0;
+
+	if (flags.useViewTransitionMaximize) {
+		var transition = document.startViewTransition(function() {
+			windows.calculator.target.classList.toggle('maximized');
+		});
+		return;
+	}
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name == "transform" || name == "width";
