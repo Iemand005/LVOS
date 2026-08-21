@@ -116,17 +116,16 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 			case "boolean":
 				var row = document.createElement("li");
 
-                var toggle = document.createElement("input");
-                toggle.type = "checkbox";
-                toggle.id = "flag-" + flagId;
-                toggle.checked = flagValue;
+				(function(currentKey) {
+					var toggle = document.createElement("input");
+					toggle.type = "checkbox";
+					toggle.id = "flag-" + flagId;
+					toggle.checked = flagValue;
 
-                (function(currentKey) {
                     toggle.addEventListener("change", function() {
                         flags[currentKey] = toggle.checked;
                         handler.saveFlags(flags);
                     }, false);
-                })(flagId);
 
                 var label = document.createElement("label");
                 label.htmlFor = toggle.id;
@@ -136,7 +135,8 @@ SettingsHandler.prototype.loadFlags = function (flags) {
                 row.appendChild(label);
                 
                 flagsElement.appendChild(row);
-                break;
+				})(flagId);
+
 				break;
 		}
 		if (!settingElement) return;
