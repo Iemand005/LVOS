@@ -143,7 +143,7 @@ Minesweeper.prototype.startGame = function () {
                 button.onmousedown = function(ev){
                     if(!isGameOver) setEmoji(icons.scared);
                     if(!tile.isClickAllowed()) ev.preventDefault();
-                    if(tile.mousedown = !ev.button) tile.enableVisual();
+                    (tile.mousedown = !ev.button) && tile.enableVisual();
                 };
 
                 button.onmouseup = function(){
