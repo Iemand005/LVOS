@@ -1204,7 +1204,7 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 });
 
 Object.defineProperty(Dialog.prototype, "icon", {
-	get: function() { return this._appIcon; },
+	get: function() { return this._appIcon; }
 });
 
 Object.defineProperty(Dialog.prototype, "iconUrl", {
@@ -1866,7 +1866,7 @@ Dialog.prototype.createPopout = function() {
 		width = Math.round(width);
 		height = Math.round(height);
 
-		if (outerX != prevRect.x || outerY != prevRect.y) {
+		if (outerX !== prevRect.x || outerY !== prevRect.y) {
 			var x = outerX - window.screenX,
 				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
 
@@ -1875,7 +1875,7 @@ Dialog.prototype.createPopout = function() {
 			prevRect.x = outerX, prevRect.y = outerY;
 		}
 
-		if (width != prevRect.width || height != prevRect.height) {
+		if (width !== prevRect.width || height !== prevRect.height) {
 
 			self.resizeBody(width, height);
 
@@ -2000,7 +2000,7 @@ function DragAction() {
 		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
 		function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y; },// Top right
 		function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y); }, // Bottom right
-		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y; }, // Bottom left
+		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y; } // Bottom left
 	];
 }
 
@@ -2079,6 +2079,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 			case types.launchOverlay:
 				var overlay = bodyCrawler.getOverlay();
 				if (!overlay) break;
+				var dialog = windowManager.windows[source];
 				overlay.ontransitionend = function () {
 					dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
 					if (dialog.frame) {
@@ -2097,8 +2098,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 			case types.readyToLaunchOverlay:
 				var overlay1 = bodyCrawler.getOverlay();
 				if (!overlay1) break;
-				var dialog = windowManager.windows[source];
-				if (dialog.body) overlay1.appendChild(dialog.body);
+				var dialog1 = windowManager.windows[source];
+				if (dialog1.body) overlay1.appendChild(dialog1.body);
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
 			case types.pip:
