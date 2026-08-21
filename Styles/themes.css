@@ -76,6 +76,19 @@
 	transform: none;
 	-webkit-transform: none;
 	left: 0;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding-left: 5px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.windows-11 #dockapplist {
+	justify-content: center;
+	padding-left: 0;
 }
 
 .windows #dock {

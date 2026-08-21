@@ -1231,6 +1231,11 @@ Dialog.prototype.getIconUrl = function() {
 	}
 };
 
+Dialog.prototype.getMiniIconUrl = function() {
+	if (!this.application) return null;
+	return getFaviconUrl(this.application.src);
+};
+
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
 	if (!this.target) return;
