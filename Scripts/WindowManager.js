@@ -1989,7 +1989,7 @@ Dialog.prototype.flip = function(enable) {
 
 function DragAction() {
 	/** @type {DragFunction} */
-	this.execute = function(){};
+	this.execute = function(dialog, offset, difference){};
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function(dialog, offset, difference){ dialog.move(offset.startX + difference.x, offset.startY + difference.y); }, // Move
