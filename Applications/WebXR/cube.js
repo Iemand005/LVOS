@@ -496,8 +496,8 @@ function initXR() {
           // and draw them into the corresponding viewport here, but we're
           // keeping this sample slim so we're not bothering to draw any
           // geometry.
-          /*for (/*let*/var view of pose.views) {
-            /*let*/var viewport = glLayer.getViewport(view);
+          /*for (var view of pose.views) {
+            var viewport = glLayer.getViewport(view);
             gl.viewport(viewport.x, viewport.y,
                         viewport.width, viewport.height);
 
