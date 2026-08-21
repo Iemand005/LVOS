@@ -1424,7 +1424,7 @@ Dialog.prototype.stopAnimating = function () {
  */
 Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
 	this.toggleClassAnimated(className, force, function(propertyName) {
-		return propertyName == animationEndTrigger;
+		return propertyName === animationEndTrigger;
 	}, onEnd, onToggled);
 };
 /**
@@ -1487,11 +1487,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
-		return name == "transform" || name == "width";
+		return name === "transform" || name === "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
-		return name == "transform";
+		return name === "transform";
 	}, function onEnd(enabled) {
 		if (fsTimeout) clearTimeout(fsTimeout);
 		var target = this.target;
