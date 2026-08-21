@@ -123,7 +123,7 @@ function WindowManager() {
 	/** @type {DialogMap} */
 	this._windows = {};
 
-	/** @type {DesktopState?} */
+	/** @type {DesktopState | null} */
 	this._windowStates = null;
 
 	this._isBlurEnabled = true;
@@ -1393,7 +1393,7 @@ Dialog.prototype.togglePointerEvents = function(enable) {
 	var frame = this.frame;
 	if (frame) frame.style.pointerEvents = events;
 	return events;
-}
+};
 /**
  * @param {number} buttonId
  * @param {boolean} [enable]
@@ -1427,7 +1427,7 @@ function setClass(element, className, enabled) {
 Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
 	this.target.classList.remove("animating");
-}
+};
 /**
  * @param {string} className 
  * @param {boolean} [force] 
@@ -1440,7 +1440,7 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
 	this.toggleClassAnimated(className, force, function(propertyName) {
 		return propertyName == animationEndTrigger;
 	}, onEnd, onToggled);
-}
+};
 /**
  * @param {string} className 
  * @param {boolean} [force] 
@@ -2512,7 +2512,7 @@ function removeWallpaper() {
 
 var wallpaper = getWallpaper();
 if (wallpaper) {
-	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi")};
+	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi"); };
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
 }
 
