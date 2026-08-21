@@ -2092,7 +2092,9 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 					}
 					if (!overlay) return;
 					overlay.ontransitionend = null;
-					overlay.requestFullscreen();
+					overlay.requestFullscreen().then(function() {
+						console.log("Ok I did fullscreenboy");
+					});
 					if (dialog.body) overlay.appendChild(dialog.body);
 					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
 				};
