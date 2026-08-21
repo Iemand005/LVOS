@@ -225,9 +225,8 @@ function setThemeOld(id) {
 	if (typeof id == 'undefined') return;
 	settings.set("theme", id);
 	for(var index in window.windowManager.windows){
-		var window = window.windowManager.windows[index];
-	var target = window.target;
-	if (!target) continue;
+		var target = window.windowManager.windows[index].target;
+		if (!target) continue;
 		switch (id) {
 			case 0:
 				target.classList.remove("rounded-corners");
