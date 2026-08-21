@@ -220,7 +220,7 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
     }
     if (blurredUrl) this.wallpaperImage.setAttribute("blurred-src", blurredUrl);
 
-}
+};
 
 // DesktopManager.hasTheme
 
@@ -237,13 +237,13 @@ window.ondrag = document.ondrag = function(ev){
     ev.preventDefault();
     ev.stopPropagation();
     if (elements.desktop) elements.desktop.style.opacity = "0.5";
-}
+};
 
 window.ondragleave = document.ondragleave = function(ev){
     ev.preventDefault();
     ev.stopPropagation();
     if (elements.desktop) elements.desktop.style.opacity = "";
-}
+};
 
 /**
  * Initialize IndexedDB for wallpaper storage.
@@ -529,20 +529,20 @@ DesktopManager.toggleElementPip = function(el, callback) {
 window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
-if (document.readyState == 'loading') {
+if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadWallpaperFromCache, false);
 } else {
     loadWallpaperFromCache();
 }
 
 window.addEventListener('keydown', function(event) {
-  if (event.key == 'Shift' || event.keyCode == 16) {
+  if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.add('slow-animations');
   }
 }, false);
 
 window.addEventListener('keyup', function(event) {
-  if (event.key == 'Shift' || event.keyCode == 16) {
+  if (event.key === 'Shift' || event.keyCode === 16) {
     document.body.classList.remove('slow-animations');
   }
 }, false);
