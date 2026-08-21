@@ -116,30 +116,23 @@ OmniFS.prototype.prototypewriteToOPFS = function (fileName, content) {
 
         navigator.storage.getDirectory()
 			.then(function (root) {
-                // 2. Open of maak het bestand aan
                 return root.getFileHandle(fileName, { create: true });
             })
 			.then(function (fileHandle) {
-                // 3. Start de writable stream op het bestand
-                // We bewaren de handle tijdelijk in een variabele om hem later te sluiten bij errors
                 var currentWritable;
                 
                 return fileHandle.createWritable()
 					.then(function (writable) {
                         currentWritable = writable;
-                        // 4. Schrijf de content weg naar de stream
                         return writable.write(content);
                     })
 					.then(function () {
-                        // 5. Sluit de stream netjes af om de data te committen
                         return currentWritable.close();
                     });
             })
 			.then(function () {
-                // Alles is succesvol doorlopen
                 resolve("Data veilig opgeslagen in OPFS sandbox!");
             })["catch"](function (error) {
-                // Vang eventuelle errors (zoals disk-full of permissie fouten) centraal op
                 reject(error);
             });
     });

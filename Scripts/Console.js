@@ -26,14 +26,13 @@ function ConsoleInterceptor() {
 }
 
 ConsoleInterceptor.prototype.intercept = function() {
-	// alert("stds out here" + this.stdout);
 	if (!this.stdout) return;
 	try {
 	if (this.stdout.firstChild) this.stdout.removeChild(this.stdout.firstChild);
 	var html = this.getHTML();
     this.stdout.appendChild(html);
     this.stdout.scrollTop = this.stdout.scrollHeight;
-	} catch(ex){alert(ex)}
+	} catch(ex){ alert(ex); }
 };
 
 ConsoleInterceptor.prototype.init = function() {
@@ -61,7 +60,7 @@ ConsoleInterceptor.prototype.init = function() {
 				data: [eval(input)]
 			});
 		} catch (exception) {
-			alert(exception)
+			alert(exception);
 			self.results.push({ type: ConsoleOutType.Error, data: [exception] });
 		}
 		interceptConsole();
@@ -91,7 +90,7 @@ ConsoleInterceptor.prototype.bindage = function() {
 		};
 
 		console.standardError = console.error.bind(console);
-		console.errors = new Array();
+		console.errors = [];
 		console.error = function() {
 			console.standardError.apply(console, arguments);
 			self.results.push({ type: ConsoleOutType.Error, data: arguments });
