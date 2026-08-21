@@ -345,6 +345,14 @@ function updateBlurState() {
 	// toggleBlur(JSON.parse(a));
 }
 
+/** @param {boolean} enabled */
+function toggleBlur(enabled){ // Does not work on Chrome!
+	if (enabled == null) document.body.classList.toggle("blur");
+	else document.body.classList.toggle("blur", enabled);
+	// settings.set("blur", enabled);
+}
+
+
 var settings = new SettingsHandler();
 
 /** @type {{[key:string]: HTMLElement | null}} */

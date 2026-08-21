@@ -2379,13 +2379,6 @@ function fromPixels(text){
     return 0;
 }
 
-/** @param {boolean} enabled */
-function toggleBlur(enabled){ // Does not work on Chrome!
-    if (enabled == null) document.body.classList.toggle("blur");
-    else document.body.classList.toggle("blur", enabled);
-    // settings.set("blur", enabled);
-}
-
 /** @param {*} exception */
 function handleStorageException(exception){
     console.error(exception);
