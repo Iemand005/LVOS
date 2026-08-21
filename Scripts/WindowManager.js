@@ -1872,7 +1872,8 @@ Dialog.prototype.createPopout = function() {
 
 			console.log("pos:", outerX, outerY);
 			self.moveBody(x, y);
-			prevRect.x = outerX, prevRect.y = outerY;
+			prevRect.x = outerX;
+			prevRect.y = outerY;
 		}
 
 		if (width !== prevRect.width || height !== prevRect.height) {
@@ -1881,7 +1882,8 @@ Dialog.prototype.createPopout = function() {
 
 			console.log("size:", width, width);
 
-			prevRect.width = width, prevRect.height = height;
+			prevRect.width = width;
+			prevRect.height = height;
 		}
 	}, 100);
 };
