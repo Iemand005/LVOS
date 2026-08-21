@@ -4,9 +4,6 @@
 // Target: ES6 (Dropped support for IE11!)
 
 'use strict';
-'use esnext';
-'use esnext';
-'use moz';
 
 /*const*/var video = document.getElementById("camera");
 /*const*/var output = document.getElementById("picture");

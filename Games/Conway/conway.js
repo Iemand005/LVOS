@@ -6,8 +6,6 @@
 //=================//
 
 'use strict';
-'use esnext';
-'use moz';
 
 /*const*/var horizontalCellCount = 10;
 /*const*/var verticalCellCount = 10;

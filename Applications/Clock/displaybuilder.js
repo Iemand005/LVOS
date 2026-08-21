@@ -2,8 +2,6 @@
 // Lasse Lauwerys � 2024
 
 'use strict';
-'use esnext';
-'use moz';
 
 /**
  * @param {number} number 
