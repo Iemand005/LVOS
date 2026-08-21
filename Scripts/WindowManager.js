@@ -1221,13 +1221,14 @@ Object.defineProperty(Dialog.prototype, "icon", {
 });
 
 Object.defineProperty(Dialog.prototype, "iconUrl", {
-	get: function() { if (this.application.iconUrl && this.target) {
-				this.setIcon(this.application.iconUrl);
+	get: function() {
+		if (this.application.iconUrl && this.target) {
+			return this.application.iconUrl;
 
-			} else {
-				this.setIcon(getFaviconUrl(this.application.src));
-			}}
+		} else {
+			return getFaviconUrl(this.application.src);
 		}
+	}
 }
 /** @param {string} iconUrl */
 Dialog.prototype.setIcon = function(iconUrl) {
