@@ -2312,7 +2312,7 @@ function updateTopZ(newZ) {
 
 /** @param {*} properties */
 function stringifyDialogProperties(properties){
-    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/}|{|"/g, '') : "No JSON!";
+    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/[}{"]/g, '') : "No JSON!";
 }
 
 /** @param {Element| null} target */
