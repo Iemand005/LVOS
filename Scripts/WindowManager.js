@@ -1833,7 +1833,7 @@ Dialog.prototype.createPopout = function() {
 	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
 	var titleBarHeight = titlebar && titlebar.getBoundingClientRect().height || 0;
-	var viewboxPosition = getViewboxPosition();
+	var viewboxPosition = getViewBoxPosition();
 	var propeties = {
 		scrollbars: true,
 		resizable: true,
@@ -2329,7 +2329,7 @@ function getDialogBody(target) { // I am specifically not using querySelector in
     return isElement(body) ? body : null;
 }
 
-function getViewboxPosition() {
+function getViewBoxPosition() {
 	return { left: window.screenLeft, top: window.screenTop };
 }
 
