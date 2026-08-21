@@ -1381,7 +1381,7 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 Dialog.prototype.togglePointerEvents = function(enable) {
 	var target = this.target;
 	if (!target) return;
-	if (enable == null) enable = target.style.pointerEvents == "none";
+	if (enable == null) enable = target.style.pointerEvents === "none";
 	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
 	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
 
@@ -1416,13 +1416,13 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 function setClass(element, className, enabled) {
 	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-	if (typeof enabled == "undefined") enabled = element.className.indexOf(className) == -1;
+	if (typeof enabled == "undefined") enabled = element.className.indexOf(className) === -1;
 
 	if (enabled) {
 		if (!re.test(element.className))
 			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-	return element.className.indexOf(className) != -1;
+	return element.className.indexOf(className) !== -1;
 }
 Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
@@ -1769,7 +1769,7 @@ Dialog.prototype.resizeWithAspect = function (width, height) {
 };
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
-	if (!bodyRect || (bodyRect.width == 0 && bodyRect.height == 0 && bodyRect.x == 0 && bodyRect.y == 0)) return;
+	if (!bodyRect || (bodyRect.width === 0 && bodyRect.height === 0 && bodyRect.x === 0 && bodyRect.y === 0)) return;
 	this._bodyOffset.width = this.width - bodyRect.width;
 	this._bodyOffset.height = this.height - bodyRect.height;
 	this._bodyOffset.x = this.x - bodyRect.x;
@@ -2089,9 +2089,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 	var types = LVMessenger.types;
 	
 	if (source) {
-		var dialog = windowManager.windows[source];
-		
-		if (type == types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+
+		if (type === types.windowSize) windowManager.windows[source].resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
 		switch (type) {
 			case types.launchOverlay:
 				var overlay = bodyCrawler.getOverlay();
@@ -2251,9 +2250,9 @@ function windowActivationEvent(event, dialog) {
     try {
         var node = event && (event.target || event.srcElement);
         var isInteractive = false;
-        while (node && isElement(node) && node.nodeType == 1) {
+        while (node && isElement(node) && node.nodeType === 1) {
             var tn = (node.tagName || "").toLowerCase();
-            if (tn === "input" || tn == "textarea" || tn == "select" || tn == "button" || tn == "a" || tn == "label" || tn === "output") { isInteractive = true; break; }
+            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
             if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
             node = node.parentElement;
         }
