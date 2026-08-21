@@ -166,22 +166,18 @@ window.addEventListener('keydown', function(event) {
   }
 }, false);
 
+function DesktopManager() {
+
+	/** @type {HTMLImageElement | null} */
+	this.wallpaperImage = null;
+}
+
 /** @param {string} theme */
 function setTheme(theme) { document.body.classList.add(theme); }
 /** @param {string} theme */
 function hasTheme(theme) { return document.body.classList.contains(theme); }
 /** @param {string} theme */
-function removeTheme(theme) { document.body.classList.remove(theme); }
-
-
-
-// function
-
-function DesktopManager() {
-
-    /** @type {HTMLImageElement?} */
-    this.wallpaperImage = null;
-}
+DesktopManager.removeTheme(theme) { document.body.classList.remove(theme); }
 
 
 /**
