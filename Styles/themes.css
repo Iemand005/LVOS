@@ -198,7 +198,7 @@ button {
 }
 
 .windows .window {
-	max-height:     max-height: calc(100% - 40px);
+	max-height: calc(100% - 40px);
 }
 
 .windows #dockapplist > button {

@@ -216,6 +216,7 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 
 WindowManager.prototype.saveState = function() {
 	if (!loaded) return;
+	if (window.top != window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
 		if (canSave && typeof localStorage != "undefined")
@@ -519,6 +520,9 @@ function Dialog(object, create) {
 	this._rotation = 0;
 
 	this._maximizing = false;
+
+	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
+	this._stateOpen = false;
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
     
@@ -1315,9 +1319,11 @@ Dialog.prototype.toggleTitlebar = function (force) {
 	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force != "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
+	this._stateOpen = true;
 	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
 };
 Dialog.prototype.close = function () {
+	this._stateOpen = false;
 	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
 };
 Dialog.prototype.getInnerRect = function () {
@@ -2375,7 +2381,7 @@ Dialog.prototype.getState = function() {
 		z: this.z,
 		width: this.width || this.minWidth,
 		height: this.height || this.minHeight,
-		open: this.isOpen || false,
+		open: this._stateOpen || this.isOpen || false,
 		maximized: this.maximized
 	};
 };
