@@ -229,11 +229,15 @@ function setThemeOld(id) {
 	var target = window.target;
 	if (!target) continue;
 		switch (id) {
-			case 0: target.classList.remove("rounded-corners"), target.classList.add("sharp-corners");
+			case 0:
+				target.classList.remove("rounded-corners");
+				target.classList.add("sharp-corners");
 				break;
-			case 1: target.classList.remove("rounded-corners"), target.classList.remove("sharp-corners");
+			case 1:
+				target.classList.remove("rounded-corners");
+				target.classList.remove("sharp-corners");
 				break;
-			case 2: target.classList.remove("sharp-corners"), target.classList.add("rounded-corners");
+			case 2: target.classList.remove("sharp-corners"); target.classList.add("rounded-corners");
 				break;
 		}
 	}
