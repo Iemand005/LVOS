@@ -41,6 +41,7 @@ var flags = {
 		document.body.classList.toggle("compositor-animations", value);
 		this._compositorResize = value;
 	}
+	useViewTransitionMaximize: true
 };
 
 /** @constant */
