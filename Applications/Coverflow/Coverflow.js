@@ -2,8 +2,6 @@
 // Lasse Lauwerys � 2024
 
 'use strict';
-'use esnext';
-'use moz';
 
 /*const*/var oneDiv = document.querySelector("div");
 /*const*/var allDivs = document.querySelectorAll("div");
