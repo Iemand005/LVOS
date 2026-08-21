@@ -181,13 +181,13 @@ function setThemeOption(theme) {
 	var blurWasOn = previous === "blur" || previous === "glass" || previous === "modern-blur";
 	var previousBase = BASE_THEMES[previous];
 	if (previous && previous !== theme) {
-		if (THEMES.indexOf(previous) !== -1) removeTheme(previous);
-		if (previous === "glass") removeTheme("blur");
+		if (THEMES.indexOf(previous) !== -1) DesktopManager.removeTheme(previous);
+		if (previous === "glass") DesktopManager.removeTheme("blur");
 		if (previous === "modern-blur") {
-			removeTheme("blur");
-			removeTheme("modern");
+			DesktopManager.removeTheme("blur");
+			DesktopManager.removeTheme("modern");
 		}
-		if (previousBase) removeTheme(previousBase);
+		if (previousBase) DesktopManager.removeTheme(previousBase);
 	}
 	if (theme && THEMES.indexOf(theme) !== -1) {
 		if (theme !== "modern-blur") setTheme(theme);
@@ -200,11 +200,11 @@ function setThemeOption(theme) {
 		applyStartButtonIcon(theme);
 		settings.set("theme", theme);
 	} else {
-		removeTheme("blur");
-		removeTheme("glass");
+		DesktopManager.removeTheme("blur");
+		DesktopManager.removeTheme("glass");
 		settings.set("theme", "");
 	}
-	if (theme === "blur" || theme === "glass") removeTheme("modern");
+	if (theme === "blur" || theme === "glass") DesktopManager.removeTheme("modern");
 	else if (blurWasOn && theme !== "modern-blur") setTheme("modern");
 }
 
