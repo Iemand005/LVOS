@@ -706,14 +706,14 @@ Dialog.prototype.initWithObject = function(object) {
             }
 
 			if (createTouchSizers) {
-				for (var index = 0; index < 8; index++) {
+				for (var i = 0; i < 8; i++) {
 
-					var id = index + 1;
+					var id = i + 1;
 					var sizerId = "touch-sizer-" + id;
 
 					var div = this.getElementByTagOrClassName(sizerId);
 					if (!div || !(isElement(div))) div = document.createElement("div");
-					div.draggable = false, div.id = "touch-" + (index + 1), div.classList.add(sizerId);
+					div.draggable = false, div.id = "touch-" + (i + 1), div.classList.add(sizerId);
 					div.classList.add("touch");
 					
 					var touchDown = function(id) {
