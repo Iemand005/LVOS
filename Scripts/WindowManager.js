@@ -1567,10 +1567,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}, timeOffsetMs);
 	});
 	else {
-		var startPos = this.position;
-		var startSize = this.size;
-		var target = this.target;
-		var self = this;
+		var startPos = self.position;
+		var startSize = self.size;
+		var target = self.target;
 		if (!target) return;
 		enable = !target.classList.contains("maximized");
 		var toggleThingie = function() {
@@ -1579,7 +1578,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.width = startSize.x;
 			self.height = startSize.y;
 			if ( self.target) self.target.classList.toggle("maximized", enable);
-		}
+		};
 		if (!enable) toggleThingie();
 		animate(300, function(t) {
 			var ease = easeSharpCenterStrong;
