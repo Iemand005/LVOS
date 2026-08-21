@@ -684,7 +684,9 @@ Dialog.prototype.initWithObject = function(object) {
 
                 var div = this.getElementByTagOrClassName(sizerId);
                 if (!div || !(isElement(div))) div = document.createElement("div");
-                div.draggable = false, div.id = String(index + 1), div.classList.add(sizerId);
+                div.draggable = false;
+				div.id = String(index + 1);
+				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
@@ -836,11 +838,16 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
-    this.toggleClassAnimatedOld("open", forceOpen, "opacity", function () {
+    this.toggleClassAnimated("open", forceOpen, function(a) {
+		return a === "opacity";
+	}, function () {
         if (shouldKill) self.kill();
     }, function (enabled) {
         if (enabled) self.activate();
     });
+
+	self._stateOpen = true;
+	windowManager.saveState();
 };
 /**
  * @param {boolean} [create]
@@ -1306,11 +1313,15 @@ Dialog.prototype.toggleTitleBar = function (force) {
 };
 Dialog.prototype.open = function () {
 	this._stateOpen = true;
-	return (this.isOpen = true), windowManager.saveState(), this.isOpen;
+	this.isOpen = true;
+	windowManager.saveState();
+	return this.isOpen;
 };
 Dialog.prototype.close = function () {
 	this._stateOpen = false;
-	return (this.isOpen = false), windowManager.saveState(), this.isOpen;
+	this.isOpen = false;
+	windowManager.saveState();
+	return this.isOpen;
 };
 Dialog.prototype.getInnerRect = function () {
   	if (!this.target) return;
