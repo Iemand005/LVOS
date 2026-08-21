@@ -158,6 +158,24 @@ var BASE_THEMES = {
 };
 
 /** @param {string} theme */
+function applyStartButtonIcon(theme) {
+	var startButton = document.getElementById("start-button");
+	if (!startButton) return;
+	if (theme == "windows-10") {
+		var logoIcon = document.createElement("img");
+		logoIcon.onload = function () {
+			if (startButton){
+				startButton.innerText = "";
+				startButton.appendChild(logoIcon);
+			}
+		}
+		logoIcon.src = "Assets/Windows-10.svg";
+	} else if (startButton.getElementsByTagName("img").length) {
+		startButton.innerText = "Start";
+	}
+}
+
+/** @param {string} theme */
 function setThemeOption(theme) {
 	var previous = settings.get("theme");
 	var blurWasOn = previous == "blur" || previous == "glass" || previous == "modern-blur";
@@ -179,21 +197,7 @@ function setThemeOption(theme) {
 			setTheme("blur");
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
-		if (theme === "windows-10") {
-			var startButton = document.getElementById("start-button");
-			if (startButton) {
-				var logoIcon = document.createElement("img");
-				logoIcon.onload = function () {
-					if (startButton){
-						startButton.innerText = "";
-						startButton.appendChild(logoIcon);
-					}
-				}
-				logoIcon.src = "Assets/Windows-10.svg";
-			}
-		} else {
-
-		}
+		applyStartButtonIcon(theme);
 		settings.set("theme", theme);
 	} else {
 		removeTheme("blur");
@@ -317,6 +321,7 @@ function loadThemeSetting() {
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
 		if (theme == "blur" || theme == "glass") removeTheme("modern");
+		applyStartButtonIcon(theme);
 		if (elements.theme) elements.theme.value = theme;
 	}
 	var colorDebug = settings.get("color-debug");
