@@ -220,28 +220,6 @@ function toggleSquircles(enabled) {
 	settings.set("squircles", enabled);
 }
 
-/** @param {number} id */
-function setThemeOld(id) {
-	if (typeof id == 'undefined') return;
-	settings.set("theme", id);
-	for(var index in window.windowManager.windows){
-		var target = window.windowManager.windows[index].target;
-		if (!target) continue;
-		switch (id) {
-			case 0:
-				target.classList.remove("rounded-corners");
-				target.classList.add("sharp-corners");
-				break;
-			case 1:
-				target.classList.remove("rounded-corners");
-				target.classList.remove("sharp-corners");
-				break;
-			case 2: target.classList.remove("sharp-corners"); target.classList.add("rounded-corners");
-				break;
-		}
-	}
-}
-
 function toggleCharmsEvent(ev) {
 	if (!document.elementFromPoint) return;
 	var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
