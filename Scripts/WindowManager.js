@@ -10,8 +10,6 @@
 \*/
 
 "use strict"; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both desktop and Metro mode).
-"use esnext"; // This enables ECMAScript 6 (ES6) on older browsers that don't have it enabled by default. This enables the use of /*let*/var and const.
-"use moz"; // Enable Mozilla JS extensions for old versions of Firefox so we can use /*let*/var and /*const*/var on those too.
 
 // Modifiable settings
 var useMica = false,
