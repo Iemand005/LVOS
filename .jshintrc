@@ -6,9 +6,11 @@
   "-W097": true,
   "-W083": true,
   "globals": {
-    "Vector": true
+    "Vector": true,
+    "globals": {
+      "windowManager": false
+    }
   },
   "varstmt": false,
-  "esversion": 6,
-  
+  "esversion": 5
 }
