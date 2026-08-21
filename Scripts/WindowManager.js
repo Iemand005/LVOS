@@ -635,10 +635,8 @@ Dialog.prototype.initWithObject = function(object) {
 
             this.moveEvents = object.moveEvents || false;
 
-			var iconUrl = this.getMiniIconUrl();
-			if (iconUrl) this.setIcon(iconUrl, function() {
-				iconUrl = self.getIconUrl();
-				if (iconUrl) self.setIcon(iconUrl);
+			this.setIcon(this.getMiniIconUrl(), function() {
+				self.setIcon(self.getIconUrl());
 			});
         }
     }
