@@ -5,6 +5,7 @@
   },
   "rules": {
     "comma-dangle": ["error", "never"],
-    "no-var": "off"
+    "no-var": "off",
+    "no-sequences": "off"
   }
 }
