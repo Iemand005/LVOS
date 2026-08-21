@@ -179,6 +179,7 @@ function setThemeOption(theme) {
 			setTheme("blur");
 		}
 		if (BASE_THEMES[theme]) setTheme(BASE_THEMES[theme]);
+		if BASE_THEMES[theme]
 		settings.set("theme", theme);
 	} else {
 		removeTheme("blur");
