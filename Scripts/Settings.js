@@ -127,14 +127,14 @@ SettingsHandler.prototype.loadFlags = function (flags) {
                         handler.saveFlags(flags);
                     }, false);
 
-                var label = document.createElement("label");
-                label.htmlFor = toggle.id;
-                label.appendChild(document.createTextNode(formatCamelCase(flagId)));
+					var label = document.createElement("label");
+					label.htmlFor = toggle.id;
+					label.appendChild(document.createTextNode(formatCamelCase(flagId)));
 
-                row.appendChild(toggle);
-                row.appendChild(label);
-                
-                flagsElement.appendChild(row);
+					row.appendChild(toggle);
+					row.appendChild(label);
+
+					flagsElement.appendChild(row);
 				})(flagId);
 
 				break;
