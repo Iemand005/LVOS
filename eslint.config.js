@@ -2,6 +2,15 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config({
   files: ['**/*.ts', '**/*.tsx', '*.d.ts'],
+  languageOptions: {
+    parser: tseslint.parser,
+    parserOptions: {
+      project: './tsconfig.json',
+    },
+  },
+  plugins: {
+    '@typescript-eslint': tseslint.plugin,
+  },
   rules: {
     'no-restricted-syntax': [
       'error',
