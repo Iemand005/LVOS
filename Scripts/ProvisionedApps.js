@@ -264,7 +264,7 @@ var applications = [
 	{
 		title : "The Useless Web",
 		id: "theuselessweb",
-		src : "https://theuselessweb.com/",
+		src: "https://theuselessweb.com/",
 	}
 ]
 
