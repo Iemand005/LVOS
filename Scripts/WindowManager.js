@@ -1487,8 +1487,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var fsTimeout = 0;
 
 	if (flags.useViewTransitionMaximize) {
+		self.target.style.viewTransitionName = 'window-fullscreen';
+
 		var transition = document.startViewTransition(function() {
-			windows.calculator.target.classList.toggle('maximized');
+			self.target.classList.toggle('maximized');
+		});
+		transition.finished.finally(function() {
+			self.target.style.viewTransitionName = '';
 		});
 		return;
 	}
