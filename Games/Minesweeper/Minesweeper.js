@@ -252,8 +252,16 @@ function setBombCount(count) {
     var bombCount = document.getElementById("bomb-count");
     if (bombCount) bombCount.innerText = count.toString();
 }
+/** @param {number} time */
+function setTimeDisplay(time) {
+    var bombCount = document.getElementById("timer");
+    var timeStr = time.toString();
+    while (timeStr.length < 3) timeStr = "0" + timeStr;
+    if (bombCount) bombCount.innerText = timeStr;
+}
 
 function stopTimer(reset) {
+    var timeDisplay = document.getElementById("timer");
     if(reset) displays[1].update(0);
     window.clearInterval(timerInterval);
 }
