@@ -31,7 +31,9 @@
 }
 
 html:has(body.slow-animations)::view-transition-old(root),
-html:has(body.slow-animations)::view-transition-new(root) {
+html:has(body.slow-animations)::view-transition-new(root),
+html:has(body.slow-animations)::view-transition-old(window-fullscreen),
+html:has(body.slow-animations)::view-transition-new(window-fullscreen){
 	animation-duration: 3s;
 }
 
