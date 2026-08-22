@@ -289,11 +289,11 @@ stopTimer(true);
 function load() {
 	minesweeper.startGame();
 	var button = document.querySelector("button");
-	button.onclick = function () { minesweeper.startGame(); };
+	if (button) button.onclick = function () { minesweeper.startGame(); };
 	
 	document.body.ondblclick = quickRevealEvent;
 	document.ondblclick = quickRevealEvent;
-	document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
+	document.onmousedown = setEmoji.bind(null, !isGameOver?icons.scared:icons.dead);
 	document.onmouseup = function(ev) {
 		ev.preventDefault();
 		if(!isGameOver) setEmoji(icons.alive);
