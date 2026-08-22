@@ -88,10 +88,11 @@ var onLoad = function () {
 			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 
-			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			// TODO: is this running on window drag??? it should not!
+			// translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 			
-			selector.style.width = toPixels(Math.abs(width));
-			selector.style.height = toPixels(Math.abs(height));
+			// selector.style.width = toPixels(Math.abs(width));
+			// selector.style.height = toPixels(Math.abs(height));
 		};
 		
 		// if (supportsPointer)
