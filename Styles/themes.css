@@ -16,9 +16,8 @@
 }
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-
+::view-transition-group(root) {
+	animation: none;
 }
 
 ::view-transition-group(window-fullscreen) {

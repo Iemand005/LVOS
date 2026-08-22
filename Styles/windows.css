@@ -102,10 +102,10 @@ main {
 .window header,
 .window header section,
 .window header nav {
-    -webkit-transition: all 170ms ease-out;
-    -moz-transition: all 170ms ease-out;
-    -o-transition: all 170ms ease-out;
-    transition: all 170ms ease-out;
+    /*-webkit-transition: all 170ms ease-out;*/
+    /*-moz-transition: all 170ms ease-out;*/
+    /*-o-transition: all 170ms ease-out;*/
+    /*transition: all 170ms ease-out;*/
 }
 
 .window header button svg {
