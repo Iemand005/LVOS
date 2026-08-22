@@ -18,15 +18,16 @@
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-	width: 100%;
-	height: 100%;
-	object-fit: fill;
+
 }
 
 ::view-transition-old(window-fullscreen),
 ::view-transition-new(window-fullscreen) {
 	animation-duration: 280ms;
 	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
+	width: 100%;
+	height: 100%;
+	object-fit: fill;
 }
 
 html:has(body.slow-animations)::view-transition-old(root),
