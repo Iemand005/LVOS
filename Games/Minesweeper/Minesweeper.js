@@ -109,8 +109,8 @@ Tile.prototype.getFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbo
 Tile.prototype.countFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getFlaggedNeighbouringMines(neighbors).length; };
 Tile.prototype.getUnflaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged !== 1; }); };
 Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (this.button) if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
-
-Tile.prototype.toggleFlag = function(/**@type {boolean | undefined}*/enabled) {
+/** @param {boolean} [enabled] */
+Tile.prototype.toggleFlag = function(enabled) {
 	if (this.revealed || !this.button) return;
 	this.flagged = enabled == null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
 	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
