@@ -24,6 +24,10 @@ export default tseslint.config({
 				selector: 'ChainExpression',
 				message: 'Optional chaining (?.) is not allowed.',
 			},
+			{
+				selector: "CallExpression[callee.property.name='addEventListener']",
+				message: "addEventListener must have a third options parameter."
+			}
 		],
 	},
 });
