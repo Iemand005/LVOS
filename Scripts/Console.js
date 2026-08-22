@@ -115,26 +115,26 @@ ConsoleInterceptor.prototype.getHTML = function() {
 			var span = document.createElement("span");
 			// span.style.background = "blue";
 
-			if (result.type == ConsoleOutType.Input) {
+			if (result.type === ConsoleOutType.Input) {
 				span.style.color = "black";
 				span.appendChild(document.createTextNode(data));
 
 				tableData.appendChild(document.createTextNode("← "));
 				tableData.appendChild(span);
 
-			} else if (result.type == ConsoleOutType.Log) {
+			} else if (result.type === ConsoleOutType.Log) {
 				span.style.color = "gray";
 				span.appendChild(document.createTextNode(data));
 
 				tableData.appendChild(document.createTextNode("→ "));
 				tableData.appendChild(span);
 
-			} else if (result.type == ConsoleOutType.Warn) {
+			} else if (result.type === ConsoleOutType.Warn) {
 				span.style.color = "yellow";
 				span.appendChild(document.createTextNode("⚠ " + data));
 				tableData.appendChild(span);
 
-			} else if (result.type == ConsoleOutType.Error) {
+			} else if (result.type === ConsoleOutType.Error) {
 				span.style.color = "red";
 				span.appendChild(document.createTextNode("⚠ " + data));
 				tableData.appendChild(span);
