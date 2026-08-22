@@ -63,6 +63,7 @@ Tile.prototype.generate = function() { // This generates the mines, the algorith
 };
 
 Tile.prototype.reveal = function() {
+    if (!this.button) return;
     if (this.revealed) return 0;
     if (!gameStarted) {
         gameStarted = true;
@@ -75,7 +76,7 @@ Tile.prototype.reveal = function() {
     this.disable();
     if (!this.mine) {
         if (remaining === 0) gameOver(true);
-        this.button.textContent = neighbourCount;
+        this.button.textContent = neighbourCount.toString();
         classes.add('n' + neighbourCount);
     } else {
         this.button.textContent = !isGameWon?icons.exploded:icons.correct;
