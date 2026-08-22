@@ -4,9 +4,9 @@
 'use strict';
 
 /**
- * @param {number} number 
- * @param {number} index 
- * @param {boolean} singular 
+ * @param {number} [number]
+ * @param {number} [index]
+ * @param {boolean} [singular]
  */
 function DisplayBuilder(number, index, singular){
     this.display;
