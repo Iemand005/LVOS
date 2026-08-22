@@ -56,9 +56,9 @@ var onLoad = function () {
 		var clock = document.createElement("time");
 		clock.id = "clock";
 
-		function updateClock() {
+		var updateClock = function() {
 			clock.innerHTML = new Date().toLocaleTimeString();
-		}
+		};
 
 		updateClock();
 		setInterval(updateClock, 1000);
