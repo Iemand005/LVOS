@@ -242,9 +242,8 @@ Minesweeper.prototype.countRemainingFields = function() { return lineartiles.fil
 
 function activateTimer() {
     var timer = 0;
-    var timeDisplay = document.getElementById("timer");
     timerInterval = window.setInterval(function() {
-        if (timeDisplay) timeDisplay.innerText = (++timer).toString();
+        setTimeDisplay(++timer);
     }, 1000);
 }
 /** @param {number} count */
@@ -259,10 +258,9 @@ function setTimeDisplay(time) {
     while (timeStr.length < 3) timeStr = "0" + timeStr;
     if (bombCount) bombCount.innerText = timeStr;
 }
-
+/** @param {boolean} reset */
 function stopTimer(reset) {
-    var timeDisplay = document.getElementById("timer");
-    if(reset) displays[1].update(0);
+    if (reset) setTimeDisplay(0);
     window.clearInterval(timerInterval);
 }
 
