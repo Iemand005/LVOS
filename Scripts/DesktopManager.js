@@ -292,6 +292,32 @@ function initWallpaperDB(onSuccess, onFailure) {
     };
 }
 
+function localStorageFabblack(dataUrl) {
+	if (dataUrl) {
+		if (typeof settings != 'undefined' && settings.set) {
+			try {
+				settings.set('wallpaperImage', dataUrl);
+				console.log("Wallpaper saved to localStorage via settings");
+			} catch (ex) {
+				console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
+				try {
+					window.localStorage.setItem('wallpaperImage', dataUrl);
+					console.log("Wallpaper saved to direct localStorage");
+				} catch (ex2) {
+					console.warn("Failed to save to direct localStorage:", ex2.message);
+				}
+			}
+		} else {
+			try {
+				window.localStorage.setItem('wallpaperImage', dataUrl);
+				console.log("Wallpaper saved to direct localStorage");
+			} catch (ex) {
+				console.warn("Failed to save wallpaper to localStorage:", ex.message);
+			}
+		}
+	}
+}
+
 /**
  * Store wallpaper image blob to IndexedDB, with localStorage fallback.
  * @param {Blob} blob
@@ -316,56 +342,12 @@ function saveWallpaperToCache(blob, dataUrl) {
         request.onerror = function() {
             console.warn("Failed to save wallpaper to IndexedDB, falling back to localStorage:", request.error);
             // Fall back to localStorage if IndexedDB fails
-            if (dataUrl) {
-                if (typeof settings != 'undefined' && settings.set) {
-                    try {
-                        settings.set('wallpaperImage', dataUrl);
-                        console.log("Wallpaper saved to localStorage via settings");
-                    } catch (ex) {
-                        console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
-                        try {
-                            window.localStorage.setItem('wallpaperImage', dataUrl);
-                            console.log("Wallpaper saved to direct localStorage");
-                        } catch (ex2) {
-                            console.warn("Failed to save to direct localStorage:", ex2.message);
-                        }
-                    }
-                } else {
-                    try {
-                        window.localStorage.setItem('wallpaperImage', dataUrl);
-                        console.log("Wallpaper saved to direct localStorage");
-                    } catch (ex) {
-                        console.warn("Failed to save wallpaper to localStorage:", ex.message);
-                    }
-                }
-            }
+            localStorageFabblack(dataUrl);
         };
     }, function (err) {
         // console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
-        if (dataUrl) {
-            if (typeof settings != 'undefined' && settings.set) {
-                try {
-                    settings.set('wallpaperImage', dataUrl);
-                    console.log("Wallpaper saved to localStorage via settings");
-                } catch (ex) {
-                    console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
-                    try {
-                        window.localStorage.setItem('wallpaperImage', dataUrl);
-                        console.log("Wallpaper saved to direct localStorage");
-                    } catch (ex2) {
-                        console.warn("Failed to save to direct localStorage:", ex2.message);
-                    }
-                }
-            } else {
-                try {
-                    window.localStorage.setItem('wallpaperImage', dataUrl);
-                    console.log("Wallpaper saved to direct localStorage");
-                } catch (ex) {
-                    console.warn("Failed to save wallpaper to localStorage:", ex.message);
-                }
-            }
-        }
+		localStorageFabblack(dataUrl);
     });
 }
 
