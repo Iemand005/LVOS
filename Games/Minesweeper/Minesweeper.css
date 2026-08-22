@@ -161,7 +161,14 @@ form, div, header, footer {
 }
 
 @media (prefers-color-scheme: dark) {
-	form {
+	body, form, div, button	 {
 		background-color: #212121;
+	}
+
+	form, button, div button {
+		border-top-color: rgb(231, 231, 231);
+		border-left-color: rgb(231, 231, 231);
+		border-right-color: darkgray;
+		border-bottom-color: darkgray;
 	}
 }
