@@ -44,9 +44,9 @@ function getCamera(){
 
 startButton.onclick = getCamera;
 
-takePhoto.onclick = ev => {
+takePhoto.onclick = function(ev) {
     ev.preventDefault();
-    /*const*/var photo = getPhoto(video, video.videoWidth, video.videoHeight);
+    var photo = getPhoto(video, video.videoWidth, video.videoHeight);
     console.log("foto", photo);
     output.setAttribute("src", photo);
 };
