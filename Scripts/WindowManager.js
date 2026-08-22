@@ -1516,29 +1516,31 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this.target.style.viewTransitionName = 'window-fullscreen';
 
-		var transition = document.startViewTransition(function() {
-			self.target.classList.toggle('maximized', enable);
-		});
+		if (document.startViewTransition) {
+			var transition = document.startViewTransition(function() {
+				self.target.classList.toggle('maximized', enable);
+			});
 
-		var oldRect = self.target.getBoundingClientRect();
-		// var transition.
-		transition.ready.then(function() {
-			var newRect = self.target.getBoundingClientRect();
+			var oldRect = self.target.getBoundingClientRect();
+			// var transition.
+			transition.ready.then(function() {
+				var newRect = self.target.getBoundingClientRect();
 
-			document.documentElement.style.setProperty('--wf-sx', oldRect.width / newRect.width);
-			document.documentElement.style.setProperty('--wf-sy', oldRect.height / newRect.height);
-		}).catch(function(ev) {
-			console.warn("transition interrupted:", ev);
-		});
+				document.documentElement.style.setProperty('--wf-sx', oldRect.width / newRect.width);
+				document.documentElement.style.setProperty('--wf-sy', oldRect.height / newRect.height);
+			}).catch(function(ev) {
+				console.warn("transition interrupted:", ev);
+			});
 
-		transition.finished.finally(function() {
-			if (viewTransitions > 1) {
-				// TODO: Perhaps add to interrupted queue and clear them after on clean else next
-			} else {
-				self.target.style.viewTransitionName = '';
-			}
-			viewTransitions--;
-		});
+			transition.finished.finally(function() {
+				if (viewTransitions > 1) {
+					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
+				} else {
+					self.target.style.viewTransitionName = '';
+				}
+				viewTransitions--;
+			});
+		} else self.target.classList.toggle('maximized', enable);
 		return;
 	}
 
