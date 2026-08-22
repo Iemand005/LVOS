@@ -166,8 +166,15 @@ form, div, header, footer {
 	}
 
 	form, button, div button {
-		border-color: rgb(0 0 0);
-		border-right-color: dark#4a4747grayit;
-		border-bottom-color: darkgray;
+		border-color: #4a4747;
+		border-right-color: black;
+		border-bottom-color: black;
+	}
+
+	button:active:not(:disabled):not(.mine), button.active, table, div, .display {
+		border-top-color: darkgray;
+		border-left-color: darkgray;
+		border-right-color: rgb(231, 231, 231);
+		border-bottom-color: rgb(231, 231, 231);
 	}
 }
