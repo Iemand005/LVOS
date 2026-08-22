@@ -1,11 +1,11 @@
 
 
-var browser = windows.browser.target;//document.getElementById("browser");
-var browserform = windows.browser.originalBody;//document.getElementById("browserform");
+var browser = window.windows.browser.target;//document.getElementById("browser");
+var browserform = window.windows.browser.originalBody;//document.getElementById("browserform");
 var browserframe = browser.getElementsByTagName("iframe")[0];
 
-dockapplist.appendChild(windows.browser.createOpenButton());
-dockapplist.appendChild(windows.console.createOpenButton());
+dockapplist.appendChild(window.windows.browser.createOpenButton());
+dockapplist.appendChild(window.windows.console.createOpenButton());
 
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
