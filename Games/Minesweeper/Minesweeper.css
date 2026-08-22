@@ -7,16 +7,16 @@
    \*********************/
 
 html, body, button:disabled {
-    margin: 0px;
-    overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
+	margin: 0px;
+	overflow: hidden;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 body {
-    flex-direction: column;
-    display: table; /* I want the content size to be minimal, we can use the table display to obtain this property, using fit-content width doesn't work yet on all browsers. */
-    margin: auto;
+	flex-direction: column;
+	display: table; /* I want the content size to be minimal, we can use the table display to obtain this property, using fit-content width doesn't work yet on all browsers. */
+	margin: auto;
 }
 
 @font-face {
@@ -25,60 +25,60 @@ body {
 }
 
 button {
-    height: 20px;
-    width: 20px;
-    font-size: 12px;
-    display: flex;
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    color: black;
-    box-sizing: border-box;
-    border: none;
-    display: flex; /* Necessary for a bug in Chrome and other Chromium based browsers that causes the buttons to be vertically offset with the block display.*/
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+	height: 20px;
+	width: 20px;
+	font-size: 12px;
+	display: flex;
+	padding: 0;
+	margin: 0;
+	font-weight: bold;
+	color: black;
+	box-sizing: border-box;
+	border: none;
+	display: flex; /* Necessary for a bug in Chrome and other Chromium based browsers that causes the buttons to be vertically offset with the block display.*/
+	text-align: center;
+	align-items: center;
+	justify-content: center;
 }
 
 button:disabled {
-    border: 1px solid darkgray;
-    border-right: none;
-    border-bottom: none;
-    pointer-events: none;
+	border: 1px solid darkgray;
+	border-right: none;
+	border-bottom: none;
+	pointer-events: none;
 }
 
 table {
-    border-spacing: 0;
-    kerning: auto;
-    margin: auto;
-    /* border-collapse: collapse; */
+	border-spacing: 0;
+	kerning: auto;
+	margin: auto;
+	/* border-collapse: collapse; */
 }
 
 td {
-    padding: 0;
-    margin: 0;
-    line-height: 0; 
+	padding: 0;
+	margin: 0;
+	line-height: 0; 
 }
 
 tr {
-    /* dis */
-    border-collapse: collapse;
+	/* dis */
+	border-collapse: collapse;
 }
 
 form, div {
-    padding: 10px;
+	padding: 10px;
 }
 
 div {
-    width: 100%;
-    /* height: 100px; */
-    display: flex;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-    margin-bottom: 10px;
+	width: 100%;
+	/* height: 100px; */
+	display: flex;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-sizing: border-box;
+	margin-bottom: 10px;
 }
 
 button.n0 { color: lightgray; }
@@ -91,104 +91,72 @@ button.n6 { color: darkcyan; }
 button.n7 { color: black; }
 button.n8 { color: darkgray; }
 
-/* button.n0 { background-color: transparent; }
-button.n1 { background-color: blue; }
-button.n2 { background-color: green; }
-button.n3 { background-color: red; }
-button.n4 { background-color: darkblue; }
-button.n5 { background-color: darkred; }
-button.n6 { background-color: darkcyan; }
-button.n7 { background-color: black; }
-button.n8 { background-color: darkgray; } */
-
 div, form, table, button {
-    border-style: solid;
-    border-width: 3px;
+	border-style: solid;
+	border-width: 3px;
 }
 
 div > * {
-    /* float: left; */
-    display: -moz-inline-box;
-    display: inline-block; 
-    vertical-align: middle;
-    display: inline-flex;
-    display: -moz-inline-box;
-    -moz-box-pack: center;
-    -moz-box-align: center;
+	/* float: left; */
+	display: -moz-inline-box;
+	display: inline-block; 
+	vertical-align: middle;
+	display: inline-flex;
+	display: -moz-inline-box;
+	-moz-box-pack: center;
+	-moz-box-align: center;
 }
 
 button:active:not(:disabled):not(.mine), button.active, table, div, output {
-    border-top-color: darkgray;
-    border-left-color: darkgray;
-    border-right-color: rgb(231, 231, 231);
-    border-bottom-color: rgb(231, 231, 231);
+	border-top-color: darkgray;
+	border-left-color: darkgray;
+	border-right-color: rgb(231, 231, 231);
+	border-bottom-color: rgb(231, 231, 231);
 }
 
 form, button, div button {
-    border-top-color: rgb(231, 231, 231);
-    border-left-color: rgb(231, 231, 231);
-    border-right-color: darkgray;
-    border-bottom-color: darkgray;
+	border-top-color: rgb(231, 231, 231);
+	border-left-color: rgb(231, 231, 231);
+	border-right-color: darkgray;
+	border-bottom-color: darkgray;
 }
 
 body, form, div, button {
-    background-color: lightgray;
+	background-color: lightgray;
 }
 
 .revealed {
-    font-size: 16px;
+	font-size: 16px;
 }
 
-output {
-    width: 100%;
-    border-style: solid;
-    border-width: 2px;
-    color: red;
-    border-width: 1px;
-    display: -webkit-box;
-    display: flex; /*¨¨Fixes bug in Internet Explorer that causes a weird padding on top of the output content. **/
-    background-color: #3e0000;
-    background: radial-gradient( circle at 2px 2px, #000 1px, #3e0000 2px ) 0 0 / 4px 5px;
-    background: radial-gradient( circle at 2px 2px, #640000 0px, #3e0000 2px ) 0 0 / 2px 2px;
-    height: 46px;
-    width: 80px;
+.display {
+	width: 100%;
+	border-style: solid;
+	border-width: 2px;
+	color: red;
+	border-width: 1px;
+	display: -webkit-box;
+	display: flex; /*¨¨Fixes bug in Internet Explorer that causes a weird padding on top of the output content. **/
+	background-color: #3e0000;
+	background: radial-gradient( circle at 2px 2px, #000 1px, #3e0000 2px ) 0 0 / 4px 5px;
+	background: radial-gradient( circle at 2px 2px, #640000 0px, #3e0000 2px ) 0 0 / 2px 2px;
+	height: 46px;
+	width: 80px;
+	display: -moz-inline-box; /* Netscape 9's version of inline-block */
+	display: inline-block;
+	font-family: DSEG7Classic;
+	line-height: 46px;
+	font-size: 30px;
 }
 
 div > button {
-    font-size: 18px;
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-div.original {
-    display: -webkit-box;
-    -webkit-box-orient: horizontal;
-    -webkit-box-pack: justify;
-}
-
-div.original > button {
-    width: 28px;
-    height: 28px;
-    font-size: 15px;
-    padding: 0;
-}
-
-div.original > output {
-    width: 44px;
-    height: 28px;
-    
+	font-size: 18px;
+	padding: 15px;
+	box-sizing: border-box;
 }
 
 form, div, header, footer, output {
-    display: block;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-output {
-    display: -moz-inline-box; /* Netscape 9's version of inline-block */
-    display: inline-block;
-    font-family: DSEG7Classic;
-    line-height: 46px;
-    font-size: 30px;
+	display: block;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
