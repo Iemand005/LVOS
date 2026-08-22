@@ -6,7 +6,7 @@ function Calculator() {
 
 Calculator.prototype.updateDisplay = function() {
     output.value = this.expression || "0";
-}
+};
 
 Calculator.prototype.calculate = function () {
     var safeExpr = this.expression.replace(/[^0-9+\-*/.]/g, "");
@@ -24,26 +24,26 @@ Calculator.prototype.calculate = function () {
     }
 
     this.updateDisplay();
-}
+};
 
 Calculator.prototype.clearAll = function () {
     this.expression = "";
     this.updateDisplay();
-}
+};
 
 Calculator.prototype.press = function (value) {
-    if (value == "=")
+    if (value === "=")
        return this.calculate();
 
-    if (value == "C")
+    if (value === "C")
         return this.clearAll();
 
-    if (this.expression == "Error")
+    if (this.expression === "Error")
         this.expression = "";
 
     this.expression += value;
     this.updateDisplay();
-}
+};
 
 var output;
 var cells;
