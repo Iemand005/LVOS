@@ -26,7 +26,7 @@ export default tseslint.config({
 			},
 			{
 				selector: "CallExpression[callee.property.name='addEventListener'][arguments.length=2]",
-				message: "addEventListener requires a third options parameter."
+				message: "addEventListener requires a third options parameter for Netscape."
 			}
 		],
 	},
