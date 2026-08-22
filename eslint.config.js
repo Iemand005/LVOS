@@ -3,11 +3,11 @@
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config({
-	files: ['**/*.ts', '**/*.tsx', '*.d.ts'],
+	files: ['**/*.js', '**/*.ts', '**/*.tsx', '*.d.ts'],
 	languageOptions: {
 		parser: tseslint.parser,
 		parserOptions: {
-			project: './tsconfig.json',
+			project: './jsconfig.json',
 		},
 	},
 	plugins: {
