@@ -2406,11 +2406,6 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     return element;
 }
 
-function isCharmsOpen() {
-    var charms = document.getElementById("charms");
-    return charms && charms.classList.contains("open");
-}
-
 /** @param {Application[]} arguments */
 var injectApplications = WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
