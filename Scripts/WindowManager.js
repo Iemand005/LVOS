@@ -1959,6 +1959,7 @@ Dialog.prototype.updateScale = function(useScale) {
 		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
 		target.style.right = toPixels(this.right);
 		target.style.bottom = toPixels(this.bottom);
+		target.classList.remove("use-scale");
 	}
 
 	this.update();
