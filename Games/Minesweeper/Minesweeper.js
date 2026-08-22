@@ -81,7 +81,7 @@ Tile.prototype.reveal = function() {
         gameOver();
     }
     console.log("Neighbours: ", neighbours);
-    if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {}
+    if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal();; } catch (ex) {}
     return neighbourCount;
 };
 
@@ -89,7 +89,7 @@ Tile.prototype.getNeighbours = function() {
     var neighbours = [];
     for (var i = 0; i < 9; i++) {
         var x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
-        if((!(x == this.position.x && y == this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
+        if((!(x === this.position.x && y === this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
     }
     return neighbours;
 };
@@ -102,15 +102,15 @@ Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours) { return thi
 Tile.prototype.countUnflaggedNeighbouringMines = function(neighbours) { return this.getUnflaggedNeighbouringMines(neighbours).length; };
 Tile.prototype.getUnflaggedNeighbouringNotMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine && neighbour.flagged != 1 }); };
 Tile.prototype.countUnflaggedNeighbouringNotMines = function(neighbours) { return this.getUnflaggedNeighbouringnotMines(neighbours).length; };
-Tile.prototype.toggleDisabled = function(enabled) { if (enabled == null || (this.button.hasAttribute("disabled") == enabled)) this.button.toggleAttribute("disabled"); };
+Tile.prototype.toggleDisabled = function(enabled) { if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
 Tile.prototype.toggleFlag = function(enabled) { if (!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged==1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; };
 Tile.prototype.disableVisual = function() { this.button.classList.remove("active"); };
-Tile.prototype.isClickAllowed = function() { return this.flagged != 1; };
+Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
 Tile.prototype.enableVisual = function() { if (this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); };
 Tile.prototype.quickReveal = function() {
     if (quickReveal) {
         var neighbours = this.getNeighbours();
-        if (this.countFlaggedNeighbouringMines(neighbours) == this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour) { neighbour.reveal(); });
+        if (this.countFlaggedNeighbouringMines(neighbours) === this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour) { neighbour.reveal(); });
     }
 };
 
