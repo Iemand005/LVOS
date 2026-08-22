@@ -51,7 +51,7 @@ var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: isBlink,
-	useDragOverlay: false,
+	useDragOverlay: true,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
@@ -1639,15 +1639,15 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		Animation.animate(300, function(t) {
 			var ease = Animation.easeSharpCenterStrong;
 			if (enable) {
-				self.x = lerp(startPos.x, 0, ease(t));
-				self.y = lerp(startPos.y, 0, ease(t));
-				self.width = lerp(startSize.x, window.innerWidth, ease(t));
-				self.height = lerp(startSize.y, window.innerHeight, ease(t));
+				self.x = Animation.lerp(startPos.x, 0, ease(t));
+				self.y = Animation.lerp(startPos.y, 0, ease(t));
+				self.width = Animation.lerp(startSize.x, window.innerWidth, ease(t));
+				self.height = Animation.lerp(startSize.y, window.innerHeight, ease(t));
 			} else {
-				self.x = lerp(0, startPos.x, ease(t));
-				self.y = lerp(0, startPos.y, ease(t));
-				self.width = lerp(window.innerWidth, startSize.x, ease(t));
-				self.height = lerp(window.innerHeight, startSize.y, ease(t));
+				self.x = Animation.lerp(0, startPos.x, ease(t));
+				self.y = Animation.lerp(0, startPos.y, ease(t));
+				self.width = Animation.lerp(window.innerWidth, startSize.x, ease(t));
+				self.height = Animation.lerp(window.innerHeight, startSize.y, ease(t));
 			}
 		}, function() {
 			if (enable) toggleMaximized();
