@@ -2171,6 +2171,13 @@ function flipHandler(enable){
 	return flipped;
 }
 
+/** @param {boolean} [enable] */
+function toggleOverlay(enable) {
+	var overlay = bodyCrawler.getOverlay();
+	if (!overlay) return;
+	overlay.classList.toggle("open", enable);
+}
+
 function initializeDialogs() {
     if (supportsPointer) {
         document.onpointerup = disableDialogDrag;
