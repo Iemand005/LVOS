@@ -572,14 +572,25 @@ function Dialog(object, create) {
 }
 
 WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
+
+WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
+
+window.addEventListener('resize', function() {
+	// cachedWidth = window.innerWidth;
+	var inset = WindowManager.windowBoundsInset;
+	WindowManager._windowBounds.top = inset.top != null ? inset.top : -Infinity;
+	WindowManager._windowBounds.left = inset.left != null ? inset.left : -Infinity;
+	WindowManager._windowBounds.right = inset.right != null ? window.innerWidth - inset.right : Infinity;
+	WindowManager._windowBounds.bottom = inset.bottom != null ? window.innerHeight - inset.bottom : Infinity;
+});
+
+Object.defineProperty(WindowManager, "windowBounds", {
+	get: function () { return WindowManager._windowBounds; }
+});
+
 WindowManager.getWindowBounds = function() {
     var inset = WindowManager.windowBoundsInset;
-    return {
-        top: inset.top != null ? inset.top : -Infinity,
-        left: inset.left != null ? inset.left : -Infinity,
-        right: inset.right != null ? window.innerWidth - inset.right : Infinity,
-        bottom: inset.bottom != null ? window.innerHeight - inset.bottom : Infinity
-    };
+    return WindowManager.windowBounds;
 };
 /**
  * @param {any} object
