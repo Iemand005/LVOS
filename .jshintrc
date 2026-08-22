@@ -10,6 +10,7 @@
     "LVMessenger": true,
     "Animation": true,
     "DesktopManager": true,
+    "ClickOffset": true,
     "lerp": true,
     "windowManager": false,
     "toggleReflections": true,
