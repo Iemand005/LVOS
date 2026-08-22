@@ -104,11 +104,11 @@ Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (enab
 Tile.prototype.toggleFlag = function(/**@type {boolean}*/enabled) {
     if (this.revealed || !this.button) return;
     this.flagged = enabled == null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
-    this.button.innerText = this.flagged ? this.flagged === 1 ? (displays[0].update(--bombCount), icons.flag) : (displays[0].update(++bombCount), icons.unknown) : icons.none;
+    this.button.innerText = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
 };
-Tile.prototype.disableVisual = function() { this.button.classList.remove("active"); };
+Tile.prototype.disableVisual = function() { if (this.button) this.button.classList.remove("active"); };
 Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
-Tile.prototype.enableVisual = function() { if (this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); };
+Tile.prototype.enableVisual = function() { if (this.isClickAllowed() && this.mousedown && this.button) this.button.classList.add("active"); };
 Tile.prototype.quickReveal = function() {
     if (quickReveal) {
         var neighbours = this.getNeighbours();
