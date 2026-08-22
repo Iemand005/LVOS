@@ -189,4 +189,6 @@ output {
     display: -moz-inline-box; /* Netscape 9's version of inline-block */
     display: inline-block;
     font-family: DSEG7Classic;
+    line-height: 46px;
+    font-size: 30px;
 }
