@@ -1468,7 +1468,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (!target) return;
 		try { void target.offsetWidth; } catch (e) {}
 		enabled = setClass(target, className, force);
-		// if (onZtart) onZtart.call(dialog);
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
 };
@@ -1843,8 +1842,8 @@ Dialog.prototype.createPopout = function() {
 	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
 	var titleBarHeight = titlebar && titlebar.getBoundingClientRect().height || 0;
-	var viewboxPosition = getViewBoxPosition();
-	var propeties = {
+	var viewBoxPosition = getViewBoxPosition();
+	var properties = {
 		scrollbars: true,
 		resizable: true,
 		status: false,
@@ -1853,11 +1852,11 @@ Dialog.prototype.createPopout = function() {
 		menubar: false,
 		width: rect.width,
 		height: rect.height,
-		left: rect.left + viewboxPosition.left,
-		top: rect.top + viewboxPosition.top + titleBarHeight
+		left: rect.left + viewBoxPosition.left,
+		top: rect.top + viewBoxPosition.top + titleBarHeight
 	};
 
-	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(propeties));
+	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(properties));
 	if (!this._popupWindow) return;
 	var self = this;
 	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
