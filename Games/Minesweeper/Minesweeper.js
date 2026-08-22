@@ -111,7 +111,7 @@ Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (this
 Tile.prototype.toggleFlag = function(/**@type {boolean}*/enabled) {
 	if (this.revealed || !this.button) return;
 	this.flagged = enabled == null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
-	this.button.innerText = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
+	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
 };
 Tile.prototype.disableVisual = function() { if (this.button) this.button.classList.remove("active"); };
 Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
@@ -170,7 +170,7 @@ Minesweeper.prototype.startGame = function () {
 				button.onclick = function(ev){
 					if(ev.button === 0 && tile.isClickAllowed()){
 						var neighbours = tile.reveal();
-						if(!tile.mine) button.innerText = neighbours;
+						if(!tile.mine) button.textContent = neighbours;
 						else gameOver();
 					} else ev.preventDefault();
 				};
@@ -230,7 +230,7 @@ function gameOver(won) {
 function setEmoji(emoji) {
 	try {
 		var button = document.querySelector("div").querySelector("button");
-		button.innerText=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
+		button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 	} catch (ex) {
 
 	}
@@ -251,7 +251,7 @@ function setDisplayValue(value, id) {
 	var bombCount = document.getElementById(id);
 	var valueStr = value.toString();
 	while (valueStr.length < 3) valueStr = "0" + valueStr;
-	if (bombCount) bombCount.innerText = valueStr;
+	if (bombCount) bombCount.textContent = valueStr;
 }
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
