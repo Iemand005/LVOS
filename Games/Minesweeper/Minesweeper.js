@@ -235,7 +235,7 @@ function gameOver(won) {
 	gameStarted = false;
 	stopTimer();
 }
-
+/** @param {string} [emoji] */
 function setEmoji(emoji) {
 	try {
 		var thing = document.querySelector("div");
