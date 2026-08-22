@@ -1990,6 +1990,9 @@ Dialog.prototype.updateScale = function(useScale) {
 function getWallpaper() {
 	return document.getElementById("wallpaper");
 }
+
+var supportsObjectFit = false;
+
 /** @returns {boolean} */
 Dialog.prototype.injectMica = function() {
 	try {
