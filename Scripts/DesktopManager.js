@@ -29,6 +29,12 @@ function stopVibrations() {
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
 var onLoad = function () {
+
+	var desktop = document.getElementById('desktop');
+	desktop.addEventListener('mouseup', function (e) {
+		toggleCharms(false);
+	});
+
 	var applist = document.getElementById("applist");
 
 	if (applist) {
@@ -38,7 +44,7 @@ var onLoad = function () {
 	var appButtons = document.getElementById("dockapplist");
 
 	if (appButtons) {
-		var startButton = document.createElement("button")
+		var startButton = document.createElement("button");
 		startButton.innerHTML = "Start";
         startButton.id = "start-button";
 		startButton.addEventListener("click", function () {
