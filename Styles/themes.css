@@ -21,19 +21,19 @@
 
 }
 
-::view-transition-old(window-fullscreen),
-::view-transition-new(window-fullscreen) {
+::view-transition-group(window-fullscreen) {
 	animation-duration: 280ms;
 	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
+}
+
+::view-transition-old(window-fullscreen),
+::view-transition-new(window-fullscreen) {
 	width: 100%;
 	height: 100%;
 	object-fit: fill;
 }
 
-html:has(body.slow-animations)::view-transition-old(root),
-html:has(body.slow-animations)::view-transition-new(root),
-html:has(body.slow-animations)::view-transition-old(window-fullscreen),
-html:has(body.slow-animations)::view-transition-new(window-fullscreen){
+html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;
 }
 
