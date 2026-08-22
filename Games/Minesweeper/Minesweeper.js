@@ -220,7 +220,7 @@ function gameOver(won) {
     if(isGameOver) return;
     isGameWon = won;
     isGameOver = true;
-    displays[0].update(0);
+    setBombCount(0);
     lineartiles.forEach(function(tile){ tile.reveal(); });
     setEmoji();
     gameStarted = false;
@@ -248,6 +248,8 @@ function activateTimer() {
 /** @param {number} count */
 function setBombCount(count) {
     var bombCount = document.getElementById("bomb-count");
+    var bombStr = time.toString();
+    while (bombStr.length < 3) bombStr = "0" + bombStr;
     if (bombCount) bombCount.innerText = count.toString();
 }
 /** @param {number} time */
