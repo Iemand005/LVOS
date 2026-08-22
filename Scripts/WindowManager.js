@@ -818,7 +818,9 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 	}
     if (rotation) transform += "rotate(" + toDegree(rotation) + ")";
     element.style.transform = transform;
-    element.style.webkitTransform = transform;
+    // TODO: Chekc where this is applied and only assing if needed
+	// element.style.webkitTransform = transform;
+
 }
 /**
  * @param {HTMLElement} element
