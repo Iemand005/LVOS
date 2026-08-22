@@ -1,4 +1,4 @@
-/** eshint: esversion: 6 */
+/** jshint esversion: 6 */
 const canvas = document.getElementById("canvas");
 
 const xrButton = document.getElementById('xr-button');
