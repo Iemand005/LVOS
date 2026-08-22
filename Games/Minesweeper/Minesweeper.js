@@ -196,6 +196,7 @@ Minesweeper.prototype.startGame = function () {
 function sendDesiredSize(){
 	try {
 		var form = document.querySelector("form");
+		if (!form) return;
 		LVMessenger.broadcastToParent(LVMessenger.types.windowSize, {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Fixed tooth 11/1/2024.
 	} catch(ex) {
 		console.error("Failed to post desired size", ex);
