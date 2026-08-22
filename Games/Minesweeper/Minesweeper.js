@@ -207,7 +207,7 @@ try {
 		console.log("My host is LVOS!!");
 	});
 } catch(ex) {}
-
+/** @param {MouseEvent&TouchEvent} ev */
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
 	if(element) {
