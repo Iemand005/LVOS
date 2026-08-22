@@ -275,6 +275,9 @@ function load() {
 
 window.addEventListener("load", load, false);
 
+    // suppress spellchecking
+// noinspection SpellCheckingInspection
+
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ====       222222       0000      222222    666666
  \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  66      
