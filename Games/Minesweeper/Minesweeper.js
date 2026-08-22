@@ -207,9 +207,9 @@ try {
 		console.log("My host is LVOS!!");
 	});
 } catch(ex) {}
-/** @param {MouseEvent&TouchEvent} ev */
+/** @param {MouseEvent} ev */
 function quickRevealEvent(ev) {
-	var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
+	var element = document.elementFromPoint(ev.clientX, ev.clientY);
 	if(element) {
 		var tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
 		if(tile && tile.flagged!==1) tile.quickReveal();
@@ -292,7 +292,6 @@ function load() {
 	button.onclick = function () { minesweeper.startGame(); };
 	
 	document.body.ondblclick = quickRevealEvent;
-	document.body.ontouchend = quickRevealEvent;
 	document.ondblclick = quickRevealEvent;
 	document.onmousedown = setEmoji.bind(this, !isGameOver?icons.scared:icons.dead);
 	document.onmouseup = function(ev) {
