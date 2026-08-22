@@ -165,16 +165,17 @@ form, div, header, footer {
 		background-color: #212121;
 	}
 
-	form, button, div button {
+	form, button, div button, table, div, .display {
 		border-color: #4a4747;
+	}
+
+	form, button, div button {
 		border-right-color: black;
 		border-bottom-color: black;
 	}
 
 	button:active:not(:disabled):not(.mine), button.active, table, div, .display {
-		border-top-color: darkgray;
-		border-left-color: darkgray;
-		border-right-color: rgb(231, 231, 231);
-		border-bottom-color: rgb(231, 231, 231);
+		border-top-color: black;
+		border-left-color: black;
 	}
 }
