@@ -816,7 +816,7 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 		if (scaleX) transform += "scaleX(" + scaleX + ")";
 		if (scaleY) transform += "scaleY(" + scaleY + ")";
 	}
-    if (rotation) transform += "rotate(" + toDegree(rotation) + ")";
+    if (rotation) transform += "rotate(" + rotation + "deg)";
     element.style.transform = transform;
     // TODO: Chekc where this is applied and only assing if needed
 	// element.style.webkitTransform = transform;
