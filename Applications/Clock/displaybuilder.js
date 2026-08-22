@@ -90,9 +90,8 @@ DisplayBuilder.prototype = {
 function MultiDigitDisplayBuilder(digits, number, singleSided){
     this.displays = [];
     this.digits = digits;
-    for (var i = 0; i < this.digits; i++) {
+    for (var i = 0; i < this.digits; i++)
         this.displays.push(new DisplayBuilder(number, i, singleSided));
-    }    
 }
 
 MultiDigitDisplayBuilder.prototype = {
