@@ -1479,7 +1479,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
-var interrupted = false;
+var viewTransitions = 0;
 
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
@@ -1492,7 +1492,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var fsTimeout = 0;
 
 	if (flags.useViewTransitionMaximize) {
-		interrupted = false;
+		viewTransitions++;
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
@@ -1505,16 +1505,17 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		});
 
 		// var transition.
-		transition.ready.catch(function() {
-			interrupted = true;
+		transition.ready.catch(function(ev) {
+			console.warn("transition interrupted:", ev);
 		});
 
 		transition.finished.then(function() {
-			if (interrupted) {
+			if (viewTransitions > 1) {
 				// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 			} else {
 				self.target.style.viewTransitionName = '';
 			}
+			viewTransitions--;
 		});
 		return;
 	}
