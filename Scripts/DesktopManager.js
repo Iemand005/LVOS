@@ -111,13 +111,19 @@ var onLoad = function () {
 
 			clickOffset.toggleDragEventHandler(true);
 			// document.body.hasPointerCapture
-	}, false);
+		}, false);
 
-		tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown",function() {
+		tingeling.addEventListener(supportsPointer ? "pointerdown" : "mousedown",function() {
+			clickOffset.toggleDragEventHandler(false);
+
 			selector.remove();
 		}, false);
 
-		window.addEventListener(supportsPointer?"pointerup":"mouseup", function(ev) { selector.remove(); }, false);
+		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", function(ev) {
+			clickOffset.toggleDragEventHandler(false);
+			selector.remove();
+
+		}, false);
 	}
 
     
