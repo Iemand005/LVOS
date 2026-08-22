@@ -35,29 +35,29 @@
 /*	object-fit: fill;*/
 /*}*/
 
-::view-transition-group(window-fullscreen) {
-	animation: none;
-}
-
-::view-transition-old(window-fullscreen) {
-	animation: wf-stretch-out 0.4s ease both;
-}
-
-::view-transition-new(window-fullscreen) {
-	animation:
-			wf-stretch-out 0.4s ease both,
-			wf-fade-in 0.4s ease both;
-}
-
-@keyframes wf-stretch-out {
+@keyframes wf-morph {
 	from { transform: scale(var(--wf-sx), var(--wf-sy)); }
 	to   { transform: scale(1, 1); }
 }
 
-@keyframes wf-fade-in {
-	from { opacity: 0; }
-	to   { opacity: 1; }
+::view-transition-old(window-fullscreen),
+::view-transition-new(window-fullscreen) {
+	width: 100%;
+	height: 100%;
+	object-fit: fill;
+	transform-origin: top left;
+	animation: wf-morph 0.4s ease both; /* shared, synced scale */
 }
+
+::view-transition-old(window-fullscreen) {
+	animation: wf-morph 0.4s ease both, wf-fade-out 0.4s ease both;
+}
+::view-transition-new(window-fullscreen) {
+	animation: wf-morph 0.4s ease both, wf-fade-in 0.4s ease both;
+}
+
+@keyframes wf-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes wf-fade-in  { from { opacity: 0; } to { opacity: 1; } }
 
 html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;
