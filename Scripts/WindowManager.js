@@ -1260,7 +1260,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 	};
 
 	this._appIcon.onerror = function (e) {
-		console.warn("App icon errror!", e);
+		console.warn("App icon error!", e);
 		if (self._appIcon) self._appIcon.className = "";
 		if (onError) onError();
 	};
@@ -1932,7 +1932,7 @@ Dialog.prototype.updateScale = function(useScale) {
 		target.style.bottom = "";
 		target.classList.add("use-scale");
 	} else {
-		if (this.useTransform) return console.warn("Cannot disable scale if using ttansform");
+		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
 		target.style.right = toPixels(this.right);
 		target.style.bottom = toPixels(this.bottom);
 	}
@@ -1946,7 +1946,7 @@ function getWallpaper() {
 /** @returns {boolean} */
 Dialog.prototype.injectMica = function() {
 	try {
-		if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you psosible even do that??");
+		if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you possible even do that??");
 		if (!this.target) return false;
 		var wallpaper = document.getElementById("wallpaper");
 		if (!wallpaper) return false;
@@ -2171,48 +2171,6 @@ function flipHandler(enable){
 	return flipped;
 }
 
-/** @param {boolean} [enable] */
-function toggleOverlay(enable) {
-	var overlay = bodyCrawler.getOverlay();
-	if (!overlay) return;
-	overlay.classList.toggle("open", enable);
-}
-
-// toggleOverlay(loadingOverlay);
-// checkForFlip();
-
-// var desktopElement = document.getElementById("desktop");
-
-// if (loadingOverlay && desktopElement)
-//   desktopElement.ontransitionend = checkForFlip;
-// function checkForFlip() {
-
-//     if (!loaded) {
-//         //I'll s'
-//         console.log("th I'll set the timeoutrat");
-//         if (timeout != -1) return;
-//         timeout = setTimeout(function () {
-//             timeout = -1;
-//             toggleOverlay(!(!loaded ? (loaded = true) : false));
-//             updateBlurState();
-//         }, 500);
-//     }
-
-//     if (false && window.matchMedia('only screen and (max-width: 300px), (pointer:none), (pointer:coarse)').matches) {
-//         console.log("Switching to Mobile mode...");
-//         if (!flipped) {
-//             flipHandler(true);
-//             activeDialogToMetro();
-//         }
-//     } else if (flipped) {
-//         console.log("Switching to Desktop mode...");
-//         flipHandler(false);
-//         restoreMetroBody();
-//     }
-// };
-
-// window.onresize = checkForFlip;
-
 function initializeDialogs() {
     if (supportsPointer) {
         document.onpointerup = disableDialogDrag;
@@ -2332,7 +2290,7 @@ function stringifyDialogProperties(properties){
 }
 
 /** @param {Element| null} target */
-function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
+function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster, but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again, or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
     if (!target) return null;
     var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
     return isElement(body) ? body : null;
@@ -2352,7 +2310,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 
 /** @param {number} value */
 function toPixels(value) {
-    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total prosition it aligns properly to the pixel grid! Nevermind it's sitll broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body.
+    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total position it aligns properly to the pixel grid! Nevermind it's still broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body. I can't fix this shit.
 }
 
 /** @param {number} value */
@@ -2503,7 +2461,7 @@ window.addEventListener("drop", function(e) {
  *  \  Chrome for Android Chrome targetting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on Mac OS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
+ *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
  *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
