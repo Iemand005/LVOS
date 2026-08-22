@@ -1496,7 +1496,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			document.activeViewTransition.skipTransition();
 		}
 
-		self.target.style.viewTransitionName = 'window-fullscreen';
+		this.target.style.viewTransitionName = 'window-fullscreen';
 
 		var transition = document.startViewTransition(function() {
 			self.target.classList.toggle('maximized', enable);
@@ -1511,7 +1511,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (interrupted) {
 				// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 			} else {
-				// treat as a clean, natural finish
+				self.target.style.viewTransitionName = '';
 			}
 		});
 		return;
