@@ -39,7 +39,13 @@ var flags = {
 		// if (value === false) document.body.classList.remove("compositor-animations");
 		this._compositorResize = value;
 	},
-	useViewTransitionMaximize: true
+	useViewTransitionMaximize: true,
+	_useMica: false,
+	get useMica() { return this._useMica; },
+	set useMica(value) {
+		window.windowManager.toggleMica(value);
+		this._useMica = value;
+	},
 };
 
 /** @constant */
