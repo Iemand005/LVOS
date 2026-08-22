@@ -26,6 +26,7 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	// declaring the objects.
 	/** @type {Tile[][]} */
 	tiles = new Array(height),
+	/** @type {Tile[]} */
 	lineartiles = new Array(height*width),
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
@@ -135,6 +136,7 @@ Minesweeper.prototype.startGame = function () {
 	isGameOver = false;
 	setEmoji();
 	var table = document.querySelector("table");
+	if (!table) return;
 	var self = this;
 	while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
 	for (var y = 0; y < height; y++) {
@@ -142,7 +144,7 @@ Minesweeper.prototype.startGame = function () {
 		var row = table.appendChild(document.createElement("tr"));
 		for (var x = 0; x < width; x++) (
 			function(x, y) {
-				var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = x + (y*width)] = new Tile(self, button, x, y);
+				var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = (x + (y*width)).toString()] = new Tile(self, button, x, y);
 				row.appendChild(document.createElement("td")).appendChild(button);
 				try {
 
