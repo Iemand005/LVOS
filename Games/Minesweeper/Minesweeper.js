@@ -250,7 +250,7 @@ function setBombCount(count) {
     var bombCount = document.getElementById("bomb-count");
     var bombStr = count.toString();
     while (bombStr.length < 3) bombStr = "0" + bombStr;
-    if (bombCount) bombCount.innerText = count.toString();
+    if (bombCount) bombCount.innerText = bombStr;
 }
 /** @param {number} time */
 function setTimeDisplay(time) {
