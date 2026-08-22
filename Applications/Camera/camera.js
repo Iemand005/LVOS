@@ -47,9 +47,9 @@ startButton.onclick = getCamera;
 takePhoto.onclick = ev => {
     ev.preventDefault();
     /*const*/var photo = getPhoto(video, video.videoWidth, video.videoHeight);
-    console.log("foto", photo)
+    console.log("foto", photo);
     output.setAttribute("src", photo);
-}
+};
 
 function getStreamInfo(stream){
     return stream.getVideoTracks()[0].getSettings();
@@ -59,7 +59,7 @@ function getPhoto(videa, width, height){
     captureCard.width = width;
     captureCard.height = height;
     captureCard.getContext("2d").drawImage(videa, 0, 0, width, height);
-    return captureCard.toDataURL("image/png");W
+    return captureCard.toDataURL("image/png");
 }
 
 //getCamera();
