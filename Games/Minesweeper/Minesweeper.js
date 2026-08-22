@@ -206,7 +206,8 @@ function randomNumberBetween(start, end) {
 
 function gameOver(won) {
     if(isGameOver) return;
-    isGameWon = won, isGameOver = true;
+    isGameWon = won;
+    isGameOver = true;
     displays[0].update(0);
     lineartiles.forEach(function(tile){ tile.reveal(); });
     setEmoji();
