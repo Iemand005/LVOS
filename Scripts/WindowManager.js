@@ -2407,10 +2407,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /** @param {boolean} force */
-function toggleCharms(force){
-    var charms = document.getElementById("charms");
-    return charms && charms.classList.toggle("open", force);
-}
+function toggleCharms(force) { DesktopManager.toggleCharms(force); }
 
 function isCharmsOpen() {
     var charms = document.getElementById("charms");
