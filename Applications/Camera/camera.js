@@ -5,16 +5,16 @@
 
 'use strict';
 
-/*const*/var video = document.getElementById("camera");
-/*const*/var output = document.getElementById("picture");
-/*const*/var takeVideo = document.getElementById("video");
-/*const*/var takePhoto = document.getElementById("photo");
-/*const*/var startButton = document.getElementById("start");
-/*const*/var captureCard = document.createElement("canvas"); //document.getElementById("capture");
+var video = document.getElementById("camera");
+var output = document.getElementById("picture");
+var takeVideo = document.getElementById("video");
+var takePhoto = document.getElementById("photo");
+var startButton = document.getElementById("start");
+var captureCard = document.createElement("canvas"); //document.getElementById("capture");
 
-/*let*/var recorder;
-/*let*/var videoStream;
-/*let*/var front = true;
+var recorder;
+var videoStream;
+var front = true;
 
 function cameraAccepted(stream){
     video.srcObject = stream;
