@@ -2256,7 +2256,7 @@ function windowActivationEvent(event, dialog) {
     } catch (ex) { /* ignore */ }
 
     cancelDomEvent(event);
-    console.log("Activating window", dialog);
+    // console.log("Activating window", dialog);
     activeDialog = dialog;
     resizeDirection = 0;
     enableDialogDrag();
