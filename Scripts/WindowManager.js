@@ -2167,7 +2167,7 @@ function flip(enable){
 
 /** @param {boolean} enable */
 function flipHandler(enable){
-    toggleCharms(false);
+	DesktopManager.toggleCharms(false);
     swapMetroBody();
     flipped = enable;
 	return flipped;
@@ -2405,9 +2405,6 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     });
     return element;
 }
-
-/** @param {boolean} force */
-function toggleCharms(force) { DesktopManager.toggleCharms(force); }
 
 function isCharmsOpen() {
     var charms = document.getElementById("charms");
