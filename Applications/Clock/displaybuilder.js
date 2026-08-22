@@ -20,7 +20,7 @@ function DisplayBuilder(number, index, singular){
 }
 
 function tokenizeNumber(number){ // There are probably better ways to do this but this was the first I came up with and it works for now.
-    return typeof number =='number' && number>-100? (number>=0?[parseInt(((number % 1000)/100).toString()), parseInt((number % 100) / 10), parseInt(number % 10)]:[number>-10?11:number<=-100?parseInt((number % 1000)/100):10, number>-10?10:0-parseInt((number % 100) / 10), 0-parseInt(number % 10)]):[10, 10, 10];
+    return typeof number =='number' && number>-100? (number>=0?[parseInt(((number % 1000)/100).toString()), parseInt(((number % 100) / 10).toString()), parseInt((number % 10).toString())]:[number>-10?11:number<=-100?parseInt(((number % 1000)/100).toString()):10, number>-10?10:0-parseInt(((number % 100) / 10).toString()), 0-parseInt((number % 10).toString())]):[10, 10, 10];
 }
 
 /**
@@ -85,11 +85,11 @@ DisplayBuilder.prototype = {
             element.style.marginBottom = fat + "px";
         });
     }
-}
+};
 
 function MultiDigitDisplayBuilder(digits, number, singleSided){
     this.displays = [];
-    this.digits = digits
+    this.digits = digits;
     for (/*let*/var i = 0; i < this.digits; i++) {
         this.displays.push(new DisplayBuilder(number, i, singleSided));
     }    
@@ -107,4 +107,4 @@ MultiDigitDisplayBuilder.prototype = {
             display.update(max > number ? tokenizeNumber(number)[index] : 9);
         });
     }
-}
+};
