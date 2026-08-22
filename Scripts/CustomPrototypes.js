@@ -89,8 +89,8 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.querySelectorAll(selector)[0];
 }
 
-if (typeof document != 'undefined' && !document.getElementsByClassName) {
-    document.getElementsByClassName = function(className) {
+function getElementsByClassName() {
+    return function(className) {
         var results = [];
         var all = this.getElementsByTagName('*');
         var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
@@ -101,16 +101,12 @@ if (typeof document != 'undefined' && !document.getElementsByClassName) {
     };
 }
 
+  if (typeof document != 'undefined' && !document.getElementsByClassName) {
+    document.getElementsByClassName = getElementsByClassName();
+}
+
 if (typeof Document != 'undefined' && Document.prototype && !Document.prototype.getElementsByClassName) {
-    Document.prototype.getElementsByClassName = function(className) {
-        var results = [];
-        var all = this.getElementsByTagName('*');
-        var pattern = new RegExp('(^|\\s)' + className + '(\\s|$)');
-        for (var i = 0; i < all.length; i++) {
-            if (pattern.test(all[i].className)) results.push(all[i]);
-        }
-        return results;
-    };
+    Document.prototype.getElementsByClassName = getElementsByClassName();
 }
 
 if (typeof Element != 'undefined' && !Element.prototype.getElementsByClassName) {
