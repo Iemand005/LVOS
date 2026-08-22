@@ -382,7 +382,7 @@ graphics.startRendering();
 
 console.log(graphics);
 
-window.onresize = function (ev) {
+window.onresize = function () {
   const bounds = canvas.getBoundingClientRect();
   graphics.resize(bounds.width, bounds.height);
 };
@@ -451,7 +451,7 @@ function initXR() {
       // session.end() or when the UA has ended the session for any reason.
       // At this point the session object is no longer usable and should be
       // discarded.
-      function onSessionEnded(event) {
+      function onSessionEnded() {
         xrSession = null;
         xrButton.textContent = 'Enter VR';
 
