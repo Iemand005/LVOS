@@ -20,6 +20,33 @@ var useMica = false,
 	useScale = false,
 	hasLocalStorage = false;
 
+// HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
+var supportsPointer = typeof window != "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
+var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
+var supportsTransitions = false;
+var supportsTransform = false;
+
+(function () {
+	var style = document.createElement("div").style;
+
+	supportsTransitions = (
+		"transition" in style ||
+		"WebkitTransition" in style ||
+		"MozTransition" in style ||
+		"OTransition" in style ||
+		"msTransition" in style
+	);
+	supportsTransform = (
+		"transform" in style ||
+		"webkitTransform" in style ||
+		"msTransform" in style ||
+		"mozTransform" in style ||
+		"oTransform" in style
+	);
+})();
+
+if (!supportsTransform) useTransform = false;
+
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
@@ -64,31 +91,6 @@ if (isIE) {
 // flags.compositorResize = true;
 
 if (!hasLocalStorage) canSave  = false;
-
-// HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
-var supportsPointer = typeof window != "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
-var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
-var supportsTransitions = false;
-var supportsTransform = false;
-
-(function () {
-    var style = document.createElement("div").style;
-
-	supportsTransitions = (
-        "transition" in style ||
-        "WebkitTransition" in style ||
-        "MozTransition" in style ||
-        "OTransition" in style ||
-        "msTransition" in style
-    );
-	supportsTransform = (
-		"transform" in style ||
-		"webkitTransform" in style ||
-		"msTransform" in style ||
-		"mozTransform" in style ||
-		"oTransform" in style
-	);
-})();
 
 if (supportsPointer) console.log("Supports pointer events!");
 
