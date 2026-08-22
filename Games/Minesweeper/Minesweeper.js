@@ -97,10 +97,10 @@ Tile.prototype.getNeighbours = function() {
 Tile.prototype.countNeighbouringMines = function() { return this.getNeighbouringMines().length; };
 Tile.prototype.getNeighbouringMines = function(/**@type {Tile[]}*/neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine }); };
 Tile.prototype.iterateNeighbours = function(/**@type {Tile[]}*/neighbours, /**@type {(neighbour:Tile)=>boolean}*/filter) { return (neighbours || this.getNeighbours()).filter(filter); };
-Tile.prototype.getFlaggedNeighbouringMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged === 1; }); };
-Tile.prototype.countFlaggedNeighbouringMines = function(neighbours) { return this.getFlaggedNeighbouringMines(neighbours).length; };
-Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged !== 1; }); };
-Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
+Tile.prototype.getFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged === 1; }); };
+Tile.prototype.countFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getFlaggedNeighbouringMines(neighbors).length; };
+Tile.prototype.getUnflaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged !== 1; }); };
+Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (this.button) if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
 Tile.prototype.toggleFlag = function(/**@type {boolean}*/enabled) {
     if (this.revealed || !this.button) return;
     this.flagged = enabled == null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
