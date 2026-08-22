@@ -31,7 +31,7 @@ var eventPrevent = function (/** @type {Event} */event) { event.preventDefault()
 var onLoad = function () {
 
 	var desktop = document.getElementById('desktop');
-	desktop.addEventListener('mouseup', function (e) {
+	desktop.addEventListener('mousedown', function (e) {
 		DesktopManager.toggleCharms(false);
 	});
 
