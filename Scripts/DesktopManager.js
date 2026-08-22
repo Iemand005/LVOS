@@ -118,17 +118,14 @@ var onLoad = function () {
 			// document.body.hasPointerCapture
 		}, false);
 
-		tingeling.addEventListener(supportsPointer ? "pointerdown" : "mousedown",function() {
+		var stopIt = function() {
 			clickOffset.toggleDragEventHandler(false);
 
-			selector.remove();
-		}, false);
+			selector.parentNode.removeChild(selector);
+		};
 
-		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", function() {
-			clickOffset.toggleDragEventHandler(false);
-			selector.remove();
-
-		}, false);
+		tingeling.addEventListener(supportsPointer ? "pointerdown" : "mousedown",stopIt, false);
+		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", stopIt, false);
 	}
 
     
