@@ -32,7 +32,7 @@ var onLoad = function () {
 
 	var desktop = document.getElementById('desktop');
 	desktop.addEventListener('mouseup', function (e) {
-		toggleCharms(false);
+		DesktopManager.toggleCharms(false);
 	});
 
 	var applist = document.getElementById("applist");
@@ -185,7 +185,11 @@ function setTheme(theme) { document.body.classList.add(theme); }
 function hasTheme(theme) { return document.body.classList.contains(theme); }
 /** @param {string} theme */
 DesktopManager.removeTheme = function(theme) { document.body.classList.remove(theme); }
-
+/** @param {boolean} force */
+DesktopManager.toggleCharms = function(force){
+	var charms = document.getElementById("charms");
+	return charms && charms.classList.toggle("open", force);
+};
 
 /**
  * @param {string} url
