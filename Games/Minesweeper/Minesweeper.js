@@ -24,6 +24,7 @@ var icons = { // Quick configuration of the signs used in game. These particular
     },
 
     // declaring the objects.
+    /** @type {Tile[][]} */
     tiles = new Array(height),
     lineartiles = new Array(height*width),
     displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)],
