@@ -6,7 +6,6 @@ html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100%;
     width: 100%;
-    animation: all 1s ease-in-out 0;
 }
 
 body > footer, header.hidden {
