@@ -33,7 +33,7 @@
 	width: 100%;
 	height: 100%;
 	object-fit: fill;
-	animation: none;
+	/*animation: none;*/
 }
 
 html:has(body.slow-animations)::view-transition-group(*) {
