@@ -7,6 +7,9 @@
 
 	--window-radius: 20px;
 	--window-border-width: 10px;
+
+	--wf-sx: 1;
+	--wf-sy: 1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,16 +23,51 @@
 	animation: none;
 }
 
+/*::view-transition-group(window-fullscreen) {*/
+/*	animation-duration: 280ms;*/
+/*	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);*/
+/*}*/
+
+/*::view-transition-old(window-fullscreen),*/
+/*::view-transition-new(window-fullscreen) {*/
+/*	width: 100%;*/
+/*	height: 100%;*/
+/*	object-fit: fill;*/
+/*}*/
+
 ::view-transition-group(window-fullscreen) {
-	animation-duration: 280ms;
-	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
+	animation: none;
 }
 
+/* 2. Old/new sized once, statically, to the (now-frozen) group box */
 ::view-transition-old(window-fullscreen),
 ::view-transition-new(window-fullscreen) {
 	width: 100%;
 	height: 100%;
 	object-fit: fill;
+	transform-origin: top left;
+}
+
+::view-transition-old(window-fullscreen) {
+	animation: wf-stretch-out 0.4s ease both;
+}
+
+@keyframes wf-stretch-out {
+	from {
+		transform: scale(var(--wf-sx), var(--wf-sy));
+	}
+	to {
+		transform: scale(1, 1);
+	}
+}
+
+::view-transition-new(window-fullscreen) {
+	animation: wf-fade-in 0.4s ease both;
+}
+
+@keyframes wf-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
 }
 
 html:has(body.slow-animations)::view-transition-group(*) {
