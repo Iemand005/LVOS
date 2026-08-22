@@ -584,8 +584,8 @@ function relaclulaaWIndowBounts() {
 	WindowManager._windowBounds.bottom = inset.bottom != null ? window.innerHeight - inset.bottom : Infinity;
 }
 
-window.addEventListener('resize', relaclulaaWIndowBounts);
-window.addEventListener('load', relaclulaaWIndowBounts);
+window.addEventListener('resize', relaclulaaWIndowBounts, false);
+window.addEventListener('load', relaclulaaWIndowBounts, false);
 
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
