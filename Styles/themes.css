@@ -22,12 +22,9 @@
 	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
 }
 
-.slow-animations {
-	::view-transition-old(window-fullscreen),
-	::view-transition-new(window-fullscreen) {
-		animation-duration: 280ms;
-		animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
-	}
+html:has(body.slow-animations)::view-transition-old(root),
+html:has(body.slow-animations)::view-transition-new(root) {
+	animation-duration: 3s;
 }
 
 .window {
