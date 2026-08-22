@@ -1493,7 +1493,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.target.classList.toggle('maximized', enable);
 		});
 		transition.finished.finally(function() {
-			self.target.style.viewTransitionName = '';
+			// self.target.style.viewTransitionName = '';
 		});
 		return;
 	}
