@@ -45,7 +45,7 @@ var flags = {
 	set useMica(value) {
 		window.windowManager.toggleMica(value);
 		this._useMica = value;
-	},
+	}
 };
 
 /** @constant */
@@ -1696,6 +1696,7 @@ Dialog.prototype.move = function (x, y) {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
+	if (!flags.useMica) return;
 	var micaElement = this.micaElement;
 	if (micaElement) try {
 		var backdrop = micaElement.firstChild;
