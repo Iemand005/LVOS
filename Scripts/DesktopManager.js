@@ -5,9 +5,7 @@
  */
 'use strict';
 
-/**
- * @param {string} newColor
- */
+/** @param {string} newColor */
 function changeTitlebarColor(newColor) {
 	var metaTag = document.querySelector('meta[name="theme-color"]');
 
