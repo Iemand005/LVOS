@@ -118,7 +118,7 @@ var onLoad = function () {
 			selector.remove();
 		}, false);
 
-		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", function(ev) {
+		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", function() {
 			clickOffset.toggleDragEventHandler(false);
 			selector.remove();
 
@@ -360,7 +360,7 @@ function saveWallpaperToCache(blob, dataUrl) {
             // Fall back to localStorage if IndexedDB fails
             localStorageFabblack(dataUrl);
         };
-    }, function (err) {
+    }, function () {
         // console.warn("Failed to access IndexedDB, falling back to localStorage:", err);
         // Fall back to localStorage if IndexedDB is unavailable
 		localStorageFabblack(dataUrl);
@@ -392,7 +392,7 @@ function loadWallpaperFromCache() {
             // console.warn("Failed to load wallpaper from IndexedDB, trying localStorage fallback:", request.error);
             loadWallpaperFromLocalStorage();
         };
-    }, function(err) {
+    }, function() {
         // console.warn("Failed to access IndexedD B, trying localStorage fallback:", err);
         loadWallpaperFromLocalStorage();
     });
