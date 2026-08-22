@@ -99,9 +99,6 @@ Tile.prototype.iterateNeighbours = function(neighbours, filter) { return (neighb
 Tile.prototype.getFlaggedNeighbouringMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged === 1; }); };
 Tile.prototype.countFlaggedNeighbouringMines = function(neighbours) { return this.getFlaggedNeighbouringMines(neighbours).length; };
 Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged !== 1; }); };
-Tile.prototype.countUnflaggedNeighbouringMines = function(neighbours) { return this.getUnflaggedNeighbouringMines(neighbours).length; };
-Tile.prototype.getUnflaggedNeighbouringNotMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine && neighbour.flagged !== 1; }); };
-Tile.prototype.countUnflaggedNeighbouringNotMines = function(neighbours) { return this.getUnflaggedNeighbouringnotMines(neighbours).length; };
 Tile.prototype.toggleDisabled = function(enabled) { if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
 Tile.prototype.toggleFlag = function(enabled) { if (!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged===1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; };
 Tile.prototype.disableVisual = function() { this.button.classList.remove("active"); };
