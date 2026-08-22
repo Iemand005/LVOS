@@ -94,10 +94,10 @@ Graphics3D.prototype.loadShaders = function (vsSource, fsSource) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 };
 
-/*let*/var squareRotation = 0.0;
-/*let*/var deltaTime = 0;
-// /*let*/var now = 0;
-/*let*/var then = 0;
+let squareRotation = 0.0;
+let deltaTime = 0;
+// let now = 0;
+let then = 0;
 
 Graphics3D.prototype.drawScene = function (programInfo, deltaTime) {
   const gl = this.gl;
@@ -254,7 +254,7 @@ XRGraphics.prototype.constructor = XRGraphics;
 // export { drawScene };
 // const hey = 
 const graphics = new Graphics3D(canvas);
-/*let*/var gl = graphics.gl;
+let gl = graphics.gl;
 graphics.clear();
 graphics.loadShaders(vsSource, fsSource);
 
@@ -348,9 +348,9 @@ const faceColors = [
 
 // Convert the array of colors into a table for all the vertices.
 
-/*let*/var colors = [];
+let colors = [];
 
-for (/*let*/var cIndex in faceColors) {
+for (let cIndex in faceColors) {
   // Repeat each color four times for the four vertices of the face
   const c = faceColors[cIndex];
   colors = colors.concat(c, c, c, c);
@@ -386,8 +386,8 @@ window.onresize = function (ev) {
   graphics.resize(bounds.width, bounds.height);
 };
 
-/*let*/var xrSession = null;
-/*let*/var xrRefSpace = null;
+let xrSession = null;
+let xrRefSpace = null;
 
 function initXR() {
         // Is WebXR available on this UA?
@@ -427,7 +427,7 @@ function initXR() {
 
         // Create a WebGL context to render with, initialized to be compatible
         // with the XRDisplay we're presenting to.
-        /*let*/var canvas = document.createElement('canvas');
+        let canvas = document.createElement('canvas');
         gl = canvas.getContext('webgl', { xrCompatible: true });
 
         // Use the new WebGL context to create a XRWebGLLayer and set it as the
@@ -461,14 +461,14 @@ function initXR() {
 
       // Called every time the XRSession requests that a new frame be drawn.
       function onXRFrame(time, frame) {
-        /*let*/var session = frame.session;
+        let session = frame.session;
 
         // Inform the session that we're ready for the next frame.
         session.requestAnimationFrame(onXRFrame);
 
         // Get the XRDevice pose relative to the reference space we created
         // earlier.
-        /*let*/var pose = frame.getViewerPose(xrRefSpace);
+        let pose = frame.getViewerPose(xrRefSpace);
 
         // Getting the pose may fail if, for example, tracking is lost. So we
         // have to check to make sure that we got a valid pose before attempting
@@ -476,7 +476,7 @@ function initXR() {
         // framebuffer cleared, so tracking loss means the scene will simply
         // disappear.
         if (pose) {
-          /*let*/var glLayer = session.renderState.baseLayer;
+          let glLayer = session.renderState.baseLayer;
 
           // If we do have a valid pose, bind the WebGL layer's framebuffer,
           // which is where any content to be displayed on the XRDevice must be
