@@ -43,7 +43,7 @@ var isGameOver = false,
  * @param {HTMLButtonElement} button
  * @param {number} x
  * @param {number} y
- * @param {boolean} mine
+ * @param {boolean} [mine]
  */
 function Tile(minesweeper, button, x, y, mine){
 	this.disable = this.toggleDisabled.bind(this, false);
@@ -144,7 +144,10 @@ Minesweeper.prototype.startGame = function () {
 		var row = table.appendChild(document.createElement("tr"));
 		for (var x = 0; x < width; x++) (
 			function(x, y) {
-				var button = document.createElement("button"), tile = tiles[y][x] = lineartiles[button.id = (x + (y*width)).toString()] = new Tile(self, button, x, y);
+				var id = x + (y*width);
+				var button = document.createElement("button");
+				button.id = id.toString();
+				var tile = tiles[y][x] = lineartiles[id] = new Tile(self, button, x, y);
 				row.appendChild(document.createElement("td")).appendChild(button);
 				try {
 
