@@ -230,7 +230,12 @@ Minesweeper.prototype.countRemainingFields = function() { return lineartiles.fil
 function activateTimer() {
     var timer = 0;
     displays[1].update(timer++);
-    timerInterval = window.setInterval(function(){displays[1].update(timer++)}, 1000);
+    timerInterval = window.setInterval(function(){
+        // displays[1].update(timer++)
+        // var bombCount = document.getElementById("bomb-count");
+        var bombCount = document.getElementById("timer");
+        if (bombCount) bombCount.innerText = (timer++).toString();
+    }, 1000);
 }
 
 function stopTimer(reset) {

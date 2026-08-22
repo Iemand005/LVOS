@@ -176,7 +176,7 @@ div.original > button {
 div.original > output {
     width: 44px;
     height: 28px;
-    font-family: DSEG7Classic;
+    
 }
 
 form, div, header, footer, output {
@@ -188,4 +188,5 @@ form, div, header, footer, output {
 output {
     display: -moz-inline-box; /* Netscape 9's version of inline-block */
     display: inline-block;
+    font-family: DSEG7Classic;
 }
