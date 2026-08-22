@@ -1504,8 +1504,14 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.target.classList.toggle('maximized', enable);
 		});
 
+		var oldRect = self.target.getBoundingClientRect();
 		// var transition.
-		transition.ready.catch(function(ev) {
+		transition.ready.then(function() {
+			var newRect = self.target.getBoundingClientRect();
+
+			document.documentElement.style.setProperty('--wf-sx', oldRect.width / newRect.width);
+			document.documentElement.style.setProperty('--wf-sy', oldRect.height / newRect.height);
+		}).catch(function(ev) {
 			console.warn("transition interrupted:", ev);
 		});
 
