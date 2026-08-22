@@ -2098,14 +2098,14 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				overlay.ontransitionend = function () {
 					dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
 					if (dialog.frame) {
-						var oriurl = new URL(dialog.frame.src);
-						oriurl.searchParams.set("fullscreen", String(true));
-						dialog.frame.src = oriurl.href;
+						var oriel = new URL(dialog.frame.src);
+						oriel.searchParams.set("fullscreen", String(true));
+						dialog.frame.src = oriel.href;
 					}
 					if (!overlay) return;
 					overlay.ontransitionend = null;
 					overlay.requestFullscreen().then(function() {
-						console.log("Ok I did fullscreenboy");
+						console.log("Ok I did full screen boy");
 					});
 					if (dialog.body) overlay.appendChild(dialog.body);
 					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
