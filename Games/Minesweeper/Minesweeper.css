@@ -167,7 +167,7 @@ form, div, header, footer {
 
 	form, button, div button {
 		border-color: rgb(0 0 0);
-		border-right-color: darkgray;
+		border-right-color: dark#4a4747grayit;
 		border-bottom-color: darkgray;
 	}
 }
