@@ -121,7 +121,7 @@ var onLoad = function () {
 		var stopIt = function() {
 			clickOffset.toggleDragEventHandler(false);
 
-			selector.parentNode.removeChild(selector);
+			if (selector.parentNode) selector.parentNode.removeChild(selector);
 		};
 
 		tingeling.addEventListener(supportsPointer ? "pointerdown" : "mousedown",stopIt, false);

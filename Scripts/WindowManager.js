@@ -68,16 +68,26 @@ if (!hasLocalStorage) canSave  = false;
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer = typeof window != "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
 var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
-var supportsTransitions = (function () {
+var supportsTransitions = false;
+var supportsTransform = false;
+
+(function () {
     var style = document.createElement("div").style;
 
-    return (
+	supportsTransitions = (
         "transition" in style ||
         "WebkitTransition" in style ||
         "MozTransition" in style ||
         "OTransition" in style ||
         "msTransition" in style
     );
+	supportsTransform = (
+		"transform" in style ||
+		"webkitTransform" in style ||
+		"msTransform" in style ||
+		"mozTransform" in style ||
+		"oTransform" in style
+	);
 })();
 
 if (supportsPointer) console.log("Supports pointer events!");
@@ -1038,7 +1048,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
         var height = max(min(bottom - top, this.maxHeight), this.minHeight);
-        top = bottom - height;
+        // top = bottom - height;
         this._height = height;
         this._y = top / window.innerHeight;
         if (this.useTransform) {
