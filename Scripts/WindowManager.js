@@ -165,9 +165,9 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
   get: function () {
     if (!this._windowStates && localStorage)
       try {
-        var stringyy = localStorage.getItem("windowState");
-        if (stringyy == null) return null;
-		  this._windowStates = JSON.parse(stringyy);
+        var string = localStorage.getItem("windowState");
+        if (string == null) return null;
+		  this._windowStates = JSON.parse(string);
       } catch (ex) {
         if (ex instanceof Error) console.error(ex.message);
       }
