@@ -50,7 +50,7 @@ if (!supportsTransform) useTransform = false;
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
-	updateRateLimit: true,
+	updateRateLimit: isBlink,
 	useDragOverlay: false,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
@@ -58,7 +58,7 @@ var flags = {
 		this._useTransform = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
-	_compositorResize: false,
+	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
 	set compositorResize(value) {
 
@@ -66,7 +66,7 @@ var flags = {
 		// if (value === false) document.body.classList.remove("compositor-animations");
 		this._compositorResize = value;
 	},
-	useViewTransitionMaximize: true,
+	useViewTransitionMaximize: false,
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
