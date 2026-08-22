@@ -846,15 +846,16 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
+	this._stateOpen = forceOpen;
     this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
 	}, function () {
         if (shouldKill) self.kill();
     }, function (enabled) {
+		self._stateOpen = enabled;
         if (enabled) self.activate();
     });
 
-	self._stateOpen = true;
 	windowManager.saveState();
 };
 /**
