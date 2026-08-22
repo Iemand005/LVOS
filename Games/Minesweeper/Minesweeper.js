@@ -100,7 +100,7 @@ Tile.prototype.countNeighbouringMines = function() { return this.getNeighbouring
 Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
 
 /**
- * @param {Tile[]} [neighbors]
+ * @param {Tile[] | undefined} neighbors
  * @param {(neighbour:Tile)=>boolean} filter
  */
 Tile.prototype.iterateNeighbours = function(neighbors, filter) { return (neighbors || this.getNeighbours()).filter(filter); };
