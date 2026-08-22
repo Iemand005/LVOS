@@ -817,7 +817,7 @@ function min(a, b) {
  * @param {number} [rotation]
  */
 function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
-    var transform = "translate(" + x + "px," + y + "px)";
+    var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
     if (skew) transform += " skewX(" + skew + "deg)";
 	if (scaleX === 1) scaleX = undefined;
 	if (scaleY === 1) scaleY = undefined;
