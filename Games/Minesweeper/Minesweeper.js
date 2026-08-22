@@ -217,11 +217,14 @@ function quickRevealEvent(ev) {
 }
 
 Minesweeper.prototype.quickRevealEvent = quickRevealEvent;
-
+/**
+ * @param {number} start
+ * @param {number} end
+ */
 function randomNumberBetween(start, end) {
 	return (Math.random()*(end - start)) + start;
 }
-
+/** @param {boolean} won */
 function gameOver(won) {
 	if(isGameOver) return;
 	isGameWon = won;
