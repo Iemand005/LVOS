@@ -1954,13 +1954,12 @@ Dialog.prototype.updateScale = function(useScale) {
 	if (useScale) {
 		target.style.right = "";
 		target.style.bottom = "";
-		target.classList.add("use-scale");
 	} else {
 		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
 		target.style.right = toPixels(this.right);
 		target.style.bottom = toPixels(this.bottom);
-		target.classList.remove("use-scale");
 	}
+	target.classList.toggle("use-scale", useScale);
 
 	this.update();
 };
