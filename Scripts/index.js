@@ -11,6 +11,6 @@ function init() {
 			if (dialog.application) launchpad.addApp(dialog);
 		});
 	}
-	}
+}
 
 window.addEventListener("load", init, false);
