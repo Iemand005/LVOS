@@ -27,7 +27,6 @@ var icons = { // Quick configuration of the signs used in game. These particular
     /** @type {Tile[][]} */
     tiles = new Array(height),
     lineartiles = new Array(height*width),
-    displays = [new MultiDigitDisplayBuilder(3, 3, singleSidedDisplay), new MultiDigitDisplayBuilder(3, 0, singleSidedDisplay)],
     mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
@@ -184,7 +183,7 @@ Minesweeper.prototype.startGame = function () {
         )(x, y);
     }
 
-    displays[0].update(bombCount = this.countBombs());
+    setBombCount(bombCount = this.countBombs());
     sendDesiredSize();
 };
 
