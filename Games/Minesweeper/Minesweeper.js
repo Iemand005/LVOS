@@ -98,7 +98,12 @@ Tile.prototype.getNeighbours = function() {
 Tile.prototype.countNeighbouringMines = function() { return this.getNeighbouringMines().length; };
 /** @param {Tile[]} [neighbors] */
 Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
-Tile.prototype.iterateNeighbours = function(/**@type {Tile[]}*/neighbours, /**@type {(neighbour:Tile)=>boolean}*/filter) { return (neighbours || this.getNeighbours()).filter(filter); };
+
+/**
+ * @param {Tile[]} [neighbors]
+ * @param {(neighbour:Tile)=>boolean} filter
+ */
+Tile.prototype.iterateNeighbours = function(neighbors, filter) { return (neighbors || this.getNeighbours()).filter(filter); };
 Tile.prototype.getFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged === 1; }); };
 Tile.prototype.countFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getFlaggedNeighbouringMines(neighbors).length; };
 Tile.prototype.getUnflaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged !== 1; }); };
