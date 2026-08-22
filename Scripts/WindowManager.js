@@ -1050,7 +1050,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
         var height = max(min(bottom - top, this.maxHeight), this.minHeight);
-        // top = bottom - height;
+        top = bottom - height;
         this._height = height;
         this._y = top / window.innerHeight;
         if (this.useTransform) {
