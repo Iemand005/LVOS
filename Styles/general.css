@@ -10,9 +10,9 @@ html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-* {
-    transition: color 100ms ease-in-out, background-color 90ms ease-out;
-}
+/** {*/
+/*    transition: color 100ms ease-in-out, background-color 90ms ease-out;*/
+/*}*/
 
 h1 {
     margin: 0;

@@ -817,7 +817,12 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 		if (scaleY) transform += "scaleY(" + scaleY + ")";
 	}
     if (rotation) transform += "rotate(" + rotation + "deg)";
-    element.style.transform = transform;
+
+	var deferTransform = true;
+	if (deferTransform) requestAnimationFrame(function() {
+		element.style.transform = transform;
+	});
+	else element.style.transform = transform;
     // TODO: Chekc where this is applied and only assing if needed
 	// element.style.webkitTransform = transform;
 
