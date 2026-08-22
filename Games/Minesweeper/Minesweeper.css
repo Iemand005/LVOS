@@ -19,6 +19,11 @@ body {
     margin: auto;
 }
 
+@font-face {
+  font-family: DSEG7Classic;
+  src: url(DSEG7Classic-Bold.woff2);
+}
+
 button {
     height: 20px;
     width: 20px;
@@ -171,6 +176,7 @@ div.original > button {
 div.original > output {
     width: 44px;
     height: 28px;
+    font-family: DSEG7Classic;
 }
 
 form, div, header, footer, output {
