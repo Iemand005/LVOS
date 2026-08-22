@@ -51,7 +51,7 @@ var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
 	updateRateLimit: true,
-	useDragOverlay: true,
+	useDragOverlay: false,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
