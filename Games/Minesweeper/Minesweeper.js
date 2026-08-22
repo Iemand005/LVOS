@@ -95,7 +95,8 @@ Tile.prototype.getNeighbours = function() {
     }
     return neighbours;
 };
-Tile.prototype.countNeighbouringMines = function() { return this.getNeighbouringMines().length; };
+/** @param {Tile[]} [neighbors] */
+Tile.prototype.countNeighbouringMines = function(neighbors) { return this.getNeighbouringMines(neighbors).length; };
 /** @param {Tile[]} [neighbors] */
 Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
 
