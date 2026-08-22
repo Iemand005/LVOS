@@ -2463,13 +2463,6 @@ WindowManager.prototype.closeApp = function(appId) {
     windowManager.windows[appId].kill();
 };
 
-/** @param {string} appId  */
-function closeApp(appId) { windowManager.closeApp(appId); }
-
-function enableMica() {
-    windowManager.toggleMica(true);
-}
-
 /** @param {boolean} [enabled] */
 WindowManager.prototype.toggleMica = function(enabled) {
     this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
