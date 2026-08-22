@@ -240,6 +240,11 @@ function activateTimer() {
         if (bombCount) bombCount.innerText = (++timer).toString();
     }, 1000);
 }
+/** @param {number} count */
+function setBombCount(count) {
+    var bombCount = document.getElementById("bomb-count");
+    if (bombCount) bombCount.innerText = count.toString();
+}
 
 function stopTimer(reset) {
     if(reset) displays[1].update(0);
