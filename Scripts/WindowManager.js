@@ -1508,7 +1508,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		});
 
 		transition.finished.finally(function() {
-			// self.target.style.viewTransitionName = '';
+			if (interrupted) {
+				// TODO: Perhaps add to interrupted queue and clear them after on clean else next
+			} else {
+				// treat as a clean, natural finish
+			}
 		});
 		return;
 	}
