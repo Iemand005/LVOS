@@ -129,7 +129,8 @@ function Minesweeper() {
 }
 
 Minesweeper.prototype.startGame = function () {
-    document.querySelector("form").addEventListener("submit", function (ev) { ev.preventDefault(); }, false );
+    var form = document.querySelector("form");
+    if (form) form.addEventListener("submit", function (ev) { ev.preventDefault(); }, false );
     stopTimer(true);
     isGameWon = false;
     isGameOver = false;
