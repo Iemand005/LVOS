@@ -95,7 +95,7 @@ Tile.prototype.getNeighbours = function() {
     return neighbours;
 };
 Tile.prototype.countNeighbouringMines = function() { return this.getNeighbouringMines().length; };
-Tile.prototype.getNeighbouringMines = function(/**@type {Tile[]}*/neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine }); };
+Tile.prototype.getNeighbouringMines = function(/**@type {Tile[] | undefined}*/neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.mine }); };
 Tile.prototype.iterateNeighbours = function(/**@type {Tile[]}*/neighbours, /**@type {(neighbour:Tile)=>boolean}*/filter) { return (neighbours || this.getNeighbours()).filter(filter); };
 Tile.prototype.getFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged === 1; }); };
 Tile.prototype.countFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getFlaggedNeighbouringMines(neighbors).length; };
