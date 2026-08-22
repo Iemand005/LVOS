@@ -63,19 +63,25 @@ Tile.prototype.generate = function() { // This generates the mines, the algorith
 
 Tile.prototype.reveal = function() {
     if (this.revealed) return 0;
-    if (!gameStarted) gameStarted = true, activateTimer();
+    if (!gameStarted) {
+        gameStarted = true;
+        activateTimer();
+    }
     this.revealed = true;
     var remaining = this.minesweeper.countRemainingFields(), neighbours = this.getNeighbours(), neighbourCount = this.countNeighbouringMines(), classes = this.button.classList;
 
     classes.add("revealed");
     this.disable();
     if (!this.mine) {
-        if(remaining==0) gameOver(true);
-        this.button.textContent = neighbourCount, classes.add('n' + neighbourCount);
+        if (remaining === 0) gameOver(true);
+        this.button.textContent = neighbourCount;
+        classes.add('n' + neighbourCount);
+    } else {
+        this.button.textContent = !isGameWon?icons.exploded:icons.correct;
+        gameOver();
     }
-    else this.button.textContent = !isGameWon?icons.exploded:icons.correct, gameOver();
     console.log("Neighbours: ", neighbours);
-    if (neighbourCount == 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {}
+    if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour] && neighbours[neighbour].reveal) neighbours[neighbour].reveal() } catch (ex) {}
     return neighbourCount;
 };
 
