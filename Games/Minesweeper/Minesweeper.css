@@ -154,7 +154,7 @@ div > button {
 	box-sizing: border-box;
 }
 
-form, div, header, footer, .display {
+form, div, header, footer {
 	display: block;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
