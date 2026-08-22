@@ -196,7 +196,7 @@ function setTheme(theme) { document.body.classList.add(theme); }
 /** @param {string} theme */
 function hasTheme(theme) { return document.body.classList.contains(theme); }
 /** @param {string} theme */
-DesktopManager.removeTheme = function(theme) { document.body.classList.remove(theme); }
+DesktopManager.removeTheme = function(theme) { document.body.classList.remove(theme); };
 /** @param {boolean} [force] */
 DesktopManager.toggleCharms = function(force){
 	var charms = document.getElementById("charms");

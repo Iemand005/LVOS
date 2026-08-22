@@ -145,6 +145,9 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	if (settingsElement) settingsElement.appendChild(flagsElement);
 };
 
+var settings = new SettingsHandler();
+
+
 /** The body-level theme classes available in Styles/themes.css. */
 var THEMES = ["blur", "default-theme", "flippy", "glass", "gnome", "mac-os", "mica", "modern", "modern-blur", "windows", "windows-10", "windows-11", "windows-95"];
 
@@ -327,9 +330,6 @@ function toggleBlur(enabled){ // Does not work on Chrome!
 	else document.body.classList.toggle("blur", enabled);
 	// settings.set("blur", enabled);
 }
-
-
-var settings = new SettingsHandler();
 
 /** @type {{[key:string]: HTMLElement | null}} */
 var elements = {
