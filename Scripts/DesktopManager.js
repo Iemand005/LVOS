@@ -132,7 +132,7 @@ var onLoad = function () {
 	}
 
     
-    launchpad.open();
+    if  (launchpad) launchpad.open();
 };
 
 window.addEventListener("load", onLoad, false);

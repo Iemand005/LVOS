@@ -270,8 +270,11 @@ function setColor(color){
 	if (window.metaThemeColor) window.metaThemeColor.setAttribute('content', color);
 }
 
+/** @param {string} color */
 function setAccentColor(color) {
-	settings.set("accentColor", elements.accent.value = color);
+	if (!color) return;
+	elements.accent.value = color;
+	settings.set("accentColor", color);
 	var isWhite = isColorDark(color);
 	var metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
 	metroStyle.backgroundColor = charmStyle.backgroundColor = color;
