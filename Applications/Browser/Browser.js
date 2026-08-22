@@ -9,8 +9,8 @@ dockapplist.appendChild(window.windows.console.createOpenButton());
 
 browserform.addEventListener("submit", function(event){
     event.preventDefault();
-    /*let*/var url = event.target.address.value;
-    /*let*/var xhr = new XMLHttpRequest();
+    var url = event.target.address.value;
+    var xhr = new XMLHttpRequest();
     try{
         console.log("The browser is navigating to '" + url + "'");
         if(!/^https?:\/\//i.test(url)) url = "https://" + url.trim(); // Sanitising the url.
@@ -25,7 +25,7 @@ browserform.addEventListener("submit", function(event){
         // for (/*let*/var link in links) if (links.hasOwnProperty(link)) links[link].target = "_self";
     } catch (e) {
         // if(e.code == )
-        console.log(url, url.hostname)
+        console.log(url, url.hostname);
         if(url.hostname.indexOf("youtube")!==-1) {
             console.log("yoututbe!", url.pathname);
             if(url.pathname === "/watch"){
@@ -38,7 +38,7 @@ browserform.addEventListener("submit", function(event){
         url = new URL("./Applications/Error/error.html", window.location.href);
         url.searchParams.set("errormessage", e.message);
         url.searchParams.set("code", e.code);
-        if(e.code == 19) { // Error handling for other potential problems can be done here!
+        if(e.code === 19) { // Error handling for other potential problems can be done here!
             //url = new URL("./Applications/Error/error.html", window.location.href);
             url.searchParams.set("message", "Some websites like the ones hosted by Google do not allow loading their website inside another website for security reasons.");
             //url.searchParams.set("code", e.code);
