@@ -1025,7 +1025,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         top = bottom - height;
         this._height = height;
         this._y = top / window.innerHeight;
-        if (this.useTransform || this.useScale) {
+        if (this.useTransform) {
             if (this.target) this.target.style.height = toPixels(height);
             if (this.useTransform) this.updateTranslation();
         } else {
@@ -1046,7 +1046,7 @@ Object.defineProperty(Dialog.prototype, "left", {
         left = right - width;
         this._width = width;
         this._x = left / window.innerWidth;
-        if (this.useTransform || this.useScale) {
+        if (this.useTransform) {
             if (this.target) this.target.style.width = toPixels(width);
             if (this.useTransform) this.updateTranslation();
         } else {
@@ -1104,7 +1104,7 @@ Object.defineProperty(Dialog.prototype, "isMinHeight", {
 });
 
 Object.defineProperty(Dialog.prototype, "useTransform", {
-    get: function () {return this._useTransform; },
+    get: function () { return this._useTransform; },
     set: function(useTransform) { this.updateUseTransform(useTransform); }
 });
 
