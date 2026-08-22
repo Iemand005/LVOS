@@ -245,19 +245,23 @@ function activateTimer() {
         setTimeDisplay(++timer);
     }, 1000);
 }
+/**
+ * @param {number} value
+ * @param {string} id
+ */
+function setDisplayValue(value, id) {
+    var bombCount = document.getElementById(id);
+    var valueStr = value.toString();
+    while (valueStr.length < 3) valueStr = "0" + valueStr;
+    if (bombCount) bombCount.innerText = valueStr;
+}
 /** @param {number} count */
 function setBombCount(count) {
-    var bombCount = document.getElementById("bomb-count");
-    var bombStr = count.toString();
-    while (bombStr.length < 3) bombStr = "0" + bombStr;
-    if (bombCount) bombCount.innerText = bombStr;
+    setDisplayValue(count, "bomb-count");
 }
 /** @param {number} time */
 function setTimeDisplay(time) {
-    var bombCount = document.getElementById("timer");
-    var timeStr = time.toString();
-    while (timeStr.length < 3) timeStr = "0" + timeStr;
-    if (bombCount) bombCount.innerText = timeStr;
+    setDisplayValue(time, "timer");
 }
 /** @param {boolean} reset */
 function stopTimer(reset) {
