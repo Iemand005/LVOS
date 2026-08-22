@@ -51,7 +51,7 @@ function Tile(minesweeper, button, x, y, mine){
     this.mine = mine || false;
     /** @type {HTMLButtonElement | null} */
     this.button = button;
-    this.flagged = false;
+    this.flagged = 0;
     this.position = { x: x, y: y };
     this.revealed = false;
     this.mousedown = false;
@@ -101,7 +101,11 @@ Tile.prototype.getFlaggedNeighbouringMines = function(neighbours) { return this.
 Tile.prototype.countFlaggedNeighbouringMines = function(neighbours) { return this.getFlaggedNeighbouringMines(neighbours).length; };
 Tile.prototype.getUnflaggedNeighbouringMines = function(neighbours) { return this.iterateNeighbours(neighbours, function(neighbour){ return neighbour.flagged !== 1; }); };
 Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (enabled == null || (this.button.hasAttribute("disabled") === enabled)) this.button.toggleAttribute("disabled"); };
-Tile.prototype.toggleFlag = function(/**@type {boolean}*/enabled) { if (!this.revealed)this.flagged=enabled==null?(this.flagged+1)%3:enabled?3:0,this.button.innerText=this.flagged?this.flagged===1?(displays[0].update(--bombCount),icons.flag):(displays[0].update(++bombCount),icons.unknown):icons.none; };
+Tile.prototype.toggleFlag = function(/**@type {boolean}*/enabled) {
+    if (this.revealed) return;
+    this.flagged = enabled == null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
+    this.button.innerText=this.flagged ? this.flagged===1 ? (displays[0].update(--bombCount), icons.flag) : (displays[0].update(++bombCount), icons.unknown) : icons.none;
+};
 Tile.prototype.disableVisual = function() { this.button.classList.remove("active"); };
 Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
 Tile.prototype.enableVisual = function() { if (this.isClickAllowed() && this.mousedown) this.button.classList.add("active"); };
