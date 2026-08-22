@@ -256,13 +256,9 @@ function setDisplayValue(value, id) {
 	if (bombCount) bombCount.innerText = valueStr;
 }
 /** @param {number} count */
-function setBombCount(count) {
-	setDisplayValue(count, "bomb-count");
-}
+function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
 /** @param {number} time */
-function setTimeDisplay(time) {
-	setDisplayValue(time, "timer");
-}
+function setTimeDisplay(time) { setDisplayValue(time, "timer"); }
 /** @param {boolean} reset */
 function stopTimer(reset) {
 	if (reset) setTimeDisplay(0);
