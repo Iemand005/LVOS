@@ -1486,10 +1486,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var fsTimeout = 0;
 
 	if (flags.useViewTransitionMaximize) {
+		if (this.maximized === enable) return;
 		self.target.style.viewTransitionName = 'window-fullscreen';
 
 		var transition = document.startViewTransition(function() {
-			self.target.classList.toggle('maximized');
+			self.target.classList.toggle('maximized', enable);
 		});
 		transition.finished.finally(function() {
 			self.target.style.viewTransitionName = '';
