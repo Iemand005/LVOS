@@ -1,5 +1,5 @@
 
-var bindConsole = true;
+var bindConsole = false; // TODO: Before you turn back on console please look ingo requestAnimationFrame or requestIdleCallback because this causes intense slowdown of mouse event handles and everythng that logs is really really slow. put it in arrays and batch rpocess later async!!
 
 /** @typedef {"input" | "return" | "log" | "warn" | "error"} ConsoleOutputType */
 /**
