@@ -589,7 +589,6 @@ Object.defineProperty(WindowManager, "windowBounds", {
 });
 
 WindowManager.getWindowBounds = function() {
-    var inset = WindowManager.windowBoundsInset;
     return WindowManager.windowBounds;
 };
 /**
