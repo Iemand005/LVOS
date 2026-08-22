@@ -575,14 +575,17 @@ WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
 
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
-window.addEventListener('resize', function() {
+function relaclulaaWIndowBounts() {
 	// cachedWidth = window.innerWidth;
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top != null ? inset.top : -Infinity;
 	WindowManager._windowBounds.left = inset.left != null ? inset.left : -Infinity;
 	WindowManager._windowBounds.right = inset.right != null ? window.innerWidth - inset.right : Infinity;
 	WindowManager._windowBounds.bottom = inset.bottom != null ? window.innerHeight - inset.bottom : Infinity;
-});
+}
+
+window.addEventListener('resize', relaclulaaWIndowBounts);
+window.addEventListener('load', relaclulaaWIndowBounts);
 
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
