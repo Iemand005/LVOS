@@ -107,7 +107,7 @@ div > * {
 	-moz-box-align: center;
 }
 
-button:active:not(:disabled):not(.mine), button.active, table, div, output {
+button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 	border-top-color: darkgray;
 	border-left-color: darkgray;
 	border-right-color: rgb(231, 231, 231);
@@ -154,7 +154,7 @@ div > button {
 	box-sizing: border-box;
 }
 
-form, div, header, footer, output {
+form, div, header, footer, .display {
 	display: block;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
