@@ -225,10 +225,10 @@ Minesweeper.prototype.quickRevealEvent = quickRevealEvent;
 function randomNumberBetween(start, end) {
 	return (Math.random()*(end - start)) + start;
 }
-/** @param {boolean} won */
+/** @param {boolean} [won] */
 function gameOver(won) {
 	if(isGameOver) return;
-	isGameWon = won;
+	isGameWon = won || false;
 	isGameOver = true;
 	setBombCount(0);
 	lineartiles.forEach(function(tile){ tile.reveal(); });
