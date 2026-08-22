@@ -107,22 +107,22 @@ div > * {
 	-moz-box-align: center;
 }
 
-button:active:not(:disabled):not(.mine), button.active, table, div, .display {
-	border-top-color: darkgray;
-	border-left-color: darkgray;
-	border-right-color: rgb(231, 231, 231);
-	border-bottom-color: rgb(231, 231, 231);
+body, form, div, button	 {
+	background-color: lightgray;
+}
+
+form, button, div button, table, div, .display, button:disabled {
+	border-color: rgb(231, 231, 231);
 }
 
 form, button, div button {
-	border-top-color: rgb(231, 231, 231);
-	border-left-color: rgb(231, 231, 231);
 	border-right-color: darkgray;
 	border-bottom-color: darkgray;
 }
 
-body, form, div, button {
-	background-color: lightgray;
+button:active:not(:disabled):not(.mine), button.active, table, div, .display {
+	border-top-color: darkgray;
+	border-left-color: darkgray;
 }
 
 .revealed {
@@ -165,7 +165,7 @@ form, div, header, footer {
 		background-color: #212121;
 	}
 
-	form, button, div button, table, div, .display {
+	form, button, div button, table, div, .display, button:disabled {
 		border-color: #4a4747;
 	}
 
