@@ -238,8 +238,10 @@ function gameOver(won) {
 
 function setEmoji(emoji) {
 	try {
-		var button = document.querySelector("div").querySelector("button");
-		button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
+		var thing = document.querySelector("div");
+		if (!thing) return;
+		var button = thing.querySelector("button");
+		if (button) button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 	} catch (ex) {
 
 	}
