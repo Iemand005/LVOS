@@ -267,11 +267,6 @@ function stopTimer(reset) {
 var minesweeper = new Minesweeper();
 
 try {
-    // var outputs = document.getElementsByTagName("output");
-    // if(singleSidedDisplay) outputs[0].parentElement.classList.toggle("original", singleSidedDisplay);
-    // for(var i=0; i<outputs.length; i++) displays[i].build(outputs[i]);
-    
-    
     window.onmessage = sendDesiredSize;
     
     mutationObserver.observe(document.body, {childList: true});
