@@ -1480,6 +1480,9 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
+
+	if (this.maximized === enable) return;
+
 	var self = this;
 	var content = this.content;
 
@@ -1487,16 +1490,23 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (flags.useViewTransitionMaximize) {
 
-
-		if (this.maximized === enable) return;
-
 		var interrupted = false;
+
+		if (document.activeViewTransition) {
+			document.activeViewTransition.skipTransition();
+		}
 
 		self.target.style.viewTransitionName = 'window-fullscreen';
 
 		var transition = document.startViewTransition(function() {
 			self.target.classList.toggle('maximized', enable);
 		});
+
+		// var transition.
+		transition.ready.catch(function() {
+			interrupted = true;
+		});
+
 		transition.finished.finally(function() {
 			// self.target.style.viewTransitionName = '';
 		});
