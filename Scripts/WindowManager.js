@@ -2031,7 +2031,7 @@ DocumentCrawler.prototype.getMetro = function () { return this.document.getEleme
 DocumentCrawler.prototype.getMetroBody = function () { var metro = this.getMetro(); return metro && metro.firstChild; };
 DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
 DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
-DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); }; // I don't know why I d;dn't use getters to start with.
+DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
