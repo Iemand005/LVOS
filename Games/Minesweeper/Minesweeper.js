@@ -266,7 +266,7 @@ function setDisplayValue(value, id) {
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
 /** @param {number} time */
 function setTimeDisplay(time) { setDisplayValue(time, "timer"); }
-/** @param {boolean} reset */
+/** @param {boolean} [reset] */
 function stopTimer(reset) {
 	if (reset) setTimeDisplay(0);
 	window.clearInterval(timerInterval);
