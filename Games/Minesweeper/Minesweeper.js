@@ -156,7 +156,7 @@ Minesweeper.prototype.startGame = function () {
                 };
 
                 button.onclick = function(ev){
-                    if(ev.button == 0 && tile.isClickAllowed()){
+                    if(ev.button === 0 && tile.isClickAllowed()){
                         var neighbours = tile.reveal();
                         if(!tile.mine) button.innerText = neighbours;
                         else gameOver();
@@ -191,10 +191,10 @@ try {
 } catch(ex) {}
 
 function quickRevealEvent(ev) {
-    /*const*/var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
+    var element = document.elementFromPoint(ev.clientX || ev.changedTouches[0].clientX, ev.clientY || ev.changedTouches[0].clientY);
     if(element) {
-        /*const*/var tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
-        if(tile && tile.flagged!=1) tile.quickReveal();
+        var tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
+        if(tile && tile.flagged!==1) tile.quickReveal();
     }
 }
 
@@ -223,8 +223,8 @@ function setEmoji(emoji) {
     }
 }
 
-Minesweeper.prototype.countBombs = function() { return lineartiles.filter(function(tile){ return tile.mine }).length; };
-Minesweeper.prototype.countRemainingFields = function() { return lineartiles.filter(function(tile){return !tile.mine && !tile.revealed}).length; };
+Minesweeper.prototype.countBombs = function() { return lineartiles.filter(function(tile){ return tile.mine; }).length; };
+Minesweeper.prototype.countRemainingFields = function() { return lineartiles.filter(function(tile){ return !tile.mine && !tile.revealed; }).length; };
 
 function activateTimer() {
     var timer = 0;
