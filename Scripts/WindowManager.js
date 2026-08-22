@@ -1250,7 +1250,6 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 	var self = this;
 	this._appIcon.onload = function () {
 		console.log("App icon loaded!!");
-		// TOdo uh add a class?
 		if (self._appIcon) self._appIcon.className = "loaded";
 	};
 
@@ -1306,7 +1305,11 @@ Dialog.prototype.focus = function() {
 };
 Dialog.prototype.activate = function() {
 	this.focus();
-	return this.setZ(topZ++), this.messageFrame(LVMessenger.types.open), activeDialogId = this.id, activeDialog = this, swapMetroBody();
+	this.setZ(topZ++);
+	this.messageFrame(LVMessenger.types.open);
+	activeDialogId = this.id;
+	activeDialog = this;
+	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
@@ -1630,7 +1633,8 @@ Dialog.prototype.move = function (x, y) {
 	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
-	(this._x = x / windowWidth), (this._y = y / windowHeight);
+	this._x = x / windowWidth;
+	this._y = y / windowHeight;
 	if (!this.target) return;
 	if (this.useTransform) this.updateTranslation();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
@@ -2001,10 +2005,10 @@ function DragAction() {
 		function(dialog, offset, difference){ dialog.width = offset.width + difference.x; }, // Right
 		function(dialog, offset, difference){ dialog.height = offset.height + difference.y; }, // Bottom
 		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; }, // Left
-		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y, dialog.left = offset.startX + difference.x; }, // Top Left
-		function(dialog, offset, difference){ dialog.width = offset.width + difference.x, dialog.top = offset.startY + difference.y; },// Top right
+		function(dialog, offset, difference){ dialog.top = offset.startY + difference.y; dialog.left = offset.startX + difference.x; }, // Top Left
+		function(dialog, offset, difference){ dialog.width = offset.width + difference.x; dialog.top = offset.startY + difference.y; },// Top right
 		function(dialog, offset, difference){ dialog.resize(offset.width + difference.x, offset.height + difference.y); }, // Bottom right
-		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x, dialog.width = offset.width - difference.x, dialog.height = offset.height + difference.y; } // Bottom left
+		function(dialog, offset, difference){ dialog.left = offset.startX + difference.x; dialog.width = offset.width - difference.x; dialog.height = offset.height + difference.y; } // Bottom left
 	];
 }
 
