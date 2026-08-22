@@ -1478,6 +1478,9 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
     this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
+
+var interrupted = false;
+
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
 
@@ -1489,8 +1492,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var fsTimeout = 0;
 
 	if (flags.useViewTransitionMaximize) {
-
-		var interrupted = false;
+		interrupted = false;
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
@@ -1507,7 +1509,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			interrupted = true;
 		});
 
-		transition.finished.finally(function() {
+		transition.finished.then(function() {
 			if (interrupted) {
 				// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 			} else {
