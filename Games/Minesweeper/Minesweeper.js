@@ -233,11 +233,9 @@ Minesweeper.prototype.countRemainingFields = function() { return lineartiles.fil
 
 function activateTimer() {
     var timer = 0;
-    var bombCount = document.getElementById("timer");
-    timerInterval = window.setInterval(function(){
-        // displays[1].update(timer++)
-        // var bombCount = document.getElementById("bomb-count");
-        if (bombCount) bombCount.innerText = (++timer).toString();
+    var timeDisplay = document.getElementById("timer");
+    timerInterval = window.setInterval(function() {
+        if (timeDisplay) timeDisplay.innerText = (++timer).toString();
     }, 1000);
 }
 /** @param {number} count */
