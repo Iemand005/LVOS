@@ -6,6 +6,13 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-var": "off",
-    "no-sequences": "off"
+    "no-sequences": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "CallExpression[callee.property.name='addEventListener'][arguments.length=2]",
+        "message": "addEventListener requires a third options parameter for browser compatibility."
+      }
+    ]
   }
 }

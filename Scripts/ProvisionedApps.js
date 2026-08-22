@@ -254,8 +254,8 @@ var initApps = function () {
 	var loadApps = true;
 	if (loadApps) {
 
-	injectApplications(applications);
-  	injectApplications(games);
+	windowManager.injectApplications(applications);
+	windowManager.injectApplications(games);
 	windowManager.loadInstalledApps();
 	windowManager.loadState();
 }
