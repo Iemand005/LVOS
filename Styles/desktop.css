@@ -217,12 +217,6 @@ section#desktop[flipped] article#metrobody {
 	display: none;
 }
 
-
-#desktop[flipped],
-#metro {
-	/* transform: rotateY(180deg); */
-}
-
 #desktop[flipped] > #windows {
 	translate: 0 0 1px;
 }
@@ -387,10 +381,6 @@ aside#metroapplist > button {
 	width: 100%;
 	height: 100%;
 	/* animation: overlayclose 456ms cubic-bezier(0.53, 0.01, 0.27, 1) forwards; */
-}
-
-#metro, #overlay {
-	/* display: none; */
 }
 
 #overlay.open {
