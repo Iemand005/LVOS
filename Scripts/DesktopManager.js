@@ -5,6 +5,12 @@
  */
 'use strict';
 
+var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
+
+function getWallpaper() {
+	return document.getElementById("wallpaper");
+}
+
 /** @param {string} newColor */
 function changeTitlebarColor(newColor) {
 	var metaTag = document.querySelector('meta[name="theme-color"]');
@@ -33,7 +39,7 @@ var onLoad = function () {
 	var desktop = document.getElementById('desktop');
 	desktop.addEventListener('mousedown', function () {
 		DesktopManager.toggleCharms(false);
-	});
+	}, false);
 
 	var applist = document.getElementById("applist");
 

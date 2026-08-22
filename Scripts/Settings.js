@@ -401,7 +401,7 @@ function loadElements() {
 			installAppFromUrl(false);
 		}, false);
 	}
-	if (charmsButton) charmsButton.onclick  = DesktopManager.toggleCharms;
+	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
 
 	settings.loadFlags(flags);
