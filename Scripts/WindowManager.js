@@ -23,8 +23,8 @@ var useMica = false,
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: false,
-	updateRateLimit: false,
-	useDragOverlay: false,
+	updateRateLimit: true,
+	useDragOverlay: true,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
