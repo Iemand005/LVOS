@@ -2445,12 +2445,6 @@ function isCharmsOpen() {
     return charms && charms.classList.contains("open");
 }
 
-/** @param {Application} application */
-function injectApplication(application) {
-    windowManager.loadApp(application); // The Dialog class takes care of anything passed to it and tries to compile a dialog from the given data. This can be an HTMLElement or an object with each the correct structure.
-    windowManager.loadState();
-}
-
 /** @param {Application[]} arguments */
 var injectApplications = WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
