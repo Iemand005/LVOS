@@ -941,7 +941,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 		var bounds = WindowManager.getWindowBounds();
 		if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
 		this._width = max(min(width, this.maxWidth), this.minWidth);
-		if (this.useTransform || this.useScale) this.target.style.width = toPixels(this._width);
+		if (this.useTransform) this.target.style.width = toPixels(this._width);
 		else this.target.style.right = toPixels(this.right);
 
 		this._isMinWidth = this._width === this.minWidth;
@@ -959,7 +959,7 @@ Object.defineProperty(Dialog.prototype, "height", {
 		if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
 		
 		this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
-		if (this.useTransform || this.useScale) {
+		if (this.useTransform) {
 			this.target.style.height = toPixels(this._height);
 		} else this.target.style.bottom = toPixels(this.bottom);
 
