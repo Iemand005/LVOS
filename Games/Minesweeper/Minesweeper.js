@@ -95,10 +95,8 @@ Tile.prototype.getNeighbours = function() {
     }
     return neighbours;
 };
-/** @param {Tile[]} neighbors */
-Tile.prototype.countNeighbouringMines = function(neighbors) { return this.getNeighbouringMines(neighbors).length; };
-/** @param {Tile[]} neighbors */
-Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
+Tile.prototype.countNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getNeighbouringMines(neighbors).length; };
+Tile.prototype.getNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
 Tile.prototype.iterateNeighbours = function(/**@type {Tile[]}*/neighbours, /**@type {(neighbour:Tile)=>boolean}*/filter) { return (neighbours || this.getNeighbours()).filter(filter); };
 Tile.prototype.getFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.flagged === 1; }); };
 Tile.prototype.countFlaggedNeighbouringMines = function(/**@type {Tile[]}*/neighbors) { return this.getFlaggedNeighbouringMines(neighbors).length; };
