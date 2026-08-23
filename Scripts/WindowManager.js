@@ -1513,6 +1513,7 @@ var viewTransitions = 0;
 Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (this.maximized === enable) return;
+	if (!this.target) return;
 
 	var self = this;
 	var content = this.content;
@@ -1526,7 +1527,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			document.activeViewTransition.skipTransition();
 		}
 
-		if (!this.target) return;
 
 		this.target.style.viewTransitionName = 'window-fullscreen';
 
