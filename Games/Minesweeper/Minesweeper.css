@@ -39,6 +39,9 @@ button {
 	text-align: center;
 	align-items: center;
 	justify-content: center;
+}
+
+table button {
 	forced-color-adjust: none;
 }
 
