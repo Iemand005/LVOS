@@ -66,10 +66,15 @@ var flags = {
 	set compositorResize(value) {
 
 		document.body.classList.toggle("compositor-animations", !!value);
-		// if (value === false) document.body.classList.remove("compositor-animations");
 		this._compositorResize = value;
 	},
-	useViewTransitionMaximize: false,
+	_useViewTransitionMaximize: false,
+	get useViewTransitionMaximize() { return this._useViewTransitionMaximize; },
+	set useViewTransitionMaximize(value) {
+
+		if (value) this.compositorResize = false;
+		this._useViewTransitionMaximize = value;
+	},
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
