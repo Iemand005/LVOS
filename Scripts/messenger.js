@@ -88,16 +88,13 @@ function getParentWindow() {
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
     var target = getParentWindow();
-    if (target && typeof target.__LVMessengerReceive === "function") {
-        try {
+    try {
+        if (target && typeof target.__LVMessengerReceive === "function")
             target.__LVMessengerReceive(type, message, id);
-
-            return;
-        } catch (ex) {
-            console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
-        }
+    } catch (ex) {
+        console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
+        if (target) LVMessenger.broadcast(target, type, message, id);
     }
-    if (target) LVMessenger.broadcast(target, type, message, id);
 };
 
 /**
