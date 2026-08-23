@@ -242,7 +242,9 @@ Minesweeper.prototype.countRemainingFields = function() { return lineartiles.fil
 
 function activateTimer() {
 	var timer = 0;
-	timerInterval = window.setInterval(setTimeDisplay.bind(null, ++timer), 1000);
+	timerInterval = window.setInterval(function() {
+		setTimeDisplay(++timer);
+	}, 1000);
 }
 /**
  * @param {number} value
