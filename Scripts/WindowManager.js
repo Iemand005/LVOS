@@ -1726,7 +1726,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
 
-	if (aniamte !== false) {
+	if (animate !== false) {
 		if (!this.target) return;
 		if (this.useTransform) this.updateTranslation();
 		else this.setInset(this.top, this.left, this.right, this.bottom);
