@@ -169,7 +169,7 @@ Minesweeper.prototype.startGame = function () {
 				button.onclick = function(ev){
 					if(ev.button === 0 && tile.isClickAllowed()){
 						var neighbours = tile.reveal();
-						if(!tile.mine && neighbours) button.textContent = neighbours.toString();
+						if(!tile.mine && typeof neighbours !== "undefined") button.textContent = neighbours.toString();
 						else gameOver();
 					} else ev.preventDefault();
 				};
