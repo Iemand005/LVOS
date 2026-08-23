@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */
 
 import tseslint from "typescript-eslint";
+import globals from "globals";
 
 export default tseslint.config({
 	files: ["**/*.js", "**/*.ts", "**/*.tsx", "*.d.ts"],
@@ -8,6 +9,10 @@ export default tseslint.config({
 		parser: tseslint.parser,
 		parserOptions: {
 			project: "./jsconfig.json"
+		},
+		globals: {
+			...globals.browser,
+			... globals.commonjs
 		}
 	},
 	plugins: {
