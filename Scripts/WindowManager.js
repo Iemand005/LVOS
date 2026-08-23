@@ -1533,8 +1533,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			});
 			if (!self.target) return;
 
+			var oldRect = self.target.getBoundingClientRect();
 
-			transition.ready.catch(function(ev) {
+			transition.ready.then(function() {
+				if (!self.target) return;
+				var newRect = self.target.getBoundingClientRect();
+			}).catch(function(ev) {
 				console.warn("transition interrupted:", ev);
 			});
 
