@@ -199,7 +199,7 @@ LVMessenger.onHostBeingLVOS(function () {
 /** @param {MouseEvent} ev */
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX, ev.clientY);
-	if(element) {
+	if (element) {
 		var tile = tiles[parseInt(element.firstChild? element.children[0].id: element.id)];
 		if(tile && tile.flagged!==1) tile.quickReveal();
 	}
