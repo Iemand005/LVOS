@@ -949,7 +949,7 @@ Object.defineProperty(Dialog.prototype, "mica", {
 
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () {
-		return this._x * window.innerWidth;
+		return this._x * window.innerWidth; // TODO: get ehe window bounds calced on resize evt
 	},
 	set: function (x) {
 		if (typeof x === "number") this.move(x, this.y);
