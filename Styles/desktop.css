@@ -512,6 +512,9 @@ aside#charms form {
 
 	bottom: 0;
 
+	z-index: 100000;
+    pointer-events: auto;
+
 	/* padding: 10px 0; */
 }
 
