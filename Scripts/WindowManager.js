@@ -1981,7 +1981,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "0px";
 		target.style.left = "0px";
-		this.updateScale(true);
         this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
@@ -1989,6 +1988,8 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 		target.style.width = "auto";
 		target.style.height = "auto";
 	}
+	
+	this.updateScale(useTransform);
 
 	this.update();
 };
