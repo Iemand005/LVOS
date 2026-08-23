@@ -84,8 +84,8 @@ function getParentWindow() {
 
 /**
  * @param {MessageType | string} type 
- * @param {LVMessage} [message]
- * @param {*} [id]
+ * @param {*} [message]
+ * @param {string} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
     var target = getParentWindow();
