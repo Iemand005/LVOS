@@ -29,7 +29,7 @@ declare global {
 
 		windows?: Dialog[];
 
-		__LVMessengerReceive?: (type: MessageType, data: any, source: string) => void;
+		__LVMessengerReceive?: (type: MessageType, data: any, source?: string) => void;
 		__LVMessenger?: {
 			accent: HTMLMetaElement | undefined;
 		} | {};

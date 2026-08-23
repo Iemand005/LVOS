@@ -83,7 +83,7 @@ function getParentWindow() {
 }
 
 /**
- * @param {MessageType | string} type 
+ * @param {MessageType} type 
  * @param {*} [message]
  * @param {string} [id]
  */
