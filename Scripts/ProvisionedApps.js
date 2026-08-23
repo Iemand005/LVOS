@@ -246,6 +246,11 @@ var games = [
     id: "clicker",
     src: "./Games/ChoccyClicker/clicker.html",
     hidden: true
+  },
+  {
+	title: "FAT",
+	id : "mountain",
+	src : "https://iemand005.github.io/MountainWeb/"
   }
 ];
 
