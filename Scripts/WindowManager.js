@@ -1744,7 +1744,7 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (typeof z === "undefined") {
-		if (this._z !== topZ) this._z = topZ++;
+		if (this._z !== topZ) this._z = ++topZ;
 	} else this._z = z;
 	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
