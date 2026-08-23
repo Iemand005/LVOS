@@ -195,7 +195,7 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 		border-color: ButtonBorder !important;
 	}
 
-	button.mine:not(.n0):not(.n1) {
+	button.mine:not(.n0):not(.n1):not(.n2):not(.n3):not(.n4):not(.n5):not(.n6):not(.n7):not(.n8) {
 		forced-color-adjust: auto;
 	}
 }
