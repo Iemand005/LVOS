@@ -1796,8 +1796,11 @@ Dialog.prototype.setWidth = function (width, options) {
 
 	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
 	this._width = max(min(width, this.maxWidth), this.minWidth);
-	if (this.useTransform) this.target.style.width = toPixels(this._width);
-	else this.target.style.right = toPixels(this.right);
+	
+	if (options.update) {
+		if (this.useTransform) this.target.style.width = toPixels(this._width);
+		else this.target.style.right = toPixels(this.right);
+	}
 
 	this._isMinWidth = this._width === this.minWidth;
 };
