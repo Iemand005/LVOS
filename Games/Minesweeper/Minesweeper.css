@@ -39,6 +39,7 @@ button {
 	text-align: center;
 	align-items: center;
 	justify-content: center;
+	forced-color-adjust: none;
 }
 
 button:disabled {
