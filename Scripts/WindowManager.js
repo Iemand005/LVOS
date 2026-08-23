@@ -21,8 +21,8 @@ var useMica = false,
 	hasLocalStorage = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
-var supportsPointer = typeof window != "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
-var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
+var supportsPointer = typeof window !== "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
+var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit !== "undefined");
 var supportsTransitions = false;
 var supportsTransform = false;
 
@@ -80,10 +80,10 @@ var flags = {
 
 
 
-var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 try {
-    hasLocalStorage = typeof localStorage != "undefined";
+    hasLocalStorage = typeof localStorage !== "undefined";
 } catch(ex) { console.warn("Local storage access denied.", ex); }
 
 if (isIE) {
@@ -98,9 +98,9 @@ if (supportsPointer) console.log("Supports pointer events!");
 
 /** @param {Event} event */
 function cancelDomEvent(event) {
-	if (typeof event.preventDefault == "function") event.preventDefault();
+	if (typeof event.preventDefault === "function") event.preventDefault();
 	event.returnValue = false;
-	if (typeof event.stopPropagation == "function") event.stopPropagation();
+	if (typeof event.stopPropagation === "function") event.stopPropagation();
 	event.cancelBubble = true;
 	return false;
 }
@@ -201,7 +201,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
   get: function () { return this._isBlurEnabled; },
   set: function (value) {
-    if (typeof value == "boolean") this._isBlurEnabled = value;
+    if (typeof value === "boolean") this._isBlurEnabled = value;
   }
 });
 
@@ -210,7 +210,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
     return this._isMicaEnabled;
   },
   set: function (value) {
-    if (typeof value != "boolean") return;
+    if (typeof value !== "boolean") return;
     document.body.classList.toggle("mica", value);
     windowManager.forEachWindow(function(window) { window.mica = value; });
     this._isMicaEnabled = value;
@@ -231,7 +231,7 @@ WindowManager.prototype.saveState = function() {
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
-		if (canSave && typeof localStorage != "undefined")
+		if (canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
 		handleStorageException(exception);
@@ -304,7 +304,7 @@ WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 
 Object.defineProperty(WindowManager.prototype, "installedApps", {
 	get: function() {
-		if (typeof localStorage == "undefined") return [];
+		if (typeof localStorage === "undefined") return [];
 		try {
 			var string = localStorage.getItem("installedApps");
 			if (string == null) return [];
@@ -319,7 +319,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 
 /** @param {Application} application */
 WindowManager.prototype.saveInstalledApp = function(application) {
-	if (!canSave || typeof localStorage == "undefined") return;
+	if (!canSave || typeof localStorage === "undefined") return;
 	try {
 		var apps = this.installedApps;
 		for (var i = 0; i < apps.length; i++)
@@ -332,7 +332,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 };
 
 WindowManager.prototype.loadInstalledApps = function() {
-	if (!canSave || typeof localStorage == "undefined") return;
+	if (!canSave || typeof localStorage === "undefined") return;
 	try {
 		this.installedApps.forEach(function(application) {
 			if (application && application.src) this.loadApp(application);
@@ -455,7 +455,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
     this.reset();
 	this.clickX = x;
 	this.clickY = y;
-    if (typeof width != "number" || typeof height != "number" || typeof startX != "number" || typeof startY != "number") return;
+    if (typeof width !== "number" || typeof height !== "number" || typeof startX !== "number" || typeof startY !== "number") return;
 	this.width = width;
 	this.height = height;
 	this.startX = startX;
@@ -652,7 +652,7 @@ Dialog.prototype.initWithObject = function(object) {
 
                 // windowManager.loadState(this);
             } finally {}
-            if (object.classes && typeof object.classes == 'object'){
+            if (object.classes && typeof object.classes === 'object'){
                 object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // We can't use class since it's a keyword!!
             }
             this.openUrl(object.src);
@@ -943,7 +943,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 		return this._x * window.innerWidth;
 	},
 	set: function (x) {
-		if (typeof x == "number") this.move(x, this.y);
+		if (typeof x === "number") this.move(x, this.y);
 	}
 });
 
@@ -952,14 +952,14 @@ Object.defineProperty(Dialog.prototype, "y", {
 		return this._y * window.innerHeight;
 	},
 	set: function (y) {
-		if (typeof y == "number") this.move(this.x, y);
+		if (typeof y === "number") this.move(this.x, y);
 	}
 });
 
 Object.defineProperty(Dialog.prototype, "z", {
 	get: function () { return this._z; },
 	set: function (z) {
-		if (typeof z == "number") this.setZ(z);
+		if (typeof z === "number") this.setZ(z);
 	}
 });
     
@@ -1001,7 +1001,7 @@ Object.defineProperty(Dialog.prototype, "position", {
 Object.defineProperty(Dialog.prototype, "size", {
     get: function() { return new Vector(this.width, this.height); },
     set: function(size) {
-        if (typeof size.x != "number" || typeof size.y != "number") return;
+        if (typeof size.x !== "number" || typeof size.y !== "number") return;
         this.resize(size.x, size.y);
     }
 });
@@ -1071,7 +1071,7 @@ Object.defineProperty(Dialog.prototype, "rightFromLeft", {
 Object.defineProperty(Dialog.prototype, "right", {
     get: function() { return window.innerWidth - this.rightFromLeft; },
     set: function(right) {
-        if (typeof right == "number") {
+        if (typeof right === "number") {
             var bounds = WindowManager.getWindowBounds();
             if (right > bounds.right) right = bounds.right;
             if (right < bounds.left) right = bounds.left;
@@ -1088,7 +1088,7 @@ Object.defineProperty(Dialog.prototype, "bottomFromTop", {
 Object.defineProperty(Dialog.prototype, "bottom", {
     get: function() { return window.innerHeight - this.bottomFromTop; },
     set: function(bottom) {
-        if (typeof bottom == "number") {
+        if (typeof bottom === "number") {
             var bounds = WindowManager.getWindowBounds();
             if (bottom > bounds.bottom) bottom = bounds.bottom;
             if (bottom < bounds.top) bottom = bounds.top;
@@ -1328,7 +1328,7 @@ Dialog.prototype.activate = function() {
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 /** @param {boolean} force */
 Dialog.prototype.toggleTitleBar = function (force) {
-	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force != "undefined" ? !force : undefined);
+	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
 };
 Dialog.prototype.open = function () {
 	return this.toggleOpen(true);
@@ -1421,7 +1421,7 @@ var transitionEndEvent = ('webkitTransition' in document.documentElement.style) 
 function setClass(element, className, enabled) {
 	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
-	if (typeof enabled == "undefined") enabled = element.className.indexOf(className) === -1;
+	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
 
 	if (enabled) {
 		if (!re.test(element.className))
@@ -1674,8 +1674,8 @@ Dialog.prototype.move = function (x, y) {
 		this._previousX = this.x;
 		this._previousY = this.y;
 	}
-	if (typeof x == "undefined" || x == null) x = this.x;
-	if (typeof y == "undefined" || y == null) y = this.y;
+	if (typeof x === "undefined" || x == null) x = this.x;
+	if (typeof y === "undefined" || y == null) y = this.y;
 	var bounds = WindowManager.getWindowBounds();
 	if (x < bounds.left) x = bounds.left;
 	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
@@ -1733,7 +1733,7 @@ Dialog.prototype.moveBy = function (deltaX, deltaY) {
  * @param {number} centerY
  */
 Dialog.prototype.moveToCenter = function(centerX, centerY) {
-    if (typeof centerX != "number" || typeof centerY != "number") return;
+    if (typeof centerX !== "number" || typeof centerY !== "number") return;
     this.move(centerX - this.width / 2, centerY - this.height / 2);
 };
 
@@ -1745,7 +1745,7 @@ Dialog.prototype.setZ = function(z) {
 };
 /** @param {number} width */
 Dialog.prototype.setWidth = function (width) {
-	if (typeof width != "number" || !this.target) return;
+	if (typeof width !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
 	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
@@ -1757,7 +1757,7 @@ Dialog.prototype.setWidth = function (width) {
 };
 /** @param {number} height */
 Dialog.prototype.setHeight = function (height) {
-	if (typeof height != "number" || !this.target) return;
+	if (typeof height !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
 	var finalHeight = height; 
@@ -1775,8 +1775,8 @@ Dialog.prototype.setHeight = function (height) {
  * @param {number} [height]
  */
 Dialog.prototype.resize = function (width, height) {
-	if (typeof width == "undefined" || width == null) width = this.width;
-	if (typeof height == "undefined" || height == null) height = this.height;
+	if (typeof width === "undefined" || width == null) width = this.width;
+	if (typeof height === "undefined" || height == null) height = this.height;
 	this.setWidth(width);
 	this.setHeight(height);
 };
@@ -1789,8 +1789,8 @@ Dialog.prototype.update = function () {
  * @param {number} [height]
  */
 Dialog.prototype.setMinSize = function (width, height) {
-	this._minWidth = typeof width == "number" ? width : 180;
-	this._minHeight = typeof height == "number" ? height : 200;
+	this._minWidth = typeof width === "number" ? width : 180;
+	this._minHeight = typeof height === "number" ? height : 200;
 	this.resize();
 };
 /**
@@ -1798,8 +1798,8 @@ Dialog.prototype.setMinSize = function (width, height) {
  * @param {number} [height]
  */
 Dialog.prototype.setMaxSize = function (width, height) {
-	this._maxWidth = typeof width == "number" ? width : 180;
-	this._maxHeight = typeof height == "number" ? height : 200;
+	this._maxWidth = typeof width === "number" ? width : 180;
+	this._maxHeight = typeof height === "number" ? height : 200;
 	this.resize();
 };
 /** @param {number} ratio */
@@ -2351,12 +2351,12 @@ function enableDialogDrag() {
 
 /** @param {number} [newZ]  */
 function updateTopZ(newZ) {
-    if (typeof newZ == "number") {
+    if (typeof newZ === "number") {
         topZ = Math.max(topZ, newZ + 1);
         return;
     }
     windowManager.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z == "number" && dialog.z >= topZ) {
+        if (dialog && typeof dialog.z === "number" && dialog.z >= topZ) {
             topZ = dialog.z + 1;
         }
     });
@@ -2404,7 +2404,7 @@ function pixelsToCentimeters(pixels){
 /** @param {string} text */
 function fromPixels(text){
     if (text != null) try {
-        return typeof text == 'number' ? text : parseInt(text.replace("px", ''));
+        return typeof text === 'number' ? text : parseInt(text.replace("px", ''));
     } catch (ex) { console.warn("Failed to parse pixels:", ex); }
     return 0;
 }
