@@ -1733,7 +1733,7 @@ Dialog.prototype.updatePosition = function() {
 		backdrop.style.width = toPixels(wallpaperWidth);
 		backdrop.style.height = toPixels(wallpaperHeight);
 	} catch(_) {}
-}
+};
 /**
  * @param {number} [x]
  * @param {number} [y]
