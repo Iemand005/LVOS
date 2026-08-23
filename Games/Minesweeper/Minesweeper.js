@@ -109,7 +109,7 @@ Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (this
 /** @param {boolean} [enabled] */
 Tile.prototype.toggleFlag = function(enabled) {
 	if (this.revealed || !this.button) return;
-	this.flagged = enabled === null ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
+	this.flagged = typeof enabled === "undefined" ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
 	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
 };
 Tile.prototype.disableVisual = function() { if (this.button) this.button.classList.remove("active"); };
