@@ -12,7 +12,8 @@ export default tseslint.config({
 		},
 		globals: {
 			...globals.browser,
-			...globals.commonjs
+			...globals.commonjs,
+			"Anim": "readonly"
 		}
 	},
 	plugins: {
