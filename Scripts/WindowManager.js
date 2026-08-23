@@ -1557,10 +1557,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		if (this._animationProps._fsToken !== this._animationProps._fsTokenAtStart) {
-			target.style.pointerEvents = "";
-			return;
-		}
+		// if (this._animationProps._fsToken !== this._animationProps._fsTokenAtStart) {
+		// 	target.style.pointerEvents = "";
+		// 	return;
+		// }
 
 		if (this._animationProps._fsTimeout) { clearTimeout(this._animationProps._fsTimeout); this._animationProps._fsTimeout = null; }
 		if (this._animationProps._fsRaf) { cancelAnimationFrame(this._animationProps._fsRaf); this._animationProps._fsRaf = null; }
