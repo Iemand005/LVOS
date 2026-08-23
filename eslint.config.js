@@ -13,7 +13,7 @@ export default tseslint.config({
 		globals: {
 			...globals.browser,
 			...globals.commonjs,
-			"Anim": "readonly",
+			Anim: "readonly",
 			Vector: "writable",
 			LVMessenger: "writable",
 			DesktopManager: "writable",
@@ -21,7 +21,7 @@ export default tseslint.config({
 			lerp: "writable",
 			windowManager: "readonly",
 			toggleReflections: "writable",
-			setTheme: "writable",
+			setTheme: "writable"
 		}
 	},
 	plugins: {
