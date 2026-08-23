@@ -1491,7 +1491,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     // this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
-var viewTransitions = 0;
+var maximizeAnimations = 0;
 
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
@@ -1506,8 +1506,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	this.setZ();
 
+	maximizeAnimations++;
 	if (flags.useViewTransitionMaximize) {
-		viewTransitions++;
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
@@ -1534,12 +1534,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 			transition.finished.finally(function() {
 				if (!self.target) return;
-				if (viewTransitions > 1) {
+				if (maximizeAnimations > 1) {
 					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 				} else {
 					self.target.style.viewTransitionName = "";
 				}
-				viewTransitions--;
+				maximizeAnimations--;
 			});
 		} else this.target.classList.toggle("maximized", enable);
 		return;
