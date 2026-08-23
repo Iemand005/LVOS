@@ -1496,25 +1496,19 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	if (!target) return;
 	var dialog = this;
 	var enabled = false;
-	if (supportsTransitions) {
-		target.classList.add("animating");
-		/** @type {(ev: TransitionEvent)=>void} */
-		var animationHandler = function(event) {
-			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
-			dialog.stopAnimating();
-			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
-			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(dialog, enabled);
-		};
-		target.addEventListener(transitionEndEvent, animationHandler, false);
-	}
 
-	window.requestAnimationFrame(function() {
-		if (!target) return;
-		// void target.offsetWidth;
-		enabled = setClass(target, className, force);
-		if (onToggled) onToggled.call(dialog, enabled);
-	});
+	this.animate(
+		function() {
+			if (!target) return;
+			// void target.offsetWidth;
+			enabled = setClass(target, className, force);
+			if (onToggled) onToggled.call(dialog, enabled);
+		},
+		onTransitionEnd,
+		function() {
+			if (onEnd) onEnd.call(dialog, enabled);
+		}
+	);
 };
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
