@@ -1703,6 +1703,11 @@ Dialog.prototype.messageFrame = function (type, message) {
 Dialog.prototype.updateTranslation = function () {
 	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
+Dialog.prototype.updatePosition() {
+	if (!this.target) return;
+	if (this.useTransform) this.updateTranslation();
+	else this.setInset(this.top, this.left, this.right, this.bottom);
+}
 /**
  * @param {number} [x]
  * @param {number} [y]
@@ -1727,9 +1732,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	this._y = y / windowHeight;
 
 	if (animate !== false) {
-		if (!this.target) return;
-		if (this.useTransform) this.updateTranslation();
-		else this.setInset(this.top, this.left, this.right, this.bottom);
+		
 	}
 
 	if (flags.useSkewAnimations) {
