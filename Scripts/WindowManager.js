@@ -180,7 +180,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
     if (!this._windowStates && localStorage)
       try {
         var string = localStorage.getItem("windowState");
-        if (string == null) return null;
+        if (string === null) return null;
 		  this._windowStates = JSON.parse(string);
       } catch (ex) {
         if (ex instanceof Error) console.error(ex.message);
@@ -307,7 +307,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 		if (typeof localStorage === "undefined") return [];
 		try {
 			var string = localStorage.getItem("installedApps");
-			if (string == null) return [];
+			if (string === null) return [];
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
 		} catch (exception) {
@@ -592,10 +592,10 @@ WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 function relaclulaaWIndowBounts() {
 	// cachedWidth = window.innerWidth;
 	var inset = WindowManager.windowBoundsInset;
-	WindowManager._windowBounds.top = inset.top != null ? inset.top : -Infinity;
-	WindowManager._windowBounds.left = inset.left != null ? inset.left : -Infinity;
-	WindowManager._windowBounds.right = inset.right != null ? window.innerWidth - inset.right : Infinity;
-	WindowManager._windowBounds.bottom = inset.bottom != null ? window.innerHeight - inset.bottom : Infinity;
+	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
+	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
+	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
+	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
 }
 
 window.addEventListener("resize", relaclulaaWIndowBounts, false);
@@ -1312,7 +1312,7 @@ Dialog.prototype.setRotation = function(rotation) {
 /** @type {Dialog| null} */
 var focusedDialog = null;
 Dialog.prototype.focus = function() {
-    if (focusedDialog != null && focusedDialog.target)
+    if (focusedDialog !== null && focusedDialog.target)
         focusedDialog.target.removeAttribute("focus");
     if (this.target) this.target.setAttribute("focus", String(true));
     focusedDialog = this;
@@ -1388,7 +1388,7 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 Dialog.prototype.togglePointerEvents = function(enable) {
 	var target = this.target;
 	if (!target) return;
-	if (enable == null) enable = target.style.pointerEvents === "none";
+	if (enable === null) enable = target.style.pointerEvents === "none";
 	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
 	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
 
@@ -1988,7 +1988,7 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 		target.style.width = "auto";
 		target.style.height = "auto";
 	}
-	
+
 	this.updateScale(useTransform);
 
 	this.update();
