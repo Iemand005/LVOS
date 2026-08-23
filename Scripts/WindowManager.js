@@ -2473,7 +2473,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /** @param {Application[]} arguments */
-var injectApplications = WindowManager.prototype.injectApplications = function() {
+WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
         arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
     windowManager.loadState();
