@@ -1488,7 +1488,6 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
  * @param {(name:string)=>boolean} [onTransitionEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
- * @returns
  */
 Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
 	var self = this;
