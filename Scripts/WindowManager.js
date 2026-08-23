@@ -1779,6 +1779,18 @@ Dialog.prototype.setWidth = function (width) {
 	if (typeof width !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
+
+	if (bounds.right !== Infinity) {
+		var overflow = this._x + width - bounds.right;
+		if (overflow > 0) {
+			var newX = this._x - overflow;
+			if (bounds.left !== undefined && newX < bounds.left) {
+				newX = bounds.left;
+			}
+			this.x = newX;
+		}
+	}
+
 	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
 	this._width = max(min(width, this.maxWidth), this.minWidth);
 	if (this.useTransform) this.target.style.width = toPixels(this._width);
