@@ -2117,8 +2117,8 @@ function windowManagerInit() {
 
 
 	LVMessenger.receive(messageReceived);
-	window.metaThemeColor = document.querySelector('meta[name="theme-color"]');
-	if (window.metaThemeColor instanceof HTMLMetaElement && window.__LVMessenger)
+	window.metaThemeColor = document.querySelector('meta[name="theme-color"]') || undefined;
+	if (window.metaThemeColor && window.__LVMessenger)
 		window.__LVMessenger.accent = window.metaThemeColor;
 }
 
