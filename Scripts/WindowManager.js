@@ -1675,7 +1675,7 @@ Dialog.prototype.move = function (x, y) {
 		this._previousY = this.y;
 	}
 	if (typeof x === "undefined" || x == null) x = this.x;
-	if (typeof y === "undefined" || y == null) y = this.y;
+	if (typeof y === "undefined" || y === null) y = this.y;
 	var bounds = WindowManager.getWindowBounds();
 	if (x < bounds.left) x = bounds.left;
 	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
@@ -1713,7 +1713,7 @@ Dialog.prototype.move = function (x, y) {
 
 		backdrop.style.width = toPixels(wallpaperWidth);
 		backdrop.style.height = toPixels(wallpaperHeight);
-	} catch(ex) {}
+	} catch(_) {}
 
     // i wanna add a like move event thing with velocity and stuff
 
@@ -2023,7 +2023,7 @@ Dialog.prototype.injectMica = function() {
 		// var newWallpaper = wallpaper.cloneNode(true);
 		var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
 		var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
-		var preBlurredImage = blurredSrc != null;
+		var preBlurredImage = blurredSrc !== null;
 		var clip = this.micaElement;
 		if (!clip) return false;
 		while (clip.firstChild) clip.removeChild(clip.firstChild);
@@ -2072,7 +2072,7 @@ Dialog.prototype.flip = function(enable) {
 
 function DragAction() {
 	/** @type {DragFunction} */
-	this.execute = function(dialog, offset, difference){};
+	this.execute = function(_dialog, offset, difference){};
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function move(dialog, offset, d){ dialog.move(offset.startX + d.x, offset.startY + d.y); },

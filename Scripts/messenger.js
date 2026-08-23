@@ -2,7 +2,7 @@
  // Lasse Lauwerys (c) 2026
 // 8/1/2024 -> patch 11/1/2024, added origin identifier without CORS -> patch 01/02/2026, don't parse if not a string, did other stuff ya kno -> patch 08/03/2026, remove duplicate function
 
-'use strict';
+"use strict";
 
 function LVMessenger(){
 }
@@ -34,13 +34,13 @@ LVMessenger.types = {
  */
 
 /**
- * @param {Window} target 
- * @param {MessageType} type 
- * @param {*} message 
- * @param {*} [id] 
+ * @param {Window} target
+ * @param {MessageType} type
+ * @param {*} message
+ * @param {*} [id]
  */
 LVMessenger.broadcast = function (target, type, message, id){
-    if(target && 'JSON' in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), '*');
+    if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
 };
 
 /**
@@ -53,14 +53,14 @@ LVMessenger.receive = function (callback, destroyWhenType) {
         try {
             /** @type {LVMessage} */
             var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
-            
+
             if (data.type) switch (data.type) {
                 default: callback(data.type, data.data, data.id); break;
                 case "identify":
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
                     var identity = { name: "LVOS" };
-                    if (ev.source && typeof ev.source.postMessage == "function")
+                    if (ev.source && typeof ev.source.postMessage === "function")
                         LVMessenger.broadcast(ev.source, "identity",  identity);
                     break;
             }
@@ -81,13 +81,13 @@ function getParentWindow() {
 }
 
 /**
- * @param {MessageType} type 
+ * @param {MessageType} type
  * @param {*} [message]
  * @param {string} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
     var target = getParentWindow();
-    if (target && typeof target.__LVMessengerReceive == "function") {
+    if (target && typeof target.__LVMessengerReceive === "function") {
         try {
             target.__LVMessengerReceive(type, message, id);
 
@@ -100,9 +100,9 @@ LVMessenger.broadcastToParent = function (type, message, id) {
 };
 
 /**
- * @param {MessageType} type 
- * @param {LVMessage} message 
- * @param {HTMLIFrameElement} iFrame 
+ * @param {MessageType} type
+ * @param {LVMessage} message
+ * @param {HTMLIFrameElement} iFrame
  */
 LVMessenger.broadcastToChild = function (type, message, iFrame) {
     if (iFrame.contentWindow) LVMessenger.broadcast(iFrame.contentWindow, type, message);
@@ -114,4 +114,4 @@ LVMessenger.onHostBeingLVOS = function (callback) {
         if (type === "identity" && data.name === "LVOS") callback();
     }, "identity");
     LVMessenger.broadcastToParent("identify");
-}
+};
