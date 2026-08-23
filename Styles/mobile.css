@@ -10,6 +10,7 @@
 	display: block !important;
 	height: 40px;
 	position: sticky;
+	background: black;
 }
 
 body {
@@ -63,7 +64,7 @@ footer svg {
 #main-frame {
 	z-index: 100;
     display: block;
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     height: 100%;
 	background-color: white;
