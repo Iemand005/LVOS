@@ -1552,72 +1552,96 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
-	}, function onEnd(enabled) {
-		if (fsTimeout) clearTimeout(fsTimeout);
-		var target = this.target;
-		if (!target) return;
+	}, function(enabled) {
+	var target = this.target;
+	if (!target) return;
 
-		target.classList.toggle("maximized", enabled);
+	// If a newer animation has already started, don't let this stale
+	// completion handler stomp its state.
+	if (this._fsToken !== this._fsTokenAtStart) {
+		// still safe to restore pointer-events, but skip resetting geometry
+		target.style.pointerEvents = "";
+		return;
+	}
 
+	if (this._fsTimeout) { clearTimeout(this._fsTimeout); this._fsTimeout = null; }
+	if (this._fsRaf) { cancelAnimationFrame(this._fsRaf); this._fsRaf = null; }
 
-		this.setScale(1, 1);
-		if (!content) return;
-		translateElement(content, 0, 0, 0, 1, 1);
-		content.style.width = "";
-		content.style.height = "";
-		maximizeAnimations--;
+	target.classList.toggle("maximized", enabled);
+	target.style.pointerEvents = "";
 
-	}, function onToggled(enabled) {
-		var timeOffsetMs = 50;
-		var totalDuration = 280; //Can I uh get this from uh the css somehow
-		var invertDurationOnShrink = false;
+	this.setScale(1, 1);
+	if (!content) return;
+	translateElement(content, 0, 0, 0, 1, 1);
+	content.style.width = "";
+	content.style.height = "";
+	maximizeAnimations--;
+}, function(enabled) {
+	var timeOffsetMs = 50;
+	var totalDuration = 280;
+	var invertDurationOnShrink = false;
 
-		var target = this.target;
-		if (!target) return;
+	var target = this.target;
+	if (!target) return;
 
-		this._maximizing = enabled;
+	this._maximizing = enabled;
 
-		var startWidth = this.width;
-		var startHeight = this.height;
+	// Cancel anything still pending from a previous, interrupted toggle
+	if (this._fsTimeout) {
+		clearTimeout(this._fsTimeout);
+		this._fsTimeout = null;
+	}
+	if (this._fsRaf) {
+		cancelAnimationFrame(this._fsRaf);
+		this._fsRaf = null;
+	}
 
-		var windowSection = document.getElementById("window-section");
-		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
+	// Bump a token; only the latest scheduled work is allowed to apply itself
+	var token = (this._fsToken = (this._fsToken || 0) + 1);
 
-		var scaleX = window.innerWidth / startWidth;
-		var scaleY = height / startHeight;
+	// Use the element's REAL current box, not the cached resting size,
+	// so reversing mid-flight doesn't jump.
+	var rect = target.getBoundingClientRect();
+	var startWidth = rect.width;
+	var startHeight = rect.height;
 
-		target.style.transformOrigin = "top left";
-		target.style.pointerEvents = "none";
+	var windowSection = document.getElementById("window-section");
+	var height = windowSection ? windowSection.clientHeight : window.innerHeight;
 
-		if (!enabled) {
-			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+	var scaleX = window.innerWidth / startWidth;
+	var scaleY = height / startHeight;
 
-			scaleX = 1 / scaleX;
-			scaleY = 1 / scaleY;
-		}
+	target.style.transformOrigin = "top left";
+	target.style.pointerEvents = "none";
 
-		this.setScale(scaleX, scaleY);
+	if (!enabled) {
+		if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+		scaleX = 1 / scaleX;
+		scaleY = 1 / scaleY;
+	}
 
-		var targetWidth = enabled ? window.innerWidth : self.width;
-		var targetHeight = enabled ? height : self.height;
+	this.setScale(scaleX, scaleY);
 
+	var targetWidth = enabled ? window.innerWidth : this.width;
+	var targetHeight = enabled ? height : this.height;
 
+	var self = this;
+	this._fsTimeout = setTimeout(function() {
+		self._fsTimeout = null;
+		self._fsRaf = requestAnimationFrame(function() {
+			self._fsRaf = null;
+			// Stale? A newer toggle happened while we were waiting — bail.
+			if (token !== self._fsToken) return;
+			if (!content) return;
 
-		fsTimeout = setTimeout(function() {
-			// if (maximizeAnimations > 1) {
-			// 	console.log("Animainois ongoign");
-			// 	return;
-			// }
-			requestAnimationFrame(function() {
-				if (!content) return;
-				content.style.width = toPixels(targetWidth);
-				content.style.height = toPixels(targetHeight);
-				void content.offsetWidth;
+			content.style.width = toPixels(targetWidth);
+			content.style.height = toPixels(targetHeight);
+			void content.offsetWidth;
 
-				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-			});
-		}, timeOffsetMs);
-	});
+			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+		});
+	}, timeOffsetMs);
+});
 	else {
 		var startPos = self.position;
 		var startSize = self.size;
