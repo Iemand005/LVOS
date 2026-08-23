@@ -1487,8 +1487,8 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     if (!this.target) return;
-    this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
-    this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
+    // this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
+    // this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
 var viewTransitions = 0;
@@ -1503,6 +1503,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var content = this.content;
 
 	var fsTimeout = 0;
+
+	this.setZ();
 
 	if (flags.useViewTransitionMaximize) {
 		viewTransitions++;
@@ -1739,9 +1741,9 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
     this.move(centerX - this.width / 2, centerY - this.height / 2);
 };
 
-/** @param {number} z */
+/** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
-	this._z = z;
+	this._z = z || topZ++;
 	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
 };
@@ -1984,14 +1986,14 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	var target = this.target;
 	if (!target) return;
 	if (useTransform) {
-		target.style.top = "	 ";
-		target.style.left = "	 ";
+		target.style.top = "";
+		target.style.left = "";
         this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
-		target.style.width = "auto";
-		target.style.height = "auto";
+		target.style.width = "";
+		target.style.height = "";
 	}
 
 	this.updateScale(useTransform);
