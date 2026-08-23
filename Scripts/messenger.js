@@ -60,7 +60,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
                     console.log("Reveived an identity request", ev);
                     /** @type {Identity} */
                     var identity = { name: "LVOS" };
-                    if (ev.source && typeof ev.source.postMessage === "function")
+                    if (ev.source instanceof Window && typeof ev.source.postMessage === "function")
                         LVMessenger.broadcast(ev.source, "identity",  identity);
                     break;
             }
