@@ -22,9 +22,9 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	},
 
 	/** @type {Tile[][]} */
-	tiles = new Array(height),
+	tileGrid = new Array(height),
 	/** @type {Tile[]} */
-	lineartiles = new Array(height*width),
+	tiles = new Array(height*width),
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 /**
@@ -80,7 +80,7 @@ Tile.prototype.getNeighbours = function() {
 	var neighbours = [];
 	for (var i = 0; i < 9; i++) {
 		var x = this.position.x + (i % 3) - 1, y = this.position.y + Math.floor((i / 3) - 1);
-		if((!(x === this.position.x && y === this.position.y)) && tiles[y] && tiles[y][x]) neighbours.push(tiles[y][x]);
+		if((!(x === this.position.x && y === this.position.y)) && tileGrid[y] && tileGrid[y][x]) neighbours.push(tileGrid[y][x]);
 	}
 	return neighbours;
 };
@@ -134,13 +134,13 @@ Minesweeper.prototype.startGame = function () {
 	var self = this;
 	while (table.firstChild) table.removeChild(table.firstChild); // Clear the table
 	for (var y = 0; y < height; y++) {
-		tiles[y] = [];
+		tileGrid[y] = [];
 		var row = table.appendChild(document.createElement("tr"));
 		for (var x = 0; x < width; x++) (function(x, y) {
 			var id = x + (y*width);
 			var button = document.createElement("button");
 			button.id = id.toString();
-			var tile = tiles[y][x] = lineartiles[id] = new Tile(self, button, x, y);
+			var tile = tileGrid[y][x] = tiles[id] = new Tile(self, button, x, y);
 			row.appendChild(document.createElement("td")).appendChild(button);
 
 			button.classList.add("mine");
@@ -197,7 +197,7 @@ LVMessenger.onHostBeingLVOS(function () {
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX, ev.clientY);
 	if(element) {
-		var tile = lineartiles[parseInt(element.firstChild? element.children[0].id: element.id)];
+		var tile = tiles[parseInt(element.firstChild? element.children[0].id: element.id)];
 		if(tile && tile.flagged!==1) tile.quickReveal();
 	}
 }
@@ -216,7 +216,7 @@ function gameOver(won) {
 	minesweeper.isGameWon = won || false;
 	minesweeper.isGameOver = true;
 	setBombCount(0);
-	lineartiles.forEach(function(tile){ tile.reveal(); });
+	tiles.forEach(function(tile){ tile.reveal(); });
 	setEmoji();
 	minesweeper.gameStarted = false;
 	stopTimer();
@@ -229,8 +229,8 @@ function setEmoji(emoji) {
 	if (button) button.textContent=minesweeper.isGameOver?minesweeper.isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 }
 
-Minesweeper.prototype.countBombs = function() { return lineartiles.filter(function(tile){ return tile.mine; }).length; };
-Minesweeper.prototype.countRemainingFields = function() { return lineartiles.filter(function(tile){ return !tile.mine && !tile.revealed; }).length; };
+Minesweeper.prototype.countBombs = function() { return tiles.filter(function(tile){ return tile.mine; }).length; };
+Minesweeper.prototype.countRemainingFields = function() { return tiles.filter(function(tile){ return !tile.mine && !tile.revealed; }).length; };
 
 function activateTimer() {
 	var timer = 0;
@@ -286,7 +286,7 @@ function load() {
 	document.onmouseup = function(ev) {
 		ev.preventDefault();
 		if(!minesweeper.isGameOver) setEmoji(icons.alive);
-		lineartiles.forEach(function(tile){ tile.mousedown = false; });
+		tiles.forEach(function(tile){ tile.mousedown = false; });
 		return false;
 	};
 
