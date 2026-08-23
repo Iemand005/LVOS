@@ -208,12 +208,14 @@ var applications = [
 	{
 		title: "Pinball Space Cadet",
 		id: "pinball",
-		src: "https://98.js.org/programs/pinball/space-cadet.html"
+		src: "https://98.js.org/programs/pinball/space-cadet.html",
+		iconUrl : "https://98.js.org/images/icons/pinball-16x16.png"
 	},
 	{
-		title: "Pinball Space Cadet",
-		id: "pinball",
-		src: "https://98.js.org/programs/explorer/index.html?address=https%3A%2F%2Fwww.google.com"
+		title: "Internet Exporer",
+		id: "ie",
+		src: "https://98.js.org/programs/explorer/index.html?address=https%3A%2F%2Fwww.google.com",
+		iconUrl : "https://98.js.org/images/icons/html-16x16.png"
 	},
 	{
 		title: "Pinball Space Cadet",
