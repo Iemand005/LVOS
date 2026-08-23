@@ -876,7 +876,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     if (!target) return;
     var self = this;
     var shouldKill = kill && !forceOpen;
-	this._stateOpen = forceOpen;
+	this._stateOpen = forceOpen || false;
     this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
 	}, function () {
@@ -1560,7 +1560,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				}
 				viewTransitions--;
 			});
-		} else self.target.classList.toggle('maximized', enable);
+		} else this.target.classList.toggle('maximized', enable);
 		return;
 	}
 
