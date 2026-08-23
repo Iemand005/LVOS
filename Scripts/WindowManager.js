@@ -546,8 +546,8 @@ function Dialog(object, create) {
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
-	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?}} */
-	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null};
+	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?, _fsTokenAtStart: number? }} */
+	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null, _fsTokenAtStart: null };
 
     if (!object) return;
     if (!create) create = false;
@@ -1558,7 +1558,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		if (!target) return;
 
 		if (this._animationProps._fsToken !== this._animationProps._fsTokenAtStart) {
-			// still safe to restore pointer-events, but skip resetting geometry
 			target.style.pointerEvents = "";
 			return;
 		}
