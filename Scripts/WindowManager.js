@@ -1984,8 +1984,8 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	var target = this.target;
 	if (!target) return;
 	if (useTransform) {
-		target.style.top = "0px";
-		target.style.left = "0px";
+		target.style.top = "	 ";
+		target.style.left = "	 ";
         this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
