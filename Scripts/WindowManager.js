@@ -1873,9 +1873,6 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
 
 	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
-	// if (this.useTransform) {
-	// 	this.target.style.height = toPixels(this._height);
-	// } else this.target.style.bottom = toPixels(this.bottom);
 
 	if (update !== false) {
 		if (animate) {
