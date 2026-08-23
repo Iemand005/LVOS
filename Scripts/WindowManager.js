@@ -1502,8 +1502,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var self = this;
 	var content = this.content;
 
-	var fsTimeout = 0;
-
 	this.setZ();
 
 	maximizeAnimations++;
@@ -1553,95 +1551,93 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
 	}, function(enabled) {
-	var target = this.target;
-	if (!target) return;
+		var target = this.target;
+		if (!target) return;
 
-	// If a newer animation has already started, don't let this stale
-	// completion handler stomp its state.
-	if (this._fsToken !== this._fsTokenAtStart) {
-		// still safe to restore pointer-events, but skip resetting geometry
+		if (this._fsToken !== this._fsTokenAtStart) {
+			// still safe to restore pointer-events, but skip resetting geometry
+			target.style.pointerEvents = "";
+			return;
+		}
+
+		if (this._fsTimeout) { clearTimeout(this._fsTimeout); this._fsTimeout = null; }
+		if (this._fsRaf) { cancelAnimationFrame(this._fsRaf); this._fsRaf = null; }
+
+		target.classList.toggle("maximized", enabled);
 		target.style.pointerEvents = "";
-		return;
-	}
 
-	if (this._fsTimeout) { clearTimeout(this._fsTimeout); this._fsTimeout = null; }
-	if (this._fsRaf) { cancelAnimationFrame(this._fsRaf); this._fsRaf = null; }
+		this.setScale(1, 1);
+		if (!content) return;
+		translateElement(content, 0, 0, 0, 1, 1);
+		content.style.width = "";
+		content.style.height = "";
+		maximizeAnimations--;
+	}, function(enabled) {
+		var timeOffsetMs = 50;
+		var totalDuration = 280;
+		var invertDurationOnShrink = false;
 
-	target.classList.toggle("maximized", enabled);
-	target.style.pointerEvents = "";
+		var target = this.target;
+		if (!target) return;
 
-	this.setScale(1, 1);
-	if (!content) return;
-	translateElement(content, 0, 0, 0, 1, 1);
-	content.style.width = "";
-	content.style.height = "";
-	maximizeAnimations--;
-}, function(enabled) {
-	var timeOffsetMs = 50;
-	var totalDuration = 280;
-	var invertDurationOnShrink = false;
+		this._maximizing = enabled;
 
-	var target = this.target;
-	if (!target) return;
+		// Cancel anything still pending from a previous, interrupted toggle
+		if (this._fsTimeout) {
+			clearTimeout(this._fsTimeout);
+			this._fsTimeout = null;
+		}
+		if (this._fsRaf) {
+			cancelAnimationFrame(this._fsRaf);
+			this._fsRaf = null;
+		}
 
-	this._maximizing = enabled;
+		// Bump a token; only the latest scheduled work is allowed to apply itself
+		var token = (this._fsToken = (this._fsToken || 0) + 1);
 
-	// Cancel anything still pending from a previous, interrupted toggle
-	if (this._fsTimeout) {
-		clearTimeout(this._fsTimeout);
-		this._fsTimeout = null;
-	}
-	if (this._fsRaf) {
-		cancelAnimationFrame(this._fsRaf);
-		this._fsRaf = null;
-	}
+		// Use the element's REAL current box, not the cached resting size,
+		// so reversing mid-flight doesn't jump.
+		var rect = target.getBoundingClientRect();
+		var startWidth = rect.width;
+		var startHeight = rect.height;
 
-	// Bump a token; only the latest scheduled work is allowed to apply itself
-	var token = (this._fsToken = (this._fsToken || 0) + 1);
+		var windowSection = document.getElementById("window-section");
+		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
 
-	// Use the element's REAL current box, not the cached resting size,
-	// so reversing mid-flight doesn't jump.
-	var rect = target.getBoundingClientRect();
-	var startWidth = rect.width;
-	var startHeight = rect.height;
+		var scaleX = window.innerWidth / startWidth;
+		var scaleY = height / startHeight;
 
-	var windowSection = document.getElementById("window-section");
-	var height = windowSection ? windowSection.clientHeight : window.innerHeight;
+		target.style.transformOrigin = "top left";
+		target.style.pointerEvents = "none";
 
-	var scaleX = window.innerWidth / startWidth;
-	var scaleY = height / startHeight;
+		if (!enabled) {
+			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+			scaleX = 1 / scaleX;
+			scaleY = 1 / scaleY;
+		}
 
-	target.style.transformOrigin = "top left";
-	target.style.pointerEvents = "none";
+		this.setScale(scaleX, scaleY);
 
-	if (!enabled) {
-		if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
-		scaleX = 1 / scaleX;
-		scaleY = 1 / scaleY;
-	}
+		var targetWidth = enabled ? window.innerWidth : this.width;
+		var targetHeight = enabled ? height : this.height;
 
-	this.setScale(scaleX, scaleY);
+		var self = this;
+		this._fsTimeout = setTimeout(function() {
+			self._fsTimeout = null;
+			self._fsRaf = requestAnimationFrame(function() {
+				self._fsRaf = null;
+				// Stale? A newer toggle happened while we were waiting — bail.
+				if (token !== self._fsToken) return;
+				if (!content) return;
 
-	var targetWidth = enabled ? window.innerWidth : this.width;
-	var targetHeight = enabled ? height : this.height;
+				content.style.width = toPixels(targetWidth);
+				content.style.height = toPixels(targetHeight);
+				void content.offsetWidth;
 
-	var self = this;
-	this._fsTimeout = setTimeout(function() {
-		self._fsTimeout = null;
-		self._fsRaf = requestAnimationFrame(function() {
-			self._fsRaf = null;
-			// Stale? A newer toggle happened while we were waiting — bail.
-			if (token !== self._fsToken) return;
-			if (!content) return;
-
-			content.style.width = toPixels(targetWidth);
-			content.style.height = toPixels(targetHeight);
-			void content.offsetWidth;
-
-			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-		});
-	}, timeOffsetMs);
-});
+				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+			});
+		}, timeOffsetMs);
+	});
 	else {
 		var startPos = self.position;
 		var startSize = self.size;
