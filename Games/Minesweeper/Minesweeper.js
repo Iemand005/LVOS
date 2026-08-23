@@ -139,46 +139,44 @@ Minesweeper.prototype.startGame = function () {
 	for (var y = 0; y < height; y++) {
 		tiles[y] = [];
 		var row = table.appendChild(document.createElement("tr"));
-		for (var x = 0; x < width; x++) (
-			function(x, y) {
-				var id = x + (y*width);
-				var button = document.createElement("button");
-				button.id = id.toString();
-				var tile = tiles[y][x] = lineartiles[id] = new Tile(self, button, x, y);
-				row.appendChild(document.createElement("td")).appendChild(button);
+		for (var x = 0; x < width; x++) (function(x, y) {
+			var id = x + (y*width);
+			var button = document.createElement("button");
+			button.id = id.toString();
+			var tile = tiles[y][x] = lineartiles[id] = new Tile(self, button, x, y);
+			row.appendChild(document.createElement("td")).appendChild(button);
 
-				button.classList.add("mine");
-				tile.generate();
+			button.classList.add("mine");
+			tile.generate();
 
-				button.onmouseover = tile.enableVisual.bind(tile);
-				button.onmouseout = tile.disableVisual.bind(tile);
-				button.ondblclick = function () { alert("hey"); };
+			button.onmouseover = tile.enableVisual.bind(tile);
+			button.onmouseout = tile.disableVisual.bind(tile);
+			button.ondblclick = function () { alert("hey"); };
 
-				button.onmousedown = function(ev){
-					if(!isGameOver) setEmoji(icons.scared);
-					if(!tile.isClickAllowed()) ev.preventDefault();
-					(tile.mousedown = !ev.button) && tile.enableVisual();
-				};
+			button.onmousedown = function(ev){
+				if(!isGameOver) setEmoji(icons.scared);
+				if(!tile.isClickAllowed()) ev.preventDefault();
+				(tile.mousedown = !ev.button) && tile.enableVisual();
+			};
 
-				button.onmouseup = function(){
-					tile.mousedown = false;
-					tile.disableVisual();
-				};
+			button.onmouseup = function(){
+				tile.mousedown = false;
+				tile.disableVisual();
+			};
 
-				button.onclick = function(ev){
-					if(ev.button === 0 && tile.isClickAllowed()){
-						var neighbours = tile.reveal();
-						if(!tile.mine && typeof neighbours !== "undefined") button.textContent = neighbours.toString();
-						else gameOver();
-					} else ev.preventDefault();
-				};
+			button.onclick = function(ev){
+				if(ev.button === 0 && tile.isClickAllowed()){
+					var neighbours = tile.reveal();
+					if(!tile.mine && typeof neighbours !== "undefined") button.textContent = neighbours.toString();
+					else gameOver();
+				} else ev.preventDefault();
+			};
 
-				button.oncontextmenu = function(ev){
-					ev.preventDefault();
-					tile.toggleFlag();
-				};
-			}
-		)(x, y);
+			button.oncontextmenu = function(ev){
+				ev.preventDefault();
+				tile.toggleFlag();
+			};
+		})(x, y);
 	}
 
 	setBombCount(bombCount = this.countBombs());
