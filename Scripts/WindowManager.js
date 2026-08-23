@@ -66,6 +66,7 @@ var flags = {
 	set compositorResize(value) {
 
 		document.body.classList.toggle("compositor-animations", !!value);
+		if (value) this._useViewTransitionMaximize = false;
 		this._compositorResize = value;
 	},
 	_useViewTransitionMaximize: false,
