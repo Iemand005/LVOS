@@ -1534,8 +1534,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (!self.target) return;
 
 
-			transition.ready.then(function() {
-			}).catch(function(ev) {
+			transition.ready.catch(function(ev) {
 				console.warn("transition interrupted:", ev);
 			});
 
