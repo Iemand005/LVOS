@@ -1776,10 +1776,9 @@ Dialog.prototype.setZ = function(z) {
 };
 /**
  * @param {number} width
- * @param {boolean} update
- * @param {boolean} animate
+ * @param {{update:boolean, animate:boolean}} options
  */
-Dialog.prototype.setWidth = function (width, update, animate) {
+Dialog.prototype.setWidth = function (width, options) {
 	if (typeof width !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
