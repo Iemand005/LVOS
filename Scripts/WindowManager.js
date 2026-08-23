@@ -1707,33 +1707,6 @@ Dialog.prototype.updatePosition() {
 	if (!this.target) return;
 	if (this.useTransform) this.updateTranslation();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
-}
-/**
- * @param {number} [x]
- * @param {number} [y]
- * @param {boolean} [update]
- * @param {boolean} [animate]
- */
-Dialog.prototype.move = function (x, y, update, animate) {
-	if (flags.useSkewAnimations) {
-		this._previousX = this.x;
-		this._previousY = this.y;
-	}
-	if (typeof x === "undefined" || x === null) x = this.x;
-	if (typeof y === "undefined" || y === null) y = this.y;
-	var bounds = WindowManager.getWindowBounds();
-	if (x < bounds.left) x = bounds.left;
-	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
-	if (y < bounds.top) y = bounds.top;
-	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
-	var windowWidth = window.innerWidth;
-	var windowHeight = window.innerHeight;
-	this._x = x / windowWidth;
-	this._y = y / windowHeight;
-
-	if (animate !== false) {
-		
-	}
 
 	if (flags.useSkewAnimations) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
@@ -1760,6 +1733,38 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		backdrop.style.width = toPixels(wallpaperWidth);
 		backdrop.style.height = toPixels(wallpaperHeight);
 	} catch(_) {}
+}
+/**
+ * @param {number} [x]
+ * @param {number} [y]
+ * @param {boolean} [update]
+ * @param {boolean} [animate]
+ */
+Dialog.prototype.move = function (x, y, update, animate) {
+	if (flags.useSkewAnimations) {
+		this._previousX = this.x;
+		this._previousY = this.y;
+	}
+	if (typeof x === "undefined" || x === null) x = this.x;
+	if (typeof y === "undefined" || y === null) y = this.y;
+	var bounds = WindowManager.getWindowBounds();
+	if (x < bounds.left) x = bounds.left;
+	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
+	if (y < bounds.top) y = bounds.top;
+	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
+	var windowWidth = window.innerWidth;
+	var windowHeight = window.innerHeight;
+	this._x = x / windowWidth;
+	this._y = y / windowHeight;
+
+	if (update !== false) {
+		var self = this;
+		animate && this.animate(function() {
+			self.updatePosition();
+		});
+	}
+
+	
 
     // i wanna add a like move event thing with velocity and stuff
 
