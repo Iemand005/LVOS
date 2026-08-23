@@ -76,8 +76,8 @@ Tile.prototype.reveal = function() {
 		this.button.textContent = neighbourCount.toString();
 		classes.add("n" + neighbourCount);
 	} else {
-		this.button.textContent = !isGameWon?icons.exploded:icons.correct;
-		gameOver();
+		this.button.textContent = !isGameWon ? icons.exploded : icons.correct;
+		if (!isGameWon) gameOver();
 	}
 	console.log("Neighbours: ", neighbours);
 	if (neighbourCount === 0) for (var neighbour in neighbours) if (neighbours[neighbour]) neighbours[neighbour].reveal();
