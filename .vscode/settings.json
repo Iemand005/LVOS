@@ -24,5 +24,10 @@
 		"statusBar.noFolderForeground": "#FFF8F4"
 	},
 	"git.detectSubmodulesLimit": 20,
-	"liveServer.settings.port": 5501
+	"liveServer.settings.port": 5501,
+	"javascript.inlayHints.parameterTypes.enabled": true,
+	"javascript.inlayHints.variableTypes.enabled": true,
+	"javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+	"javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+	"js/ts.inlayHints.parameterTypes.enabled": true
 }
