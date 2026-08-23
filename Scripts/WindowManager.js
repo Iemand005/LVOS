@@ -1491,20 +1491,11 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
  * @returns
  */
 Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
-	var target = this.target;
-	if (!target) return;
 	var self = this;
 	var enabled = false;
-
 	this.animate(function() {
-			if (!target) return;
-			if (onToggled) onToggled.call(self, enabled = setClass(target, className, force));
-		},
-		onTransitionEnd,
-		function() {
-			if (onEnd) onEnd.call(self, enabled);
-		}
-	);
+		if (self.target && onToggled) onToggled.call(self, enabled = setClass(self.target, className, force));
+	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); });
 };
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
