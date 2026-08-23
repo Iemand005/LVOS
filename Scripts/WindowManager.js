@@ -1671,7 +1671,7 @@ Dialog.prototype.move = function (x, y) {
 		this._previousX = this.x;
 		this._previousY = this.y;
 	}
-	if (typeof x === "undefined" || x == null) x = this.x;
+	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
 	var bounds = WindowManager.getWindowBounds();
 	if (x < bounds.left) x = bounds.left;

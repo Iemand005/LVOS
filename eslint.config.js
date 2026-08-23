@@ -13,7 +13,8 @@ export default tseslint.config({
 		globals: {
 			...globals.browser,
 			...globals.commonjs,
-			"Anim": "readonly"
+			"Anim": "readonly",
+			"LVMessenger": "readonly"
 		}
 	},
 	plugins: {
