@@ -179,10 +179,12 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 		border-top-color: black;
 		border-left-color: black;
 	}
+
+	button.n4 { color: lightblue; }
 }
 
 @media (forced-colors: active) {
   	button {
-		border-color: LinkText;
+		border-color: ButtonBorder !important;
 	}
 }
