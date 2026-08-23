@@ -598,7 +598,7 @@ WindowManager.windowBoundsInset = { top: 0, left: 0, right: 0, bottom: 0 };
 
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
-function relaclulaaWIndowBounts() {
+function recalculateWindowBounds() {
 	// cachedWidth = window.innerWidth;
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
@@ -607,8 +607,8 @@ function relaclulaaWIndowBounts() {
 	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
 }
 
-window.addEventListener("resize", relaclulaaWIndowBounts, false);
-window.addEventListener("load", relaclulaaWIndowBounts, false);
+window.addEventListener("resize", recalculateWindowBounds, false);
+window.addEventListener("load", recalculateWindowBounds, false);
 
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
