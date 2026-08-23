@@ -965,28 +965,13 @@ Object.defineProperty(Dialog.prototype, "z", {
     
 Object.defineProperty(Dialog.prototype, "width", {
 	get: function() { return this._width; },
-	set: function(width) {
-		this.setWidth(width);
-	}
+	set: function(width) { this.setWidth(width); }
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
 	/** @param {number} height */
-	set: function(/** @type {number} */height) {
-		if (typeof height != "number" || !this.target) return;
-
-		var bounds = WindowManager.getWindowBounds();
-		var finalHeight = height; 
-		if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
-		
-		this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
-		if (this.useTransform) {
-			this.target.style.height = toPixels(this._height);
-		} else this.target.style.bottom = toPixels(this.bottom);
-
-		this._isMinHeight = this._height === this.minHeight;
-	}
+	set: function(/** @type {number} */height) { this.setHeight(height); }
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
 	get: function() { return this._minWidth; },
@@ -1769,6 +1754,20 @@ Dialog.prototype.setWidth = function (width) {
 	else this.target.style.right = toPixels(this.right);
 
 	this._isMinWidth = this._width === this.minWidth;
+}
+Dialog.prototype.setHeight = function (height) {
+	if (typeof height != "number" || !this.target) return;
+
+		var bounds = WindowManager.getWindowBounds();
+		var finalHeight = height; 
+		if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
+		
+		this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
+		if (this.useTransform) {
+			this.target.style.height = toPixels(this._height);
+		} else this.target.style.bottom = toPixels(this.bottom);
+
+		this._isMinHeight = this._height === this.minHeight;
 }
 /**
  * @param {number} [width]
