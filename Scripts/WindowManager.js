@@ -2134,17 +2134,11 @@ var windowButtons = {
     full: 1,
     close: 2
 };
-/** @type {string| null} */
-var activeDialogId = null;
 /** @type {Dialog| null} */
 var activeDialog = null;
-var resizeDirection = 0;
 var topZ = 100;
-/** @type {string| null} */
-var metroBodyOrigin;
 var loaded = false;
 /** @type {number} */
-var timeout = -1;
 
 /**
  * @param {MessageType} type
@@ -2295,7 +2289,6 @@ function windowActivationEvent(event, dialog) {
     cancelDomEvent(event);
     // console.log("Activating window", dialog);
     activeDialog = dialog;
-    resizeDirection = 0;
     enableDialogDrag();
     dialog.setClickOffset(event.clientX, event.clientY);
     dialog.activate();
