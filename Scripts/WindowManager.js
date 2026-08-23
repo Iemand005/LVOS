@@ -1595,6 +1595,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = 1 / scaleY;
 		}
 
+		if (maximizeAnimations > 1) {
+				console.log("Animainois ongoign");
+				return;
+			}
+
 		this.setScale(scaleX, scaleY);
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
