@@ -26,7 +26,15 @@ declare global {
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
+		
+		documentPictureInPicture: DocumentPictureInPicture | undefined;
 
+		inspect?: (value: any) => void;
+
+		GearsFactory?: unknown;
+
+
+		
 		windowManager?: WindowManager;
 		windows?: Dialog[];
 
@@ -37,11 +45,6 @@ declare global {
 
 		desktopManager?: DesktopManager;
 
-		documentPictureInPicture: DocumentPictureInPicture | undefined;
-
-		inspect?: (value: any) => void;
-
-		GearsFactory?: unknown;
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
