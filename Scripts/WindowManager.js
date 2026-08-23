@@ -1778,7 +1778,7 @@ Dialog.prototype.resize = function (width, height) {
 	if (typeof width == "undefined" || width == null) width = this.width;
 	if (typeof height == "undefined" || height == null) height = this.height;
 	this.setWidth(width);
-	this.height = height;
+	this.setHeight(height);
 };
 Dialog.prototype.update = function () {
 	this.move();
