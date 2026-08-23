@@ -1454,6 +1454,36 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
 		return propertyName === animationEndTrigger;
 	}, onEnd, onToggled);
 };
+
+/**
+ * @param {(name:string)=>boolean} [onTransitionEnd]
+ * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
+ * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
+ * @returns
+ */
+Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
+	var target = this.target;
+	if (!target) return;
+	var dialog = this;
+	var enabled = false;
+	if (supportsTransitions) {
+		target.classList.add("animating");
+		/** @type {(ev: TransitionEvent)=>void} */
+		var animationHandler = function(event) {
+			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
+			dialog.stopAnimating();
+			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
+			target.removeEventListener(transitionEndEvent, animationHandler, false);
+			if (onEnd) onEnd.call(dialog, enabled);
+		};
+		target.addEventListener(transitionEndEvent, animationHandler, false);
+	}
+
+	window.requestAnimationFrame(function() {
+		if (!target) return;
+		if (onToggled) onToggled.call(dialog, enabled);
+	});
+};
 /**
  * @param {string} className
  * @param {boolean} [force]
