@@ -1803,13 +1803,18 @@ Dialog.prototype.setZ = function(z) {
 	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
 };
+Dialog.prototype.updateWidth = function () {
+	if (!this.target) return;
+	if (this.useTransform) this.target.style.width = toPixels(this._width);
+	else this.target.style.right = toPixels(this.right);
+};
 /**
  * @param {number} width
  * @param {boolean} [update]
  * @param {boolean} [animate]
  */
 Dialog.prototype.setWidth = function (width, update, animate) {
-	if (typeof width !== "number" || !this.target) return;
+	if (typeof width !== "number") return;
 
 	var bounds = WindowManager.getWindowBounds();
 
@@ -1828,8 +1833,7 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 	this._width = max(min(width, this.maxWidth), this.minWidth);
 
 	if (update !== false) {
-		if (this.useTransform) this.target.style.width = toPixels(this._width);
-		else this.target.style.right = toPixels(this.right);
+		
 	}
 
 	this._isMinWidth = this._width === this.minWidth;
