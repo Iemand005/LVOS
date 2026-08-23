@@ -1836,17 +1836,12 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 
 	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
 	this._width = max(min(width, this.maxWidth), this.minWidth);
+	this._isMinWidth = this._width === this.minWidth;
 
 	if (update !== false) {
-		if (animate) {
-			var self = this;
-			this.animate(function() {
-				self.updateWidth();
-			});
-		} else this.updateWidth();
+		if (animate) this.animate(this.updateWidth);
+		else this.updateWidth();
 	}
-
-	this._isMinWidth = this._width === this.minWidth;
 };
 /**
  * @param {number} height
@@ -1873,13 +1868,12 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
 
 	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
+	this._isMinHeight = this._height === this.minHeight;
 
 	if (update !== false) {
 		if (animate) this.animate(this.updateHeight);
 		else this.updateHeight();
 	}
-
-	this._isMinHeight = this._height === this.minHeight;
 };
 /**
  * @param {number} [width]
