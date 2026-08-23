@@ -546,7 +546,7 @@ function Dialog(object, create) {
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
-	this._animationProps = {};
+	this._animationProps = { _fsTimeout: 0};
 
     if (!object) return;
     if (!create) create = false;
@@ -1556,14 +1556,14 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 		if (!target) return;
 
-		if (this._fsToken !== this._fsTokenAtStart) {
+		if (this._animationProps._fsToken !== this._animationProps._fsTokenAtStart) {
 			// still safe to restore pointer-events, but skip resetting geometry
 			target.style.pointerEvents = "";
 			return;
 		}
 
-		if (this._fsTimeout) { clearTimeout(this._fsTimeout); this._fsTimeout = null; }
-		if (this._fsRaf) { cancelAnimationFrame(this._fsRaf); this._fsRaf = null; }
+		if (this._animationProps._fsTimeout) { clearTimeout(this._animationProps._fsTimeout); this._animationProps._fsTimeout = null; }
+		if (this._animationProps._fsRaf) { cancelAnimationFrame(this._animationProps._fsRaf); this._animationProps._fsRaf = null; }
 
 		target.classList.toggle("maximized", enabled);
 		target.style.pointerEvents = "";
@@ -1584,16 +1584,16 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this._maximizing = enabled;
 
-		if (this._fsTimeout) {
-			clearTimeout(this._fsTimeout);
-			this._fsTimeout = null;
+		if (this._animationProps._fsTimeout) {
+			clearTimeout(this._animationProps._fsTimeout);
+			this._animationProps._fsTimeout = null;
 		}
-		if (this._fsRaf) {
-			cancelAnimationFrame(this._fsRaf);
-			this._fsRaf = null;
+		if (this._animationProps._fsRaf) {
+			cancelAnimationFrame(this._animationProps._fsRaf);
+			this._animationProps._fsRaf = null;
 		}
 
-		var token = (this._fsToken = (this._fsToken || 0) + 1);
+		var token = (this._animationProps._fsToken = (this._animationProps._fsToken || 0) + 1);
 
 		var rect = target.getBoundingClientRect();
 		var startWidth = rect.width;
