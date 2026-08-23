@@ -1559,6 +1559,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		target.classList.toggle("maximized", enabled);
 
+		if (maximizeAnimations > 1) {
+				console.log("Animainois ongoign");
+				return;
+			}
+
 		this.setScale(1, 1);
 		if (!content) return;
 		translateElement(content, 0, 0, 0, 1, 1);
@@ -1595,10 +1600,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = 1 / scaleY;
 		}
 
-		if (maximizeAnimations > 1) {
-				console.log("Animainois ongoign");
-				return;
-			}
+		
 
 		this.setScale(scaleX, scaleY);
 
