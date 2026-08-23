@@ -60,8 +60,8 @@ Tile.prototype.generate = function() { // This generates the mines, the algorith
 Tile.prototype.reveal = function() {
 	if (!this.button) return;
 	if (this.revealed) return 0;
-	if (!gameStarted) {
-		gameStarted = true;
+	if (!minesweeper.gameStarted) {
+		minesweeper.gameStarted = true;
 		activateTimer();
 	}
 	this.revealed = true;
@@ -74,8 +74,8 @@ Tile.prototype.reveal = function() {
 		this.button.textContent = neighbourCount.toString();
 		classes.add("n" + neighbourCount);
 	} else {
-		this.button.textContent = !isGameWon ? icons.exploded : icons.correct;
-		if (!isGameWon) gameOver();
+		this.button.textContent = !minesweeper.isGameWon ? icons.exploded : icons.correct;
+		if (!minesweeper.isGameWon) gameOver();
 	}
 	console.log("Neighbours: ", neighbours);
 	if (neighbourCount === 0) for (var neighbour in neighbours) if (neighbours[neighbour]) neighbours[neighbour].reveal();
@@ -154,7 +154,7 @@ Minesweeper.prototype.startGame = function () {
 			button.ondblclick = function () { alert("hey"); };
 
 			button.onmousedown = function(ev){
-				if(!isGameOver) setEmoji(icons.scared);
+				if(!self.isGameOver) setEmoji(icons.scared);
 				if(!tile.isClickAllowed()) ev.preventDefault();
 				(tile.mousedown = !ev.button) && tile.enableVisual();
 			};
@@ -192,11 +192,10 @@ function sendDesiredSize(){
 	}
 }
 
-try {
-	LVMessenger.onHostBeingLVOS(function () {
-		console.log("My host is LVOS!!");
-	});
-} catch(ex) {}
+LVMessenger.onHostBeingLVOS(function () {
+	console.log("My host is LVOS!!");
+});
+	
 /** @param {MouseEvent} ev */
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX, ev.clientY);
@@ -216,13 +215,13 @@ function randomNumberBetween(start, end) {
 }
 /** @param {boolean} [won] */
 function gameOver(won) {
-	if(isGameOver) return;
-	isGameWon = won || false;
-	isGameOver = true;
+	if (minesweeper.isGameOver) return;
+	minesweeper.isGameWon = won || false;
+	minesweeper.isGameOver = true;
 	setBombCount(0);
 	lineartiles.forEach(function(tile){ tile.reveal(); });
 	setEmoji();
-	gameStarted = false;
+	minesweeper.gameStarted = false;
 	stopTimer();
 }
 /** @param {string} [emoji] */
@@ -230,7 +229,7 @@ function setEmoji(emoji) {
 	var thing = document.querySelector("div");
 	if (!thing) return;
 	var button = thing.querySelector("button");
-	if (button) button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
+	if (button) button.textContent=minesweeper.isGameOver?minesweeper.isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 }
 
 Minesweeper.prototype.countBombs = function() { return lineartiles.filter(function(tile){ return tile.mine; }).length; };
@@ -286,7 +285,7 @@ function load() {
 	document.body.ondblclick = quickRevealEvent;
 	document.ondblclick = quickRevealEvent;
 	var table = document.querySelector("table");
-	(table || document).onmousedown = setEmoji.bind(null, !isGameOver?icons.scared:icons.dead);
+	(table || document).onmousedown = setEmoji.bind(null, !minesweeper.isGameOver?icons.scared:icons.dead);
 	document.onmouseup = function(ev) {
 		ev.preventDefault();
 		if(!isGameOver) setEmoji(icons.alive);

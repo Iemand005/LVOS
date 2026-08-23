@@ -8,17 +8,17 @@ function LVMessenger(){
 }
 
 LVMessenger.types = {
-    open: "open",
-    windowSize: "windowSize",
-    windowMove: "windowMove",
-    mouseUp: "mouseUp",
-    launchOverlay: "launchOverlay",
-    prepareToLaunchOverlay: "prepareToLaunchOverlay",
-    readyToLaunchOverlay: "readyToLaunchOverlay",
-    identify: "identify",
-    identity: "identity",
-    pip: "pip",
-    visualizers: "visualizers"
+	open: "open",
+	windowSize: "windowSize",
+	windowMove: "windowMove",
+	mouseUp: "mouseUp",
+	launchOverlay: "launchOverlay",
+	prepareToLaunchOverlay: "prepareToLaunchOverlay",
+	readyToLaunchOverlay: "readyToLaunchOverlay",
+	identify: "identify",
+	identity: "identity",
+	pip: "pip",
+	visualizers: "visualizers"
 };
 
 /**
@@ -40,7 +40,7 @@ LVMessenger.types = {
  * @param {*} [id]
  */
 LVMessenger.broadcast = function (target, type, message, id){
-    if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
+	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
 };
 
 /**
@@ -48,37 +48,37 @@ LVMessenger.broadcast = function (target, type, message, id){
  * @param {MessageType} [destroyWhenType]
  */
 LVMessenger.receive = function (callback, destroyWhenType) {
-    /** @type {(this: Window, ev: MessageEvent<any>) => any} */
-    var messageListener = function (ev) {
-        try {
-            /** @type {LVMessage} */
-            var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
+	/** @type {(this: Window, ev: MessageEvent<any>) => any} */
+	var messageListener = function (ev) {
+		try {
+			/** @type {LVMessage} */
+			var data = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data;
 
-            if (data.type) switch (data.type) {
-                default: callback(data.type, data.data, data.id); break;
-                case "identify":
-                    console.log("Reveived an identity request", ev);
-                    /** @type {Identity} */
-                    var identity = { name: "LVOS" };
-                    if (ev.source instanceof Window && typeof ev.source.postMessage === "function")
-                        LVMessenger.broadcast(ev.source, "identity",  identity);
-                    else console.warn("Couldn't send identity request!", ev);
-                    break;
-            }
-            // else console.warn("Missing data property", data);
-            if (data.type === destroyWhenType) this.window.removeEventListener("message", messageListener);
-        } catch (ex) {
-            console.warn("Error decoding data", ev.data, ex);
-        }
-    };
+			if (data.type) switch (data.type) {
+				default: callback(data.type, data.data, data.id); break;
+				case "identify":
+					console.log("Reveived an identity request", ev);
+					/** @type {Identity} */
+					var identity = { name: "LVOS" };
+					if (ev.source instanceof Window && typeof ev.source.postMessage === "function")
+						LVMessenger.broadcast(ev.source, "identity",  identity);
+					else console.warn("Couldn't send identity request!", ev);
+					break;
+			}
+			// else console.warn("Missing data property", data);
+			if (data.type === destroyWhenType) this.window.removeEventListener("message", messageListener);
+		} catch (ex) {
+			console.warn("Error decoding data", ev.data, ex);
+		}
+	};
 
-    window.addEventListener("message", messageListener, false);
+	window.addEventListener("message", messageListener, false);
 
-    return messageListener;
+	return messageListener;
 };
 
 function getParentWindow() {
-    return window.parent && window.parent !== window ? window.parent : window.top;
+	return window.parent && window.parent !== window ? window.parent : window.top;
 }
 
 /**
@@ -87,14 +87,14 @@ function getParentWindow() {
  * @param {string} [id]
  */
 LVMessenger.broadcastToParent = function (type, message, id) {
-    var target = getParentWindow();
-    try {
-        if (target && typeof target.__LVMessengerReceive === "function")
-            target.__LVMessengerReceive(type, message, id);
-    } catch (ex) {
-        console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
-        if (target) LVMessenger.broadcast(target, type, message, id);
-    }
+	var target = getParentWindow();
+	try {
+		if (target && typeof target.__LVMessengerReceive === "function")
+			target.__LVMessengerReceive(type, message, id);
+	} catch (ex) {
+		console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
+		if (target) LVMessenger.broadcast(target, type, message, id);
+	}
 };
 
 /**
@@ -103,13 +103,17 @@ LVMessenger.broadcastToParent = function (type, message, id) {
  * @param {HTMLIFrameElement} iFrame
  */
 LVMessenger.broadcastToChild = function (type, message, iFrame) {
-    if (iFrame.contentWindow) LVMessenger.broadcast(iFrame.contentWindow, type, message);
+	if (iFrame.contentWindow) LVMessenger.broadcast(iFrame.contentWindow, type, message);
 };
 
 /** @param {()=>void} callback */
 LVMessenger.onHostBeingLVOS = function (callback) {
-    LVMessenger.receive(function(type, data) {
-        if (type === "identity" && data.name === "LVOS") callback();
-    }, "identity");
-    LVMessenger.broadcastToParent("identify");
+	try {
+		LVMessenger.receive(function(type, data) {
+			if (type === "identity" && data.name === "LVOS") callback();
+		}, "identity");
+		LVMessenger.broadcastToParent("identify");
+	} catch (ex) {
+		console.warn("Failed to request host OS");
+	}
 };
