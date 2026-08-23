@@ -1493,17 +1493,17 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
 	var target = this.target;
 	if (!target) return;
-	var dialog = this;
+	var self = this;
 	var enabled = false;
 
 	this.animate(
 		function() {
 			if (!target) return;
-			if (onToggled) onToggled.call(dialog, enabled = setClass(target, className, force));
+			if (onToggled) onToggled.call(self, enabled = setClass(target, className, force));
 		},
 		onTransitionEnd,
 		function() {
-			if (onEnd) onEnd.call(dialog, enabled);
+			if (onEnd) onEnd.call(self, enabled);
 		}
 	);
 };
