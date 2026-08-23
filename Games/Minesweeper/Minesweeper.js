@@ -28,9 +28,6 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	lineartiles = new Array(height*width),
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
-// Declaring the modifiable variables.
-
-
 /**
  * @param {Minesweeper} minesweeper
  * @param {HTMLButtonElement} button
