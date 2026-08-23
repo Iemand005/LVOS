@@ -1499,7 +1499,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	this.animate(
 		function() {
 			if (!target) return;
-			if (onToggled) onToggled.call(dialog, setClass(target, className, force));
+			if (onToggled) onToggled.call(dialog, enabled = setClass(target, className, force));
 		},
 		onTransitionEnd,
 		function() {
