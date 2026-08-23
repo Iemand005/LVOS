@@ -1558,20 +1558,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
-	}, function(enabled) {
+	}, function onEnd(enabled) {
+		if (self._animationProps._fsTimeout) clearTimeout(self._animationProps._fsTimeout);
 		var target = this.target;
 		if (!target) return;
 
-		// if (this._animationProps._fsToken !== this._animationProps._fsTokenAtStart) {
-		// 	target.style.pointerEvents = "";
-		// 	return;
-		// }
-
-		if (this._animationProps._fsTimeout) { clearTimeout(this._animationProps._fsTimeout); this._animationProps._fsTimeout = null; }
-		if (this._animationProps._fsRaf) { cancelAnimationFrame(this._animationProps._fsRaf); this._animationProps._fsRaf = null; }
-
 		target.classList.toggle("maximized", enabled);
-		target.style.pointerEvents = "";
+
 
 		this.setScale(1, 1);
 		if (!content) return;
@@ -1579,9 +1572,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		content.style.width = "";
 		content.style.height = "";
 		maximizeAnimations--;
-	}, function(enabled) {
+
+	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
-		var totalDuration = 280;
+		var totalDuration = 280; //Can I uh get this from uh the css somehow
 		var invertDurationOnShrink = false;
 
 		var target = this.target;
@@ -1589,20 +1583,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this._maximizing = enabled;
 
-		if (this._animationProps._fsTimeout) {
-			clearTimeout(this._animationProps._fsTimeout);
-			this._animationProps._fsTimeout = null;
-		}
-		if (this._animationProps._fsRaf) {
-			cancelAnimationFrame(this._animationProps._fsRaf);
-			this._animationProps._fsRaf = null;
-		}
-
-		var token = (this._animationProps._fsToken = (this._animationProps._fsToken || 0) + 1);
-
-		var rect = target.getBoundingClientRect();
-		var startWidth = rect.width;
-		var startHeight = rect.height;
+		var startWidth = this.width;
+		var startHeight = this.height;
 
 		var windowSection = document.getElementById("window-section");
 		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
@@ -1615,24 +1597,25 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		if (!enabled) {
 			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+
 			scaleX = 1 / scaleX;
 			scaleY = 1 / scaleY;
 		}
 
 		this.setScale(scaleX, scaleY);
 
-		var targetWidth = enabled ? window.innerWidth : this.width;
-		var targetHeight = enabled ? height : this.height;
+		var targetWidth = enabled ? window.innerWidth : self.width;
+		var targetHeight = enabled ? height : self.height;
 
-		var self = this;
-		this._animationProps._fsTimeout = setTimeout(function() {
-			self._animationProps._fsTimeout = null;
-			self._animationProps._fsRaf = requestAnimationFrame(function() {
-				self._animationProps._fsRaf = null;
-				// Stale? A newer toggle happened while we were waiting — bail.
-				if (token !== self._animationProps._fsToken) return;
+
+
+		self._animationProps._fsTimeout = setTimeout(function() {
+			// if (maximizeAnimations > 1) {
+			// 	console.log("Animainois ongoign");
+			// 	return;
+			// }
+			requestAnimationFrame(function() {
 				if (!content) return;
-
 				content.style.width = toPixels(targetWidth);
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
