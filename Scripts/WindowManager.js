@@ -27,7 +27,7 @@ var supportsTransitions = false;
 var supportsTransform = false;
 
 /** @constant */
-var isBlink = 'chrome' in window;
+var isBlink = "chrome" in window;
 
 (function () {
 	var style = document.createElement("div").style;
@@ -108,18 +108,18 @@ function cancelDomEvent(event) {
 /** @param {string} url */
 function getFaviconUrl(url) {
 	var m = url.match(/^([a-z]+:\/\/[^\/]+)/i);
-	return (m ? m[1] : url) + '/favicon.ico';
+	return (m ? m[1] : url) + "/favicon.ico";
 }
 
 /** @param {string} url */
 function getDomain(url) {
-	return url.replace(/^[a-z]+:\/\//i, '').split('/')[0].split('?')[0];
+	return url.replace(/^[a-z]+:\/\//i, "").split("/")[0].split("?")[0];
 }
 
 /** @param {string} url */
 function getSiteName(url) {
-	var domain = url.replace(/^[a-z]+:\/\//i, '').split('/')[0].split('?')[0];
-	var parts = domain.split('.');
+	var domain = url.replace(/^[a-z]+:\/\//i, "").split("/")[0].split("?")[0];
+	var parts = domain.split(".");
 	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
 	return name.charAt(0).toUpperCase() + name.slice(1);
 }
@@ -598,8 +598,8 @@ function relaclulaaWIndowBounts() {
 	WindowManager._windowBounds.bottom = inset.bottom != null ? window.innerHeight - inset.bottom : Infinity;
 }
 
-window.addEventListener('resize', relaclulaaWIndowBounts, false);
-window.addEventListener('load', relaclulaaWIndowBounts, false);
+window.addEventListener("resize", relaclulaaWIndowBounts, false);
+window.addEventListener("load", relaclulaaWIndowBounts, false);
 
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
@@ -652,7 +652,7 @@ Dialog.prototype.initWithObject = function(object) {
 
                 // windowManager.loadState(this);
             } finally {}
-            if (object.classes && typeof object.classes === 'object'){
+            if (object.classes && typeof object.classes === "object"){
                 object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // We can't use class since it's a keyword!!
             }
             this.openUrl(object.src);
@@ -1411,7 +1411,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 };
 
 /** @type {"webkitTransitionEnd" | "transitionend"} */
-var transitionEndEvent = ('webkitTransition' in document.documentElement.style) ? 'webkitTransitionEnd' : 'transitionend';
+var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 /**
  * @param {HTMLElement} element
@@ -1507,12 +1507,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}
 
 
-		this.target.style.viewTransitionName = 'window-fullscreen';
+		this.target.style.viewTransitionName = "window-fullscreen";
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(function() {
 				if (!self.target) return;
-				self.target.classList.toggle('maximized', enable);
+				self.target.classList.toggle("maximized", enable);
 			});
 			if (!self.target) return;
 
@@ -1530,11 +1530,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				if (viewTransitions > 1) {
 					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 				} else {
-					self.target.style.viewTransitionName = '';
+					self.target.style.viewTransitionName = "";
 				}
 				viewTransitions--;
 			});
-		} else this.target.classList.toggle('maximized', enable);
+		} else this.target.classList.toggle("maximized", enable);
 		return;
 	}
 
@@ -1554,8 +1554,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this.setScale(1, 1);
 		if (!content) return;
 		translateElement(content, 0, 0, 0, 1, 1);
-		content.style.width = '';
-		content.style.height = '';
+		content.style.width = "";
+		content.style.height = "";
 
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
@@ -1576,8 +1576,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var scaleX = window.innerWidth / startWidth;
 		var scaleY = height / startHeight;
 
-		target.style.transformOrigin = 'top left';
-		target.style.pointerEvents = 'none';
+		target.style.transformOrigin = "top left";
+		target.style.pointerEvents = "none";
 
 		if (!enabled) {
 			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
@@ -2117,7 +2117,7 @@ function windowManagerInit() {
 
 
 	LVMessenger.receive(messageReceived);
-	window.metaThemeColor = document.querySelector('meta[name="theme-color"]') || undefined;
+	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
 	if (window.__LVMessenger)
 		window.__LVMessenger.accent = window.metaThemeColor;
 }
@@ -2361,7 +2361,7 @@ function updateTopZ(newZ) {
 
 /** @param {*} properties */
 function stringifyDialogProperties(properties){
-    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, '=').replace(/[}{"]/g, '') : "No JSON!";
+    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
 }
 
 /** @param {Element| null} target */
@@ -2401,7 +2401,7 @@ function pixelsToCentimeters(pixels){
 /** @param {string} text */
 function fromPixels(text){
     if (text !== null) try {
-        return typeof text === 'number' ? text : parseInt(text.replace("px", ''));
+        return typeof text === "number" ? text : parseInt(text.replace("px", ""));
     } catch (ex) { console.warn("Failed to parse pixels:", ex); }
     return 0;
 }
