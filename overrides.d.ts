@@ -27,6 +27,7 @@ declare global {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
 
+		windowManager?: WindowManager;
 		windows?: Dialog[];
 
 		__LVMessengerReceive?: (type: MessageType, data: any, source?: string) => void;

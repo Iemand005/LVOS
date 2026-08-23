@@ -2101,8 +2101,8 @@ DocumentCrawler.prototype.getOverlay = function () { return document.getElementB
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
-window.windowManager = new WindowManager;
-window.windowManager.isWindowUpdatesEnabled = true;
+var windowManager = new WindowManager;
+windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler();
 
 function windowManagerInit() {
