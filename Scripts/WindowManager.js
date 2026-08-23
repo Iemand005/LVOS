@@ -1857,6 +1857,18 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 	if (typeof height !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
+
+	if (bounds.bottom !== Infinity) {
+		var overflow = this.y + height - bounds.bottom;
+		if (overflow > 0) {
+			var newY = this.y - overflow;
+			if (bounds.top !== undefined && newY < bounds.top) {
+				newY = bounds.top;
+			}
+			this.move(this.x, newY);
+		}
+	}
+
 	var finalHeight = height;
 	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
 
