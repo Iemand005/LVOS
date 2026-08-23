@@ -546,7 +546,7 @@ function Dialog(object, create) {
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
-	/** @type {{_fsTimeout?: number | null}} */
+	/** @type {{_fsTimeout: number?}} */
 	this._animationProps = { _fsTimeout: 0};
 
     if (!object) return;
