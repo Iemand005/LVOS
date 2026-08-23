@@ -180,3 +180,9 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 		border-left-color: black;
 	}
 }
+
+@media (forced-colors: active) {
+  	button {
+		border-color: LinkText;
+	}
+}
