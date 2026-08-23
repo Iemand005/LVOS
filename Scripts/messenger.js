@@ -62,6 +62,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
                     var identity = { name: "LVOS" };
                     if (ev.source instanceof Window && typeof ev.source.postMessage === "function")
                         LVMessenger.broadcast(ev.source, "identity",  identity);
+                    else console.warn("Couldn't send identity request!", ev);
                     break;
             }
             // else console.warn("Missing data property", data);
