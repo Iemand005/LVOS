@@ -1781,13 +1781,14 @@ Dialog.prototype.setWidth = function (width) {
 	var bounds = WindowManager.getWindowBounds();
 
 	if (bounds.right !== Infinity) {
-		var overflow = this._x + width - bounds.right;
+		var overflow = this.x + width - bounds.right;
 		if (overflow > 0) {
-			var newX = this._x - overflow;
+			var newX = this.x - overflow;
 			if (bounds.left !== undefined && newX < bounds.left) {
 				newX = bounds.left;
 			}
-			this.x = newX;
+			// this.x = newX;
+			this.move(newX);
 		}
 	}
 
