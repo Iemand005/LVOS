@@ -1808,6 +1808,11 @@ Dialog.prototype.updateWidth = function () {
 	if (this.useTransform) this.target.style.width = toPixels(this._width);
 	else this.target.style.right = toPixels(this.right);
 };
+Dialog.prototype.updateHeight = function () {
+	if (!this.target) return;
+	if (this.useTransform) this.target.style.height = toPixels(this._height);
+	else this.target.style.bottom = toPixels(this.bottom);
+};
 /**
  * @param {number} width
  * @param {boolean} [update]
