@@ -235,14 +235,10 @@ function gameOver(won) {
 }
 /** @param {string} [emoji] */
 function setEmoji(emoji) {
-	try {
-		var thing = document.querySelector("div");
-		if (!thing) return;
-		var button = thing.querySelector("button");
-		if (button) button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
-	} catch (ex) {
-
-	}
+	var thing = document.querySelector("div");
+	if (!thing) return;
+	var button = thing.querySelector("button");
+	if (button) button.textContent=isGameOver?isGameWon?icons.won:icons.dead:emoji?emoji:icons.alive;
 }
 
 Minesweeper.prototype.countBombs = function() { return lineartiles.filter(function(tile){ return tile.mine; }).length; };
