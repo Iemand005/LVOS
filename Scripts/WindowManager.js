@@ -879,8 +879,9 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	this._stateOpen = forceOpen || false;
     this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
-	}, function () {
+	}, function (enabed) {
         if (shouldKill) self.kill();
+		if (enabled) self.messageFrame("windowSize", {});
     }, function (enabled) {
 		self._stateOpen = enabled;
         if (enabled) {
@@ -1169,7 +1170,7 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Object.defineProperty(Dialog.prototype, "closeable", {
-	get: function() { return this.application != null; }
+	get: function() { return this.application !== null; }
 });
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
