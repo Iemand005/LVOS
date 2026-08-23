@@ -2197,7 +2197,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
 					if (!pipWindow) return;
 					pipWindow.onresize = function() {
-						// if (!(targetElement instanceof HTMLCanvasElement)) return;
+						if (!(targetElement instanceof HTMLCanvasElement)) return;
 						targetElement.width = targetElement.clientWidth;
 						targetElement.height = targetElement.clientHeight;
 					};
