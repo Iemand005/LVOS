@@ -883,7 +883,10 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
         if (shouldKill) self.kill();
     }, function (enabled) {
 		self._stateOpen = enabled;
-        if (enabled) self.activate();
+        if (enabled) {
+			self.activate();
+			self.messageFrame("windowSize", {});
+		}
     });
 
 	windowManager.saveState();
