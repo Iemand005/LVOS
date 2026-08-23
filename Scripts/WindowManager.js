@@ -1774,7 +1774,9 @@ Dialog.prototype.setZ = function(z) {
 	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
 };
-/** @param {number} width */
+/**
+ * @param {number} width
+ */
 Dialog.prototype.setWidth = function (width) {
 	if (typeof width !== "number" || !this.target) return;
 
