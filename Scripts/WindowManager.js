@@ -1549,6 +1549,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		return name === "transform" || name === "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
 	}, function onEnd(enabled) {
@@ -1563,6 +1564,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		translateElement(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
 		content.style.height = "";
+		maximizeAnimations--;
 
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
@@ -1601,6 +1603,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 
 		fsTimeout = setTimeout(function() {
+			if (maximizeAnimations > 1) {
+				console.log("Animainois ongoign");
+				return;
+			}
 			requestAnimationFrame(function() {
 				if (!content) return;
 				content.style.width = toPixels(targetWidth);
