@@ -966,17 +966,21 @@ Object.defineProperty(Dialog.prototype, "z", {
 Object.defineProperty(Dialog.prototype, "width", {
 	get: function() { return this._width; },
 	set: function(width) {
-		if (typeof width != "number" || !this.target) return;
-
-		var bounds = WindowManager.getWindowBounds();
-		if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
-		this._width = max(min(width, this.maxWidth), this.minWidth);
-		if (this.useTransform) this.target.style.width = toPixels(this._width);
-		else this.target.style.right = toPixels(this.right);
-
-		this._isMinWidth = this._width === this.minWidth;
+		this.setWidth(width);
 	}
 });
+
+Dialog.prototype.setWidth = function (width) {
+	if (typeof width != "number" || !this.target) return;
+
+	var bounds = WindowManager.getWindowBounds();
+	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
+	this._width = max(min(width, this.maxWidth), this.minWidth);
+	if (this.useTransform) this.target.style.width = toPixels(this._width);
+	else this.target.style.right = toPixels(this.right);
+
+	this._isMinWidth = this._width === this.minWidth;
+}
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
