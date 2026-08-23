@@ -14,6 +14,16 @@ export default tseslint.config({
 		'@typescript-eslint': tseslint.plugin,
 	},
 	rules: {
+		"comma-dangle": ["error", "never"],
+		"no-var": "off",
+		"no-sequences": "off",
+		"comma-spacing": "warn",
+		"no-trailing-spaces": "warn",
+		"semi": ["warn", "always"],
+		"quotes": ["warn", "double"],
+		"no-unused-vars": "warn",
+		"no-undef": "error",
+		"eqeqeq": "warn",
 		'no-restricted-syntax': [
 			'error',
 			{
