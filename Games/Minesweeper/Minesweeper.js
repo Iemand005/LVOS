@@ -147,12 +147,8 @@ Minesweeper.prototype.startGame = function () {
 				button.id = id.toString();
 				var tile = tiles[y][x] = lineartiles[id] = new Tile(self, button, x, y);
 				row.appendChild(document.createElement("td")).appendChild(button);
-				try {
 
-					button.classList.add("mine");
-				} catch(ex) {
-					// alert(ex.message);
-				}
+				button.classList.add("mine");
 				tile.generate();
 
 				button.onmouseover = tile.enableVisual.bind(tile);
