@@ -1725,9 +1725,12 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	var windowHeight = window.innerHeight;
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
-	if (!this.target) return;
-	if (this.useTransform) this.updateTranslation();
-	else this.setInset(this.top, this.left, this.right, this.bottom);
+
+	if (aniamte !== false) {
+		if (!this.target) return;
+		if (this.useTransform) this.updateTranslation();
+		else this.setInset(this.top, this.left, this.right, this.bottom);
+	}
 
 	if (flags.useSkewAnimations) {
 		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
