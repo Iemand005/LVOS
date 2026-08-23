@@ -29,9 +29,7 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
-var
-	timerInterval = 0,
-	bombCount = 0;
+
 
 /**
  * @param {Minesweeper} minesweeper
@@ -108,7 +106,7 @@ Tile.prototype.toggleDisabled = function(/**@type {boolean}*/enabled) { if (this
 Tile.prototype.toggleFlag = function(enabled) {
 	if (this.revealed || !this.button) return;
 	this.flagged = typeof enabled === "undefined" ? (this.flagged + 1) % 3 : enabled ? 3 : 0;
-	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--bombCount), icons.flag) : (setBombCount(++bombCount), icons.unknown) : icons.none;
+	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--minesweeper.bombCount), icons.flag) : (setBombCount(++minesweeper.bombCount), icons.unknown) : icons.none;
 };
 Tile.prototype.disableVisual = function() { if (this.button) this.button.classList.remove("active"); };
 Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
@@ -124,6 +122,9 @@ function Minesweeper() {
 	this.isGameOver = false,
 	this.isGameWon = false,
 	this.gameStarted = false;
+
+	this.timerInterval = 0,
+	this.bombCount = 0;
 }
 
 Minesweeper.prototype.startGame = function () {
@@ -179,7 +180,7 @@ Minesweeper.prototype.startGame = function () {
 		})(x, y);
 	}
 
-	setBombCount(bombCount = this.countBombs());
+	setBombCount(this.bombCount = this.countBombs());
 };
 
 function sendDesiredSize(){
@@ -237,7 +238,7 @@ Minesweeper.prototype.countRemainingFields = function() { return lineartiles.fil
 
 function activateTimer() {
 	var timer = 0;
-	timerInterval = window.setInterval(function() {
+	minesweeper.timerInterval = window.setInterval(function() {
 		setTimeDisplay(++timer);
 	}, 1000);
 }
@@ -258,8 +259,8 @@ function setTimeDisplay(time) { setDisplayValue(time, "timer"); }
 /** @param {boolean} [reset] */
 function stopTimer(reset) {
 	if (reset) setTimeDisplay(0);
-	if (timerInterval) window.clearInterval(timerInterval);
-	timerInterval = 0;
+	if (minesweeper.timerInterval) window.clearInterval(minesweeper.timerInterval);
+	minesweeper.timerInterval = 0;
 }
 
 var minesweeper = new Minesweeper();
