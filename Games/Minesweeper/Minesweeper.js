@@ -29,9 +29,7 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
-var isGameOver = false,
-	isGameWon = false,
-	gameStarted = false,
+var 
 	timerInterval = 0,
 	bombCount = 0;
 
@@ -123,14 +121,16 @@ Tile.prototype.quickReveal = function() {
 };
 
 function Minesweeper() {
-
+	this.isGameOver = false,
+	this.isGameWon = false,
+	this.gameStarted = false;
 }
 
 Minesweeper.prototype.startGame = function () {
-	gameStarted = false;
+	this.isGameWon = false;
+	this.isGameOver = false;
+	this.gameStarted = false;
 	stopTimer(true);
-	isGameWon = false;
-	isGameOver = false;
 	setEmoji();
 	var table = document.querySelector("table");
 	if (!table) return;
