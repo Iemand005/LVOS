@@ -546,6 +546,8 @@ function Dialog(object, create) {
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
+	this._animationProps = {};
+
     if (!object) return;
     if (!create) create = false;
 
@@ -1582,7 +1584,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this._maximizing = enabled;
 
-		// Cancel anything still pending from a previous, interrupted toggle
 		if (this._fsTimeout) {
 			clearTimeout(this._fsTimeout);
 			this._fsTimeout = null;
@@ -1592,11 +1593,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			this._fsRaf = null;
 		}
 
-		// Bump a token; only the latest scheduled work is allowed to apply itself
 		var token = (this._fsToken = (this._fsToken || 0) + 1);
 
-		// Use the element's REAL current box, not the cached resting size,
-		// so reversing mid-flight doesn't jump.
 		var rect = target.getBoundingClientRect();
 		var startWidth = rect.width;
 		var startHeight = rect.height;
