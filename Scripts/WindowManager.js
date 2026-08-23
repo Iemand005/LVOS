@@ -546,8 +546,8 @@ function Dialog(object, create) {
 
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
-	/** @type {{_fsTimeout: number?, _fsRaf: number?}} */
-	this._animationProps = { _fsTimeout: 0, _fsRaf: null};
+	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?}} */
+	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null};
 
     if (!object) return;
     if (!create) create = false;
@@ -1626,7 +1626,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self._animationProps._fsRaf = requestAnimationFrame(function() {
 				self._animationProps._fsRaf = null;
 				// Stale? A newer toggle happened while we were waiting — bail.
-				if (token !== self_animationProps.._fsToken) return;
+				if (token !== self._animationProps._fsToken) return;
 				if (!content) return;
 
 				content.style.width = toPixels(targetWidth);
