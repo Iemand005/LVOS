@@ -105,14 +105,17 @@ Tile.prototype.toggleFlag = function(enabled) {
 	this.button.textContent = this.flagged ? this.flagged === 1 ? (setBombCount(--minesweeper.bombCount), icons.flag) : (setBombCount(++minesweeper.bombCount), icons.unknown) : icons.none;
 };
 Tile.prototype.disableVisual = function() { if (this.button) this.button.classList.remove("active"); };
-Tile.prototype.isClickAllowed = function() { return this.flagged !== 1; };
-Tile.prototype.enableVisual = function() { if (this.isClickAllowed() && this.mousedown && this.button) this.button.classList.add("active"); };
+Tile.prototype.enableVisual = function() { if (this.isClickAllowed && this.mousedown && this.button) this.button.classList.add("active"); };
 Tile.prototype.quickReveal = function() {
 	if (quickReveal) {
 		var neighbours = this.getNeighbours();
 		if (this.countFlaggedNeighbouringMines(neighbours) === this.countNeighbouringMines(neighbours)) this.getUnflaggedNeighbouringMines(neighbours).forEach(function(neighbour) { neighbour.reveal(); });
 	}
 };
+
+Object.defineProperty(Tile.prototype, "isClickAllowed", {
+	get: function() { return this.flagged !== 1; }
+});
 
 function Minesweeper() {
 	this.isGameOver = false,
@@ -152,7 +155,7 @@ Minesweeper.prototype.startGame = function () {
 
 			button.onmousedown = function(ev){
 				if(!self.isGameOver) setEmoji(icons.scared);
-				if(!tile.isClickAllowed()) ev.preventDefault();
+				if(!tile.isClickAllowed) ev.preventDefault();
 				(tile.mousedown = !ev.button) && tile.enableVisual();
 			};
 
@@ -162,7 +165,7 @@ Minesweeper.prototype.startGame = function () {
 			};
 
 			button.onclick = function(ev){
-				if(ev.button === 0 && tile.isClickAllowed()){
+				if(ev.button === 0 && tile.isClickAllowed){
 					var neighbours = tile.reveal();
 					if(!tile.mine && typeof neighbours !== "undefined") button.textContent = neighbours.toString();
 					else gameOver();
