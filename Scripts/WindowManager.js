@@ -1706,9 +1706,10 @@ Dialog.prototype.updateTranslation = function () {
 /**
  * @param {number} [x]
  * @param {number} [y]
+ * @param {boolean} [update]
  * @param {boolean} [animate]
  */
-Dialog.prototype.move = function (x, y) {
+Dialog.prototype.move = function (x, y, update, animate) {
 	if (flags.useSkewAnimations) {
 		this._previousX = this.x;
 		this._previousY = this.y;
