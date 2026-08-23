@@ -1480,7 +1480,6 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 	}
 
 	window.requestAnimationFrame(function() {
-		if (!target) return;
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
 };
