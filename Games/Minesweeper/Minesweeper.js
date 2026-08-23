@@ -29,7 +29,7 @@ var icons = { // Quick configuration of the signs used in game. These particular
 	mutationObserver = new MutationObserver(function(){ sendDesiredSize(); });
 
 // Declaring the modifiable variables.
-var 
+var
 	timerInterval = 0,
 	bombCount = 0;
 
@@ -195,7 +195,7 @@ function sendDesiredSize(){
 LVMessenger.onHostBeingLVOS(function () {
 	console.log("My host is LVOS!!");
 });
-	
+
 /** @param {MouseEvent} ev */
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX, ev.clientY);
@@ -288,7 +288,7 @@ function load() {
 	(table || document).onmousedown = setEmoji.bind(null, !minesweeper.isGameOver?icons.scared:icons.dead);
 	document.onmouseup = function(ev) {
 		ev.preventDefault();
-		if(!isGameOver) setEmoji(icons.alive);
+		if(!minesweeper.isGameOver) setEmoji(icons.alive);
 		lineartiles.forEach(function(tile){ tile.mousedown = false; });
 		return false;
 	};

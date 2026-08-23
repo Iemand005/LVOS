@@ -114,6 +114,6 @@ LVMessenger.onHostBeingLVOS = function (callback) {
 		}, "identity");
 		LVMessenger.broadcastToParent("identify");
 	} catch (ex) {
-		console.warn("Failed to request host OS");
+		console.warn("Failed to request host OS", ex);
 	}
 };
