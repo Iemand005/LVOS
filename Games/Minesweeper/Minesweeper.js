@@ -1,5 +1,5 @@
 
-	//              Minesweeper!              \\
+    //              Minesweeper!              \\
    //       Lasse Lauwerys © 23/12/2023        \\
   //   Original game by Microsoft Corporation   \\
 
@@ -21,7 +21,6 @@ var icons = { // Quick configuration of the signs used in game. These particular
 		none: ""
 	},
 
-	// declaring the objects.
 	/** @type {Tile[][]} */
 	tiles = new Array(height),
 	/** @type {Tile[]} */
