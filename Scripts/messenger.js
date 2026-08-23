@@ -21,8 +21,6 @@ LVMessenger.types = {
     visualizers: "visualizers"
 };
 
-/** @typedef {keyof typeof LVMessenger.types} MessageType */
-
 /**
  * @typedef Identity
  * @prop {string} name
@@ -115,5 +113,5 @@ LVMessenger.onHostBeingLVOS = function (callback) {
     LVMessenger.receive(function(type, data) {
         if (type === "identity" && data.name === "LVOS") callback();
     }, "identity");
-    LVMessenger.broadcastToParent(LVMessenger.types.identify);
+    LVMessenger.broadcastToParent("identify");
 }
