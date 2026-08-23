@@ -1875,12 +1875,8 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
 
 	if (update !== false) {
-		if (animate) {
-			var self = this;
-			this.animate(function() {
-				self.updateHeight();
-			});
-		} else this.updateHeight();
+		if (animate) this.animate(this.updateHeight);
+		else this.updateHeight();
 	}
 
 	this._isMinHeight = this._height === this.minHeight;
