@@ -86,6 +86,7 @@ body:not(.blur) .window > article {
 	position: absolute;
 	height: 100%;
 	width: 100%;
+	overflow: hidden;
 	/*z-index: -1000;*/
 	pointer-events: none;
 	overflow: visible;
