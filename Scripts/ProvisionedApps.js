@@ -198,7 +198,17 @@ var applications = [
 	{
 		title : "The Useless Web",
 		id: "theuselessweb",
-		src: "https://theuselessweb.com/",
+		src: "https://theuselessweb.com/"
+	},
+	{
+		title: "Windows 95",
+		id : "win95",
+		src : "https://98.js.org/"
+	},
+	{
+		title: "Pinball Space Cadet",
+		id: "pinball",
+		src: "https://98.js.org/programs/pinball/space-cadet.html"
 	}
 ];
 
