@@ -31,7 +31,6 @@ var icons = { // Quick configuration of the signs used in game. These particular
 // Declaring the modifiable variables.
 var isGameOver = false,
 	isGameWon = false,
-	mousedown = false,
 	gameStarted = false,
 	timerInterval = 0,
 	bombCount = 0;
@@ -81,7 +80,7 @@ Tile.prototype.reveal = function() {
 		gameOver();
 	}
 	console.log("Neighbours: ", neighbours);
-	if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour]) neighbours[neighbour].reveal(); } catch (ex) {}
+	if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour]) neighbours[neighbour].reveal(); } catch (_) {}
 	return neighbourCount;
 };
 
@@ -158,7 +157,7 @@ Minesweeper.prototype.startGame = function () {
 
 				button.onmouseover = tile.enableVisual.bind(tile);
 				button.onmouseout = tile.disableVisual.bind(tile);
-				button.ondblclick = function (ev) { alert("hey"); };
+				button.ondblclick = function () { alert("hey"); };
 
 				button.onmousedown = function(ev){
 					if(!isGameOver) setEmoji(icons.scared);
