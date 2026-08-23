@@ -1844,13 +1844,16 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 				self.updateWidth();
 			});
 		} else this.updateWidth();
-
 	}
 
 	this._isMinWidth = this._width === this.minWidth;
 };
-/** @param {number} height */
-Dialog.prototype.setHeight = function (height) {
+/**
+ * @param {number} height
+ * @param {boolean} [update]
+ * @param {boolean} [animate]
+ */
+Dialog.prototype.setHeight = function (height, update, animate) {
 	if (typeof height !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
@@ -1858,9 +1861,18 @@ Dialog.prototype.setHeight = function (height) {
 	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
 
 	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
-	if (this.useTransform) {
-		this.target.style.height = toPixels(this._height);
-	} else this.target.style.bottom = toPixels(this.bottom);
+	// if (this.useTransform) {
+	// 	this.target.style.height = toPixels(this._height);
+	// } else this.target.style.bottom = toPixels(this.bottom);
+
+	if (update !== false) {
+		if (animate) {
+			var self = this;
+			this.animate(function() {
+				self.updateHeight();
+			});
+		} else this.updateHeight();
+	}
 
 	this._isMinHeight = this._height === this.minHeight;
 };
