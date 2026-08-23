@@ -1,17 +1,17 @@
 /* jshint esversion: 6 */
 
-import tseslint from 'typescript-eslint';
+import tseslint from "typescript-eslint";
 
 export default tseslint.config({
-	files: ['**/*.js', '**/*.ts', '**/*.tsx', '*.d.ts'],
+	files: ["**/*.js", "**/*.ts", "**/*.tsx", "*.d.ts"],
 	languageOptions: {
 		parser: tseslint.parser,
 		parserOptions: {
-			project: './jsconfig.json',
-		},
+			project: "./jsconfig.json"
+		}
 	},
 	plugins: {
-		'@typescript-eslint': tseslint.plugin,
+		"@typescript-eslint": tseslint.plugin
 	},
 	rules: {
 		"comma-dangle": ["error", "never"],
@@ -24,20 +24,20 @@ export default tseslint.config({
 		"no-unused-vars": "warn",
 		"no-undef": "error",
 		"eqeqeq": "warn",
-		'no-restricted-syntax': [
-			'error',
+		"no-restricted-syntax": [
+			"error",
 			{
-				selector: 'ArrowFunctionExpression',
-				message: 'Arrow functions are not allowed. Use a regular function instead.',
+				selector: "ArrowFunctionExpression",
+				message: "Arrow functions are not allowed. Use a regular function instead."
 			},
 			{
-				selector: 'ChainExpression',
-				message: 'Optional chaining (?.) is not allowed.',
+				selector: "ChainExpression",
+				message: "Optional chaining (?.) is not allowed."
 			},
 			{
 				selector: "CallExpression[callee.property.name='addEventListener'][arguments.length=2]",
 				message: "addEventListener requires a third options parameter for Netscape."
 			}
-		],
-	},
+		]
+	}
 });
