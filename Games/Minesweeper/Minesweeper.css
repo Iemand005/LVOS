@@ -180,6 +180,7 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 		border-left-color: black;
 	}
 
+	button.n1 { color: deepskyblue; }
 	button.n4 { color: lightblue; }
 	button.n5 { color: mediumvioletred; }
 }
