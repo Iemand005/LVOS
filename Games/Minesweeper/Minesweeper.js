@@ -212,7 +212,7 @@ try {
 function quickRevealEvent(ev) {
 	var element = document.elementFromPoint(ev.clientX, ev.clientY);
 	if(element) {
-		var tile = lineartiles[parseInt(element.firstChild? element.firstChild.id: element.id)];
+		var tile = lineartiles[parseInt(element.firstChild? element.children[0].id: element.id)];
 		if(tile && tile.flagged!==1) tile.quickReveal();
 	}
 }
