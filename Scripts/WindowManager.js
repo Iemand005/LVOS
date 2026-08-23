@@ -1788,7 +1788,7 @@ Dialog.prototype.setWidth = function (width) {
 				newX = bounds.left;
 			}
 			// this.x = newX;
-			this.move(newX);
+			this.move(undefined, snewX);
 		}
 	}
 
