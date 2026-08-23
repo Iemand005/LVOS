@@ -1758,12 +1758,11 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	this._y = y / windowHeight;
 
 	if (update !== false) {
-		var self = this;
-		if (animate) this.animate(self.updatePosition);
+		if (animate) this.animate(this.updatePosition);
 		else this.updatePosition();
 	}
 
-	
+
 
     // i wanna add a like move event thing with velocity and stuff
 
