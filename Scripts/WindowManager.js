@@ -1457,15 +1457,14 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
 
 /**
  * @param {(name:string)=>boolean} [onTransitionEnd]
- * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
- * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
+ * @param {(this:Dialog)=>void} [onEnd]
+ * @param {(this:Dialog)=>void} [onToggled]
  * @returns
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 	var target = this.target;
 	if (!target) return;
 	var dialog = this;
-	var enabled = false;
 	if (supportsTransitions) {
 		target.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
@@ -1474,13 +1473,13 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 			dialog.stopAnimating();
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(dialog, enabled);
+			if (onEnd) onEnd.call(dialog);
 		};
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
 	window.requestAnimationFrame(function() {
-		if (onToggled) onToggled.call(dialog, enabled);
+		if (onToggled) onToggled.call(dialog);
 	});
 };
 /**
@@ -1500,9 +1499,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	this.animate(
 		function() {
 			if (!target) return;
-			// void target.offsetWidth;
-			enabled = setClass(target, className, force);
-			if (onToggled) onToggled.call(dialog, enabled);
+			if (onToggled) onToggled.call(dialog, setClass(target, className, force));
 		},
 		onTransitionEnd,
 		function() {
