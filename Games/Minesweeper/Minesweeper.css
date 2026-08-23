@@ -181,6 +181,7 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 	}
 
 	button.n4 { color: lightblue; }
+	button.n5 { color: mediumvioletred; }
 }
 
 @media (forced-colors: active) {
