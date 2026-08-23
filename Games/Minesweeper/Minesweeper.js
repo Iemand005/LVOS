@@ -268,6 +268,7 @@ var minesweeper = new Minesweeper();
 
 try {
 	window.onmessage = sendDesiredSize;
+	window.onload = sendDesiredSize;
 
 	mutationObserver.observe(document.body, {childList: true});
 
