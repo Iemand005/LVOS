@@ -1833,7 +1833,12 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 	this._width = max(min(width, this.maxWidth), this.minWidth);
 
 	if (update !== false) {
-		if (animate) {} else this.updateWidth();
+		if (animate) {
+			var self = this;
+			this.animate(function() {
+				self.updateWidth();
+			});
+		} else this.updateWidth();
 
 	}
 
