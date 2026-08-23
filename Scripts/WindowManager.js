@@ -2146,7 +2146,6 @@ var loaded = false;
  * @param {string} [source]
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-	var types = LVMessenger.types;
 
 	if (source) {
 
@@ -2356,13 +2355,6 @@ function updateTopZ(newZ) {
 /** @param {*} properties */
 function stringifyDialogProperties(properties){
     return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
-}
-
-/** @param {Element| null} target */
-function getDialogBody(target) { // I am specifically not using querySelector in case we want an actual HTMLElement reference instead of a node! QuerySelector may be faster, but I'm not using this function in time sensitive operations like the window drag, so I prefer functionality instead. The most left is the most recent revision. I removed the deprecated ones but if I make even more changes to the design of the dialogs I'll have to clean it up again, or it'll get too long. We theoretically only need one, so as soon as I rebuilt all dialogs it can be simplified to one.
-    if (!target) return null;
-    var body = target.getElementsByTagName("content")[1] || target.getElementsByTagName("section")[1] || target.querySelector("article") || target.getElementsByClassName("client")[0] || target.getElementsByTagName("iframe")[0] || target.getElementsByTagName("section")[1] || target.getElementsByClassName("body")[0] || target.children[2];
-    return isElement(body) ? body : null;
 }
 
 function getViewBoxPosition() {
