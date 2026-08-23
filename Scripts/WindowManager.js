@@ -1759,7 +1759,8 @@ Dialog.prototype.move = function (x, y, update, animate) {
 
 	if (update !== false) {
 		var self = this;
-		animate && this.animate(self.updatePosition);
+		if (animate) this.animate(self.updatePosition);
+		else this.updatePosition();
 	}
 
 	
