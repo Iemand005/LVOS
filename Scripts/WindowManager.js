@@ -26,6 +26,9 @@ var supportsObjectFit = Boolean(document.documentElement && document.documentEle
 var supportsTransitions = false;
 var supportsTransform = false;
 
+/** @constant */
+var isBlink = 'chrome' in window;
+
 (function () {
 	var style = document.createElement("div").style;
 
@@ -75,8 +78,7 @@ var flags = {
 	}
 };
 
-/** @constant */
-var isBlink = 'chrome' in window;
+
 
 var isIE = typeof window != "undefined" && typeof document != "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
@@ -2144,7 +2146,7 @@ var timeout = -1;
 /**
  * @param {MessageType} type
  * @param {any} data
- * @param {string| null} source
+ * @param {string} [source]
  */
 function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
 	var types = LVMessenger.types;
@@ -2257,7 +2259,7 @@ function initializeDialogs() {
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
         if (isElement(dialog))
-          windowManager.loadApp(dialog);
+			windowManager.loadApp(dialog);
         
     });
     //flip();
