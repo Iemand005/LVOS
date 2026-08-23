@@ -218,9 +218,10 @@ var applications = [
 		iconUrl : "https://98.js.org/images/icons/html-16x16.png"
 	},
 	{
-		title: "Pinball Space Cadet",
-		id: "pinball",
-		src: "https://98.js.org/programs/pinball/space-cadet.html"
+		title: "Solitaire",
+		id: "solitaire",
+		src: "https://98.js.org/programs/js-solitaire/index.html",
+		iconUrl: "https://98.js.org/images/icons/solitaire-16x16.png"
 	}
 ];
 
