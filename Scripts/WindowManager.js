@@ -1325,7 +1325,7 @@ Dialog.prototype.focus = function() {
 };
 Dialog.prototype.activate = function() {
 	this.focus();
-	this.setZ(topZ++);
+	this.setZ();
 	this.messageFrame("open");
 	activeDialog = this;
 	return swapMetroBody();
