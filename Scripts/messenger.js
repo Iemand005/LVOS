@@ -44,7 +44,7 @@ LVMessenger.broadcast = function (target, type, message, id){
 };
 
 /**
- * @param {(type:MessageType,data:*,id:string|null)=>void} callback
+ * @param {(type:MessageType,data:*,id?:string)=>void} callback
  * @param {MessageType} [destroyWhenType]
  */
 LVMessenger.receive = function (callback, destroyWhenType) {
