@@ -1760,9 +1760,9 @@ Dialog.prototype.setHeight = function (height) {
 	if (typeof height !== "number" || !this.target) return;
 
 	var bounds = WindowManager.getWindowBounds();
-	var finalHeight = height; 
+	var finalHeight = height;
 	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
-	
+
 	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
 	if (this.useTransform) {
 		this.target.style.height = toPixels(this._height);
@@ -1775,8 +1775,8 @@ Dialog.prototype.setHeight = function (height) {
  * @param {number} [height]
  */
 Dialog.prototype.resize = function (width, height) {
-	if (typeof width === "undefined" || width == null) width = this.width;
-	if (typeof height === "undefined" || height == null) height = this.height;
+	if (typeof width === "undefined" || width === null) width = this.width;
+	if (typeof height === "undefined" || height === null) height = this.height;
 	this.setWidth(width);
 	this.setHeight(height);
 };
