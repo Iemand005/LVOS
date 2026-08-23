@@ -127,8 +127,7 @@ function Minesweeper() {
 }
 
 Minesweeper.prototype.startGame = function () {
-	var form = document.querySelector("form");
-	if (form) form.addEventListener("submit", function (ev) { ev.preventDefault(); }, false );
+	gameStarted = false;
 	stopTimer(true);
 	isGameWon = false;
 	isGameOver = false;
@@ -183,7 +182,6 @@ Minesweeper.prototype.startGame = function () {
 	}
 
 	setBombCount(bombCount = this.countBombs());
-	sendDesiredSize();
 };
 
 function sendDesiredSize(){
@@ -282,7 +280,8 @@ stopTimer(true);
 
 
 function load() {
-	minesweeper.startGame();
+	var form = document.querySelector("form");
+	if (form) form.addEventListener("submit", function (ev) { ev.preventDefault(); }, false );
 	var button = document.querySelector("button");
 	if (button) button.onclick = function () { minesweeper.startGame(); };
 
@@ -296,6 +295,8 @@ function load() {
 		lineartiles.forEach(function(tile){ tile.mousedown = false; });
 		return false;
 	};
+
+	minesweeper.startGame();
 }
 
 window.addEventListener("load", load, false);
