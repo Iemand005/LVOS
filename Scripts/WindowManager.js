@@ -970,6 +970,7 @@ Object.defineProperty(Dialog.prototype, "width", {
 	}
 });
 
+/** @param {number} width */
 Dialog.prototype.setWidth = function (width) {
 	if (typeof width != "number" || !this.target) return;
 
@@ -1777,7 +1778,7 @@ Dialog.prototype.setZ = function(z) {
 Dialog.prototype.resize = function (width, height) {
 	if (typeof width == "undefined" || width == null) width = this.width;
 	if (typeof height == "undefined" || height == null) height = this.height;
-	this.width = width;
+	this.setWidth(width);
 	this.height = height;
 };
 Dialog.prototype.update = function () {
