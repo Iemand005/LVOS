@@ -118,7 +118,7 @@ function localFullscreen() {
 
 if (fullscreen) fullscreen.onclick = function(){
 	localFullscreen();
-	LVMessenger.broadcastToParent(LVMessenger.types.launchOverlay, "", "music");
+	LVMessenger.broadcastToParent("launchOverlay", "", "music");
 }
 
 /** @param {number} intensity */

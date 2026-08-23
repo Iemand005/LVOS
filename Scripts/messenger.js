@@ -35,7 +35,7 @@ LVMessenger.types = {
 
 /**
  * @param {Window} target 
- * @param {MessageType | string} type 
+ * @param {MessageType} type 
  * @param {*} message 
  * @param {*} [id] 
  */
@@ -61,7 +61,7 @@ LVMessenger.receive = function (callback, destroyWhenType) {
                     /** @type {Identity} */
                     var identity = { name: "LVOS" };
                     if (ev.source && typeof ev.source.postMessage == "function")
-                        LVMessenger.broadcast(ev.source, LVMessenger.types.identity,  identity);
+                        LVMessenger.broadcast(ev.source, "identity",  identity);
                     break;
             }
             // else console.warn("Missing data property", data);
@@ -100,7 +100,7 @@ LVMessenger.broadcastToParent = function (type, message, id) {
 };
 
 /**
- * @param {MessageType | string} type 
+ * @param {MessageType} type 
  * @param {LVMessage} message 
  * @param {HTMLIFrameElement} iFrame 
  */
