@@ -2163,7 +2163,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				if (!overlay) break;
 
 				overlay.ontransitionend = function () {
-					dialog.messageFrame(LVMessenger.types.prepareToLaunchOverlay);
+					dialog.messageFrame("prepareToLaunchOverlay");
 					if (dialog.frame) {
 						var oriel = new URL(dialog.frame.src);
 						oriel.searchParams.set("fullscreen", String(true));
@@ -2206,7 +2206,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				});
 				break;
 			case "visualizers":
-				dialog.messageFrame(LVMessenger.types.visualizers, window.windowManager.getVisualizerApps());
+				dialog.messageFrame("visualizers", window.windowManager.getVisualizerApps());
 				break;
 		}
 		console.log("Received message " + type);
