@@ -1517,13 +1517,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (!self.target) return;
 
 			var oldRect = self.target.getBoundingClientRect();
-			// var transition.
+
 			transition.ready.then(function() {
 				if (!self.target) return;
 				var newRect = self.target.getBoundingClientRect();
-
-				document.documentElement.style.setProperty('--wf-sx', oldRect.width / newRect.width);
-				document.documentElement.style.setProperty('--wf-sy', oldRect.height / newRect.height);
 			}).catch(function(ev) {
 				console.warn("transition interrupted:", ev);
 			});

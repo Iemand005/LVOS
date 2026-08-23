@@ -34,7 +34,7 @@ declare global {
 		GearsFactory?: unknown;
 
 
-		
+
 		windowManager?: WindowManager;
 		windows?: Dialog[];
 
@@ -44,6 +44,8 @@ declare global {
 		} | {};
 
 		desktopManager?: DesktopManager;
+
+		metaThemeColor?: HTMLMetaElement;
 
 	}
 
