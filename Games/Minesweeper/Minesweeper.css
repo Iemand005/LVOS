@@ -170,7 +170,7 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 		background-color: #212121;
 	}
 
-	form, button, div button, table, div, .display, button:disabled, button:active:not(:disabled):not(.mine), button.active, table, div, .display {
+	form, button, div button, table, div, .display, button:disabled, button:active:not(:disabled):not(.mine), button.active {
 		border-color: #4a4747;
 	}
 
