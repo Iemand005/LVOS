@@ -1551,7 +1551,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				console.warn("transition interrupted:", ev);
 			});
 
-			transition.finished.finally(function() {
+			transition.finished.then(function() {
 				if (!self.target) return;
 				if (viewTransitions > 1) {
 					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
