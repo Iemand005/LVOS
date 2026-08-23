@@ -21,7 +21,9 @@ export default tseslint.config({
 			lerp: "writable",
 			windowManager: "readonly",
 			toggleReflections: "writable",
-			setTheme: "writable"
+			setTheme: "writable",
+			WindowManager: "readonly",
+			Dialog: "readonly"
 		}
 	},
 	plugins: {

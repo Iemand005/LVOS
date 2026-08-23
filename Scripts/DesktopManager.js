@@ -3,25 +3,21 @@
  * @version 1.0.1
  * @copyright Lasse Lauwerys © 2026
  */
-'use strict';
+"use strict";
 
 var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
 
-function getWallpaper() {
-	return document.getElementById("wallpaper");
-}
-
 /** @param {string} newColor */
 function changeTitlebarColor(newColor) {
-	var metaTag = document.querySelector('meta[name="theme-color"]');
+	var metaTag = document.querySelector("meta[name=\"theme-color\"]");
 
 	if (!metaTag) {
-		metaTag = document.createElement('meta');
-		metaTag.setAttribute('name', 'theme-color');
+		metaTag = document.createElement("meta");
+		metaTag.setAttribute("name", "theme-color");
 		document.head.appendChild(metaTag);
 	}
 
-	metaTag.setAttribute('content', newColor);
+	metaTag.setAttribute("content", newColor);
 }
 
 function vibrate() {
@@ -36,8 +32,8 @@ var eventPrevent = function (/** @type {Event} */event) { event.preventDefault()
 
 var onLoad = function () {
 
-	var desktop = document.getElementById('desktop');
-	desktop.addEventListener('mousedown', function () {
+	var desktop = document.getElementById("desktop");
+	desktop.addEventListener("mousedown", function () {
 		DesktopManager.toggleCharms(false);
 	}, false);
 
@@ -75,13 +71,13 @@ var onLoad = function () {
 	document.body.ondragover = window.ondragover = function(ev) { 
 		ev.preventDefault(); 
 		ev.stopPropagation();
-		if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'copy';
+		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
 	}
 
-	if ('serviceWorker' in navigator) navigator.serviceWorker.register('./Scripts/sw.js')["then"](function(reg) {
-		console.log('Service Worker registered!', reg);
+	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
+		console.log("Service Worker registered!", reg);
 	})["catch"](function(err) {
-		console.error('Registration of service worker failed:', err);
+		console.error("Registration of service worker failed:", err);
 	});
 
 	var clickOffset = new ClickOffset;
@@ -153,10 +149,10 @@ function toggleReflections(force) {
     if(force == null) reflecitons = !reflecitons;
     else reflecitons = Boolean(force);
     if(reflecitons) windowManager.forEachWindow(function(dialog) { if (dialog.target && reflector) reflector.reflect(dialog.target); });
-    else if (typeof reflector.observer != 'undefined') reflector.observer.disconnect();
+    else if (typeof reflector.observer != "undefined") reflector.observer.disconnect();
 }
 
-window.addEventListener('keydown', function(event) {
+window.addEventListener("keydown", function(event) {
   switch (event.key) {
     case "F11":
       event.preventDefault();
@@ -200,6 +196,10 @@ DesktopManager.toggleCharms = function(force){
 	return charms && charms.classList.toggle("open", force);
 };
 
+DesktopManager.getWallpaper = function () {
+	return document.getElementById("wallpaper");
+};
+
 /**
  * @param {string} url
  * @param {string} [blurredUrl]
@@ -215,7 +215,7 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
     var self = this;
 
     var loadHandler = function() {
-        var wallpaper = getWallpaper();
+        var wallpaper = DesktopManager.getWallpaper();
         if (!wallpaper || !self.wallpaperImage) return;
         while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
         // wallpaper.setAttribute("data-wallpaper-src", url);
@@ -272,7 +272,7 @@ window.ondragleave = document.ondragleave = function(ev){
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
     // IndexedDB is only available over http/https, not file:// scheme
-    var isFileScheme = window.location.protocol === 'file:';
+    var isFileScheme = window.location.protocol === "file:";
     if (isFileScheme) {
         console.log("File scheme detected (HTA/local file). Using localStorage only.");
         if (onFailure) onFailure(new Error("IndexedDB not available for file:// scheme"));
@@ -289,7 +289,7 @@ function initWallpaperDB(onSuccess, onFailure) {
         return;
     }
     
-    var request = indexedDB.open('LVOSWallpaperDB', 1);
+    var request = indexedDB.open("LVOSWallpaperDB", 1);
     
     request.onerror = function() {
         console.warn("IndexedDB failed to open:", request.error);
@@ -305,22 +305,22 @@ function initWallpaperDB(onSuccess, onFailure) {
     request.onupgradeneeded = function(event) {
         if (!event.target) return;
         var db = event.target.result;
-        if (!db.objectStoreNames.contains('wallpapers')) {
-            db.createObjectStore('wallpapers', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("wallpapers")) {
+            db.createObjectStore("wallpapers", { keyPath: "id" });
         }
     };
 }
 
 function localStorageFabblack(dataUrl) {
 	if (dataUrl) {
-		if (typeof settings != 'undefined' && settings.set) {
+		if (typeof settings != "undefined" && settings.set) {
 			try {
-				settings.set('wallpaperImage', dataUrl);
+				settings.set("wallpaperImage", dataUrl);
 				console.log("Wallpaper saved to localStorage via settings");
 			} catch (ex) {
 				console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
 				try {
-					window.localStorage.setItem('wallpaperImage', dataUrl);
+					window.localStorage.setItem("wallpaperImage", dataUrl);
 					console.log("Wallpaper saved to direct localStorage");
 				} catch (ex2) {
 					console.warn("Failed to save to direct localStorage:", ex2.message);
@@ -328,7 +328,7 @@ function localStorageFabblack(dataUrl) {
 			}
 		} else {
 			try {
-				window.localStorage.setItem('wallpaperImage', dataUrl);
+				window.localStorage.setItem("wallpaperImage", dataUrl);
 				console.log("Wallpaper saved to direct localStorage");
 			} catch (ex) {
 				console.warn("Failed to save wallpaper to localStorage:", ex.message);
@@ -350,9 +350,9 @@ function saveWallpaperToCache(blob, dataUrl) {
     
     // Try IndexedDB first
     initWallpaperDB(function (db) {
-        var transaction = db.transaction(['wallpapers'], 'readwrite');
-        var store = transaction.objectStore('wallpapers');
-        var request = store.put({ id: 'current', blob: blob, timestamp: Date.now() });
+        var transaction = db.transaction(["wallpapers"], "readwrite");
+        var store = transaction.objectStore("wallpapers");
+        var request = store.put({ id: "current", blob: blob, timestamp: Date.now() });
         
         request.onsuccess = function() {
             console.log("Wallpaper saved to IndexedDB");
@@ -375,9 +375,9 @@ function saveWallpaperToCache(blob, dataUrl) {
  */
 function loadWallpaperFromCache() {
     initWallpaperDB(function(db) {
-        var transaction = db.transaction(['wallpapers'], 'readonly');
-        var store = transaction.objectStore('wallpapers');
-        var request = store.get('current');
+        var transaction = db.transaction(["wallpapers"], "readonly");
+        var store = transaction.objectStore("wallpapers");
+        var request = store.get("current");
         
         request.onsuccess = function() {
             var result = request.result;
@@ -406,11 +406,11 @@ function loadWallpaperFromCache() {
  */
 function loadWallpaperFromLocalStorage() {
     console.log("Attempting to load wallpaper from localStorage...");
-    console.log("settings defined:", typeof settings != 'undefined');
-    if (typeof settings == 'undefined') {
+    console.log("settings defined:", typeof settings != "undefined");
+    if (typeof settings == "undefined") {
         console.warn("Settings not available yet, trying direct localStorage access");
         try {
-            var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
+            var cachedWallpaper = window.localStorage.getItem("wallpaperImage");
             if (cachedWallpaper && window.desktopManager) {
                 console.log("Loading cached wallpaper from direct localStorage");
                 window.desktopManager.applyWallpaperImage(cachedWallpaper);
@@ -424,8 +424,8 @@ function loadWallpaperFromLocalStorage() {
     }
     
     try {
-        var cachedWallpaper = settings.get('wallpaperImage');
-        console.log("Retrieved from settings.get():", cachedWallpaper ? 'found' : 'not found');
+        var cachedWallpaper = settings.get("wallpaperImage");
+        console.log("Retrieved from settings.get():", cachedWallpaper ? "found" : "not found");
         if (cachedWallpaper && window.desktopManager) {
             console.log("Loading cached wallpaper from localStorage via settings");
             window.desktopManager.applyWallpaperImage(cachedWallpaper);
@@ -436,7 +436,7 @@ function loadWallpaperFromLocalStorage() {
         console.warn("Failed to load wallpaper from settings localStorage:", ex.message);
         // Try direct localStorage as last resort
         try {
-            var cachedWallpaper = window.localStorage.getItem('wallpaperImage');
+            var cachedWallpaper = window.localStorage.getItem("wallpaperImage");
             if (cachedWallpaper && window.desktopManager) {
                 console.log("Loading cached wallpaper from direct localStorage (fallback)");
                 window.desktopManager.applyWallpaperImage(cachedWallpaper);
@@ -494,8 +494,8 @@ function handleWallpaperDrop(ev) {
  * @param {(pipWindow:Window)=>void} callback - the element to pop out
  */
 DesktopManager.toggleElementPip = function(el, callback) {
-  if (!('documentPictureInPicture' in window) || !window.documentPictureInPicture) {
-    console.warn('Document Picture-in-Picture not supported in this browser.');
+  if (!("documentPictureInPicture" in window) || !window.documentPictureInPicture) {
+    console.warn("Document Picture-in-Picture not supported in this browser.");
     return null;
   }
 
@@ -514,10 +514,10 @@ DesktopManager.toggleElementPip = function(el, callback) {
 		var originalParent = el.parentNode;
 		var originalNextSibling = el.nextSibling;
 
-		pipWindow.document.body.style.margin = '0';
+		pipWindow.document.body.style.margin = "0";
 		pipWindow.document.body.appendChild(el);
 
-		pipWindow.addEventListener('pagehide', function () {
+		pipWindow.addEventListener("pagehide", function () {
 			if (!originalParent) return;
 			if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
 			else originalParent.appendChild(el);
@@ -531,20 +531,20 @@ DesktopManager.toggleElementPip = function(el, callback) {
 window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadWallpaperFromCache, false);
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadWallpaperFromCache, false);
 } else {
     loadWallpaperFromCache();
 }
 
-window.addEventListener('keydown', function(event) {
-  if (event.key === 'Shift' || event.keyCode === 16) {
-    document.body.classList.add('slow-animations');
+window.addEventListener("keydown", function(event) {
+  if (event.key === "Shift" || event.keyCode === 16) {
+    document.body.classList.add("slow-animations");
   }
 }, false);
 
-window.addEventListener('keyup', function(event) {
-  if (event.key === 'Shift' || event.keyCode === 16) {
-    document.body.classList.remove('slow-animations');
+window.addEventListener("keyup", function(event) {
+  if (event.key === "Shift" || event.keyCode === 16) {
+    document.body.classList.remove("slow-animations");
   }
 }, false);

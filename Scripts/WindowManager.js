@@ -2400,7 +2400,7 @@ function pixelsToCentimeters(pixels){
 
 /** @param {string} text */
 function fromPixels(text){
-    if (text != null) try {
+    if (text !== null) try {
         return typeof text === 'number' ? text : parseInt(text.replace("px", ''));
     } catch (ex) { console.warn("Failed to parse pixels:", ex); }
     return 0;
@@ -2490,14 +2490,14 @@ WindowManager.prototype.toggleMica = function(enabled) {
 };
 
 function removeWallpaper() {
-	var wallpaper = getWallpaper();
+	var wallpaper = DesktopManager.getWallpaper();
 	if (!wallpaper) return;
 	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
 	return wallpaper;
 }
 
 
-var wallpaper = getWallpaper();
+var wallpaper = DesktopManager.getWallpaper();
 if (wallpaper) {
 	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi"); };
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
