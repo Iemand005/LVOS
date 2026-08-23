@@ -1596,12 +1596,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = 1 / scaleY;
 		}
 
-		
-		if (maximizeAnimations > 1) {
-			console.log("Animainois ongoign");
-			return;
-		}
-
 		this.setScale(scaleX, scaleY);
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
@@ -1610,10 +1604,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 
 		fsTimeout = setTimeout(function() {
-			if (maximizeAnimations > 1) {
-				console.log("Animainois ongoign");
-				return;
-			}
+			// if (maximizeAnimations > 1) {
+			// 	console.log("Animainois ongoign");
+			// 	return;
+			// }
 			requestAnimationFrame(function() {
 				if (!content) return;
 				content.style.width = toPixels(targetWidth);
