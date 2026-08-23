@@ -285,7 +285,8 @@ function load() {
 
 	document.body.ondblclick = quickRevealEvent;
 	document.ondblclick = quickRevealEvent;
-	document.onmousedown = setEmoji.bind(null, !isGameOver?icons.scared:icons.dead);
+	var form = document.querySelector("form");
+	(form || document).onmousedown = setEmoji.bind(null, !isGameOver?icons.scared:icons.dead);
 	document.onmouseup = function(ev) {
 		ev.preventDefault();
 		if(!isGameOver) setEmoji(icons.alive);
