@@ -879,9 +879,9 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	this._stateOpen = forceOpen || false;
     this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
-	}, function (enabled) {
-        if (shouldKill) self.kill();
-		if (enabled) self.messageFrame("windowSize", {});
+	}, function (opened) {
+        if (kill && !opened) self.kill();
+		if (opened) self.messageFrame("windowSize", {});
     }, function (enabled) {
 		self._stateOpen = enabled;
         if (enabled) self.activate();
