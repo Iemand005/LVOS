@@ -1644,18 +1644,18 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (self.target) self.target.classList.toggle("maximized", enable);
 		};
 		if (!enable) toggleMaximized();
-		Animation.animate(300, function(t) {
-			var ease = Animation.easeSharpCenterStrong;
+		Anim.animate(300, function(t) {
+			var ease = Anim.easeSharpCenterStrong;
 			if (enable) {
-				self.x = Animation.lerp(startPos.x, 0, ease(t));
-				self.y = Animation.lerp(startPos.y, 0, ease(t));
-				self.width = Animation.lerp(startSize.x, window.innerWidth, ease(t));
-				self.height = Animation.lerp(startSize.y, window.innerHeight, ease(t));
+				self.x = Anim.lerp(startPos.x, 0, ease(t));
+				self.y = Anim.lerp(startPos.y, 0, ease(t));
+				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
+				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
 			} else {
-				self.x = Animation.lerp(0, startPos.x, ease(t));
-				self.y = Animation.lerp(0, startPos.y, ease(t));
-				self.width = Animation.lerp(window.innerWidth, startSize.x, ease(t));
-				self.height = Animation.lerp(window.innerHeight, startSize.y, ease(t));
+				self.x = Anim.lerp(0, startPos.x, ease(t));
+				self.y = Anim.lerp(0, startPos.y, ease(t));
+				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
+				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
 			}
 		}, function() {
 			if (enable) toggleMaximized();

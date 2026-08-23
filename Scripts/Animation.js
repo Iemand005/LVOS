@@ -1,4 +1,4 @@
-function Animation() {
+function Anim() {
 
 }
 
@@ -7,7 +7,7 @@ function Animation() {
  * @param {(time:number)=>void} update 
  * @param {()=>void} complete 
  */
-Animation.animate = function(duration, update, complete) {
+Anim.animate = function(duration, update, complete) {
     var start = new Date().getTime();
 
     function tick() {
@@ -33,27 +33,27 @@ Animation.animate = function(duration, update, complete) {
  * @param {number} t 
  * @returns 
  */
-Animation.lerp = function(a, b, t) {
+Anim.lerp = function(a, b, t) {
     return a + (b - a) * t;
 };
 /** @param {number} t */
-Animation.ease = function(t) {
+Anim.ease = function(t) {
     return t * t * (3 - 2 * t);
 };
 /** @param {number} t */
-Animation.easeOutLog = function(t) {
+Anim.easeOutLog = function(t) {
     return Math.log(1 + 9 * t) / Math.log(10);
 };
 /** @param {number} t */
-Animation.easeSharpCenter = function(t) {
+Anim.easeSharpCenter = function(t) {
     return 0.5 - 0.5 * Math.cos(Math.PI * t);
 };
 /** @param {number} t */
-Animation.easeSharpCenterStrong = function(t) {
+Anim.easeSharpCenterStrong = function(t) {
     t = 0.5 - 0.5 * Math.cos(Math.PI * t);
     return 0.5 - 0.5 * Math.cos(Math.PI * t);
 };
 /** @param {number} t */
-Animation.easeSharpMiddle = function(t) {
+Anim.easeSharpMiddle = function(t) {
     return 0.5 + (t - 0.5) * Math.abs(2 * t - 1);
 };
