@@ -3,12 +3,10 @@
    //       Lasse Lauwerys © 23/12/2023        \\
   //   Original game by Microsoft Corporation   \\
 
-'use strict';
+"use strict";
 
 var width = 12, height = 13,
-	quickReveal = true,
-	singleSidedDisplay = true,
-	showBombInsteadOfCheckmark = true;
+	quickReveal = true;
 
 var icons = { // Quick configuration of the signs used in game. These particular emojis were tested by me and confirmed working on Windows 7 and up.
 		bomb: "💣",
@@ -77,7 +75,7 @@ Tile.prototype.reveal = function() {
 	if (!this.mine) {
 		if (remaining === 0) gameOver(true);
 		this.button.textContent = neighbourCount.toString();
-		classes.add('n' + neighbourCount);
+		classes.add("n" + neighbourCount);
 	} else {
 		this.button.textContent = !isGameWon?icons.exploded:icons.correct;
 		gameOver();
@@ -98,7 +96,7 @@ Tile.prototype.getNeighbours = function() {
 /** @param {Tile[]} [neighbors] */
 Tile.prototype.countNeighbouringMines = function(neighbors) { return this.getNeighbouringMines(neighbors).length; };
 /** @param {Tile[]} [neighbors] */
-Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine }); };
+Tile.prototype.getNeighbouringMines = function(neighbors) { return this.iterateNeighbours(neighbors, function(neighbour){ return neighbour.mine; }); };
 
 /**
  * @param {Tile[] | undefined} neighbors
@@ -279,9 +277,9 @@ var minesweeper = new Minesweeper();
 
 try {
 	window.onmessage = sendDesiredSize;
-	
+
 	mutationObserver.observe(document.body, {childList: true});
-	
+
 } catch(ex) {
 	console.log(ex);
 }
@@ -293,7 +291,7 @@ function load() {
 	minesweeper.startGame();
 	var button = document.querySelector("button");
 	if (button) button.onclick = function () { minesweeper.startGame(); };
-	
+
 	document.body.ondblclick = quickRevealEvent;
 	document.ondblclick = quickRevealEvent;
 	document.onmousedown = setEmoji.bind(null, !isGameOver?icons.scared:icons.dead);
@@ -302,7 +300,7 @@ function load() {
 		if(!isGameOver) setEmoji(icons.alive);
 		lineartiles.forEach(function(tile){ tile.mousedown = false; });
 		return false;
-	}
+	};
 }
 
 window.addEventListener("load", load, false);
@@ -312,7 +310,7 @@ window.addEventListener("load", load, false);
 
 /**\
 \ * \    LL          aa       SSSSSSS   SSSSSSS  eeeeeee      ====       222222       0000      222222    666666
- \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  66      
+ \ * \   LL         aaaa     SS        SS        ee         // cccc \\    22    22    00    00   22    22  66
   | * |  LL        aa  aa     SSSSSS    SSSSSS   eeee      || cc     ||       222    00      00      222    666666
  / * /   LL       aaaaaaaa         SS        SS  ee         \\ cccc //      22        00    00     22      66    66
 / * /    LLLLLL  aa      aa  SSSSSSS   SSSSSSS   eeeeeee      ====      22222222      0000     22222222   666666
