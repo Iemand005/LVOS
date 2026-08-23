@@ -1341,7 +1341,7 @@ Dialog.prototype.focus = function() {
 Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ(topZ++);
-	this.messageFrame(LVMessenger.types.open);
+	this.messageFrame("open");
 	activeDialogId = this.id;
 	activeDialog = this;
 	return swapMetroBody();
@@ -1526,16 +1526,21 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			document.activeViewTransition.skipTransition();
 		}
 
+		if (!this.target) return;
+
 		this.target.style.viewTransitionName = 'window-fullscreen';
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(function() {
+				if (!self.target) return;
 				self.target.classList.toggle('maximized', enable);
 			});
+			if (!self.target) return;
 
 			var oldRect = self.target.getBoundingClientRect();
 			// var transition.
 			transition.ready.then(function() {
+				if (!self.target) return;
 				var newRect = self.target.getBoundingClientRect();
 
 				document.documentElement.style.setProperty('--wf-sx', oldRect.width / newRect.width);
@@ -1545,6 +1550,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			});
 
 			transition.finished.finally(function() {
+				if (!self.target) return;
 				if (viewTransitions > 1) {
 					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
 				} else {
@@ -1670,7 +1676,7 @@ Dialog.prototype.toggleFullButton = function (enable) {
   	this.toggleButton(windowButtons.full, enable);
 };
 /**
- * @param {MessageType | string} type
+ * @param {MessageType} type
  * @param {*} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
@@ -2147,9 +2153,9 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 
 		var dialog = windowManager.windows[source];
 
-		if (type === types.windowSize) dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
 		switch (type) {
-			case types.launchOverlay:
+			case "launchOverlay":
 				var overlay = bodyCrawler.getOverlay();
 				if (!overlay) break;
 
@@ -2170,13 +2176,13 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 				};
 				overlay.classList.toggle("open");
 				break;
-			case types.readyToLaunchOverlay:
+			case "readyToLaunchOverlay":
 				var overlay1 = bodyCrawler.getOverlay();
 				if (!overlay1) break;
 				if (dialog.body) overlay1.appendChild(dialog.body);
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
-			case types.pip:
+			case "pip":
 				var id = data.id;
 				console.log("Element ID to rip from app guts: " + id, dialog);
 				var doc = dialog.contentDocument;
@@ -2196,8 +2202,8 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 					targetElement.style.height = "100%";
 				});
 				break;
-			case types.visualizers:
-				dialog.messageFrame(LVMessenger.types.visualizers, windowManager.getVisualizerApps());
+			case "visualizers":
+				dialog.messageFrame(LVMessenger.types.visualizers, window.windowManager.getVisualizerApps());
 				break;
 		}
 		console.log("Received message " + type);
