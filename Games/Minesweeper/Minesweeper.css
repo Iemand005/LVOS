@@ -197,7 +197,8 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 	}
 
 	button.mine:not(.n0):not(.n1):not(.n2):not(.n3):not(.n4):not(.n5):not(.n6):not(.n7):not(.n8) {
-		color: ORANGERED;
+		color: orangered;
+		/* TODO: Make the chekcboxes green in high contrast mode they currently overridden withorange! */
         font-variant-emoji: text;
 	}
 }
