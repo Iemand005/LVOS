@@ -1482,7 +1482,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 
 	window.requestAnimationFrame(function() {
 		if (!target) return;
-		void target.offsetWidth;
+		// void target.offsetWidth;
 		enabled = setClass(target, className, force);
 		if (onToggled) onToggled.call(dialog, enabled);
 	});
