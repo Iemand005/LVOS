@@ -1754,7 +1754,7 @@ Dialog.prototype.setWidth = function (width) {
 	else this.target.style.right = toPixels(this.right);
 
 	this._isMinWidth = this._width === this.minWidth;
-}
+};
 /** @param {number} height */
 Dialog.prototype.setHeight = function (height) {
 	if (typeof height != "number" || !this.target) return;
@@ -1769,7 +1769,7 @@ Dialog.prototype.setHeight = function (height) {
 	} else this.target.style.bottom = toPixels(this.bottom);
 
 	this._isMinHeight = this._height === this.minHeight;
-}
+};
 /**
  * @param {number} [width]
  * @param {number} [height]
