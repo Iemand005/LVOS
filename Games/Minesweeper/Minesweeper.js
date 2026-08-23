@@ -263,7 +263,8 @@ function setTimeDisplay(time) { setDisplayValue(time, "timer"); }
 /** @param {boolean} [reset] */
 function stopTimer(reset) {
 	if (reset) setTimeDisplay(0);
-	window.clearInterval(timerInterval);
+	if (timerInterval) window.clearInterval(timerInterval);
+	timerInterval = 0;
 }
 
 var minesweeper = new Minesweeper();
