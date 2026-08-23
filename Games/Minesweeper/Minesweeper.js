@@ -80,7 +80,7 @@ Tile.prototype.reveal = function() {
 		gameOver();
 	}
 	console.log("Neighbours: ", neighbours);
-	if (neighbourCount === 0) for (var neighbour in neighbours) try { if (neighbours[neighbour]) neighbours[neighbour].reveal(); } catch (_) {}
+	if (neighbourCount === 0) for (var neighbour in neighbours) if (neighbours[neighbour]) neighbours[neighbour].reveal();
 	return neighbourCount;
 };
 
