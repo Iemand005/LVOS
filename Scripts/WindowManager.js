@@ -81,7 +81,8 @@ var flags = {
 	set useMica(value) {
 		window.windowManager.toggleMica(value);
 		this._useMica = value;
-	}
+	},
+	windowReaper: true
 };
 
 
@@ -905,7 +906,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
 	}, function (opened) {
-        if (kill && !opened) self.kill();
+        if ((kill || flags.windowReaper) && !opened) self.kill();
 		if (opened) self.reportState();
     }, function (opening) {
 		self._stateOpen = opening;
@@ -914,6 +915,10 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 
 	windowManager.saveState();
 	self.reportState();
+
+	if (flags.windowReaper) setTimeout(function() {
+		self.kill();
+	}, 1000);
 };
 /**
  * @param {boolean} [create]
