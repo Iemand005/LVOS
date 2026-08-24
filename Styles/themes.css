@@ -359,8 +359,11 @@ button {
 
 .windows-95 #launchpad li button {
 	border: none;
+	border-image: none !important;
 	width: 30px;
     height: 30px;
+	margin: 0;
+	padding: 0;
 }
 
 .windows.windows-95 #dockapplist {
