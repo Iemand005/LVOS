@@ -24,6 +24,7 @@ body {
 }
 
 .window *, #desktop, #desktop img {
+    -wg-user-select: none;
     -moz-user-select: none;
     -moz-user-drag: none;
     -webkit-user-select: none;
