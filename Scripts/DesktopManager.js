@@ -83,7 +83,7 @@ var onLoad = function () {
 
     if  (launchpad) launchpad.open();
 
-    if (typeof ClickOffset !== "undefined") return;
+    if (typeof ClickOffset === "undefined") return;
 
 	var clickOffset = new ClickOffset;
 
