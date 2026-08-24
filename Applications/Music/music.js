@@ -3,10 +3,6 @@
 
 'use strict';
 
-/** @type {MusicApp | null} */
-window.musicApp = null;
-
-
 {
 var frequencies = 128;
 
@@ -61,6 +57,8 @@ function MusicApp(visualizerElement) {
 
 	this.rotation = 0;
 }
+
+window.musicApp = null;
 
 /**
 	* Setter used by the wasm Aura bridge: the game engine forwards a colour
