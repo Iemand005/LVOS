@@ -287,6 +287,10 @@ WindowManager.prototype.killAll = function () {
 	this.forEachWindow(function (dialog) { dialog.kill(); });
 };
 
+WindowManager.prototype.synchronizeStates = function () {
+	this.forEachWindow(function(dialoge) { dialoge.reportState(); });
+}
+
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
     try {
