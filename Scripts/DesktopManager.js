@@ -273,7 +273,7 @@ window.ondragleave = document.ondragleave = function(ev){
 var wallpaperDB = null;
 /**
  * @param {(db:IDBDatabase)=>void} onSuccess
- * @param {(error:DOMException?)=>void} onFailure
+ * @param {(error:Error?)=>void} onFailure
  */
 function initWallpaperDB(onSuccess, onFailure) {
     // IndexedDB is only available over http/https, not file:// scheme
