@@ -1,11 +1,11 @@
 /** @type {Launchpad?} */
-var launchpad = null;
+var launchpad = Launchpad ? new Launchpad : null;
 
 function init() {
-	launchpad = new Launchpad();
+	// launchpad = new Launchpad;
 
 	var launchpadElement = document.getElementById("launchpad");
-	if (launchpadElement) {
+	if (launchpad && launchpadElement) {
 		launchpad.init(launchpadElement);
 	
 		window.windowManager.forEachWindow(function(dialog) {
