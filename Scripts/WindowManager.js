@@ -916,7 +916,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	windowManager.saveState();
 	self.reportState();
 
-	if (flags.windowReaper && forceOpen === false) setTimeout(function() {
+	if (flags.windowReaper && (forceOpen === false)) setTimeout(function() {
 		self.kill();
 	}, 1000);
 };
