@@ -11,7 +11,7 @@
 	justify-content: space-evenly;
 
 	height: 100%;
-	overflow: scroll;
+	overflow-y: auto;
 }
 /* Disable the close btn */
 #launchpad > button {
