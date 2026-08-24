@@ -354,6 +354,7 @@ button {
 
 .windows-95 #launchpad li {
     display: flex;
+	padding: 0;
 }
 
 .windows-95 #launchpad li button {
