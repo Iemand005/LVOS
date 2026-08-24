@@ -363,6 +363,10 @@ button {
 	z-index: 100000;
 }
 
+.windows-95 ul {
+	padding: 2px;
+}
+
 .windows-95 #launchpad li {
     display: flex;
 	padding: 0;
