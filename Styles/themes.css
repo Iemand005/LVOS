@@ -317,6 +317,8 @@ button {
 }
 
 .windows-95 .window header {
+	margin: 2px;
+	height: 18px;
 	background: linear-gradient(to right, rgb(0, 0, 128) 0%, rgb(16, 132, 208) 100%);
 }
 
