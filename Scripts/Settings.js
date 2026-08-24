@@ -24,7 +24,10 @@ function ActiveXStorage() {
 	if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
 	this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
 }
-
+/**
+ * @param {string} key
+ * @param {*} value
+ */
 ActiveXStorage.prototype.setItem = function(key, value) {
 	var data = {};
 	
