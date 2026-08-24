@@ -1,5 +1,5 @@
 /** @type {Launchpad?} */
-var launchpad = Launchpad ? new Launchpad : null;
+var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function init() {
 	// launchpad = new Launchpad;
