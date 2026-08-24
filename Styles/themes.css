@@ -301,7 +301,7 @@ button {
 	background-color: rgb(240, 240, 240);
 }
 
-.windows-95 time {
+.windows-95 time, .windows-95 footer {
 	color: black;
 }
 
