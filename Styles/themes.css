@@ -329,11 +329,17 @@ button {
 
 .windows-95 .window header button:nth-child(3) {
 	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .windows-95 .window header button svg {
 	margin: 0;
     width: 8px;
+}
+
+.windows-95 .window header section {
+	position: relative;
+	height: auto;
 }
 
 .flippy .window:not(.maximized) {
