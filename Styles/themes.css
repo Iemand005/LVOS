@@ -368,7 +368,7 @@ button {
 .windows-95 #launchpad li button {
 	border: none;
 	border-image: none !important;
-	background-color: transparent;
+	background: transparent !important;
 	width: 30px;
     height: 30px;
 	margin: 0;
