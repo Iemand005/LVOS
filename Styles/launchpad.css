@@ -11,7 +11,7 @@
 	justify-content: space-evenly;
 
 	height: 100%;
-	overflow-y: auto;
+	overflow: auto;
 }
 /* Disable the close btn */
 #launchpad > button {
@@ -41,7 +41,7 @@
 }
 
 #launchpad label {
-	width: 70px;
+	/* width: 70px; */
 	display: block;
 	text-align: center;
 	align-content: center;

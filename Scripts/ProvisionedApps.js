@@ -229,6 +229,11 @@ var applications = [
 		src: "https://98.js.org/programs/pipes/index.html#%7B%22hideUI%22%3Atrue%7D",
 		iconUrl: "https://98.js.org/images/icons/solitaire-16x16.png",
 		screensaver: true
+	},
+	{
+		title: "Cavetown - Big Strong Man",
+		id: "cavetown.bigstrongmen",
+		src: "https://www.youtube.com/embed/uKn0BtAAEyw?si=s3Pz0PzIpQDCxizU"
 	}
 ];
 
