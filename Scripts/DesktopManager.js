@@ -324,7 +324,7 @@ function localStorageFabblack(dataUrl) {
 			try {
 				settings.set("wallpaperImage", dataUrl);
 				console.log("Wallpaper saved to localStorage via settings");
-			} catch (/**@type {Error}*/ex) {
+			} catch (ex) {
 				console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
 				try {
 					window.localStorage.setItem("wallpaperImage", dataUrl);
