@@ -200,8 +200,11 @@ DesktopManager.removeTheme = function(theme) { document.body.classList.remove(th
 DesktopManager.toggleCharms = function(force){
 	var charms = document.getElementById("charms");
     if (!charms) return;
-    if (charms && charms.classList.toggle.length) return charms.classList.toggle("open", force);
-    
+    if (charms.classList.toggle.length) return charms.classList.toggle("open", force);
+    // if (charms.classList.contains("open")) charms.classList.remove("open")
+    if (force) charms.classList.add("open");
+    else charms.classList.remove("open");
+    return force === true;
 };
 
 DesktopManager.getWallpaper = function () {
