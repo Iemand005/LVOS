@@ -580,10 +580,15 @@ button:hover {
 }
 
 @supports (display: flex) {
-    tbody, .window tr:nth-of-type(2) {
+    tbody {
         height: 100%;
         display: flex;
         flex-direction: column;
+    }
+
+    .window tr:nth-of-type(2) {
+        height: 100%;
+        display: block;
     }
 }
 
