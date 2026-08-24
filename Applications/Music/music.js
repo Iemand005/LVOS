@@ -327,7 +327,7 @@ MusicApp.prototype.animateFrame = function(time) {
 	this.setAuraColor(rgb.r, rgb.g, rgb.b);
 	if (colorTitlebar) {
 		var parentWindow = getParentWindow();
-		if (parentWindow && parentWindow.__LVMessenger.accent) {
+		if (parentWindow && parentWindow.__LVMessenger && parentWindow.__LVMessenger.accent) {
 			var color = rgbToHex(rgb.r, rgb.g, rgb.b);
 			
 			if (time - lastUpdateTime > THROTTLE_MS) {
