@@ -295,10 +295,13 @@ button {
 	padding: 0;
 }
 
-.windows .window article > *,
-.windows-10 .window article > *,
-.windows-11 .window article > * {
+.windows-10 .window article,
+.windows-11 .window article {
 	background-color: rgb(240, 240, 240);
+}
+
+.windows .window article > * {
+	background-color: transparent;
 }
 
 .windows-95 time, .windows-95 footer {
