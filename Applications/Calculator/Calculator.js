@@ -53,8 +53,7 @@ var calculator = null;
 
 function load() {
     output = document.getElementById("display");
-    cells = document.getElementsByTagName("td");
-    var button = document.createElement("button");
+    cells = document.getElementsByTagName("button");
 
     calculator = new Calculator;
 
