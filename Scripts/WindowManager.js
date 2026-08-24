@@ -283,6 +283,10 @@ WindowManager.prototype.forEachWindow = function (callback) {
     if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
 };
 
+WindowManager.prototype.killAll = function () {
+	this.forEachWindow(function (windoww) {windoww.kill();});
+};
+
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
     try {
