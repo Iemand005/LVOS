@@ -185,7 +185,10 @@ function DesktopManager() {
 }
 
 /** @param {string} theme */
-function setTheme(theme) { document.body.classList.add(theme); }
+function setTheme(theme) {
+    document.body.classList.add(theme);
+    window.windowManager.synchronizeStates();
+}
 /** @param {string} theme */
 function hasTheme(theme) { return document.body.classList.contains(theme); }
 /** @param {string} theme */
