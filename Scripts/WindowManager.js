@@ -284,7 +284,7 @@ WindowManager.prototype.forEachWindow = function (callback) {
 };
 
 WindowManager.prototype.killAll = function () {
-	this.forEachWindow(function (windoww) {windoww.kill();});
+	this.forEachWindow(function (dialog) { dialog.kill(); });
 };
 
 /** @param {Application | HTMLElement} app */
