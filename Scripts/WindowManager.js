@@ -44,7 +44,7 @@ var isBlink = "chrome" in window;
 		"webkitTransform" in style ||
 		"msTransform" in style ||
 		"mozTransform" in style ||
-		"oTransform" in style
+		"OTransform" in style
 	);
 })();
 
@@ -864,7 +864,10 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 	}
     if (rotation) transform += "rotate(" + rotation + "deg)";
 
-	else element.style.transform = transform;
+	else {
+		// if (element.style.OTransform)
+		element.style.OTransform = transform;
+	}
     // TODO: Chekc where this is applied and only assing if needed
 	// element.style.webkitTransform = transform;
 
