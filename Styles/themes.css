@@ -301,6 +301,10 @@ button {
 	background-color: rgb(240, 240, 240);
 }
 
+.windows-95 time {
+	color: black;
+}
+
 .windows-95 button, .windows-95 .window header button, .windows-95.windows .window content,
 .windows.windows-95 #dockapplist > button,
 .windows.windows-95 #dockapplist {
