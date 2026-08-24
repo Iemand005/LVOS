@@ -41,7 +41,7 @@ td {
     /* height: 100%; */
 }
 
-table {
+table, tbody {
     width: 100%;
     height: 100%;
     /* border-collapse: collapse; */
@@ -65,4 +65,23 @@ td button {
 #displayRow, #displayRow td {
     height: 1px;
     padding: 0;
+}
+
+.keys {
+    height: 100%;
+    padding: 0;
+}
+
+.keys table {
+    width: 100%;
+    height: 100%;
+}
+
+.keys td {
+    padding: 0;
+}
+
+.keys button {
+    width: 100%;
+    height: 100%;
 }
