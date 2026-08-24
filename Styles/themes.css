@@ -321,6 +321,11 @@ button {
 	height: 14px;
 }
 
+.windows-96 .window header button svg {
+	margin: 0;
+    width: 8px;
+}
+
 .flippy .window:not(.maximized) {
 	/* sanimation: spin360 500ms ease-in-out reverse; */
 	animation-direction: reverse;
