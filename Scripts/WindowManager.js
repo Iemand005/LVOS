@@ -602,7 +602,7 @@ function Dialog(object, create) {
 	this._appIcon = null;
 }
 
-WindowManager.windowBoundsInset = { top: 0, left: 100, right: 100, bottom: 100 };
+WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
 
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
