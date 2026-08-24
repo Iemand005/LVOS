@@ -361,9 +361,14 @@ button {
 	padding: 0;
 }
 
+.windows-95 #launchpad li:hover {
+	background-color: blue;
+}
+
 .windows-95 #launchpad li button {
 	border: none;
 	border-image: none !important;
+	background-color: transparent;
 	width: 30px;
     height: 30px;
 	margin: 0;
