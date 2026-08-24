@@ -8,7 +8,7 @@ html, body {
 table {
     width: 100%;
     height: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
     border-spacing: 6px;
     table-layout: fixed;
 }
@@ -42,4 +42,16 @@ tr {
 
 td {
     /* height: 100%; */
+}
+
+td {
+    position: relative;
+}
+
+td button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
