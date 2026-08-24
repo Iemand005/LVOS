@@ -18,11 +18,11 @@ table {
 
 /* display */
 input {
-    width:100%;
-    box-sizing:border-box;
-    font-size:32px;
-    text-align:right;
-    border-radius:5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 32px;
+    text-align: right;
+    border-radius: 5px;
 }
 
 /* buttonpad cells */
@@ -35,10 +35,6 @@ table button {
 
 tr {
     height: 20%;
-}
-
-td {
-    /* height: 100%; */
 }
 
 table {
