@@ -919,9 +919,10 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 Object.defineProperty(Dialog.prototype, "src", {
     get: function() { return this._src || this.application && this.application.src; },
     set: function(url) {
-        var frame = this.getOrCreateFrame(true);
-        if (frame) frame.src = url;
-        this._src = url;
+        // var frame = this.getOrCreateFrame(true);
+        // if (frame) frame.src = url;
+        // this._src = url;
+		this.openUrl(url);
     }
 });
 Object.defineProperty(Dialog.prototype, "body", {
