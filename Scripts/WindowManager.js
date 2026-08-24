@@ -911,14 +911,14 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     }, function (opening) {
 		self._stateOpen = opening;
         if (opening) self.activate();
+		if (flags.windowReaper && !opening) setTimeout(function() {
+			// self.kill();
+		}, 1000);
     });
 
 	windowManager.saveState();
 	self.reportState();
 
-	if (flags.windowReaper && (forceOpen === false)) setTimeout(function() {
-		self.kill();
-	}, 1000);
 };
 /**
  * @param {boolean} [create]
