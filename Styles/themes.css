@@ -361,8 +361,12 @@ button {
 	padding: 0;
 }
 
-.windows-95 #launchpad li:hover {
+.windows-95 #launchpad li:hover,
+.windows-95 #launchpad li:hover button,
+.windows-95 #launchpad li:hover label
+ {
 	background-color: blue;
+	color: white !important;
 }
 
 .windows-95 #launchpad li button {
