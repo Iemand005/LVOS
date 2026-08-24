@@ -301,7 +301,7 @@ button {
 	background-color: rgb(240, 240, 240);
 }
 
-.windows-95 button, .windows-95 .window header button, .windows-95 .window {
+.windows-95 button, .windows-95 .window header button, .windows-95 content {
 	background-color:  rgb(192, 192, 192);
 	color: black;
 	border-image: url("data:image/svg+xml,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22256px%22%20height%3D%22256px%22%20viewBox%3D%220%200%20256%20256%22%3E%0A%09%09%09%0A%09%09%3Cpath%20d%3D%22M0%200h224v32h-192v192h-32v-224z%22%20fill%3D%22%20rgb(255%2C%20255%2C%20255)%22%2F%3E%0A%09%09%3Cpath%20d%3D%22M224%200h32v256h-256v-32h224v-224z%22%20fill%3D%22%20rgb(0%2C%200%2C%200)%22%2F%3E%0A%09%09%3Cpath%20d%3D%22M32%2032h160v32h-128v128h-32v-160z%22%20fill%3D%22%20rgb(223%2C%20223%2C%20223)%22%2F%3E%0A%09%09%3Cpath%20d%3D%22M192%2032h32v192h-192v-32h160v-160z%22%20fill%3D%22%20rgb(128%2C%20128%2C%20128)%22%2F%3E%0A%09%09%3Cpath%20d%3D%22M64%2064h128v128h-128v-128z%22%20fill%3D%22%20rgb(192%2C%20192%2C%20192)%22%2F%3E%0A%09%0A%09%09%3C%2Fsvg%3E") 64 / 2px;
@@ -314,10 +314,11 @@ button {
 .windows-95 .window > content
 .windows-95 .window .content {
 	background-color: white;
+	padding: 2px;
 }
 
 .windows-95 .window header {
-	margin: 2px;
+	margin-bottom: 2px;
 	height: 18px;
 	background: linear-gradient(to right, rgb(0, 0, 128) 0%, rgb(16, 132, 208) 100%);
 }
