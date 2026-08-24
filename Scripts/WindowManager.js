@@ -866,7 +866,7 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 
 	else {
 		// if (element.style.OTransform)
-		element.style.OTransform = transform;
+		element.style.transform = transform;
 	}
     // TODO: Chekc where this is applied and only assing if needed
 	// element.style.webkitTransform = transform;
