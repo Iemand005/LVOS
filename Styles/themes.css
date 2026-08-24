@@ -305,8 +305,8 @@ button {
 	color: black;
 }
 
-.windows-95 .window.animating {
-	transition-timing-function: linear;
+.windows.windows-95 .window.animating {
+	transition-timing-function: linear !important;
 }
 
 .windows-95 button,
