@@ -316,6 +316,10 @@ button {
 	background-color: white;
 }
 
+.windows-95 .window header {
+	background: linear-gradient(to right, rgb(0, 0, 128) 0%, rgb(16, 132, 208) 100%);
+}
+
 .windows-95 .window header button {
 	width: 16px;
 	height: 14px;
