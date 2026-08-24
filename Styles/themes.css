@@ -578,6 +578,10 @@ button {
 	opacity: 0.9;
 }
 
+.modern.blur button {
+	background: linear-gradient(358deg, #1616162b, #33323200);
+}
+
 .modern.blur .window content {
 	background: rgba(27, 27, 27, 0.72);
 	backdrop-filter: blur(20px) saturate(160%);

@@ -469,7 +469,6 @@ button:hover {
 
 .blur button {
     backdrop-filter: blur(10px);
-    background: linear-gradient(358deg, #1616162b, #33323200);
 }
 
 /* Resize grabbers */
