@@ -361,9 +361,9 @@ button {
     bottom: 25px;
 }
 
-.windows-10 .windows-95 #launchpad {
-	width: 206px;
-	height: 340px;
+.windows-10 #launchpad {
+	width: 40%;
+	height: 70%;
 	left: 2px;
     bottom: 25px;
 }
