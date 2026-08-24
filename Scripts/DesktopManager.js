@@ -315,14 +315,16 @@ function initWallpaperDB(onSuccess, onFailure) {
         }
     };
 }
-
+/** /
+ * @param {string} dataUrl
+ */
 function localStorageFabblack(dataUrl) {
 	if (dataUrl) {
 		if (typeof settings != "undefined" && settings.set) {
 			try {
 				settings.set("wallpaperImage", dataUrl);
 				console.log("Wallpaper saved to localStorage via settings");
-			} catch (ex) {
+			} catch (/**@type {Error}*/ex) {
 				console.warn("Failed to save to settings, trying direct localStorage:", ex.message);
 				try {
 					window.localStorage.setItem("wallpaperImage", dataUrl);
