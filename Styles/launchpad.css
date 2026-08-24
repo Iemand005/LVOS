@@ -3,6 +3,11 @@
 	transition: all 1s linear;
 }
 
+#launchpad {
+	pointer-events: auto;
+	z-index: 100000;
+}
+
 #launchpad > ul {
 	display: flex;
 	margin: 0;
@@ -15,7 +20,7 @@
 }
 /* Disable the close btn */
 #launchpad > button {
-	display: none;
+	/* display: none; */
 }
 
 #launchpad li {
