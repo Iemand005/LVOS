@@ -3,7 +3,7 @@
 	transition: all 1s linear;
 }
 
-#launchpad {
+#launchpad.open {
 	pointer-events: auto;
 	z-index: 100000;
 }
