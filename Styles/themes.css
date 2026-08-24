@@ -354,6 +354,8 @@ button {
 	width: 206px;
 	height: 340px;
 	pointer-events: auto;
+	left: 2px;
+    bottom: 25px;
 }
 
 .windows-95 #launchpad li {
