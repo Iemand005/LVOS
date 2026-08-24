@@ -407,7 +407,7 @@ function loadElements() {
 	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
 
-	settings.loadFlags(flags);
+	if (typeof flags !== "undefined") settings.loadFlags(flags);
 }
 
 addEventListener("load", function() {
