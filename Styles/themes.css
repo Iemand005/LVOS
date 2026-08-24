@@ -306,6 +306,11 @@ button {
 	background-color: white;
 }
 
+.windows-95 .window header button {
+	width: 16px;
+	height: 14px;
+}
+
 .flippy .window:not(.maximized) {
 	/* sanimation: spin360 500ms ease-in-out reverse; */
 	animation-direction: reverse;
