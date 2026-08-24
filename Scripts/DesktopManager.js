@@ -199,7 +199,9 @@ DesktopManager.removeTheme = function(theme) { document.body.classList.remove(th
 /** @param {boolean} [force] */
 DesktopManager.toggleCharms = function(force){
 	var charms = document.getElementById("charms");
-	return charms && charms.classList.toggle("open", force);
+    if (!charms) return;
+    if (charms && charms.classList.toggle.length) return charms.classList.toggle("open", force);
+    
 };
 
 DesktopManager.getWallpaper = function () {
