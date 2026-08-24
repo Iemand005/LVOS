@@ -881,7 +881,8 @@ Object.defineProperty(Dialog.prototype, "frame", {
     get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Dialog.prototype.reportState = function() {
-
+	this.messageFrame("windowSize", {});
+	this.messageFrame("theme", {className: document.body.className})
 }
 /**
  * @param {boolean} [forceOpen]
@@ -896,16 +897,15 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 		return a === "opacity";
 	}, function (opened) {
         if (kill && !opened) self.kill();
-		if (opened) {
-			self.messageFrame("windowSize", {});
-			self.messageFrame("theme", {className: document.body.className})
-		}
+		if (opened) self.reportState();
     }, function (enabled) {
 		self._stateOpen = enabled;
         if (enabled) self.activate();
+		if (enabled) self.reportState();
     });
 
 	windowManager.saveState();
+	self.reportState();
 };
 /**
  * @param {boolean} [create]
