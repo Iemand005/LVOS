@@ -904,6 +904,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
     });
 
 	windowManager.saveState();
+	self.reportState();
 };
 /**
  * @param {boolean} [create]
