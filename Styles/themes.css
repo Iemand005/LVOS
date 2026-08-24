@@ -321,9 +321,8 @@ button {
 	height: 14px;
 }
 
-.windows-95 .window header button:nth-child(2) {
-	width: 160px;
-	height: 14px;
+.windows-95 .window header button:nth-child(3) {
+	margin-left: 2px;
 }
 
 .windows-95 .window header button svg {
