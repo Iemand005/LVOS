@@ -44,6 +44,7 @@
 	width: 70px;
 	display: block;
 	text-align: center;
+	align-content: center;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
