@@ -93,7 +93,8 @@ html:has(body.slow-animations)::view-transition-group(*) {
 	background-color: transparent !important;
 }
 
-.windows #dockapplist {
+.windows #dockapplist,
+.windows-10 #launchpad {
 	width: 100%;
     background: #0d0d0d57;
     backdrop-filter: blur(10px);
