@@ -121,7 +121,6 @@ var onLoad = function () {
 			if (selector.parentNode) selector.parentNode.removeChild(selector);
 		};
 
-		tingeling.addEventListener(supportsPointer ? "pointerdown" : "mousedown",stopIt, false);
 		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", stopIt, false);
 	}
 
