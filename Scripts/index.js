@@ -9,7 +9,7 @@ function init() {
 		launchpad.init(launchpadElement);
 	
 		window.windowManager.forEachWindow(function(dialog) {
-			if (dialog.application) launchpad.addApp(dialog);
+			if (launchpad && dialog.application) launchpad.addApp(dialog);
 		});
 	}
 }
