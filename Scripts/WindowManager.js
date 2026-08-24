@@ -898,14 +898,12 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	}, function (opened) {
         if (kill && !opened) self.kill();
 		if (opened) self.reportState();
-    }, function (enabled) {
-		self._stateOpen = enabled;
-        if (enabled) self.activate();
-		if (enabled) self.reportState();
+    }, function (opening) {
+		self._stateOpen = opening;
+        if (opening) self.activate();
     });
 
 	windowManager.saveState();
-	self.reportState();
 };
 /**
  * @param {boolean} [create]
@@ -1965,7 +1963,6 @@ Dialog.prototype.openUrl = function(url) {
 
 	var self = this;
 	frame.onload = function() {
-		// FileSystemWritableFileStream
 		self.reportState();
 	};
 
