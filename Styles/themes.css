@@ -328,8 +328,7 @@ button {
 }
 
 .windows-95 .window header button:nth-child(3) {
-	margin-left: 2px;
-	margin-right: 2px;
+	margin: 0 2px;
 }
 
 .windows-95 .window header button svg {
