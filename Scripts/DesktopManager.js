@@ -269,6 +269,7 @@ window.ondragleave = document.ondragleave = function(ev){
  * Initialize IndexedDB for wallpaper storage.
  * Skip IndexedDB for file:// scheme (HTAs, local files).
  */
+/** @type {IDBDatabase?} */
 var wallpaperDB = null;
 function initWallpaperDB(onSuccess, onFailure) {
     // IndexedDB is only available over http/https, not file:// scheme
