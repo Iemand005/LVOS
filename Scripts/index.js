@@ -1,7 +1,8 @@
-
-var launchpad = new Launchpad();
+/** @type {Launchpad?} */
+var launchpad = null;
 
 function init() {
+	launchpad = new Launchpad();
 
 	var launchpadElement = document.getElementById("launchpad");
 	if (launchpadElement) {
