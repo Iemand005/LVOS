@@ -349,15 +349,13 @@ button {
 .windows-95 #launchpad {
 	width: 206px;
 	height: 340px;
-	pointer-events
-Specifies under what circumstances a given element can be the target element for a pointer event.
-
-Widely available across major browsers (Baseline since January 2018)
-Learn more
-
-Don't show
-: auto;
+	pointer-events: auto;
 }
+
+.windows-95 #launchpad li
+Specificity: (1,0,1)
+ {
+    display: flex;
 
 .windows.windows-95 #dockapplist {
 	backdrop-filter: unset;
