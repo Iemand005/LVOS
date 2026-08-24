@@ -727,6 +727,8 @@ Dialog.prototype.initWithObject = function(object) {
         var createSizers = true;
 		var createTouchSizers = true;
 
+		if (!supportsPointer) createTouchSizers = false;
+
         if(borderSection && !this.fixed && createSizers) {
             for (var index = 0; index < 8; index++) {
 
