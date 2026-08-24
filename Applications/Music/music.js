@@ -145,7 +145,7 @@ function openCanvasPip() {
 		return;
 	}
 
-	const visualiserCanvasId = musicApp.visualizer === "cake" ? "canvas" : "visualizer";
+	const visualiserCanvasId = window.musicApp.visualizer === "cake" ? "canvas" : "visualizer";
 
 	const visualiser = document.getElementById(visualiserCanvasId);
 
@@ -211,7 +211,6 @@ function openCanvasPip() {
 			pipWindow.removeEventListener('resize', fitCanvas);
 			if (originalParent && visualiser.parentNode !== originalParent)
 				originalParent.appendChild(visualiser);
-			pipWindow = null;
 		}, { once: true });
 	}).catch(function(ex) {
 		LVMessenger.broadcastToParent("pip", {id: visualiser.id}, "music");
