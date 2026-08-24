@@ -301,6 +301,10 @@ button {
 	background-color: rgb(240, 240, 240);
 }
 
+.windows-95 button {
+	background-color:  rgb(192, 192, 192);
+}
+
 .windows-95 .window > content
 .windows-95 .window .content {
 	background-color: white;
