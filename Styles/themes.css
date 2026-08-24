@@ -352,10 +352,15 @@ button {
 	pointer-events: auto;
 }
 
-.windows-95 #launchpad li
-Specificity: (1,0,1)
- {
+.windows-95 #launchpad li {
     display: flex;
+}
+
+.windows-95 #launchpad li button {
+	border: none;
+	width: 30px;
+    height: 30px;
+}
 
 .windows.windows-95 #dockapplist {
 	backdrop-filter: unset;
