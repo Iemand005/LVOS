@@ -226,6 +226,10 @@ button {
 	max-height: calc(100% - 40px);
 }
 
+.windows-95 .window {
+	max-height: calc(100% - 27px);
+}
+
 .windows #dockapplist > button {
 	height: 100%;
 	margin: 0;
