@@ -534,7 +534,7 @@ desktop #launchpad {
 	background-color: transparent;
 }
 
-#metro {
+#metro, #overlay {
 	display: none;
 }
 
