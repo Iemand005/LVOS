@@ -351,7 +351,7 @@ MusicApp.prototype.animateFrame = function(time) {
 		/*let*/var rad = 0, inc = Math.PI*2*(1/count);
 		ctx.lineWidth = 100;
 		for(let index in timeData){
-			const amp = parseInt(timeData[index].toString());
+			const amp = parseInt(timeData[index].toString()); // TODO: why this backforth
 
 			const a = parseInt(freqData[index].toString());
 
@@ -388,14 +388,14 @@ MusicApp.prototype.loadVisualizerApps = function() {
 }
 
 if (visualiserOption) visualiserOption.onchange = function() {
-	if (visualiserOption instanceof HTMLSelectElement) musicApp.visualizer = visualiserOption.value || "bars";
+	if (visualiserOption instanceof HTMLSelectElement) window.musicApp.visualizer = visualiserOption.value || "bars";
 }
 
 function startAnimation(){
 	fft.oninput = function(){
 		audioVisualiser.updateBinCount(Math.pow(2, this.value)); // "2 ** this.value" works in more modern browsers too.
 	}
-	window.requestAnimationFrame(musicApp.animateFrame.bind(musicApp));
+	window.requestAnimationFrame(window.musicApp.animateFrame.bind(window.musicApp));
 }
 
 file.onchange = function(){
