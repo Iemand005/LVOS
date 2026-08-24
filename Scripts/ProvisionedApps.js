@@ -222,6 +222,12 @@ var applications = [
 		id: "solitaire",
 		src: "https://98.js.org/programs/js-solitaire/index.html",
 		iconUrl: "https://98.js.org/images/icons/solitaire-16x16.png"
+	},
+	{
+		title: "Pipes",
+		id: "pipes",
+		src: "https://98.js.org/programs/pipes/index.html#%7B%22hideUI%22%3Atrue%7D",
+		iconUrl: "https://98.js.org/images/icons/solitaire-16x16.png"
 	}
 ];
 
