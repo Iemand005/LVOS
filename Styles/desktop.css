@@ -534,6 +534,10 @@ desktop #launchpad {
 	background-color: transparent;
 }
 
+#metro {
+	display: none;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;

@@ -567,3 +567,13 @@ if (wallpaper) {
 	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi"); };
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
 }
+
+function loadMetro() {
+    var metro = document.getElementById("metro");
+    if (metro ) {
+        metro.style.display = "block";
+        var metroFrame = document.createElement("iframe");
+        metroFrame.src = "mobile.html";
+        metro.appendChild(metroFrame);
+    }
+}
