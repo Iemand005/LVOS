@@ -31,7 +31,7 @@ interface DialogState {
   height: number;
   open: boolean;
   maximized: boolean;
-} 1`1`1`11``1`1111
+}
 
 interface Position {
   x: number;

@@ -98,15 +98,6 @@ main {
 	border-radius: inherit;
 }
 
-.window header,
-.window header section,
-.window header nav {
-    /*-webkit-transition: all 170ms ease-out;*/
-    /*-moz-transition: all 170ms ease-out;*/
-    /*-o-transition: all 170ms ease-out;*/
-    /*transition: all 170ms ease-out;*/
-}
-
 svg {
     fill: rgb(255, 255, 255);
 }
@@ -179,11 +170,6 @@ svg {
 
 .window header button:active {
     background-color: #0000002b;
-}
-
-.window header button:not(:disabled) ~ button:not(:disabled){
-    /* border-bottom-left-radius: 0px;
-    border-left: none; */
 }
 
 .window header button:disabled {
@@ -606,10 +592,6 @@ button:hover {
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
-
-    body.blur .window {
-        /* border-radius: 8px; */
-    }
 
     body.blur .window > content {
         background-color: rgba(255, 255, 255, 0.267);

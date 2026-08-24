@@ -2,6 +2,7 @@
 
 import tseslint from "typescript-eslint";
 import globals from "globals";
+import jsdoc from 'eslint-plugin-jsdoc';
 
 export default tseslint.config({
 	files: ["**/*.js", "**/*.ts", "**/*.tsx", "*.d.ts"],
@@ -13,6 +14,7 @@ export default tseslint.config({
 		globals: {
 			...globals.browser,
 			...globals.commonjs,
+			...jsdoc.configs['flat/recommended'].rules,
 			Anim: "readonly",
 			Vector: "writable",
 			LVMessenger: "writable",

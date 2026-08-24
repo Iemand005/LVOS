@@ -517,10 +517,6 @@ button {
 	opacity: 0.9;
 }
 
-.modern.blur .window {
-	/* --window-outer-radius: 20px; */
-}
-
 .modern.blur .window content {
 	background: rgba(27, 27, 27, 0.72);
 	backdrop-filter: blur(20px) saturate(160%);
@@ -735,18 +731,14 @@ body.no-blur.modern.blur .window content {
 
 @supports (filter: url("#firefox-glass")) {
 
-.glass content {
-	/* background: none !important; */
-}
+	.glass .window > content {
+		backdrop-filter: blur(3px) !important;
+	}
 
-.glass .window > content {
-	backdrop-filter: blur(3px) !important;
-}
-
-.glass .backdrop-filter {
-	backdrop-filter: blur(3px) !important;
-	filter: url(#glass) !important;
-}
+	.glass .backdrop-filter {
+		backdrop-filter: blur(3px) !important;
+		filter: url(#glass) !important;
+	}
 }
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
