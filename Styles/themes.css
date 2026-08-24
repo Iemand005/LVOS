@@ -354,13 +354,16 @@ button {
 	text-shadow: none;
 }
 
+#launchpad {
+	pointer-events: auto;
+	z-index: 100000;
+}
+
 .windows-95 #launchpad {
 	width: 206px;
 	height: 340px;
-	pointer-events: auto;
 	left: 2px;
     bottom: 25px;
-	z-index: 100000;
 }
 
 .windows-95 #launchpad ul {
