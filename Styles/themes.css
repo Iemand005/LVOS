@@ -147,7 +147,8 @@ html:has(body.slow-animations)::view-transition-group(*) {
 
 .windows .window > div,
 .windows-10 .window > div,
-.windows-11 .window > div {
+.windows-11 .window > div,
+.mac-os .window > div {
 	z-index: 1;
 }
 
