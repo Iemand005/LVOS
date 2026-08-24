@@ -759,6 +759,10 @@ body.no-blur.modern.blur .window content {
 
 @media (prefers-color-scheme: dark) {
 
+	.windows-95 time, .windows-95 footer nav svg * {
+		color: black;
+	}
+
 	.windows-10 .window,
 	.windows-11 .window {
 		color: white;
