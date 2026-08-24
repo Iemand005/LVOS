@@ -351,9 +351,9 @@ MusicApp.prototype.animateFrame = function(time) {
 		/*let*/var rad = 0, inc = Math.PI*2*(1/count);
 		ctx.lineWidth = 100;
 		for(let index in timeData){
-			const amp = parseInt(timeData[index]);
+			const amp = parseInt(timeData[index].toString());
 
-			const a = parseInt(freqData[index]);
+			const a = parseInt(freqData[index].toString());
 
 			const x = (amp) * Math.cos(rad) + cX;
 			const y = (amp) * Math.sin(rad) + cY;
@@ -371,7 +371,7 @@ MusicApp.prototype.animateFrame = function(time) {
 		// count = freqData.length;    
 		ctx.beginPath();
 
-		const amp = parseInt(freqData[index]);
+		const amp = parseInt(freqData[index].toString());
 		const x = parseInt(index) * (width/count);
 		ctx.fillStyle = fillStyle;
 		ctx.fillRect(x, ctx.canvas.height, ctx.canvas.width/count, -(ctx.canvas.height/256 *amp));
