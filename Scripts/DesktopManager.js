@@ -35,7 +35,7 @@ var onLoad = function () {
 	var desktop = document.getElementById("desktop");
 	if (desktop) desktop.addEventListener("mousedown", function () {
 		DesktopManager.toggleCharms(false);
-        launchpad.close();
+        if (launchpad) launchpad.close();
 	}, false);
 
 	var applist = document.getElementById("applist");
@@ -51,7 +51,7 @@ var onLoad = function () {
 		startButton.innerHTML = "Start";
         startButton.id = "start-button";
 		startButton.addEventListener("click", function () {
-			launchpad.open();
+			if (launchpad) launchpad.open();
 		}, false);
 
 		appButtons.appendChild(startButton);
