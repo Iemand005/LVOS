@@ -5,6 +5,10 @@ html, body {
     background: transparent;
 }
 
+body > table {
+    border-collapse: collapse;
+}
+
 table {
     width: 100%;
     height: 100%;
@@ -65,8 +69,9 @@ td button {
     padding: 0;
 }
 
-#display {
+#displayRow td {
     padding: 6px;
+    padding-bottom: 0;
 }
 
 .keys {
