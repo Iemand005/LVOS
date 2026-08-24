@@ -81,6 +81,10 @@ var onLoad = function () {
 		console.error("Registration of service worker failed:", err);
 	});
 
+    if  (launchpad) launchpad.open();
+
+    if (!ClickOffset) return;
+
 	var clickOffset = new ClickOffset;
 
 	var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
@@ -125,7 +129,6 @@ var onLoad = function () {
 	}
 
     
-    if  (launchpad) launchpad.open();
 };
 
 window.addEventListener("load", onLoad, false);
