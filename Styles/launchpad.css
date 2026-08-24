@@ -27,6 +27,12 @@
 	padding: 10px;
 }
 
+#launchpad li img {
+    width: 100%;
+    height: 100$;
+    image-fit: cover;
+}
+
 #launchpad li button {
 	width: 70px;
 	height: 70px;
