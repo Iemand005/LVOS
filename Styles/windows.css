@@ -579,7 +579,7 @@ button:hover {
 	will-change: transform;
 }
 
-@supports (display: flex) {
+/* @supports (display: flex) {
     tbody {
         height: 100%;
         display: flex;
@@ -590,7 +590,7 @@ button:hover {
         height: 100%;
         display: block;
     }
-}
+} */
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
 
