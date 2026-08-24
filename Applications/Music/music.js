@@ -219,14 +219,18 @@ function openCanvasPip() {
 
 const pipBtn = document.getElementById("pip-button");
 if (pipBtn) pipBtn.onclick = openCanvasPip;
-
+/** @param {number} c */
 function componentToHex(c) {
-var hex = c.toString(16);
-return hex.length == 1 ? "0" + hex : hex;
+	var hex = c.toString(16);
+	return hex.length == 1 ? "0" + hex : hex;
 }
-
+/**
+ * @param {number} r 
+ * @param {number} g 
+ * @param {number} b
+ */
 function rgbToHex(r, g, b) {
-return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 let lastUpdateTime = 0;
