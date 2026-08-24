@@ -287,7 +287,7 @@ function initWallpaperDB(onSuccess, onFailure) {
         return;
     }
     
-    if (!indexedDB) {
+    if (typeof indexedDB === "undefined") {
         if (onFailure) onFailure(new Error("IndexedDB not supported"));
         return;
     }
