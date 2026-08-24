@@ -314,6 +314,7 @@ button {
 
 .windows.windows-95 .window.animating {
 	transition-timing-function: linear !important;
+	transition-duration: 150ms !important;
 }
 
 .windows-95 button,

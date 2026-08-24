@@ -26,7 +26,7 @@ const precacheUrls = [
 	'./Scripts/Console.js',
 	'./Scripts/physics.js',
 	'./Scripts/youtube.js',
-	'./Scripts/messenger.js',
+	'./Scripts/Messenger.js',
 	'./Scripts/NewtonVirus.js',
 	'./Scripts/index.js'
 ];

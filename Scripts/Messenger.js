@@ -7,20 +7,6 @@
 function LVMessenger(){
 }
 
-LVMessenger.types = {
-	open: "open",
-	windowSize: "windowSize",
-	windowMove: "windowMove",
-	mouseUp: "mouseUp",
-	launchOverlay: "launchOverlay",
-	prepareToLaunchOverlay: "prepareToLaunchOverlay",
-	readyToLaunchOverlay: "readyToLaunchOverlay",
-	identify: "identify",
-	identity: "identity",
-	pip: "pip",
-	visualizers: "visualizers"
-};
-
 /**
  * @typedef Identity
  * @prop {string} name
