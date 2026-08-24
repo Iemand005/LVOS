@@ -5,7 +5,7 @@ function init() {
 	// launchpad = new Launchpad;
 
 	var launchpadElement = document.getElementById("launchpad");
-	if (launchpad && launchpadElement) {
+	if (launchpad && launchpadElement && "windowManager" in window) {
 		launchpad.init(launchpadElement);
 	
 		window.windowManager.forEachWindow(function(dialog) {

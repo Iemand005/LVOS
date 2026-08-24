@@ -303,7 +303,7 @@ function dockApp(dialog) {
 // function loadApps
 var initApps = function () {
 	var loadApps = true;
-	if (loadApps && windowManager) {
+	if (loadApps && typeof windowManager !== "undefined") {
 
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
