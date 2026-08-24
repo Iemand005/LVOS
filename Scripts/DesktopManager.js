@@ -558,3 +558,9 @@ window.addEventListener("keyup", function(event) {
     document.body.classList.remove("slow-animations");
   }
 }, false);
+
+var wallpaper = DesktopManager.getWallpaper();
+if (wallpaper) {
+	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi"); };
+	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
+}

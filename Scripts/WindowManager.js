@@ -2577,13 +2577,6 @@ function removeWallpaper() {
 	return wallpaper;
 }
 
-
-var wallpaper = DesktopManager.getWallpaper();
-if (wallpaper) {
-	wallpaper.ondragover = function(ev) { ev.preventDefault(); console.log ("okdi"); };
-	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
-}
-
 window.addEventListener("unload", function() {
 	windowManager.saveState();
 }, false);
