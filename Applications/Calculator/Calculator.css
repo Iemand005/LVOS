@@ -6,21 +6,21 @@ html, body {
 }
 
 table {
-    width:100%;
-    height:100%;
-    border-collapse:separate;
-    border-spacing:6px;
-    table-layout:fixed;
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    border-spacing: 6px;
+    table-layout: fixed;
 }
 
 /* display row stays minimal */
 #displayRow td {
-    height:1px;
-    padding:0;
+    height: 1px;
+    padding: 0;
 }
 
 /* display */
-input{
+input {
     width:100%;
     box-sizing:border-box;
     font-size:32px;
@@ -34,4 +34,12 @@ table button {
     height: 100%;
     padding: 0;
     margin: 0;
+}
+
+tr {
+    height: 20%;
+}
+
+td {
+    height: 100%;
 }
