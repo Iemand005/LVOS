@@ -35,6 +35,7 @@ body {
     -o-user-select: none;
     -o-user-drag: none;
     user-select: none;
+    cursor: default;
 }
 
 /* Main */
