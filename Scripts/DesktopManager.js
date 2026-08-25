@@ -128,7 +128,9 @@ var onLoad = function () {
 		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", stopIt, false);
 	}
 
-    
+    document.onselectstart = function () {
+        return false;
+    };
 };
 
 window.addEventListener("load", onLoad, false);
