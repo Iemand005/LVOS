@@ -240,7 +240,9 @@ function toggleCharmsEvent(ev) {
 /** @param {number} size */
 function setBorderSize(size) {
 	settings.set("borderSize", size);
-	for (var index in windowManager.windows) windowManager.windows[index].borderSize = size;
+	if (typeof windowManager !== "undefined" && windowManager.windows) {
+		for (var index in windowManager.windows) windowManager.windows[index].borderSize = size;
+	}
 }
 
 function hexToRGB(hex) {
@@ -360,12 +362,22 @@ var elements = {
 function installAppFromUrl(useProxy) {
 	var url = (elements.installAppUrl && elements.installAppUrl.value || "").trim();
 	if (!url) return;
-	if (useProxy && windowManager && typeof windowManager.installAppProxied == "function") {
+	if (useProxy && typeof appRegistry !== "undefined" && typeof appRegistry.installAppProxied == "function") {
+		appRegistry.installAppProxied(url);
+		if (elements.installAppUrl) elements.installAppUrl.value = "";
+		return;
+	}
+	if (useProxy && typeof windowManager !== "undefined" && typeof windowManager.installAppProxied == "function") {
 		windowManager.installAppProxied(url);
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 		return;
 	}
-	if (windowManager && typeof windowManager.installApp == "function") {
+	if (typeof appRegistry !== "undefined" && typeof appRegistry.installApp == "function") {
+		appRegistry.installApp(url);
+		if (elements.installAppUrl) elements.installAppUrl.value = "";
+		return;
+	}
+	if (typeof windowManager !== "undefined" && typeof windowManager.installApp == "function") {
 		windowManager.installApp(url);
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 	}

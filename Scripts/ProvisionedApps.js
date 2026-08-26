@@ -289,11 +289,13 @@ var games = [
   }
 ];
 
-Object.defineProperty(Window.prototype, "windows", {
-	get: function () {
-		return windowManager.windows;
-	}
-})
+if (typeof windowManager !== "undefined") {
+	Object.defineProperty(Window.prototype, "windows", {
+		get: function () {
+			return windowManager.windows;
+		}
+	});
+}
 
 /** @param {Dialog} dialog */
 function dockApp(dialog) {
@@ -302,9 +304,10 @@ function dockApp(dialog) {
 
 // function loadApps
 var initApps = function () {
-	var loadApps = true;
-	if (loadApps && typeof windowManager !== "undefined") {
-
+	if (typeof appRegistry !== "undefined") {
+		appRegistry.registerApps(applications, games);
+		appRegistry.loadInstalledApps();
+	} else if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
 		windowManager.loadInstalledApps();
@@ -319,8 +322,6 @@ var initApps = function () {
 			dockApp(windows.music);
 		}
 	}
-
-//toggleReflections(true);
 };
 
 window.addEventListener("load", initApps, false);

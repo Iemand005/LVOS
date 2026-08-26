@@ -95,38 +95,48 @@ Launchpad.prototype.close = function() {
 	this.launchpad.classList.remove("open");
 };
 
+Launchpad.prototype._createMobileButton = function(app) {
+	var title = (app && app.title) || "?";
+	var openButton = document.createElement("button");
+	openButton.appendChild(document.createTextNode(title.charAt(0).toUpperCase()));
+
+	if (app && app.accentColor) openButton.style.background = app.accentColor;
+
+	var iconUrl = app && app.iconUrl;
+	if (iconUrl) {
+		var icon = document.createElement("img");
+		icon.onload = function() {
+			openButton.textContent = "";
+			openButton.appendChild(icon);
+		};
+		icon.src = iconUrl;
+	}
+
+	return openButton;
+};
+
 /**
- * @param {Dialog} app 
+ * @param {Dialog|Object} app - A Dialog instance (desktop) or plain app object (mobile)
  */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
-	var openButton = app.createOpenButton();
-
-	appElement.appendChild(openButton);
-
 
 	if (this._isMobile) {
-		openButton.textContent = openButton.textContent.charAt(0).toUpperCase();
-		if (app.application && app.application.accentColor) openButton.style.background = app.application.accentColor;
+		var openButton = this._createMobileButton(app);
+		appElement.appendChild(openButton);
+
 		openButton.onclick = function() {
 			mobileFrameManager.open(app);
 		};
 
-		var iconUrl = app.iconUrl;
-		if (iconUrl) {
-			var icon = document.createElement("img");
-			icon.onload = function() {
-				openButton.textContent = "";
-				openButton.appendChild(icon);
-			};
-			icon.src = iconUrl;
-		}
-
 		var appLabel = document.createElement("label");
-		appLabel.textContent = app.title || "Unknown";
-
+		appLabel.textContent = (app && app.title) || "Unknown";
 		appElement.appendChild(appLabel);
+	} else {
+		var openButton = app.createOpenButton();
+		appElement.appendChild(openButton);
 	}
+
 	this.list.appendChild(appElement);
 };
 

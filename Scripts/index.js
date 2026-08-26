@@ -2,14 +2,18 @@
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function init() {
-	// launchpad = new Launchpad;
-
 	var launchpadElement = document.getElementById("launchpad");
-	if (launchpad && launchpadElement && "windowManager" in window) {
-		launchpad.init(launchpadElement);
-	
-		window.windowManager.forEachWindow(function(dialog) {
-			if (launchpad && dialog.application) launchpad.addApp(dialog);
+	if (!launchpad || !launchpadElement) return;
+
+	launchpad.init(launchpadElement);
+
+	if (typeof appRegistry !== "undefined") {
+		appRegistry.forEachApp(function(app, id) {
+			launchpad.addApp(app);
+		});
+	} else if (typeof windowManager !== "undefined" && "windowManager" in window) {
+		windowManager.forEachWindow(function(dialog) {
+			if (dialog.application) launchpad.addApp(dialog);
 		});
 	}
 }
