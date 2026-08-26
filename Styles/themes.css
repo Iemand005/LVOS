@@ -528,6 +528,11 @@ button {
 	border: 0px solid black !important;
 }
 
+.modern button:active {
+	background: linear-gradient(358deg, #333232, #161616);
+	border: 0px solid black !important;
+}
+
 .modern .window content {
 	z-index: 1;
 }
