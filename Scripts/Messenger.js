@@ -103,3 +103,10 @@ LVMessenger.onHostBeingLVOS = function (callback) {
 		console.warn("Failed to request host OS", ex);
 	}
 };
+
+LVMessenger.addThemeChangeHandler = function() {
+	LVMessenger.receive(function(message, data) {
+		if (message === "theme")
+			document.body.className = data.className;
+	});
+}

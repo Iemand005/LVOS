@@ -78,7 +78,4 @@ function load() {
 
 window.addEventListener("load", load, false);
 
-LVMessenger.receive(function(message, data) {
-    if (message === "theme")
-        document.body.className = data.className;
-});
+LVMessenger.addThemeChangeHandler();
