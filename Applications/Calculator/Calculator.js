@@ -53,10 +53,10 @@ var calculator = null;
 
 /**
  * @type {HTMLElement | null} element
- * @returns {is HTMLInputElement}
+ * @returns {element is HTMLInputElement}
  */
 function hasValueProperty(element) {
-
+    return element.getAttribute("value") !== "";
 }
 
 function load() {
