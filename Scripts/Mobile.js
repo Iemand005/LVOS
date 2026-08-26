@@ -1,19 +1,13 @@
 window.addEventListener("load", function(e){
-	const homeButton = document.getElementById("home-button");
-	const backButton = document.getElementById("back-button");
-	const appsButton = document.getElementById("apps-button");
-
-	var mainFrame = document.getElementById("main-frame");
-	var appFrame = document.getElementById("app-frame");
+	var homeButton = document.getElementById("home-button");
+	var backButton = document.getElementById("back-button");
 
 	var goBack = function() {
-		if (!(mainFrame instanceof HTMLIFrameElement) || !mainFrame.contentWindow) return;
-		mainFrame.contentWindow.history.back();
+		mobileFrameManager.goBack();
 	};
 	
 	if (homeButton) homeButton.onclick = function() {
-		if (!(mainFrame instanceof HTMLElement)) return;
-		mainFrame.classList.remove("open");
+		mobileFrameManager.hide();
 	};
 
 	if (backButton) backButton.onclick = goBack;
@@ -31,5 +25,3 @@ window.addEventListener("load", function(e){
 		goBack();
 	});
 });
-
-
