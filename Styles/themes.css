@@ -526,12 +526,10 @@ button {
 .modern button {
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
-	transition: background 1s linear;
 }
 
 .modern button:active {
 	background: linear-gradient(358deg, #333232, #161616);
-	border: 0px solid black !important;
 }
 
 .modern .window content {
