@@ -59,9 +59,28 @@ footer svg {
 	fill: none;
 }
 
-button:active::after {
+/* button:active::after {
 	content: "";
 	background-color: blue;
+
+} */
+
+.modern button:active::after
+{
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: .5px;
+	background: linear-gradient(rgba(255, 255, 255, 0.1), #ffffff38 75%);;
+	mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+	-webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+	-webkit-mask-componsite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
+
+	
+
 }
 
 
