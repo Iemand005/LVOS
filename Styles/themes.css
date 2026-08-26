@@ -496,8 +496,7 @@ button {
 }
 
 .modern .window content::before,
-.modern button::after
-{
+.modern button::after {
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -509,8 +508,21 @@ button {
 	-webkit-mask-componsite: xor;
 	mask-composite: exclude;
 	pointer-events: none;
+	transition: all 1s linear;
+}
 
-
+.modern button:active::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: .5px;
+	background: linear-gradient(rgba(255,255,255,0.1), transparent 75%);
+	mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+	-webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
+	-webkit-mask-componsite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
 }
 
 .modern .window content::after
