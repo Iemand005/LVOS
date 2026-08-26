@@ -78,4 +78,4 @@ function load() {
 
 window.addEventListener("load", load, false);
 
-LVMessenger.addThemeChangeHandler();
+LVMessenger.registerThemeChangeHandler();

@@ -104,7 +104,7 @@ LVMessenger.onHostBeingLVOS = function (callback) {
 	}
 };
 
-LVMessenger.addThemeChangeHandler = function() {
+LVMessenger.registerThemeChangeHandler = function() {
 	LVMessenger.receive(function(message, data) {
 		if (message === "theme")
 			document.body.className = data.className;
