@@ -522,17 +522,18 @@ button {
 }
 
 
-.modern .window content {
+.modern .window content,
+.modern button {
 	background: linear-gradient(358deg, #161616, #333232);
-	/* padding: 5px; */
 	border: 0px solid black !important;
+}
+
+.modern .window content {
 	z-index: 1;
 }
 
 .modern button {
-	background: linear-gradient(358deg, #161616, #333232);
 	padding: 5px;
-	border: 0px solid black;
 	position: relative;
 	border-radius: 100px;
 	padding: 5px 10px;
