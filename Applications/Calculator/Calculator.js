@@ -51,11 +51,19 @@ Calculator.prototype.press = function (value) {
 /** @type {Calculator | null} */
 var calculator = null;
 
+/**
+ * @type {HTMLElement | null} element
+ * @returns {is HTMLInputElement}
+ */
+function hasValueProperty(element) {
+
+}
+
 function load() {
     var output = document.getElementById("display");
     var cells = document.getElementsByTagName("button");
 
-    if (!output) return;
+    if (!(output )) return;
     calculator = new Calculator(output);
 
     for (var i = 0; i < cells.length; i++) {
