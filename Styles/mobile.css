@@ -8,6 +8,7 @@
 	height: 40px;
 	position: sticky;
 	background: black;
+	z-index: 10000000;
 }
 
 body {
