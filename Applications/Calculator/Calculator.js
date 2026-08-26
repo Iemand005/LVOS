@@ -52,11 +52,11 @@ Calculator.prototype.press = function (value) {
 var calculator = null;
 
 /**
- * @type {HTMLElement | null} element
+ * @param {HTMLElement | null} element
  * @returns {element is HTMLInputElement}
  */
 function hasValueProperty(element) {
-    return element.getAttribute("value") !== "";
+    return !!element && "value" in element;
 }
 
 function load() {
