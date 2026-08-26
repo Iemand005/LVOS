@@ -59,11 +59,9 @@ footer svg {
 	fill: none;
 }
 
-/* button:active::after {
-	content: "";
-	background-color: blue;
-
-} */
+button:active::after {
+	transition: all 1s linear;
+}
 
 .modern button:active::after
 {
