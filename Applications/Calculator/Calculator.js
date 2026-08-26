@@ -1,7 +1,11 @@
 'use strict';
 
-function Calculator() {
+/**
+ * @param {HTMLElement} output
+ */
+function Calculator(output) {
     this.expression = "";
+    this.output = output;
 }
 
 Calculator.prototype.updateDisplay = function() {
@@ -55,11 +59,12 @@ function load() {
     output = document.getElementById("display");
     cells = document.getElementsByTagName("button");
 
-    calculator = new Calculator;
+    if (!output) return;
+    calculator = new Calculator(output);
 
     for (var i = 0; i < cells.length; i++) {
         cells[i].onclick = function () {
-            if (calculator)
+            if (!calculator) return;
             calculator.press(this.textContent || this.innerText);
         };
     }
