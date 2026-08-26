@@ -12,7 +12,7 @@ Calculator.prototype.calculate = function () {
     var safeExpr = this.expression.replace(/[^0-9+\-*/.]/g, "");
 
     if (!safeExpr) {
-        expression = "0";
+        this.expression = "0";
         this.updateDisplay();
         return;
     }
@@ -59,6 +59,7 @@ function load() {
 
     for (var i = 0; i < cells.length; i++) {
         cells[i].onclick = function () {
+            if (calculator)
             calculator.press(this.textContent || this.innerText);
         };
     }
