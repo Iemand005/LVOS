@@ -59,6 +59,11 @@ footer svg {
 	fill: none;
 }
 
+button:active::after {
+	content: "";
+	background-color: blue;
+}
+
 
 #main-frame {
 	z-index: 100;
