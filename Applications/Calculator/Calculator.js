@@ -63,7 +63,7 @@ function load() {
     var output = document.getElementById("display");
     var cells = document.getElementsByTagName("button");
 
-    if (!(output )) return;
+    if (!hasValueProperty(output)) return;
     calculator = new Calculator(output);
 
     for (var i = 0; i < cells.length; i++) {
