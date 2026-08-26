@@ -362,23 +362,30 @@ var elements = {
 function installAppFromUrl(useProxy) {
 	var url = (elements.installAppUrl && elements.installAppUrl.value || "").trim();
 	if (!url) return;
-	if (useProxy && typeof appRegistry !== "undefined" && typeof appRegistry.installAppProxied == "function") {
-		appRegistry.installAppProxied(url);
+	if (typeof appRegistry !== "undefined") {
+		var app;
+		if (useProxy) {
+			var proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
+			app = appRegistry.createApp(
+				proxyUrl + url,
+				getSiteName(url),
+				"custom." + getDomain(url),
+				getFaviconUrl(url)
+			);
+		} else {
+			app = appRegistry.createApp(url);
+		}
+		appRegistry.addApp(app);
+		appRegistry.saveApp(app);
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 		return;
 	}
-	if (useProxy && typeof windowManager !== "undefined" && typeof windowManager.installAppProxied == "function") {
-		windowManager.installAppProxied(url);
-		if (elements.installAppUrl) elements.installAppUrl.value = "";
-		return;
-	}
-	if (typeof appRegistry !== "undefined" && typeof appRegistry.installApp == "function") {
-		appRegistry.installApp(url);
-		if (elements.installAppUrl) elements.installAppUrl.value = "";
-		return;
-	}
-	if (typeof windowManager !== "undefined" && typeof windowManager.installApp == "function") {
-		windowManager.installApp(url);
+	if (typeof windowManager !== "undefined") {
+		if (useProxy && typeof windowManager.installAppProxied == "function") {
+			windowManager.installAppProxied(url);
+		} else if (typeof windowManager.installApp == "function") {
+			windowManager.installApp(url);
+		}
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 	}
 }

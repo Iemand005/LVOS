@@ -1,6 +1,12 @@
 /* AppRegistry - Lightweight app registry for LVOS Mobile.
-   Provides app registration, iteration, installation, and persistence
-   without the full WindowManager/Dialog desktop scaffolding. */
+   Provides app registration, iteration, and persistence
+   without the full WindowManager/Dialog desktop scaffolding.
+
+   Save and load are intentionally separate from adding:
+     addApp(app)  - adds to registry only, no localStorage
+     saveApp(app) - persists one app to localStorage only
+     loadApps()   - loads from localStorage into registry only
+*/
 
 var canSave = true;
 var hasLocalStorage = false;
@@ -46,18 +52,20 @@ function AppRegistry() {
     this._apps = {};
 }
 
-AppRegistry.prototype.registerApp = function(app) {
+/* --- Registry (no persistence) --- */
+
+AppRegistry.prototype.addApp = function(app) {
     if (!app || typeof app !== "object") return;
     if (!app.id) app.id = app.title || "unknown";
     this._apps[app.id] = app;
 };
 
-AppRegistry.prototype.registerApps = function(/* ...arrays */) {
+AppRegistry.prototype.addApps = function(/* ...arrays */) {
     for (var i = 0; i < arguments.length; i++) {
         var arr = arguments[i];
         if (arr instanceof Array) {
             for (var j = 0; j < arr.length; j++) {
-                this.registerApp(arr[j]);
+                this.addApp(arr[j]);
             }
         }
     }
@@ -66,6 +74,11 @@ AppRegistry.prototype.registerApps = function(/* ...arrays */) {
 AppRegistry.prototype.getApp = function(id) {
     if (!id) return null;
     return this._apps[id] || null;
+};
+
+AppRegistry.prototype.removeApp = function(id) {
+    if (!id) return;
+    delete this._apps[id];
 };
 
 AppRegistry.prototype.forEachApp = function(callback) {
@@ -80,6 +93,8 @@ AppRegistry.prototype.forEachApp = function(callback) {
 Object.defineProperty(AppRegistry.prototype, "apps", {
     get: function() { return this._apps; }
 });
+
+/* --- Persistence (localStorage) --- */
 
 Object.defineProperty(AppRegistry.prototype, "installedApps", {
     get: function() {
@@ -96,8 +111,9 @@ Object.defineProperty(AppRegistry.prototype, "installedApps", {
     }
 });
 
-AppRegistry.prototype.saveInstalledApp = function(app) {
+AppRegistry.prototype.saveApp = function(app) {
     if (!canSave || !hasLocalStorage) return;
+    if (!app || typeof app !== "object" || !app.id) return;
     try {
         var apps = this.installedApps;
         for (var i = 0; i < apps.length; i++) {
@@ -110,39 +126,28 @@ AppRegistry.prototype.saveInstalledApp = function(app) {
     }
 };
 
-AppRegistry.prototype.loadInstalledApps = function() {
+AppRegistry.prototype.loadApps = function() {
     if (!canSave || !hasLocalStorage) return;
     var self = this;
     try {
         var apps = this.installedApps;
         for (var i = 0; i < apps.length; i++) {
             var app = apps[i];
-            if (app && app.src) self.registerApp(app);
+            if (app && app.src) self.addApp(app);
         }
     } catch (exception) {
         handleStorageException(exception);
     }
 };
 
-AppRegistry.prototype.installApp = function(url, title, id, iconUrl) {
+AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
     var app = {
         src: url,
         id: id || "custom." + getDomain(url),
         title: title || getSiteName(url)
     };
     if (iconUrl) app.iconUrl = iconUrl;
-    this.registerApp(app);
-    this.saveInstalledApp(app);
-};
-
-AppRegistry.prototype.installAppProxied = function(url, proxyUrl) {
-    if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
-    this.installApp(
-        proxyUrl + url,
-        getSiteName(url),
-        "custom." + getDomain(url),
-        getFaviconUrl(url)
-    );
+    return app;
 };
 
 var appRegistry = new AppRegistry;

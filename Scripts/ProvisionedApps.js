@@ -305,8 +305,8 @@ function dockApp(dialog) {
 // function loadApps
 var initApps = function () {
 	if (typeof appRegistry !== "undefined") {
-		appRegistry.registerApps(applications, games);
-		appRegistry.loadInstalledApps();
+		appRegistry.addApps(applications, games);
+		appRegistry.loadApps();
 	} else if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
