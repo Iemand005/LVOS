@@ -1,15 +1,13 @@
 'use strict';
 
-/**
- * @param {HTMLElement} output
- */
+/** @param {HTMLInputElement} output */
 function Calculator(output) {
     this.expression = "";
     this.output = output;
 }
 
 Calculator.prototype.updateDisplay = function() {
-    output.value = this.expression || "0";
+    this.output.value = this.expression || "0";
 };
 
 Calculator.prototype.calculate = function () {
@@ -35,6 +33,7 @@ Calculator.prototype.clearAll = function () {
     this.updateDisplay();
 };
 
+/** @param {string} value */
 Calculator.prototype.press = function (value) {
     if (value === "=")
        return this.calculate();
@@ -49,15 +48,12 @@ Calculator.prototype.press = function (value) {
     this.updateDisplay();
 };
 
-var output;
-var cells;
-
 /** @type {Calculator | null} */
 var calculator = null;
 
 function load() {
-    output = document.getElementById("display");
-    cells = document.getElementsByTagName("button");
+    var output = document.getElementById("display");
+    var cells = document.getElementsByTagName("button");
 
     if (!output) return;
     calculator = new Calculator(output);
