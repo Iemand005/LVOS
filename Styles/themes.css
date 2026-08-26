@@ -341,6 +341,10 @@ button {
 	color: black;
 }
 
+.windows-95 .window h1 {
+	color: white;
+}
+
 .windows-95 button:active,
 .windows-95 .window header button:active,
 .windows.windows-95 #dockapplist > button:active,
