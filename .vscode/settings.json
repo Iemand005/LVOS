@@ -30,5 +30,6 @@
 	"javascript.inlayHints.propertyDeclarationTypes.enabled": true,
 	"javascript.inlayHints.functionLikeReturnTypes.enabled": true,
 	"js/ts.inlayHints.parameterTypes.enabled": true,
-	"js/ts.inlayHints.parameterNames.enabled": "all"
+	"js/ts.inlayHints.parameterNames.enabled": "all",
+	"tabStack.history.maxEntries": 100
 }
