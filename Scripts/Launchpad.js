@@ -7,6 +7,7 @@ function Launchpad() {
 }
 
 function MobileFrameManager() {
+	/** @type {{[id: string]: HTMLIFrameElement}} */
 	this._frames = {};
 	this._activeId = null;
 	this._container = null;
