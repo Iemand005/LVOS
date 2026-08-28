@@ -19,23 +19,21 @@ MobileFrameManager.prototype.init = function(container) {
 	this._container = container;
 };
 
-/** @param {Dialog} app */
+/** @param {Application} app */
 MobileFrameManager.prototype.open = function(app) {
-	var id = app.application ? app.application.id : app.id;
-	var src = app.src || (app.application && app.application.src);
-	if (!id || !src) return;
+	if (!app.id || !app.src || !this._container) return;
 
-	if (this._frames[id]) {
-		this._showFrame(id);
+	if (this._frames[app.id]) {
+		this._showFrame(app.id);
 		return;
 	}
 
 	var frame = document.createElement("iframe");
 	frame.setAttribute("frameborder", "0");
-	frame.src = src;
-	this._frames[id] = frame;
+	frame.src = app.src;
+	this._frames[app.id] = frame;
 	this._container.appendChild(frame);
-	this._showFrame(id);
+	this._showFrame(app.id);
 };
 
 MobileFrameManager.prototype._showFrame = function(id) {
