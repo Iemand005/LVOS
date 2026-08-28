@@ -144,9 +144,13 @@ ContextMenu.prototype.toggleOpen = function(force) {
     if (!this.element) return;
     this.element.classList.toggle("open", force);
 }
-
-ContextMenu.prototype.open = function() {
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+ContextMenu.prototype.open = function(x, y) {
     if (!this.element) return;
+    translateElement(this.element, x, y);
     this.element.classList.add("open");
 }
 
@@ -163,7 +167,7 @@ document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
     console.log("Open contex tp ples");
-    contextMenu.open();
+    contextMenu.open(e.clientX, e.clientY);
 }, false);
 
 var reflecitons = false;
