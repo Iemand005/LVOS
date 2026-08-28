@@ -161,6 +161,16 @@ AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
 	return app;
 };
 
+AppRegistry.prototype.setWallpaper = function(id) {
+	var wallpaperFrame = document.getElementById("wallpaper-frame");
+	if (!(wallpaperFrame instanceof HTMLIFrameElement)) return;
+
+	var app = this.getApp(id);
+	if (!app) return;
+
+	wallpaperFrame.src = app.src;
+}
+
 var appRegistry = new AppRegistry;
 window.appRegistry = appRegistry;
 
