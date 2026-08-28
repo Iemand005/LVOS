@@ -140,7 +140,14 @@ AppRegistry.prototype.loadApps = function() {
     }
 };
 
+/**
+ * @param {string} url
+ * @param {string} title
+ * @param {string} id
+ * @param {string} iconUrl
+ */
 AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
+    /** @type {Application} */
     var app = {
         src: url,
         id: id || "custom." + getDomain(url),
