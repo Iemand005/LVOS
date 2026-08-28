@@ -138,7 +138,7 @@ window.addEventListener("load", onLoad, false);
 function ContextMenu() {
     this.element = document.getElementById("context-menu");
 }
-
+/** @param {boolean} force */
 ContextMenu.prototype.toggleOpen = function(force) {
     if (!this.element) return;
     this.element.classList.toggle("open", force);
@@ -154,10 +154,15 @@ ContextMenu.prototype.close = function() {
     this.element.classList.remove("open");
 }
 
+var contextMenu = new ContextMenu;
+
+
+
 document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
     console.log("Open contex tp ples");
+    contextMenu.open();
 }, false);
 
 var reflecitons = false;
