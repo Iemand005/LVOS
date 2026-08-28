@@ -538,6 +538,13 @@ desktop #launchpad {
 	display: none;
 }
 
+.context-menu {
+	position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    background: gray;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
