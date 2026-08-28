@@ -139,6 +139,11 @@ function ContextMenu() {
     this.element = document.getElementById("context-menu");
 }
 
+ContextMenu.prototype.toggleOpen = function(force) {
+    if (!this.element) return;
+    this.element.classList.toggle("open", force);
+}
+
 ContextMenu.prototype.open = function() {
     if (!this.element) return;
     this.element.classList.add("open");
