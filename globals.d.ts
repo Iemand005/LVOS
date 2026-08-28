@@ -18,6 +18,7 @@ interface Application {
   minHeight?: number;
   audioVisualizer?: boolean;
   screensaver?: boolean;
+  wallpaper?: boolean;
   iconUrl?: string;
   accentColor?: string;
 }
