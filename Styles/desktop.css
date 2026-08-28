@@ -543,6 +543,11 @@ desktop #launchpad {
     min-width: 10px;
     min-height: 10px;
     background: gray;
+	display: none;
+}
+
+.context-menu.open {
+	display: subgrid;
 }
 
 @keyframes opensesame {
