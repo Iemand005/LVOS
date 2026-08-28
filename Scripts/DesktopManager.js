@@ -78,7 +78,7 @@ var onLoad = function () {
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
 		console.log("Service Worker registered!", reg);
 	})["catch"](function(err) {
-		console.error("Registration of service worker failed:", err);
+		console.warn("Registration of service worker failed:", err);
 	});
 
     if  (launchpad) launchpad.open();
