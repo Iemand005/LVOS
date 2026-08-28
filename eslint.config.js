@@ -14,7 +14,7 @@ export default tseslint.config({
 		globals: {
 			...globals.browser,
 			...globals.commonjs,
-			...jsdoc.configs['flat/recommended'].rules,
+			// ...jsdoc.configs['flat/recommended'].rules,
 			Anim: "readonly",
 			Vector: "writable",
 			LVMessenger: "writable",
