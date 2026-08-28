@@ -66,7 +66,9 @@ AppRegistry.prototype.addApp = function(app) {
 	if (!app.id) app.id = app.title || "unknown";
 	this._apps[app.id] = app;
 };
-
+/**
+//  * @param {arguments: any[]}
+ */
 AppRegistry.prototype.addApps = function() {
 	for (var i = 0; i < arguments.length; i++) {
 		var arr = arguments[i];
