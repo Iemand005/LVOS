@@ -46,6 +46,7 @@ function getSiteName(url) {
 	return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+/** @param {*} exception */
 function handleStorageException(exception) {
 	console.error(exception);
 	console.warn("A problem occurred, app state saving has been disabled for this session.");
