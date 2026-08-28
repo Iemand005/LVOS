@@ -36,6 +36,7 @@ MobileFrameManager.prototype.open = function(app) {
 	this._showFrame(app.id);
 };
 
+/** @param {string} id */
 MobileFrameManager.prototype._showFrame = function(id) {
 	if (!this._container) return;
 	var keys = Object.keys(this._frames);
@@ -99,6 +100,7 @@ Launchpad.prototype.close = function() {
 	this.launchpad.classList.remove("open");
 };
 
+/** @param {Application} app */
 Launchpad.prototype._createMobileButton = function(app) {
 	var title = (app && app.title) || "?";
 	var openButton = document.createElement("button");
@@ -119,9 +121,7 @@ Launchpad.prototype._createMobileButton = function(app) {
 	return openButton;
 };
 
-/**
- * @param {Dialog|Object} app - A Dialog instance (desktop) or plain app object (mobile)
- */
+/** @param {Application} app */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
 
