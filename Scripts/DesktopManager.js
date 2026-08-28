@@ -36,6 +36,7 @@ var onLoad = function () {
 	if (desktop) desktop.addEventListener("mousedown", function () {
 		DesktopManager.toggleCharms(false);
         if (launchpad) launchpad.close();
+        contextMenu.close();
 	}, false);
 
 	var applist = document.getElementById("applist");
