@@ -55,6 +55,7 @@ function AppRegistry() {
 
 /* --- Registry (no persistence) --- */
 
+/** @param {Application} app */
 AppRegistry.prototype.addApp = function(app) {
     if (!app || typeof app !== "object") return;
     if (!app.id) app.id = app.title || "unknown";
