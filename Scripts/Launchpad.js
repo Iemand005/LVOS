@@ -37,6 +37,7 @@ MobileFrameManager.prototype.open = function(app) {
 };
 
 MobileFrameManager.prototype._showFrame = function(id) {
+	if (!this._container) return;
 	var keys = Object.keys(this._frames);
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
@@ -47,6 +48,7 @@ MobileFrameManager.prototype._showFrame = function(id) {
 };
 
 MobileFrameManager.prototype.hide = function() {
+	if (!this._container) return;
 	this._container.classList.remove("open");
 };
 
