@@ -65,11 +65,9 @@ AppRegistry.prototype.addApp = function(app) {
 AppRegistry.prototype.addApps = function(/* ...arrays */) {
     for (var i = 0; i < arguments.length; i++) {
         var arr = arguments[i];
-        if (arr instanceof Array) {
-            for (var j = 0; j < arr.length; j++) {
+        if (arr instanceof Array)
+            for (var j = 0; j < arr.length; j++)
                 this.addApp(arr[j]);
-            }
-        }
     }
 };
 /** @param {string} id */
