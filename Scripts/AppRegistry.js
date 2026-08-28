@@ -85,6 +85,7 @@ AppRegistry.prototype.removeApp = function(id) {
 };
 /** @param {(app: Application, id: string)=>void} callback */
 AppRegistry.prototype.forEachApp = function(callback) {
+    if (typeof callback !== "function") return;
     for (var id in this._apps)
         if (this._apps.hasOwnProperty(id))
             callback(this._apps[id], id);
