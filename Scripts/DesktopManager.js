@@ -135,6 +135,10 @@ var onLoad = function () {
 
 window.addEventListener("load", onLoad, false);
 
+function ContextMenu() {
+    this.element = document.getElementById("context-menu");
+}
+
 document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
