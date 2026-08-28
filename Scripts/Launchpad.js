@@ -125,7 +125,7 @@ Launchpad.prototype._createMobileButton = function(app) {
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
 
-	if (this._isMobile) {
+	if (/**@type {o is Dialog} */this._isMobile) {
 		var openButton = this._createMobileButton(app);
 		appElement.appendChild(openButton);
 
