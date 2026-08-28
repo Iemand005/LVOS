@@ -161,6 +161,12 @@ ContextMenu.prototype.close = function() {
     this.element.classList.remove("open");
 }
 
+ContextMenu.prototype.addItem = function(uhTitle, callback icon?) {
+    if (!this.element) return;
+    
+    
+}
+
 var contextMenu = new ContextMenu;
 
 
