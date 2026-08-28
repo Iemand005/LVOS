@@ -139,6 +139,16 @@ function ContextMenu() {
     this.element = document.getElementById("context-menu");
 }
 
+ContextMenu.prototype.open = function() {
+    if (!this.element) return;
+    this.element.classList.add("open");
+}
+
+ContextMenu.prototype.close = function() {
+    if (!this.element) return;
+    this.element.classList.remove("open");
+}
+
 document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
