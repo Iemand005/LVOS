@@ -307,7 +307,8 @@ var initApps = function () {
 	if (typeof appRegistry !== "undefined") {
 		appRegistry.addApps(applications, games);
 		appRegistry.loadApps();
-	} else if (typeof windowManager !== "undefined") {
+	}
+	if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
 		windowManager.loadInstalledApps();
