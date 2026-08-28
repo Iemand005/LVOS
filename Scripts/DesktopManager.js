@@ -163,7 +163,7 @@ ContextMenu.prototype.close = function() {
 /**
  * @param {string} title
  * @param {()=>void} callback
- * @param {string} icon[]
+ * @param {string} [icon][]
  */
 ContextMenu.prototype.addItem = function(title, callback, icon) {
     if (!this.element) return;
