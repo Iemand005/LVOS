@@ -160,4 +160,4 @@ AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
 var appRegistry = new AppRegistry;
 window.appRegistry = appRegistry;
 
-module.exports = {appRegistry};
+// module.exports = {appRegistry};
