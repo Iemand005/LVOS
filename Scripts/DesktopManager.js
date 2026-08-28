@@ -150,7 +150,9 @@ ContextMenu.prototype.toggleOpen = function(force) {
  */
 ContextMenu.prototype.open = function(x, y) {
     if (!this.element) return;
-    translateElement(this.element, x, y);
+    // translateElement(this.element, x, y);
+    this.element.style.left = toPixels(x);
+    this.element.style.top = toPixels(y);
     this.element.classList.add("open");
 }
 
