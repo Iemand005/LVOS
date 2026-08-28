@@ -19,7 +19,7 @@ MobileFrameManager.prototype.init = function(container) {
 	this._container = container;
 };
 
-/** @param {Application} app */
+/** @param {Dialog} app */
 MobileFrameManager.prototype.open = function(app) {
 	var id = app.application ? app.application.id : app.id;
 	var src = app.src || (app.application && app.application.src);
