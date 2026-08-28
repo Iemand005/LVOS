@@ -49,6 +49,7 @@ function handleStorageException(exception) {
 }
 
 function AppRegistry() {
+    /** @type {{[id:string]: Application}} */
     this._apps = {};
 }
 
@@ -110,7 +111,7 @@ Object.defineProperty(AppRegistry.prototype, "installedApps", {
         }
     }
 });
-
+/** @param {Application} app */
 AppRegistry.prototype.saveApp = function(app) {
     if (!canSave || !hasLocalStorage) return;
     if (!app || typeof app !== "object" || !app.id) return;
