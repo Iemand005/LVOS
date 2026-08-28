@@ -72,17 +72,18 @@ AppRegistry.prototype.addApps = function(/* ...arrays */) {
         }
     }
 };
-
+/** @param {string} id */
 AppRegistry.prototype.getApp = function(id) {
     if (!id) return null;
     return this._apps[id] || null;
 };
 
+/** @param {string} id */
 AppRegistry.prototype.removeApp = function(id) {
     if (!id) return;
     delete this._apps[id];
 };
-
+/** @param {(app: Application, id: string)=>void} callback */
 AppRegistry.prototype.forEachApp = function(callback) {
     if (typeof callback !== "function") return;
     for (var id in this._apps) {
