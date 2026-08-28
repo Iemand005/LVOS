@@ -19,8 +19,12 @@ try {
 
 if (!hasLocalStorage) canSave = false;
 
+/**
+ * @param {any} object
+ * @returns {object is HTMLElement}
+ */
 function isElement(object) {
-	return object && typeof object === "object" && "nodeType" in object;
+	return object && "nodeType" in object;
 }
 
 /** @param {string} url */
