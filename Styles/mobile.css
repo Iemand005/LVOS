@@ -16,9 +16,17 @@ body {
 	flex-direction: column;
 }
 
+#launchpad {
+	position: relative;
+}
+
 #launchpad > button {
 	/* launchpad */
 	display: none;
+}
+
+#launchpad > ul {
+	padding: 0;
 }
 
 #launchpad ul button {
