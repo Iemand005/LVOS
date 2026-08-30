@@ -286,7 +286,12 @@ var games = [
 	title: "FAT",
 	id : "mountain",
 	src : "https://iemand005.github.io/MountainWeb/"
-  }
+  },
+	{
+		title: "Planet Life",
+		id : "planetlife",
+		src : "https://www.planetlife.space/static/game/index.html"
+	}
 ];
 
 if (typeof windowManager !== "undefined") {
