@@ -786,7 +786,7 @@ window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 
 /** @type {number} */
-var dragStopTimer;
+ClickOffset.dragStopTimer = 0;
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", function(ev) {
     // console.log("mouse moving");
@@ -795,9 +795,9 @@ window.addEventListener(supportsPointer? "pointermove" : "mousemove", function(e
 
 	ClickOffset._overlay.style.display = "block";
 
-    clearTimeout(dragStopTimer);
+    clearTimeout(ClickOffset.dragStopTimer);
 
-    dragStopTimer = setTimeout(function() {
+    ClickOffset.dragStopTimer = setTimeout(function() {
         // console.log("mouse stopped");
 		// ClickOffset._overlay.style.display = "none";
 
