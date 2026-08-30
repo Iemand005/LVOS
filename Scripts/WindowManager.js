@@ -2207,15 +2207,6 @@ DocumentCrawler.prototype.getDialogsContainer = function () { return this.docume
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
-// Setting up the global variables after defining the classes to avoid undefined prototypes!
-var windowManager = new WindowManager;
-window.windowManager = windowManager;
-windowManager.isWindowUpdatesEnabled = true;
-var bodyCrawler = new DocumentCrawler;
-
-window.__LVMessengerReceive = messageReceived;
-window.__LVMessenger = {};
-
 var dragAction = new DragAction();
 var windowButtons = {
     eject: 0,
@@ -2585,6 +2576,16 @@ window.addEventListener("drop", function(e) {
   if (files.length > 0)
      console.log("File dropped anywhere in window:", files[0].name);
 }, false);
+
+
+// Setting up the global variables after defining the classes to avoid undefined prototypes!
+var windowManager = new WindowManager;
+window.windowManager = windowManager;
+windowManager.isWindowUpdatesEnabled = true;
+var bodyCrawler = new DocumentCrawler;
+
+window.__LVMessengerReceive = messageReceived;
+window.__LVMessenger = {};
 
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
