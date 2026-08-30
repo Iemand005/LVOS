@@ -461,7 +461,6 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 		console.log("Storage access is disabled for this session!");
 		return;
 	}
-	var self = this;
 	try {
 		if (!localStorage) return;
 		var windowStates = this.windowStates;
@@ -472,15 +471,15 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
         this.loaded = true;
 		if (dialog && dialog.id) {
 			dialog.loadState(windowStates[dialog.id]);
-			self.updateTopZ(dialog.z);
+			this.updateTopZ(dialog.z);
 		} else {
 			var fails = [];
 			for (var id in windowStates) try {
-				if (self.windows[id] && windowStates[id])
-					self.windows[id].loadState(windowStates[id]);
+				if (this.windows[id] && windowStates[id])
+					this.windows[id].loadState(windowStates[id]);
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
-			self.updateTopZ();
+			this.updateTopZ();
 		}
 	} catch (exception) {
 		handleStorageException(exception);
