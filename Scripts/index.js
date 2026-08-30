@@ -16,6 +16,19 @@ function init() {
 			if (dialog.application) launchpad.addApp(dialog);
 		});
 	}
+
+	bodyCrawler = new DocumentCrawler(document);
+
+    if (!isBlink) DesktopManager.removeTheme("glass");
+
+    initializeDialogs();
+    toggleReflections(reflections);
+
+
+	LVMessenger.receive(messageReceived);
+	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
+	if (window.__LVMessenger)
+		window.__LVMessenger.accent = window.metaThemeColor;
 }
 
 window.addEventListener("DOMContentLoaded", init, false);

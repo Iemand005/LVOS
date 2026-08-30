@@ -2211,24 +2211,7 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 var windowManager = new WindowManager;
 window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
-var bodyCrawler = new DocumentCrawler();
-
-function windowManagerInit() {
-    bodyCrawler = new DocumentCrawler(document);
-
-    if (!isBlink) DesktopManager.removeTheme("glass");
-
-    initializeDialogs();
-    toggleReflections(reflections);
-
-
-	LVMessenger.receive(messageReceived);
-	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
-	if (window.__LVMessenger)
-		window.__LVMessenger.accent = window.metaThemeColor;
-}
-
-window.addEventListener("load", windowManagerInit, false);
+var bodyCrawler = new DocumentCrawler;
 
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
