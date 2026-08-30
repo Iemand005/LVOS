@@ -206,6 +206,26 @@ function skewElement(element, skew) {
 	element.style.webkitTransform = transform;
 }
 
+/** @type {"webkitTransitionEnd" | "transitionend"} */
+var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} className
+ * @param {boolean} [enabled]
+ */
+function setClass(element, className, enabled) {
+	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
+
+	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
+
+	if (enabled) {
+		if (!re.test(element.className))
+			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	return element.className.indexOf(className) !== -1;
+}
+
 // #region Window Manager
 
 function WindowManager() {
@@ -1480,25 +1500,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 	return button && button.toggleAttribute("disabled", !enable);
 };
 
-/** @type {"webkitTransitionEnd" | "transitionend"} */
-var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
-/**
- * @param {HTMLElement} element
- * @param {string} className
- * @param {boolean} [enabled]
- */
-function setClass(element, className, enabled) {
-	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
-
-	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
-
-	if (enabled) {
-		if (!re.test(element.className))
-			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-	return element.className.indexOf(className) !== -1;
-}
 Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
 	this.target.classList.remove("animating");
