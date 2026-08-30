@@ -2372,7 +2372,6 @@ function toggleOverlay(enable) {
 	overlay.classList.toggle("open", enable);
 }
 
-/** @deprecated  I think this one isn't used anymeore??*/
 WindowManager.prototype.ininializeDialogs = function() {
     if (supportsPointer) {
         document.onpointerup = windowManager.disableDialogDrag;
