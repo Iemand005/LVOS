@@ -2201,7 +2201,7 @@ Dialog.prototype.flip = function(enable) {
 	this.toggleClassAnimated("flipped", enable);
 };
 
-Dialog.prototype.makeWallpaper = function() { appRegistry.setWallpaper(this.id); };
+Dialog.prototype.makeWallpaper = function() { if (this.id) appRegistry.setWallpaper(this.id); };
 
 // #endregion
 
