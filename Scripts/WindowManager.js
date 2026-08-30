@@ -2221,6 +2221,35 @@ Dialog.prototype.flip = function(enable) {
 
 Dialog.prototype.makeWallpaper = function() { if (this.id) appRegistry.setWallpaper(this.id); };
 
+/** @returns {DialogState} */
+Dialog.prototype.getState = function() {
+	return {
+		title: this.title || this.id || "Unc",
+		x: this.x,
+		y: this.y,
+		z: this.z,
+		width: this.width || this.minWidth,
+		height: this.height || this.minHeight,
+		open: this._stateOpen || this.isOpen || false,
+		maximized: this.maximized
+	};
+};
+
+/** @param {DialogState} state */
+Dialog.prototype.loadState = function(state) {
+	if (state.open) this.launch();
+	this.title = state.title;
+	this.move(state.x, state.y);
+	this.setZ(state.z);
+	this.resize(state.width, state.height);
+	console.log(state.title, "window loaded width: ", state.width, state.height);
+	this.toggleMaximized(state.maximized);
+};
+
+Dialog.prototype.exportDialogBodyToMetro = function() {
+
+};
+
 // #endregion
 
 
@@ -2528,34 +2557,7 @@ function handleStorageException(exception){
     localStorage.windowState = null;
     canSave = false;
 }
-/** @returns {DialogState} */
-Dialog.prototype.getState = function() {
-	return {
-		title: this.title || this.id || "Unc",
-		x: this.x,
-		y: this.y,
-		z: this.z,
-		width: this.width || this.minWidth,
-		height: this.height || this.minHeight,
-		open: this._stateOpen || this.isOpen || false,
-		maximized: this.maximized
-	};
-};
 
-/** @param {DialogState} state */
-Dialog.prototype.loadState = function(state) {
-	if (state.open) this.launch();
-	this.title = state.title;
-	this.move(state.x, state.y);
-	this.setZ(state.z);
-	this.resize(state.width, state.height);
-	console.log(state.title, "window loaded width: ", state.width, state.height);
-	this.toggleMaximized(state.maximized);
-};
-
-Dialog.prototype.exportDialogBodyToMetro = function() {
-
-};
 
 function getDialogTemplate(){
     var template = document.querySelector("template") || document.getElementById("window-template");
