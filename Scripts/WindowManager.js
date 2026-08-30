@@ -226,6 +226,16 @@ function setClass(element, className, enabled) {
 	return element.className.indexOf(className) !== -1;
 }
 
+
+/**
+ * @param {HTMLElement| null} element
+ * @param {number} [index]
+ */
+function getRect(element, index) {
+	if (!element) return null;
+	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
+}
+
 // #region Window Manager
 
 function WindowManager() {
@@ -1437,14 +1447,7 @@ Dialog.prototype.getInnerRect = function () {
 		height: this.target.offsetHeight
 	};
 }; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
-/**
- * @param {HTMLElement| null} element
- * @param {number} [index]
- */
-function getRect(element, index) {
-	if (!element) return null;
-	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
-}
+
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
 /** @param {number} [index] */
