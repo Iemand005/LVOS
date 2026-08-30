@@ -530,6 +530,13 @@ Object.defineProperty(WindowManager, "windowBounds", {
 WindowManager.getWindowBounds = function() {
     return WindowManager.windowBounds;
 };
+/** @param {Dialog} dialog */
+WindowManager.prototype.focusDialog = function(dialog) {
+	if (this.focusedDialog !== null && this.focusedDialog.target)
+        this.focusedDialog.target.removeAttribute("focus");
+    if (dialog.target) dialog.target.setAttribute("focus", String(true));
+    this.focusedDialog = dialog;
+}
 
 // #endregion
 
