@@ -2379,16 +2379,16 @@ WindowManager.prototype.ininializeDialogs = function() {
 	document.addEventListener(event, stop, false);
 	window.addEventListener(event, stop, false);
 
-    windowManager.dragAction.set(0);
+    this.dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
         if (isElement(dialog))
-			windowManager.loadApp(dialog);
+			self.loadApp(dialog);
 
     });
     //flip();
     // checkForFlip();
-    windowManager.loadState();
+    this.loadState();
 }
 
 
