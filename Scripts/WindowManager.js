@@ -2443,7 +2443,7 @@ function handleWindowDrag(newX, hewY) {
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
-function disableDialogDrag() {
+WindowManager.prototype.disableDialogDrag = function() {
     if (!windowManager.isDragging) return;
     // if (flipped) return;
     windowManager.dragAction.set();
