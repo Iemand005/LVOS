@@ -2395,7 +2395,7 @@ function initializeDialogs() {
  * @param {MouseEvent | PointerEvent} event
  * @param {Dialog} dialog
  */
-function windowActivationEvent(event, dialog) {
+WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     // If the event originated from an interactive element, don't start a drag
     try {
         var node = event && (event.target || event.srcElement);
