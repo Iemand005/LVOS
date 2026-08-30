@@ -82,7 +82,7 @@ var onLoad = function () {
 		console.warn("Registration of service worker failed:", err);
 	});
 
-    if  (launchpad) launchpad.open();
+    // if  (launchpad) launchpad.open();
 
     if (typeof ClickOffset === "undefined") return;
 
