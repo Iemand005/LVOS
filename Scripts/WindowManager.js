@@ -620,7 +620,7 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 };
 
 
-// #region My Section
+// #region Dialog
 
 
 /**
@@ -2199,6 +2199,8 @@ Dialog.prototype.flip = function(enable) {
 };
 
 Dialog.prototype.makeWallpaper = function() { appRegistry.setWallpaper(this.id); };
+
+// #endregion
 
 function DragAction() {
 	/** @type {DragFunction} */
