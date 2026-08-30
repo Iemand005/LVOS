@@ -137,6 +137,14 @@ function isDialog(element) {
 	return element && element.classList && element.classList.contains("window");
 }
 
+/**
+ * @param {any} object
+ * @returns {object is HTMLElement}
+ */
+function isElement(object) {
+    return object && "nodeType" in object;
+}
+
 function WindowManager() {
 	/** @type {DialogMap} */
 	this._windows = {};
@@ -397,6 +405,30 @@ WindowManager.prototype.toggleMica = function(enabled) {
     this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
 
+WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
+
+WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
+
+WindowManager.recalculateWindowBounds = function() {
+	// cachedWidth = window.innerWidth;
+	var inset = WindowManager.windowBoundsInset;
+	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
+	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
+	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
+	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
+}
+
+window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
+window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
+
+Object.defineProperty(WindowManager, "windowBounds", {
+	get: function () { return WindowManager._windowBounds; }
+});
+
+WindowManager.getWindowBounds = function() {
+    return WindowManager.windowBounds;
+};
+
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
@@ -620,36 +652,8 @@ function Dialog(object, create) {
 	this._appIcon = null;
 }
 
-WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
 
-WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
-WindowManager.recalculateWindowBounds = function() {
-	// cachedWidth = window.innerWidth;
-	var inset = WindowManager.windowBoundsInset;
-	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
-	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
-	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
-	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
-}
-
-window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
-window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
-
-Object.defineProperty(WindowManager, "windowBounds", {
-	get: function () { return WindowManager._windowBounds; }
-});
-
-WindowManager.getWindowBounds = function() {
-    return WindowManager.windowBounds;
-};
-/**
- * @param {any} object
- * @returns {object is HTMLElement}
- */
-function isElement(object) {
-    return object && "nodeType" in object;
-}
 /**
  * @param {string} name
  * @param {Element} [parent]
