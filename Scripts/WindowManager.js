@@ -2344,11 +2344,11 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 
 function swapMetroBody() {
     if (!flipped) return;
-    activeDialogToMetro();
+    windowManager.activeDialogToMetro();
 }
 
-function activeDialogToMetro() {
-    if (windowManager.activeDialog) windowManager.activeDialog.exportDialogBodyToMetro();
+WindowManager.prototype.activeDialogToMetro = function() {
+    if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro();
 }
 
 /** @param {boolean} enable */
