@@ -253,13 +253,15 @@ function WindowManager() {
 
 	this.dragAction = new DragAction;
 
-	/** @type {Dialog| null} */
+	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
 	this.loaded = false;
 
 	this.ticking = false;
 
+	/** @type {Dialog | null} */
+	this.focusedDialog = null;
 
 
 	var self = this;
@@ -1410,8 +1412,7 @@ Dialog.prototype.setRotation = function(rotation) {
 	this.updateTranslation();
 };
 
-/** @type {Dialog| null} */
-var focusedDialog = null;
+
 Dialog.prototype.focus = function() {
     if (focusedDialog !== null && focusedDialog.target)
         focusedDialog.target.removeAttribute("focus");
