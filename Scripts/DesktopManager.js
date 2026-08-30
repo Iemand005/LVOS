@@ -82,8 +82,6 @@ var onLoad = function () {
 		console.warn("Registration of service worker failed:", err);
 	});
 
-    // if  (launchpad) launchpad.open();
-
     if (typeof ClickOffset === "undefined") return;
 
 	var clickOffset = new ClickOffset;
