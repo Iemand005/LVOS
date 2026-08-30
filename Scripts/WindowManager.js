@@ -2413,7 +2413,7 @@ function windowActivationEvent(event, dialog) {
     cancelDomEvent(event);
     // console.log("Activating window", dialog);
     activeDialog = dialog;
-    enableDialogDrag();
+    windowManager.enableDialogDrag();
     dialog.setClickOffset(event.clientX, event.clientY);
     dialog.activate();
     return dialog;
@@ -2460,8 +2460,8 @@ WindowManager.prototype.disableDialogDrag = function() {
     if (func) func();
 }
 
-function enableDialogDrag() {
-    windowManager.toggleDragging(true);
+WindowManager.prototype.enableDialogDrag = function() {
+    this.toggleDragging(true);
 }
 
 /** @param {number} [newZ]  */
