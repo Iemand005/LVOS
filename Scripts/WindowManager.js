@@ -145,6 +145,63 @@ function isElement(object) {
     return object && "nodeType" in object;
 }
 
+
+/**
+ * @param {number} a
+ * @param {number} b
+ */
+function max(a, b) {
+  return a > b ? a : b;
+}
+
+/**
+ * @param {number} a
+ * @param {number} b
+ */
+function min(a, b) {
+  return a < b ? a : b;
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {number} x
+ * @param {number} y
+ * @param {number} [skew]
+ * @param {number} [scaleX]
+ * @param {number} [scaleY]
+ * @param {number} [rotation]
+ */
+function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
+    var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
+    if (skew) transform += " skewX(" + skew + "deg)";
+	if (scaleX === 1) scaleX = undefined;
+	if (scaleY === 1) scaleY = undefined;
+    if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
+    else {
+		if (scaleX) transform += "scaleX(" + scaleX + ")";
+		if (scaleY) transform += "scaleY(" + scaleY + ")";
+	}
+    if (rotation) transform += "rotate(" + rotation + "deg)";
+
+	else {
+		// if (element.style.OTransform)
+		element.style.transform = transform;
+	}
+    // TODO: Chekc where this is applied and only assing if needed
+	// element.style.webkitTransform = transform;
+
+}
+/**
+ * @param {HTMLElement} element
+ * @param {number} skew
+ */
+function skewElement(element, skew) {
+	var transform = " skewX(" + toDegree(skew) + ")";
+	element.style.transform = transform;
+	element.style.webkitTransform = transform;
+}
+
+
 function WindowManager() {
 	/** @type {DialogMap} */
 	this._windows = {};
@@ -846,63 +903,6 @@ Dialog.prototype.initWithObject = function(object) {
             this.move(object.x, object.y);
         else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 };
-
-// Dialog.prototype.getIconUrl
-
-/**
- * @param {number} a
- * @param {number} b
- */
-function max(a, b) {
-  return a > b ? a : b;
-}
-
-/**
- * @param {number} a
- * @param {number} b
- */
-function min(a, b) {
-  return a < b ? a : b;
-}
-
-/**
- * @param {HTMLElement} element
- * @param {number} x
- * @param {number} y
- * @param {number} [skew]
- * @param {number} [scaleX]
- * @param {number} [scaleY]
- * @param {number} [rotation]
- */
-function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
-    var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
-    if (skew) transform += " skewX(" + skew + "deg)";
-	if (scaleX === 1) scaleX = undefined;
-	if (scaleY === 1) scaleY = undefined;
-    if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
-    else {
-		if (scaleX) transform += "scaleX(" + scaleX + ")";
-		if (scaleY) transform += "scaleY(" + scaleY + ")";
-	}
-    if (rotation) transform += "rotate(" + rotation + "deg)";
-
-	else {
-		// if (element.style.OTransform)
-		element.style.transform = transform;
-	}
-    // TODO: Chekc where this is applied and only assing if needed
-	// element.style.webkitTransform = transform;
-
-}
-/**
- * @param {HTMLElement} element
- * @param {number} skew
- */
-function skewElement(element, skew) {
-	var transform = " skewX(" + toDegree(skew) + ")";
-	element.style.transform = transform;
-	element.style.webkitTransform = transform;
-}
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
     get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
