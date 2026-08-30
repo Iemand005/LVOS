@@ -2373,9 +2373,8 @@ function toggleOverlay(enable) {
 }
 
 WindowManager.prototype.ininializeDialogs = function() {
-	var stop = function() {
-		windowManager.disableDialogDrag();
-	};
+	var self = this;
+	var stop = function() { self.disableDialogDrag(); };
 	var event = supportsPointer ? "pointerup" : "mouseup";
 	document.addEventListener(event, stop, false);
 	window.addEventListener(event, stop, false);
