@@ -2367,13 +2367,13 @@ function toggleOverlay(enable) {
 
 function initializeDialogs() {
     if (supportsPointer) {
-        document.onpointerup = disableDialogDrag;
-        window.onpointerup = disableDialogDrag;
+        document.onpointerup = windowManager.disableDialogDrag;
+        window.onpointerup = windowManager.disableDialogDrag;
     } else {
         // document.onmouseup = disableDialogDrag;
         // window.onmouseup = disableDialogDrag;
-        document.addEventListener("mouseup", disableDialogDrag, false);
-        window.addEventListener("mouseup", disableDialogDrag, false);
+        document.addEventListener("mouseup", windowManager.disableDialogDrag, false);
+        window.addEventListener("mouseup", windowManager.disableDialogDrag, false);
     }
 
     windowManager.dragAction.set(0);
