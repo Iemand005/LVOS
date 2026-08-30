@@ -1414,10 +1414,10 @@ Dialog.prototype.setRotation = function(rotation) {
 
 
 Dialog.prototype.focus = function() {
-    if (focusedDialog !== null && focusedDialog.target)
-        focusedDialog.target.removeAttribute("focus");
+    if (windowManager.focusedDialog !== null && windowManager.focusedDialog.target)
+        windowManager.focusedDialog.target.removeAttribute("focus");
     if (this.target) this.target.setAttribute("focus", String(true));
-    focusedDialog = this;
+    windowManager.focusedDialog = this;
 };
 Dialog.prototype.activate = function() {
 	this.focus();
