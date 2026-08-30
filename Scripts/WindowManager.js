@@ -2444,11 +2444,11 @@ function handleWindowDrag(newX, hewY) {
 }
 
 WindowManager.prototype.disableDialogDrag = function() {
-    if (!windowManager.isDragging) return;
+    if (!this.isDragging) return;
     // if (flipped) return;
-    windowManager.dragAction.set();
-    windowManager.toggleDragging(false);
-    windowManager.saveState();
+    this.dragAction.set();
+    this.toggleDragging(false);
+    this.saveState();
     if (!activeDialog) return;
 
     if (flags.aeroSnap && activeDialog.y <= 0)
