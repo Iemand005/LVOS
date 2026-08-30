@@ -89,6 +89,9 @@ var flags = {
 
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
+var maximizeAnimations = 0;
+// var maximizeAnimationsMaximize = 0;
+
 try {
     hasLocalStorage = typeof localStorage !== "undefined";
 } catch(ex) { console.warn("Local storage access denied.", ex); }
@@ -1782,7 +1785,6 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     // this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
-var maximizeAnimations = 0;
 
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
