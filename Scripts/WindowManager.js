@@ -2232,6 +2232,8 @@ DragAction.prototype.set = function (direction) {
 
 // #endregion
 
+// #region DocumentCrawler
+
 /** @param {HTMLDocument} [customDocument] */
 function DocumentCrawler(customDocument){
     this.document = customDocument || document;
@@ -2243,6 +2245,8 @@ DocumentCrawler.prototype.getAllDialogs = function () { return this.document.get
 DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
+
+// #endregion
 
 var dragAction = new DragAction();
 var windowButtons = {
