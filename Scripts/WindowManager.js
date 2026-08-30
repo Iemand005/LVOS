@@ -2230,7 +2230,7 @@ DragAction.prototype.set = function (direction) {
 	this.execute = this.resizeFunctions[direction || 0] || function () {};
 };
 
-// #endr
+// #endregion
 
 /** @param {HTMLDocument} [customDocument] */
 function DocumentCrawler(customDocument){
