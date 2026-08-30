@@ -34,5 +34,4 @@
 	"tabStack.history.maxEntries": 100,
 	"tabStack.gitIntegration.enabled": true,
 	"tabStack.gitIntegration.mode": "auto-create",
-	tabstack
 }
