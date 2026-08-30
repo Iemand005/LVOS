@@ -206,6 +206,7 @@ function skewElement(element, skew) {
 	element.style.webkitTransform = transform;
 }
 
+// #region Window Manager
 
 function WindowManager() {
 	/** @type {DialogMap} */
@@ -490,6 +491,8 @@ Object.defineProperty(WindowManager, "windowBounds", {
 WindowManager.getWindowBounds = function() {
     return WindowManager.windowBounds;
 };
+
+// #endregion
 
 // #region ClickOffset
 
