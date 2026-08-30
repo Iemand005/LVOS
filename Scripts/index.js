@@ -18,4 +18,4 @@ function init() {
 	}
 }
 
-window.addEventListener("load", init, false);
+window.addEventListener("DOMContentLoaded", init, false);
