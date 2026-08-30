@@ -223,6 +223,11 @@ function WindowManager() {
 
 	this.dragAction = new DragAction;
 
+	/** @type {Dialog| null} */
+	this.activeDialog = null;
+	this.topZ = 100;
+	this.loaded = false;
+
 
 	var self = this;
 	/** @type {(ev:Event)=>void} */
@@ -308,7 +313,7 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 });
 
 WindowManager.prototype.saveState = function() {
-	if (!loaded) return;
+	if (!this.loaded) return;
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
@@ -330,10 +335,10 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 		if (!localStorage) return;
 		var windowStates = this.windowStates;
 		if (!windowStates) {
-			loaded = true;
+			this.loaded = true;
 			return;
 		}
-        loaded = true;
+        this.loaded = true;
 		if (dialog && dialog.id) {
 			dialog.loadState(windowStates[dialog.id]);
 			updateTopZ(dialog.z);
@@ -1388,7 +1393,7 @@ Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ();
 	this.messageFrame("open");
-	activeDialog = this;
+	this.activeDialog = this;
 	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
@@ -1826,7 +1831,7 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (typeof z === "undefined") {
-		if (this._z !== topZ) this._z = ++topZ;
+		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
 	} else this._z = z;
 	if (isElement(this.target))
         this.target.style.zIndex = String(this._z);
@@ -2259,10 +2264,7 @@ var windowButtons = {
     full: 1,
     close: 2
 };
-/** @type {Dialog| null} */
-var activeDialog = null;
-var topZ = 100;
-var loaded = false;
+
 /** @type {number} */
 
 /**
@@ -2339,7 +2341,7 @@ function swapMetroBody() {
 }
 
 function activeDialogToMetro() {
-    if (activeDialog) activeDialog.exportDialogBodyToMetro();
+    if (windowManager.activeDialog) windowManager.activeDialog.exportDialogBodyToMetro();
 }
 
 /** @param {boolean} enable */
@@ -2412,7 +2414,7 @@ function windowActivationEvent(event, dialog) {
 
     cancelDomEvent(event);
     // console.log("Activating window", dialog);
-    activeDialog = dialog;
+    windowManager.activeDialog = dialog;
     windowManager.enableDialogDrag();
     dialog.setClickOffset(event.clientX, event.clientY);
     dialog.activate();
@@ -2426,7 +2428,7 @@ var ticking = false;
  * @param {number} hewY
  */
 function handleWindowDrag(newX, hewY) {
-    var dialog = activeDialog;
+    var dialog = windowManager.activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
@@ -2449,14 +2451,14 @@ WindowManager.prototype.disableDialogDrag = function() {
     this.dragAction.set();
     this.toggleDragging(false);
     this.saveState();
-    if (!activeDialog) return;
+    if (!windowManager.activeDialog) return;
 
-    if (flags.aeroSnap && activeDialog.y <= 0)
-        activeDialog.maximize();
+    if (flags.aeroSnap && windowManager.activeDialog.y <= 0)
+        windowManager.activeDialog.maximize();
 
-    if (!activeDialog.moveEvents) return;
+    if (!windowManager.activeDialog.moveEvents) return;
 
-    var func = activeDialog.exchangeDialogMouseUpEvent;
+    var func = windowManager.activeDialog.exchangeDialogMouseUpEvent;
     if (func) func();
 }
 
@@ -2467,12 +2469,12 @@ WindowManager.prototype.enableDialogDrag = function() {
 /** @param {number} [newZ]  */
 function updateTopZ(newZ) {
     if (typeof newZ === "number") {
-        topZ = Math.max(topZ, newZ + 1);
+        windowManager.topZ = Math.max(windowManager.topZ, newZ + 1);
         return;
     }
     windowManager.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z === "number" && dialog.z >= topZ) {
-            topZ = dialog.z + 1;
+        if (dialog && typeof dialog.z === "number" && dialog.z >= windowManager.topZ) {
+            windowManager.topZ = dialog.z + 1;
         }
     });
 }
