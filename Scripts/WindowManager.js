@@ -2453,14 +2453,14 @@ WindowManager.prototype.disableDialogDrag = function() {
     this.dragAction.set();
     this.toggleDragging(false);
     this.saveState();
-    if (!windowManager.activeDialog) return;
+    if (!this.activeDialog) return;
 
-    if (flags.aeroSnap && windowManager.activeDialog.y <= 0)
-        windowManager.activeDialog.maximize();
+    if (flags.aeroSnap && this.activeDialog.y <= 0)
+        this.activeDialog.maximize();
 
-    if (!windowManager.activeDialog.moveEvents) return;
+    if (!this.activeDialog.moveEvents) return;
 
-    var func = windowManager.activeDialog.exchangeDialogMouseUpEvent;
+    var func = this.activeDialog.exchangeDialogMouseUpEvent;
     if (func) func();
 }
 
