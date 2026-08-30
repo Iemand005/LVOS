@@ -2476,7 +2476,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
     }
 	var self = this;
     this.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z === "number" && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
+        if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
     });
 }
 
