@@ -624,7 +624,7 @@ WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -10
 
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
-function recalculateWindowBounds() {
+WindowManager.recalculateWindowBounds = function() {
 	// cachedWidth = window.innerWidth;
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
