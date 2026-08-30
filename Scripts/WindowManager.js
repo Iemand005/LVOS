@@ -475,8 +475,9 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 		} else {
 			var fails = [];
 			for (var id in windowStates) try {
-				if (this.windows[id] && windowStates[id])
-					this.windows[id].loadState(windowStates[id]);
+				var window = this.windows[id];
+				if (window && windowStates[id])
+					window.loadState(windowStates[id]);
 			} catch (ex) { fails.push(ex); }
 			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
 			this.updateTopZ();
