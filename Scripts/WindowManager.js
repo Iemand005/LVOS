@@ -2373,14 +2373,17 @@ function toggleOverlay(enable) {
 }
 
 WindowManager.prototype.ininializeDialogs = function() {
+	var stop = function() {
+		windowManager.disableDialogDrag();
+	};
     if (supportsPointer) {
-        document.onpointerup = windowManager.disableDialogDrag;
-        window.onpointerup = windowManager.disableDialogDrag;
+		document.addEventListener("pointerup", stop, false);
+        window.addEventListener("pointerup", stop, false);
     } else {
         // document.onmouseup = disableDialogDrag;
         // window.onmouseup = disableDialogDrag;
-        document.addEventListener("mouseup", windowManager.disableDialogDrag, false);
-        window.addEventListener("mouseup", windowManager.disableDialogDrag, false);
+        document.addEventListener("mouseup", stop, false);
+        window.addEventListener("mouseup", stop, false);
     }
 
     windowManager.dragAction.set(0);
