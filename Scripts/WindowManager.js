@@ -491,6 +491,8 @@ WindowManager.getWindowBounds = function() {
     return WindowManager.windowBounds;
 };
 
+// #region ClickOffset
+
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
@@ -619,6 +621,7 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
 };
 
+// #endregion
 
 // #region Dialog
 
@@ -2202,6 +2205,9 @@ Dialog.prototype.makeWallpaper = function() { appRegistry.setWallpaper(this.id);
 
 // #endregion
 
+
+// #region DragAction
+
 function DragAction() {
 	/** @type {DragFunction} */
 	this.execute = function(_dialog, offset, difference){};
@@ -2223,6 +2229,8 @@ function DragAction() {
 DragAction.prototype.set = function (direction) {
 	this.execute = this.resizeFunctions[direction || 0] || function () {};
 };
+
+// #endr
 
 /** @param {HTMLDocument} [customDocument] */
 function DocumentCrawler(customDocument){
