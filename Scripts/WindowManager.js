@@ -228,6 +228,9 @@ function WindowManager() {
 	this.topZ = 100;
 	this.loaded = false;
 
+	this.ticking = false;
+
+
 
 	var self = this;
 	/** @type {(ev:Event)=>void} */
@@ -244,12 +247,12 @@ function WindowManager() {
 		try {
 			cancelDomEvent(event);
 			if (flags.updateRateLimit) {
-				if (ticking) return;
+				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
 					windowManager.handleWindowDrag(event.clientX, event.clientY);
-					ticking = false;
+					self.ticking = false;
 				});
-				ticking = true;
+				self.ticking = true;
 			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
 		} catch (ex) {
 			console.error(ex);
@@ -2421,7 +2424,6 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     return dialog;
 }
 
-var ticking = false;
 
 /**
  * @param {number} newX
