@@ -221,6 +221,9 @@ function WindowManager() {
 
 	this.isDragging = false;
 
+	this.dragAction = new DragAction;
+
+
 	var self = this;
 	/** @type {(ev:Event)=>void} */
 	this.resizeHandler = function() {
@@ -2251,7 +2254,6 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 // #endregion
 
-var dragAction = new DragAction();
 var windowButtons = {
     eject: 0,
     full: 1,
