@@ -2396,6 +2396,8 @@ WindowManager.prototype.ininializeDialogs = function() {
     windowManager.loadState();
 }
 
+
+
 /**
  * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event

@@ -21,7 +21,7 @@ function init() {
 
     if (!isBlink) DesktopManager.removeTheme("glass");
 
-    initializeDialogs();
+    windowManager.ininializeDialogs();
     toggleReflections(reflections);
 
 
