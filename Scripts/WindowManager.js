@@ -839,7 +839,7 @@ Dialog.prototype.initWithObject = function(object) {
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
-                    if (ev.target && "id" in ev.target) dragAction.set(Number(ev.target.id));
+                    if (ev.target && "id" in ev.target) windowManager.dragAction.set(Number(ev.target.id));
                     activationHandler(ev);
                 }; // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but Netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
                 if (supportsPointer) div.onpointerdown = pointerDown;
@@ -864,13 +864,13 @@ Dialog.prototype.initWithObject = function(object) {
 						/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
 						return function (ev) {
 							if (ev.pointerType !== "touch") {
-								dragAction.set(-1);
+								windowManager.dragAction.set(-1);
 								return;
 							}
 							cancelDomEvent(ev);
 							console.log(ev.type, ev.pointerType);
 							// ev.pointerType = "";
-							if (ev.target && isElement(ev.target)) dragAction.set(id);
+							if (ev.target && isElement(ev.target)) windowManager.dragAction.set(id);
 							activationHandler(ev);
 						};
 					}(id); // You can also put index + 1 in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
@@ -2376,7 +2376,7 @@ function initializeDialogs() {
         window.addEventListener("mouseup", disableDialogDrag, false);
     }
 
-    dragAction.set(0);
+    windowManager.dragAction.set(0);
     var dialogs = bodyCrawler.getAllDialogs();
     Array.from(dialogs).forEach(function (dialog) {
         if (isElement(dialog))
@@ -2439,14 +2439,14 @@ function handleWindowDrag(newX, hewY) {
 
 	dialog.stopAnimating();
 
-    dragAction.execute(dialog, dialog.clickOffset, difference);
+    windowManager.dragAction.execute(dialog, dialog.clickOffset, difference);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
 function disableDialogDrag() {
     if (!windowManager.isDragging) return;
     // if (flipped) return;
-    dragAction.set();
+    windowManager.dragAction.set();
     windowManager.toggleDragging(false);
     windowManager.saveState();
     if (!activeDialog) return;
