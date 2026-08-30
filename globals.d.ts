@@ -39,6 +39,8 @@ interface Position {
   y: number;
 }
 
+type Side = "left" | "right" | "top" | "bottom";
+
 type DesktopState = {[key: string]: DialogState};
 type DialogMap = {[id: string]: Dialog};
 type DragFunction = (dialog: Dialog, offset: ClickOffset, difference: Position) => void;

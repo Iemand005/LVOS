@@ -162,6 +162,11 @@ function min(a, b) {
   return a < b ? a : b;
 }
 
+/** @param {Window} window */
+function getWindowChromeHeight(window) {
+	return window.outerHeight - window.innerHeight;
+}
+
 /**
  * @param {HTMLElement} element
  * @param {number} x
@@ -1922,7 +1927,7 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
 	this._minAspectRatio = ratio;
 	this.resize();
 };
-/** @typedef {"left" | "right" | "top" | "bottom" } Side */
+
 /**
  * @param {number} ratio
  * @param {Side} [sideConstraint1]
@@ -2093,10 +2098,7 @@ Dialog.prototype.createPopout = function() {
 	}, 100);
 };
 Dialog.prototype.inspect = function() { if (window.inspect) window.inspect(this.target); };
-/** @param {Window} window */
-function getWindowChromeHeight(window) {
-	return window.outerHeight - window.innerHeight;
-}
+
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
