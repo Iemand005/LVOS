@@ -2469,14 +2469,15 @@ WindowManager.prototype.enableDialogDrag = function() {
 }
 
 /** @param {number} [newZ]  */
-function updateTopZ(newZ) {
+WindowManager.prototype.updateTopZ = function(newZ) {
     if (typeof newZ === "number") {
-        windowManager.topZ = Math.max(windowManager.topZ, newZ + 1);
+        this.topZ = Math.max(this.topZ, newZ + 1);
         return;
     }
-    windowManager.forEachWindow(function(dialog) {
-        if (dialog && typeof dialog.z === "number" && dialog.z >= windowManager.topZ) {
-            windowManager.topZ = dialog.z + 1;
+	var this = self;
+    this.forEachWindow(function(dialog) {
+        if (dialog && typeof dialog.z === "number" && dialog.z >= this.topZ) {
+            this.topZ = dialog.z + 1;
         }
     });
 }
