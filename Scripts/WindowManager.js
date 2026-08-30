@@ -82,7 +82,7 @@ var flags = {
 		window.windowManager.toggleMica(value);
 		this._useMica = value;
 	},
-	windowReaper: true
+	windowReaper: false
 };
 
 
