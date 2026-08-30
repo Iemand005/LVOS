@@ -633,8 +633,8 @@ WindowManager.recalculateWindowBounds = function() {
 	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
 }
 
-window.addEventListener("resize", recalculateWindowBounds, false);
-window.addEventListener("load", recalculateWindowBounds, false);
+window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
+window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
