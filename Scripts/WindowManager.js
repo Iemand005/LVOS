@@ -236,6 +236,102 @@ function getRect(element, index) {
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 }
 
+
+/**
+ * @param {MessageType} type
+ * @param {any} data
+ * @param {string} [source]
+ */
+function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
+
+	if (source) {
+
+		var dialog = windowManager.windows[source];
+
+		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+		switch (type) {
+			case "launchOverlay":
+				var overlay = bodyCrawler.getOverlay();
+				if (!overlay) break;
+
+				overlay.ontransitionend = function () {
+					dialog.messageFrame("prepareToLaunchOverlay");
+					if (dialog.frame) {
+						var oriel = new URL(dialog.frame.src);
+						oriel.searchParams.set("fullscreen", String(true));
+						dialog.frame.src = oriel.href;
+					}
+					if (!overlay) return;
+					overlay.ontransitionend = null;
+					overlay.requestFullscreen().then(function() {
+						console.log("Ok I did full screen boy");
+					});
+					if (dialog.body) overlay.appendChild(dialog.body);
+					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				};
+				overlay.classList.toggle("open");
+				break;
+			case "readyToLaunchOverlay":
+				var overlay1 = bodyCrawler.getOverlay();
+				if (!overlay1) break;
+				if (dialog.body) overlay1.appendChild(dialog.body);
+				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
+				break;
+			case "pip":
+				var id = data.id;
+				console.log("Element ID to rip from app guts: " + id, dialog);
+				var doc = dialog.contentDocument;
+				if (!doc) break;
+				var targetElement = doc.getElementById(id);
+				console.log("Ripped out element:", targetElement);
+				if (!targetElement) break;
+				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
+					if (!pipWindow) return;
+					pipWindow.onresize = function() {
+						if (!(targetElement instanceof HTMLCanvasElement)) return;
+						targetElement.width = targetElement.clientWidth;
+						targetElement.height = targetElement.clientHeight;
+					};
+					if (!targetElement) return;
+					targetElement.style.width = "100%";
+					targetElement.style.height = "100%";
+				});
+				break;
+			case "visualizers":
+				dialog.messageFrame("visualizers", window.windowManager.getVisualizerApps());
+				break;
+		}
+		console.log("Received message " + type);
+	}
+}
+
+function swapMetroBody() {
+    if (!flipped) return;
+    windowManager.activeDialogToMetro();
+}
+/** @param {boolean} enable */
+function flip(enable){
+    var tesktop = bodyCrawler.getDesktop();
+    if (!tesktop) return;
+    tesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    flipHandler(tesktop.classList.toggle("flipped", enable));
+}
+
+/** @param {boolean} enable */
+function flipHandler(enable){
+	DesktopManager.toggleCharms(false);
+    swapMetroBody();
+    flipped = enable;
+	return flipped;
+}
+
+/** @param {boolean} [enable] */
+function toggleOverlay(enable) {
+	var overlay = bodyCrawler.getOverlay();
+	if (!overlay) return;
+	overlay.classList.toggle("open", enable);
+}
+
 // #region Window Manager
 
 function WindowManager() {
@@ -536,6 +632,119 @@ WindowManager.prototype.focusDialog = function(dialog) {
         this.focusedDialog.target.removeAttribute("focus");
     if (dialog.target) dialog.target.setAttribute("focus", String(true));
     this.focusedDialog = dialog;
+}
+
+
+WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
+
+
+
+WindowManager.prototype.ininializeDialogs = function() {
+	var self = this;
+	var stop = function() { self.disableDialogDrag(); };
+	var event = supportsPointer ? "pointerup" : "mouseup";
+	document.addEventListener(event, stop, false);
+	window.addEventListener(event, stop, false);
+
+    this.dragAction.set(0);
+    var dialogs = bodyCrawler.getAllDialogs();
+    Array.from(dialogs).forEach(function (dialog) {
+        if (isElement(dialog))
+			self.loadApp(dialog);
+
+    });
+    //flip();
+    // checkForFlip();
+    this.loadState();
+}
+
+
+
+/**
+ * Activates the window on which the provided event was fired.
+ * @param {MouseEvent | PointerEvent} event
+ * @param {Dialog} dialog
+ */
+WindowManager.prototype.windowActivationEvent = function(event, dialog) {
+    // If the event originated from an interactive element, don't start a drag
+    try {
+        var node = event && (event.target || event.srcElement);
+        var isInteractive = false;
+        while (node && isElement(node) && node.nodeType === 1) {
+            var tn = (node.tagName || "").toLowerCase();
+            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
+            if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
+            node = node.parentElement;
+        }
+        if (isInteractive) {
+            try { dialog.focus(); } catch (e) {}
+            return dialog;
+        }
+    } catch (ex) { /* ignore */ }
+
+    cancelDomEvent(event);
+    // console.log("Activating window", dialog);
+    this.activeDialog = dialog;
+    this.enableDialogDrag();
+    dialog.setClickOffset(event.clientX, event.clientY);
+    dialog.activate();
+    return dialog;
+}
+
+
+/**
+ * @param {number} newX
+ * @param {number} hewY
+ */
+WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
+    var dialog = this.activeDialog;
+    if (!dialog || !dialog.clickOffset) return;
+    /** @type {Position} */
+    var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
+
+    if (dialog.maximized) {
+        if (!flags.aeroSnap) return;
+        dialog.maximized = false;
+        dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
+    }
+
+	dialog.stopAnimating();
+
+    this.dragAction.execute(dialog, dialog.clickOffset, difference);
+	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
+}
+
+WindowManager.prototype.disableDialogDrag = function() {
+    if (!this.isDragging) return;
+    // if (flipped) return;
+    this.dragAction.set();
+    this.toggleDragging(false);
+    this.saveState();
+    if (!this.activeDialog) return;
+
+    if (flags.aeroSnap && this.activeDialog.y <= 0)
+        this.activeDialog.maximize();
+
+    if (!this.activeDialog.moveEvents) return;
+
+    var func = this.activeDialog.exchangeDialogMouseUpEvent;
+    if (func) func();
+}
+
+WindowManager.prototype.enableDialogDrag = function() {
+    this.toggleDragging(true);
+}
+
+/** @param {number} [newZ]  */
+WindowManager.prototype.updateTopZ = function(newZ) {
+    if (typeof newZ === "number") {
+        this.topZ = Math.max(this.topZ, newZ + 1);
+        return;
+    }
+	var self = this;
+    this.forEachWindow(function(dialog) {
+        if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
+    });
 }
 
 // #endregion
@@ -2301,213 +2510,6 @@ var windowButtons = {
     close: 2
 };
 
-/** @type {number} */
-
-/**
- * @param {MessageType} type
- * @param {any} data
- * @param {string} [source]
- */
-function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
-
-	if (source) {
-
-		var dialog = windowManager.windows[source];
-
-		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
-		switch (type) {
-			case "launchOverlay":
-				var overlay = bodyCrawler.getOverlay();
-				if (!overlay) break;
-
-				overlay.ontransitionend = function () {
-					dialog.messageFrame("prepareToLaunchOverlay");
-					if (dialog.frame) {
-						var oriel = new URL(dialog.frame.src);
-						oriel.searchParams.set("fullscreen", String(true));
-						dialog.frame.src = oriel.href;
-					}
-					if (!overlay) return;
-					overlay.ontransitionend = null;
-					overlay.requestFullscreen().then(function() {
-						console.log("Ok I did full screen boy");
-					});
-					if (dialog.body) overlay.appendChild(dialog.body);
-					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
-				};
-				overlay.classList.toggle("open");
-				break;
-			case "readyToLaunchOverlay":
-				var overlay1 = bodyCrawler.getOverlay();
-				if (!overlay1) break;
-				if (dialog.body) overlay1.appendChild(dialog.body);
-				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
-				break;
-			case "pip":
-				var id = data.id;
-				console.log("Element ID to rip from app guts: " + id, dialog);
-				var doc = dialog.contentDocument;
-				if (!doc) break;
-				var targetElement = doc.getElementById(id);
-				console.log("Ripped out element:", targetElement);
-				if (!targetElement) break;
-				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
-					if (!pipWindow) return;
-					pipWindow.onresize = function() {
-						if (!(targetElement instanceof HTMLCanvasElement)) return;
-						targetElement.width = targetElement.clientWidth;
-						targetElement.height = targetElement.clientHeight;
-					};
-					if (!targetElement) return;
-					targetElement.style.width = "100%";
-					targetElement.style.height = "100%";
-				});
-				break;
-			case "visualizers":
-				dialog.messageFrame("visualizers", window.windowManager.getVisualizerApps());
-				break;
-		}
-		console.log("Received message " + type);
-	}
-}
-
-function swapMetroBody() {
-    if (!flipped) return;
-    windowManager.activeDialogToMetro();
-}
-
-WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
-
-/** @param {boolean} enable */
-function flip(enable){
-    var tesktop = bodyCrawler.getDesktop();
-    if (!tesktop) return;
-    tesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
-    flipHandler(tesktop.classList.toggle("flipped", enable));
-}
-
-/** @param {boolean} enable */
-function flipHandler(enable){
-	DesktopManager.toggleCharms(false);
-    swapMetroBody();
-    flipped = enable;
-	return flipped;
-}
-
-/** @param {boolean} [enable] */
-function toggleOverlay(enable) {
-	var overlay = bodyCrawler.getOverlay();
-	if (!overlay) return;
-	overlay.classList.toggle("open", enable);
-}
-
-WindowManager.prototype.ininializeDialogs = function() {
-	var self = this;
-	var stop = function() { self.disableDialogDrag(); };
-	var event = supportsPointer ? "pointerup" : "mouseup";
-	document.addEventListener(event, stop, false);
-	window.addEventListener(event, stop, false);
-
-    this.dragAction.set(0);
-    var dialogs = bodyCrawler.getAllDialogs();
-    Array.from(dialogs).forEach(function (dialog) {
-        if (isElement(dialog))
-			self.loadApp(dialog);
-
-    });
-    //flip();
-    // checkForFlip();
-    this.loadState();
-}
-
-
-
-/**
- * Activates the window on which the provided event was fired.
- * @param {MouseEvent | PointerEvent} event
- * @param {Dialog} dialog
- */
-WindowManager.prototype.windowActivationEvent = function(event, dialog) {
-    // If the event originated from an interactive element, don't start a drag
-    try {
-        var node = event && (event.target || event.srcElement);
-        var isInteractive = false;
-        while (node && isElement(node) && node.nodeType === 1) {
-            var tn = (node.tagName || "").toLowerCase();
-            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
-            if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
-            node = node.parentElement;
-        }
-        if (isInteractive) {
-            try { dialog.focus(); } catch (e) {}
-            return dialog;
-        }
-    } catch (ex) { /* ignore */ }
-
-    cancelDomEvent(event);
-    // console.log("Activating window", dialog);
-    this.activeDialog = dialog;
-    this.enableDialogDrag();
-    dialog.setClickOffset(event.clientX, event.clientY);
-    dialog.activate();
-    return dialog;
-}
-
-
-/**
- * @param {number} newX
- * @param {number} hewY
- */
-WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
-    var dialog = this.activeDialog;
-    if (!dialog || !dialog.clickOffset) return;
-    /** @type {Position} */
-    var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
-
-    if (dialog.maximized) {
-        if (!flags.aeroSnap) return;
-        dialog.maximized = false;
-        dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
-    }
-
-	dialog.stopAnimating();
-
-    this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-}
-
-WindowManager.prototype.disableDialogDrag = function() {
-    if (!this.isDragging) return;
-    // if (flipped) return;
-    this.dragAction.set();
-    this.toggleDragging(false);
-    this.saveState();
-    if (!this.activeDialog) return;
-
-    if (flags.aeroSnap && this.activeDialog.y <= 0)
-        this.activeDialog.maximize();
-
-    if (!this.activeDialog.moveEvents) return;
-
-    var func = this.activeDialog.exchangeDialogMouseUpEvent;
-    if (func) func();
-}
-
-WindowManager.prototype.enableDialogDrag = function() {
-    this.toggleDragging(true);
-}
-
-/** @param {number} [newZ]  */
-WindowManager.prototype.updateTopZ = function(newZ) {
-    if (typeof newZ === "number") {
-        this.topZ = Math.max(this.topZ, newZ + 1);
-        return;
-    }
-	var self = this;
-    this.forEachWindow(function(dialog) {
-        if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
-    });
-}
 
 /** @param {*} properties */
 function stringifyDialogProperties(properties){
