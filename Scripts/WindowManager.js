@@ -380,6 +380,23 @@ WindowManager.prototype.getVisualizerApps = function() {
 	return apps;
 };
 
+/** @param {Application[]} arguments */
+WindowManager.prototype.injectApplications = function() {
+    for (var i = 0; i < arguments.length; i++)
+        arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
+    windowManager.loadState();
+};
+
+/** @param {string} appId  */
+WindowManager.prototype.closeApp = function(appId) {
+    windowManager.windows[appId].kill();
+};
+
+/** @param {boolean} [enabled] */
+WindowManager.prototype.toggleMica = function(enabled) {
+    this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
+};
+
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
@@ -2537,22 +2554,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     return element;
 }
 
-/** @param {Application[]} arguments */
-WindowManager.prototype.injectApplications = function() {
-    for (var i = 0; i < arguments.length; i++)
-        arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
-    windowManager.loadState();
-};
 
-/** @param {string} appId  */
-WindowManager.prototype.closeApp = function(appId) {
-    windowManager.windows[appId].kill();
-};
-
-/** @param {boolean} [enabled] */
-WindowManager.prototype.toggleMica = function(enabled) {
-    this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
-};
 
 function removeWallpaper() {
 	var wallpaper = DesktopManager.getWallpaper();
