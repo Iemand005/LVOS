@@ -246,11 +246,11 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				if (ticking) return;
 				window.requestAnimationFrame(function() {
-					handleWindowDrag(event.clientX, event.clientY);
+					windowManager.handleWindowDrag(event.clientX, event.clientY);
 					ticking = false;
 				});
 				ticking = true;
-			} else handleWindowDrag(event.clientX, event.clientY);
+			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -2427,7 +2427,7 @@ var ticking = false;
  * @param {number} newX
  * @param {number} hewY
  */
-function handleWindowDrag(newX, hewY) {
+WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
     var dialog = windowManager.activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
