@@ -12,7 +12,7 @@
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.background": "#ca5406",
-		"activityBar.foreground": "#f5b489",
+		"activityBar.foreground": "#f7f6f6",
 		"titleBar.activeBackground": "#D95D0A",
 		"titleBar.activeForeground": "#FFF8F4",
 		"titleBar.inactiveBackground": "#9B4207",
@@ -24,6 +24,8 @@
 		"statusBar.noFolderBackground": "#9B4207",
 		"statusBar.noFolderForeground": "#FFF8F4"
 	},
+	"workbench.browser.autoReloadOnFileChange": true,
+	"workbench.browser.showInTitleBar": true,
 	"git.detectSubmodulesLimit": 20,
 	"liveServer.settings.port": 5501,
 	"javascript.inlayHints.parameterTypes.enabled": true,
