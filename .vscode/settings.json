@@ -33,5 +33,6 @@
 	"js/ts.inlayHints.parameterNames.enabled": "all",
 	"tabStack.history.maxEntries": 100,
 	"tabStack.gitIntegration.enabled": true,
-	"tabStack.gitIntegration.mode": "auto-create"
+	"tabStack.gitIntegration.mode": "auto-create",
+	tabstack
 }
