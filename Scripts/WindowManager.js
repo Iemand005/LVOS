@@ -201,7 +201,7 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
  * @param {number} skew
  */
 function skewElement(element, skew) {
-	var transform = " skewX(" + toDegree(skew) + ")";
+	var transform = " skewX(" + toDegrees(skew) + ")";
 	element.style.transform = transform;
 	element.style.webkitTransform = transform;
 }
@@ -2503,7 +2503,7 @@ function toPixels(value) {
 }
 
 /** @param {number} value */
-function toDegree(value) {
+function toDegrees(value) {
     return Math.round(value) + "deg";
 }
 
