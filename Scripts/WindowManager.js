@@ -818,7 +818,7 @@ Dialog.prototype.initWithObject = function(object) {
     // if (object.body) this.body.appendChild(object.body);
     /** @type {(ev:MouseEvent|PointerEvent)=>void} */
     var activationHandler = function (ev) {
-        windowActivationEvent(ev, self);
+        windowManager.windowActivationEvent(ev, self);
     };
 
     var target = this.target;
