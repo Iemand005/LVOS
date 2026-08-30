@@ -619,6 +619,10 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
 };
 
+
+// #region My Section
+
+
 /**
  * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
