@@ -2347,9 +2347,7 @@ function swapMetroBody() {
     windowManager.activeDialogToMetro();
 }
 
-WindowManager.prototype.activeDialogToMetro = function() {
-    if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro();
-}
+WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
 
 /** @param {boolean} enable */
 function flip(enable){
