@@ -2417,8 +2417,8 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 
     cancelDomEvent(event);
     // console.log("Activating window", dialog);
-    windowManager.activeDialog = dialog;
-    windowManager.enableDialogDrag();
+    this.activeDialog = dialog;
+    this.enableDialogDrag();
     dialog.setClickOffset(event.clientX, event.clientY);
     dialog.activate();
     return dialog;
@@ -2430,7 +2430,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
  * @param {number} hewY
  */
 WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
-    var dialog = windowManager.activeDialog;
+    var dialog = this.activeDialog;
     if (!dialog || !dialog.clickOffset) return;
     /** @type {Position} */
     var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
@@ -2443,7 +2443,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
 
 	dialog.stopAnimating();
 
-    windowManager.dragAction.execute(dialog, dialog.clickOffset, difference);
+    this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
