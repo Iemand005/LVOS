@@ -1,7 +1,12 @@
 {
   "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "build:dev": "node build.js --no-minify"
+  },
   "devDependencies": {
     "@types/w3c-web-hid": "^1.0.7",
+    "esbuild": "^0.28.2",
     "eslint-plugin-jsdoc": "^63.3.3",
     "globals": "^17.11.0",
     "jshint": "^2.13.6",
