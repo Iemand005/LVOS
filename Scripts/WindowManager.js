@@ -1164,13 +1164,15 @@ Dialog.prototype.initWithObject = function(object) {
         if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
     };
 
-    // if (object.body) this.body.appendChild(object.body);
-    /** @type {(ev:MouseEvent|PointerEvent)=>void} */
+    /**
+	 * @param {MouseEvent|PointerEvent} ev
+	 */
     var activationHandler = function (ev) {
 		if (this.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch")) {
-			return;
+			return false;
 		}
         windowManager.windowActivationEvent(ev, self);
+		return true;
     };
 
     var target = this.target;
