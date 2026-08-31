@@ -14,7 +14,6 @@ export default tseslint.config({
 		globals: {
 			...globals.browser,
 			...globals.commonjs,
-			...jsdoc.configs['flat/recommended'].rules,
 			Anim: "readonly",
 			Vector: "writable",
 			LVMessenger: "writable",
@@ -29,9 +28,11 @@ export default tseslint.config({
 		}
 	},
 	plugins: {
-		"@typescript-eslint": tseslint.plugin
+		"@typescript-eslint": tseslint.plugin,
+		jsdoc
 	},
 	rules: {
+		...jsdoc.configs['flat/recommended'].rules,
 		"comma-dangle": ["error", "never"],
 		"no-var": "off",
 		"no-sequences": "off",
