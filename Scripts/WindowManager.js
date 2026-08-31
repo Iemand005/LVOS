@@ -44,6 +44,11 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 	);
 })();
 
+
+if (isIE) {
+    useTransform = true;
+}
+
 if (!supportsTransform) useTransform = false;
 
 var flags = {
@@ -89,9 +94,6 @@ var maximizeAnimations = 0;
 
 
 
-if (isIE) {
-    useTransform = true;
-}
 
 // flags.compositorResize = true;
 
