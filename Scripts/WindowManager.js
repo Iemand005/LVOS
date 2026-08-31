@@ -9,7 +9,7 @@
    /
 \*/
 
-"use strict"; // Strict mode is required for older browsers (tested on Chrome 48, Dialogs 8.1 both desktop and Metro mode).
+"use strict"
 
 // Modifiable settings
 var useMica = false,
@@ -26,9 +26,6 @@ var supportsObjectFit = Boolean(document.documentElement && document.documentEle
 var supportsTransitions = false;
 var supportsTransform = false;
 
-// @ts-check
-
-/** @readonly @type {boolean} */
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
