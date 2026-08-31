@@ -314,6 +314,11 @@ article, .article {
     pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
 }
 
+.window-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
  /*{
     pointer-events: none !important;
 }*/

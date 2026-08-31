@@ -1159,14 +1159,12 @@ Dialog.prototype.initWithObject = function(object) {
     var target = this.target;
     if (target) {
 
-        var borderSection = this.getElementByTagOrClassName("section");
-
         var createSizers = true;
 		var createTouchSizers = true;
 
 		if (!supportsPointer) createTouchSizers = false;
 
-        if(borderSection && !this.fixed && createSizers) {
+        if(!this.fixed && createSizers) {
 			/**
 			 * @this Dialog
 			 * @param {number} id
