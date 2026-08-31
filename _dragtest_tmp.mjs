@@ -30,27 +30,34 @@ const result = await page.evaluate(async () => {
   const pEv = (el, type, x, y, buttons) => el.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0, buttons, pointerId: 1, isPrimary: true }));
   const mEv = (el, type, x, y, buttons) => el.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, buttons, button: 0 }));
 
-  // wait for a laid out .window
-  let candidates = [];
-  for (let i = 0; i < 60; i++) {
-    candidates = Array.from(document.querySelectorAll(".window")).filter(w => { try { const r = w.getBoundingClientRect(); return r.width > 50 && r.height > 50; } catch (e) { return false; } });
-    if (candidates.length) break;
-    await pause(250);
+  // find any .window with real geometry by polling and pressing until one activates
+  let ad = null, liveWin = null;
+  for (let i = 0; i < 80; i++) {
+    if (!liveWin) {
+      const ws = Array.from(document.querySelectorAll(".window"));
+      for (const w of ws) {
+        let r = null; try { r = w.getBoundingClientRect(); } catch (e) {}
+        if (r && r.width > 40 && r.height > 40) { liveWin = w; break; }
+      }
+    }
+    if (liveWin) {
+      let r = liveWin.getBoundingClientRect();
+      const tx = r.left + r.width / 2, ty = r.top + 10;
+      if (usePointer) pEv(liveWin, "pointerdown", tx, ty, 1); else mEv(liveWin, "mousedown", tx, ty, 1);
+      await pause(30);
+      ad = wm.activeDialog;
+      if (ad) break;
+    }
+    await pause(300);
   }
-  if (!candidates.length) { out.error = "no laid-out window"; return out; }
-  out.numCandidates = candidates.length;
-
-  // try each candidate until activation works
-  let ad = null, liveWin = null, overlapInfo = {};
-  for (const w of candidates) {
-    const r = w.getBoundingClientRect();
-    const tx = r.left + r.width / 2, ty = r.top + 10;
-    if (usePointer) pEv(w, "pointerdown", tx, ty, 1); else mEv(w, "mousedown", tx, ty, 1);
-    await pause(40);
-    ad = wm.activeDialog;
-    if (ad) { liveWin = w; break; }
+  if (!ad || !liveWin) {
+    out.error = "no interactive window";
+    out.domWindows = document.querySelectorAll(".window").length;
+    const sizes = Array.from(document.querySelectorAll(".window")).map(w => { try { const r = w.getBoundingClientRect(); return w.id + ":" + Math.round(r.width) + "x" + Math.round(r.height); } catch (e) { return w.id + ":err"; } });
+    out.windowSizes = sizes;
+    return out;
   }
-  if (!ad) { out.error = "no activation on any window"; return out; }
+  out.numDomWindows = document.querySelectorAll(".window").length;
 
   let r = liveWin.getBoundingClientRect();
   const tx = r.left + r.width / 2, ty = r.top + 10;
