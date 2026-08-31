@@ -1188,12 +1188,12 @@ Dialog.prototype.initWithObject = function(object) {
             var createSizer = function (id) {
 				if (!target) return;
 
-                var sizerId = "sizer-" + (id);
+                var sizerId = "sizer-" + id;
 
                 var div = this.getElementByTagOrClassName(sizerId);
                 if (!div || !(isElement(div))) div = document.createElement("div");
                 div.draggable = false;
-				div.id = String(id);
+				div.id = id.toString();
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
