@@ -438,6 +438,13 @@ function WindowManager() {
 	/** @param {PointerEvent | MouseEvent} event */
 	this.windowDragEvent = function(event) {
 		try {
+			// If the pointer button has already been released without a matching
+			// pointerup reaching this document (e.g. it happened over an embedded
+			// app iframe), stop dragging so the window lets go of the mouse.
+			if (event && event.buttons === 0 && self.isDragging) {
+				self.disableDialogDrag();
+				return;
+			}
 			cancelDomEvent(event);
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
