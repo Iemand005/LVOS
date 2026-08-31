@@ -2604,6 +2604,8 @@ function removeWallpaper() {
 	return wallpaper;
 }
 
+// #region Event Listeners
+
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 
 
@@ -2623,6 +2625,7 @@ window.addEventListener("drop", function(e) {
      console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
+// #endregion
 
 // Setting up the global variables after defining the classes to avoid undefined prototypes!
 var windowManager = new WindowManager;
