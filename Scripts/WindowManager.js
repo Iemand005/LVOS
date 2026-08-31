@@ -1225,19 +1225,7 @@ Dialog.prototype.initWithObject = function(object) {
 					div2.classList.add(touchSizerId);
 					div2.classList.add("touch");
 
-					/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
-					var touchDown = function (ev) {
-						if (ev.pointerType !== "touch") {
-							windowManager.dragAction.set(-1);
-							return;
-						}
-
-						cancelDomEvent(ev);
-						windowManager.dragAction.set(id);
-						activationHandler(ev);
-					};
-
-					if (supportsPointer) div2.onpointerdown = touchDown;
+					if (supportsPointer) div2.onpointerdown = pointerDown;
 
 					target.appendChild(div2);
 				}
