@@ -105,21 +105,20 @@ function cancelDomEvent(event) {
 
 /** @param {string} url */
 function getFaviconUrl(url) {
-	var m = url.match(/^([a-z]+:\/\/[^\/]+)/i);
-	return (m ? m[1] : url) + "/favicon.ico";
+	return "https://" + getDomain(url) + "/favicon.ico";
 }
 
 /** @param {string} url */
 function getDomain(url) {
-	return url.replace(/^[a-z]+:\/\//i, "").split("/")[0].split("?")[0];
+    return url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0].split("?")[0];
 }
 
 /** @param {string} url */
 function getSiteName(url) {
-	var domain = url.replace(/^[a-z]+:\/\//i, "").split("/")[0].split("?")[0];
-	var parts = domain.split(".");
-	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
-	return name.charAt(0).toUpperCase() + name.slice(1);
+    var parts = getDomain(url).split(".");
+    var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+
+    return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
 
