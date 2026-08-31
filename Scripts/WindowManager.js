@@ -1250,7 +1250,7 @@ Dialog.prototype.initWithObject = function(object) {
         }, false);
 
         var buttons = target.getElementsByTagName("button");
-        buttons[windowButtons.close].addEventListener("click", this.close, false);
+        buttons[windowButtons.close].addEventListener("click", this.close.bind(this), false);
         buttons[windowButtons.full].addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
         this.toggleOpen(false);
