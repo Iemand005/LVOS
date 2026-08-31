@@ -791,9 +791,6 @@ ClickOffset.dragStopTimer = 0;
 
 /** @param {MouseEvent} ev */
 ClickOffset.handleMouseDrag = function (ev) {
-
-};
-
     // console.log("mouse moving");
 	//if (!ev.buttons) ClickOffset._overlay.remove();
 	ClickOffset.disableOverlay(ev);
@@ -809,9 +806,7 @@ ClickOffset.handleMouseDrag = function (ev) {
     }, 50);
 };
 
-window.addEventListener(supportsPointer? "pointermove" : "mousemove", function(ev) {
-	ClickOffset.handleMouseDrag(ev);
-}, false);
+window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
