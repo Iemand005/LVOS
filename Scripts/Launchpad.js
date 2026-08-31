@@ -116,6 +116,7 @@ Launchpad.prototype._createMobileButton = function(app) {
 			openButton.appendChild(icon);
 		};
 		icon.src = iconUrl;
+		icon.alt = app.title + " Logo";
 	}
 
 	return openButton;
