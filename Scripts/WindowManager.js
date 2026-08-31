@@ -175,13 +175,10 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
     if (rotation) transform += "rotate(" + rotation + "deg)";
 
 	else {
-		// if (element.style.OTransform)
 		element.style.transform = transform;
 	}
-    // TODO: Chekc where this is applied and only assing if needed
-	// element.style.webkitTransform = transform;
-
 }
+
 /**
  * @param {HTMLElement} element
  * @param {number} skew
@@ -209,7 +206,6 @@ function setClass(element, className, enabled) {
 	return element.className.indexOf(className) !== -1;
 }
 
-
 /**
  * @param {HTMLElement| null} element
  * @param {number} [index]
@@ -218,7 +214,6 @@ function getRect(element, index) {
 	if (!element) return null;
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 }
-
 
 /**
  * @param {MessageType} type
@@ -292,6 +287,7 @@ function swapMetroBody() {
     if (!windowManager.flipped) return;
     windowManager.activeDialogToMetro();
 }
+
 /** @param {boolean} enable */
 function flip(enable){
     var tesktop = bodyCrawler.getDesktop();
@@ -401,8 +397,6 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
     });
     return element;
 }
-
-
 
 function removeWallpaper() {
 	var wallpaper = DesktopManager.getWallpaper();
