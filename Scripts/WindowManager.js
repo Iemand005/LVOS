@@ -1204,6 +1204,34 @@ Dialog.prototype.initWithObject = function(object) {
                 if (supportsPointer) div.onpointerdown = pointerDown;
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
+
+				if (createTouchSizers) {
+					var touchSizerId = "touch-sizer-" + id;
+
+					var div2 = this.getElementByTagOrClassName(touchSizerId);
+					if (!div2 || !isElement(div2)) div2 = document.createElement("div");
+
+					div2.draggable = false;
+					div2.id = "touch-" + id;
+					div2.classList.add(touchSizerId);
+					div2.classList.add("touch");
+
+					/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
+					var touchDown = function (ev) {
+						if (ev.pointerType !== "touch") {
+							windowManager.dragAction.set(-1);
+							return;
+						}
+
+						cancelDomEvent(ev);
+						windowManager.dragAction.set(id);
+						activationHandler(ev);
+					};
+
+					if (supportsPointer) div2.onpointerdown = touchDown;
+
+					target.appendChild(div2);
+				}
             };
 			
 			for (var index = 0; index < 8; index++) createSizer.call(this, index + 1);
