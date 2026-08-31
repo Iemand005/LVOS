@@ -1,3 +1,5 @@
+var reflecitons = false;
+
 /** @type {Launchpad?} */
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 

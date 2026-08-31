@@ -13,7 +13,6 @@
 
 // Modifiable settings
 var useMica = false,
-	reflections = false,
 	canSave = true,
 	useTransform = true,
 	useScale = false,
