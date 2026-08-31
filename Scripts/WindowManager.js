@@ -92,10 +92,6 @@ var flags = {
 	windowReaper: false
 };
 
-
-
-
-
 //#region Functions
 
 /** @param {Event} event */
