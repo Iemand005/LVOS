@@ -44,6 +44,11 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 	);
 })();
 
+var maximizeAnimations = 0;
+
+if (supportsPointer) console.log("Supports pointer events!");
+
+
 /** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
@@ -90,9 +95,6 @@ var flags = {
 
 
 
-var maximizeAnimations = 0;
-
-if (supportsPointer) console.log("Supports pointer events!");
 
 //#region Functions
 
