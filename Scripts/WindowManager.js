@@ -1205,6 +1205,7 @@ Dialog.prototype.initWithObject = function(object) {
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
             };
+			
 			for (var index = 0; index < 8; index++) createSizer.call(this, index + 1);
 
 			if (createTouchSizers) {
