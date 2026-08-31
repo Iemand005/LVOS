@@ -440,7 +440,9 @@ function removeWallpaper() {
 //#region Window Manager
 
 function WindowManager() {
-	/** @type {DialogMap} */
+	/** @type {DialogMap} @readonly */
+	this._windows = {};
+
 	this._windows = {};
 
 	/** @type {DesktopState | null} */
