@@ -13,7 +13,6 @@
 
 // Modifiable settings
 var useMica = false,
-	canSave = true,
 	useTransform = true,
 	useScale = false;
 
@@ -453,9 +452,11 @@ function WindowManager() {
 	this.topZ = 100;
 	this.loaded = false;
 
+	this.canSave = true;
+
 	this.ticking = false;
 
-	this.flipped = false,
+	this.flipped = false;
 
 
 	/** @type {Dialog | null} */
