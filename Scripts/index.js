@@ -19,7 +19,6 @@ function init() {
 		});
 	}
 
-	bodyCrawler = new DocumentCrawler(document);
 
     if (!isBlink) DesktopManager.removeTheme("glass");
 
