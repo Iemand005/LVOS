@@ -36,7 +36,11 @@ isBlink = false;
 
 // @ts-check
 
-/** @readonly @constant @const @type {string} */
+/**
+ * @typedef {string & {readonly "": never}} ReadonlyString
+ */
+
+/** @type {ReadonlyString} */
 var mijnVariabele = "Hoi";
 
 // VS Code geeft hier nu een foutmelding: 
