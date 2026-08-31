@@ -2627,7 +2627,7 @@ window.addEventListener("drop", function(e) {
 
 // #endregion
 
-// Setting up the global variables after defining the classes to avoid undefined prototypes!
+// #region Global Variables
 var windowManager = new WindowManager;
 window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
@@ -2636,6 +2636,7 @@ var bodyCrawler = new DocumentCrawler;
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
 
+// #endregion
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
