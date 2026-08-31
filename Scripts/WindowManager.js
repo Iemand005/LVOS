@@ -28,7 +28,9 @@ var supportsTransform = false;
 
 /** @constant */
 var isBlink = "chrome" in window;
+var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
+isBlink = false;
 (function () {
 	var style = document.createElement("div").style;
 
@@ -87,7 +89,6 @@ var flags = {
 
 
 
-var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 var maximizeAnimations = 0;
 // var maximizeAnimationsMaximize = 0;
