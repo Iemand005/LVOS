@@ -527,7 +527,7 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 WindowManager.prototype.saveState = function() {
 	if (!this.loaded) return;
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
-	console.log("Saving window state.");
+	if (flags.verboseLags) console.log("Saving window state.");
 	try {
 		if (this.canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
@@ -942,7 +942,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
     // (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
-    console.log(enable ? "Starting drag" : "Ending drag");
+    if (flags.verboseLags) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
