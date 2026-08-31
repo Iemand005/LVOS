@@ -335,6 +335,102 @@ function toggleOverlay(enable) {
 	overlay.classList.toggle("open", enable);
 }
 
+
+var windowButtons = {
+    eject: 0,
+    full: 1,
+    close: 2
+};
+
+
+/** @param {*} properties */
+function stringifyDialogProperties(properties){
+    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
+}
+
+function getViewBoxPosition() {
+	return { left: window.screenLeft, top: window.screenTop };
+}
+
+/** @param {HTMLElement | Event | null} object */
+function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
+    if (!object) return console.log(object);
+    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
+    else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
+    else if (isElement(object)) return getObjectDialog(object.parentElement);
+}
+
+/** @param {number} value */
+function toPixels(value) {
+    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total position it aligns properly to the pixel grid! Nevermind it's still broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body. I can't fix this shit.
+}
+
+/** @param {number} value */
+function toDegrees(value) {
+    return Math.round(value) + "deg";
+}
+
+/** @param {number} pixels */
+function pixelsToCentimeters(pixels){
+    return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
+}
+
+/** @param {string} text */
+function fromPixels(text){
+    if (text !== null) try {
+        return typeof text === "number" ? text : parseInt(text.replace("px", ""));
+    } catch (ex) { console.warn("Failed to parse pixels:", ex); }
+    return 0;
+}
+
+/** @param {*} exception */
+function handleStorageException(exception){
+    console.error(exception);
+    console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
+    console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
+    localStorage.windowState = null;
+    canSave = false;
+}
+
+
+function getDialogTemplate(){
+    var template = document.querySelector("template") || document.getElementById("window-template");
+    if (!template ) return void console.warn("Couldn't find template!");
+    var content = template;
+	if (template instanceof HTMLTemplateElement) return template.content.children[0];
+    return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
+}
+
+function createDialog() {
+    var container = bodyCrawler.getDialogsContainer();
+    var template = getDialogTemplate();
+    if (!template) return null;
+    var clone = template.cloneNode(true);
+    if (container && clone instanceof Element) {
+        var dialogElement = container.appendChild(removeComments(clone));
+        if (isElement(dialogElement)) return dialogElement;
+    }
+    return null;
+}
+
+/** @param {Element} element */
+function removeComments(element){ // Removes the comments of an HTMLElement based object.
+    element.childNodes.forEach(function (child) {
+        if (child.nodeName === "#comment") element.removeChild(child);
+        else if (isElement(child)) removeComments(child);
+    });
+    return element;
+}
+
+
+
+function removeWallpaper() {
+	var wallpaper = DesktopManager.getWallpaper();
+	if (!wallpaper) return;
+	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+	return wallpaper;
+}
+
 // #region Window Manager
 
 function WindowManager() {
@@ -2509,100 +2605,6 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 // #endregion
 
-var windowButtons = {
-    eject: 0,
-    full: 1,
-    close: 2
-};
-
-
-/** @param {*} properties */
-function stringifyDialogProperties(properties){
-    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
-}
-
-function getViewBoxPosition() {
-	return { left: window.screenLeft, top: window.screenTop };
-}
-
-/** @param {HTMLElement | Event | null} object */
-function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
-    if (!object) return console.log(object);
-    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
-    else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
-    else if (isElement(object)) return getObjectDialog(object.parentElement);
-}
-
-/** @param {number} value */
-function toPixels(value) {
-    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total position it aligns properly to the pixel grid! Nevermind it's still broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body. I can't fix this shit.
-}
-
-/** @param {number} value */
-function toDegrees(value) {
-    return Math.round(value) + "deg";
-}
-
-/** @param {number} pixels */
-function pixelsToCentimeters(pixels){
-    return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
-}
-
-/** @param {string} text */
-function fromPixels(text){
-    if (text !== null) try {
-        return typeof text === "number" ? text : parseInt(text.replace("px", ""));
-    } catch (ex) { console.warn("Failed to parse pixels:", ex); }
-    return 0;
-}
-
-/** @param {*} exception */
-function handleStorageException(exception){
-    console.error(exception);
-    console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
-    console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-    localStorage.windowState = null;
-    canSave = false;
-}
-
-
-function getDialogTemplate(){
-    var template = document.querySelector("template") || document.getElementById("window-template");
-    if (!template ) return void console.warn("Couldn't find template!");
-    var content = template;
-	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-    return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
-}
-
-function createDialog() {
-    var container = bodyCrawler.getDialogsContainer();
-    var template = getDialogTemplate();
-    if (!template) return null;
-    var clone = template.cloneNode(true);
-    if (container && clone instanceof Element) {
-        var dialogElement = container.appendChild(removeComments(clone));
-        if (isElement(dialogElement)) return dialogElement;
-    }
-    return null;
-}
-
-/** @param {Element} element */
-function removeComments(element){ // Removes the comments of an HTMLElement based object.
-    element.childNodes.forEach(function (child) {
-        if (child.nodeName === "#comment") element.removeChild(child);
-        else if (isElement(child)) removeComments(child);
-    });
-    return element;
-}
-
-
-
-function removeWallpaper() {
-	var wallpaper = DesktopManager.getWallpaper();
-	if (!wallpaper) return;
-	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
-	return wallpaper;
-}
 
 // #region Event Listeners
 
