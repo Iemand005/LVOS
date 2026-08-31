@@ -1167,6 +1167,9 @@ Dialog.prototype.initWithObject = function(object) {
     // if (object.body) this.body.appendChild(object.body);
     /** @type {(ev:MouseEvent|PointerEvent)=>void} */
     var activationHandler = function (ev) {
+		if (this.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch")) {
+			return;
+		}
         windowManager.windowActivationEvent(ev, self);
     };
 
@@ -1197,10 +1200,7 @@ Dialog.prototype.initWithObject = function(object) {
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers | HTMLElement, ev: PointerEvent | MouseEvent) => any} */
 				var pointerDown = function (ev) {
-					if ("classList" in this && this.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch")) {
-						windowManager.dragAction.set(-1);
-						return;
-					}
+					
 
 					windowManager.dragAction.set(id);
 					activationHandler(ev);
