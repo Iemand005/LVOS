@@ -133,22 +133,6 @@ function isDialog(element) {
 function isElement(object) { return object && "nodeType" in object; }
 
 
-/**
- * @param {number} a
- * @param {number} b
- */
-function max(a, b) {
-  return a > b ? a : b;
-}
-
-/**
- * @param {number} a
- * @param {number} b
- */
-function min(a, b) {
-	return a < b ? a : b;
-}
-
 /** @param {Window} window */
 function getWindowChromeHeight(window) {
 	return window.outerHeight - window.innerHeight;
@@ -221,13 +205,13 @@ function getRect(element, index) {
  * @param {any} data
  * @param {string} [source]
  */
-function messageReceived(type, data, source){ // I have yet to make a wrapper function that takes care of the types and data parsing for ease of use by another user who doesn't understand what I'm doing here, it needs to be done manually by me for now!
+function messageReceived(type, data, source){
 
 	if (source) {
 
 		var dialog = windowManager.windows[source];
 
-		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // If our dialog gives us a specific size, we act accordingly and give it what it wants! We swith the window size from being based on the non-client area size, and we make the non-client area wrap around the client area, fully giving sizing control to the client. This way our system can suffice the client's demands.
+		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
 			case "launchOverlay":
 				var overlay = bodyCrawler.getOverlay();
@@ -293,7 +277,7 @@ function swapMetroBody() {
 function flip(enable){
     var tesktop = bodyCrawler.getDesktop();
     if (!tesktop) return;
-    tesktop.toggleAttribute("flipped", enable); // Deprecated, I am switching transferring this attribute to a class.
+    tesktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
     flipHandler(tesktop.classList.toggle("flipped", enable));
 }
 
@@ -330,7 +314,7 @@ function getViewBoxPosition() {
 }
 
 /** @param {HTMLElement | Event | null} object */
-function getObjectDialog(object){ // Alternatieve methode aan recursief het evenement af te gaan zou zijn door over de elementsFromPoint stack te lopen.
+function getObjectDialog(object){
     if (!object) return console.log(object);
     if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
     else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
@@ -339,7 +323,7 @@ function getObjectDialog(object){ // Alternatieve methode aan recursief het even
 
 /** @param {number} value */
 function toPixels(value) {
-    return Math.round(value) + "px"; // This is why Chrome was jiggling around! I noticed it was rounding off the positions of the contained elements separately but if we round the total position it aligns properly to the pixel grid! Nevermind it's still broken... Come on chrome! It's working a lot better and you can only notice the 1px offsets if you look closely. Firefox, Internet Explorer and Edge do not have this issue at all! Actually now this issue is completely gone, even on Chrome I see absolutely no sign of the body shifting around. Might be thanks to the 5th restructuring of the dialog body. I can't fix this shit.
+    return Math.round(value) + "px";
 }
 
 /** @param {number} value */
@@ -675,7 +659,7 @@ WindowManager.prototype.getVisualizerApps = function() {
 /** @param {Application[]} arguments */
 WindowManager.prototype.injectApplications = function() {
     for (var i = 0; i < arguments.length; i++)
-        arguments[i].forEach(windowManager.loadApp, windowManager); // Awwor notation: applications.forEach(application => windowManager.windows[demo.id] = new Dialog(application));
+        arguments[i].forEach(windowManager.loadApp, windowManager);
     windowManager.loadState();
 };
 
@@ -694,7 +678,6 @@ WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -10
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
 WindowManager.recalculateWindowBounds = function() {
-	// cachedWidth = window.innerWidth;
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
 	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
@@ -737,8 +720,6 @@ WindowManager.prototype.ininializeDialogs = function() {
 			self.loadApp(dialog);
 
     });
-    //flip();
-    // checkForFlip();
     this.loadState();
 }
 
@@ -869,8 +850,6 @@ ClickOffset.dragStopTimer = 0;
 
 /** @param {MouseEvent} ev */
 ClickOffset.handleMouseDrag = function (ev) {
-    // console.log("mouse moving");
-	//if (!ev.buttons) ClickOffset._overlay.remove();
 	ClickOffset.disableOverlay(ev);
 
 	ClickOffset._overlay.style.display = "block";
@@ -878,9 +857,6 @@ ClickOffset.handleMouseDrag = function (ev) {
     clearTimeout(ClickOffset.dragStopTimer);
 
     ClickOffset.dragStopTimer = setTimeout(function() {
-        // console.log("mouse stopped");
-		// ClickOffset._overlay.style.display = "none";
-
     }, 50);
 };
 
@@ -941,7 +917,6 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-    // (enable ? document.addEventListener : document.removeEventListener)(supportsPointer ? "pointermove" : "mousemove", handler, false);
     if (flags.verboseLags) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
@@ -1096,14 +1071,9 @@ Dialog.prototype.initWithObject = function(object) {
             this.close();
         } else {
             this.application = object;
-            // this.closeable = true;
             this.target = createDialog();
-            try {
-
-                // windowManager.loadState(this);
-            } finally {}
             if (object.classes && typeof object.classes === "object"){
-                object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // We can't use class since it's a keyword!!
+                object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
             }
             this.openUrl(object.src);
             this.setTitle(object.title);
@@ -1128,12 +1098,6 @@ Dialog.prototype.initWithObject = function(object) {
 
     if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
-    // This adds application shortcuts to the app drawer, which currently rests on the desktop. I will make another drawer for mobile and make a pop-up drawer from the dock with the option to pin apps to it. I probably won't have enough time to implement an in-browser file manager, the localStorage API is limited to 5-10MB and using persistent storage requires browser specific APIs that don't work consistently yet.
-    // var applist = document.getElementById("applist");
-    // if (applist) applist.appendChild(this.createOpenButton());
-    // var metroapplist = document.getElementById("metroapplist");
-    // if (metroapplist) metroapplist.appendChild(this.createOpenButton());
-
     this.toggleCloseButton(true);
     this.toggleFullButton(true);
     if (this.verifyEjectCapability()) this.toggleEjectButton(true);
@@ -1142,7 +1106,7 @@ Dialog.prototype.initWithObject = function(object) {
 
     var self = this;
     /** @param {Position} difference */
-    this.exchangeDialogMoveEvent = function(difference) { // Async is not supported in IE11?!? I chose some async since we don't need the return value and I need the window move to be as fast as possible. The next best option is a service worker!!
+    this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
         if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
     };
 
@@ -1421,7 +1385,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         var bottom = this.bottomFromTop;
         if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
         if (top < bounds.top) top = bounds.top;
-        var height = max(min(bottom - top, this.maxHeight), this.minHeight);
+        var height = Math.max(Math.min(bottom - top, this.maxHeight), this.minHeight);
         top = bottom - height;
         this._height = height;
         this._y = top / window.innerHeight;
@@ -1442,7 +1406,7 @@ Object.defineProperty(Dialog.prototype, "left", {
         var right = this.rightFromLeft;
         if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
         if (left < bounds.left) left = bounds.left;
-        var width = max(min(right - left, this.maxWidth), this.minWidth);
+        var width = Math.max(Math.min(right - left, this.maxWidth), this.minWidth);
         left = right - width;
         this._width = width;
         this._x = left / window.innerWidth;
@@ -1732,7 +1696,7 @@ Dialog.prototype.getInnerRect = function () {
 		width: this.target.offsetWidth,
 		height: this.target.offsetHeight
 	};
-}; // This builds a rect without extra function calls and includes the dimension offsets caused by css transformations. This allows us to actually move the windows correctly WHILE the animation is playing. Try it out if you think you're fast enough (or change the animation speed)
+}; // Builds a rect without extra function calls, including the dimension offsets caused by CSS transforms, so windows move correctly while an animation plays.
 
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
@@ -1852,8 +1816,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     if (!this.target) return;
-    // this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
-    // this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
 
@@ -1892,9 +1854,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 			transition.finished.finally(function() {
 				if (!self.target) return;
-				if (maximizeAnimations > 1) {
-					// TODO: Perhaps add to interrupted queue and clear them after on clean else next
-				} else {
+				if (maximizeAnimations <= 1) {
 					self.target.style.viewTransitionName = "";
 				}
 				maximizeAnimations--;
@@ -1962,10 +1922,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 
 		self._animationProps._fsTimeout = setTimeout(function() {
-			// if (maximizeAnimations > 1) {
-			// 	console.log("Animainois ongoign");
-			// 	return;
-			// }
 			requestAnimationFrame(function() {
 				if (!content) return;
 				content.style.width = toPixels(targetWidth);
@@ -2092,12 +2048,6 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (animate) this.animate(this.updatePosition);
 		else this.updatePosition();
 	}
-
-
-
-    // i wanna add a like move event thing with velocity and stuff
-
-
 };
 /**
  * @param {number} deltaX
@@ -2149,15 +2099,13 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 		var overflow = this.x + width - bounds.right;
 		if (overflow > 0) {
 			var newX = this.x - overflow;
-			if (bounds.left !== undefined && newX < bounds.left) {
-				newX = bounds.left;
-			}
+			if (bounds.left !== undefined && newX < bounds.left) newX = bounds.left;
 			this.move(newX);
 		}
 	}
 
-	if (bounds.right !== Infinity) width = min(width, bounds.right - this.x);
-	this._width = max(min(width, this.maxWidth), this.minWidth);
+	if (bounds.right !== Infinity) width = Math.min(width, bounds.right - this.x);
+	this._width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
 	this._isMinWidth = this._width === this.minWidth;
 
 	if (update !== false) {
@@ -2179,17 +2127,15 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 		var overflow = this.y + height - bounds.bottom;
 		if (overflow > 0) {
 			var newY = this.y - overflow;
-			if (bounds.top !== undefined && newY < bounds.top) {
-				newY = bounds.top;
-			}
+			if (bounds.top !== undefined && newY < bounds.top) newY = bounds.top;
 			this.move(this.x, newY);
 		}
 	}
 
 	var finalHeight = height;
-	if (bounds.bottom !== Infinity) finalHeight = min(finalHeight, bounds.bottom - this.y);
+	if (bounds.bottom !== Infinity) finalHeight = Math.min(finalHeight, bounds.bottom - this.y);
 
-	this._height = max(min(finalHeight, this.maxHeight), this.minHeight);
+	this._height = Math.max(Math.min(finalHeight, this.maxHeight), this.minHeight);
 	this._isMinHeight = this._height === this.minHeight;
 
 	if (update !== false) {
