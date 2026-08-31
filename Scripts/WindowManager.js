@@ -466,7 +466,6 @@ function WindowManager() {
 
 
 	var self = this;
-	/** @type {(ev:Event)=>void} */
 	this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	};
