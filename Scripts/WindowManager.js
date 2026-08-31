@@ -1197,9 +1197,7 @@ Dialog.prototype.initWithObject = function(object) {
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
 				var pointerDown = function (ev) {
-					if (this.classList.contains("touch") &&
-						"pointerType" in ev &&
-						ev.pointerType !== "touch")
+					if (this.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 						return;
 
 					cancelDomEvent(ev);
