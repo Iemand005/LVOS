@@ -30,22 +30,7 @@ var supportsTransform = false;
 
 /** @readonly @type {boolean} */
 var isBlink = "chrome" in window;
-var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
-
-isBlink = false;
-
-// @ts-check
-
-/**
- * @typedef {string & {readonly "": never}} ReadonlyString
- */
-
-/** @type {ReadonlyString} */
-var mijnVariabele = "Hoi";
-
-// VS Code geeft hier nu een foutmelding: 
-// "Cannot assign to 'mijnVariabele' because it is a read-only property."
-mijnVariabele = "Doei"; 
+var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11
 
 (function () {
 	var style = document.createElement("div").style;
