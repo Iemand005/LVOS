@@ -806,7 +806,6 @@ ClickOffset.handleMouseDrag = function (ev) {
     }, 50);
 };
 
-window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 
 ClickOffset.prototype.reset = function () {
 	var self = this;
@@ -2604,6 +2603,9 @@ function removeWallpaper() {
 	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
 	return wallpaper;
 }
+
+window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
+
 
 window.addEventListener("unload", function() {
 	windowManager.saveState();
