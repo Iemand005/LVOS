@@ -1197,12 +1197,14 @@ Dialog.prototype.initWithObject = function(object) {
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
 				var pointerDown = function (ev) {
-					if ("pointerType" in ev && ev.pointerType === "touch" && !createTouchSizers)
-						return;
+					if ("pointerType" in ev) {
+						if (ev.pointerType === "touch" && !createTouchSizers)
+							return;
 
-					if (supportsPointer && ev.pointerType !== "touch" ||
-						!supportsPointer && ev.type !== "mousedown")
-						return;
+						if (supportsPointer && ev.pointerType !== "touch" ||
+							!supportsPointer && ev.type !== "mousedown")
+							return;
+					}
 
 					cancelDomEvent(ev);
 					windowManager.dragAction.set(id);
