@@ -1184,7 +1184,7 @@ Dialog.prototype.initWithObject = function(object) {
 					if (!activationHandler(ev)) return;
 					windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
-				}; // You can also put id in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but Netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+				};
                 if (supportsPointer) sizer.onpointerdown = pointerDown;
                 else sizer.onmousedown = pointerDown;
                 target.appendChild(sizer);
