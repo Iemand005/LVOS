@@ -435,7 +435,7 @@ function removeWallpaper() {
 
 //#endregion
 
-// #region Window Manager
+//#region Window Manager
 
 function WindowManager() {
 	/** @type {DialogMap} */
@@ -851,9 +851,9 @@ WindowManager.prototype.updateTopZ = function(newZ) {
     });
 }
 
-// #endregion
+//#endregion
 
-// #region ClickOffset
+//#region ClickOffset
 
 function ClickOffset() {
 	this.clickX = 0;
@@ -985,9 +985,9 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
 };
 
-// #endregion
+//#endregion
 
-// #region Dialog
+//#region Dialog
 
 
 /**
@@ -2564,10 +2564,10 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 
 };
 
-// #endregion
+//#endregion
 
 
-// #region DragAction
+//#region DragAction
 
 function DragAction() {
 	/** @type {DragFunction} */
@@ -2591,9 +2591,9 @@ DragAction.prototype.set = function (direction) {
 	this.execute = this.resizeFunctions[direction || 0] || function () {};
 };
 
-// #endregion
+//#endregion
 
-// #region DocumentCrawler
+//#region DocumentCrawler
 
 /** @param {HTMLDocument} [customDocument] */
 function DocumentCrawler(customDocument){
@@ -2607,10 +2607,10 @@ DocumentCrawler.prototype.getDialogsContainer = function () { return this.docume
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
-// #endregion
+//#endregion
 
 
-// #region Event Listeners
+//#region Event Listeners
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 
@@ -2631,9 +2631,9 @@ window.addEventListener("drop", function(e) {
      console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
-// #endregion
+//#endregion
 
-// #region Global Variables
+//#region Global Variables
 var windowManager = new WindowManager;
 window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
@@ -2642,7 +2642,7 @@ var bodyCrawler = new DocumentCrawler;
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
 
-// #endregion
+//#endregion
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
