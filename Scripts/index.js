@@ -1,5 +1,7 @@
 var reflecitons = false;
 
+// var isBlink = "chrome" in window;
+
 /** @type {Launchpad?} */
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
@@ -17,14 +19,14 @@ function init() {
 		windowManager.forEachWindow(function(dialog) {
 			if (dialog.application) launchpad.addApp(dialog);
 		});
+		if (!isBlink) DesktopManager.removeTheme("glass");
+		windowManager.ininializeDialogs();
+		toggleReflections(reflections);
 	}
 
 
-    if (!isBlink) DesktopManager.removeTheme("glass");
 
-    windowManager.ininializeDialogs();
-    toggleReflections(reflections);
-
+	
 
 	LVMessenger.receive(messageReceived);
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
