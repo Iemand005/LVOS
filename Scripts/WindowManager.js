@@ -1226,7 +1226,7 @@ Dialog.prototype.initWithObject = function(object) {
 				}
             };
 			
-			for (var index = 0; index < 8; index++) createSizer.call(this, index + 1);
+			for (var i = 0; i < 8; i++) createSizer.call(this, i + 1);
         }
 
         target.addEventListener("dragstart", cancelDomEvent, false);
