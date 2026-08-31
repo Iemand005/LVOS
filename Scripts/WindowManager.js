@@ -1189,7 +1189,7 @@ Dialog.prototype.initWithObject = function(object) {
                 if (!div || !(isElement(div))) div = document.createElement("div");
                 div.draggable = false;
 				div.id = String(index + 1);
-				div.classList.add(sizerId);1``1`1		`
+				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
                 var pointerDown = function (ev) {
                     cancelDomEvent(ev);
