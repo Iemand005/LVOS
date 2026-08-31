@@ -15,6 +15,7 @@ function init() {
 		appRegistry.forEachApp(function(app, id) {
 			launchpad.addApp(app);
 		});
+		launchpad.open();
 	} else if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {
 			if (dialog.application) launchpad.addApp(dialog);
@@ -22,7 +23,7 @@ function init() {
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.ininializeDialogs();
 		toggleReflections(reflections);
-		
+
 		LVMessenger.receive(messageReceived);
 	}
 
