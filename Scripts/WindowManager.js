@@ -1168,9 +1168,8 @@ Dialog.prototype.initWithObject = function(object) {
 	 * @param {MouseEvent|PointerEvent} ev
 	 */
     var activationHandler = function (ev) {
-		if (ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch")) {
+		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-		}
         windowManager.windowActivationEvent(ev, self);
 		return true;
     };
