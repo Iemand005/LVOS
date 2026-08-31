@@ -548,7 +548,7 @@ WindowManager.prototype.saveState = function() {
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
-		if (windowManager.canSave && typeof localStorage !== "undefined")
+		if (this.canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
 		handleStorageException(exception);
@@ -558,7 +558,7 @@ WindowManager.prototype.saveState = function() {
 /** @param {Dialog} [dialog] */
 WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
 	console.log("Loading window state.");
-	if (!windowManager.canSave) {
+	if (!this.canSave) {
 		console.log("Storage access is disabled for this session!");
 		return;
 	}
@@ -645,7 +645,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 
 /** @param {Application} application */
 WindowManager.prototype.saveInstalledApp = function(application) {
-	if (!canSave || typeof localStorage === "undefined") return;
+	if (!this.canSave || typeof localStorage === "undefined") return;
 	try {
 		var apps = this.installedApps;
 		for (var i = 0; i < apps.length; i++)
@@ -658,7 +658,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 };
 
 WindowManager.prototype.loadInstalledApps = function() {
-	if (!canSave || typeof localStorage === "undefined") return;
+	if (!this.canSave || typeof localStorage === "undefined") return;
 	try {
 		this.installedApps.forEach(function(application) {
 			if (application && application.src) this.loadApp(application);
