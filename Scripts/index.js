@@ -22,13 +22,14 @@ function init() {
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.ininializeDialogs();
 		toggleReflections(reflections);
+		
+		LVMessenger.receive(messageReceived);
 	}
 
 
 
 	
 
-	LVMessenger.receive(messageReceived);
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
 	if (window.__LVMessenger)
 		window.__LVMessenger.accent = window.metaThemeColor;
