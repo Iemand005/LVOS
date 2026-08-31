@@ -302,9 +302,9 @@ if (typeof windowManager !== "undefined") {
 	});
 }
 
-/** @param {Dialog} dialog */
+/** @param {Dialog?} dialog */
 function dockApp(dialog) {
-	if (dockAppList) dockAppList.appendChild(dialog.createOpenButton());
+	if (dockAppList && dialog) dockAppList.appendChild(dialog.createOpenButton());
 }
 
 // function loadApps
@@ -318,8 +318,6 @@ var initApps = function () {
 		
 		var windows = windowManager.windows;
 		if (dockAppList) {
-			dockApp(windows.browser);
-			dockApp(windows.console);
 			dockApp(windows.browser);
 			dockApp(windows.console);
 			dockApp(windows.music);
