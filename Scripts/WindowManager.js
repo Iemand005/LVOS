@@ -1196,11 +1196,18 @@ Dialog.prototype.initWithObject = function(object) {
 				div.id = id.toString();
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
-                var pointerDown = function (ev) {
-                    cancelDomEvent(ev);
-                    if (ev.target && "id" in ev.target) windowManager.dragAction.set(Number(ev.target.id));
-                    activationHandler(ev);
-                }; // You can also put id in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but Netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
+				var pointerDown = function (ev) {
+					if ("pointerType" in ev && ev.pointerType === "touch" && !createTouchSizers)
+						return;
+
+					if (supportsPointer && ev.pointerType !== "touch" ||
+						!supportsPointer && ev.type !== "mousedown")
+						return;
+
+					cancelDomEvent(ev);
+					windowManager.dragAction.set(id);
+					activationHandler(ev);
+				}; // You can also put id in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but Netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
                 if (supportsPointer) div.onpointerdown = pointerDown;
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
