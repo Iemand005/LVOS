@@ -151,7 +151,7 @@ function max(a, b) {
  * @param {number} b
  */
 function min(a, b) {
-  return a < b ? a : b;
+	return a < b ? a : b;
 }
 
 /** @param {Window} window */
