@@ -30,6 +30,11 @@ const result = await page.evaluate(async () => {
   const pEv = (el, type, x, y, buttons) => el.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0, buttons, pointerId: 1, isPrimary: true }));
   const mEv = (el, type, x, y, buttons) => el.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, buttons, button: 0 }));
 
+  // OPEN dialogs so windows get sized in the DOM
+  const dialogs = wm && wm._windows ? Object.values(wm._windows) : [];
+  out.totalDialogs = dialogs.length;
+  for (const d of dialogs) { try { if (d && typeof d.open === "function" && !(d.isOpen || d._stateOpen)) d.open(); } catch (e) {} }
+
   // find any .window with real geometry by polling and pressing until one activates
   let ad = null, liveWin = null;
   for (let i = 0; i < 80; i++) {
