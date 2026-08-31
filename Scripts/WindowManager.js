@@ -104,9 +104,7 @@ function cancelDomEvent(event) {
 }
 
 /** @param {string} url */
-function getFaviconUrl(url) {
-	return "https://" + getDomain(url) + "/favicon.ico";
-}
+function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
 
 /** @param {string} url */
 function getDomain(url) {
