@@ -330,4 +330,9 @@ var initApps = function () {
 	}
 };
 
+if (typeof appRegistry !== "undefined") {
+		appRegistry.addApps(applications, games);
+		appRegistry.loadApps();
+	}
+
 window.addEventListener("load", initApps, false);
