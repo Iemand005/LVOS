@@ -87,10 +87,7 @@ var flags = {
 var maximizeAnimations = 0;
 // var maximizeAnimationsMaximize = 0;
 
-try {
-    var hasLocalStorage = typeof localStorage !== "undefined";
-	if (!hasLocalStorage) windowManager.canSave  = false;
-} catch(ex) { console.warn("Local storage access denied.", ex); }
+
 
 if (isIE) {
     useTransform = true;
@@ -452,7 +449,12 @@ function WindowManager() {
 	this.topZ = 100;
 	this.loaded = false;
 
-	this.windowManager.canSave = true;
+	this.canSave = true;
+
+	try {
+		var hasLocalStorage = typeof localStorage !== "undefined";
+		if (!hasLocalStorage) windowManager.canSave  = false;
+	} catch(ex) { console.warn("Local storage access denied.", ex); }
 
 	this.ticking = false;
 
