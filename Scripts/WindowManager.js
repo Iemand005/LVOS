@@ -443,8 +443,6 @@ function WindowManager() {
 	/** @type {DialogMap} @readonly */
 	this._windows = {};
 
-	this._windows = {};
-
 	/** @type {DesktopState | null} */
 	this._windowStates = null;
 
@@ -534,6 +532,8 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
     document.body.classList.toggle("mica", value);
     windowManager.forEachWindow(function(window) { window.mica = value; });
     this._isMicaEnabled = value;
+	this._windows = {};
+
   }
 });
 
