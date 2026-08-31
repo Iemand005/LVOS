@@ -90,13 +90,6 @@ var flags = {
 
 
 var maximizeAnimations = 0;
-// var maximizeAnimationsMaximize = 0;
-
-
-
-
-// flags.compositorResize = true;
-
 
 if (supportsPointer) console.log("Supports pointer events!");
 
