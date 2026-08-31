@@ -48,9 +48,7 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 
-if (isIE) {
-    useTransform = true;
-}
+if (isIE) useTransform = true;
 
 if (!supportsTransform) useTransform = false;
 
