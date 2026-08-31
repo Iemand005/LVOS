@@ -90,7 +90,7 @@ var flags = {
 		this._useMica = value;
 	},
 	windowReaper: false,
-	verboseLags: false
+	verboseLogs: false
 };
 
 //#region Functions
@@ -518,7 +518,7 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 WindowManager.prototype.saveState = function() {
 	if (!this.loaded) return;
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
-	if (flags.verboseLags) console.log("Saving window state.");
+	if (flags.verboseLogs) console.log("Saving window state.");
 	try {
 		if (this.canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
@@ -753,13 +753,11 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     } catch (ex) { /* ignore */ }
 
     cancelDomEvent(event);
-    // Capture the pointer so the drag keeps receiving pointermove/pointerup even
-    // when the cursor moves over an embedded app iframe; otherwise releasing the
-    // button there never reaches this document and the window won't let go.
+	
     if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
         try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
     }
-    // console.log("Activating window", dialog);
+    if (flags.verboseLogs) console.log("Activating window", dialog);
     this.activeDialog = dialog;
     this.enableDialogDrag();
     // Default a window grab to a move; the sizer handler overrides this with a
@@ -933,7 +931,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-    if (flags.verboseLags) console.log(enable ? "Starting drag" : "Ending drag");
+    if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
