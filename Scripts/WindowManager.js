@@ -129,9 +129,7 @@ function isDialog(element) {
  * @param {any} object
  * @returns {object is HTMLElement}
  */
-function isElement(object) {
-    return object && "nodeType" in object;
-}
+function isElement(object) { return object && "nodeType" in object; }
 
 
 /**
@@ -2593,12 +2591,8 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 //#region Event Listeners
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-
-
 window.addEventListener("unload", function() { windowManager.saveState(); }, false);
-
 window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
-
 window.addEventListener("drop", function(e) {
   e.preventDefault();
   if (!e.dataTransfer) return;
