@@ -722,8 +722,6 @@ WindowManager.prototype.focusDialog = function(dialog) {
 
 WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
 
-
-
 WindowManager.prototype.ininializeDialogs = function() {
 	var self = this;
 	var stop = function() { self.disableDialogDrag(); };
@@ -742,8 +740,6 @@ WindowManager.prototype.ininializeDialogs = function() {
     // checkForFlip();
     this.loadState();
 }
-
-
 
 /**
  * Activates the window on which the provided event was fired.
