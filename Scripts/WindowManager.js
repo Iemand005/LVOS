@@ -1237,7 +1237,8 @@ Dialog.prototype.initWithObject = function(object) {
             body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
         var header = this.titleBar;
-        if (header) header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
+        if (header)
+			header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
 
 
         if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
