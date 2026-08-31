@@ -106,6 +106,8 @@ if (!hasLocalStorage) canSave  = false;
 
 if (supportsPointer) console.log("Supports pointer events!");
 
+//#region Functions
+
 /** @param {Event} event */
 function cancelDomEvent(event) {
 	if (typeof event.preventDefault === "function") event.preventDefault();
@@ -430,6 +432,8 @@ function removeWallpaper() {
 	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
 	return wallpaper;
 }
+
+//#endregion
 
 // #region Window Manager
 
