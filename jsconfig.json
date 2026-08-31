@@ -21,6 +21,7 @@
 	"exclude": [
 		"node_modules",
 		"./Applications/**/WebGraphics",
-		"./Applications/StereogramMaker"
+		"./Applications/StereogramMaker",
+		"LVOS-dist"
 	]
 }
