@@ -1197,13 +1197,9 @@ Dialog.prototype.initWithObject = function(object) {
 				div.classList.add(sizerId);
                 /** @type {(this: GlobalEventHandlers, ev: PointerEvent | MouseEvent) => any} */
 				var pointerDown = function (ev) {
-					if ("pointerType" in ev) {
-						if (ev.pointerType === "touch" && !createTouchSizers)
-							return;
-
-						if (supportsPointer && ev.pointerType !== "touch" ||
-							!supportsPointer && ev.type !== "mousedown")
-							return;
+					if ("pointerType" in ev && (ev.pointerType === "touch" && !createTouchSizers || supportsPointer && ev.pointerType !== "touch" || !supportsPointer && ev.type !== "mousedown")) {
+						windowManager.dragAction.set(-1);
+						return;
 					}
 
 					cancelDomEvent(ev);
@@ -1225,19 +1221,7 @@ Dialog.prototype.initWithObject = function(object) {
 					div2.classList.add(touchSizerId);
 					div2.classList.add("touch");
 
-					/** @type {(this: GlobalEventHandlers, ev: PointerEvent) => any} */
-					var touchDown = function (ev) {
-						if (ev.pointerType !== "touch") {
-							windowManager.dragAction.set(-1);
-							return;
-						}
-
-						cancelDomEvent(ev);
-						windowManager.dragAction.set(id);
-						activationHandler(ev);
-					};
-
-					if (supportsPointer) div2.onpointerdown = touchDown;
+					if (supportsPointer) div2.onpointerdown = pointerDown;
 
 					target.appendChild(div2);
 				}
