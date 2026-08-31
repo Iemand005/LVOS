@@ -1201,8 +1201,7 @@ Dialog.prototype.initWithObject = function(object) {
 						if (ev.pointerType === "touch" && !createTouchSizers)
 							return;
 
-						if (supportsPointer && ev.pointerType !== "touch" ||
-							!supportsPointer && ev.type !== "mousedown")
+						if (supportsPointer && ev.pointerType !== "touch" || !supportsPointer && ev.type !== "mousedown")
 							return;
 					}
 
