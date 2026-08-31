@@ -756,7 +756,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     // Capture the pointer so the drag keeps receiving pointermove/pointerup even
     // when the cursor moves over an embedded app iframe; otherwise releasing the
     // button there never reaches this document and the window won't let go.
-    if (supportsPointer && event && "pointerId" in event && event.pointerId !== undefined && event.target && typeof event.target.setPointerCapture === "function") {
+    if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
         try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
     }
     // console.log("Activating window", dialog);
