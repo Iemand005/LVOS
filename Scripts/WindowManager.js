@@ -15,8 +15,7 @@
 var useMica = false,
 	canSave = true,
 	useTransform = true,
-	useScale = false,
-	hasLocalStorage = false;
+	useScale = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
 var supportsPointer = typeof window !== "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
@@ -90,7 +89,8 @@ var maximizeAnimations = 0;
 // var maximizeAnimationsMaximize = 0;
 
 try {
-    hasLocalStorage = typeof localStorage !== "undefined";
+    var hasLocalStorage = typeof localStorage !== "undefined";
+	if (!hasLocalStorage) canSave  = false;
 } catch(ex) { console.warn("Local storage access denied.", ex); }
 
 if (isIE) {
@@ -99,7 +99,6 @@ if (isIE) {
 
 // flags.compositorResize = true;
 
-if (!hasLocalStorage) canSave  = false;
 
 if (supportsPointer) console.log("Supports pointer events!");
 
