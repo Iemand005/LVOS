@@ -15,7 +15,6 @@
 var useMica = false,
 	reflections = false,
 	canSave = true,
-	flipped = false,
 	useTransform = true,
 	useScale = false,
 	hasLocalStorage = false;
@@ -310,7 +309,7 @@ function messageReceived(type, data, source){ // I have yet to make a wrapper fu
 }
 
 function swapMetroBody() {
-    if (!flipped) return;
+    if (!windowManager.flipped) return;
     windowManager.activeDialogToMetro();
 }
 /** @param {boolean} enable */
@@ -325,8 +324,8 @@ function flip(enable){
 function flipHandler(enable){
 	DesktopManager.toggleCharms(false);
     swapMetroBody();
-    flipped = enable;
-	return flipped;
+    windowManager.flipped = enable;
+	return windowManager.flipped;
 }
 
 /** @param {boolean} [enable] */
@@ -457,6 +456,9 @@ function WindowManager() {
 	this.loaded = false;
 
 	this.ticking = false;
+
+	this.flipped = false,
+
 
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
