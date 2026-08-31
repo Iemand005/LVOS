@@ -453,7 +453,7 @@ function WindowManager() {
 
 	try {
 		var hasLocalStorage = typeof localStorage !== "undefined";
-		if (!hasLocalStorage) windowManager.canSave  = false;
+		if (!hasLocalStorage) this.canSave  = false;
 	} catch(ex) { console.warn("Local storage access denied.", ex); }
 
 	this.ticking = false;
