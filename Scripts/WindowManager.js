@@ -1209,7 +1209,7 @@ Dialog.prototype.initWithObject = function(object) {
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
 
-				if (!createTouchSizers) {
+				if (createTouchSizers) {
 					var touchSizerId = "touch-sizer-" + id;
 
 					var div2 = this.getElementByTagOrClassName(touchSizerId);
