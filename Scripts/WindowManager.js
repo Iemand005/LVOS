@@ -1181,7 +1181,7 @@ Dialog.prototype.initWithObject = function(object) {
 		if (!supportsPointer) createTouchSizers = false;
 
         if(borderSection && !this.fixed && createSizers) {
-            for (var index = 0; index < 8; index++) {
+            for (var index = 0; index < 8; index++) (function (/** @type {number} */id) {
 
                 var sizerId = "sizer-" + (index + 1);
 
@@ -1199,7 +1199,7 @@ Dialog.prototype.initWithObject = function(object) {
                 if (supportsPointer) div.onpointerdown = pointerDown;
                 else div.onmousedown = pointerDown;
                 target.appendChild(div);
-            }
+            }).call(this, index + 1);
 
 			if (createTouchSizers) {
 				for (var i = 0; i < 8; i++) {
