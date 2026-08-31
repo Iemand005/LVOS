@@ -89,7 +89,7 @@ var maximizeAnimations = 0;
 
 try {
     var hasLocalStorage = typeof localStorage !== "undefined";
-	if (!hasLocalStorage) canSave  = false;
+	if (!hasLocalStorage) windowManager.canSave  = false;
 } catch(ex) { console.warn("Local storage access denied.", ex); }
 
 if (isIE) {
@@ -386,7 +386,7 @@ function handleStorageException(exception){
     console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
     console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
     localStorage.windowState = null;
-    canSave = false;
+    windowManager.canSave = false;
 }
 
 
@@ -452,7 +452,7 @@ function WindowManager() {
 	this.topZ = 100;
 	this.loaded = false;
 
-	this.canSave = true;
+	this.windowManager.canSave = true;
 
 	this.ticking = false;
 
@@ -546,7 +546,7 @@ WindowManager.prototype.saveState = function() {
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	console.log("Saving window state.");
 	try {
-		if (canSave && typeof localStorage !== "undefined")
+		if (windowManager.canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
 		handleStorageException(exception);
@@ -556,7 +556,7 @@ WindowManager.prototype.saveState = function() {
 /** @param {Dialog} [dialog] */
 WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
 	console.log("Loading window state.");
-	if (!canSave) {
+	if (!windowManager.canSave) {
 		console.log("Storage access is disabled for this session!");
 		return;
 	}
