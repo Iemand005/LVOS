@@ -18,13 +18,35 @@
  * otherwise a local "./dist" folder.
  */
 
-import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = join(ROOT, "Scripts");
+
+/**
+ * Static assets copied verbatim into the dist folder. Each entry's "from" is
+ * resolved relative to ROOT and its "to" relative to the dist folder.
+ */
+const ASSETS = [
+	{ from: "Styles", to: "Styles" },
+	{ from: "manifest.json", to: "manifest.json" },
+	{ from: "manifest-mobile.json", to: "manifest-mobile.json" },
+	{ from: "icon-192.png", to: "icon-192.png" },
+	{ from: "icon-512.png", to: "icon-512.png" }
+];
+
+/**
+ * Production HTML generated into the dist folder. Keys are the output filename;
+ * "scripts" is the JS bundle loaded by that page, "source" is the src HTML that
+ * this page is derived from (used only for reference, not parsing).
+ */
+const PAGES = {
+	"index.html": { source: "index.html", script: "desktop.dist.js" },
+	"mobile.html": { source: "mobile.html", script: "mobile.dist.js" }
+};
 
 /**
  * Ordered source lists per bundle. Order is load-critical; do not reorder
@@ -67,6 +89,41 @@ function resolveDist() {
 	const sibling = join(ROOT, "LVOS-dist");
 	if (existsSync(sibling)) return sibling;
 	return join(ROOT, "dist");
+}
+
+function copyAssets(dist) {
+	for (const asset of ASSETS) {
+		const src = join(ROOT, asset.from);
+		const dest = join(dist, asset.to);
+		if (!existsSync(src)) {
+			console.warn("Asset not found, skipping: " + asset.from);
+			continue;
+		}
+		cpSync(src, dest, { recursive: true });
+		console.log("[copy] " + asset.from + " -> " + dest);
+	}
+}
+
+function writePages(dist) {
+	for (const [page, config] of Object.entries(PAGES)) {
+		const srcPath = join(ROOT, config.source);
+		if (!existsSync(srcPath)) {
+			console.warn(config.source + " not found; skipping " + page + ".");
+			continue;
+		}
+
+		// Replace every <script> tag (external or inline) with a single fixed
+		// deferred bundle tag pointing at the production bundle.
+		const src = readFileSync(srcPath, "utf8");
+		const out = src
+			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+			.replace(
+				/<\/head>/i,
+				'<script src="./' + config.script + '" defer></script>\n</head>'
+			);
+		writeFileSync(join(dist, page), out);
+		console.log("[page] " + page + " -> scripts replaced with " + config.script);
+	}
 }
 
 function readGroup(files) {
