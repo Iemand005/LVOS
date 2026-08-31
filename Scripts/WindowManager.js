@@ -451,7 +451,7 @@ function WindowManager() {
 	this._isWindowUpdatesEnabled = false;
 
 	this.isDragging = false;
-
+	/** @readonly */
 	this.dragAction = new DragAction;
 
 	/** @type {Dialog | null} */
@@ -532,8 +532,6 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
     document.body.classList.toggle("mica", value);
     windowManager.forEachWindow(function(window) { window.mica = value; });
     this._isMicaEnabled = value;
-	this._windows = {};
-
   }
 });
 
