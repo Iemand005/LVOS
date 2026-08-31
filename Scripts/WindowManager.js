@@ -1199,7 +1199,7 @@ Dialog.prototype.initWithObject = function(object) {
                 div.draggable = false;
 				div.id = id.toString();
 				div.classList.add(sizerId);
-                /** @type {(this: GlobalEventHandlers | HTMLElement, ev: PointerEvent | MouseEvent) => any} */
+				/** @param {PointerEvent | MouseEvent} ev */
 				var pointerDown = function (ev) {
 					if (!activationHandler(ev)) return;
 					windowManager.dragAction.set(id);
