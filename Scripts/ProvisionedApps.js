@@ -309,10 +309,7 @@ function dockApp(dialog) {
 
 // function loadApps
 var initApps = function () {
-	if (typeof appRegistry !== "undefined") {
-		appRegistry.addApps(applications, games);
-		appRegistry.loadApps();
-	}
+
 	if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
@@ -331,8 +328,8 @@ var initApps = function () {
 };
 
 if (typeof appRegistry !== "undefined") {
-		appRegistry.addApps(applications, games);
-		appRegistry.loadApps();
-	}
+	appRegistry.addApps(applications, games);
+	appRegistry.loadApps();
+}
 
 window.addEventListener("load", initApps, false);
