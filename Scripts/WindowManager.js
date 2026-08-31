@@ -789,6 +789,9 @@ window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 /** @type {number} */
 ClickOffset.dragStopTimer = 0;
 
+/** @param {PointerEvent} ev */
+ClickOffset.handleMouseDrag = function (ev) {}
+
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", function(ev) {
     // console.log("mouse moving");
 	//if (!ev.buttons) ClickOffset._overlay.remove();
