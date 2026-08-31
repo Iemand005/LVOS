@@ -44,6 +44,9 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 	);
 })();
 
+/** @type {"webkitTransitionEnd" | "transitionend"} */
+var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
+
 
 if (isIE) {
     useTransform = true;
@@ -197,9 +200,6 @@ function skewElement(element, skew) {
 	element.style.transform = transform;
 	element.style.webkitTransform = transform;
 }
-
-/** @type {"webkitTransitionEnd" | "transitionend"} */
-var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 /**
  * @param {HTMLElement} element
