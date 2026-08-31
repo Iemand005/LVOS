@@ -26,7 +26,7 @@ var supportsObjectFit = Boolean(document.documentElement && document.documentEle
 var supportsTransitions = false;
 var supportsTransform = false;
 
-/** @constant */
+/** @readonly */
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
