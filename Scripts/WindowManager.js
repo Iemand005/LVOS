@@ -1194,35 +1194,35 @@ Dialog.prototype.initWithObject = function(object) {
 
                 var sizerId = "sizer-" + id;
 
-                var div = this.getElementByTagOrClassName(sizerId);
-                if (!div || !(isElement(div))) div = document.createElement("div");
-                div.draggable = false;
-				div.id = id.toString();
-				div.classList.add(sizerId);
+                var sizer = this.getElementByTagOrClassName(sizerId);
+                if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
+                sizer.draggable = false;
+				sizer.id = id.toString();
+				sizer.classList.add(sizerId);
 				/** @param {PointerEvent | MouseEvent} ev */
 				var pointerDown = function (ev) {
 					if (!activationHandler(ev)) return;
 					windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				}; // You can also put id in here instead for optimal efficiency and minimalism, but Internet Explorer is not a very stubborn browser but Netscape is and does not instantiate the index variable but keeps one in memory resulting in resize direction being 9. Despite this it uses very little memory compared to Firefox and Chrome?
-                if (supportsPointer) div.onpointerdown = pointerDown;
-                else div.onmousedown = pointerDown;
-                target.appendChild(div);
+                if (supportsPointer) sizer.onpointerdown = pointerDown;
+                else sizer.onmousedown = pointerDown;
+                target.appendChild(sizer);
 
 				if (createTouchSizers) {
 					var touchSizerId = "touch-sizer-" + id;
 
-					var div2 = this.getElementByTagOrClassName(touchSizerId);
-					if (!div2 || !isElement(div2)) div2 = document.createElement("div");
+					var touchSizer = this.getElementByTagOrClassName(touchSizerId);
+					if (!touchSizer || !isElement(touchSizer)) touchSizer = document.createElement("div");
 
-					div2.draggable = false;
-					div2.id = "touch-" + id;
-					div2.classList.add(touchSizerId);
-					div2.classList.add("touch");
+					touchSizer.draggable = false;
+					touchSizer.id = "touch-" + id;
+					touchSizer.classList.add(touchSizerId);
+					touchSizer.classList.add("touch");
 
-					if (supportsPointer) div2.onpointerdown = pointerDown;
+					if (supportsPointer) touchSizer.onpointerdown = pointerDown;
 
-					target.appendChild(div2);
+					target.appendChild(touchSizer);
 				}
             };
 			
