@@ -9,7 +9,7 @@
    /
 \*/
 
-"use strict"
+"use strict";
 
 // Modifiable settings
 var useMica = false,
