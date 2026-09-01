@@ -172,7 +172,7 @@ AppRegistry.prototype.setWallpaper = function(id) {
 	if (!app) return;
 
 	wallpaperFrame.src = app.src;
-}
+};
 
 var appRegistry = new AppRegistry;
 window.appRegistry = appRegistry;
