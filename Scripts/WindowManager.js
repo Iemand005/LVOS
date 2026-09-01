@@ -728,7 +728,7 @@ WindowManager.prototype.ininializeDialogs = function() {
 
     });
     this.loadState();
-}
+};
 
 /**
  * Activates the window on which the provided event was fired.
@@ -753,7 +753,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     } catch (ex) { /* ignore */ }
 
     cancelDomEvent(event);
-	
+
     if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
         try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
     }
@@ -766,7 +766,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
     dialog.setClickOffset(event.clientX, event.clientY);
     dialog.activate();
     return dialog;
-}
+};
 
 
 /**
