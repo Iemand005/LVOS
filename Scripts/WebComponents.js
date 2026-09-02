@@ -1,6 +1,6 @@
 
-class Window extends HTMLDivElement {
-	
+class WindowDiv extends HTMLDivElement {
+
 }
 
 class OdometerTrack extends HTMLSpanElement {
@@ -17,10 +17,6 @@ class OdometerTrack extends HTMLSpanElement {
 		this.style.transform = `translateY(-${shiftY}px)`;
 	}
 }
-
-customElements.define("odometer-track", OdometerTrack, {
-	extends: "span"
-});
 
 class OdometerTime extends HTMLTimeElement {
 
@@ -88,6 +84,10 @@ class OdometerTime extends HTMLTimeElement {
 		this.tracks.forEach((track, index) => track.setDigit(digits[index]));
 	}
 }
+
+customElements.define("odometer-track", OdometerTrack, {
+	extends: "span"
+});
 
 customElements.define("odometer-time", OdometerTime, {
 	extends: "time"
