@@ -22,8 +22,8 @@ class WindowDiv extends HTMLDivElement {
 		this.style.viewTransitionName = "window-fullscreen";
 
 		const self = this;
-		const dialgo = this.dialog;
-		if (!dialgo) return;
+		const dialog = this.dialog;
+		if (!dialog) return;
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
@@ -31,10 +31,10 @@ class WindowDiv extends HTMLDivElement {
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
 			transition.finished.finally(() => {
-				if (dialgo.maximizeAnimations <= 1) {
+				if (dialog.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
 				}
-				dialgo.maximizeAnimations--;
+				dialog.maximizeAnimations--;
 			});
 		} else this.classList.toggle("maximized", enable);
 	}
