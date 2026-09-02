@@ -14,7 +14,7 @@ class WindowDiv extends HTMLDivElement {
 	/**
 	 * @param {boolean} [enable] Enable maximization
 	 */
-	toggleMaximized(enable) {
+	toggleMaximizedVT(enable) {
 
 		if (document.activeViewTransition)
 			document.activeViewTransition.skipTransition();

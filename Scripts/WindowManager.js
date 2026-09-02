@@ -1848,7 +1848,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	this.maximizeAnimations++;
 	if (flags.useViewTransitionMaximize && "dialog" in this.target)
-		return this.target.toggleMaximized(enable);
+		return this.target.toggleMaximizedVT(enable);
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name === "transform" || name === "width";
