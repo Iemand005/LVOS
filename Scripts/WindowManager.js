@@ -1842,8 +1842,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name === "transform" || name === "width";
-	}, undefined, function(isMaximized) {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+	}, undefined, function() {
 		self.maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
