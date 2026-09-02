@@ -1521,7 +1521,7 @@ Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() { 
 		var target = this.target;
 
-		if (target && typeof target.maximize === "function") {
+		if (target && "dialog" in target) {
 			return /** @type {WindowDiv} */ (target);
 		}
 
