@@ -969,7 +969,7 @@ function Dialog(object, create) {
 	this._maxHeight = 1000;
 	this._minAspectRatio = 0;
 	this._maxAspectRatio = Infinity;
-	this._mica = useMica;
+	this._mica = flags.useMica;
 
 	this._useTransform = useTransform;
 	this._useScale = useScale;
