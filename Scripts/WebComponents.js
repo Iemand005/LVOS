@@ -1,6 +1,8 @@
 
 class WindowDiv extends HTMLDivElement {
-
+	connectedCallback() {
+		console.log("I connected balls");
+	}
 }
 
 class OdometerTrack extends HTMLSpanElement {
