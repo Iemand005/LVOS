@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable jsdoc/require-returns-description */
 /* eslint-disable jsdoc/require-param-description */
 /* eslint-disable jsdoc/require-returns */
@@ -304,7 +305,7 @@ var windowButtons = {
 };
 
 
-/** @param {*} properties */
+/** @param {WindowProperties} properties */
 function stringifyDialogProperties(properties){
     return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
 }
