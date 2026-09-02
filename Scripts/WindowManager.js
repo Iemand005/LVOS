@@ -1,3 +1,6 @@
+/* eslint-disable jsdoc/require-returns-description */
+/* eslint-disable jsdoc/require-param-description */
+/* eslint-disable jsdoc/require-returns */
 /*\
    \________
    / ______/\                                               \\
@@ -124,7 +127,7 @@ function isDialog(element) {
 }
 
 /**
- * @param {any} object
+ * @param {Node} object
  * @returns {object is HTMLElement}
  */
 function isElement(object) { return object && "nodeType" in object; }
