@@ -2298,7 +2298,8 @@ Dialog.prototype.createPopout = function() {
 	var rect = body.getBoundingClientRect();
 	var titleBarHeight = titleBar && titleBar.getBoundingClientRect().height || 0;
 	var viewBoxPosition = getViewBoxPosition();
-	var properties = {
+
+	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties({
 		scrollbars: true,
 		resizable: true,
 		status: false,
@@ -2309,9 +2310,7 @@ Dialog.prototype.createPopout = function() {
 		height: rect.height,
 		left: rect.left + viewBoxPosition.left,
 		top: rect.top + viewBoxPosition.top + titleBarHeight
-	};
-
-	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties(properties));
+	}));
 	if (!this._popupWindow) return;
 	var self = this;
 	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
