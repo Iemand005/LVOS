@@ -22,6 +22,12 @@ interface DocumentPictureInPicture extends EventTarget {
 	): void;
 }
 
+type CustomElementsByIsMap =
+    Partial<{
+        [K in keyof HTMLElementTagNameMap]:
+            Record<string, HTMLElementTagNameMap[K]>
+    }>;
+
 interface CustomElementsByIs {
     time: {
         "odometer-time": OdometerTime;
