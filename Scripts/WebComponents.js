@@ -1,7 +1,6 @@
 
 class WindowDiv extends HTMLDivElement {
 
-	// constraintRotation
 	constructor() {
 		super();
 		/** @type {Dialog?} */
