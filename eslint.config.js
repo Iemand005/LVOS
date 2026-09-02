@@ -46,6 +46,11 @@ export default defineConfig(
 			"no-undef": "error",
 			"eqeqeq": "warn",
 
+			"jsdoc/require-jsdoc": "off",
+			"jsdoc/require-returns-description": "off",
+			"jsdoc/require-param-description": "off",
+			"jsdoc/require-returns": "off",
+
 			"no-restricted-syntax": [
 				"error",
 				{
