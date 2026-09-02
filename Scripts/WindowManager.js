@@ -1846,7 +1846,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	this.setZ();
 
-	maximizeAnimations++;
+	this.maximizeAnimations++;
 	if (flags.useViewTransitionMaximize && "dialog" in this.target) {
 		this.target.toggleMaximized(enable);
 
@@ -1871,10 +1871,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 			transition.finished.finally(function() {
 				if (!self.target) return;
-				if (maximizeAnimations <= 1) {
+				if (self.maximizeAnimations <= 1) {
 					self.target.style.viewTransitionName = "";
 				}
-				maximizeAnimations--;
+				self.maximizeAnimations--;
 			});
 		} else this.target.classList.toggle("maximized", enable);
 		return;
@@ -1884,7 +1884,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		return name === "transform" || name === "width";
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-		maximizeAnimations--;
+		self.maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
 	}, function onEnd(enabled) {
