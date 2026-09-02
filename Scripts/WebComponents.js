@@ -1,6 +1,6 @@
 class OdometerTrack extends HTMLSpanElement {
 	connectedCallback() {}
-
+	/** @param {number} digit Digit value */
 	setDigit(digit) {
 		// 40px height per character row
 		const shiftY = digit * 40; 
