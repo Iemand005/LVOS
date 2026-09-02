@@ -12,9 +12,7 @@ class WindowDiv extends HTMLDivElement {
 		console.log("I connected balls");
 	}
 	/**
-	 * 
 	 * @param {boolean} enable Enable maximization
-	 * @param {number} maximizeAnimations Amount of ongoing animation
 	 */
 	toggleMaximized(enable) {
 
@@ -26,6 +24,8 @@ class WindowDiv extends HTMLDivElement {
 		this.style.viewTransitionName = "window-fullscreen";
 
 		const self = this;
+		const dialgo = this.dialog;
+		if (!dialgo) return;
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(function() {
@@ -38,10 +38,10 @@ class WindowDiv extends HTMLDivElement {
 			});
 
 			transition.finished.finally(function() {
-				if (this.dialog.maximizeAnimations <= 1) {
+				if (dialgo.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
 				}
-				this.dialog.maximizeAnimations--;
+				dialgo.maximizeAnimations--;
 			});
 		} else this.classList.toggle("maximized", enable);
 	}
