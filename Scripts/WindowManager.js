@@ -310,14 +310,6 @@ function getViewBoxPosition() {
 	return { left: window.screenLeft, top: window.screenTop };
 }
 
-/** @param {HTMLElement | Event | null} object */
-function getObjectDialog(object){
-	if (!object) return console.log(object);
-	if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
-	else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
-	else if (isElement(object)) return getObjectDialog(object.parentElement);
-}
-
 /** @param {number} value */
 function toPixels(value) {
 	return Math.round(value) + "px";
