@@ -1,42 +1,42 @@
 
 interface Array<T> {
-  forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
+forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
 }
 
 interface Application {
-  title: string;
-  id: string;
-  src: string;
-  fixed?: boolean;
-  scroll?: boolean;
-  hidden?: boolean;
-  camera?: boolean;
-  microphone?: boolean;
-  moveEvents?: boolean;
-  classes?: string[];
-  minWidth?: number;
-  minHeight?: number;
-  audioVisualizer?: boolean;
-  screensaver?: boolean;
-  wallpaper?: boolean;
-  iconUrl?: string;
-  accentColor?: string;
+title: string;
+id: string;
+src: string;
+fixed?: boolean;
+scroll?: boolean;
+hidden?: boolean;
+camera?: boolean;
+microphone?: boolean;
+moveEvents?: boolean;
+classes?: string[];
+minWidth?: number;
+minHeight?: number;
+audioVisualizer?: boolean;
+screensaver?: boolean;
+wallpaper?: boolean;
+iconUrl?: string;
+accentColor?: string;
 }
 
 interface DialogState {
-  title: string;
-  x: number;
-  y: number;
-  z: number;
-  width: number;
-  height: number;
-  open: boolean;
-  maximized: boolean;
+title: string;
+x: number;
+y: number;
+z: number;
+width: number;
+height: number;
+open: boolean;
+maximized: boolean;
 }
 
 interface Position {
-  x: number;
-  y: number;
+x: number;
+y: number;
 }
 
 type Side = "left" | "right" | "top" | "bottom";
@@ -48,21 +48,21 @@ type WindowCallback = (dialog: Dialog, id: string) => void
 
 
 declare global {
-  interface HTMLElementEventMap {
-    webkitTransitionEnd: TransitionEvent;
-    webkitAnimationEnd: AnimationEvent;
-    webkitAnimationIteration: AnimationEvent;
-    webkitAnimationStart: AnimationEvent;
-  }
+interface HTMLElementEventMap {
+	webkitTransitionEnd: TransitionEvent;
+	webkitAnimationEnd: AnimationEvent;
+	webkitAnimationIteration: AnimationEvent;
+	webkitAnimationStart: AnimationEvent;
+}
 
-  interface GraphicsBase {
-    canvas: HTMLCanvasElement;
-  }
+interface GraphicsBase {
+	canvas: HTMLCanvasElement;
+}
 
-  interface Graphics2D extends GraphicsBase {
-    ctx: CanvasRenderingContext2D;
-    resize();
-  }
+interface Graphics2D extends GraphicsBase {
+	ctx: CanvasRenderingContext2D;
+	resize();
+}
 }
 
 type Cursor = "alias" | "all-scroll" | "auto" | "cell" | "context-menu" | "col-resize" | "copy" | "crosshair" | "default" | "e-resize" | "ew-resize" | "grab" | "grabbing" | "help" | "move" | "n-resize" | "ne-resize" | "nesw-resize" | "ns-resize" | "nw-resize" | "nwse-resize" | "no-drop" | "none" | "not-allowed" | "pointer" | "progress" | "row-resize" | "s-resize" | "se-resize" | "sw-resize" | "text" | "vertical-text" | "w-resize" | "wait" | "zoom-in" | "zoom-out" | "initial";
@@ -70,24 +70,24 @@ type Cursor = "alias" | "all-scroll" | "auto" | "cell" | "context-menu" | "col-r
 type MessageType = "open" | "windowSize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme";
 
 interface WindowProperties {
-    scrollbars: boolean;
-    resizable: boolean;
-    status: boolean;
-    location: boolean;
-    toolbar: boolean;
-    menubar: boolean;
-    width: number;
-    height: number;
-    left: number;
-    top: number;
+	scrollbars: boolean;
+	resizable: boolean;
+	status: boolean;
+	location: boolean;
+	toolbar: boolean;
+	menubar: boolean;
+	width: number;
+	height: number;
+	left: number;
+	top: number;
 }
 
 interface Identity {
-    name: string;
+	name: string;
 }
 
 interface LVMessage {
-    type: MessageType;
-    data: unknown;
-    id: string;
+	type: MessageType;
+	data: unknown;
+	id: string;
 }
