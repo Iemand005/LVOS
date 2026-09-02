@@ -1517,6 +1517,10 @@ Object.defineProperty(Dialog.prototype, "maximized", {
     }
 });
 
+Object.defineProperty(Dialog.prototype, "windowTarget", {
+	get: function() { return this.target; }
+})
+
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
     this.title = title;
