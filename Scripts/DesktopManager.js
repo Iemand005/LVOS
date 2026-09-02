@@ -64,9 +64,8 @@ var onLoad = function () {
 		var updateClock = function() {
             var date = new Date();
             clock.dateTime = date.toISOString();
-            if (!("tracks" in clock)) {
+            if (!("tracks" in clock))
                 clock.innerHTML = date.toLocaleTimeString();
-            }
 		};
 
 		updateClock();
