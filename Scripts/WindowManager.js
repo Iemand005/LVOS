@@ -1001,7 +1001,7 @@ function Dialog(object, create) {
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
 	this._stateOpen = false;
-
+	/** @readonly */
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
 	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?, _fsTokenAtStart: number? }} */
