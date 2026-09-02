@@ -368,7 +368,9 @@ function createDialog() {
     if (!template) return null;
     var clone = template.cloneNode(true);
     if (container && clone instanceof Element) {
+		/** @type {Element | WindowDiv} */
         var dialogElement = container.appendChild(removeComments(clone));
+		if ("dialog" in dialogElement) dialogElement.dialog = this;
         if (isElement(dialogElement)) return dialogElement;
     }
     return null;
