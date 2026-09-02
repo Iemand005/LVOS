@@ -109,4 +109,4 @@ LVMessenger.registerThemeChangeHandler = function() {
 		if (message === "theme")
 			document.body.className = data.className;
 	});
-}
+};
