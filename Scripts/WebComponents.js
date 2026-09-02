@@ -40,9 +40,7 @@ class OdometerDigit extends HTMLSpanElement {
 		super();
 		this.lineHeight = 40;
 	}
-	connectedCallback() {
-		this.setAttribute("is", "odometer-track");
-	}
+	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
 }
