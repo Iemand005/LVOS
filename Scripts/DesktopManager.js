@@ -57,13 +57,17 @@ var onLoad = function () {
 
 		appButtons.appendChild(startButton);
 
+        /** @type {HTMLTimeElement | OdometerTime} */
 		var clock = document.createElement("time", {is: "odometer-time"});
 		clock.id = "clock";
 
 		var updateClock = function() {
             var date = new Date();
-			clock.innerHTML = date.toLocaleTimeString();
+			// clock.innerHTML = date.toLocaleTimeString();
             clock.dateTime = date.toISOString();
+            if (!("odometerActive" in clock)) {
+                clock.innerHTML = date.toLocaleTimeString();
+            }
 		};
 
 		updateClock();
