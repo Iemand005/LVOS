@@ -370,7 +370,6 @@ function createDialog() {
     if (container && clone instanceof Element) {
 		/** @type {Element | WindowDiv} */
         var dialogElement = container.appendChild(removeComments(clone));
-		if ("dialog" in dialogElement) dialogElement.dialog = this;
         if (isElement(dialogElement)) return dialogElement;
     }
     return null;
@@ -1087,7 +1086,10 @@ Dialog.prototype.initWithObject = function(object) {
             this.close();
         } else {
             this.application = object;
-            this.target = createDialog();
+            var newDialog = createDialog();
+			if ("dialog" in newDialog) this.target.dialog = this;
+			this.target = newDialog;
+
             if (object.classes && typeof object.classes === "object"){
                 object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
             }
