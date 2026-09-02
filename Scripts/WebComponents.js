@@ -49,7 +49,11 @@ class OdometerTime extends HTMLTimeElement {
 		if (track instanceof OdometerTrack) this.tracks.push(track);
 		this.appendChild(track);
 	}
-
+	/**
+	 * @param {string} name Name of the attribute
+	 * @param {string} oldValue Old value
+	 * @param {string} newValue New value
+	 */
 	attributeChangedCallback(name, oldValue, newValue) {
         if (name === "datetime" && oldValue !== newValue) {
             this.update();
