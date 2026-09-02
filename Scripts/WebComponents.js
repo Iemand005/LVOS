@@ -16,10 +16,8 @@ class WindowDiv extends HTMLDivElement {
 	 */
 	toggleMaximized(enable) {
 
-		if (document.activeViewTransition) {
+		if (document.activeViewTransition)
 			document.activeViewTransition.skipTransition();
-		}
-
 
 		this.style.viewTransitionName = "window-fullscreen";
 
