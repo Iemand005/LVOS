@@ -28,9 +28,9 @@ class WindowDiv extends HTMLDivElement {
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
 
-			transition.ready.catch((ev) => console.warn("transition interrupted:", ev));
+			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
-			transition.finished.finally(function() {
+			transition.finished.finally(() => {
 				if (dialgo.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
 				}
