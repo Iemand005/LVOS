@@ -50,6 +50,7 @@ export default defineConfig(
 			"jsdoc/require-returns-description": "off",
 			"jsdoc/require-param-description": "off",
 			"jsdoc/require-returns": "off",
+			"jsdoc/no-undefined-types": "off",
 
 			"no-restricted-syntax": [
 				"error",
