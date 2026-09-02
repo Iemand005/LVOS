@@ -1777,7 +1777,6 @@ Dialog.prototype.stopAnimating = function () {
  * @param {string} [animationEndTrigger]
  * @param {()=>void} [onEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
- * @returns
  */
 Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
 	this.toggleClassAnimated(className, force, function(propertyName) {
@@ -1786,10 +1785,9 @@ Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationE
 };
 
 /**
+ * @param {(this:Dialog)=>void} [onToggled]
  * @param {(name:string)=>boolean} [onTransitionEnd]
  * @param {(this:Dialog)=>void} [onEnd]
- * @param {(this:Dialog)=>void} [onToggled]
- * @returns
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 	var target = this.target;
@@ -1826,11 +1824,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (self.target && onToggled) onToggled.call(self, enabled = setClass(self.target, className, force));
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); });
 };
-/** @param {boolean} [isMaximized] */
-Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
-    if (!this.target) return;
-};
-
 
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
