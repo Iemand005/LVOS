@@ -13,10 +13,8 @@
 	},
 	"ignoreDeprecations": "6.0",
 	"include": [
-		"./Scripts/WebGraphics",
+		"./Scripts/**",
 		"*.d.ts",
-		"**/*.js",
-		"**/*.d.ts"
 	],
 	"exclude": [
 		"node_modules",
