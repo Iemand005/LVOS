@@ -1169,7 +1169,7 @@ Dialog.prototype.initWithObject = function(object) {
 					target.appendChild(touchSizer);
 				}
 			};
-			
+
 			for (var i = 0; i < 8; i++) createSizer.call(this, i + 1);
 		}
 
