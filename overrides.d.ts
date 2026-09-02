@@ -22,6 +22,12 @@ interface DocumentPictureInPicture extends EventTarget {
 	): void;
 }
 
+interface CustomElementsByIs {
+    time: {
+        "odometer-time": OdometerTime;
+    };
+}
+
 declare global {
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
