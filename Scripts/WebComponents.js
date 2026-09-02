@@ -52,9 +52,7 @@ class OdometerDigit extends HTMLSpanElement {
 
 class OdometerTime extends HTMLTimeElement {
 
-	static get observedAttributes() {
-        return ["datetime"];
-    }
+	static get observedAttributes() { return ["datetime"]; }
 
 	constructor() {
 		super();
