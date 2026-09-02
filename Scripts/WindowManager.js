@@ -1241,8 +1241,8 @@ Object.defineProperty(Dialog.prototype, "frame", {
 });
 Dialog.prototype.reportState = function() {
 	this.messageFrame("windowSize", {});
-	this.messageFrame("theme", {className: document.body.className})
-}
+	this.messageFrame("theme", {className: document.body.className});
+};
 /**
  * @param {boolean} [forceOpen]
  * @param {boolean} [kill]
