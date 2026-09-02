@@ -26,6 +26,9 @@ interface CustomElementsByIs {
     time: {
         "odometer-time": OdometerTime;
     };
+	span: {
+		"odometer-track": OdometerTrack;
+	}
 }
 
 declare global {
