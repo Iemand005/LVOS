@@ -1,42 +1,42 @@
 
 interface Array<T> {
-forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
+	forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
 }
 
 interface Application {
-title: string;
-id: string;
-src: string;
-fixed?: boolean;
-scroll?: boolean;
-hidden?: boolean;
-camera?: boolean;
-microphone?: boolean;
-moveEvents?: boolean;
-classes?: string[];
-minWidth?: number;
-minHeight?: number;
-audioVisualizer?: boolean;
-screensaver?: boolean;
-wallpaper?: boolean;
-iconUrl?: string;
-accentColor?: string;
+	title: string;
+	id: string;
+	src: string;
+	fixed?: boolean;
+	scroll?: boolean;
+	hidden?: boolean;
+	camera?: boolean;
+	microphone?: boolean;
+	moveEvents?: boolean;
+	classes?: string[];
+	minWidth?: number;
+	minHeight?: number;
+	audioVisualizer?: boolean;
+	screensaver?: boolean;
+	wallpaper?: boolean;
+	iconUrl?: string;
+	accentColor?: string;
 }
 
 interface DialogState {
-title: string;
-x: number;
-y: number;
-z: number;
-width: number;
-height: number;
-open: boolean;
-maximized: boolean;
+	title: string;
+	x: number;
+	y: number;
+	z: number;
+	width: number;
+	height: number;
+	open: boolean;
+	maximized: boolean;
 }
 
 interface Position {
-x: number;
-y: number;
+	x: number;
+	y: number;
 }
 
 type Side = "left" | "right" | "top" | "bottom";
