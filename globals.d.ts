@@ -81,3 +81,13 @@ interface WindowProperties {
     left: number;
     top: number;
 }
+
+interface Identity {
+    name: string;
+}
+
+interface LVMessage {
+    type: MessageType;
+    data: unknown;
+    id: string;
+}

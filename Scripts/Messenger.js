@@ -8,18 +8,6 @@ function LVMessenger(){
 }
 
 /**
- * @typedef Identity
- * @prop {string} name
- */
-
-/**
- * @typedef LVMessage
- * @prop {MessageType} type
- * @prop {*} data
- * @prop {string} id
- */
-
-/**
  * @param {Window} target
  * @param {MessageType} type
  * @param {*} message
