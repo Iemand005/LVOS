@@ -106,15 +106,15 @@ function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico
 
 /** @param {string} url */
 function getDomain(url) {
-    return url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0].split("?")[0];
+	return url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0].split("?")[0];
 }
 
 /** @param {string} url */
 function getSiteName(url) {
-    var parts = getDomain(url).split(".");
-    var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+	var parts = getDomain(url).split(".");
+	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
 
-    return name.charAt(0).toUpperCase() + name.slice(1);
+	return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
 
@@ -145,16 +145,16 @@ function getWindowChromeHeight(window) {
  * @param {number} [rotation]
  */
 function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
-    var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
-    if (skew) transform += " skewX(" + skew + "deg)";
+	var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
+	if (skew) transform += " skewX(" + skew + "deg)";
 	if (scaleX === 1) scaleX = undefined;
 	if (scaleY === 1) scaleY = undefined;
-    if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
-    else {
+	if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
+	else {
 		if (scaleX) transform += "scaleX(" + scaleX + ")";
 		if (scaleY) transform += "scaleY(" + scaleY + ")";
 	}
-    if (rotation) transform += "rotate(" + rotation + "deg)";
+	if (rotation) transform += "rotate(" + rotation + "deg)";
 
 	else {
 		element.style.transform = transform;
@@ -266,23 +266,23 @@ function messageReceived(type, data, source){
 }
 
 function swapMetroBody() {
-    if (!windowManager.flipped) return;
-    windowManager.activeDialogToMetro();
+	if (!windowManager.flipped) return;
+	windowManager.activeDialogToMetro();
 }
 
 /** @param {boolean} enable */
 function flip(enable){
-    var tesktop = bodyCrawler.getDesktop();
-    if (!tesktop) return;
-    tesktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
-    flipHandler(tesktop.classList.toggle("flipped", enable));
+	var tesktop = bodyCrawler.getDesktop();
+	if (!tesktop) return;
+	tesktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
+	flipHandler(tesktop.classList.toggle("flipped", enable));
 }
 
 /** @param {boolean} enable */
 function flipHandler(enable){
 	DesktopManager.toggleCharms(false);
-    swapMetroBody();
-    windowManager.flipped = enable;
+	swapMetroBody();
+	windowManager.flipped = enable;
 	return windowManager.flipped;
 }
 
@@ -295,15 +295,15 @@ function toggleOverlay(enable) {
 
 
 var windowButtons = {
-    eject: 0,
-    full: 1,
-    close: 2
+	eject: 0,
+	full: 1,
+	close: 2
 };
 
 
 /** @param {WindowProperties} properties */
 function stringifyDialogProperties(properties){
-    return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
+	return JSON ? JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "") : "No JSON!";
 }
 
 function getViewBoxPosition() {
@@ -327,50 +327,50 @@ function pixelsToCentimeters(pixels){
 
 /** @param {string} text */
 function fromPixels(text){
-    if (text !== null) try {
-        return typeof text === "number" ? text : parseInt(text.replace("px", ""));
-    } catch (ex) { console.warn("Failed to parse pixels:", ex); }
-    return 0;
+	if (text !== null) try {
+		return typeof text === "number" ? text : parseInt(text.replace("px", ""));
+	} catch (ex) { console.warn("Failed to parse pixels:", ex); }
+	return 0;
 }
 
 /** @param {*} exception */
 function handleStorageException(exception){
-    console.error(exception);
-    console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
-    console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
-    localStorage.windowState = null;
-    windowManager.canSave = false;
+	console.error(exception);
+	console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
+	console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
+	localStorage.windowState = null;
+	windowManager.canSave = false;
 }
 
 
 function getDialogTemplate(){
-    var template = document.querySelector("template") || document.getElementById("window-template");
-    if (!template ) return void console.warn("Couldn't find template!");
-    var content = template;
+	var template = document.querySelector("template") || document.getElementById("window-template");
+	if (!template ) return void console.warn("Couldn't find template!");
+	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-    return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
+	return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
 }
 
 function createDialog() {
-    var container = bodyCrawler.getDialogsContainer();
-    var template = getDialogTemplate();
-    if (!template) return null;
-    var clone = template.cloneNode(true);
-    if (container && clone instanceof Element) {
+	var container = bodyCrawler.getDialogsContainer();
+	var template = getDialogTemplate();
+	if (!template) return null;
+	var clone = template.cloneNode(true);
+	if (container && clone instanceof Element) {
 		/** @type {Element | WindowElement} */
-        var dialogElement = container.appendChild(removeComments(clone));
-        if (isElement(dialogElement)) return dialogElement;
-    }
-    return null;
+		var dialogElement = container.appendChild(removeComments(clone));
+		if (isElement(dialogElement)) return dialogElement;
+	}
+	return null;
 }
 
 /** @param {Element} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
-    element.childNodes.forEach(function (child) {
-        if (child.nodeName === "#comment") element.removeChild(child);
-        else if (isElement(child)) removeComments(child);
-    });
-    return element;
+	element.childNodes.forEach(function (child) {
+		if (child.nodeName === "#comment") element.removeChild(child);
+		else if (isElement(child)) removeComments(child);
+	});
+	return element;
 }
 
 //#endregion
@@ -449,53 +449,53 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 
 Object.defineProperty(WindowManager.prototype, "windowStates", {
   get: function () {
-    if (!this._windowStates && localStorage)
-      try {
-        var string = localStorage.getItem("windowState");
-        if (string === null) return null;
+	if (!this._windowStates && localStorage)
+	  try {
+		var string = localStorage.getItem("windowState");
+		if (string === null) return null;
 		  this._windowStates = JSON.parse(string);
-      } catch (ex) {
-        if (ex instanceof Error) console.error(ex.message);
-      }
-    return this._windowStates;
+	  } catch (ex) {
+		if (ex instanceof Error) console.error(ex.message);
+	  }
+	return this._windowStates;
   }
 });
 
 Object.defineProperty(WindowManager.prototype, "state", {
   get: function () {
-    /** @type {DesktopState} */
-    var state = {};
-    for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
-    return state;
+	/** @type {DesktopState} */
+	var state = {};
+	for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
+	return state;
   }
 });
 
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
   get: function () { return this._isBlurEnabled; },
   set: function (value) {
-    if (typeof value === "boolean") this._isBlurEnabled = value;
+	if (typeof value === "boolean") this._isBlurEnabled = value;
   }
 });
 
 Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
   get: function () {
-    return this._isMicaEnabled;
+	return this._isMicaEnabled;
   },
   set: function (value) {
-    if (typeof value !== "boolean") return;
-    document.body.classList.toggle("mica", value);
-    windowManager.forEachWindow(function(window) { window.mica = value; });
-    this._isMicaEnabled = value;
+	if (typeof value !== "boolean") return;
+	document.body.classList.toggle("mica", value);
+	windowManager.forEachWindow(function(window) { window.mica = value; });
+	this._isMicaEnabled = value;
   }
 });
 
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
-    get: function() { return this._isWindowUpdatesEnabled; },
-    set: function(value) {
-        if (value) window.addEventListener("resize", this.resizeHandler, false);
-        else window.removeEventListener("resize", this.resizeHandler, false);
-        this._isWindowUpdatesEnabled = value;
-    }
+	get: function() { return this._isWindowUpdatesEnabled; },
+	set: function(value) {
+		if (value) window.addEventListener("resize", this.resizeHandler, false);
+		else window.removeEventListener("resize", this.resizeHandler, false);
+		this._isWindowUpdatesEnabled = value;
+	}
 });
 
 WindowManager.prototype.saveState = function() {
@@ -524,7 +524,7 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 			this.loaded = true;
 			return;
 		}
-        this.loaded = true;
+		this.loaded = true;
 		if (dialog && dialog.id) {
 			dialog.loadState(windowStates[dialog.id]);
 			this.updateTopZ(dialog.z);
@@ -547,7 +547,7 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 /** @param {WindowCallback} callback */
 WindowManager.prototype.forEachWindow = function (callback) {
   for (var id in this.windows)
-    if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
+	if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
 };
 
 WindowManager.prototype.killAll = function () {
@@ -560,10 +560,10 @@ WindowManager.prototype.synchronizeStates = function () {
 
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
-    try {
-        this._windows[app.id] = new Dialog(app);
-        this._windows[app.id].mica = this.isMicaEnabled || false;
-    } catch(ex) { console.warn("Appleload failed", ex); }
+	try {
+		this._windows[app.id] = new Dialog(app);
+		this._windows[app.id].mica = this.isMicaEnabled || false;
+	} catch(ex) { console.warn("Appleload failed", ex); }
 };
 /**
  * @param {string} url
@@ -634,7 +634,7 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
 	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent, "grabbing");
-    this.isDragging = enabled;
+	this.isDragging = enabled;
 };
 
 WindowManager.prototype.getVisualizerApps = function() {
@@ -648,19 +648,19 @@ WindowManager.prototype.getVisualizerApps = function() {
 
 /** @param {Application[]} arguments */
 WindowManager.prototype.injectApplications = function() {
-    for (var i = 0; i < arguments.length; i++)
-        arguments[i].forEach(windowManager.loadApp, windowManager);
-    windowManager.loadState();
+	for (var i = 0; i < arguments.length; i++)
+		arguments[i].forEach(windowManager.loadApp, windowManager);
+	windowManager.loadState();
 };
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
-    windowManager.windows[appId].kill();
+	windowManager.windows[appId].kill();
 };
 
 /** @param {boolean} [enabled] */
 WindowManager.prototype.toggleMica = function(enabled) {
-    this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
+	this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
 
 WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
@@ -683,14 +683,14 @@ Object.defineProperty(WindowManager, "windowBounds", {
 });
 
 WindowManager.getWindowBounds = function() {
-    return WindowManager.windowBounds;
+	return WindowManager.windowBounds;
 };
 /** @param {Dialog} dialog */
 WindowManager.prototype.focusDialog = function(dialog) {
 	if (this.focusedDialog !== null && this.focusedDialog.target)
-        this.focusedDialog.target.removeAttribute("focus");
-    if (dialog.target) dialog.target.setAttribute("focus", String(true));
-    this.focusedDialog = dialog;
+		this.focusedDialog.target.removeAttribute("focus");
+	if (dialog.target) dialog.target.setAttribute("focus", String(true));
+	this.focusedDialog = dialog;
 }
 
 
@@ -703,14 +703,14 @@ WindowManager.prototype.ininializeDialogs = function() {
 	document.addEventListener(event, stop, false);
 	window.addEventListener(event, stop, false);
 
-    this.dragAction.set(0);
-    var dialogs = bodyCrawler.getAllDialogs();
-    Array.from(dialogs).forEach(function (dialog) {
-        if (isElement(dialog))
+	this.dragAction.set(0);
+	var dialogs = bodyCrawler.getAllDialogs();
+	Array.from(dialogs).forEach(function (dialog) {
+		if (isElement(dialog))
 			self.loadApp(dialog);
 
-    });
-    this.loadState();
+	});
+	this.loadState();
 };
 
 /**
@@ -719,36 +719,36 @@ WindowManager.prototype.ininializeDialogs = function() {
  * @param {Dialog} dialog
  */
 WindowManager.prototype.windowActivationEvent = function(event, dialog) {
-    // If the event originated from an interactive element, don't start a drag
-    try {
-        var node = event && (event.target || event.srcElement);
-        var isInteractive = false;
-        while (node && isElement(node) && node.nodeType === 1) {
-            var tn = (node.tagName || "").toLowerCase();
-            if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
-            if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
-            node = node.parentElement;
-        }
-        if (isInteractive) {
-            try { dialog.focus(); } catch (e) {}
-            return dialog;
-        }
-    } catch (ex) { /* ignore */ }
+	// If the event originated from an interactive element, don't start a drag
+	try {
+		var node = event && (event.target || event.srcElement);
+		var isInteractive = false;
+		while (node && isElement(node) && node.nodeType === 1) {
+			var tn = (node.tagName || "").toLowerCase();
+			if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
+			if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
+			node = node.parentElement;
+		}
+		if (isInteractive) {
+			try { dialog.focus(); } catch (e) {}
+			return dialog;
+		}
+	} catch (ex) { /* ignore */ }
 
-    cancelDomEvent(event);
+	cancelDomEvent(event);
 
-    if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-        try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
-    }
-    if (flags.verboseLogs) console.log("Activating window", dialog);
-    this.activeDialog = dialog;
-    this.enableDialogDrag();
-    // Default a window grab to a move; the sizer handler overrides this with a
-    // resize direction right after, so a stuck resize can never hijack dragging.
-    this.dragAction.set(0);
-    dialog.setClickOffset(event.clientX, event.clientY);
-    dialog.activate();
-    return dialog;
+	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
+		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
+	}
+	if (flags.verboseLogs) console.log("Activating window", dialog);
+	this.activeDialog = dialog;
+	this.enableDialogDrag();
+	// Default a window grab to a move; the sizer handler overrides this with a
+	// resize direction right after, so a stuck resize can never hijack dragging.
+	this.dragAction.set(0);
+	dialog.setClickOffset(event.clientX, event.clientY);
+	dialog.activate();
+	return dialog;
 };
 
 
@@ -757,54 +757,54 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
  * @param {number} hewY
  */
 WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
-    var dialog = this.activeDialog;
-    if (!dialog || !dialog.clickOffset) return;
-    /** @type {Position} */
-    var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
+	var dialog = this.activeDialog;
+	if (!dialog || !dialog.clickOffset) return;
+	/** @type {Position} */
+	var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
 
-    if (dialog.maximized) {
-        if (!flags.aeroSnap) return;
-        dialog.maximized = false;
-        dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
-    }
+	if (dialog.maximized) {
+		if (!flags.aeroSnap) return;
+		dialog.maximized = false;
+		dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
+	}
 
 	dialog.stopAnimating();
 
-    this.dragAction.execute(dialog, dialog.clickOffset, difference);
+	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 }
 
 WindowManager.prototype.disableDialogDrag = function() {
-    if (!this.isDragging) return;
-    // if (flipped) return;
-    this.dragAction.set();
-    this.toggleDragging(false);
-    this.saveState();
-    if (!this.activeDialog) return;
+	if (!this.isDragging) return;
+	// if (flipped) return;
+	this.dragAction.set();
+	this.toggleDragging(false);
+	this.saveState();
+	if (!this.activeDialog) return;
 
-    if (flags.aeroSnap && this.activeDialog.y <= 0)
-        this.activeDialog.maximize();
+	if (flags.aeroSnap && this.activeDialog.y <= 0)
+		this.activeDialog.maximize();
 
-    if (!this.activeDialog.moveEvents) return;
+	if (!this.activeDialog.moveEvents) return;
 
-    var func = this.activeDialog.exchangeDialogMouseUpEvent;
-    if (func) func();
+	var func = this.activeDialog.exchangeDialogMouseUpEvent;
+	if (func) func();
 }
 
 WindowManager.prototype.enableDialogDrag = function() {
-    this.toggleDragging(true);
+	this.toggleDragging(true);
 }
 
 /** @param {number} [newZ]  */
 WindowManager.prototype.updateTopZ = function(newZ) {
-    if (typeof newZ === "number") {
-        this.topZ = Math.max(this.topZ, newZ + 1);
-        return;
-    }
+	if (typeof newZ === "number") {
+		this.topZ = Math.max(this.topZ, newZ + 1);
+		return;
+	}
 	var self = this;
-    this.forEachWindow(function(dialog) {
-        if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
-    });
+	this.forEachWindow(function(dialog) {
+		if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
+	});
 }
 
 //#endregion
@@ -826,8 +826,8 @@ function ClickOffset() {
 	this.lastPosition = new Vector;
 	this.difference = new Vector;
 
-    /** @type {((ev:PointerEvent|MouseEvent)=>void) | null} */
-    this.dragHandler = null;
+	/** @type {((ev:PointerEvent|MouseEvent)=>void) | null} */
+	this.dragHandler = null;
 }
 
 ClickOffset._overlay = document.createElement("div");
@@ -851,10 +851,10 @@ ClickOffset.handleMouseDrag = function (ev) {
 
 	ClickOffset._overlay.style.display = "block";
 
-    clearTimeout(ClickOffset.dragStopTimer);
+	clearTimeout(ClickOffset.dragStopTimer);
 
-    ClickOffset.dragStopTimer = setTimeout(function() {
-    }, 50);
+	ClickOffset.dragStopTimer = setTimeout(function() {
+	}, 50);
 };
 
 
@@ -875,10 +875,10 @@ ClickOffset.prototype.update = function(x, y){
 	self.last = Date.now();
 	self.position.x = x;
 	self.position.y = y;
-    var lastPosition = self.position.clone();
+	var lastPosition = self.position.clone();
 	self.difference = self.lastPosition.clone().sub(self.position);
 
-    self.lastPosition = lastPosition;
+	self.lastPosition = lastPosition;
 	return self;
 };
 
@@ -895,15 +895,15 @@ ClickOffset.prototype.clear = function () {
  * @param {number} [startY]
  */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
-    this.reset();
+	this.reset();
 	this.clickX = x;
 	this.clickY = y;
-    if (typeof width !== "number" || typeof height !== "number" || typeof startX !== "number" || typeof startY !== "number") return;
+	if (typeof width !== "number" || typeof height !== "number" || typeof startX !== "number" || typeof startY !== "number") return;
 	this.width = width;
 	this.height = height;
 	this.startX = startX;
 	this.startY = startY;
-    return this;
+	return this;
 };
 
 /**
@@ -914,7 +914,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-    if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
+	if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
@@ -948,29 +948,29 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
  */
 function Dialog(object, create) {
 
-    this._x = 0;
-    this._y = 0;
-    this._z = 0;
-    this._width = 0;
-    this._height = 0;
-    this._isMinWidth = false;
-    this._isMinHeight = false;
+	this._x = 0;
+	this._y = 0;
+	this._z = 0;
+	this._width = 0;
+	this._height = 0;
+	this._isMinWidth = false;
+	this._isMinHeight = false;
 
-    /** @type {Window | null} */
-    this._popupWindow = null;
+	/** @type {Window | null} */
+	this._popupWindow = null;
 
-    /** @type {string| null} */
-    this._src = null;
+	/** @type {string| null} */
+	this._src = null;
 
-    this._previousX = 0;
-    this._previousY = 0;
-    this._minWidth = 200;
-    this._minHeight = 200;
-    this._maxWidth = 1000;
-    this._maxHeight = 1000;
-    this._minAspectRatio = 0;
-    this._maxAspectRatio = Infinity;
-    this._mica = useMica;
+	this._previousX = 0;
+	this._previousY = 0;
+	this._minWidth = 200;
+	this._minHeight = 200;
+	this._maxWidth = 1000;
+	this._maxHeight = 1000;
+	this._minAspectRatio = 0;
+	this._maxAspectRatio = Infinity;
+	this._mica = useMica;
 
 	this._useTransform = useTransform;
 	this._useScale = useScale;
@@ -992,42 +992,42 @@ function Dialog(object, create) {
 	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?, _fsTokenAtStart: number? }} @readonly */
 	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null, _fsTokenAtStart: null };
 
-    if (!object) return;
-    if (!create) create = false;
+	if (!object) return;
+	if (!create) create = false;
 
-    /** @type {HTMLElement | null} */
-    this.target = null;
-    var id = object.id;
+	/** @type {HTMLElement | null} */
+	this.target = null;
+	var id = object.id;
 
-    /** @type {Application | null} */
-    this.application = null;
-    if (!isElement(object))
-        this.application = object;
+	/** @type {Application | null} */
+	this.application = null;
+	if (!isElement(object))
+		this.application = object;
 
-    if (!id) id = object.title;
-    if (object.title) this._title = object.title;
-    else {
-        var titleElement = this.getTitleElement();
-        if (titleElement) this._title = titleElement.innerText;
-        if (!id) id = this.id || this.title || "";
-    }
+	if (!id) id = object.title;
+	if (object.title) this._title = object.title;
+	else {
+		var titleElement = this.getTitleElement();
+		if (titleElement) this._title = titleElement.innerText;
+		if (!id) id = this.id || this.title || "";
+	}
 
 
 
-    this._id = id;
-    /** @type {HTMLButtonElement[]} */
-    this.buttons = [];
-    this.originalBody = this.body;
-    this.clickOffset = new ClickOffset;
+	this._id = id;
+	/** @type {HTMLButtonElement[]} */
+	this.buttons = [];
+	this.originalBody = this.body;
+	this.clickOffset = new ClickOffset;
 
-    if(!this.scroll && this.body) this.body.style.overflow = "hidden";
+	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
-    var applist = document.getElementById("applist");
-    if (applist) applist.appendChild(this.createOpenButton());
+	var applist = document.getElementById("applist");
+	if (applist) applist.appendChild(this.createOpenButton());
 
-    var metroapplist = document.getElementById("metroapplist");
-    if (metroapplist) metroapplist.appendChild(this.createOpenButton());
-    if (create || isElement(object)) this.initWithObject(object);
+	var metroapplist = document.getElementById("metroapplist");
+	if (metroapplist) metroapplist.appendChild(this.createOpenButton());
+	if (create || isElement(object)) this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
 
@@ -1044,104 +1044,104 @@ function Dialog(object, create) {
  * @param {Element} [parent]
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
-    var target = parent || this.target;
-    if (!target) return null;
-    var elements = target.getElementsByTagName(name);
-    if (!elements || !elements.length) elements = target.getElementsByClassName(name);
-    var element = elements.length ? elements[0] : null;
-    if (isElement(element)) return element;
-    return null;
+	var target = parent || this.target;
+	if (!target) return null;
+	var elements = target.getElementsByTagName(name);
+	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
+	var element = elements.length ? elements[0] : null;
+	if (isElement(element)) return element;
+	return null;
 };
 
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
-    if (!object) return;
+	if (!object) return;
 
-    if (object instanceof Dialog) {
-        if (object.target) return;
-        else if (object.application) object = object.application;
-    }
+	if (object instanceof Dialog) {
+		if (object.target) return;
+		else if (object.application) object = object.application;
+	}
 
-    if (!(object instanceof Dialog)) {
-        if (isElement(object)) {
-            if (!isDialog(object)) return console.warn("This is not a dialog element");
-            this.target = object;
-            if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
-            this.close();
-        } else {
-            this.application = object;
-            this.target = createDialog();
+	if (!(object instanceof Dialog)) {
+		if (isElement(object)) {
+			if (!isDialog(object)) return console.warn("This is not a dialog element");
+			this.target = object;
+			if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
+			this.close();
+		} else {
+			this.application = object;
+			this.target = createDialog();
 			if (this.target && "dialog" in this.target) this.target.dialog = this;
 
-            if (object.classes && typeof object.classes === "object"){
-                object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
-            }
-            this.openUrl(object.src);
-            this.setTitle(object.title);
-            this.fixed = object.fixed;
-            this.scroll = object.scroll;
-            if (this.frame) {
-                if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-                this.frame.setAttribute("allow", "fullscreen");
-            }
+			if (object.classes && typeof object.classes === "object"){
+				object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
+			}
+			this.openUrl(object.src);
+			this.setTitle(object.title);
+			this.fixed = object.fixed;
+			this.scroll = object.scroll;
+			if (this.frame) {
+				if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
+				this.frame.setAttribute("allow", "fullscreen");
+			}
 
-            this.moveEvents = object.moveEvents || false;
+			this.moveEvents = object.moveEvents || false;
 
 			this.setIcon(this.getMiniIconUrl(), function() {
 				self.setIcon(self.getIconUrl());
 			});
-        }
-    }
+		}
+	}
 
-    this.setMinSize(180, 250);
+	this.setMinSize(180, 250);
 
-    this.originalBody = this.body;
+	this.originalBody = this.body;
 
-    if(!this.scroll && this.body) this.body.style.overflow = "hidden";
+	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
-    this.toggleCloseButton(true);
-    this.toggleFullButton(true);
-    if (this.verifyEjectCapability()) this.toggleEjectButton(true);
+	this.toggleCloseButton(true);
+	this.toggleFullButton(true);
+	if (this.verifyEjectCapability()) this.toggleEjectButton(true);
 
-    this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
+	this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
-    var self = this;
-    /** @param {Position} difference */
-    this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
-        if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
-    };
+	var self = this;
+	/** @param {Position} difference */
+	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
+		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
+	};
 
-    /**
+	/**
 	 * @param {MouseEvent|PointerEvent} ev
 	 */
-    var activationHandler = function (ev) {
+	var activationHandler = function (ev) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-        windowManager.windowActivationEvent(ev, self);
+		windowManager.windowActivationEvent(ev, self);
 		return true;
-    };
+	};
 
-    var target = this.target;
-    if (target) {
+	var target = this.target;
+	if (target) {
 
-        var createSizers = true;
+		var createSizers = true;
 		var createTouchSizers = true;
 
 		if (!supportsPointer) createTouchSizers = false;
 
-        if(!this.fixed && createSizers) {
+		if(!this.fixed && createSizers) {
 			/**
 			 * @this Dialog
 			 * @param {number} id
 			 */
-            var createSizer = function (id) {
+			var createSizer = function (id) {
 				if (!target) return;
 
-                var sizerId = "sizer-" + id;
+				var sizerId = "sizer-" + id;
 
-                var sizer = this.getElementByTagOrClassName(sizerId);
-                if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
-                sizer.draggable = false;
+				var sizer = this.getElementByTagOrClassName(sizerId);
+				if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
+				sizer.draggable = false;
 				sizer.id = id.toString();
 				sizer.classList.add(sizerId);
 				/** @param {PointerEvent | MouseEvent} ev */
@@ -1150,9 +1150,9 @@ Dialog.prototype.initWithObject = function(object) {
 					windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				};
-                if (supportsPointer) sizer.onpointerdown = pointerDown;
-                else sizer.onmousedown = pointerDown;
-                target.appendChild(sizer);
+				if (supportsPointer) sizer.onpointerdown = pointerDown;
+				else sizer.onmousedown = pointerDown;
+				target.appendChild(sizer);
 
 				if (createTouchSizers) {
 					var touchSizerId = "touch-sizer-" + id;
@@ -1169,56 +1169,56 @@ Dialog.prototype.initWithObject = function(object) {
 
 					target.appendChild(touchSizer);
 				}
-            };
+			};
 			
 			for (var i = 0; i < 8; i++) createSizer.call(this, i + 1);
-        }
+		}
 
-        target.addEventListener("dragstart", cancelDomEvent, false);
-        target.addEventListener("selectstart", cancelDomEvent, false);
+		target.addEventListener("dragstart", cancelDomEvent, false);
+		target.addEventListener("selectstart", cancelDomEvent, false);
 
-        var body = this.body;
-        if (body)
-            body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
+		var body = this.body;
+		if (body)
+			body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
 
-        var header = this.titleBar;
-        if (header)
+		var header = this.titleBar;
+		if (header)
 			header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
 
 
-        if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
-        else target.addEventListener("mousedown", activationHandler, false);
+		if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
+		else target.addEventListener("mousedown", activationHandler, false);
 
-        target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function() {
-            self.createPopout();
-            self.quit();
-        }, false);
+		target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function() {
+			self.createPopout();
+			self.quit();
+		}, false);
 
-        var buttons = target.getElementsByTagName("button");
-        buttons[windowButtons.close].addEventListener("click", this.close.bind(this), false);
-        buttons[windowButtons.full].addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+		var buttons = target.getElementsByTagName("button");
+		buttons[windowButtons.close].addEventListener("click", this.close.bind(this), false);
+		buttons[windowButtons.full].addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
-        this.toggleOpen(false);
-    }
+		this.toggleOpen(false);
+	}
 
-    if (this.id) windowManager.windows[this.id] = this;
+	if (this.id) windowManager.windows[this.id] = this;
 
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
-    this.update();
+	this.update();
 
-    if (!isElement(object))
-        if (object instanceof Dialog)
-            this.move(object.x, object.y);
-        else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
+	if (!isElement(object))
+		if (object instanceof Dialog)
+			this.move(object.x, object.y);
+		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 };
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-    get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
-    set: function(open) { this.toggleOpen(open); }
+	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
+	set: function(open) { this.toggleOpen(open); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-    get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
+	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Dialog.prototype.reportState = function() {
 	this.messageFrame("windowSize", {});
@@ -1229,22 +1229,22 @@ Dialog.prototype.reportState = function() {
  * @param {boolean} [kill]
  */
 Dialog.prototype.toggleOpen = function (forceOpen, kill) {
-    var target = this.target;
-    if (!target) return;
-    var self = this;
+	var target = this.target;
+	if (!target) return;
+	var self = this;
 	this._stateOpen = forceOpen || false;
-    this.toggleClassAnimated("open", forceOpen, function(a) {
+	this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
 	}, function (opened) {
-        if ((kill || flags.windowReaper) && !opened) self.kill();
+		if ((kill || flags.windowReaper) && !opened) self.kill();
 		if (opened) self.reportState();
-    }, function (opening) {
+	}, function (opening) {
 		self._stateOpen = opening;
-        if (opening) self.activate();
+		if (opening) self.activate();
 		if (flags.windowReaper && !opening) setTimeout(function() {
 			// self.kill();
 		}, 1000);
-    });
+	});
 
 	windowManager.saveState();
 	self.reportState();
@@ -1255,35 +1255,35 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
  * @returns {HTMLIFrameElement| null}
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
-    var frame = this.frame;
-    if (frame || !create || !this.body) return frame;
-    return this.body.appendChild(document.createElement("iframe"));
+	var frame = this.frame;
+	if (frame || !create || !this.body) return frame;
+	return this.body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "src", {
-    get: function() { return this._src || this.application && this.application.src; },
-    set: function(url) { this.openUrl(url); }
+	get: function() { return this._src || this.application && this.application.src; },
+	set: function(url) { this.openUrl(url); }
 });
 Object.defineProperty(Dialog.prototype, "body", {
-    get: function() {
-        var content = this.content;
-        if (!content) return null;
-        return this.getElementByTagOrClassName("article", content);
-    }
+	get: function() {
+		var content = this.content;
+		if (!content) return null;
+		return this.getElementByTagOrClassName("article", content);
+	}
 });
 Object.defineProperty(Dialog.prototype, "titleBar", {
 	get: function() { return this.getElementByTagOrClassName("header"); }
 });
 Object.defineProperty(Dialog.prototype, "contentDocument", {
-    get: function() {
-        var frame = this.frame;
-        return frame ? frame.contentDocument : null;
-    }
+	get: function() {
+		var frame = this.frame;
+		return frame ? frame.contentDocument : null;
+	}
 });
 Object.defineProperty(Dialog.prototype, "contentWindow", {
-    get: function() {
-        var frame = this.frame;
-        return frame ? frame.contentWindow : null;
-    }
+	get: function() {
+		var frame = this.frame;
+		return frame ? frame.contentWindow : null;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "mica", {
@@ -1357,139 +1357,139 @@ Object.defineProperty(Dialog.prototype, "position", {
 });
 
 Object.defineProperty(Dialog.prototype, "size", {
-    get: function() { return new Vector(this.width, this.height); },
-    set: function(size) {
-        if (typeof size.x !== "number" || typeof size.y !== "number") return;
-        this.resize(size.x, size.y);
-    }
+	get: function() { return new Vector(this.width, this.height); },
+	set: function(size) {
+		if (typeof size.x !== "number" || typeof size.y !== "number") return;
+		this.resize(size.x, size.y);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "aspectRatio", {
-    get: function() { return this.width / this.height; },
-    set: function(aspect) { this.width = this.height * aspect; }
+	get: function() { return this.width / this.height; },
+	set: function(aspect) { this.width = this.height * aspect; }
 });
 
 Object.defineProperty(Dialog.prototype, "minAspectRatio", {
-    get: function() { return this._minAspectRatio; },
-    set: function(aspect) { this.width = this.height * aspect; }
+	get: function() { return this._minAspectRatio; },
+	set: function(aspect) { this.width = this.height * aspect; }
 });
 
 Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
-    get: function() { return this._maxAspectRatio; },
-    set: function(aspect) { this.width = this.height * aspect; }
+	get: function() { return this._maxAspectRatio; },
+	set: function(aspect) { this.width = this.height * aspect; }
 });
 
 Object.defineProperty(Dialog.prototype, "top", {
-    get: function() { return this.y; },
-    set: function(top) {
-        var bounds = WindowManager.getWindowBounds();
-        var bottom = this.bottomFromTop;
-        if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
-        if (top < bounds.top) top = bounds.top;
-        var height = Math.max(Math.min(bottom - top, this.maxHeight), this.minHeight);
-        top = bottom - height;
-        this._height = height;
-        this._y = top / window.innerHeight;
-        if (this.useTransform) {
-            if (this.target) this.target.style.height = toPixels(height);
-            if (this.useTransform) this.updateTranslation();
-        } else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
-        this._isMinHeight = height === this.minHeight;
-    }
+	get: function() { return this.y; },
+	set: function(top) {
+		var bounds = WindowManager.getWindowBounds();
+		var bottom = this.bottomFromTop;
+		if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
+		if (top < bounds.top) top = bounds.top;
+		var height = Math.max(Math.min(bottom - top, this.maxHeight), this.minHeight);
+		top = bottom - height;
+		this._height = height;
+		this._y = top / window.innerHeight;
+		if (this.useTransform) {
+			if (this.target) this.target.style.height = toPixels(height);
+			if (this.useTransform) this.updateTranslation();
+		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+		this._isMinHeight = height === this.minHeight;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "left", {
-    get: function() { return this.x; },
-    set: function(left) {
-        var bounds = WindowManager.getWindowBounds();
-        var right = this.rightFromLeft;
-        if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
-        if (left < bounds.left) left = bounds.left;
-        var width = Math.max(Math.min(right - left, this.maxWidth), this.minWidth);
-        left = right - width;
-        this._width = width;
-        this._x = left / window.innerWidth;
-        if (this.useTransform) {
-            if (this.target) this.target.style.width = toPixels(width);
-            if (this.useTransform) this.updateTranslation();
-        } else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
-        this._isMinWidth = width === this.minWidth;
-    }
+	get: function() { return this.x; },
+	set: function(left) {
+		var bounds = WindowManager.getWindowBounds();
+		var right = this.rightFromLeft;
+		if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
+		if (left < bounds.left) left = bounds.left;
+		var width = Math.max(Math.min(right - left, this.maxWidth), this.minWidth);
+		left = right - width;
+		this._width = width;
+		this._x = left / window.innerWidth;
+		if (this.useTransform) {
+			if (this.target) this.target.style.width = toPixels(width);
+			if (this.useTransform) this.updateTranslation();
+		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+		this._isMinWidth = width === this.minWidth;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "rightFromLeft", {
-    get: function() { return this.x + this.width; },
-    set: function(right) { this.width = right - this.x; }
+	get: function() { return this.x + this.width; },
+	set: function(right) { this.width = right - this.x; }
 });
 
 Object.defineProperty(Dialog.prototype, "right", {
-    get: function() { return window.innerWidth - this.rightFromLeft; },
-    set: function(right) {
-        if (typeof right === "number") {
-            var bounds = WindowManager.getWindowBounds();
-            if (right > bounds.right) right = bounds.right;
-            if (right < bounds.left) right = bounds.left;
-            this.width = (window.innerWidth - right) - this.x;
-        }
-    }
+	get: function() { return window.innerWidth - this.rightFromLeft; },
+	set: function(right) {
+		if (typeof right === "number") {
+			var bounds = WindowManager.getWindowBounds();
+			if (right > bounds.right) right = bounds.right;
+			if (right < bounds.left) right = bounds.left;
+			this.width = (window.innerWidth - right) - this.x;
+		}
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "bottomFromTop", {
-    get: function() { return this.y + this.height; },
-    set: function(bottom) { this.height = bottom - this.y; }
+	get: function() { return this.y + this.height; },
+	set: function(bottom) { this.height = bottom - this.y; }
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
-    get: function() { return window.innerHeight - this.bottomFromTop; },
-    set: function(bottom) {
-        if (typeof bottom === "number") {
-            var bounds = WindowManager.getWindowBounds();
-            if (bottom > bounds.bottom) bottom = bounds.bottom;
-            if (bottom < bounds.top) bottom = bounds.top;
-            this.height = (window.innerHeight - bottom) - this.y;
-        }
-    }
+	get: function() { return window.innerHeight - this.bottomFromTop; },
+	set: function(bottom) {
+		if (typeof bottom === "number") {
+			var bounds = WindowManager.getWindowBounds();
+			if (bottom > bounds.bottom) bottom = bounds.bottom;
+			if (bottom < bounds.top) bottom = bounds.top;
+			this.height = (window.innerHeight - bottom) - this.y;
+		}
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "inset", {
-    get: function() { return (this.bottom + this.right + this.left + this.top) / 4; },
-    set: function(inset) { this.bottom = this.right = this.left = this.top = inset; }
+	get: function() { return (this.bottom + this.right + this.left + this.top) / 4; },
+	set: function(inset) { this.bottom = this.right = this.left = this.top = inset; }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", {
-    get: function () { return this._isMinWidth; }
+	get: function () { return this._isMinWidth; }
 });
 
 Object.defineProperty(Dialog.prototype, "isMinHeight", {
-    get: function () { return this._isMinHeight; }
+	get: function () { return this._isMinHeight; }
 });
 
 Object.defineProperty(Dialog.prototype, "useTransform", {
-    get: function () { return this._useTransform; },
-    set: function(useTransform) { this.updateUseTransform(useTransform); }
+	get: function () { return this._useTransform; },
+	set: function(useTransform) { this.updateUseTransform(useTransform); }
 });
 
 Object.defineProperty(Dialog.prototype, "useScale", {
-    get: function () {return this._useScale; },
-    set: function(useScale) { this.updateScale(useScale); }
+	get: function () {return this._useScale; },
+	set: function(useScale) { this.updateScale(useScale); }
 });
 
 Object.defineProperty(Dialog.prototype, "title", {
-    get: function() {
-        if (this._title) return this._title;
-        var titleElement = this.getTitleElement();
-        if (titleElement && titleElement.innerHTML) return titleElement.innerHTML;
-        return this.id;
-    },
-    set: function(title) { this.setTitle(title); }
+	get: function() {
+		if (this._title) return this._title;
+		var titleElement = this.getTitleElement();
+		if (titleElement && titleElement.innerHTML) return titleElement.innerHTML;
+		return this.id;
+	},
+	set: function(title) { this.setTitle(title); }
 });
 
 Object.defineProperty(Dialog.prototype, "maximized", {
-    get: function() {
-        if (!this.target) return false;
-        return this.target.classList.contains("maximized");
-    },
-    set: function(maximized) { this.toggleMaximized(maximized); }
+	get: function() {
+		if (!this.target) return false;
+		return this.target.classList.contains("maximized");
+	},
+	set: function(maximized) { this.toggleMaximized(maximized); }
 });
 
 Object.defineProperty(Dialog.prototype, "windowTarget", {
@@ -1509,12 +1509,12 @@ Dialog.prototype.setTitle = function(title) {
 };
 
 Object.defineProperty(Dialog.prototype, "id", {
-    get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
-    set: function(id) {
-        this._id = id;
-        windowManager.windows[id] = this;
-        if (this.target) this.target.setAttribute("id", id);
-    }
+	get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
+	set: function(id) {
+		this._id = id;
+		windowManager.windows[id] = this;
+		if (this.target) this.target.setAttribute("id", id);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
@@ -1543,28 +1543,28 @@ Object.defineProperty(Dialog.prototype, "popup", {
 });
 
 Object.defineProperty(Dialog.prototype, "micaElement", {
-    get: function() {
-        try { // TODO: cache the element so it doesn't have to be refretched each time! add _micaElement to the dialog thing as an otpional prop
-            if (!this.target) return null;
-            var clipElem = this.target.getElementsByClassName("backdrop-filter");
-            if (!clipElem.length) return null;
-            var clip = clipElem[0];
-            if (isElement(clip)) return clip;
-        } catch(ex) { if (ex instanceof Error) console.log(ex.message); }
-        return null;
-    }
+	get: function() {
+		try { // TODO: cache the element so it doesn't have to be refretched each time! add _micaElement to the dialog thing as an otpional prop
+			if (!this.target) return null;
+			var clipElem = this.target.getElementsByClassName("backdrop-filter");
+			if (!clipElem.length) return null;
+			var clip = clipElem[0];
+			if (isElement(clip)) return clip;
+		} catch(ex) { if (ex instanceof Error) console.log(ex.message); }
+		return null;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "micaBackdrop", {
-    get: function() {
-        try {
+	get: function() {
+		try {
 			var micaElement = this.micaElement;
-            if (!micaElement) return null;
-            var backdrop = micaElement.children[0];
-            if (isElement(backdrop)) return backdrop;
-        } catch(ex) { if (ex instanceof Error) console.log(ex.message); }
-        return null;
-    }
+			if (!micaElement) return null;
+			var backdrop = micaElement.children[0];
+			if (isElement(backdrop)) return backdrop;
+		} catch(ex) { if (ex instanceof Error) console.log(ex.message); }
+		return null;
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "skew", {
@@ -1639,7 +1639,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 Dialog.prototype.setSkew = function(skew) {
 	this._skew = skew;
 	if (this.useTransform)
-        	this.updateTranslation();
+			this.updateTranslation();
 	else if (this.target) skewElement(this.target, skew);
 };
 /**
@@ -1709,11 +1709,11 @@ Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
 };
 Dialog.prototype.createOpenButton = function () {
-    var openButton = document.createElement("button");
-    this.buttons.unshift(openButton);
-    openButton.appendChild(document.createTextNode(this.title || "?"));
-    openButton.onclick = this.launch.bind(this);
-    return openButton;
+	var openButton = document.createElement("button");
+	this.buttons.unshift(openButton);
+	openButton.appendChild(document.createTextNode(this.title || "?"));
+	openButton.onclick = this.launch.bind(this);
+	return openButton;
 };
 /**
  * @param {number} x
@@ -2028,8 +2028,8 @@ Dialog.prototype.moveBy = function (deltaX, deltaY) {
  * @param {number} centerY
  */
 Dialog.prototype.moveToCenter = function(centerX, centerY) {
-    if (typeof centerX !== "number" || typeof centerY !== "number") return;
-    this.move(centerX - this.width / 2, centerY - this.height / 2);
+	if (typeof centerX !== "number" || typeof centerY !== "number") return;
+	this.move(centerX - this.width / 2, centerY - this.height / 2);
 };
 
 /** @param {number} [z] */
@@ -2038,7 +2038,7 @@ Dialog.prototype.setZ = function(z) {
 		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
 	} else this._z = z;
 	if (isElement(this.target))
-        this.target.style.zIndex = String(this._z);
+		this.target.style.zIndex = String(this._z);
 };
 Dialog.prototype.updateWidth = function () {
 	if (!this.target) return;
@@ -2219,7 +2219,7 @@ Dialog.prototype.openUrl = function(url) {
 };
 
 Dialog.prototype.quit = function() {
-    this.close();
+	this.close();
 };
 
 Dialog.prototype.launch = function() {
@@ -2313,7 +2313,7 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "";
 		target.style.left = "";
-        this.toggleMinSizeConstraints(this.maximized);
+		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
@@ -2463,7 +2463,7 @@ DragAction.prototype.set = function (direction) {
 
 /** @param {HTMLDocument} [customDocument] */
 function DocumentCrawler(customDocument){
-    this.document = customDocument || document;
+	this.document = customDocument || document;
 }
 
 DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
@@ -2486,7 +2486,7 @@ window.addEventListener("drop", function(e) {
   if (!e.dataTransfer) return;
   var files = e.dataTransfer.files;
   if (files.length > 0)
-     console.log("File dropped anywhere in window:", files[0].name);
+	 console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
 //#endregion
