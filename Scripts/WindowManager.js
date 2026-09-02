@@ -312,25 +312,25 @@ function getViewBoxPosition() {
 
 /** @param {HTMLElement | Event | null} object */
 function getObjectDialog(object){
-    if (!object) return console.log(object);
-    if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
-    else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
-    else if (isElement(object)) return getObjectDialog(object.parentElement);
+	if (!object) return console.log(object);
+	if (isElement(object) && ["DIALOG", "BODY", "HTML", "HEAD"].indexOf(object.tagName) !== -1 || (isElement(object) && object.classList && object.classList.contains("window"))) return object;
+	else if (object instanceof Event && isElement(object.target)) return getObjectDialog(object.target);
+	else if (isElement(object)) return getObjectDialog(object.parentElement);
 }
 
 /** @param {number} value */
 function toPixels(value) {
-    return Math.round(value) + "px";
+	return Math.round(value) + "px";
 }
 
 /** @param {number} value */
 function toDegrees(value) {
-    return Math.round(value) + "deg";
+	return Math.round(value) + "deg";
 }
 
 /** @param {number} pixels */
 function pixelsToCentimeters(pixels){
-    return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
+	return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
 }
 
 /** @param {string} text */
@@ -379,13 +379,6 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
         else if (isElement(child)) removeComments(child);
     });
     return element;
-}
-
-function removeWallpaper() {
-	var wallpaper = DesktopManager.getWallpaper();
-	if (!wallpaper) return;
-	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
-	return wallpaper;
 }
 
 //#endregion
