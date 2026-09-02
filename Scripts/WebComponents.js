@@ -16,7 +16,7 @@ class WindowDiv extends HTMLDivElement {
 	 * @param {boolean} enable Enable maximization
 	 * @param {number} maximizeAnimations Amount of ongoing animation
 	 */
-	toggleMaximized(enable, maximizeAnimations) {
+	toggleMaximized(enable) {
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
@@ -38,10 +38,10 @@ class WindowDiv extends HTMLDivElement {
 			});
 
 			transition.finished.finally(function() {
-				if (maximizeAnimations <= 1) {
+				if (this.dialog.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
 				}
-				maximizeAnimations--;
+				this.dialog.maximizeAnimations--;
 			});
 		} else this.classList.toggle("maximized", enable);
 	}
