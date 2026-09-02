@@ -1485,11 +1485,7 @@ Object.defineProperty(Dialog.prototype, "title", {
         if (titleElement && titleElement.innerHTML) return titleElement.innerHTML;
         return this.id;
     },
-    set: function(title) {
-        this._title = title;
-        var titleElement = this.getTitleElement();
-        if (titleElement) titleElement.innerHTML = title;
-    }
+    set: function(title) { this.setTitle(title); }
 });
 
 Object.defineProperty(Dialog.prototype, "maximized", {
@@ -1511,7 +1507,9 @@ Object.defineProperty(Dialog.prototype, "windowTarget", {
 
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
-    this.title = title;
+	this._title = title;
+	var titleElement = this.getTitleElement();
+	if (titleElement) titleElement.innerHTML = title;
 };
 
 Object.defineProperty(Dialog.prototype, "id", {
