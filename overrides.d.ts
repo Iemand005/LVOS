@@ -71,13 +71,7 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<
-        K extends keyof HTMLElementTagNameMap,
-        I extends keyof CustomElementsByIs[K]
-    >(
-        tagName: K,
-        options: { is: I }
-    ): CustomElementsByIs[K][I];
+		createElement<K extends keyof CustomElementsByIs & keyof HTMLElementTagNameMap, I extends keyof CustomElementsByIs[K]>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
 	}
 
 	interface Navigator {

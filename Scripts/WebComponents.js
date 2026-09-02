@@ -22,8 +22,6 @@ class OdometerTime extends HTMLTimeElement {
 		super();
 		/** @type {OdometerTrack[]} */
 		this.tracks = [];
-
-		this.odometerActive = true;
 	}
 
 	connectedCallback() {
