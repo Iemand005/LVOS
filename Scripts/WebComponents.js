@@ -44,7 +44,7 @@ class OdometerDigit extends HTMLSpanElement {
 		this.setAttribute("is", "odometer-track");
 	}
 	/** @param {number} digit Digit value */
-	setValue(digit) {
+	set value(digit) {
 		const shiftY = digit * this.lineHeight;
 		this.style.transform = `translateY(-${shiftY}px)`;
 	}
@@ -113,7 +113,7 @@ class OdometerTime extends HTMLTimeElement {
 			seconds % 10
 		];
 
-		this.tracks.forEach((track, index) => track.setValue(digits[index]));
+		this.tracks.forEach((track, index) => track.value = (digits[index]));
 	}
 }
 
