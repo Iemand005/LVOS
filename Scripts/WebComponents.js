@@ -26,14 +26,9 @@ class WindowDiv extends HTMLDivElement {
 		if (!dialgo) return;
 
 		if (document.startViewTransition) {
-			var transition = document.startViewTransition(function() {
-				self.classList.toggle("maximized", enable);
-			});
+			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
 
-
-			transition.ready.catch(function(ev) {
-				console.warn("transition interrupted:", ev);
-			});
+			transition.ready.catch((ev) => console.warn("transition interrupted:", ev));
 
 			transition.finished.finally(function() {
 				if (dialgo.maximizeAnimations <= 1) {
