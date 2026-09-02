@@ -46,7 +46,7 @@ class OdometerTime extends HTMLTimeElement {
 			is: "odometer-track"
 		});
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-		this.tracks.push(track);
+		if (track instanceof OdometerTrack) this.tracks.push(track);
 		this.appendChild(track);
 	}
 
