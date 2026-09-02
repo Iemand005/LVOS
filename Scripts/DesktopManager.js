@@ -62,6 +62,7 @@ var onLoad = function () {
 
 		var updateClock = function() {
 			// clock.innerHTML = new Date().toLocaleTimeString();
+            $0.dateTime =a.toISOString();
 		};
 
 		updateClock();
