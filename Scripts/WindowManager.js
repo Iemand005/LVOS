@@ -1393,9 +1393,7 @@ Object.defineProperty(Dialog.prototype, "top", {
         if (this.useTransform) {
             if (this.target) this.target.style.height = toPixels(height);
             if (this.useTransform) this.updateTranslation();
-        } else {
-            this.setInset(top, this.left, this.right, window.innerHeight - bottom);
-        }
+        } else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
         this._isMinHeight = height === this.minHeight;
     }
 });
@@ -1414,9 +1412,7 @@ Object.defineProperty(Dialog.prototype, "left", {
         if (this.useTransform) {
             if (this.target) this.target.style.width = toPixels(width);
             if (this.useTransform) this.updateTranslation();
-        } else {
-            this.setInset(this.top, left, window.innerWidth - right, this.bottom);
-        }
+        } else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
         this._isMinWidth = width === this.minWidth;
     }
 });
