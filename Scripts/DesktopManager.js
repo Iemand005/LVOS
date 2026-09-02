@@ -74,7 +74,7 @@ var onLoad = function () {
 		ev.preventDefault(); 
 		ev.stopPropagation();
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
-	}
+	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
 		console.log("Service Worker registered!", reg);
