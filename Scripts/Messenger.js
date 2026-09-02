@@ -86,7 +86,7 @@ LVMessenger.broadcastToParent = function (type, message, id) {
 /**
  * @param {MessageType} type
  * @param {HTMLIFrameElement} iFrame
- * @param {LVMessage} [message]
+ * @param {*} [message]
  */
 LVMessenger.broadcastToChild = function (type, iFrame, message) {
 	if (iFrame.contentWindow) LVMessenger.broadcast(iFrame.contentWindow, type, message);

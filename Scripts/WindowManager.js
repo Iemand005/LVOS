@@ -1965,7 +1965,7 @@ Dialog.prototype.toggleFullButton = function (enable) {
 };
 /**
  * @param {MessageType} type
- * @param {LVMessage} [message]
+ * @param {*} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
