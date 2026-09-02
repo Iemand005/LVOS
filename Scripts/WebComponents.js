@@ -56,7 +56,7 @@ class OdometerTime extends HTMLTimeElement {
 
 	constructor() {
 		super();
-		/** @type {OdometerDigit[]} */
+		/** @type {OdometerDigit[]} @readonly */
 		this.tracks = [];
 	}
 
