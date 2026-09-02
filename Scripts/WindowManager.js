@@ -1086,9 +1086,8 @@ Dialog.prototype.initWithObject = function(object) {
             this.close();
         } else {
             this.application = object;
-            var newDialog = createDialog();
-			if ("dialog" in newDialog) this.target.dialog = this;
-			this.target = newDialog;
+            this.target = createDialog();
+			if (this.target && "dialog" in this.target) this.target.dialog = this;
 
             if (object.classes && typeof object.classes === "object"){
                 object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
