@@ -1497,9 +1497,7 @@ Object.defineProperty(Dialog.prototype, "maximized", {
         if (!this.target) return false;
         return this.target.classList.contains("maximized");
     },
-    set: function(maximized) {
-        this.toggleMaximized(maximized);
-    }
+    set: function(maximized) { this.toggleMaximized(maximized); }
 });
 
 Object.defineProperty(Dialog.prototype, "windowTarget", {
