@@ -1849,34 +1849,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.maximizeAnimations++;
 	if (flags.useViewTransitionMaximize && "dialog" in this.target) {
 		this.target.toggleMaximized(enable);
-
-		if (document.activeViewTransition) {
-			document.activeViewTransition.skipTransition();
-		}
-
-
-		this.target.style.viewTransitionName = "window-fullscreen";
-
-		if (document.startViewTransition) {
-			var transition = document.startViewTransition(function() {
-				if (!self.target) return;
-				self.target.classList.toggle("maximized", enable);
-			});
-			if (!self.target) return;
-
-
-			transition.ready.catch(function(ev) {
-				console.warn("transition interrupted:", ev);
-			});
-
-			transition.finished.finally(function() {
-				if (!self.target) return;
-				if (self.maximizeAnimations <= 1) {
-					self.target.style.viewTransitionName = "";
-				}
-				self.maximizeAnimations--;
-			});
-		} else this.target.classList.toggle("maximized", enable);
 		return;
 	}
 
@@ -1900,7 +1872,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		translateElement(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
 		content.style.height = "";
-		maximizeAnimations--;
+		this.maximizeAnimations--;
 
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
