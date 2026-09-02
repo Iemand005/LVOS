@@ -3,8 +3,12 @@ class WindowDiv extends HTMLDivElement {
 	connectedCallback() {
 		console.log("I connected balls");
 	}
-
-	maximize(maximizeAnimations) {
+	/**
+	 * 
+	 * @param {boolean} enable Enable maximization
+	 * @param {number} maximizeAnimations Amount of ongoing animation
+	 */
+	toggleMaximized(enable, maximizeAnimations) {
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
