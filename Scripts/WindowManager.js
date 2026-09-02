@@ -365,7 +365,7 @@ function createDialog() {
     if (!template) return null;
     var clone = template.cloneNode(true);
     if (container && clone instanceof Element) {
-		/** @type {Element | WindowDiv} */
+		/** @type {Element | WindowElement} */
         var dialogElement = container.appendChild(removeComments(clone));
         if (isElement(dialogElement)) return dialogElement;
     }
@@ -1522,7 +1522,7 @@ Object.defineProperty(Dialog.prototype, "windowTarget", {
 		var target = this.target;
 
 		if (target && "dialog" in target) {
-			return /** @type {WindowDiv} */ (target);
+			return /** @type {WindowElement} */ (target);
 		}
 
 		return null;
@@ -1820,7 +1820,7 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd.call(dialog);
 		};
-		if (!(target instanceof WindowDiv))
+		if (!(target instanceof WindowElement))
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 

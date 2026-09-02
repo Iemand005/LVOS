@@ -1,5 +1,5 @@
 
-class WindowDiv extends HTMLDivElement {
+class WindowElement extends HTMLDivElement {
 
 	constructor() {
 		super();
@@ -117,7 +117,7 @@ class OdometerTime extends HTMLTimeElement {
 	}
 }
 
-customElements.define("window-div", WindowDiv, {
+customElements.define("window-div", WindowElement, {
 	extends: "div"
 });
 
