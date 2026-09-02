@@ -4,21 +4,21 @@ class WindowDiv extends HTMLDivElement {
 		console.log("I connected balls");
 	}
 
-	maximize() {
+	maximize(maximizeAnimations) {
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
 		}
 
 
-		this.target.style.viewTransitionName = "window-fullscreen";
+		this.style.viewTransitionName = "window-fullscreen";
+
+		const self = this;
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(function() {
-				if (!self.target) return;
-				self.target.classList.toggle("maximized", enable);
+				self.classList.toggle("maximized", enable);
 			});
-			if (!self.target) return;
 
 
 			transition.ready.catch(function(ev) {
@@ -26,13 +26,12 @@ class WindowDiv extends HTMLDivElement {
 			});
 
 			transition.finished.finally(function() {
-				if (!self.target) return;
 				if (maximizeAnimations <= 1) {
-					self.target.style.viewTransitionName = "";
+					self.style.viewTransitionName = "";
 				}
 				maximizeAnimations--;
 			});
-		} else this.target.classList.toggle("maximized", enable);
+		} else this.classList.toggle("maximized", enable);
 	}
 }
 
