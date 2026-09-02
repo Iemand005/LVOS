@@ -24,12 +24,12 @@ class WindowDiv extends HTMLDivElement {
 		const self = this;
 		const dialog = this.dialog;
 
-		if (document.startViewTransition && dialog) {
+		if (document.startViewTransition) {
 			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
 
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
-			transition.finished.finally(() => {
+			if (dialog) transition.finished.finally(() => {
 				if (dialog.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
 				}
