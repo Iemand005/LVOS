@@ -1004,7 +1004,7 @@ function Dialog(object, create) {
 	/** @readonly */
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
-	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?, _fsTokenAtStart: number? }} */
+	/** @type {{_fsTimeout: number?, _fsRaf: number?, _fsToken: number?, _fsTokenAtStart: number? }} @readonly */
 	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null, _fsTokenAtStart: null };
 
     if (!object) return;
