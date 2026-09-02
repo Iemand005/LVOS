@@ -1131,7 +1131,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		if(!this.fixed && createSizers) {
 			/**
-			 * @this Dialog
+			 * @this {Dialog}
 			 * @param {number} id
 			 */
 			var createSizer = function (id) {
