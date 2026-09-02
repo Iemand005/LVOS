@@ -79,9 +79,7 @@ class OdometerTime extends HTMLTimeElement {
 	}
 
 	addDigit() {
-		const track = document.createElement("span", {
-			is: "odometer-track"
-		});
+		const track = document.createElement("span", { is: "odometer-track" });
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		if (track instanceof OdometerDigit) this.tracks.push(track);
 		this.appendChild(track);
@@ -92,9 +90,7 @@ class OdometerTime extends HTMLTimeElement {
 	 * @param {string} newValue New value
 	 */
 	attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "datetime" && oldValue !== newValue) {
-            this.update();
-        }
+        if (name === "datetime" && oldValue !== newValue) this.update();
     }
 
 	update() {
