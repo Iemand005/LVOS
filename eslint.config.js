@@ -5,7 +5,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 
 export default defineConfig(
 	{
-		files: ["**/*.js", "**/*.ts", "**/*.tsx", "*.d.ts"],
+		files: ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.ts"],
 
 		languageOptions: {
 			parser: tseslint.parser,
