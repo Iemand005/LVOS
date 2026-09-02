@@ -1808,7 +1808,7 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 			target.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd.call(dialog);
 		};
-		if (target instanceof HTMLElement)
+		if (!(target instanceof WindowDiv))
 		target.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
