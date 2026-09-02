@@ -307,7 +307,7 @@ function stringifyDialogProperties(properties){
 }
 
 function getViewBoxPosition() {
-	return { left: window.screenLeft, top: window.screenTop };
+	return { x: window.screenLeft, y: window.screenTop };
 }
 
 /** @param {number} value */
@@ -2289,8 +2289,8 @@ Dialog.prototype.createPopout = function() {
 		menubar: false,
 		width: rect.width,
 		height: rect.height,
-		left: rect.left + viewBoxPosition.left,
-		top: rect.top + viewBoxPosition.top + titleBarHeight
+		left: rect.left + viewBoxPosition.x,
+		top: rect.top + viewBoxPosition.y + titleBarHeight
 	}));
 	if (!this._popupWindow) return;
 	var self = this;
