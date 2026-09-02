@@ -2467,7 +2467,7 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 
 function DragAction() {
 	/** @type {DragFunction} */
-	this.execute = function(_dialog, offset, difference){};
+	this.execute = function(){};
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function move(dialog, offset, d){ dialog.move(offset.startX + d.x, offset.startY + d.y); },
