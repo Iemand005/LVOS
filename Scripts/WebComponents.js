@@ -63,6 +63,8 @@ class OdometerTime extends HTMLTimeElement {
 	}
 
 	connectedCallback() {
+		this.setAttribute("is", "odometer-time");
+
 		this.textContent = "";
 
 		for (let i = 0; i < 6; i++) {
@@ -72,7 +74,6 @@ class OdometerTime extends HTMLTimeElement {
 				this.append(":");
 		}
 
-		this.setAttribute("is", "odometer-time");
 
 		this.update();
 	}
