@@ -113,7 +113,7 @@ class OdometerTime extends HTMLTimeElement {
 			seconds % 10
 		];
 
-		this.tracks.forEach((track, index) => track.value = (digits[index]));
+		this.tracks.forEach((track, i) => track.value = digits[i]);
 	}
 }
 
