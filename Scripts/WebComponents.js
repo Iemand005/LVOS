@@ -11,9 +11,7 @@ class WindowDiv extends HTMLDivElement {
 	connectedCallback() {
 		console.log("I connected balls");
 	}
-	/**
-	 * @param {boolean} [enable] Enable maximization
-	 */
+	/** @param {boolean} [enable] Enable maximization */
 	toggleMaximizedVT(enable) {
 
 		if (document.activeViewTransition)
