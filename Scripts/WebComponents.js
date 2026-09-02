@@ -1,5 +1,13 @@
 
 class WindowDiv extends HTMLDivElement {
+
+	// constraintRotation
+	constructor() {
+		super();
+		/** @type {Dialog?} */
+		this.dialog = null;
+	}
+
 	connectedCallback() {
 		console.log("I connected balls");
 	}
