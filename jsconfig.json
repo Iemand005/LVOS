@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
 		"target": "es2025",
-		"lib": ["ES2018", "DOM"],
+		"lib": ["ES2025", "DOM"],
 		"checkJs": true,
 		"allowJs": true,
 		"strict": true,
 		"typeRoots": [
-			"./Types",
 			"./node_modules/@types"
 		],
-		"types": ["w3c-web-hid"]
+		"types": ["w3c-web-hid"],
+		"traceResolution": true
 	},
 	"ignoreDeprecations": "6.0",
 	"include": [
