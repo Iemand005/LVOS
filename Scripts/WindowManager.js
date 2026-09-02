@@ -1010,11 +1010,11 @@ function Dialog(object, create) {
     if (!object) return;
     if (!create) create = false;
 
-    /** @type {HTMLElement | WindowDiv | null} */
+    /** @type {HTMLElement | null} */
     this.target = null;
     var id = object.id;
 
-    /** @type {Application| null} */
+    /** @type {Application | null} */
     this.application = null;
     if (!isElement(object))
         this.application = object;
