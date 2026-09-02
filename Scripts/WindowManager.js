@@ -1848,8 +1848,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.setZ();
 
 	maximizeAnimations++;
-	if (flags.useViewTransitionMaximize) {
-		this.target
+	if (flags.useViewTransitionMaximize && "dialog" in this.target) {
+		this.target.toggleMaximized(enable, maximizeAnimations);
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
