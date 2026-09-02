@@ -1965,11 +1965,11 @@ Dialog.prototype.toggleFullButton = function (enable) {
 };
 /**
  * @param {MessageType} type
- * @param {*} [message]
+ * @param {LVMessage} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
-	if (frame) LVMessenger.broadcastToChild(type, message, frame);
+	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 };
 Dialog.prototype.updateTranslation = function () {
 	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
@@ -2003,7 +2003,7 @@ Dialog.prototype.updatePosition = function() {
 
 		backdrop.style.width = toPixels(wallpaperWidth);
 		backdrop.style.height = toPixels(wallpaperHeight);
-	} catch(_) {}
+	} catch(ex) { console.warn(ex); }
 };
 /**
  * @param {number} [x]
