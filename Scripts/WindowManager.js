@@ -1,7 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable jsdoc/require-returns-description */
-/* eslint-disable jsdoc/require-param-description */
-/* eslint-disable jsdoc/require-returns */
 /*\
    \________
    / ______/\                                               \\
