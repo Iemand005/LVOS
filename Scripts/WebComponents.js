@@ -12,7 +12,7 @@ class WindowDiv extends HTMLDivElement {
 		console.log("I connected balls");
 	}
 	/**
-	 * @param {boolean} enable Enable maximization
+	 * @param {boolean} [enable] Enable maximization
 	 */
 	toggleMaximized(enable) {
 
