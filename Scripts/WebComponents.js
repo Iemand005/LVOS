@@ -85,6 +85,10 @@ class OdometerTime extends HTMLTimeElement {
 	}
 }
 
+customElements.define("window", WindowDiv, {
+	"extends": "div"
+});
+
 customElements.define("odometer-track", OdometerTrack, {
 	extends: "span"
 });
