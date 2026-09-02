@@ -11,7 +11,7 @@ function LVMessenger(){
  * @param {Window} target
  * @param {MessageType} type
  * @param {*} message
- * @param {*} [id]
+ * @param {string} [id]
  */
 LVMessenger.broadcast = function (target, type, message, id){
 	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
