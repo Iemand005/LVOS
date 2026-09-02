@@ -38,6 +38,8 @@ class OdometerTime extends HTMLTimeElement {
 			}
 		}
 
+		this.setAttribute("is", "odometer-time");
+
 		this.update();
 	}
 
