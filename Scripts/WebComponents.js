@@ -3,6 +3,37 @@ class WindowDiv extends HTMLDivElement {
 	connectedCallback() {
 		console.log("I connected balls");
 	}
+
+	maximize() {
+
+		if (document.activeViewTransition) {
+			document.activeViewTransition.skipTransition();
+		}
+
+
+		this.target.style.viewTransitionName = "window-fullscreen";
+
+		if (document.startViewTransition) {
+			var transition = document.startViewTransition(function() {
+				if (!self.target) return;
+				self.target.classList.toggle("maximized", enable);
+			});
+			if (!self.target) return;
+
+
+			transition.ready.catch(function(ev) {
+				console.warn("transition interrupted:", ev);
+			});
+
+			transition.finished.finally(function() {
+				if (!self.target) return;
+				if (maximizeAnimations <= 1) {
+					self.target.style.viewTransitionName = "";
+				}
+				maximizeAnimations--;
+			});
+		} else this.target.classList.toggle("maximized", enable);
+	}
 }
 
 class OdometerTrack extends HTMLSpanElement {
