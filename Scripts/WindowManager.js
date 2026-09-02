@@ -842,7 +842,7 @@ window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 
-/** @type {number | NodeJS.Timeout} */
+/** @type {number} */
 ClickOffset.dragStopTimer = 0;
 
 /** @param {MouseEvent} ev */
