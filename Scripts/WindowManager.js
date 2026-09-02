@@ -730,15 +730,15 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 			node = node.parentElement;
 		}
 		if (isInteractive) {
-			try { dialog.focus(); } catch (e) {}
+			try { dialog.focus(); } catch (ex) { console.warn(ex); }
 			return dialog;
 		}
-	} catch (ex) { /* ignore */ }
+	} catch (ex) {  console.warn(ex);  }
 
 	cancelDomEvent(event);
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
+		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.warn(ex); }
 	}
 	if (flags.verboseLogs) console.log("Activating window", dialog);
 	this.activeDialog = dialog;
@@ -772,7 +772,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-}';'
+};
 
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
@@ -789,11 +789,11 @@ WindowManager.prototype.disableDialogDrag = function() {
 
 	var func = this.activeDialog.exchangeDialogMouseUpEvent;
 	if (func) func();
-}';'
+};
 
 WindowManager.prototype.enableDialogDrag = function() {
 	this.toggleDragging(true);
-}';'
+};
 
 /** @param {number} [newZ]  */
 WindowManager.prototype.updateTopZ = function(newZ) {
