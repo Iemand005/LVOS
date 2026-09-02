@@ -12,8 +12,7 @@
 "use strict";
 
 // Modifiable settings
-var useMica = false,
-	useTransform = true,
+var useTransform = true,
 	useScale = false;
 
 // HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
