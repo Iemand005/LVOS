@@ -646,8 +646,9 @@ WindowManager.prototype.getVisualizerApps = function() {
 	return apps;
 };
 
-/** @param {Application[]} arguments */
 WindowManager.prototype.injectApplications = function() {
+	/** @param {Application[]} arguments */
+	var apps = arguments;
 	for (var i = 0; i < arguments.length; i++)
 		arguments[i].forEach(windowManager.loadApp, windowManager);
 	windowManager.loadState();
@@ -673,7 +674,7 @@ WindowManager.recalculateWindowBounds = function() {
 	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
 	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
 	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
-}
+};
 
 window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
 window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
@@ -691,7 +692,7 @@ WindowManager.prototype.focusDialog = function(dialog) {
 		this.focusedDialog.target.removeAttribute("focus");
 	if (dialog.target) dialog.target.setAttribute("focus", String(true));
 	this.focusedDialog = dialog;
-}
+};
 
 
 WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
