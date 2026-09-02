@@ -13,7 +13,7 @@
 	},
 	"ignoreDeprecations": "6.0",
 	"include": [
-		"./Scripts/**",
+		"./Scripts/**/*.js",
 		"*.d.ts",
 	],
 	"exclude": [
