@@ -22,12 +22,6 @@ interface DocumentPictureInPicture extends EventTarget {
 	): void;
 }
 
-type CustomElementsByIsMap =
-    Partial<{
-        [K in keyof HTMLElementTagNameMap]:
-            Record<string, HTMLElementTagNameMap[K]>
-    }>;
-
 interface CustomElementsByIs {
     time: {
         "odometer-time": OdometerTime;
@@ -76,6 +70,14 @@ declare global {
 
 	interface Document {
 		documentMode?: number;
+
+		createElement<
+        K extends keyof HTMLElementTagNameMap,
+        I extends keyof CustomElementsByIs[K]
+    >(
+        tagName: K,
+        options: { is: I }
+    ): CustomElementsByIs[K][I];
 	}
 
 	interface Navigator {
