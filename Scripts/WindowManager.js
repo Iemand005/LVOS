@@ -647,8 +647,6 @@ WindowManager.prototype.getVisualizerApps = function() {
 };
 
 WindowManager.prototype.injectApplications = function() {
-	/** @param {Application[]} arguments */
-	var apps = arguments;
 	for (var i = 0; i < arguments.length; i++)
 		arguments[i].forEach(windowManager.loadApp, windowManager);
 	windowManager.loadState();
