@@ -1011,7 +1011,7 @@ function Dialog(object, create) {
     if (!object) return;
     if (!create) create = false;
 
-    /** @type {HTMLElement| null} */
+    /** @type {HTMLElement | WindowDiv | null} */
     this.target = null;
     var id = object.id;
 
@@ -1849,6 +1849,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	maximizeAnimations++;
 	if (flags.useViewTransitionMaximize) {
+		this.target
 
 		if (document.activeViewTransition) {
 			document.activeViewTransition.skipTransition();
