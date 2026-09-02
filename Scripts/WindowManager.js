@@ -772,7 +772,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
-}
+}';'
 
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
@@ -789,11 +789,11 @@ WindowManager.prototype.disableDialogDrag = function() {
 
 	var func = this.activeDialog.exchangeDialogMouseUpEvent;
 	if (func) func();
-}
+}';'
 
 WindowManager.prototype.enableDialogDrag = function() {
 	this.toggleDragging(true);
-}
+}';'
 
 /** @param {number} [newZ]  */
 WindowManager.prototype.updateTopZ = function(newZ) {
@@ -805,7 +805,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	this.forEachWindow(function(dialog) {
 		if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
 	});
-}
+};
 
 //#endregion
 
