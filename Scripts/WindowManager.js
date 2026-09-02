@@ -43,9 +43,6 @@ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !
 		"OTransform" in style
 	);
 })();
-
-var maximizeAnimations = 0;
-
 if (supportsPointer) console.log("Supports pointer events!");
 
 
@@ -999,6 +996,8 @@ function Dialog(object, create) {
 	this._rotation = 0;
 
 	this._maximizing = false;
+	this.maximizeAnimations = 0;
+
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
 	this._stateOpen = false;
