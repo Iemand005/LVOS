@@ -22,13 +22,13 @@ class WindowDiv extends HTMLDivElement {
 		this.style.viewTransitionName = "window-fullscreen";
 
 		const self = this;
-		const dialog = this.dialog;
 
 		if (document.startViewTransition) {
 			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
 
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
+			const dialog = this.dialog;
 			if (dialog) transition.finished.finally(() => {
 				if (dialog.maximizeAnimations <= 1) {
 					self.style.viewTransitionName = "";
