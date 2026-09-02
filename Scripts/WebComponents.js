@@ -68,9 +68,8 @@ class OdometerTime extends HTMLTimeElement {
 		for (let i = 0; i < 6; i++) {
 			this.addDigit();
 
-			if (i === 1 || i === 3) {
+			if (i === 1 || i === 3)
 				this.append(":");
-			}
 		}
 
 		this.setAttribute("is", "odometer-time");
