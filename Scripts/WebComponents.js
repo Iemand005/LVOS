@@ -1,3 +1,8 @@
+
+class Window extends HTMLDivElement {
+	
+}
+
 class OdometerTrack extends HTMLSpanElement {
 	constructor()  {
 		super();
