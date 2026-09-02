@@ -25,6 +25,7 @@ export default defineConfig(
 				toggleReflections: "writable",
 				setTheme: "writable",
 				WindowManager: "readonly",
+				DesktopManager: "readonly",
 				Dialog: "readonly"
 			}
 		},
