@@ -61,7 +61,6 @@ var onLoad = function () {
 		clock.id = "clock";
 
 		var updateClock = function() {
-			// clock.innerHTML = new Date().toLocaleTimeString();
             clock.dateTime = new Date().toISOString();
 		};
 
