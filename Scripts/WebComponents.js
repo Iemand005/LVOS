@@ -23,9 +23,8 @@ class WindowDiv extends HTMLDivElement {
 
 		const self = this;
 		const dialog = this.dialog;
-		if (!dialog) return;
 
-		if (document.startViewTransition) {
+		if (document.startViewTransition && dialog) {
 			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
 
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
