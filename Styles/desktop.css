@@ -550,6 +550,19 @@ desktop #launchpad {
 	display: block;
 }
 
+time {
+	display: flex;
+	line-height: 40px;
+	height: 40px;
+	overflow: hidden;
+}
+
+time span {
+	transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+	will-change: transform;
+	white-space: pre;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
