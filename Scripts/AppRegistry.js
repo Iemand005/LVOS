@@ -176,5 +176,3 @@ AppRegistry.prototype.setWallpaper = function(id) {
 
 var appRegistry = new AppRegistry;
 window.appRegistry = appRegistry;
-
-// module.exports = {appRegistry};
