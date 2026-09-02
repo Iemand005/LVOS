@@ -2,7 +2,7 @@
 
 import tseslint from "typescript-eslint";
 import globals from "globals";
-import jsdoc from 'eslint-plugin-jsdoc';
+import jsdoc from "eslint-plugin-jsdoc";
 
 export default tseslint.config({
 	files: ["**/*.js", "**/*.ts", "**/*.tsx", "*.d.ts"],
@@ -32,7 +32,7 @@ export default tseslint.config({
 		jsdoc
 	},
 	rules: {
-		...jsdoc.configs['flat/recommended'].rules,
+		...jsdoc.configs["flat/recommended"].rules,
 		"comma-dangle": ["error", "never"],
 		"no-var": "off",
 		"no-sequences": "off",
