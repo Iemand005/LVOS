@@ -1720,7 +1720,7 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
 	var rect = this.getRect();
 	if (!this.clickOffset || !rect) return;
-	return this.clickOffset.init(x, y, window.width || rect.width, window.height || rect.height, this.x, this.y);
+	return this.clickOffset.init(x, y, this.width || rect.width, this.height || rect.height, this.x, this.y);
 };
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
