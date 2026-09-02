@@ -35,7 +35,7 @@ class WindowElement extends HTMLDivElement {
 	}
 }
 
-class OdometerTrack extends HTMLSpanElement {
+class OdometerDigit extends HTMLSpanElement {
 	constructor()  {
 		super();
 		this.lineHeight = 40;
@@ -44,7 +44,7 @@ class OdometerTrack extends HTMLSpanElement {
 		this.setAttribute("is", "odometer-track");
 	}
 	/** @param {number} digit Digit value */
-	setDigit(digit) {
+	setValue(digit) {
 		const shiftY = digit * this.lineHeight;
 		this.style.transform = `translateY(-${shiftY}px)`;
 	}
@@ -58,7 +58,7 @@ class OdometerTime extends HTMLTimeElement {
 
 	constructor() {
 		super();
-		/** @type {OdometerTrack[]} */
+		/** @type {OdometerDigit[]} */
 		this.tracks = [];
 	}
 
@@ -83,7 +83,7 @@ class OdometerTime extends HTMLTimeElement {
 			is: "odometer-track"
 		});
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-		if (track instanceof OdometerTrack) this.tracks.push(track);
+		if (track instanceof OdometerDigit) this.tracks.push(track);
 		this.appendChild(track);
 	}
 	/**
@@ -113,7 +113,7 @@ class OdometerTime extends HTMLTimeElement {
 			seconds % 10
 		];
 
-		this.tracks.forEach((track, index) => track.setDigit(digits[index]));
+		this.tracks.forEach((track, index) => track.setValue(digits[index]));
 	}
 }
 
@@ -121,7 +121,7 @@ customElements.define("window-div", WindowElement, {
 	extends: "div"
 });
 
-customElements.define("odometer-track", OdometerTrack, {
+customElements.define("odometer-track", OdometerDigit, {
 	extends: "span"
 });
 

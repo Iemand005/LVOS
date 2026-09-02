@@ -27,7 +27,7 @@ interface CustomElementsByIs {
         "odometer-time": OdometerTime;
     };
 	span: {
-		"odometer-track": OdometerTrack;
+		"odometer-track": OdometerDigit;
 	}
 }
 
