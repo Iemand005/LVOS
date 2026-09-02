@@ -66,7 +66,7 @@ export default defineConfig(
 
 	// ES6 files: allow arrow functions
 	{
-		files: ["**/*.es6.js"],
+		files: ["**/WebComponents.js"],
 
 		rules: {
 			"no-restricted-syntax": [
