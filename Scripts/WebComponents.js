@@ -123,8 +123,8 @@ customElements.define("odometer-time", OdometerTime, {
 class Modern {
 
 	/**
-	 * @param {HTMLElement} el the element to pop out
-	 * @param {(pipWindow:Window)=>void} callback - the element to pop out
+	 * @param {HTMLElement} el
+	 * @param {(pipWindow:Window)=>void} callback
 	 */
 	static toggleElementPip(el, callback) {
 		if (typeof window.documentPictureInPicture === "undefined") {
