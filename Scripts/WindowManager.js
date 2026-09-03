@@ -247,7 +247,7 @@ function messageReceived(type, data, source){
 						targetElement.width = targetElement.clientWidth;
 						targetElement.height = targetElement.clientHeight;
 					};
-				}); d
+				});
 				break;
 			case "visualizers":
 				dialog.messageFrame("visualizers", window.windowManager.getVisualizerApps());
