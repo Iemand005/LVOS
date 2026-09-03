@@ -30,6 +30,9 @@
             <button id="mic">Microphone</button>
             <button id="display-audio">Display audio</button>
             <button id="aura-button">Connect Aura</button>
+            <button id="aura-boom-button" aria-pressed="false" title="Fade keyboard to white on drums/booms">Aura Boom: OFF</button>
+            <label id="aura-boom-sens-label" for="aura-boom-sensitivity" style="display:none; font-size:12px; opacity:0.9; margin-left:6px;">Sens <span id="aura-boom-sens-val">1.0x</span></label>
+            <input id="aura-boom-sensitivity" type="range" min="0.4" max="2.0" step="0.1" value="1.0" style="display:none; width:90px; vertical-align:middle;" title="Boom sensitivity — lower = only hard drums go white">
             <button id="pip-button">Open Picture In Picture</button>
             <button id="fullscreen">Fullscreen</button>
             <input min="5" step="1" max="15" type="range" name="fft" id="fft">

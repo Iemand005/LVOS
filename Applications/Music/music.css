@@ -79,3 +79,11 @@ input[type=range], input[type=range]:focus::-webkit-slider-runnable-track, input
 input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb {
     
 }
+
+#aura-boom-button.active {
+    background: #fff;
+    color: #111;
+    border-color: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.9);
+    font-weight: 700;
+}

@@ -32,6 +32,14 @@ const media = new Media;
 /** @type {Aura | null} */
 let aura = null;
 
+// ── Aura Boom (drum/peak → white flash) ───────────────────────
+let auraBoomEnabled = false;
+let auraBoomSmoothed = 0;
+let auraBoomSensitivity = 1.0; // 0.4 … 2.0 via slider
+const AURA_BOOM_GATE = 0.14; // below this, stay fully colored
+const AURA_BOOM_DECAY = 0.14; // faster decay so it doesn't linger white
+const AURA_BOOM_ATTACK = 0.38;
+
 if (options instanceof HTMLFormElement) options.onsubmit = function(ev) {
 	ev.preventDefault();
 };
@@ -47,7 +55,8 @@ const colorTitlebar = false;
 
 // ── Beat Detector ────────────────────────────────────────────────
 function BeatDetector() {
-	this.energyHistory = new Float32Array(43);
+	// ~1.4s window (86 * ~16.7ms) — longer & more stable avg than 43
+	this.energyHistory = new Float32Array(86);
 	this.historyIndex = 0;
 	this.beatCooldown = 0;
 	this.lastBeatTime = 0;
@@ -56,6 +65,7 @@ function BeatDetector() {
 	this.isBeat = false;
 	this.beatIntensity = 0;
 	this.smoothBPM = 0;
+	this.bpmConfidence = 0; // 0..1 stable
 }
 
 BeatDetector.prototype.update = function(freqData, time) {
@@ -103,14 +113,53 @@ BeatDetector.prototype.update = function(freqData, time) {
 			var interval = time - this.lastBeatTime;
 			if (interval > 250 && interval < 2000) {
 				var bpm = 60000 / interval;
+				// ── Half/double-time correction using median so far
+				if (this.bpmHistory.length >= 6) {
+					var tmp = this.bpmHistory.slice().sort(function(a,b){return a-b;});
+					var med = tmp[Math.floor(tmp.length/2)];
+					if (med > 1) {
+						if (bpm > med * 1.85 && bpm < med * 2.15) bpm /= 2;
+						else if (bpm < med * 0.58 && bpm > med * 0.42) bpm *= 2;
+					}
+				}
 				this.bpmHistory.push(bpm);
-				if (this.bpmHistory.length > 30) this.bpmHistory.shift();
+				if (this.bpmHistory.length > 64) this.bpmHistory.shift();
 
+				// ── Accurate, slow-moving BPM: median + outlier-rejected mean
 				if (this.bpmHistory.length >= 4) {
+					var sorted = this.bpmHistory.slice().sort(function(a,b){return a-b;});
+					var median = sorted[Math.floor(sorted.length/2)];
+					// keep only BPMs within ~10% + 4bpm of median (reject stray doubles)
+					var filtered = [];
+					for (var fi = 0; fi < this.bpmHistory.length; fi++) {
+						var v = this.bpmHistory[fi];
+						var tol = Math.max(5, median * 0.10);
+						if (Math.abs(v - median) <= tol) filtered.push(v);
+					}
+					// need at least half the history to agree, otherwise keep raw median
+					var useList = filtered.length >= Math.max(4, this.bpmHistory.length * 0.5) ? filtered : sorted;
 					var bSum = 0;
-					for (var i = 0; i < this.bpmHistory.length; i++) bSum += this.bpmHistory[i];
-					this.detectedBPM = bSum / this.bpmHistory.length;
-					this.smoothBPM += (this.detectedBPM - this.smoothBPM) * 0.15;
+					for (var bi = 0; bi < useList.length; bi++) bSum += useList[bi];
+					this.detectedBPM = bSum / useList.length;
+
+					// slow lerp for stability (most songs don't change BPM fast)
+					// init snap, then 0.05-0.06 drift
+					if (this.smoothBPM === 0) this.smoothBPM = this.detectedBPM;
+					else {
+						var lerp = this.bpmHistory.length >= 12 ? 0.05 : 0.08;
+						this.smoothBPM += (this.detectedBPM - this.smoothBPM) * lerp;
+					}
+
+					// confidence: low variance + enough samples
+					var vSum = 0;
+					for (var vi = 0; vi < useList.length; vi++) { var d = useList[vi] - this.detectedBPM; vSum += d*d; }
+					var bpmStd = Math.sqrt(vSum / useList.length);
+					var stable = bpmStd < Math.max(2.5, this.detectedBPM * 0.025);
+					// ramp confidence 0..1 over time
+					var targetConf = (stable && useList.length >= 8) ? 1 : (useList.length >= 4 ? 0.5 : 0);
+					this.bpmConfidence += (targetConf - this.bpmConfidence) * 0.08;
+					if (this.bpmConfidence < 0) this.bpmConfidence = 0;
+					if (this.bpmConfidence > 1) this.bpmConfidence = 1;
 				}
 			}
 		}
@@ -121,7 +170,7 @@ BeatDetector.prototype.update = function(freqData, time) {
 	this.beatIntensity *= 0.92;
 	if (this.beatIntensity < 0.001) this.beatIntensity = 0;
 
-	return { isBeat: this.isBeat, beatIntensity: this.beatIntensity, bpm: this.smoothBPM };
+	return { isBeat: this.isBeat, beatIntensity: this.beatIntensity, bpm: this.smoothBPM, lastBeatTime: this.lastBeatTime, bpmConfidence: this.bpmConfidence, bpmHistoryLen: this.bpmHistory.length, detectedBPM: this.detectedBPM };
 };
 
 var beatDetector = new BeatDetector();
@@ -154,17 +203,43 @@ function MusicApp(visualizerElement) {
 window.musicApp = null;
 
 /**
-	* Setter used by the wasm Aura bridge: the game engine forwards a colour
-	* through Module.onAuraColor; this pushes it to the same WebAura instance the
-	* music app drives.
-	* @param {number} r 0-255
-	* @param {number} g 0-255
-	* @param {number} b 0-255
-	*/
+ * Setter used by the wasm Aura bridge: the game engine forwards a colour
+ * through Module.onAuraColor; this pushes it to the same WebAura instance the
+ * music app drives.
+ * If Boom mode is on, the requested colour is faded toward white by the
+ * current drum/intensity amount (auraBoomSmoothed 0..1) so booms feel white.
+ * @param {number} r 0-255
+ * @param {number} g 0-255
+ * @param {number} b 0-255
+ */
 MusicApp.prototype.setAuraColor = function (r, g, b) {
 	if (!aura || !aura.device) return;
+	if (auraBoomEnabled && auraBoomSmoothed > 0.001) {
+		// map smoothed 0..1 through a curve so mid values stay tinted and only
+		// real peaks go near-white — fixes "always white / too sensitive"
+		var flashAmt = Math.pow(auraBoomSmoothed, 1.8) * 0.96;
+		if (flashAmt > 1) flashAmt = 1;
+		var flashed = flashWhite({ r: r, g: g, b: b }, flashAmt);
+		r = flashed.r; g = flashed.g; b = flashed.b;
+	}
 	aura.setColor(r, g, b).catch(function () {});
 };
+
+/** Update the Boom toggle button label/state */
+function updateAuraBoomButton() {
+	var btn = document.getElementById("aura-boom-button");
+	if (!btn) return;
+	btn.textContent = auraBoomEnabled ? "Aura Boom: ON" : "Aura Boom: OFF";
+	btn.setAttribute("aria-pressed", auraBoomEnabled ? "true" : "false");
+	btn.classList.toggle("active", auraBoomEnabled);
+	btn.title = auraBoomEnabled
+		? "Boom mode ON — keyboard fades to white on drums/peaks"
+		: "Boom mode OFF — keyboard stays on rainbow";
+	var sens = document.getElementById("aura-boom-sensitivity");
+	var sensLabel = document.getElementById("aura-boom-sens-label");
+	if (sens) sens.style.display = auraBoomEnabled ? "" : "none";
+	if (sensLabel) sensLabel.style.display = auraBoomEnabled ? "" : "none";
+}
 
 if (visualiser instanceof HTMLCanvasElement) {
 	window.musicApp = new MusicApp(visualiser);
@@ -194,6 +269,31 @@ if (auraButton) auraButton.onclick = function(){
 		console.log("Aura loaded!");
 	});
 };
+
+var auraBoomButton = document.getElementById("aura-boom-button");
+var auraBoomSensSlider = document.getElementById("aura-boom-sensitivity");
+if (auraBoomSensSlider) {
+	auraBoomSensSlider.oninput = function(){
+		auraBoomSensitivity = parseFloat(this.value) || 1.0;
+		var lbl = document.getElementById("aura-boom-sens-val");
+		if (lbl) lbl.textContent = (Math.round(auraBoomSensitivity * 10) / 10).toFixed(1) + "x";
+	};
+	// init from DOM
+	auraBoomSensitivity = parseFloat(auraBoomSensSlider.value) || 1.0;
+}
+if (auraBoomButton) {
+	updateAuraBoomButton();
+	auraBoomButton.onclick = function(ev){
+		ev.preventDefault();
+		auraBoomEnabled = !auraBoomEnabled;
+		if (auraBoomEnabled && aura && !aura.device) {
+			aura.init(true).catch(function(){});
+		}
+		if (!auraBoomEnabled) auraBoomSmoothed = 0;
+		updateAuraBoomButton();
+		console.log("Aura Boom:", auraBoomEnabled ? "ON" : "OFF", "sens", auraBoomSensitivity);
+	};
+}
 
 if (aura) aura.init();
 
@@ -710,6 +810,86 @@ MusicApp.prototype.animateFrame = function(time) {
 	const freqData = audioVisualiser.frequencyData;
 	const timeData = audioVisualiser.timeDomainData;
 	this.pushBinsToWasm(freqData, timeData);
+
+	const count = audioVisualiser.frequencyBinCount;
+
+	var total = 0;
+	for (let i = 0; i < freqData.length; i++)
+		total += freqData[i];
+	const averageIntensity = total / count;
+
+	this.rotation += (Math.pow(2, averageIntensity / 255 * 12) - 1) * 0.0001;
+	const hue = this.rotation;
+	const rgb = getRainbowRGB(hue);
+
+	// ── Aura Boom: BPM-synced white pulses ───────────────────────
+	// Keep this running even for "cake" so Module.onAuraColor (wasm) can use
+	// the smoothed amount via setAuraColor's flashWhite wrapper.
+	var beatForAura = beatDetector.update(freqData, time);
+	var auraTarget = 0;
+	if (auraBoomEnabled) {
+		var bpm = beatForAura.bpm;
+		var normIntensity = averageIntensity / 255;
+		var lowBins = Math.max(1, Math.min(16, Math.floor(freqData.length * 0.12)));
+		var lowSum = 0;
+		for (var bi = 0; bi < lowBins; bi++) lowSum += freqData[bi];
+		var lowAvg = (lowSum / lowBins) / 255;
+
+		// loudness gate — silence shouldn't pulse white; scale pulse amplitude
+		var loudScale = Math.pow(Math.max(0, normIntensity - 0.10) / 0.90, 0.9);
+		// also require some bass presence so mids don't trigger alone
+		var bassGate = lowAvg > 0.22 ? 1 : (lowAvg / 0.22) * 0.6 + 0.15;
+
+		var useBpmPulse = bpm > 45 && bpm < 200
+			&& beatForAura.bpmHistoryLen >= 8
+			&& beatForAura.bpmConfidence > 0.35
+			&& beatForAura.lastBeatTime > 0;
+
+		if (useBpmPulse) {
+			var interval = 60000 / bpm;
+			var since = time - beatForAura.lastBeatTime;
+			// phase since last detected beat, wrapped to interval (predictive)
+			var phaseMs = ((since % interval) + interval) % interval;
+			// flash duration: short snap ~ 160-190ms, capped to 28% of interval for fast songs
+			var pulseW = Math.min(185, interval * 0.30);
+			var pulse = Math.max(0, 1 - phaseMs / pulseW);
+			pulse = Math.pow(pulse, 1.35); // sharper
+			// scale by loudness so quiet passages pulse dimly, not full white
+			var amp = pulse * (0.55 + loudScale * 0.45) * bassGate;
+			auraTarget = amp * 0.98 * auraBoomSensitivity;
+		} else {
+			// fallback: direct beat-intensity pulse (no sustained bass wash)
+			var beatWhite = beatForAura.beatIntensity * 0.88;
+			// gate lows so it doesn't stay white between beats
+			if (beatWhite < 0.18) beatWhite = 0;
+			else beatWhite = Math.pow((beatWhite - 0.18) / 0.82, 1.15);
+			// scale by bass/loudness so empty beats are dim
+			auraTarget = beatWhite * (0.45 + loudScale * 0.55) * (0.6 + bassGate * 0.4) * auraBoomSensitivity;
+		}
+		if (auraTarget < AURA_BOOM_GATE) auraTarget = 0;
+		else {
+			auraTarget = (auraTarget - AURA_BOOM_GATE) / (1 - AURA_BOOM_GATE);
+			auraTarget = Math.pow(auraTarget, 1.10);
+		}
+		if (auraTarget > 1) auraTarget = 1;
+		if (auraTarget < 0) auraTarget = 0;
+	}
+	// fast attack, faster decay — pulse snaps white then fades to colour
+	if (auraTarget > auraBoomSmoothed) {
+		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * AURA_BOOM_ATTACK;
+	} else {
+		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * AURA_BOOM_DECAY;
+	}
+	if (auraBoomSmoothed < 0.001) auraBoomSmoothed = 0;
+	if (auraBoomSmoothed > 1) auraBoomSmoothed = 1;
+
+	// For 2D visualizers we push the colour ourselves; setAuraColor will
+	// internally flash toward white when Boom is on (using auraBoomSmoothed).
+	// For Cake, the wasm calls Module.onAuraColor -> setAuraColor which flashes there.
+	if (this.visualizer !== "cake") {
+		this.setAuraColor(rgb.r, rgb.g, rgb.b);
+	}
+
 	if (this.visualizer === "cake") { this.prevTime = time; return; }
 
 	const ctx = this.graphics.ctx;
@@ -724,19 +904,6 @@ MusicApp.prototype.animateFrame = function(time) {
 	}
 	refresh();
 	seek.value = audio.currentTime;
-
-	const count = audioVisualiser.frequencyBinCount;
-
-	var total = 0;
-	for (let i = 0; i < freqData.length; i++)
-		total += freqData[i];
-	const averageIntensity = total / count;
-
-	this.rotation += (Math.pow(2, averageIntensity / 255 * 12) - 1) * 0.0001;
-	const hue = this.rotation;
-	const rgb = getRainbowRGB(hue);
-
-	this.setAuraColor(rgb.r, rgb.g, rgb.b);
 	if (colorTitlebar) {
 		var parentWindow = getParentWindow();
 		if (parentWindow && parentWindow.__LVMessenger && parentWindow.__LVMessenger.accent) {
@@ -748,7 +915,7 @@ MusicApp.prototype.animateFrame = function(time) {
 		}
 	}
 
-	var beatInfo = beatDetector.update(freqData, time);
+	var beatInfo = beatForAura;
 
 	switch (this.visualizer) {
 		case "intensity":
