@@ -582,6 +582,39 @@ if (ciphrdSensSlider){
 	};
 	ciphrd.sensitivity = parseFloat(ciphrdSensSlider.value) || 1.0;
 }
+var ciphrdBandsSlider = document.getElementById("ciphrd-bands");
+var ciphrdRangeSlider = document.getElementById("ciphrd-range");
+var ciphrdSpacingSel = document.getElementById("ciphrd-spacing");
+if (ciphrdBandsSlider){
+	ciphrdBandsSlider.oninput = function(){
+		var v = parseInt(this.value,10) || 12;
+		ciphrd.bands = v;
+		// resize peaks/histories to new band count
+		while (ciphrd.bandPeaks.length < v){ ciphrd.bandPeaks.push({value:0,timer:null,energy:0}); ciphrd.bandPeakHistories.push([]); }
+		while (ciphrd.bandPeaks.length > v){ ciphrd.bandPeaks.pop(); ciphrd.bandPeakHistories.pop(); }
+		ciphrd.bandEnergies = new Array(v).fill(0);
+		ciphrd.bandAvgs = new Array(v).fill(0);
+		ciphrd.bandHistories = []; ciphrd.bandHistoryDeltas = [];
+		var lbl = document.getElementById("ciphrd-bands-val");
+		if (lbl) lbl.textContent = v+"";
+	};
+}
+if (ciphrdRangeSlider){
+	ciphrdRangeSlider.oninput = function(){
+		var v = parseFloat(this.value) || 0.45;
+		ciphrd.freqFraction = v;
+		var lbl = document.getElementById("ciphrd-range-val");
+		if (lbl) lbl.textContent = Math.round(v*100)+"%";
+		// clear band histories so new range takes effect quickly
+		ciphrd.bandHistories = []; ciphrd.bandHistoryDeltas = [];
+	};
+}
+if (ciphrdSpacingSel){
+	ciphrdSpacingSel.onchange = function(){
+		ciphrd.bandSpacing = this.value;
+		ciphrd.bandHistories = []; ciphrd.bandHistoryDeltas = [];
+	};
+}
 
 // ── BPM pulse dot + manual half/double ─────────────────────────
 (function initBpmControls(){
@@ -1480,11 +1513,12 @@ MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rg
 	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Eavg", pad+46, gy0+33);
 	ctx.fillStyle = "rgba(255,40,120,0.85)"; ctx.fillRect(pad+82, gy0+30, 10, 2);
 	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Thr=Eavg*C", pad+96, gy0+33);
-	// ── multiband 8 bands (Fig: band peaks) ─
+	// ── multiband (even, lower-only) ─
 	(function(){
+		var bands = ciphrd.bands;
 		var bandY = gy0 + gyH - 20;
-		var bw = (width - pad*2) / 8;
-		for (var b=0;b<8;b++){
+		var bw = (width - pad*2) / bands;
+		for (var b=0;b<bands;b++){
 			var be = (ciphrd.bandEnergies[b]||0);
 			var ba = (ciphrd.bandAvgs[b]||0);
 			var bp = ciphrd.bandPeaks[b] ? ciphrd.bandPeaks[b].value : 0;
@@ -1504,7 +1538,7 @@ MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rg
 			ctx.fillText(b, pad + b*bw + bw/2, bandY+28);
 		}
 		ctx.fillStyle="rgba(255,255,255,0.42)"; ctx.font="9px monospace"; ctx.textAlign="left";
-		ctx.fillText("8 bands quad (0=bass) — white=cur  green=avg  yellow tick=peak (thr 1.2, persist 300ms)", pad, bandY-5);
+		ctx.fillText(bands + " even bands over lower " + Math.round(ciphrd.freqFraction*100) + "% (" + (ciphrd.bandSpacing==="linear"?"linear":"quad") + ") — white=cur  green=avg  yellow=peak", pad, bandY-5);
 	})();
 
 	// ── bottom: circle reacting to eased peak (Fig10/18) ─
