@@ -1400,7 +1400,7 @@ MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rg
 	ctx.fillText("Fig3 — Frequency (512 bins → 128 bars)", pad, 14);
 	ctx.fillStyle = "rgba(255,255,255,0.45)";
 	ctx.font = "10px monospace";
-	ctx.fillText("energy E = avg FFT = " + energy.toFixed(1) + " /255", pad, 26);
+	ctx.fillText("energy E = avg |td-128| = " + energy.toFixed(1) + "  (FFT 512 → 128 bars for display only)", pad, 26);
 
 	// ── mid: energy graph (Fig4-8) ─
 	var gy0 = midY, gyH = midH;
@@ -1410,30 +1410,36 @@ MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rg
 	ctx.strokeStyle = "rgba(255,255,255,0.06)";
 	for (var g=0; g<=4; g++){ var yy = gy0 + g/4*gyH; ctx.beginPath(); ctx.moveTo(pad, yy); ctx.lineTo(width-pad, yy); ctx.stroke(); }
 
-	// history buffer for graph: need rolling window of last 64 energies + threshold
-	// Use ciphrd.history circular — reconstruct chronological
-	var histLen = ciphrd.filled;
-	var plotEnergy = function(arr, color, maxV){
-		if (!histLen) return;
+	// history buffer for graph: time-based (energyPersistence 2000ms)
+	var hist = ciphrd.energyHistory;
+	var histLen = hist.length;
+	var plotEnergyArr = function(arr, color, maxV){
+		if (!arr || !arr.length) return;
 		ctx.beginPath();
-		for (var i=0;i<histLen;i++){
-			var idx2 = (ciphrd.hIdx - histLen + i + ciphrd.s) % ciphrd.s;
-			var v = arr[idx2];
-			var x = pad + (i/(ciphrd.s-1))*(width - pad*2);
+		for (var i=0;i<arr.length;i++){
+			var v = arr[i];
+			var x = pad + (i/Math.max(1,arr.length-1))*(width - pad*2);
 			var y = gy0 + gyH - (Math.max(0, Math.min(1, v / maxV)) * (gyH - 10)) - 5;
 			if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
 		}
 		ctx.strokeStyle = color; ctx.lineWidth = 1.6; ctx.stroke();
 	};
-	plotEnergy(ciphrd.history, "rgba(255,255,255,0.95)", 255);
-	// avg line
-	var avgLine = new Float32Array(histLen);
-	for (var i=0;i<histLen;i++) avgLine[i] = Eavg;
-	// thr line
-	var thrLine = new Float32Array(histLen);
-	for (var i=0;i<histLen;i++) thrLine[i] = thr;
-	plotEnergy(avgLine, "rgba(80,180,255,0.9)", 255);
-	plotEnergy(thrLine, "rgba(255,40,120,0.9)", 255);
+	plotEnergyArr(hist, "rgba(255,255,255,0.95)", 64);
+	var avgLine = new Array(histLen).fill(Eavg);
+	var thrLine = new Array(histLen).fill(thr);
+	// helper for avg/thr lines
+	var plotLine2 = function(arr, color, maxV){
+		if (!arr.length) return;
+		ctx.beginPath();
+		for (var i=0;i<arr.length;i++){
+			var x = pad + (i/Math.max(1,arr.length-1))*(width - pad*2);
+			var y = gy0 + gyH - (Math.max(0, Math.min(1, arr[i] / maxV)) * (gyH - 10)) - 5;
+			if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+		}
+		ctx.strokeStyle = color; ctx.lineWidth = 1.3; ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
+	};
+	plotLine2(avgLine, "rgba(80,180,255,0.9)", 64);
+	plotLine2(thrLine, "rgba(255,40,120,0.9)", 64);
 	// peaks: vertical gold where eased>0 and isPeak
 	// we don't have per-history peak times, but mark current eased as dot on right edge
 	if (eased > 0.01){
@@ -1455,6 +1461,32 @@ MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rg
 	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Eavg", pad+46, gy0+33);
 	ctx.fillStyle = "rgba(255,40,120,0.85)"; ctx.fillRect(pad+82, gy0+30, 10, 2);
 	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Thr=Eavg*C", pad+96, gy0+33);
+	// ── multiband 8 bands (Fig: band peaks) ─
+	(function(){
+		var bandY = gy0 + gyH - 20;
+		var bw = (width - pad*2) / 8;
+		for (var b=0;b<8;b++){
+			var be = (ciphrd.bandEnergies[b]||0);
+			var ba = (ciphrd.bandAvgs[b]||0);
+			var bp = ciphrd.bandPeaks[b] ? ciphrd.bandPeaks[b].value : 0;
+			var bh = (be/255)*18, ah = (ba/255)*18;
+			ctx.fillStyle = "rgba(255,255,255,0.10)";
+			ctx.fillRect(pad + b*bw, bandY, bw-2, 18);
+			ctx.fillStyle = "rgba(80,255,180,0.55)";
+			ctx.fillRect(pad + b*bw, bandY+18-ah, bw-2, ah);
+			ctx.fillStyle = "rgba(255,255,255," + (0.6+bp*0.4) + ")";
+			ctx.fillRect(pad + b*bw, bandY+18-bh, bw-2, bh);
+			if (bp>0.04){
+				ctx.fillStyle = "rgba(255,255,120," + (0.5+bp*0.5) + ")";
+				ctx.fillRect(pad + b*bw, bandY-2, bw-2, 2);
+			}
+			ctx.fillStyle = "rgba(255,255,255,0.55)";
+			ctx.font="8px monospace"; ctx.textAlign="center";
+			ctx.fillText(b, pad + b*bw + bw/2, bandY+28);
+		}
+		ctx.fillStyle="rgba(255,255,255,0.42)"; ctx.font="9px monospace"; ctx.textAlign="left";
+		ctx.fillText("8 bands quad (0=bass) — white=cur  green=avg  yellow tick=peak (thr 1.2, persist 300ms)", pad, bandY-5);
+	})();
 
 	// ── bottom: circle reacting to eased peak (Fig10/18) ─
 	var cX = width * 0.5, cY = gy0 + gyH + botH*0.55;
@@ -1523,7 +1555,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	// Keep this running even for "cake" so Module.onAuraColor (wasm) flashes.
 	var beatForAura = beatDetector.update(freqData, timeData, time);
-	ciphrd.update(freqData, time);
+	ciphrd.update(freqData, timeData, time);
 
 	// ── BPM pulse dot — flashes white on the beat grid so you can see if BPM is right
 	// (independent of Aura Boom, lets you verify double-time vs half-time)
