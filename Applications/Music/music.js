@@ -1268,10 +1268,9 @@ MusicApp.prototype.drawBpmShowcase = function(ctx, width, height, freqData, coun
 // ── Visualizer: Ciphrd (replication of ciphrd.com audio analysis) ─
 // Replicates Fig 3-18: freq bars (Fig3), energy/avg/threshold/variance (Fig4-8),
 // peak with ignore 375ms + persistence 250ms + cubic in-out (Fig12-17), circle scale (Fig10/18)
+// Note: ciphrd.update is called in animateFrame every frame, so res is already fresh.
 MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time) {
-	var res = ciphrd.eased !== undefined ? ciphrd : { eased:0, energy:0, avg:0, threshold:0, variance:0, C:1.3 };
-	// Ensure latest — if animateFrame already updated, use cached; else update
-	if (!res.energy) { var r = ciphrd.update(freqData, time); res = r; }
+	var res = ciphrd;
 	var eased = res.eased; var energy = res.energy; var Eavg = res.avg; var thr = res.threshold; var vari = res.variance; var C = res.C;
 	// layout: top 34% freq bars, mid 38% energy graph, bottom circle
 	var pad = 12;
@@ -1610,6 +1609,9 @@ MusicApp.prototype.animateFrame = function(time) {
 		case "bpmshow":
 			this.drawBpmShowcase(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time);
 			break;
+		case "ciphrd":
+			this.drawCiphrd(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time);
+			break;
 		default:
 			this.drawBars(ctx, width, height, freqData, count, rgb);
 			break;
@@ -1700,3 +1702,7 @@ LVMessenger.receive(function(type, data, id) {
 		}
 	}
 });
+
+}
+
+// LVM
