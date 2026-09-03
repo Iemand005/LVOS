@@ -2422,7 +2422,6 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	var targetElement = this.getElementById(id);
 	console.log("Ripped out element:", targetElement);
 	if (targetElement && Modern) Modern.toggleElementPip(targetElement, function (window) {
-		if (!window) return;
 		window.onresize = function() {
 			if (!(targetElement instanceof HTMLCanvasElement)) return;
 			targetElement.width = targetElement.clientWidth;
