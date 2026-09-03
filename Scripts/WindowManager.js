@@ -2427,11 +2427,11 @@ Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
-
+/** @param {string} id */
 Dialog.prototype.moveElementIntoPipById = function(id) {
-	var targetElement = dialog.getElementById(data.id);
+	var targetElement = this.getElementById(id);
 	console.log("Ripped out element:", targetElement);
-	if (!targetElement) break;
+	if (!targetElement) return;
 	Modern.toggleElementPip(targetElement, function (pipWindow) {
 		if (!pipWindow) return;
 		pipWindow.onresize = function() {
