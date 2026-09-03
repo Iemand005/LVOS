@@ -951,6 +951,8 @@ function Dialog(object, create) {
 	this._maxHeight = 1000;
 	this._minAspectRatio = 0;
 	this._maxAspectRatio = Infinity;
+	this._aspectRatio = 0;
+	this._aspectRatioEnabled = false;
 	this._mica = flags.useMica;
 
 	this._useTransform = useTransform;
@@ -1348,6 +1350,24 @@ Object.defineProperty(Dialog.prototype, "size", {
 Object.defineProperty(Dialog.prototype, "aspectRatio", {
 	get: function() { return this.width / this.height; },
 	set: function(aspect) { this.width = this.height * aspect; }
+});
+
+/**
+ * The target width/height ratio that the window is constrained to when
+ * {@link Dialog#constrainAspectRatio} is enabled. 0 (or a non-positive value) means no constraint.
+ */
+Object.defineProperty(Dialog.prototype, "aspectRatioConstraint", {
+	get: function() { return this._aspectRatio; },
+	set: function(aspect) { this._aspectRatio = typeof aspect === "number" && aspect > 0 ? aspect : 0; }
+});
+
+/**
+ * Whether the window's {@link Dialog#aspectRatioConstraint} should be enforced by
+ * {@link Dialog#resize}. When enabled, resizing always keeps the window at the constraint ratio.
+ */
+Object.defineProperty(Dialog.prototype, "constrainAspectRatio", {
+	get: function() { return this._aspectRatioEnabled; },
+	set: function(enabled) { this._aspectRatioEnabled = !!enabled; }
 });
 
 Object.defineProperty(Dialog.prototype, "minAspectRatio", {
@@ -2090,14 +2110,128 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 	}
 };
 /**
+ * Which handle of the window a resize is being performed by. Used both to keep the
+ * opposite edges fixed in place while resizing and to enforce the aspect-ratio constraint.
+ * @typedef {"bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left"} ResizeDirection
+ */
+
+/**
  * @param {number} [width]
  * @param {number} [height]
+ * @param {ResizeDirection} [direction] Which handle is being resized. When given, the edges opposite
+ * the handle stay put (so resizing up/left/top-left also moves the window).
  */
-Dialog.prototype.resize = function (width, height) {
+Dialog.prototype.resize = function (width, height, direction) {
 	if (typeof width === "undefined" || width === null) width = this.width;
 	if (typeof height === "undefined" || height === null) height = this.height;
+
+	if (this._aspectRatioEnabled && this._aspectRatio) this._resizeWithAspect(width, height, direction);
+	else this._resizeFree(width, height, direction);
+};
+
+/**
+ * Applies a resize that keeps the opposite edges of the given direction fixed.
+ * @param {number} width
+ * @param {number} height
+ * @param {ResizeDirection} [direction]
+ */
+Dialog.prototype._resizeFree = function (width, height, direction) {
+	var oldX = this.x, oldY = this.y;
+	var oldW = this.width, oldH = this.height;
+
 	this.setWidth(width);
 	this.setHeight(height);
+
+	var newW = this.width, newH = this.height;
+	var newX = oldX, newY = oldY;
+
+	switch (direction) {
+		case "bottom-left":
+			newX = oldX + oldW - newW;
+			break;
+		case "top-right":
+			newY = oldY + oldH - newH;
+			break;
+		case "top-left":
+			newX = oldX + oldW - newW;
+			newY = oldY + oldH - newH;
+			break;
+		case "left":
+			newX = oldX + oldW - newW;
+			break;
+		case "top":
+			newY = oldY + oldH - newH;
+			break;
+		// bottom-right, bottom, right (and default): keep the top-left edge fixed.
+	}
+
+	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+};
+
+/**
+ * Resizes while keeping the window at its aspect-ratio constraint, moving it so the
+ * edges opposite the given direction stay fixed.
+ * @param {number} width
+ * @param {number} height
+ * @param {ResizeDirection} [direction]
+ */
+Dialog.prototype._resizeWithAspect = function (width, height, direction) {
+	var ratio = this._aspectRatio;
+	var oldX = this.x, oldY = this.y;
+	var oldW = this.width, oldH = this.height;
+	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
+	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
+
+	var driveWidth = true;
+	if (direction === "top" || direction === "bottom") driveWidth = false;
+	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right")
+		driveWidth = (Math.abs(width - oldW) / oldW) >= (Math.abs(height - oldH) / oldH);
+
+	var newW, newH;
+	if (driveWidth) {
+		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
+		newH = newW / ratio;
+		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
+		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
+	} else {
+		newH = Math.max(Math.min(height, this.maxHeight), this.minHeight);
+		newW = newH * ratio;
+		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
+		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
+	}
+
+	var newX = oldX, newY = oldY;
+	switch (direction) {
+		case "bottom-left":
+			newX = oldRight - newW;
+			break;
+		case "top-right":
+			newY = oldBottom - newH;
+			break;
+		case "top-left":
+			newX = oldRight - newW;
+			newY = oldBottom - newH;
+			break;
+		case "left":
+			newX = oldRight - newW;
+			newY = oldCenterY - newH / 2;
+			break;
+		case "right":
+			newY = oldCenterY - newH / 2;
+			break;
+		case "top":
+			newX = oldCenterX - newW / 2;
+			newY = oldBottom - newH;
+			break;
+		case "bottom":
+			newX = oldCenterX - newW / 2;
+			break;
+		// bottom-right (and default): keep the top-left edge fixed.
+	}
+
+	this.setWidth(newW);
+	this.setHeight(newH);
+	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
 };
 Dialog.prototype.update = function () {
 	this.move();
