@@ -925,32 +925,26 @@ MusicApp.prototype.animateFrame = function(time) {
 		// loudScale just tints the flash a bit, bass dominates
 		var loudScale = Math.pow(Math.max(0, normIntensity - 0.12) / 0.88, 0.9);
 
-		var useBpmPulse = bpm > 45 && bpm < 200
-			&& beatForAura.bpmHistoryLen >= 8
-			&& beatForAura.bpmConfidence > 0.32
+		// flash constantly even before lock — use provisional BPM if we have any
+		var useBpmPulse = bpm > 40 && bpm < 220
+			&& beatForAura.bpmHistoryLen >= 2
 			&& beatForAura.lastBeatTime > 0;
 
 		if (useBpmPulse) {
+			// BPM (even provisional, not too far off) — grid pulse, constant intensity, never miss
 			var interval = 60000 / bpm;
 			var since = time - beatForAura.lastBeatTime;
 			var phaseMs = ((since % interval) + interval) % interval;
-			// tight flash — 110-140ms, max 24% of interval so fast BPM stays crisp
-			var pulseW = Math.min(140, interval * 0.24);
+			var pulseW = Math.min(150, interval * 0.26);
 			var pulse = Math.max(0, 1 - phaseMs / pulseW);
-			pulse = Math.pow(pulse, 1.55);
-			// BASS is the whiteness: pulse * bassLevel, loudScale only adds 0-20%
-			var bassWeighted = bassLevel * (0.85 + loudScale * 0.30);
-			// require some bass — if bassLevel <0.18, flash is heavily muted
-			if (bassLevel < 0.18) bassWeighted *= (bassLevel / 0.18) * 0.55;
-			var amp = pulse * bassWeighted * 1.55;
+			pulse = Math.pow(pulse, 1.45);
+			var amp = pulse * 0.92;
 			auraTarget = amp * auraBoomSensitivity;
 		} else {
-			// fallback: beatIntensity pulse weighted by bass (no wash)
-			var beatWhite = beatForAura.beatIntensity;
-			// beatIntensity already bass-gated by detector, but weight again
-			beatWhite = beatWhite * (0.25 + bassLevel * 0.75 * 1.4);
-			if (beatWhite < 0.20) beatWhite = 0;
-			else beatWhite = Math.pow((beatWhite - 0.20) / 0.80, 1.20);
+			// no BPM yet — flash on every detected beat, also constant (don't miss)
+			var beatWhite = beatForAura.beatIntensity * 0.90;
+			if (beatWhite < 0.08) beatWhite = 0;
+			else beatWhite = Math.pow((beatWhite - 0.08) / 0.92, 1.10);
 			auraTarget = beatWhite * auraBoomSensitivity;
 		}
 		// extra gate so hi-hats/mids don't wash white
