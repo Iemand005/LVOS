@@ -120,6 +120,9 @@ customElements.define("odometer-time", OdometerTime, {
 });
 
 
+class Modern {
+	
+}
 
 /**
  * @param {HTMLElement} el - the element to pop out
