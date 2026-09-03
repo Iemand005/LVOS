@@ -588,7 +588,7 @@ DesktopManager.toggleElementPip = function(el, callback) {
 
 		callback(pipWindow);
 	});
-}
+};
 
 
 window.ondrop = document.ondrop = handleWallpaperDrop;
