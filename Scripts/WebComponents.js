@@ -127,23 +127,23 @@ class Modern {
 	 * @param {(pipWindow:Window)=>void} callback - the element to pop out
 	 */
 	static toggleElementPip(el, callback) {
-	if (typeof window.documentPictureInPicture === "undefined") {
-		console.warn("Document Picture-in-Picture not supported in this browser.");
-		return;
-	}
+		if (typeof window.documentPictureInPicture === "undefined") {
+			console.warn("Document Picture-in-Picture not supported in this browser.");
+			return;
+		}
 
-	// If already in PiP, close it (this triggers pagehide -> restores element)
-	var existing = window.documentPictureInPicture.window;
-	if (existing) {
-		existing.close();
-		return;
-	}
+		// If already in PiP, close it (this triggers pagehide -> restores element)
+		var existing = window.documentPictureInPicture.window;
+		if (existing) {
+			existing.close();
+			return;
+		}
 
 		var rect = el.getBoundingClientRect();
 		var width = Math.round(rect.width) || 400;
 		var height = Math.round(rect.height) || 300;
 
-		window.documentPictureInPicture.requestWindow({ width:zwidth, height }).then(function(pipWindow) {
+		window.documentPictureInPicture.requestWindow({ width, height }).then(function(pipWindow) {
 			var originalParent = el.parentNode;
 			var originalNextSibling = el.nextSibling;
 
