@@ -150,6 +150,26 @@ BeatDetector.prototype.update = function(freqData, time) {
 						this.smoothBPM += (this.detectedBPM - this.smoothBPM) * lerp;
 					}
 
+					// ── Double-time guard: prefer musical half-tempo when BPM reads fast
+					// e.g. 62 BPM songs often lock at 124 BPM — both are "correct" but half feels the pulse
+					if (this.smoothBPM > 100 && this.bpmHistory.length >= 8) {
+						var half = this.smoothBPM / 2;
+						var halfHits = 0, fullHits = 0;
+						for (var hi = 0; hi < this.bpmHistory.length; hi++) {
+							var hv = this.bpmHistory[hi];
+							if (Math.abs(hv - this.smoothBPM) <= Math.max(4, this.smoothBPM * 0.08)) fullHits++;
+							if (Math.abs(hv - half) <= Math.max(4, half * 0.08)) halfHits++;
+							if (Math.abs(hv * 2 - this.smoothBPM) <= Math.max(4, this.smoothBPM * 0.08)) halfHits++;
+						}
+						// if a third of history supports half-tempo, lean down — lower pulse is usually the "feel"
+						if (halfHits >= 4 && halfHits >= this.bpmHistory.length * 0.28 && halfHits * 1.1 > fullHits * 0.6) {
+							var halfTarget = half;
+							// faster snap down than normal lerp so it doesn't linger at 125
+							this.smoothBPM += (halfTarget - this.smoothBPM) * 0.18;
+							this.detectedBPM = halfTarget;
+						}
+					}
+
 					// confidence: low variance + enough samples
 					var vSum = 0;
 					for (var vi = 0; vi < useList.length; vi++) { var d = useList[vi] - this.detectedBPM; vSum += d*d; }
@@ -822,63 +842,67 @@ MusicApp.prototype.animateFrame = function(time) {
 	const hue = this.rotation;
 	const rgb = getRainbowRGB(hue);
 
-	// ── Aura Boom: BPM-synced white pulses ───────────────────────
-	// Keep this running even for "cake" so Module.onAuraColor (wasm) can use
-	// the smoothed amount via setAuraColor's flashWhite wrapper.
+	// ── Aura Boom: BASS-driven BPM-synced white pulses ─────────
+	// Bass causes the flash, BPM keeps it locked to the beat grid.
+	// Keep this running even for "cake" so Module.onAuraColor (wasm) flashes.
 	var beatForAura = beatDetector.update(freqData, time);
 	var auraTarget = 0;
 	if (auraBoomEnabled) {
 		var bpm = beatForAura.bpm;
 		var normIntensity = averageIntensity / 255;
-		var lowBins = Math.max(1, Math.min(16, Math.floor(freqData.length * 0.12)));
+		// use true bass band — ~8% lowest bins = kick/bass, not mids
+		var lowBins = Math.max(1, Math.min(12, Math.floor(freqData.length * 0.08)));
 		var lowSum = 0;
 		for (var bi = 0; bi < lowBins; bi++) lowSum += freqData[bi];
 		var lowAvg = (lowSum / lowBins) / 255;
-
-		// loudness gate — silence shouldn't pulse white; scale pulse amplitude
-		var loudScale = Math.pow(Math.max(0, normIntensity - 0.10) / 0.90, 0.9);
-		// also require some bass presence so mids don't trigger alone
-		var bassGate = lowAvg > 0.22 ? 1 : (lowAvg / 0.22) * 0.6 + 0.15;
+		// bassLevel is the driver: needs loud bass to go white, quiet bass stays colored
+		var bassLevel = Math.pow(lowAvg, 1.15);
+		// loudScale just tints the flash a bit, bass dominates
+		var loudScale = Math.pow(Math.max(0, normIntensity - 0.12) / 0.88, 0.9);
 
 		var useBpmPulse = bpm > 45 && bpm < 200
 			&& beatForAura.bpmHistoryLen >= 8
-			&& beatForAura.bpmConfidence > 0.35
+			&& beatForAura.bpmConfidence > 0.32
 			&& beatForAura.lastBeatTime > 0;
 
 		if (useBpmPulse) {
 			var interval = 60000 / bpm;
 			var since = time - beatForAura.lastBeatTime;
-			// phase since last detected beat, wrapped to interval (predictive)
 			var phaseMs = ((since % interval) + interval) % interval;
-			// flash duration: short snap ~ 160-190ms, capped to 28% of interval for fast songs
-			var pulseW = Math.min(185, interval * 0.30);
+			// tight flash — 110-140ms, max 24% of interval so fast BPM stays crisp
+			var pulseW = Math.min(140, interval * 0.24);
 			var pulse = Math.max(0, 1 - phaseMs / pulseW);
-			pulse = Math.pow(pulse, 1.35); // sharper
-			// scale by loudness so quiet passages pulse dimly, not full white
-			var amp = pulse * (0.55 + loudScale * 0.45) * bassGate;
-			auraTarget = amp * 0.98 * auraBoomSensitivity;
+			pulse = Math.pow(pulse, 1.55);
+			// BASS is the whiteness: pulse * bassLevel, loudScale only adds 0-20%
+			var bassWeighted = bassLevel * (0.85 + loudScale * 0.30);
+			// require some bass — if bassLevel <0.18, flash is heavily muted
+			if (bassLevel < 0.18) bassWeighted *= (bassLevel / 0.18) * 0.55;
+			var amp = pulse * bassWeighted * 1.55;
+			auraTarget = amp * auraBoomSensitivity;
 		} else {
-			// fallback: direct beat-intensity pulse (no sustained bass wash)
-			var beatWhite = beatForAura.beatIntensity * 0.88;
-			// gate lows so it doesn't stay white between beats
-			if (beatWhite < 0.18) beatWhite = 0;
-			else beatWhite = Math.pow((beatWhite - 0.18) / 0.82, 1.15);
-			// scale by bass/loudness so empty beats are dim
-			auraTarget = beatWhite * (0.45 + loudScale * 0.55) * (0.6 + bassGate * 0.4) * auraBoomSensitivity;
+			// fallback: beatIntensity pulse weighted by bass (no wash)
+			var beatWhite = beatForAura.beatIntensity;
+			// beatIntensity already bass-gated by detector, but weight again
+			beatWhite = beatWhite * (0.25 + bassLevel * 0.75 * 1.4);
+			if (beatWhite < 0.20) beatWhite = 0;
+			else beatWhite = Math.pow((beatWhite - 0.20) / 0.80, 1.20);
+			auraTarget = beatWhite * auraBoomSensitivity;
 		}
+		// extra gate so hi-hats/mids don't wash white
 		if (auraTarget < AURA_BOOM_GATE) auraTarget = 0;
 		else {
 			auraTarget = (auraTarget - AURA_BOOM_GATE) / (1 - AURA_BOOM_GATE);
-			auraTarget = Math.pow(auraTarget, 1.10);
+			auraTarget = Math.pow(auraTarget, 1.12);
 		}
 		if (auraTarget > 1) auraTarget = 1;
 		if (auraTarget < 0) auraTarget = 0;
 	}
-	// fast attack, faster decay — pulse snaps white then fades to colour
+	// snap white on kick, quick fade back to colour (crisp, not lingering)
+	var attack = 0.62, decay = 0.22;
 	if (auraTarget > auraBoomSmoothed) {
-		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * AURA_BOOM_ATTACK;
+		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * attack;
 	} else {
-		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * AURA_BOOM_DECAY;
+		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * decay;
 	}
 	if (auraBoomSmoothed < 0.001) auraBoomSmoothed = 0;
 	if (auraBoomSmoothed > 1) auraBoomSmoothed = 1;

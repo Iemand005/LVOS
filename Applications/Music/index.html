@@ -45,6 +45,12 @@
                 <option value="waveform">Waveform</option>
                 <option value="cake">Cake</option>
             </select>
+            <span id="bpm-pulse-wrap" style="display:inline-flex; align-items:center; gap:6px; margin-left:8px; vertical-align:middle;">
+                <span id="bpm-pulse-dot" title="Flashes white on each detected beat — if this is double-time, hit ½" style="width:14px; height:14px; border-radius:50%; background:#444; display:inline-block; box-shadow:0 0 0 0 rgba(255,255,255,0); transition: transform 70ms, background 70ms, box-shadow 70ms; flex-shrink:0;"></span>
+                <span id="bpm-pulse-label" style="font:12px monospace; opacity:0.85; min-width:64px;">-- BPM</span>
+                <button id="bpm-half" title="Halve BPM (fix double-time 125→62)" style="font-size:11px; padding:2px 6px; line-height:1;">½</button>
+                <button id="bpm-double" title="Double BPM" style="font-size:11px; padding:2px 6px; line-height:1;">2×</button>
+            </span>
         </section>
         <section id="playcontrols">
             <section>
