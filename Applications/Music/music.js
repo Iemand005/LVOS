@@ -1057,14 +1057,28 @@ MusicApp.prototype.drawBpmDebug = function(ctx, width, height, freqData, count, 
 MusicApp.prototype.drawBpmShowcase = function(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time) {
 	var bpm = beatInfo.bpm;
 	var conf = beatInfo.bpmConfidence || 0;
-	var interval = bpm > 30 ? 60000 / bpm : 0;
+	// smooth BPM + phase accumulator so estimate jumps don't cause extra/missed pulses
+	var targetBpm = bpm;
+	if (targetBpm > 0 && this._showcaseBpm === 0) this._showcaseBpm = targetBpm;
+	if (targetBpm > 0) {
+		var lerpShow = 0.045; // slow for showcase — no sporadic jumps
+		this._showcaseBpm += (targetBpm - this._showcaseBpm) * lerpShow;
+	} else if (targetBpm === 0) {
+		// no BPM yet: decay showcase BPM so pulse fades instead of snapping
+		this._showcaseBpm *= 0.985;
+		if (this._showcaseBpm < 30) this._showcaseBpm = 0;
+	}
+	var interval = this._showcaseBpm > 30 ? 60000 / this._showcaseBpm : 0;
 	var pulse = 0;
 	if (interval > 0) {
-		// pure estimated BPM metronome — not anchored to lastBeat/dot, so white dot jitter doesn't affect showcase
-		var phase = time % interval;
-		var w = Math.min(180, interval * 0.28);
-		pulse = Math.max(0, 1 - phase / w);
+		var dt = time - this.prevTime;
+		if (!isFinite(dt) || dt < 0 || dt > 100) dt = 16.67;
+		this._showcasePhase = (this._showcasePhase + dt / interval) % 1;
+		var wFrac = Math.min(180, interval * 0.28) / interval;
+		pulse = Math.max(0, 1 - this._showcasePhase / wFrac);
 		pulse = Math.pow(pulse, 1.35);
+	} else {
+		this._showcasePhase = 0;
 	}
 	var cX = width/2, cY = height/2;
 	// background
