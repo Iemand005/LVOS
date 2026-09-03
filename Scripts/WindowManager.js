@@ -2432,8 +2432,7 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 Dialog.prototype.getElementById = function(id) {
 	console.log("Element ID to pull out of my guts: " + id);
 	var doc = this.contentDocument;
-	if (!doc) return null;
-	return doc.getElementById(id);
+	return doc && doc.getElementById(id);
 };
 
 //#endregion
