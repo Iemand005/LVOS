@@ -81,12 +81,12 @@ function CiphrdAnalyzer(){
 	this.bands = 12;
 	this.freqFraction = 0.45; // only lower 45% of FFT bins (ignore airy highs)
 	this.bandSpacing = 'linear'; // 'linear' = even, 'quad' = p*p
-	this.bandEnergies = new Array(8).fill(0);
+	this.bandEnergies = new Array(this.bands).fill(0);
 	this.bandHistories = []; // array of arrays
 	this.bandHistoryDeltas = [];
-	this.bandAvgs = new Array(8).fill(0);
-	this.bandPeaks = []; for (var i=0;i<8;i++) this.bandPeaks.push({ value:0, timer:null, energy:0 });
-	this.bandPeakHistories = []; for (var i=0;i<8;i++) this.bandPeakHistories.push([]);
+	this.bandAvgs = new Array(this.bands).fill(0);
+	this.bandPeaks = []; for (var i=0;i<this.bands;i++) this.bandPeaks.push({ value:0, timer:null, energy:0 });
+	this.bandPeakHistories = []; for (var i=0;i<this.bands;i++) this.bandPeakHistories.push([]);
 	this.bandThreshold = 1.08;
 	this.bandPersistence = 900;
 }
@@ -175,16 +175,17 @@ CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
 	}
 	this.eased = peak.value;
 	this.lastPeakTime = peak.timer || this.lastPeakTime;
-	// ---- multiband ----
+	// ---- multiband — even + lower-only (only lower freqFraction of spectrum) ----
 	if (freqData && freqData.length){
 		var fSize = freqData.length;
+		var effSize = Math.max(1, Math.floor(fSize * this.freqFraction));
 		var bandsEnergy = new Array(this.bands);
 		for (var b=0;b<this.bands;b++){
-			var sIdx = Math.floor(this._bandPos(b/this.bands)*fSize);
-			var eIdx = Math.floor(this._bandPos((b+1)/this.bands)*fSize);
+			var sIdx = Math.floor((b/this.bands)*effSize);
+			var eIdx = Math.floor(((b+1)/this.bands)*effSize);
 			if (eIdx<=sIdx) eIdx=sIdx+1;
 			var be=0;
-			for (var f=sIdx; f<eIdx && f<fSize; f++) be+=freqData[f];
+			for (var f=sIdx; f<eIdx && f<effSize; f++) be+=freqData[f];
 			bandsEnergy[b]= be / (eIdx - sIdx);
 		}
 		this.bandEnergies = bandsEnergy;
