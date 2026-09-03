@@ -2428,10 +2428,9 @@ Dialog.prototype.loadState = function(state) {
 Dialog.prototype.exportDialogBodyToMetro = function() {
 
 };
-
+/** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
-	var id = data.id;
-	console.log("Element ID to rip from app guts: " + id, dialog);
+	console.log("Element ID to pull out of my guts: " + id);
 	var doc = dialog.contentDocument;
 	if (!doc) break;
 	var targetElement = doc.getElementById(id);
