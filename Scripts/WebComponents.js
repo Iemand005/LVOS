@@ -120,11 +120,12 @@ customElements.define("odometer-time", OdometerTime, {
 });
 
 
+
 /**
  * @param {HTMLElement} el - the element to pop out
  * @param {(pipWindow:Window)=>void} callback - the element to pop out
  */
-DesktopManager.toggleElementPip = function(el, callback) {
+async function toggleElementPip(el, callback) {
   if (!("documentPictureInPicture" in window) || !window.documentPictureInPicture) {
     console.warn("Document Picture-in-Picture not supported in this browser.");
     return null;
