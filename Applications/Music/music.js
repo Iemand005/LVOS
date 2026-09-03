@@ -54,73 +54,170 @@ const colorTitlebar = false;
 
 
 // ── Ciphrd Audio Analysis (https://ciphrd.com/articles/audio-analysis-for-advanced-music-visualization/) ─
-// Energy E = avg FFT, history s=64, avg/variance, adaptive threshold C via variance,
-// ignore 0.375s, persistence 0.25s, cubic in-out easing → organic 0-1 peak.
+// Exact replication of starter: https://github.com/ciphrd/audio-visualization-starter
+// Global energy from TIMEDOMAIN (|td-128| avg), history time-based (energyPersistence ms),
+// peak: energy/avg > threshold, ignoreTime, peakPersistency, linear→cubic in-out.
+// Config: fftSize 512, threshold 1.8, ignore 300ms, persistence 2000ms, peakPersistency 300ms (starter)
+// Article variant: adaptive C via variance, ignore 375ms, persist 250ms, cubic — we expose both via _useAdaptive.
 function CiphrdAnalyzer(){
-	this.s = 64;
-	this.history = new Float32Array(64);
-	this.hIdx = 0;
-	this.filled = 0;
-	this.lastPeakTime = -1e9;
-	this.peakStart = -1e9;
-	this.persistence = 250; // ms
-	this.ignore = 375; // ms
-	this.eased = 0;
+	this.energyHistory = [];
+	this.energyHistoryDelta = [];
 	this.energy = 0;
 	this.avg = 0;
+	this.peak = { value: 0, timer: null, energy: 0 };
+	this.peakHistory = [];
+	this.threshold = 1.8;
+	this.ignore = 300;
+	this.persistence = 2000; // history window
+	this.peakPersistency = 300;
+	this.lastPeakTime = -1e9;
+	this.eased = 0;
 	this.variance = 0;
-	this.threshold = 0;
-	this.C = 1.3;
-	this.rawPeak = 0;
+	this.C = 1.8;
+	this._useAdaptive = false; // article adaptive via variance if true
+	this._prevTime = -1;
+	// multiband (8 bands, quadratic spacing, thr 1.2, persist 1200)
+	this.bands = 8;
+	this.bandEnergies = new Array(8).fill(0);
+	this.bandHistories = []; // array of arrays
+	this.bandHistoryDeltas = [];
+	this.bandAvgs = new Array(8).fill(0);
+	this.bandPeaks = []; for (var i=0;i<8;i++) this.bandPeaks.push({ value:0, timer:null, energy:0 });
+	this.bandPeakHistories = []; for (var i=0;i<8;i++) this.bandPeakHistories.push([]);
+	this.bandThreshold = 1.2;
+	this.bandPersistence = 1200;
 }
 CiphrdAnalyzer.prototype.cubicInOut = function(x){
 	if (x < 0.5) return 4 * x * x * x;
 	return (x - 1) * (2 * x - 2) * (2 * x - 2) + 1;
 };
-CiphrdAnalyzer.prototype.update = function(freqData, time){
-	var N = freqData.length;
-	var sum = 0; for (var i=0;i<N;i++) sum += freqData[i];
-	var E = sum / N;
-	this.energy = E;
-	this.history[this.hIdx] = E;
-	this.hIdx = (this.hIdx + 1) % this.s;
-	if (this.filled < this.s) this.filled++;
-	// avg
-	var ssum = 0; for (var i=0;i<this.filled;i++) ssum += this.history[i];
-	var Eavg = this.filled ? ssum / this.filled : E;
-	this.avg = Eavg;
-	// variance
-	var v = 0; for (var i=0;i<this.filled;i++){ var d = this.history[i]-Eavg; v += d*d; }
-	v = this.filled ? v / this.filled : 0;
-	this.variance = v;
-	// adaptive C via variance (Patin regression adapted to 0-255 FFT)
-	// Ciphrd/Patin: C = -0.0025714*V + 1.5142857 ; V is variance of energy (≈0-~4000 for 0-255)
-	// Clamp to 1.05-1.5 to avoid extremes on silence/loud
-	var C = -0.0025714 * v + 1.5142857;
-	if (C < 1.05) C = 1.05; if (C > 1.50) C = 1.50;
-	this.C = C;
-	this.threshold = Eavg * C;
-	// peak detection: E / Eavg - C > 0
-	var isPeak = false;
-	if (this.filled >= 8) {
-		var ratio = Eavg > 0.001 ? E / Eavg : 0;
-		if (ratio - C > 0 && time - this.lastPeakTime > this.ignore) {
-			isPeak = true;
-			this.lastPeakTime = time;
-			this.peakStart = time;
-			this.rawPeak = 1;
+CiphrdAnalyzer.prototype._bandPos = function(p){ return p*p; }; // quadratic as starter
+CiphrdAnalyzer.prototype._peakInterp = function(cur, start, persist, easeFn){
+	return Math.max(0, easeFn(1 - (cur - start) / persist));
+};
+CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
+	var dt = 0;
+	if (this._prevTime >= 0) dt = time - this._prevTime;
+	else dt = 16.67;
+	this._prevTime = time;
+	if (dt <0 || dt> 100) dt = 16.67;
+	// ---- global energy from TIMEDOMAIN (as starter) ----
+	var tE = 0;
+	if (timeData && timeData.length){
+		for (var i=0;i<timeData.length;i++) tE += Math.abs(timeData[i]-128);
+		tE /= timeData.length;
+	} else {
+		// fallback frequency avg
+		var s=0; for (var i=0;i<freqData.length;i++) s+=freqData[i]; tE = s/freqData.length;
+	}
+	this.energy = tE;
+	// push history time-based
+	this.energyHistory.push(tE);
+	this.energyHistoryDelta.push(dt);
+	var sum = 0;
+	for (var i=this.energyHistoryDelta.length-1;i>=0;i--){
+		sum += this.energyHistoryDelta[i];
+		if (sum >= this.persistence){
+			this.energyHistory.splice(0, i);
+			this.energyHistoryDelta.splice(0, i);
+			break;
 		}
 	}
-	// eased persistence
-	var dt = time - this.peakStart;
-	if (dt >= 0 && dt < this.persistence) {
-		var linear = 1 - dt / this.persistence;
-		this.eased = this.cubicInOut(linear);
-	} else {
-		this.eased = 0;
-		this.rawPeak = 0;
+	var avg = 0;
+	if (this.energyHistory.length) {
+		var ss=0; for (var i=0;i<this.energyHistory.length;i++) ss+=this.energyHistory[i];
+		avg = ss / this.energyHistory.length;
 	}
-	return { eased: this.eased, raw: this.rawPeak, energy: E, avg: Eavg, variance: v, threshold: this.threshold, C: C, isPeak: isPeak };
+	this.avg = avg;
+	var vari = 0;
+	if (this.energyHistory.length){
+		for (var i=0;i<this.energyHistory.length;i++){ var d=this.energyHistory[i]-avg; vari+=d*d; }
+		vari/=this.energyHistory.length;
+	}
+	this.variance = vari;
+	var C = this.threshold;
+	if (this._useAdaptive){
+		C = -0.0025714 * vari + 1.5142857;
+		if (C<1.05) C=1.05; if (C>1.8) C=1.8;
+	}
+	this.C = C;
+	this.thresholdVal = avg * C;
+	// peak detection (starter logic)
+	var peak = this.peak;
+	var isPeak = false;
+	if (peak.timer != null){
+		if (time - peak.timer <= this.ignore){
+			if (peak.value > 0) peak.value = this._peakInterp(time, peak.timer, this.peakPersistency, this.cubicInOut.bind(this));
+		} else {
+			if (avg > 0.001 && tE / avg > C){
+				var dp = { value:1, timer:time, energy:tE };
+				this.peakHistory.push(dp);
+				peak.value = 1; peak.timer = time; peak.energy = tE;
+				isPeak = true;
+			} else if (peak.value > 0){
+				peak.value = this._peakInterp(time, peak.timer, this.peakPersistency, this.cubicInOut.bind(this));
+			}
+		}
+	} else {
+		if (avg > 0.001 && tE / avg > C){
+			var dp2 = { value:1, timer:time, energy:tE };
+			this.peakHistory.push(dp2);
+			peak.value = 1; peak.timer = time; peak.energy = tE;
+			isPeak = true;
+		}
+	}
+	this.eased = peak.value;
+	this.lastPeakTime = peak.timer || this.lastPeakTime;
+	// ---- multiband ----
+	if (freqData && freqData.length){
+		var fSize = freqData.length;
+		var bandsEnergy = new Array(this.bands);
+		for (var b=0;b<this.bands;b++){
+			var sIdx = Math.floor(this._bandPos(b/this.bands)*fSize);
+			var eIdx = Math.floor(this._bandPos((b+1)/this.bands)*fSize);
+			if (eIdx<=sIdx) eIdx=sIdx+1;
+			var be=0;
+			for (var f=sIdx; f<eIdx && f<fSize; f++) be+=freqData[f];
+			bandsEnergy[b]= be / (eIdx - sIdx);
+		}
+		this.bandEnergies = bandsEnergy;
+		this.bandHistories.push(bandsEnergy.slice());
+		this.bandHistoryDeltas.push(dt);
+		var bSum=0;
+		for (var i=this.bandHistories.length-1;i>=0;i--){
+			bSum+=this.bandHistoryDeltas[i];
+			if (bSum >= this.bandPersistence){
+				this.bandHistories.splice(0,i);
+				this.bandHistoryDeltas.splice(0,i);
+				break;
+			}
+		}
+		var avgs = new Array(this.bands).fill(0);
+		for (var i=0;i<this.bandHistories.length;i++){
+			for (var b=0;b<this.bands;b++) avgs[b]+=this.bandHistories[i][b];
+		}
+		for (var b=0;b<this.bands;b++) avgs[b]/= Math.max(1,this.bandHistories.length);
+		this.bandAvgs = avgs;
+		for (var b=0;b<this.bands;b++){
+			var bp = this.bandPeaks[b];
+			var bHist = this.bandPeakHistories[b];
+			var bE = bandsEnergy[b], bAvg = avgs[b];
+			if (bp.timer != null){
+				if (time - bp.timer <= this.ignore){
+					if (bp.value>0) bp.value = this._peakInterp(time, bp.timer, this.peakPersistency, this.cubicInOut.bind(this));
+				} else {
+					if (bAvg>0.001 && bE / bAvg > this.bandThreshold){
+						var nbp={value:1,timer:time,energy:bE}; bHist.push(nbp); bp.value=1; bp.timer=time; bp.energy=bE;
+					} else if (bp.value>0) bp.value = this._peakInterp(time, bp.timer, this.peakPersistency, this.cubicInOut.bind(this));
+				}
+			} else {
+				if (bAvg>0.001 && bE / bAvg > this.bandThreshold){
+					var nbp2={value:1,timer:time,energy:bE}; bHist.push(nbp2); bp.value=1; bp.timer=time; bp.energy=bE;
+				}
+			}
+		}
+	}
+	return { eased: this.eased, raw: this.peak.value, energy: tE, avg: avg, variance: vari, threshold: this.thresholdVal, C: C, isPeak: isPeak, bandPeaks: this.bandPeaks, bandEnergies: this.bandEnergies, bandAvgs: this.bandAvgs };
 };
 var ciphrd = new CiphrdAnalyzer();
 
