@@ -2435,7 +2435,7 @@ Dialog.prototype.getElementById = function(id) {
 	if (!doc) return null;
 	var targetElement = doc.getElementById(id);
 	console.log("Ripped out element:", targetElement);
-	if (!targetElement) return null;
+	return targetElement;
 };
 
 //#endregion
