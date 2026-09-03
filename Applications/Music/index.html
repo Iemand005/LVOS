@@ -59,6 +59,18 @@
                 <input id="ciphrd-sens" type="range" min="0.6" max="2.2" step="0.1" value="1.0" style="width:80px;" title="Higher = more sensitive (hits more often)">
                 <span id="ciphrd-sens-val" style="font:11px monospace; min-width:32px;">1.0x</span>
             </span>
+            <span id="ciphrd-bands-wrap" style="display:inline-flex; align-items:center; gap:4px; margin-left:8px; vertical-align:middle;">
+                <label for="ciphrd-bands" style="font-size:11px; opacity:0.85;">Bands</label>
+                <input id="ciphrd-bands" type="range" min="4" max="16" step="1" value="12" style="width:70px;" title="Number of frequency bands (more = finer, even)">
+                <span id="ciphrd-bands-val" style="font:11px monospace; min-width:18px;">12</span>
+                <label for="ciphrd-range" style="font-size:11px; opacity:0.85; margin-left:6px;">Range</label>
+                <input id="ciphrd-range" type="range" min="0.25" max="1.0" step="0.05" value="0.45" style="width:70px;" title="Only lower X% of spectrum (0.45 = bass focus, 1.0 = all)">
+                <span id="ciphrd-range-val" style="font:11px monospace; min-width:28px;">45%</span>
+                <select id="ciphrd-spacing" style="font-size:11px; padding:1px 4px;" title="Band spacing: even (linear) vs quad (bass-heavy)">
+                    <option value="linear" selected>Even</option>
+                    <option value="quad">Quad</option>
+                </select>
+            </span>
         </section>
         <section id="playcontrols">
             <section>
