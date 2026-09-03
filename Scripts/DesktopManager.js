@@ -552,9 +552,6 @@ function handleWallpaperDrop(ev) {
     }
 }
 
-
-
-
 window.ondrop = document.ondrop = handleWallpaperDrop;
 
 // Load cached wallpaper on initialization

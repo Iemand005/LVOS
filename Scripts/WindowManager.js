@@ -239,7 +239,7 @@ function messageReceived(type, data, source){
 			case "pip":
 				var targetElement = dialog.getElementById(data.id);
 				console.log("Ripped out element:", targetElement);
-				if (!targetElement) break;
+				if (!targetElement || !DesktopManager.toggleElementPip) break;
 				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
 					if (!pipWindow) return;
 					pipWindow.onresize = function() {
