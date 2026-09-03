@@ -143,7 +143,7 @@ class Modern {
 		var width = Math.round(rect.width) || 400;
 		var height = Math.round(rect.height) || 300;
 
-		window.documentPictureInPicture.requestWindow({ width:width, height:height }).then(function(pipWindow) {
+		window.documentPictureInPicture.requestWindow({ width:zwidth, height }).then(function(pipWindow) {
 			var originalParent = el.parentNode;
 			var originalNextSibling = el.nextSibling;
 
