@@ -123,7 +123,7 @@ customElements.define("odometer-time", OdometerTime, {
 class Modern {
 
 	/**
-	 * @param {HTMLElement} el - the element to pop out
+	 * @param {HTMLElement} el the element to pop out
 	 * @param {(pipWindow:Window)=>void} callback - the element to pop out
 	 */
 	static toggleElementPip(el, callback) {
@@ -132,7 +132,6 @@ class Modern {
 			return;
 		}
 
-		// If already in PiP, close it (this triggers pagehide -> restores element)
 		var existing = window.documentPictureInPicture.window;
 		if (existing)
 			existing.close();
