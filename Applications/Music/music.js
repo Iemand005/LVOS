@@ -54,9 +54,13 @@ const colorTitlebar = false;
 
 
 // ── Beat Detector ────────────────────────────────────────────────
+// Fix for "low ends always maxed, highs empty": use finer FFT (512→256 bins, ~86Hz/bin)
+// and detect beats from TIME-DOMAIN envelope when freq low is saturated, otherwise
+// use band-limited flux. High bins empty don't dilute the avg.
 function BeatDetector() {
-	// ~1.4s window (86 * ~16.7ms) — longer & more stable avg than 43
-	this.energyHistory = new Float32Array(86);
+	// ~1.5s window (90 * ~16.7ms)
+	this.energyHistory = new Float32Array(90);
+	this.timeHistory = new Float32Array(90);
 	this.historyIndex = 0;
 	this.beatCooldown = 0;
 	this.lastBeatTime = 0;
@@ -66,42 +70,99 @@ function BeatDetector() {
 	this.beatIntensity = 0;
 	this.smoothBPM = 0;
 	this.bpmConfidence = 0; // 0..1 stable
+	this._prevLow = 0;
+	this._prevTimeEnergy = 0;
 }
 
-BeatDetector.prototype.update = function(freqData, time) {
-	var totalEnergy = 0;
+BeatDetector.prototype.update = function(freqData, timeData, time) {
+	// ---- freq low band (true bass: 0–250Hz) ----
+	// With fftSize 512 → bin width ~86Hz, so 0–250Hz ≈ 3 bins. Use 0-350Hz (~4 bins) + a bit more for 64-bin fallback.
+	// Compute adaptable lowEnd: aim for ~300Hz cutoff.
+	var lowEnd = 4;
+	if (freqData.length >= 64) {
+		// estimate binHz = 22050 / freqData.length  (22050 = nyquist)
+		var binHz = 22050 / freqData.length;
+		lowEnd = Math.max(3, Math.min(Math.floor(320 / binHz), Math.floor(freqData.length * 0.12)));
+	} else {
+		lowEnd = Math.min(Math.floor(freqData.length * 0.15), freqData.length);
+	}
 	var lowEnergy = 0;
-	var lowEnd = Math.min(Math.floor(freqData.length * 0.15), freqData.length);
 	for (var i = 0; i < lowEnd; i++) {
 		var norm = freqData[i] / 255;
 		lowEnergy += norm * norm;
 	}
 	lowEnergy /= lowEnd;
 
+	var totalEnergy = 0;
 	for (var i = 0; i < freqData.length; i++) {
 		var norm = freqData[i] / 255;
 		totalEnergy += norm * norm;
 	}
 	totalEnergy /= freqData.length;
 
-	this.energyHistory[this.historyIndex] = totalEnergy;
+	// ---- time-domain envelope (not saturated even when freq low is maxed) ----
+	var timeEnergy = 0;
+	if (timeData && timeData.length) {
+		for (var i = 0; i < timeData.length; i++) {
+			var n = (timeData[i] - 128) / 128;
+			timeEnergy += n * n;
+		}
+		timeEnergy /= timeData.length;
+		// scale to 0..1 comparable to freq (empirical *2.2)
+		timeEnergy = Math.min(1, timeEnergy * 2.2);
+	} else {
+		timeEnergy = totalEnergy;
+	}
+
+	// ---- histories: track lowEnergy and timeEnergy separately ----
+	this.energyHistory[this.historyIndex] = lowEnergy;
+	this.timeHistory[this.historyIndex] = timeEnergy;
 	this.historyIndex = (this.historyIndex + 1) % this.energyHistory.length;
 
-	var sum = 0;
-	for (var i = 0; i < this.energyHistory.length; i++) sum += this.energyHistory[i];
-	var avgEnergy = sum / this.energyHistory.length;
+	// avg/std for low
+	var sumL = 0; for (var i = 0; i < this.energyHistory.length; i++) sumL += this.energyHistory[i];
+	var avgLow = sumL / this.energyHistory.length;
+	var varL = 0; for (var i = 0; i < this.energyHistory.length; i++) { var d = this.energyHistory[i] - avgLow; varL += d*d; }
+	varL /= this.energyHistory.length; var stdLow = Math.sqrt(varL);
+	// avg/std for time
+	var sumT = 0; for (var i = 0; i < this.timeHistory.length; i++) sumT += this.timeHistory[i];
+	var avgTime = sumT / this.timeHistory.length;
+	var varT = 0; for (var i = 0; i < this.timeHistory.length; i++) { var d2 = this.timeHistory[i] - avgTime; varT += d2*d2; }
+	varT /= this.timeHistory.length; var stdTime = Math.sqrt(varT);
 
-	var variance = 0;
-	for (var i = 0; i < this.energyHistory.length; i++) {
-		var diff = this.energyHistory[i] - avgEnergy;
-		variance += diff * diff;
+	var avgEnergy = avgLow; // for debug compat
+	var stdDev = stdLow;
+	var threshold = avgLow + stdLow * 1.0 + 0.012;
+	var thresholdTime = avgTime + stdTime * 1.0 + 0.010;
+
+	// Flux: change since last frame — catches kicks even when low is near-maxed (flux still spikes)
+	var fluxLow = lowEnergy - this._prevLow;
+	var fluxTime = timeEnergy - this._prevTimeEnergy;
+	this._prevLow = lowEnergy;
+	this._prevTimeEnergy = timeEnergy;
+
+	// Saturation check: if low is pegged >0.92 most of the window, freq alone can't see kicks
+	var saturatedCount = 0;
+	for (var i = 0; i < this.energyHistory.length; i++) if (this.energyHistory[i] > 0.88) saturatedCount++;
+	var isSaturated = saturatedCount > this.energyHistory.length * 0.55;
+
+	// Beat when either domain spikes: freq flux or time flux, plus band energy above avg
+	var fluxThreshLow = stdLow * 0.55 + 0.015;
+	var fluxThreshTime = stdTime * 0.55 + 0.012;
+	var freqHit = (lowEnergy > threshold || fluxLow > fluxThreshLow) && lowEnergy > avgLow * 1.04;
+	var timeHit = (timeEnergy > thresholdTime || fluxTime > fluxThreshTime) && timeEnergy > avgTime * 1.06;
+
+	var beatDetected;
+	if (isSaturated) {
+		// freq maxed → rely on time envelope + flux, ignore freq threshold
+		beatDetected = timeHit;
+		threshold = thresholdTime; avgEnergy = avgTime; stdDev = stdTime;
+	} else {
+		// normal: need either freq or time to hit, but low must have some bass
+		beatDetected = (freqHit || timeHit) && lowEnergy > 0.08;
+		// for debug, expose freq threshold
 	}
-	variance /= this.energyHistory.length;
-	var stdDev = Math.sqrt(variance);
-
-	var threshold = avgEnergy + stdDev * 1.0 + 0.015;
-	var beatDetected = totalEnergy > threshold && lowEnergy > avgEnergy * 1.05;
-	var cooldownMs = 220;
+	var cooldownMs = 180;
 
 	this.isBeat = false;
 	if (beatDetected && this.beatCooldown <= 0) {
@@ -222,7 +283,7 @@ function MusicApp(visualizerElement) {
 
 	// ── BPM debug histories ──────────────────────────────────
 	this.dbgMax = 360; // ~6s at 60fps
-	this.dbgInt = []; this.dbgLow = []; this.dbgAvg = []; this.dbgThr = [];
+	this.dbgInt = []; this.dbgLow = []; this.dbgAvg = []; this.dbgThr = []; this.dbgTime = [];
 	this.dbgBeat = []; // 1 if beat else 0
 	this.dbgBpm = []; this.dbgAura = [];
 
@@ -1014,7 +1075,7 @@ MusicApp.prototype.animateFrame = function(time) {
 	const rgb = getRainbowRGB(hue);
 
 	// Keep this running even for "cake" so Module.onAuraColor (wasm) flashes.
-	var beatForAura = beatDetector.update(freqData, time);
+	var beatForAura = beatDetector.update(freqData, timeData, time);
 
 	// ── BPM pulse dot — flashes white on the beat grid so you can see if BPM is right
 	// (independent of Aura Boom, lets you verify double-time vs half-time)
@@ -1058,6 +1119,11 @@ MusicApp.prototype.animateFrame = function(time) {
 		var lowDbg = (lowSumDbg/lowBinsDbg);
 		var thrDbg = beatForAura._dbg ? beatForAura._dbg.threshold : 0;
 		var avgDbg = beatForAura._dbg ? beatForAura._dbg.avgEnergy : 0;
+		var timeDbg = 0;
+		if (timeData && timeData.length){
+			var _tSum=0; for (var _ti=0; _ti<timeData.length; _ti++){ var _n=(timeData[_ti]-128)/128; _tSum+=_n*_n; }
+			timeDbg = (_tSum/timeData.length)*2.2*255;
+		}
 		// BPM pulse marker (yellow) vs raw beat (red)
 		var isBpmPulse = false;
 		if (beatForAura.bpm > 40 && beatForAura.lastBeatTime>0){
@@ -1071,11 +1137,12 @@ MusicApp.prototype.animateFrame = function(time) {
 		_self.dbgLow.push(lowDbg);
 		_self.dbgAvg.push(avgDbg);
 		_self.dbgThr.push(thrDbg);
+		_self.dbgTime.push(timeDbg);
 		_self.dbgBeat.push(beatForAura.isBeat ? 1 : (isBpmPulse ? 2 : 0));
 		_self.dbgBpm.push(beatForAura.bpm || 0);
 		_self.dbgAura.push(auraBoomSmoothed*255);
 		var cap = _self.dbgMax;
-		if (_self.dbgInt.length > cap){ _self.dbgInt.shift(); _self.dbgLow.shift(); _self.dbgAvg.shift(); _self.dbgThr.shift(); _self.dbgBeat.shift(); _self.dbgBpm.shift(); _self.dbgAura.shift(); }
+		if (_self.dbgInt.length > cap){ _self.dbgInt.shift(); _self.dbgLow.shift(); _self.dbgAvg.shift(); _self.dbgThr.shift(); _self.dbgTime.shift(); _self.dbgBeat.shift(); _self.dbgBpm.shift(); _self.dbgAura.shift(); }
 	})();
 
 	// ── Aura Boom: BASS-driven BPM-synced white pulses ─────────
