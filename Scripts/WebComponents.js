@@ -134,10 +134,8 @@ class Modern {
 
 		// If already in PiP, close it (this triggers pagehide -> restores element)
 		var existing = window.documentPictureInPicture.window;
-		if (existing) {
+		if (existing)
 			existing.close();
-			return;
-		}
 
 		var rect = el.getBoundingClientRect();
 		var width = Math.round(rect.width) || 400;
