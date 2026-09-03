@@ -237,11 +237,7 @@ function messageReceived(type, data, source){
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
 			case "pip":
-				var id = data.id;
-				console.log("Element ID to rip from app guts: " + id, dialog);
-				var doc = dialog.contentDocument;
-				if (!doc) break;
-				var targetElement = doc.getElementById(id);
+				var targetElement = dialog.getElementById(data.id);
 				console.log("Ripped out element:", targetElement);
 				if (!targetElement) break;
 				DesktopManager.toggleElementPip(targetElement, function (pipWindow) {
