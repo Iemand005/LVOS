@@ -2429,6 +2429,16 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 
 };
 
+Dialog.prototype.getElementById = function(id) {
+	var id = data.id;
+	console.log("Element ID to rip from app guts: " + id, dialog);
+	var doc = dialog.contentDocument;
+	if (!doc) break;
+	var targetElement = doc.getElementById(id);
+	console.log("Ripped out element:", targetElement);
+	if (!targetElement) break;
+};
+
 //#endregion
 
 //#region DragAction

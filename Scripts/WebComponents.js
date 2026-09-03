@@ -1,4 +1,8 @@
 
+class DesktopElement extends HTMLElement {
+	
+}
+
 class WindowElement extends HTMLDivElement {
 
 	constructor() {
