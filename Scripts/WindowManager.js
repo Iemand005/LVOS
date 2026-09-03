@@ -1372,11 +1372,11 @@ Object.defineProperty(Dialog.prototype, "constrainAspectRatio", {
 });
 
 /**
- * When {@link Dialog#constrainAspectRatio} is enabled and resizing from a corner, decides which
- * border is authoritative.
- * - `true` (inner): keeps the first border under the mouse (the vertical edge glued to the cursor Y).
- * - `false` (outer, default): the other side is constrained (the horizontal edge glued to cursor X).
- * When `false`, resizing stays anchored to the opposite corner.
+ * Selects how corner resizes behave when {@link Dialog#constrainAspectRatio} is enabled. The axis
+ * that is locked switches automatically based on which side of the corner's diagonal (the aspect
+ * ratio line) the mouse is on, so the resize stays a proper right angle instead of a single axis.
+ * - `true` (inner / L shape): locks the SMALLER axis, so the window hugs the corner under the mouse.
+ * - `false` (outer / V shape, default): locks the LARGER axis, so the mouse goes away from the window.
  */
 Object.defineProperty(Dialog.prototype, "constrainAspectRatioInner", {
 	get: function() { return this._constrainAspectRatioInner; },
@@ -2197,11 +2197,15 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right")
-		// For corners, the `constrainAspectRatioInner` flag decides which border is authoritative,
-		// so the resize stays stable throughout the drag instead of alternating between the two
-		// candidate anchors every frame.
-		driveWidth = !this._constrainAspectRatioInner;
+	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
+		// Corners: the requested width/height are the mouse's horizontal/vertical distance from
+		// the stable (non-drag) corner. Whichever axis to lock is decided by which side of the
+		// corner's diagonal (the aspect-ratio line) the mouse is on.
+		var boxRatio = height ? width / height : (width > 0 ? Infinity : 1);
+		// L shape (inner): keep the smaller axis locked so the box hugs the corner under the mouse.
+		// V shape (outer): keep the larger axis locked so the mouse goes away from the window.
+		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
+	}
 
 	var newW, newH;
 	if (driveWidth) {
