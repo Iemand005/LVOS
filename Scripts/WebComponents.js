@@ -121,43 +121,43 @@ customElements.define("odometer-time", OdometerTime, {
 
 
 class Modern {
-	
+
+	/**
+	 * @param {HTMLElement} el - the element to pop out
+	 * @param {(pipWindow:Window)=>void} callback - the element to pop out
+	 */
+	static async toggleElementPip(el, callback) {
+	if (typeof window.documentPictureInPicture === "undefined") {
+		console.warn("Document Picture-in-Picture not supported in this browser.");
+		return;
+	}
+
+	// If already in PiP, close it (this triggers pagehide -> restores element)
+	var existing = window.documentPictureInPicture.window;
+	if (existing) {
+		existing.close();
+		return;
+	}
+
+		var rect = el.getBoundingClientRect();
+		var width = Math.round(rect.width) || 400;
+		var height = Math.round(rect.height) || 300;
+
+		window.documentPictureInPicture.requestWindow({ width:width, height:height }).then(function(pipWindow) {
+			var originalParent = el.parentNode;
+			var originalNextSibling = el.nextSibling;
+
+			pipWindow.document.body.style.margin = "0";
+			pipWindow.document.body.appendChild(el);
+
+			pipWindow.addEventListener("pagehide", function () {
+				if (!originalParent) return;
+				if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
+				else originalParent.appendChild(el);
+			}, { once: true });
+
+			callback(pipWindow);
+		});
+	};
+
 }
-
-/**
- * @param {HTMLElement} el - the element to pop out
- * @param {(pipWindow:Window)=>void} callback - the element to pop out
- */
-async function toggleElementPip(el, callback) {
-  if (typeof window.documentPictureInPicture === "undefined") {
-    console.warn("Document Picture-in-Picture not supported in this browser.");
-    return;
-  }
-
-  // If already in PiP, close it (this triggers pagehide -> restores element)
-  var existing = window.documentPictureInPicture.window;
-  if (existing) {
-    existing.close();
-    return;
-  }
-
-  	var rect = el.getBoundingClientRect();
-	var width = Math.round(rect.width) || 400;
-	var height = Math.round(rect.height) || 300;
-
-	window.documentPictureInPicture.requestWindow({ width:width, height:height }).then(function(pipWindow) {
-		var originalParent = el.parentNode;
-		var originalNextSibling = el.nextSibling;
-
-		pipWindow.document.body.style.margin = "0";
-		pipWindow.document.body.appendChild(el);
-
-		pipWindow.addEventListener("pagehide", function () {
-			if (!originalParent) return;
-			if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
-			else originalParent.appendChild(el);
-		}, { once: true });
-
-		callback(pipWindow);
-	});
-};
