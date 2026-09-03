@@ -1723,6 +1723,7 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
 	var rect = this.getRect();
 	if (!this.clickOffset || !rect) return;
+	this._aspectDragDrive = null;
 	return this.clickOffset.init(x, y, this.width || rect.width, this.height || rect.height, this.x, this.y);
 };
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
@@ -2184,8 +2185,13 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right")
-		driveWidth = (Math.abs(width - oldW) / oldW) >= (Math.abs(height - oldH) / oldH);
+	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
+		// Snap the driving axis once per drag so a corner resize doesn't flip between
+		// width-driven and height-driven behaviour every frame while dragging.
+		if (this._aspectDragDrive == null)
+			this._aspectDragDrive = (Math.abs(width - oldW) / oldW) >= (Math.abs(height - oldH) / oldH);
+		driveWidth = this._aspectDragDrive;
+	}
 
 	var newW, newH;
 	if (driveWidth) {
@@ -2574,14 +2580,14 @@ function DragAction() {
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function move(dialog, offset, d){ dialog.move(offset.startX + d.x, offset.startY + d.y); },
-		function top(dialog, offset, d){ dialog.resize(offset.width, offset.height + d.y, "top"); },
+		function top(dialog, offset, d){ dialog.resize(offset.width, offset.height - d.y, "top"); },
 		function right(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height, "right"); },
 		function bottom(dialog, offset, d){ dialog.resize(offset.width, offset.height + d.y, "bottom"); },
-		function left(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height, "left"); },
-		function topLeft(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "top-left"); },
-		function topRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "top-right"); },
+		function left(dialog, offset, d){ dialog.resize(offset.width - d.x, offset.height, "left"); },
+		function topLeft(dialog, offset, d){ dialog.resize(offset.width - d.x, offset.height - d.y, "top-left"); },
+		function topRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height - d.y, "top-right"); },
 		function bottomRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "bottom-right"); },
-		function bottomLeft(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "bottom-left"); }
+		function bottomLeft(dialog, offset, d){ dialog.resize(offset.width - d.x, offset.height + d.y, "bottom-left"); }
 	];
 }
 
