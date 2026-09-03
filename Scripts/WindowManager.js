@@ -953,6 +953,7 @@ function Dialog(object, create) {
 	this._maxAspectRatio = Infinity;
 	this._aspectRatio = 0;
 	this._aspectRatioEnabled = false;
+	this._constrainAspectRatioInner = false;
 	this._mica = flags.useMica;
 
 	this._useTransform = useTransform;
@@ -1370,6 +1371,18 @@ Object.defineProperty(Dialog.prototype, "constrainAspectRatio", {
 	set: function(enabled) { this._aspectRatioEnabled = !!enabled; }
 });
 
+/**
+ * When {@link Dialog#constrainAspectRatio} is enabled and resizing from a corner, decides which
+ * border is authoritative.
+ * - `true` (inner): keeps the first border under the mouse (the vertical edge glued to the cursor Y).
+ * - `false` (outer, default): the other side is constrained (the horizontal edge glued to cursor X).
+ * When `false`, resizing stays anchored to the opposite corner.
+ */
+Object.defineProperty(Dialog.prototype, "constrainAspectRatioInner", {
+	get: function() { return this._constrainAspectRatioInner; },
+	set: function(enabled) { this._constrainAspectRatioInner = !!enabled; }
+});
+
 Object.defineProperty(Dialog.prototype, "minAspectRatio", {
 	get: function() { return this._minAspectRatio; },
 	set: function(aspect) { this.width = this.height * aspect; }
@@ -1723,7 +1736,6 @@ Dialog.prototype.createOpenButton = function () {
 Dialog.prototype.setClickOffset = function(x, y) {
 	var rect = this.getRect();
 	if (!this.clickOffset || !rect) return;
-	this._aspectDragDrive = null;
 	return this.clickOffset.init(x, y, this.width || rect.width, this.height || rect.height, this.x, this.y);
 };
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
@@ -2185,13 +2197,11 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
-		// Snap the driving axis once per drag so a corner resize doesn't flip between
-		// width-driven and height-driven behaviour every frame while dragging.
-		if (this._aspectDragDrive == null)
-			this._aspectDragDrive = (Math.abs(width - oldW) / oldW) >= (Math.abs(height - oldH) / oldH);
-		driveWidth = this._aspectDragDrive;
-	}
+	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right")
+		// For corners, the `constrainAspectRatioInner` flag decides which border is authoritative,
+		// so the resize stays stable throughout the drag instead of alternating between the two
+		// candidate anchors every frame.
+		driveWidth = !this._constrainAspectRatioInner;
 
 	var newW, newH;
 	if (driveWidth) {
