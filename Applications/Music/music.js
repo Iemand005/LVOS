@@ -201,7 +201,7 @@ BeatDetector.prototype.update = function(freqData, time) {
 	this.beatIntensity *= 0.92;
 	if (this.beatIntensity < 0.001) this.beatIntensity = 0;
 
-	return { isBeat: this.isBeat, beatIntensity: this.beatIntensity, bpm: this.smoothBPM, lastBeatTime: this.lastBeatTime, bpmConfidence: this.bpmConfidence, bpmHistoryLen: this.bpmHistory.length, detectedBPM: this.detectedBPM };
+	return { isBeat: this.isBeat, beatIntensity: this.beatIntensity, bpm: this.smoothBPM, lastBeatTime: this.lastBeatTime, bpmConfidence: this.bpmConfidence, bpmHistoryLen: this.bpmHistory.length, detectedBPM: this.detectedBPM, _dbg: { threshold: threshold, avgEnergy: avgEnergy, lowEnergy: lowEnergy, totalEnergy: totalEnergy, stdDev: stdDev } };
 };
 
 var beatDetector = new BeatDetector();
@@ -214,11 +214,17 @@ function MusicApp(visualizerElement) {
 	this.graphics = new Graphics2D(visualizerElement);
 	console.log("graphics canvas found:", this.graphics.ctx);
 
-	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform"} */
+	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform" | "bpmdebug"} */
 	this.visualizer = "bars";
 
 	this.prevTime = 0;
 	this.rotation = 0;
+
+	// ── BPM debug histories ──────────────────────────────────
+	this.dbgMax = 360; // ~6s at 60fps
+	this.dbgInt = []; this.dbgLow = []; this.dbgAvg = []; this.dbgThr = [];
+	this.dbgBeat = []; // 1 if beat else 0
+	this.dbgBpm = []; this.dbgAura = [];
 
 	// Fix blurry canvas: scale backing store to devicePixelRatio
 	var self = this;
@@ -844,6 +850,142 @@ MusicApp.prototype.drawWaveform = function(ctx, width, height, freqData, timeDat
 	}
 };
 
+
+// ── Visualizer: BPM debug (intensity + threshold + BPM graph) ─
+MusicApp.prototype.drawBpmDebug = function(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time) {
+	// layout: top 52% = intensity/bass/threshold, mid 28% = BPM history, bottom = stats
+	var pad = 10;
+	var topH = Math.floor(height * 0.52);
+	var midH = Math.floor(height * 0.28);
+	var botY = topH + midH;
+
+	ctx.fillStyle = "#0a0a0a";
+	ctx.fillRect(0,0,width,height);
+
+	// ── helpers
+	function plotLine(arr, y0, h, color, maxV, fillAlpha){
+		if (!arr.length) return;
+		ctx.beginPath();
+		for (var i=0;i<arr.length;i++){
+			var x = (i / (this.dbgMax-1)) * (width - pad*2) + pad;
+			var v = Math.max(0, Math.min(1, arr[i]/maxV));
+			var y = y0 + h - v*h - 4;
+			if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+		}
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 1.5;
+		ctx.stroke();
+		if (fillAlpha){
+			ctx.lineTo(pad + (arr.length-1)/(this.dbgMax-1)*(width-pad*2), y0+h);
+			ctx.lineTo(pad, y0+h);
+			ctx.closePath();
+			ctx.fillStyle = color.replace("1)", fillAlpha+")").replace(")", ","+fillAlpha+")");
+			// crude: use globalAlpha
+			ctx.globalAlpha = 0.12;
+			ctx.fill();
+			ctx.globalAlpha = 1;
+		}
+	}
+	var self=this;
+	// grid for top
+	ctx.strokeStyle = "rgba(255,255,255,0.06)";
+	ctx.lineWidth = 1;
+	for (var gy=0; gy<=4; gy++){
+		var gyPos = gy/4*topH;
+		ctx.beginPath(); ctx.moveTo(pad, gyPos); ctx.lineTo(width-pad, gyPos); ctx.stroke();
+	}
+
+	// plot avg intensity (0-255), low bass (0-255), avgEnergy*255, threshold*255
+	// need to map energy 0..1 to 0..255 for display
+	var avgArr = this.dbgAvg.map(function(v){ return v*255; });
+	var thrArr = this.dbgThr.map(function(v){ return v*255; });
+	plotLine.call(this, this.dbgInt, 0, topH, "rgba(255,255,255,1)", 255, null);
+	plotLine.call(this, this.dbgLow, 0, topH, "rgba(255,120,40,1)", 255, null);
+	plotLine.call(this, avgArr, 0, topH, "rgba(80,180,255,0.9)", 255, null);
+	plotLine.call(this, thrArr, 0, topH, "rgba(255,40,120,0.95)", 255, null);
+
+	// beat markers (vertical)
+	for (var i=0;i<this.dbgBeat.length;i++) if (this.dbgBeat[i]){
+		var x = (i/(this.dbgMax-1))*(width-pad*2)+pad;
+		ctx.fillStyle = this.dbgBeat[i]===2 ? "rgba(255,255,120,0.9)" : "rgba(255,60,60,0.9)"; // 2 = BPM pulse
+		ctx.fillRect(x, 0, 1.5, topH);
+	}
+	// aura white level
+	plotLine.call(this, this.dbgAura.map(function(v){return v*255;}), 0, topH, "rgba(255,255,255,0.45)", 255, null);
+
+	// legend top
+	ctx.fillStyle = "rgba(255,255,255,0.9)";
+	ctx.font = "11px monospace";
+	ctx.textAlign = "left";
+	ctx.fillText("INT white  BASS orange  avg blue  thr pink  aura dimWhite  |  beat red  BPM-pulse yellow", pad, 12);
+	ctx.fillStyle = "rgba(255,255,255,0.55)";
+	ctx.font = "10px monospace";
+	ctx.fillText("top: 0→255 intensity  (threshold = avg + std*1.0 +0.015, low>avg*1.05)", pad, 24);
+
+	// ── mid: BPM history 30-200 BPM
+	var bpmY0 = topH, bpmH = midH;
+	ctx.fillStyle = "rgba(0,0,0,0.25)";
+	ctx.fillRect(0,bpmY0,width,bpmH);
+	// grid BPM
+	ctx.strokeStyle = "rgba(255,255,255,0.07)";
+	for (var bpmV=60; bpmV<=180; bpmV+=30){
+		var by = bpmY0 + bpmH - ((bpmV-30)/170)*bpmH;
+		ctx.beginPath(); ctx.moveTo(pad, by); ctx.lineTo(width-pad, by); ctx.stroke();
+		ctx.fillStyle="rgba(255,255,255,0.35)";
+		ctx.font="10px monospace"; ctx.textAlign="left";
+		ctx.fillText(bpmV+"", pad, by-2);
+	}
+	// plot BPM
+	if (this.dbgBpm.length){
+		ctx.beginPath();
+		for (var i=0;i<this.dbgBpm.length;i++){
+			var x = (i/(this.dbgMax-1))*(width-pad*2)+pad;
+			var bpmP = this.dbgBpm[i];
+			if (!bpmP) continue;
+			var y = bpmY0 + bpmH - ((bpmP-30)/170)*bpmH;
+			y = Math.max(bpmY0+2, Math.min(bpmY0+bpmH-2, y));
+			if (i===0 || !this.dbgBpm[i-1]) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+		}
+		ctx.strokeStyle = "rgba(120,255,120,1)";
+		ctx.lineWidth = 1.8;
+		ctx.stroke();
+		// dots for current BPMs in history (raw)
+		ctx.fillStyle = "rgba(120,255,120,0.35)";
+		for (var i=0;i<beatDetector.bpmHistory.length;i++){
+			var bv = beatDetector.bpmHistory[i];
+			var y = bpmY0 + bpmH - ((bv-30)/170)*bpmH;
+			var x = width - pad - 60 + (i/64)*50;
+			ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fill();
+		}
+	}
+	ctx.fillStyle="rgba(120,255,120,0.9)";
+	ctx.font="11px monospace"; ctx.textAlign="left";
+	ctx.fillText("BPM history (30–200) — green line = smoothBPM, dots = raw intervals", pad, bpmY0+12);
+
+	// ── bottom stats
+	var yb = botY + 14;
+	ctx.fillStyle = "#111";
+	ctx.fillRect(0, botY, width, height-botY);
+	ctx.fillStyle = "rgba(255,255,255,0.92)";
+	ctx.font = "12px monospace";
+	ctx.textAlign = "left";
+	var bpmD = beatInfo.bpm, conf = beatInfo.bpmConfidence, hl = beatInfo.bpmHistoryLen;
+	var lastI = beatInfo.lastBeatTime ? (time-beatInfo.lastBeatTime|0) : 0;
+	var intStr = averageIntensity|0;
+	var lowV = (this.dbgLow.length? this.dbgLow[this.dbgLow.length-1]|0 : 0);
+	var thrV = (this.dbgThr.length? (this.dbgThr[this.dbgThr.length-1]*255|0) : 0);
+	var avgV = (this.dbgAvg.length? (this.dbgAvg[this.dbgAvg.length-1]*255|0) : 0);
+	ctx.fillText("BPM: " + (bpmD? Math.round(bpmD) + (conf<0.55?" ~":"") : "--") + "  conf " + Math.round(conf*100) + "%  hist " + hl + "  half-biased (>80→/2)  lastBeat " + lastI + "ms ago", pad, yb);
+	ctx.fillStyle = "rgba(255,255,255,0.65)";
+	ctx.font = "11px monospace";
+	ctx.fillText("INT " + intStr + "  BASS " + lowV + "  avg " + avgV + "  thr " + thrV + "  aura " + (auraBoomSmoothed*100|0) + "%  sens " + auraBoomSensitivity.toFixed(1) + "x  cooldown " + (beatDetector.beatCooldown|0) + "ms", pad, yb+14);
+	ctx.fillStyle = "rgba(255,200,100,0.85)";
+	ctx.fillText("fast bass tip: if thr rides high or beats cluster, BPM reads double — dot flashes twice/kick → hit ½. Graph shows why.", pad, yb+28);
+
+	// border
+	ctx.strokeStyle = "rgba(255,255,255,0.08)";
+	ctx.strokeRect(0,0,width,height);
+};
 
 // ── Main render loop ────────────────────────────────────────────
 /** @param {number} time */
