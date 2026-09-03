@@ -26,7 +26,8 @@ export default defineConfig(
 				setTheme: "writable",
 				WindowManager: "readonly",
 				DesktopManager: "readonly",
-				Dialog: "readonly"
+				Dialog: "readonly",
+				Modern: "readonly",
 			}
 		},
 
