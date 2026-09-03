@@ -2433,9 +2433,7 @@ Dialog.prototype.getElementById = function(id) {
 	console.log("Element ID to pull out of my guts: " + id);
 	var doc = this.contentDocument;
 	if (!doc) return null;
-	var targetElement = doc.getElementById(id);
-	console.log("Ripped out element:", targetElement);
-	return targetElement;
+	return doc.getElementById(id);
 };
 
 //#endregion
