@@ -956,12 +956,12 @@ MusicApp.prototype.drawBpmDebug = function(ctx, width, height, freqData, count, 
 		ctx.beginPath(); ctx.moveTo(pad, gyPos); ctx.lineTo(width-pad, gyPos); ctx.stroke();
 	}
 
-	// plot avg intensity (0-255), low bass (0-255), avgEnergy*255, threshold*255
-	// need to map energy 0..1 to 0..255 for display
+	// plot avg intensity (0-255), low bass (0-255), avgEnergy*255, threshold*255, timeEnergy cyan
 	var avgArr = this.dbgAvg.map(function(v){ return v*255; });
 	var thrArr = this.dbgThr.map(function(v){ return v*255; });
 	plotLine.call(this, this.dbgInt, 0, topH, "rgba(255,255,255,1)", 255, null);
 	plotLine.call(this, this.dbgLow, 0, topH, "rgba(255,120,40,1)", 255, null);
+	plotLine.call(this, this.dbgTime, 0, topH, "rgba(60,255,220,0.85)", 255, null);
 	plotLine.call(this, avgArr, 0, topH, "rgba(80,180,255,0.9)", 255, null);
 	plotLine.call(this, thrArr, 0, topH, "rgba(255,40,120,0.95)", 255, null);
 
@@ -978,10 +978,12 @@ MusicApp.prototype.drawBpmDebug = function(ctx, width, height, freqData, count, 
 	ctx.fillStyle = "rgba(255,255,255,0.9)";
 	ctx.font = "11px monospace";
 	ctx.textAlign = "left";
-	ctx.fillText("INT white  BASS orange  avg blue  thr pink  aura dimWhite  |  beat red  BPM-pulse yellow", pad, 12);
+	ctx.fillText("INT white  BASS orange  TIME cyan  avg blue  thr pink  aura dimWhite  |  beat red  BPM-pulse yellow", pad, 12);
 	ctx.fillStyle = "rgba(255,255,255,0.55)";
 	ctx.font = "10px monospace";
-	ctx.fillText("top: 0→255 intensity  (threshold = avg + std*1.0 +0.015, low>avg*1.05)", pad, 24);
+	var satNote = "";
+	try { var sc=0; for (var si=0; si<beatDetector.energyHistory.length; si++) if (beatDetector.energyHistory[si]>0.88) sc++; if (sc>beatDetector.energyHistory.length*0.55) satNote=" [SATURATED → time-domain]"; } catch(e){}
+	ctx.fillText("FFT 512 (256 bins ~86Hz/bin, low=0-320Hz)  TIME=waveform RMS" + satNote, pad, 24);
 
 	// ── mid: BPM history 30-200 BPM
 	var bpmY0 = topH, bpmH = midH;
