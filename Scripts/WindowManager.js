@@ -247,9 +247,6 @@ function messageReceived(type, data, source){
 						targetElement.width = targetElement.clientWidth;
 						targetElement.height = targetElement.clientHeight;
 					};
-					if (!targetElement) return;
-					targetElement.style.width = "100%";
-					targetElement.style.height = "100%";
 				});
 				break;
 			case "visualizers":
