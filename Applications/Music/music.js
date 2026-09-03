@@ -4,7 +4,7 @@
 'use strict';
 
 {
-var frequencies = 512;
+var frequencies = 1024;
 
 var micButton = document.getElementById("mic");
 var dispAudioBtn = document.getElementById("display-audio");
@@ -77,8 +77,10 @@ function CiphrdAnalyzer(){
 	this._useAdaptive = false; // article adaptive via variance if true
 	this._prevTime = -1;
 	this.sensitivity = 1.0; // 0.5-2.0 multiplier
-	// multiband (8 bands, quadratic spacing, thr 1.08, persist 900) — more sensitive
-	this.bands = 8;
+	// now even + lower-only: 12 even bands over lower 45% of spectrum (more even, bass-focused)
+	this.bands = 12;
+	this.freqFraction = 0.45; // only lower 45% of FFT bins (ignore airy highs)
+	this.bandSpacing = 'linear'; // 'linear' = even, 'quad' = p*p
 	this.bandEnergies = new Array(8).fill(0);
 	this.bandHistories = []; // array of arrays
 	this.bandHistoryDeltas = [];
@@ -92,7 +94,10 @@ CiphrdAnalyzer.prototype.cubicInOut = function(x){
 	if (x < 0.5) return 4 * x * x * x;
 	return (x - 1) * (2 * x - 2) * (2 * x - 2) + 1;
 };
-CiphrdAnalyzer.prototype._bandPos = function(p){ return p*p; }; // quadratic as starter
+CiphrdAnalyzer.prototype._bandPos = function(p){
+	if (this.bandSpacing === 'linear') return p;
+	return p*p;
+};
 CiphrdAnalyzer.prototype._peakInterp = function(cur, start, persist, easeFn){
 	return Math.max(0, easeFn(1 - (cur - start) / persist));
 };
@@ -142,15 +147,16 @@ CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
 		if (C<1.05) C=1.05; if (C>1.8) C=1.8;
 	}
 	this.C = C;
-	this.thresholdVal = avg * C;
-	// peak detection (starter logic)
+	var effC = C / Math.max(0.3, this.sensitivity);
+	this.thresholdVal = avg * effC;
+	// peak detection (starter logic) — sensitivity makes threshold lower
 	var peak = this.peak;
 	var isPeak = false;
 	if (peak.timer != null){
 		if (time - peak.timer <= this.ignore){
 			if (peak.value > 0) peak.value = this._peakInterp(time, peak.timer, this.peakPersistency, this.cubicInOut.bind(this));
 		} else {
-			if (avg > 0.001 && tE / avg > C){
+			if (avg > 0.001 && tE / avg > effC){
 				var dp = { value:1, timer:time, energy:tE };
 				this.peakHistory.push(dp);
 				peak.value = 1; peak.timer = time; peak.energy = tE;
@@ -160,7 +166,7 @@ CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
 			}
 		}
 	} else {
-		if (avg > 0.001 && tE / avg > C){
+		if (avg > 0.001 && tE / avg > effC){
 			var dp2 = { value:1, timer:time, energy:tE };
 			this.peakHistory.push(dp2);
 			peak.value = 1; peak.timer = time; peak.energy = tE;
@@ -199,6 +205,7 @@ CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
 		}
 		for (var b=0;b<this.bands;b++) avgs[b]/= Math.max(1,this.bandHistories.length);
 		this.bandAvgs = avgs;
+		var effBandThr = this.bandThreshold / Math.max(0.3, this.sensitivity);
 		for (var b=0;b<this.bands;b++){
 			var bp = this.bandPeaks[b];
 			var bHist = this.bandPeakHistories[b];
@@ -207,12 +214,12 @@ CiphrdAnalyzer.prototype.update = function(freqData, timeData, time){
 				if (time - bp.timer <= this.ignore){
 					if (bp.value>0) bp.value = this._peakInterp(time, bp.timer, this.peakPersistency, this.cubicInOut.bind(this));
 				} else {
-					if (bAvg>0.001 && bE / bAvg > this.bandThreshold){
+					if (bAvg>0.001 && bE / bAvg > effBandThr){
 						var nbp={value:1,timer:time,energy:bE}; bHist.push(nbp); bp.value=1; bp.timer=time; bp.energy=bE;
 					} else if (bp.value>0) bp.value = this._peakInterp(time, bp.timer, this.peakPersistency, this.cubicInOut.bind(this));
 				}
 			} else {
-				if (bAvg>0.001 && bE / bAvg > this.bandThreshold){
+				if (bAvg>0.001 && bE / bAvg > effBandThr){
 					var nbp2={value:1,timer:time,energy:bE}; bHist.push(nbp2); bp.value=1; bp.timer=time; bp.energy=bE;
 				}
 			}
@@ -563,6 +570,16 @@ if (auraBoomButton) {
 		updateAuraBoomButton();
 		console.log("Aura Boom:", auraBoomEnabled ? "ON" : "OFF", "sens", auraBoomSensitivity);
 	};
+}
+
+var ciphrdSensSlider = document.getElementById("ciphrd-sens");
+if (ciphrdSensSlider){
+	ciphrdSensSlider.oninput = function(){
+		ciphrd.sensitivity = parseFloat(this.value) || 1.0;
+		var lbl = document.getElementById("ciphrd-sens-val");
+		if (lbl) lbl.textContent = (Math.round(ciphrd.sensitivity*10)/10).toFixed(1)+"x";
+	};
+	ciphrd.sensitivity = parseFloat(ciphrdSensSlider.value) || 1.0;
 }
 
 // ── BPM pulse dot + manual half/double ─────────────────────────

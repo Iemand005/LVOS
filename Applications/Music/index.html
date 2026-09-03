@@ -54,6 +54,11 @@
                 <button id="bpm-half" title="Halve BPM (fix double-time 125→62)" style="font-size:11px; padding:2px 6px; line-height:1;">½</button>
                 <button id="bpm-double" title="Double BPM" style="font-size:11px; padding:2px 6px; line-height:1;">2×</button>
             </span>
+            <span id="ciphrd-sens-wrap" style="display:inline-flex; align-items:center; gap:4px; margin-left:8px; vertical-align:middle;">
+                <label for="ciphrd-sens" style="font-size:11px; opacity:0.85;">Ciphrd Sens</label>
+                <input id="ciphrd-sens" type="range" min="0.6" max="2.2" step="0.1" value="1.0" style="width:80px;" title="Higher = more sensitive (hits more often)">
+                <span id="ciphrd-sens-val" style="font:11px monospace; min-width:32px;">1.0x</span>
+            </span>
         </section>
         <section id="playcontrols">
             <section>
