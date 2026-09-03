@@ -2431,11 +2431,11 @@ Dialog.prototype.exportDialogBodyToMetro = function() {
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
 	console.log("Element ID to pull out of my guts: " + id);
-	var doc = dialog.contentDocument;
-	if (!doc) break;
+	var doc = this.contentDocument;
+	if (!doc) return null;
 	var targetElement = doc.getElementById(id);
 	console.log("Ripped out element:", targetElement);
-	if (!targetElement) break;
+	if (!targetElement) return null;
 };
 
 //#endregion
