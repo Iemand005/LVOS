@@ -2428,6 +2428,20 @@ Dialog.prototype.getElementById = function(id) {
 	return doc && doc.getElementById(id);
 };
 
+Dialog.prototype.moveElementIntoPipById = function(id) {
+	var targetElement = dialog.getElementById(data.id);
+	console.log("Ripped out element:", targetElement);
+	if (!targetElement) break;
+	Modern.toggleElementPip(targetElement, function (pipWindow) {
+		if (!pipWindow) return;
+		pipWindow.onresize = function() {
+			if (!(targetElement instanceof HTMLCanvasElement)) return;
+			targetElement.width = targetElement.clientWidth;
+			targetElement.height = targetElement.clientHeight;
+		};
+	});
+};
+
 //#endregion
 
 //#region DragAction
