@@ -99,9 +99,9 @@ BeatDetector.prototype.update = function(freqData, time) {
 	variance /= this.energyHistory.length;
 	var stdDev = Math.sqrt(variance);
 
-	var threshold = avgEnergy + stdDev * 1.2 + 0.02;
-	var beatDetected = totalEnergy > threshold && lowEnergy > avgEnergy * 1.1;
-	var cooldownMs = 250;
+	var threshold = avgEnergy + stdDev * 1.0 + 0.015;
+	var beatDetected = totalEnergy > threshold && lowEnergy > avgEnergy * 1.05;
+	var cooldownMs = 220;
 
 	this.isBeat = false;
 	if (beatDetected && this.beatCooldown <= 0) {
@@ -126,46 +126,57 @@ BeatDetector.prototype.update = function(freqData, time) {
 				if (this.bpmHistory.length > 64) this.bpmHistory.shift();
 
 				// ── Accurate, slow-moving BPM: median + outlier-rejected mean
-				if (this.bpmHistory.length >= 4) {
+				// show provisional BPM after just 2 intervals, stabilize after 8+
+				if (this.bpmHistory.length >= 2) {
 					var sorted = this.bpmHistory.slice().sort(function(a,b){return a-b;});
 					var median = sorted[Math.floor(sorted.length/2)];
-					// keep only BPMs within ~10% + 4bpm of median (reject stray doubles)
 					var filtered = [];
-					for (var fi = 0; fi < this.bpmHistory.length; fi++) {
-						var v = this.bpmHistory[fi];
-						var tol = Math.max(5, median * 0.10);
-						if (Math.abs(v - median) <= tol) filtered.push(v);
+					// for tiny history (<4) don't filter — just use all
+					if (this.bpmHistory.length < 4) {
+						filtered = sorted;
+					} else {
+						for (var fi = 0; fi < this.bpmHistory.length; fi++) {
+							var v = this.bpmHistory[fi];
+							var tol = Math.max(5, median * 0.10);
+							if (Math.abs(v - median) <= tol) filtered.push(v);
+						}
 					}
-					// need at least half the history to agree, otherwise keep raw median
-					var useList = filtered.length >= Math.max(4, this.bpmHistory.length * 0.5) ? filtered : sorted;
+					var useList = filtered;
+					if (this.bpmHistory.length >= 4) {
+						useList = filtered.length >= Math.max(4, this.bpmHistory.length * 0.5) ? filtered : sorted;
+					}
 					var bSum = 0;
 					for (var bi = 0; bi < useList.length; bi++) bSum += useList[bi];
 					this.detectedBPM = bSum / useList.length;
 
-					// slow lerp for stability (most songs don't change BPM fast)
-					// init snap, then 0.05-0.06 drift
 					if (this.smoothBPM === 0) this.smoothBPM = this.detectedBPM;
 					else {
-						var lerp = this.bpmHistory.length >= 12 ? 0.05 : 0.08;
+						// provisional snaps fast (0.22), stable drifts slow (0.05)
+						var lerp = this.bpmHistory.length < 4 ? 0.22 : (this.bpmHistory.length >= 12 ? 0.05 : 0.08);
 						this.smoothBPM += (this.detectedBPM - this.smoothBPM) * lerp;
 					}
 
-					// ── Double-time guard: prefer musical half-tempo when BPM reads fast
-					// e.g. 62 BPM songs often lock at 124 BPM — both are "correct" but half feels the pulse
-					if (this.smoothBPM > 100 && this.bpmHistory.length >= 8) {
+					// ── Prefer half-tempo: user wants half the speed it generally detects
+					// e.g. 124 → 62. Lerp strongly to half so it feels half-time by default.
+					// Still allow manual 2× to go back — nudge scales history.
+					if (this.smoothBPM > 80) {
 						var half = this.smoothBPM / 2;
-						var halfHits = 0, fullHits = 0;
-						for (var hi = 0; hi < this.bpmHistory.length; hi++) {
-							var hv = this.bpmHistory[hi];
-							if (Math.abs(hv - this.smoothBPM) <= Math.max(4, this.smoothBPM * 0.08)) fullHits++;
-							if (Math.abs(hv - half) <= Math.max(4, half * 0.08)) halfHits++;
-							if (Math.abs(hv * 2 - this.smoothBPM) <= Math.max(4, this.smoothBPM * 0.08)) halfHits++;
-						}
-						// if a third of history supports half-tempo, lean down — lower pulse is usually the "feel"
-						if (halfHits >= 4 && halfHits >= this.bpmHistory.length * 0.28 && halfHits * 1.1 > fullHits * 0.6) {
+						// require at least 2 beats before halving provisional, then always bias to half
+						if (this.bpmHistory.length >= 2) {
 							var halfTarget = half;
-							// faster snap down than normal lerp so it doesn't linger at 125
-							this.smoothBPM += (halfTarget - this.smoothBPM) * 0.18;
+							// if already has half support, snap faster; otherwise gentle bias
+							var hasHalfSupport = false;
+							if (this.bpmHistory.length >= 8) {
+								var hh = 0;
+								for (var hi = 0; hi < this.bpmHistory.length; hi++) {
+									var hv = this.bpmHistory[hi];
+									if (Math.abs(hv - half) <= Math.max(4, half * 0.08)) hh++;
+									if (Math.abs(hv * 2 - this.smoothBPM) <= Math.max(4, this.smoothBPM * 0.08)) hh++;
+								}
+								hasHalfSupport = hh >= 4;
+							}
+							var lerpHalf = hasHalfSupport ? 0.22 : 0.14;
+							this.smoothBPM += (halfTarget - this.smoothBPM) * lerpHalf;
 							this.detectedBPM = halfTarget;
 						}
 					}
@@ -314,6 +325,24 @@ if (auraBoomButton) {
 		console.log("Aura Boom:", auraBoomEnabled ? "ON" : "OFF", "sens", auraBoomSensitivity);
 	};
 }
+
+// ── BPM pulse dot + manual half/double ─────────────────────────
+(function initBpmControls(){
+	var halfBtn = document.getElementById("bpm-half");
+	var dblBtn  = document.getElementById("bpm-double");
+	function nudge(factor){
+		if (!beatDetector.bpmHistory.length) return;
+		// scale history and smooth so next beats use corrected tempo immediately
+		for (var i=0;i<beatDetector.bpmHistory.length;i++) beatDetector.bpmHistory[i] *= factor;
+		beatDetector.detectedBPM *= factor;
+		beatDetector.smoothBPM *= factor;
+		if (beatDetector.smoothBPM < 40) beatDetector.smoothBPM = 40;
+		if (beatDetector.smoothBPM > 220) beatDetector.smoothBPM = 220;
+		console.log("BPM nudged", factor>1?"2x":"½", "→", Math.round(beatDetector.smoothBPM));
+	}
+	if (halfBtn) halfBtn.onclick = function(ev){ ev.preventDefault(); nudge(0.5); };
+	if (dblBtn) dblBtn.onclick = function(ev){ ev.preventDefault(); nudge(2); };
+})();
 
 if (aura) aura.init();
 
@@ -842,10 +871,46 @@ MusicApp.prototype.animateFrame = function(time) {
 	const hue = this.rotation;
 	const rgb = getRainbowRGB(hue);
 
-	// ── Aura Boom: BASS-driven BPM-synced white pulses ─────────
-	// Bass causes the flash, BPM keeps it locked to the beat grid.
 	// Keep this running even for "cake" so Module.onAuraColor (wasm) flashes.
 	var beatForAura = beatDetector.update(freqData, time);
+
+	// ── BPM pulse dot — flashes white on the beat grid so you can see if BPM is right
+	// (independent of Aura Boom, lets you verify double-time vs half-time)
+	(function updateBpmDot(){
+		var dot = document.getElementById("bpm-pulse-dot");
+		var lbl = document.getElementById("bpm-pulse-label");
+		if (lbl) {
+			var bpmDisp = beatForAura.bpm;
+			lbl.textContent = bpmDisp > 0 ? Math.round(bpmDisp) + " BPM" + (beatForAura.bpmConfidence < 0.55 ? " ~" : "") : "-- BPM";
+			lbl.title = beatForAura.bpmHistoryLen + " beats, conf " + Math.round(beatForAura.bpmConfidence*100) + "% — dot flashes on BPM, hit ½ if it flashes twice per kick";
+		}
+		if (!dot) return;
+		var bpm = beatForAura.bpm;
+		if (bpm > 30 && beatForAura.lastBeatTime > 0) {
+			var interval = 60000 / bpm;
+			var since = time - beatForAura.lastBeatTime;
+			var phase = ((since % interval) + interval) % interval;
+			var w = Math.min(160, interval * 0.26);
+			var p = Math.max(0, 1 - phase / w);
+			p = Math.pow(p, 1.6);
+			if (beatForAura.bpmConfidence < 0.32 || beatForAura.bpmHistoryLen < 6) p = Math.max(p, beatForAura.beatIntensity * 0.62);
+			dot.style.background = p > 0.06 ? "rgb(255,255,255)" : (beatForAura.bpmConfidence > 0.5 ? "#bbb" : "#444");
+			dot.style.boxShadow = p > 0.06 ? "0 0 " + (6 + p*14) + "px rgba(255,255,255," + (0.5 + p*0.5) + ")" : "0 0 0 0 rgba(0,0,0,0)";
+			dot.style.transform = "scale(" + (1 + p*0.55) + ")";
+			dot.style.opacity = p > 0.06 ? "1" : "0.95";
+		} else if (beatForAura.isBeat) {
+			dot.style.background = "#fff";
+			dot.style.transform = "scale(1.5)";
+			dot.style.boxShadow = "0 0 10px rgba(255,255,255,0.9)";
+		} else {
+			dot.style.background = "#444";
+			dot.style.transform = "scale(1)";
+			dot.style.boxShadow = "0 0 0 0 rgba(0,0,0,0)";
+		}
+	})();
+
+	// ── Aura Boom: BASS-driven BPM-synced white pulses ─────────
+	// Bass causes the flash, BPM keeps it locked to the beat grid.
 	var auraTarget = 0;
 	if (auraBoomEnabled) {
 		var bpm = beatForAura.bpm;
@@ -897,8 +962,8 @@ MusicApp.prototype.animateFrame = function(time) {
 		if (auraTarget > 1) auraTarget = 1;
 		if (auraTarget < 0) auraTarget = 0;
 	}
-	// snap white on kick, quick fade back to colour (crisp, not lingering)
-	var attack = 0.62, decay = 0.22;
+	// snap white on kick, slower fade back to colour (lingers white longer)
+	var attack = 0.58, decay = 0.09;
 	if (auraTarget > auraBoomSmoothed) {
 		auraBoomSmoothed += (auraTarget - auraBoomSmoothed) * attack;
 	} else {
