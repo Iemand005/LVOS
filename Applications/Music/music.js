@@ -66,17 +66,18 @@ function CiphrdAnalyzer(){
 	this.avg = 0;
 	this.peak = { value: 0, timer: null, energy: 0 };
 	this.peakHistory = [];
-	this.threshold = 1.8;
-	this.ignore = 300;
-	this.persistence = 2000; // history window
-	this.peakPersistency = 300;
+	this.threshold = 1.32; // tuned more sensitive (was 1.8) — hits more often
+	this.ignore = 140; // was 300 — allows fast bass 180 BPM (~333ms) to hit every beat
+	this.persistence = 900; // was 2000 — shorter window = avg tracks quicker, threshold lower
+	this.peakPersistency = 260;
 	this.lastPeakTime = -1e9;
 	this.eased = 0;
 	this.variance = 0;
-	this.C = 1.8;
+	this.C = 1.32;
 	this._useAdaptive = false; // article adaptive via variance if true
 	this._prevTime = -1;
-	// multiband (8 bands, quadratic spacing, thr 1.2, persist 1200)
+	this.sensitivity = 1.0; // 0.5-2.0 multiplier
+	// multiband (8 bands, quadratic spacing, thr 1.08, persist 900) — more sensitive
 	this.bands = 8;
 	this.bandEnergies = new Array(8).fill(0);
 	this.bandHistories = []; // array of arrays
@@ -84,8 +85,8 @@ function CiphrdAnalyzer(){
 	this.bandAvgs = new Array(8).fill(0);
 	this.bandPeaks = []; for (var i=0;i<8;i++) this.bandPeaks.push({ value:0, timer:null, energy:0 });
 	this.bandPeakHistories = []; for (var i=0;i<8;i++) this.bandPeakHistories.push([]);
-	this.bandThreshold = 1.2;
-	this.bandPersistence = 1200;
+	this.bandThreshold = 1.08;
+	this.bandPersistence = 900;
 }
 CiphrdAnalyzer.prototype.cubicInOut = function(x){
 	if (x < 0.5) return 4 * x * x * x;
