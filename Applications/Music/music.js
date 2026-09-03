@@ -4,7 +4,7 @@
 'use strict';
 
 {
-var frequencies = 128;
+var frequencies = 512;
 
 var micButton = document.getElementById("mic");
 var dispAudioBtn = document.getElementById("display-audio");
@@ -1051,6 +1051,33 @@ MusicApp.prototype.animateFrame = function(time) {
 		}
 	})();
 
+	// ── debug histories (for bpmdebug visualizer) ──────────────
+	(function pushDbg(){
+		var lowBinsDbg = Math.max(1, Math.min(12, Math.floor(freqData.length * 0.08)));
+		var lowSumDbg=0; for (var bi=0; bi<lowBinsDbg; bi++) lowSumDbg+=freqData[bi];
+		var lowDbg = (lowSumDbg/lowBinsDbg);
+		var thrDbg = beatForAura._dbg ? beatForAura._dbg.threshold : 0;
+		var avgDbg = beatForAura._dbg ? beatForAura._dbg.avgEnergy : 0;
+		// BPM pulse marker (yellow) vs raw beat (red)
+		var isBpmPulse = false;
+		if (beatForAura.bpm > 40 && beatForAura.lastBeatTime>0){
+			var _iv = 60000/beatForAura.bpm;
+			var _ph = ((time - beatForAura.lastBeatTime) % _iv + _iv) % _iv;
+			isBpmPulse = _ph < Math.min(150, _iv*0.26) * 0.35;
+		}
+		var _self = window.musicApp;
+		if (!_self) return;
+		_self.dbgInt.push(averageIntensity);
+		_self.dbgLow.push(lowDbg);
+		_self.dbgAvg.push(avgDbg);
+		_self.dbgThr.push(thrDbg);
+		_self.dbgBeat.push(beatForAura.isBeat ? 1 : (isBpmPulse ? 2 : 0));
+		_self.dbgBpm.push(beatForAura.bpm || 0);
+		_self.dbgAura.push(auraBoomSmoothed*255);
+		var cap = _self.dbgMax;
+		if (_self.dbgInt.length > cap){ _self.dbgInt.shift(); _self.dbgLow.shift(); _self.dbgAvg.shift(); _self.dbgThr.shift(); _self.dbgBeat.shift(); _self.dbgBpm.shift(); _self.dbgAura.shift(); }
+	})();
+
 	// ── Aura Boom: BASS-driven BPM-synced white pulses ─────────
 	// Bass causes the flash, BPM keeps it locked to the beat grid.
 	var auraTarget = 0;
@@ -1157,6 +1184,9 @@ MusicApp.prototype.animateFrame = function(time) {
 			break;
 		case "circle":
 			this.drawCircle(ctx, width, height, freqData, timeData, count, rgb);
+			break;
+		case "bpmdebug":
+			this.drawBpmDebug(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time);
 			break;
 		default:
 			this.drawBars(ctx, width, height, freqData, count, rgb);
