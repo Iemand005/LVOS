@@ -53,6 +53,77 @@ const THROTTLE_MS = 20;
 const colorTitlebar = false;
 
 
+// ── Ciphrd Audio Analysis (https://ciphrd.com/articles/audio-analysis-for-advanced-music-visualization/) ─
+// Energy E = avg FFT, history s=64, avg/variance, adaptive threshold C via variance,
+// ignore 0.375s, persistence 0.25s, cubic in-out easing → organic 0-1 peak.
+function CiphrdAnalyzer(){
+	this.s = 64;
+	this.history = new Float32Array(64);
+	this.hIdx = 0;
+	this.filled = 0;
+	this.lastPeakTime = -1e9;
+	this.peakStart = -1e9;
+	this.persistence = 250; // ms
+	this.ignore = 375; // ms
+	this.eased = 0;
+	this.energy = 0;
+	this.avg = 0;
+	this.variance = 0;
+	this.threshold = 0;
+	this.C = 1.3;
+	this.rawPeak = 0;
+}
+CiphrdAnalyzer.prototype.cubicInOut = function(x){
+	if (x < 0.5) return 4 * x * x * x;
+	return (x - 1) * (2 * x - 2) * (2 * x - 2) + 1;
+};
+CiphrdAnalyzer.prototype.update = function(freqData, time){
+	var N = freqData.length;
+	var sum = 0; for (var i=0;i<N;i++) sum += freqData[i];
+	var E = sum / N;
+	this.energy = E;
+	this.history[this.hIdx] = E;
+	this.hIdx = (this.hIdx + 1) % this.s;
+	if (this.filled < this.s) this.filled++;
+	// avg
+	var ssum = 0; for (var i=0;i<this.filled;i++) ssum += this.history[i];
+	var Eavg = this.filled ? ssum / this.filled : E;
+	this.avg = Eavg;
+	// variance
+	var v = 0; for (var i=0;i<this.filled;i++){ var d = this.history[i]-Eavg; v += d*d; }
+	v = this.filled ? v / this.filled : 0;
+	this.variance = v;
+	// adaptive C via variance (Patin regression adapted to 0-255 FFT)
+	// Ciphrd/Patin: C = -0.0025714*V + 1.5142857 ; V is variance of energy (≈0-~4000 for 0-255)
+	// Clamp to 1.05-1.5 to avoid extremes on silence/loud
+	var C = -0.0025714 * v + 1.5142857;
+	if (C < 1.05) C = 1.05; if (C > 1.50) C = 1.50;
+	this.C = C;
+	this.threshold = Eavg * C;
+	// peak detection: E / Eavg - C > 0
+	var isPeak = false;
+	if (this.filled >= 8) {
+		var ratio = Eavg > 0.001 ? E / Eavg : 0;
+		if (ratio - C > 0 && time - this.lastPeakTime > this.ignore) {
+			isPeak = true;
+			this.lastPeakTime = time;
+			this.peakStart = time;
+			this.rawPeak = 1;
+		}
+	}
+	// eased persistence
+	var dt = time - this.peakStart;
+	if (dt >= 0 && dt < this.persistence) {
+		var linear = 1 - dt / this.persistence;
+		this.eased = this.cubicInOut(linear);
+	} else {
+		this.eased = 0;
+		this.rawPeak = 0;
+	}
+	return { eased: this.eased, raw: this.rawPeak, energy: E, avg: Eavg, variance: v, threshold: this.threshold, C: C, isPeak: isPeak };
+};
+var ciphrd = new CiphrdAnalyzer();
+
 // ── Beat Detector ────────────────────────────────────────────────
 // Fix for "low ends always maxed, highs empty": use finer FFT (512→256 bins, ~86Hz/bin)
 // and detect beats from TIME-DOMAIN envelope when freq low is saturated, otherwise
@@ -275,7 +346,7 @@ function MusicApp(visualizerElement) {
 	this.graphics = new Graphics2D(visualizerElement);
 	console.log("graphics canvas found:", this.graphics.ctx);
 
-	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform" | "bpmdebug" | "bpmshow"} */
+	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform" | "bpmdebug" | "bpmshow" | "ciphrd"} */
 	this.visualizer = "bars";
 
 	this.prevTime = 0;
@@ -1194,6 +1265,140 @@ MusicApp.prototype.drawBpmShowcase = function(ctx, width, height, freqData, coun
 	}
 };
 
+// ── Visualizer: Ciphrd (replication of ciphrd.com audio analysis) ─
+// Replicates Fig 3-18: freq bars (Fig3), energy/avg/threshold/variance (Fig4-8),
+// peak with ignore 375ms + persistence 250ms + cubic in-out (Fig12-17), circle scale (Fig10/18)
+MusicApp.prototype.drawCiphrd = function(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time) {
+	var res = ciphrd.eased !== undefined ? ciphrd : { eased:0, energy:0, avg:0, threshold:0, variance:0, C:1.3 };
+	// Ensure latest — if animateFrame already updated, use cached; else update
+	if (!res.energy) { var r = ciphrd.update(freqData, time); res = r; }
+	var eased = res.eased; var energy = res.energy; var Eavg = res.avg; var thr = res.threshold; var vari = res.variance; var C = res.C;
+	// layout: top 34% freq bars, mid 38% energy graph, bottom circle
+	var pad = 12;
+	var topH = Math.floor(height * 0.34);
+	var midH = Math.floor(height * 0.38);
+	var midY = topH;
+	var botH = height - topH - midH;
+
+	ctx.fillStyle = "#08080a";
+	ctx.fillRect(0,0,width,height);
+
+	// ── top: freq bars (Fig3: 512 samples → 128 rects) ─
+	var bars = 128;
+	var step = Math.max(1, Math.floor(freqData.length / bars));
+	var barW = (width - pad*2) / bars;
+	for (var i=0;i<bars;i++){
+		var idx = Math.min(freqData.length-1, Math.floor(i*step));
+		var v = freqData[idx]/255;
+		var h = v * (topH - 28);
+		var x = pad + i*barW;
+		// gradient white → rgb
+		var g = ctx.createLinearGradient(x, topH - h, x, topH);
+		g.addColorStop(0, "rgba(255,255,255," + (0.9) + ")");
+		g.addColorStop(1, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + (0.55) + ")");
+		ctx.fillStyle = g;
+		ctx.fillRect(x+0.5, topH - h, barW-1.2, h);
+	}
+	ctx.fillStyle = "rgba(255,255,255,0.92)";
+	ctx.font = "11px monospace"; ctx.textAlign = "left";
+	ctx.fillText("Fig3 — Frequency (512 bins → 128 bars)", pad, 14);
+	ctx.fillStyle = "rgba(255,255,255,0.45)";
+	ctx.font = "10px monospace";
+	ctx.fillText("energy E = avg FFT = " + energy.toFixed(1) + " /255", pad, 26);
+
+	// ── mid: energy graph (Fig4-8) ─
+	var gy0 = midY, gyH = midH;
+	// bg + grid
+	ctx.fillStyle = "rgba(255,255,255,0.03)";
+	ctx.fillRect(0, gy0, width, gyH);
+	ctx.strokeStyle = "rgba(255,255,255,0.06)";
+	for (var g=0; g<=4; g++){ var yy = gy0 + g/4*gyH; ctx.beginPath(); ctx.moveTo(pad, yy); ctx.lineTo(width-pad, yy); ctx.stroke(); }
+
+	// history buffer for graph: need rolling window of last 64 energies + threshold
+	// Use ciphrd.history circular — reconstruct chronological
+	var histLen = ciphrd.filled;
+	var plotEnergy = function(arr, color, maxV){
+		if (!histLen) return;
+		ctx.beginPath();
+		for (var i=0;i<histLen;i++){
+			var idx2 = (ciphrd.hIdx - histLen + i + ciphrd.s) % ciphrd.s;
+			var v = arr[idx2];
+			var x = pad + (i/(ciphrd.s-1))*(width - pad*2);
+			var y = gy0 + gyH - (Math.max(0, Math.min(1, v / maxV)) * (gyH - 10)) - 5;
+			if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+		}
+		ctx.strokeStyle = color; ctx.lineWidth = 1.6; ctx.stroke();
+	};
+	plotEnergy(ciphrd.history, "rgba(255,255,255,0.95)", 255);
+	// avg line
+	var avgLine = new Float32Array(histLen);
+	for (var i=0;i<histLen;i++) avgLine[i] = Eavg;
+	// thr line
+	var thrLine = new Float32Array(histLen);
+	for (var i=0;i<histLen;i++) thrLine[i] = thr;
+	plotEnergy(avgLine, "rgba(80,180,255,0.9)", 255);
+	plotEnergy(thrLine, "rgba(255,40,120,0.9)", 255);
+	// peaks: vertical gold where eased>0 and isPeak
+	// we don't have per-history peak times, but mark current eased as dot on right edge
+	if (eased > 0.01){
+		var x = pad + (width - pad*2) * 0.985;
+		ctx.fillStyle = "rgba(255,225,80," + (0.5 + eased*0.5) + ")";
+		ctx.fillRect(x, gy0, 2, gyH);
+	}
+
+	ctx.fillStyle = "rgba(255,255,255,0.9)";
+	ctx.font = "11px monospace"; ctx.textAlign = "left";
+	ctx.fillText("Fig4-8 — Energy vs Avg vs Thr (C=" + C.toFixed(2) + " from var " + vari.toFixed(0) + ")  " + (eased>0 ? "PEAK " + (eased*100|0) + "%" : ""), pad, gy0+13);
+	ctx.fillStyle = "rgba(255,255,255,0.5)";
+	ctx.font = "10px monospace";
+	ctx.fillText("E/avg - C >0  (ignore 375ms, persist 250ms, cubic in-out)", pad, gy0+25);
+	// legend
+	ctx.fillStyle = "rgba(255,255,255,0.85)"; ctx.fillRect(pad, gy0+30, 10, 2);
+	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.font="10px monospace"; ctx.fillText("E", pad+14, gy0+33);
+	ctx.fillStyle = "rgba(80,180,255,0.85)"; ctx.fillRect(pad+32, gy0+30, 10, 2);
+	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Eavg", pad+46, gy0+33);
+	ctx.fillStyle = "rgba(255,40,120,0.85)"; ctx.fillRect(pad+82, gy0+30, 10, 2);
+	ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillText("Thr=Eavg*C", pad+96, gy0+33);
+
+	// ── bottom: circle reacting to eased peak (Fig10/18) ─
+	var cX = width * 0.5, cY = gy0 + gyH + botH*0.55;
+	var baseR = Math.min(width,height) * 0.11;
+	var r = baseR * (1 + eased * 0.62);
+	// glow
+	var glow = ctx.createRadialGradient(cX,cY, 0, cX,cY, r+26);
+	glow.addColorStop(0, "rgba(255,255,255," + (0.18 + eased*0.45) + ")");
+	glow.addColorStop(0.45, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + (0.42 + eased*0.35) + ")");
+	glow.addColorStop(1, "rgba(0,0,0,0)");
+	ctx.fillStyle = glow;
+	ctx.beginPath(); ctx.arc(cX,cY,r+26,0,Math.PI*2); ctx.fill();
+	// circle
+	ctx.beginPath(); ctx.arc(cX,cY,r,0,Math.PI*2);
+	var grad = ctx.createRadialGradient(cX,cY, r*0.3, cX,cY, r);
+	grad.addColorStop(0, "rgba(255,255,255," + (0.95) + ")");
+	grad.addColorStop(1, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",1)");
+	ctx.fillStyle = grad;
+	ctx.shadowColor = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.8)";
+	ctx.shadowBlur = 14 + eased*18;
+	ctx.fill();
+	ctx.shadowBlur = 0;
+	ctx.strokeStyle = "rgba(255,255,255," + (0.5 + eased*0.5) + ")";
+	ctx.lineWidth = 1.5;
+	ctx.stroke();
+	// eased bar
+	var barW = width * 0.42, barH = 6;
+	var bx = cX - barW/2, by = cY + r + 18;
+	ctx.fillStyle = "rgba(255,255,255,0.18)";
+	ctx.fillRect(bx, by, barW, barH);
+	ctx.fillStyle = "rgba(255,255,255,0.95)";
+	ctx.fillRect(bx, by, barW * eased, barH);
+	ctx.fillStyle = "rgba(255,255,255,0.7)";
+	ctx.font = "10px monospace"; ctx.textAlign = "center";
+	ctx.fillText("peak eased " + (eased*100|0) + "%  (1 - dt/250ms → cubicInOut)", cX, by + 16);
+	ctx.fillStyle = "rgba(255,255,255,0.9)";
+	ctx.font = "11px monospace";
+	ctx.fillText("Fig18 — Circle scale = 1 + eased*0.62  (ignore 375ms, persist 250ms)", pad, gy0 + gyH + 14);
+};
+
 // ── Main render loop ────────────────────────────────────────────
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
@@ -1222,6 +1427,7 @@ MusicApp.prototype.animateFrame = function(time) {
 
 	// Keep this running even for "cake" so Module.onAuraColor (wasm) flashes.
 	var beatForAura = beatDetector.update(freqData, timeData, time);
+	ciphrd.update(freqData, time);
 
 	// ── BPM pulse dot — flashes white on the beat grid so you can see if BPM is right
 	// (independent of Aura Boom, lets you verify double-time vs half-time)
@@ -1494,7 +1700,3 @@ LVMessenger.receive(function(type, data, id) {
 		}
 	}
 });
-
-}
-
-// LVM
