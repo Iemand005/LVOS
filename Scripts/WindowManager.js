@@ -240,7 +240,7 @@ function messageReceived(type, data, source){
 				var targetElement = dialog.getElementById(data.id);
 				console.log("Ripped out element:", targetElement);
 				if (!targetElement) break;
-				toggleElementPip(targetElement, function (pipWindow) {
+				Modern.toggleElementPip(targetElement, function (pipWindow) {
 					if (!pipWindow) return;
 					pipWindow.onresize = function() {
 						if (!(targetElement instanceof HTMLCanvasElement)) return;

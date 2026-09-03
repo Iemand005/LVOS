@@ -126,7 +126,7 @@ class Modern {
 	 * @param {HTMLElement} el - the element to pop out
 	 * @param {(pipWindow:Window)=>void} callback - the element to pop out
 	 */
-	static async toggleElementPip(el, callback) {
+	static toggleElementPip(el, callback) {
 	if (typeof window.documentPictureInPicture === "undefined") {
 		console.warn("Document Picture-in-Picture not supported in this browser.");
 		return;
