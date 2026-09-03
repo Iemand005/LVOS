@@ -2574,14 +2574,14 @@ function DragAction() {
 	/** @type {DragFunction[]} */
 	this.resizeFunctions = [
 		function move(dialog, offset, d){ dialog.move(offset.startX + d.x, offset.startY + d.y); },
-		function top(dialog, offset, d){ dialog.top = offset.startY + d.y; },
-		function right(dialog, offset, d){ dialog.width = offset.width + d.x; },
-		function bottom(dialog, offset, d){ dialog.height = offset.height + d.y; },
-		function left(dialog, offset, d){ dialog.left = offset.startX + d.x; },
-		function topLeft(dialog, offset, d){ dialog.top = offset.startY + d.y; dialog.left = offset.startX + d.x; },
-		function topRight(dialog, offset, d){ dialog.width = offset.width + d.x; dialog.top = offset.startY + d.y; },
-		function bottomRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y); },
-		function bottomLeft(dialog, offset, d){ dialog.left = offset.startX + d.x; dialog.width = offset.width - d.x; dialog.height = offset.height + d.y; }
+		function top(dialog, offset, d){ dialog.resize(offset.width, offset.height + d.y, "top"); },
+		function right(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height, "right"); },
+		function bottom(dialog, offset, d){ dialog.resize(offset.width, offset.height + d.y, "bottom"); },
+		function left(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height, "left"); },
+		function topLeft(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "top-left"); },
+		function topRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "top-right"); },
+		function bottomRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "bottom-right"); },
+		function bottomLeft(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "bottom-left"); }
 	];
 }
 
