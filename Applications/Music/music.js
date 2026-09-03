@@ -275,7 +275,7 @@ function MusicApp(visualizerElement) {
 	this.graphics = new Graphics2D(visualizerElement);
 	console.log("graphics canvas found:", this.graphics.ctx);
 
-	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform" | "bpmdebug"} */
+	/** @type {"bars" | "circle" | "cake" | "intensity" | "beatpulse" | "spiral" | "waveform" | "bpmdebug" | "bpmshow"} */
 	this.visualizer = "bars";
 
 	this.prevTime = 0;
@@ -286,6 +286,9 @@ function MusicApp(visualizerElement) {
 	this.dbgInt = []; this.dbgLow = []; this.dbgAvg = []; this.dbgThr = []; this.dbgTime = [];
 	this.dbgBeat = []; // 1 if beat else 0
 	this.dbgBpm = []; this.dbgAura = [];
+	// ── BPM showcase smooth phase (so BPM jumps don't cause extra pulses)
+	this._showcasePhase = 0;
+	this._showcaseBpm = 0;
 
 	// Fix blurry canvas: scale backing store to devicePixelRatio
 	var self = this;
@@ -1050,6 +1053,133 @@ MusicApp.prototype.drawBpmDebug = function(ctx, width, height, freqData, count, 
 	ctx.strokeRect(0,0,width,height);
 };
 
+// ── Visualizer: BPM Showcase (big BPM that pulses on the grid) ─
+MusicApp.prototype.drawBpmShowcase = function(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time) {
+	var bpm = beatInfo.bpm;
+	var conf = beatInfo.bpmConfidence || 0;
+	var interval = bpm > 30 ? 60000 / bpm : 0;
+	var pulse = 0;
+	if (interval > 0) {
+		// pure estimated BPM metronome — not anchored to lastBeat/dot, so white dot jitter doesn't affect showcase
+		var phase = time % interval;
+		var w = Math.min(180, interval * 0.28);
+		pulse = Math.max(0, 1 - phase / w);
+		pulse = Math.pow(pulse, 1.35);
+	}
+	var cX = width/2, cY = height/2;
+	// background
+	var bgGrad = ctx.createRadialGradient(cX, cY, 0, cX, cY, Math.max(width,height)*0.75);
+	var baseR = Math.round(rgb.r*0.15), baseG = Math.round(rgb.g*0.15), baseB = Math.round(rgb.b*0.15);
+	bgGrad.addColorStop(0, "rgba(" + baseR + "," + baseG + "," + baseB + ",1)");
+	bgGrad.addColorStop(1, "rgba(0,0,0,1)");
+	ctx.fillStyle = bgGrad;
+	ctx.fillRect(0,0,width,height);
+	// subtle bass bars at bottom 12%
+	var barH0 = height * 0.12;
+	var barW = width / count;
+	ctx.globalAlpha = 0.55;
+	for (var i=0;i<freqData.length;i++){
+		var amp = freqData[i]/255;
+		var h = amp * barH0;
+		var x = i * barW;
+		var a = 0.25 + amp*0.55;
+		ctx.fillStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + a + ")";
+		ctx.fillRect(x, height - h, barW-1, h);
+	}
+	ctx.globalAlpha = 1;
+	// expanding rings on BPM pulse
+	var maxR = Math.min(width,height)*0.42;
+	for (var rIdx=0; rIdx<3; rIdx++){
+		var ringPhase = (pulse * 0.7 + rIdx*0.33) % 1;
+		if (pulse < 0.02 && rIdx>0) continue;
+		var rr = 70 + ringPhase * maxR;
+		var ra = (1 - ringPhase) * (0.45 + pulse*0.4) * (0.5 + conf*0.5);
+		ctx.beginPath();
+		ctx.arc(cX, cY, rr, 0, Math.PI*2);
+		ctx.strokeStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + ra + ")";
+		ctx.lineWidth = 2 + pulse*4;
+		ctx.stroke();
+		// white flash overlay for ring
+		if (pulse > 0.3){
+			ctx.beginPath();
+			ctx.arc(cX, cY, rr, 0, Math.PI*2);
+			ctx.strokeStyle = "rgba(255,255,255," + (pulse*0.45*(1-ringPhase)) + ")";
+			ctx.lineWidth = 1;
+			ctx.stroke();
+		}
+	}
+	// central glow
+	var glowR = 90 + pulse*45;
+	var glowGrad = ctx.createRadialGradient(cX,cY, 10, cX,cY, glowR);
+	glowGrad.addColorStop(0, "rgba(255,255,255," + (0.22 + pulse*0.55) + ")");
+	glowGrad.addColorStop(0.35, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + (0.35 + pulse*0.35) + ")");
+	glowGrad.addColorStop(1, "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0)");
+	ctx.fillStyle = glowGrad;
+	ctx.beginPath(); ctx.arc(cX,cY,glowR,0,Math.PI*2); ctx.fill();
+	// big BPM number
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	var bpmText = bpm > 0 ? Math.round(bpm) + "" : "--";
+	var scale = 1 + pulse*0.13;
+	ctx.save();
+	ctx.translate(cX, cY - 8);
+	ctx.scale(scale, scale);
+	ctx.shadowColor = pulse > 0.2 ? "rgba(255,255,255,0.9)" : "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",0.9)";
+	ctx.shadowBlur = 18 + pulse*20;
+	ctx.fillStyle = pulse > 0.22 ? "#ffffff" : "rgba(255,255,255,0.97)";
+	ctx.font = "900 72px monospace";
+	ctx.fillText(bpmText, 0, 0);
+	ctx.shadowBlur = 0;
+	ctx.fillStyle = "rgba(255,255,255," + (0.55 + conf*0.35) + ")";
+	ctx.font = "600 13px monospace";
+	ctx.fillText("BPM", 0, 34);
+	ctx.restore();
+	// confidence bar under BPM
+	var barW2 = 180, barH2 = 6;
+	var bx = cX - barW2/2, by = cY + 48;
+	ctx.fillStyle = "rgba(255,255,255,0.15)";
+	ctx.fillRect(bx, by, barW2, barH2);
+	ctx.fillStyle = conf > 0.55 ? "rgba(120,255,120,0.95)" : conf > 0.30 ? "rgba(255,220,120,0.95)" : "rgba(255,120,120,0.85)";
+	ctx.fillRect(bx, by, barW2*conf, barH2);
+	ctx.fillStyle = "rgba(255,255,255,0.55)";
+	ctx.font = "10px monospace"; ctx.textAlign = "center";
+	ctx.fillText(Math.round(conf*100) + "%  •  " + (beatInfo.bpmHistoryLen|0) + " beats" + (conf<0.55?"  ~":""), cX, by+14);
+	// raw history dots arc
+	var hist = beatDetector.bpmHistory;
+	if (hist && hist.length){
+		var dotR = maxR - 18;
+		ctx.textAlign = "center";
+		for (var i=0;i<hist.length;i++){
+			var a = (i / hist.length) * Math.PI*2 - Math.PI/2;
+			var bv = hist[i];
+			var norm = (bv - 60) / 120; // 60-180
+			norm = Math.max(0, Math.min(1, norm));
+			var rr2 = 6 + norm * 18;
+			var x = cX + Math.cos(a) * dotR;
+			var y = cY + Math.sin(a) * dotR;
+			ctx.beginPath();
+			ctx.arc(x,y, 2.2, 0, Math.PI*2);
+			ctx.fillStyle = "rgba(120,255,120," + (0.25 + norm*0.5) + ")";
+			ctx.fill();
+		}
+		ctx.fillStyle = "rgba(255,255,255,0.32)";
+		ctx.font = "9px monospace";
+		ctx.fillText("raw intervals", cX, cY + maxR + 18);
+	}
+	// tap hint
+	if (!bpm || conf < 0.35){
+		ctx.fillStyle = "rgba(255,255,255,0.45)";
+		ctx.font = "11px monospace"; ctx.textAlign = "center";
+		ctx.fillText("listening…", cX, height - 18);
+	}
+	// border pulse
+	if (pulse > 0.05){
+		ctx.strokeStyle = "rgba(255,255,255," + (pulse*0.22) + ")";
+		ctx.lineWidth = 2;
+		ctx.strokeRect(1,1,width-2,height-2);
+	}
+};
+
 // ── Main render loop ────────────────────────────────────────────
 /** @param {number} time */
 MusicApp.prototype.animateFrame = function(time) {
@@ -1256,6 +1386,9 @@ MusicApp.prototype.animateFrame = function(time) {
 			break;
 		case "bpmdebug":
 			this.drawBpmDebug(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time);
+			break;
+		case "bpmshow":
+			this.drawBpmShowcase(ctx, width, height, freqData, count, rgb, averageIntensity, beatInfo, time);
 			break;
 		default:
 			this.drawBars(ctx, width, height, freqData, count, rgb);
