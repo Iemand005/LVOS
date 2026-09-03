@@ -136,6 +136,7 @@ class Modern {
 		var existing = window.documentPictureInPicture.window;
 		if (existing) {
 			existing.close();
+			return;
 		}
 
 		var rect = el.getBoundingClientRect();
