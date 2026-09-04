@@ -2126,11 +2126,27 @@ Dialog.prototype.resize = function (width, height, direction) {
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
+	var bounds = WindowManager.getWindowBounds();
 
-	this.setWidth(width);
-	this.setHeight(height);
+	width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
+	height = Math.max(Math.min(height, this.maxHeight), this.minHeight);
 
-	var newW = this.width, newH = this.height;
+	var newW = width, newH = height;
+
+	// Clamp width so the moving edge doesn't exceed bounds
+	if (direction === "left" || direction === "bottom-left" || direction === "top-left") {
+		newW = Math.min(newW, oldX + oldW - bounds.left);
+	} else if (direction !== "top" && direction !== "bottom") {
+		newW = Math.min(newW, bounds.right - oldX);
+	}
+
+	// Clamp height so the moving edge doesn't exceed bounds
+	if (direction === "top" || direction === "top-left" || direction === "top-right") {
+		newH = Math.min(newH, oldY + oldH - bounds.top);
+	} else if (direction !== "left" && direction !== "right") {
+		newH = Math.min(newH, bounds.bottom - oldY);
+	}
+
 	var newX = oldX, newY = oldY;
 
 	switch (direction) {
@@ -2153,7 +2169,14 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 		// bottom-right, bottom, right (and default): keep the top-left edge fixed.
 	}
 
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === this.minWidth;
+	this._isMinHeight = newH === this.minHeight;
+
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
 };
 
 /**
@@ -2224,9 +2247,14 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		// bottom-right (and default): keep the top-left edge fixed.
 	}
 
-	this.setWidth(newW);
-	this.setHeight(newH);
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === this.minWidth;
+	this._isMinHeight = newH === this.minHeight;
+
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
 };
 Dialog.prototype.update = function () {
 	this.move();

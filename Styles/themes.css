@@ -502,7 +502,6 @@ button {
 	inset: 0;
 	border-radius: inherit;
 	padding: .5px;
-	color: white;
 	background: linear-gradient(rgba(255,255,255,0.1), transparent 75%);
 	mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
 	-webkit-mask: linear-gradient(#ffffff 0 0) content-box, linear-gradient(#ffffff 0 0);
@@ -525,6 +524,7 @@ button {
 
 .modern .window content,
 .modern button {
+	color: white;
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
 }
