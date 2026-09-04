@@ -944,6 +944,7 @@ function Dialog(object, create) {
 	this._aspectRatio = 0;
 	this._aspectRatioEnabled = false;
 	this._constrainAspectRatioInner = false;
+	this._constrainAspectRatioLine = false;
 	this._mica = flags.useMica;
 
 	this._useTransform = useTransform;
@@ -1375,6 +1376,17 @@ Object.defineProperty(Dialog.prototype, "constrainAspectRatio", {
 Object.defineProperty(Dialog.prototype, "constrainAspectRatioInner", {
 	get: function() { return this._constrainAspectRatioInner; },
 	set: function(enabled) { this._constrainAspectRatioInner = !!enabled; }
+});
+
+/**
+ * Forces corner resizes (when {@link Dialog#constrainAspectRatio} is enabled) to keep the dragged
+ * corner on a straight line, instead of snapping between the L (inner) and V (outer) axis paths.
+ * The dragged corner is pinned to the window's own diagonal and the size follows the cursor's
+ * projection onto that diagonal, so it scales along a straight path in between the other modes.
+ */
+Object.defineProperty(Dialog.prototype, "constrainAspectRatioLine", {
+	get: function() { return this._constrainAspectRatioLine; },
+	set: function(enabled) { this._constrainAspectRatioLine = !!enabled; }
 });
 
 Object.defineProperty(Dialog.prototype, "minAspectRatio", {
@@ -2195,12 +2207,15 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	// negative. A negative distance hijacks the driven axis, collapsing the window to its minimum
 	// size and cutting off the other axis. Clamp the distances at zero instead, so the edge pins at
 	// the stable edge and the other axis keeps controlling the resize.
+	var signedWidth = width, signedHeight = height;
 	width = Math.max(0, width);
 	height = Math.max(0, height);
 
+	var isCorner = direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right";
+
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
+	else if (isCorner) {
 		// Corners: the requested width/height are the mouse's horizontal/vertical distance from
 		// the stable (non-drag) corner. Whichever axis to lock is decided by which side of the
 		// corner's diagonal (the aspect-ratio line) the mouse is on.
@@ -2210,8 +2225,42 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
 	}
 
+	var lineMode = isCorner && this._constrainAspectRatioLine;
 	var newW, newH;
-	if (driveWidth) {
+	if (lineMode) {
+		// Straight-line mode: pin the dragged corner onto the window's own diagonal and scale the
+		// window with the cursor's projection onto that diagonal, so the corner glides along a
+		// straight path between the corners instead of snapping to either axis.
+		var cX, cY, fX, fY, diagX, diagY;
+		switch (direction) {
+			case "top-left":
+				fX = oldRight; fY = oldBottom;
+				cX = oldRight - signedWidth; cY = oldBottom - signedHeight;
+				diagX = -1; diagY = -1 / ratio;
+				break;
+			case "top-right":
+				fX = oldX; fY = oldBottom;
+				cX = oldX + signedWidth; cY = oldBottom - signedHeight;
+				diagX = 1; diagY = -1 / ratio;
+				break;
+			case "bottom-left":
+				fX = oldRight; fY = oldY;
+				cX = oldRight - signedWidth; cY = oldY + signedHeight;
+				diagX = -1; diagY = 1 / ratio;
+				break;
+			default:
+				fX = oldX; fY = oldY;
+				cX = oldX + signedWidth; cY = oldY + signedHeight;
+				diagX = 1; diagY = 1 / ratio;
+				break;
+		}
+		var denom = diagX * diagX + diagY * diagY;
+		var dot = (cX - fX) * diagX + (cY - fY) * diagY;
+		var scale = dot / denom;
+		if (scale < 0) scale = 0;
+		newW = scale;
+		newH = scale / ratio;
+	} else if (driveWidth) {
 		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
 		newH = newW / ratio;
 		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
