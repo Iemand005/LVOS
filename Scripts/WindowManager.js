@@ -2709,4 +2709,7 @@ window.__LVMessenger = {};
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
  *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trid
+ *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
+ *  /  Pale Moon 34
+ * /  Safari 5+ (Windows and Mac OS X)
+\*/
