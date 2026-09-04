@@ -2203,45 +2203,20 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
 	}
 
-	var rawW, rawH;
-	if (driveWidth) {
-		rawW = width;
-		rawH = width / ratio;
-	} else {
-		rawH = height;
-		rawW = height * ratio;
-	}
-
-	// If the mouse crossed the opposite edge, flip the anchor so the
-	// window grows on the other side instead of collapsing to minimum size.
-	var flipX = false, flipY = false;
-	if (rawW < 0 && (direction === "left" || direction === "bottom-left" || direction === "top-left")) {
-		flipX = true;
-	} else if (rawW < 0 && (direction === "right" || direction === "bottom-right" || direction === "top-right")) {
-		flipX = true;
-	}
-
-	if (rawH < 0 && (direction === "top" || direction === "top-left" || direction === "top-right")) {
-		flipY = true;
-	} else if (rawH < 0 && (direction === "bottom" || direction === "bottom-left" || direction === "bottom-right")) {
-		flipY = true;
-	}
-
 	var newW, newH;
 	if (driveWidth) {
-		newW = Math.max(Math.min(Math.abs(rawW), this.maxWidth), this.minWidth);
+		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
 		newH = newW / ratio;
 		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
 		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
 	} else {
-		newH = Math.max(Math.min(Math.abs(rawH), this.maxHeight), this.minHeight);
+		newH = Math.max(Math.min(height, this.maxHeight), this.minHeight);
 		newW = newH * ratio;
 		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
 		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
 
-	// Clamp the size to the window bounds, respecting the aspect ratio.
-	// Use the original direction to determine which edge stays fixed.
+	// Clamp the size to the window bounds, respecting the aspect ratio
 	switch (direction) {
 		case "left":
 		case "bottom-left":
@@ -2270,21 +2245,34 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	newW = Math.max(Math.min(newW, this.maxWidth), this.minWidth);
 	newH = Math.max(Math.min(newH, this.maxHeight), this.minHeight);
 
-	// Compute the position so the fixed edges stay in place.
-	// Determine which edges are fixed based on the original direction and any flips.
-	var leftMoves = direction !== "left" && direction !== "top-left" && direction !== "bottom-left";
-	var topMoves = direction !== "top" && direction !== "top-left" && direction !== "top-right";
-	// If we flipped, the anchor switches — fixed edges become moving and vice versa.
-	if (flipX) leftMoves = !leftMoves;
-	if (flipY) topMoves = !topMoves;
-
 	var newX = oldX, newY = oldY;
-	if (leftMoves) newX = oldRight - newW;
-	if (topMoves) newY = oldBottom - newH;
-
-	// Center the window on the non-fixed axis for single-edge directions
-	if (direction === "left" || direction === "right") newY = oldCenterY - newH / 2;
-	if (direction === "top" || direction === "bottom") newX = oldCenterX - newW / 2;
+	switch (direction) {
+		case "bottom-left":
+			newX = oldRight - newW;
+			break;
+		case "top-right":
+			newY = oldBottom - newH;
+			break;
+		case "top-left":
+			newX = oldRight - newW;
+			newY = oldBottom - newH;
+			break;
+		case "left":
+			newX = oldRight - newW;
+			newY = oldCenterY - newH / 2;
+			break;
+		case "right":
+			newY = oldCenterY - newH / 2;
+			break;
+		case "top":
+			newX = oldCenterX - newW / 2;
+			newY = oldBottom - newH;
+			break;
+		case "bottom":
+			newX = oldCenterX - newW / 2;
+			break;
+		// bottom-right (and default): keep the top-left edge fixed.
+	}
 
 	this._width = newW;
 	this._height = newH;
