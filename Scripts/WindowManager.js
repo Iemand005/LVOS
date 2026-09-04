@@ -2608,11 +2608,11 @@ window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffse
 window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
 window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
 window.addEventListener("drop", function(e) {
-  e.preventDefault();
-  if (!e.dataTransfer) return;
-  var files = e.dataTransfer.files;
-  if (files.length > 0)
-	 console.log("File dropped anywhere in window:", files[0].name);
+	e.preventDefault();
+	if (!e.dataTransfer) return;
+	var files = e.dataTransfer.files;
+	if (files.length > 0)
+		console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
 //#endregion
