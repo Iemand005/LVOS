@@ -2203,35 +2203,41 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
 	}
 
-	var newW, newH;
+	var rawW, rawH;
 	if (driveWidth) {
-		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
-		newH = newW / ratio;
-		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
-		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
+		rawW = width;
+		rawH = width / ratio;
 	} else {
-		newH = Math.max(Math.min(height, this.maxHeight), this.minHeight);
-		newW = newH * ratio;
-		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
-		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
+		rawH = height;
+		rawW = height * ratio;
 	}
 
 	// If the mouse crossed the opposite edge, flip the anchor so the
 	// window grows on the other side instead of collapsing to minimum size.
-	if (newW < 0 && (direction === "left" || direction === "bottom-left" || direction === "top-left")) {
-		newW = -newW;
-		newX = oldRight;
-	} else if (newW < 0 && (direction === "right" || direction === "bottom-right" || direction === "top-right")) {
-		newW = -newW;
-		newX = oldX - newW;
+	var flipX = false, flipY = false;
+	if (rawW < 0 && (direction === "left" || direction === "bottom-left" || direction === "top-left")) {
+		flipX = true;
+	} else if (rawW < 0 && (direction === "right" || direction === "bottom-right" || direction === "top-right")) {
+		flipX = true;
 	}
 
-	if (newH < 0 && (direction === "top" || direction === "top-left" || direction === "top-right")) {
-		newH = -newH;
-		newY = oldBottom;
-	} else if (newH < 0 && (direction === "bottom" || direction === "bottom-left" || direction === "bottom-right")) {
-		newH = -newH;
-		newY = oldY - newH;
+	if (rawH < 0 && (direction === "top" || direction === "top-left" || direction === "top-right")) {
+		flipY = true;
+	} else if (rawH < 0 && (direction === "bottom" || direction === "bottom-left" || direction === "bottom-right")) {
+		flipY = true;
+	}
+
+	var newW, newH;
+	if (driveWidth) {
+		newW = Math.max(Math.min(Math.abs(rawW), this.maxWidth), this.minWidth);
+		newH = newW / ratio;
+		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
+		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
+	} else {
+		newH = Math.max(Math.min(Math.abs(rawH), this.maxHeight), this.minHeight);
+		newW = newH * ratio;
+		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
+		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
 
 	// Clamp the size to the window bounds, respecting the aspect ratio.
@@ -2266,10 +2272,11 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	// Compute the position so the fixed edges stay in place.
 	// Determine which edges are fixed based on the original direction and any flips.
-	var rightMoves = (direction === "left" || direction === "top-left" || direction === "bottom-left") && !(newW < 0);
 	var leftMoves = direction !== "left" && direction !== "top-left" && direction !== "bottom-left";
 	var topMoves = direction !== "top" && direction !== "top-left" && direction !== "top-right";
-	var bottomMoves = (direction === "top" || direction === "top-left" || direction === "top-right") && !(newH < 0);
+	// If we flipped, the anchor switches — fixed edges become moving and vice versa.
+	if (flipX) leftMoves = !leftMoves;
+	if (flipY) topMoves = !topMoves;
 
 	var newX = oldX, newY = oldY;
 	if (leftMoves) newX = oldRight - newW;
@@ -2702,7 +2709,4 @@ window.__LVMessenger = {};
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
  *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
+ *   /  Internet Explorer 11 Trid
