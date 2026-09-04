@@ -1009,8 +1009,8 @@ function Dialog(object, create) {
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
 
-	var metroapplist = document.getElementById("metroapplist");
-	if (metroapplist) metroapplist.appendChild(this.createOpenButton());
+	var metroAppList = document.getElementById("metroapplist");
+	if (metroAppList) metroAppList.appendChild(this.createOpenButton());
 	if (create || isElement(object)) this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
@@ -1162,8 +1162,12 @@ Dialog.prototype.initWithObject = function(object) {
 		target.addEventListener("selectstart", cancelDomEvent, false);
 
 		var body = this.body;
-		if (body)
-			body.addEventListener("load", function () { try { self.verifyEjectCapability(); } catch (exception) { if (target) target.getElementsByTagName("button")[0].style.display = "none"; }}, false);
+		if (body) body.addEventListener("load", function () { try {
+			self.verifyEjectCapability();
+		} catch (exception) {
+			console.warn("Failed to verify eject capability" + exception);
+			if (target) target.getElementsByTagName("button")[0].style.display = "none";
+		}}, false);
 
 		var header = this.titleBar;
 		if (header)
