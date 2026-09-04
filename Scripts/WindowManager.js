@@ -2216,7 +2216,26 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
 
-	// Clamp the size to the window bounds, respecting the aspect ratio
+	// If the mouse crossed the opposite edge, flip the anchor so the
+	// window grows on the other side instead of collapsing to minimum size.
+	if (newW < 0 && (direction === "left" || direction === "bottom-left" || direction === "top-left")) {
+		newW = -newW;
+		newX = oldRight;
+	} else if (newW < 0 && (direction === "right" || direction === "bottom-right" || direction === "top-right")) {
+		newW = -newW;
+		newX = oldX - newW;
+	}
+
+	if (newH < 0 && (direction === "top" || direction === "top-left" || direction === "top-right")) {
+		newH = -newH;
+		newY = oldBottom;
+	} else if (newH < 0 && (direction === "bottom" || direction === "bottom-left" || direction === "bottom-right")) {
+		newH = -newH;
+		newY = oldY - newH;
+	}
+
+	// Clamp the size to the window bounds, respecting the aspect ratio.
+	// Use the original direction to determine which edge stays fixed.
 	switch (direction) {
 		case "left":
 		case "bottom-left":
@@ -2245,34 +2264,20 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	newW = Math.max(Math.min(newW, this.maxWidth), this.minWidth);
 	newH = Math.max(Math.min(newH, this.maxHeight), this.minHeight);
 
+	// Compute the position so the fixed edges stay in place.
+	// Determine which edges are fixed based on the original direction and any flips.
+	var rightMoves = (direction === "left" || direction === "top-left" || direction === "bottom-left") && !(newW < 0);
+	var leftMoves = direction !== "left" && direction !== "top-left" && direction !== "bottom-left";
+	var topMoves = direction !== "top" && direction !== "top-left" && direction !== "top-right";
+	var bottomMoves = (direction === "top" || direction === "top-left" || direction === "top-right") && !(newH < 0);
+
 	var newX = oldX, newY = oldY;
-	switch (direction) {
-		case "bottom-left":
-			newX = oldRight - newW;
-			break;
-		case "top-right":
-			newY = oldBottom - newH;
-			break;
-		case "top-left":
-			newX = oldRight - newW;
-			newY = oldBottom - newH;
-			break;
-		case "left":
-			newX = oldRight - newW;
-			newY = oldCenterY - newH / 2;
-			break;
-		case "right":
-			newY = oldCenterY - newH / 2;
-			break;
-		case "top":
-			newX = oldCenterX - newW / 2;
-			newY = oldBottom - newH;
-			break;
-		case "bottom":
-			newX = oldCenterX - newW / 2;
-			break;
-		// bottom-right (and default): keep the top-left edge fixed.
-	}
+	if (leftMoves) newX = oldRight - newW;
+	if (topMoves) newY = oldBottom - newH;
+
+	// Center the window on the non-fixed axis for single-edge directions
+	if (direction === "left" || direction === "right") newY = oldCenterY - newH / 2;
+	if (direction === "top" || direction === "bottom") newX = oldCenterX - newW / 2;
 
 	this._width = newW;
 	this._height = newH;
