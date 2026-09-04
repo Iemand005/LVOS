@@ -1685,7 +1685,6 @@ Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ();
 	this.messageFrame("open");
-	this.activeDialog = this;
 	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
@@ -1699,17 +1698,6 @@ Dialog.prototype.open = function () {
 Dialog.prototype.close = function () {
 	return this.toggleOpen(false);
 };
-Dialog.prototype.getInnerRect = function () {
-  	if (!this.target) return;
-	return {
-		top: this.target.offsetTop,
-		left: this.target.offsetLeft,
-		right: this.target.offsetLeft + this.target.offsetWidth,
-		bottom: this.target.offsetTop + this.target.offsetHeight,
-		width: this.target.offsetWidth,
-		height: this.target.offsetHeight
-	};
-}; // Builds a rect without extra function calls, including the dimension offsets caused by CSS transforms, so windows move correctly while an animation plays.
 
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };

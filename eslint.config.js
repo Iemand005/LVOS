@@ -55,6 +55,10 @@ export default defineConfig(
 			"jsdoc/require-returns": "off",
 			"jsdoc/no-undefined-types": "off",
 
+			"@typescript-eslint/no-unused-vars": ["error", { 
+				"properties": "all" 
+			}],
+
 			"no-restricted-syntax": [
 				"error",
 				{
