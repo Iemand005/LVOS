@@ -2160,18 +2160,12 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 
 	switch (direction) {
 		case "bottom-left":
-			newX = oldX + oldW - newW;
-			break;
-		case "top-right":
-			newY = oldY + oldH - newH;
-			break;
-		case "top-left":
-			newX = oldX + oldW - newW;
-			newY = oldY + oldH - newH;
-			break;
 		case "left":
 			newX = oldX + oldW - newW;
 			break;
+		case "top-left":
+			newX = oldX + oldW - newW;
+		case "top-right":
 		case "top":
 			newY = oldY + oldH - newH;
 			break;
@@ -2306,24 +2300,20 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		case "bottom-left":
 			newX = oldRight - newW;
 			break;
-		case "top-right":
-			newY = oldBottom - newH;
-			break;
 		case "top-left":
 			newX = oldRight - newW;
 			newY = oldBottom - newH;
 			break;
 		case "left":
 			newX = oldRight - newW;
-			newY = oldCenterY - newH / 2;
-			break;
 		case "right":
 			newY = oldCenterY - newH / 2;
 			break;
-		case "top":
-			newX = oldCenterX - newW / 2;
+		case "top-right":
 			newY = oldBottom - newH;
 			break;
+		case "top":
+			newY = oldBottom - newH;
 		case "bottom":
 			newX = oldCenterX - newW / 2;
 			break;
