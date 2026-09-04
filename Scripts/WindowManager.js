@@ -62,7 +62,7 @@ var flags = {
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
-		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+		window.windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
@@ -205,7 +205,7 @@ function messageReceived(type, data, source){
 
 	if (source) {
 
-		var dialog = windowManager.windows[source];
+		var dialog = window.windowManager.windows[source];
 
 		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
@@ -248,8 +248,8 @@ function messageReceived(type, data, source){
 }
 
 function swapMetroBody() {
-	if (!windowManager.flipped) return;
-	windowManager.activeDialogToMetro();
+	if (!window.windowManager.flipped) return;
+	window.windowManager.activeDialogToMetro();
 }
 
 /** @param {boolean} enable */
@@ -264,15 +264,8 @@ function flip(enable){
 function flipHandler(enable){
 	DesktopManager.toggleCharms(false);
 	swapMetroBody();
-	windowManager.flipped = enable;
-	return windowManager.flipped;
-}
-
-/** @param {boolean} [enable] */
-function toggleOverlay(enable) {
-	var overlay = bodyCrawler.getOverlay();
-	if (!overlay) return;
-	overlay.classList.toggle("open", enable);
+	window.windowManager.flipped = enable;
+	return window.windowManager.flipped;
 }
 
 
@@ -321,7 +314,7 @@ function handleStorageException(exception){
 	console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
 	console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
 	localStorage.windowState = null;
-	windowManager.canSave = false;
+	window.windowManager.canSave = false;
 }
 
 
@@ -414,11 +407,11 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY);
+					window.windowManager.handleWindowDrag(event.clientX, event.clientY);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
+			} else window.windowManager.handleWindowDrag(event.clientX, event.clientY);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -466,7 +459,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
   set: function (value) {
 	if (typeof value !== "boolean") return;
 	document.body.classList.toggle("mica", value);
-	windowManager.forEachWindow(function(window) { window.mica = value; });
+	window.windowManager.forEachWindow(function(window) { window.mica = value; });
 	this._isMicaEnabled = value;
   }
 });
@@ -630,13 +623,13 @@ WindowManager.prototype.getVisualizerApps = function() {
 
 WindowManager.prototype.injectApplications = function() {
 	for (var i = 0; i < arguments.length; i++)
-		arguments[i].forEach(windowManager.loadApp, windowManager);
-	windowManager.loadState();
+		arguments[i].forEach(window.windowManager.loadApp, windowManager);
+	window.windowManager.loadState();
 };
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
-	windowManager.windows[appId].kill();
+	window.windowManager.windows[appId].kill();
 };
 
 /** @param {boolean} [enabled] */
@@ -663,9 +656,6 @@ Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
 });
 
-WindowManager.getWindowBounds = function() {
-	return WindowManager.windowBounds;
-};
 /** @param {Dialog} dialog */
 WindowManager.prototype.focusDialog = function(dialog) {
 	if (this.focusedDialog !== null && this.focusedDialog.target)
@@ -898,7 +888,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
-		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
+		window.windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 		return;
 	}
 
@@ -1101,7 +1091,7 @@ Dialog.prototype.initWithObject = function(object) {
 	var activationHandler = function (ev) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-		windowManager.windowActivationEvent(ev, self);
+		window.windowManager.windowActivationEvent(ev, self);
 		return true;
 	};
 
@@ -1131,7 +1121,7 @@ Dialog.prototype.initWithObject = function(object) {
 				/** @param {PointerEvent | MouseEvent} ev */
 				var pointerDown = function (ev) {
 					if (!activationHandler(ev)) return;
-					windowManager.dragAction.set(id);
+					window.windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				};
 				if (supportsPointer) sizer.onpointerdown = pointerDown;
@@ -1189,7 +1179,7 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 	}
 
-	if (this.id) windowManager.windows[this.id] = this;
+	if (this.id) window.windowManager.windows[this.id] = this;
 
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
@@ -1234,7 +1224,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 		}, 1000);
 	});
 
-	windowManager.saveState();
+	window.windowManager.saveState();
 	self.reportState();
 
 };
@@ -1400,7 +1390,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 Object.defineProperty(Dialog.prototype, "top", {
 	get: function() { return this.y; },
 	set: function(top) {
-		var bounds = WindowManager.getWindowBounds();
+		var bounds = WindowManager.windowBounds;
 		var bottom = this.bottomFromTop;
 		if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
 		if (top < bounds.top) top = bounds.top;
@@ -1419,7 +1409,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
 	get: function() { return this.x; },
 	set: function(left) {
-		var bounds = WindowManager.getWindowBounds();
+		var bounds = WindowManager.windowBounds;
 		var right = this.rightFromLeft;
 		if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
 		if (left < bounds.left) left = bounds.left;
@@ -1444,7 +1434,7 @@ Object.defineProperty(Dialog.prototype, "right", {
 	get: function() { return window.innerWidth - this.rightFromLeft; },
 	set: function(right) {
 		if (typeof right === "number") {
-			var bounds = WindowManager.getWindowBounds();
+			var bounds = WindowManager.windowBounds;
 			if (right > bounds.right) right = bounds.right;
 			if (right < bounds.left) right = bounds.left;
 			this.width = (window.innerWidth - right) - this.x;
@@ -1461,7 +1451,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 	get: function() { return window.innerHeight - this.bottomFromTop; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
-			var bounds = WindowManager.getWindowBounds();
+			var bounds = WindowManager.windowBounds;
 			if (bottom > bounds.bottom) bottom = bounds.bottom;
 			if (bottom < bounds.top) bottom = bounds.top;
 			this.height = (window.innerHeight - bottom) - this.y;
@@ -1530,7 +1520,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
 	set: function(id) {
 		this._id = id;
-		windowManager.windows[id] = this;
+		window.windowManager.windows[id] = this;
 		if (this.target) this.target.setAttribute("id", id);
 	}
 });
@@ -1687,12 +1677,11 @@ Dialog.prototype.setRotation = function(rotation) {
 };
 
 
-Dialog.prototype.focus = function() { windowManager.focusDialog(this); };
+Dialog.prototype.focus = function() { window.windowManager.focusDialog(this); };
 Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ();
 	this.messageFrame("open");
-	this.activeDialog = this;
 	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
@@ -1706,17 +1695,6 @@ Dialog.prototype.open = function () {
 Dialog.prototype.close = function () {
 	return this.toggleOpen(false);
 };
-Dialog.prototype.getInnerRect = function () {
-  	if (!this.target) return;
-	return {
-		top: this.target.offsetTop,
-		left: this.target.offsetLeft,
-		right: this.target.offsetLeft + this.target.offsetWidth,
-		bottom: this.target.offsetTop + this.target.offsetHeight,
-		width: this.target.offsetWidth,
-		height: this.target.offsetHeight
-	};
-}; // Builds a rect without extra function calls, including the dimension offsets caused by CSS transforms, so windows move correctly while an animation plays.
 
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
@@ -1778,18 +1756,6 @@ Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
 	this.target.classList.remove("animating");
 };
-/**
- * @param {string} className
- * @param {boolean} [force]
- * @param {string} [animationEndTrigger]
- * @param {()=>void} [onEnd]
- * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
- */
-Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
-	this.toggleClassAnimated(className, force, function(propertyName) {
-		return propertyName === animationEndTrigger;
-	}, onEnd, onToggled);
-};
 
 /**
  * @param {(this:Dialog)=>void} [onToggled]
@@ -1849,7 +1815,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
 		return name === "transform" || name === "width";
-	}, undefined, function() {
+	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		self.maximizeAnimations--;
 	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
@@ -2018,7 +1985,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	}
 	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 	if (x < bounds.left) x = bounds.left;
 	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
 	if (y < bounds.top) y = bounds.top;
@@ -2054,7 +2021,7 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (typeof z === "undefined") {
-		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
+		if (this._z !== window.windowManager.topZ) this._z = ++window.windowManager.topZ;
 	} else this._z = z;
 	if (isElement(this.target))
 		this.target.style.zIndex = String(this._z);
@@ -2077,7 +2044,7 @@ Dialog.prototype.updateHeight = function () {
 Dialog.prototype.setWidth = function (width, update, animate) {
 	if (typeof width !== "number") return;
 
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	if (bounds.right !== Infinity) {
 		var overflow = this.x + width - bounds.right;
@@ -2105,7 +2072,7 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 Dialog.prototype.setHeight = function (height, update, animate) {
 	if (typeof height !== "number" || !this.target) return;
 
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	if (bounds.bottom !== Infinity) {
 		var overflow = this.y + height - bounds.bottom;
@@ -2156,11 +2123,27 @@ Dialog.prototype.resize = function (width, height, direction) {
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
+	var bounds = WindowManager.windowBounds;
 
-	this.setWidth(width);
-	this.setHeight(height);
+	width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
+	height = Math.max(Math.min(height, this.maxHeight), this.minHeight);
 
-	var newW = this.width, newH = this.height;
+	var newW = width, newH = height;
+
+	// Clamp width so the moving edge doesn't exceed bounds
+	if (direction === "left" || direction === "bottom-left" || direction === "top-left") {
+		newW = Math.min(newW, oldX + oldW - bounds.left);
+	} else if (direction !== "top" && direction !== "bottom") {
+		newW = Math.min(newW, bounds.right - oldX);
+	}
+
+	// Clamp height so the moving edge doesn't exceed bounds
+	if (direction === "top" || direction === "top-left" || direction === "top-right") {
+		newH = Math.min(newH, oldY + oldH - bounds.top);
+	} else if (direction !== "left" && direction !== "right") {
+		newH = Math.min(newH, bounds.bottom - oldY);
+	}
+
 	var newX = oldX, newY = oldY;
 
 	switch (direction) {
@@ -2183,7 +2166,14 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 		// bottom-right, bottom, right (and default): keep the top-left edge fixed.
 	}
 
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === this.minWidth;
+	this._isMinHeight = newH === this.minHeight;
+
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
 };
 
 /**
@@ -2199,6 +2189,14 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldW = this.width, oldH = this.height;
 	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
 	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
+	var bounds = WindowManager.windowBounds;
+
+	// The mouse can move past the stable (non-drag) edge, which makes one of the distances
+	// negative. A negative distance hijacks the driven axis, collapsing the window to its minimum
+	// size and cutting off the other axis. Clamp the distances at zero instead, so the edge pins at
+	// the stable edge and the other axis keeps controlling the resize.
+	width = Math.max(0, width);
+	height = Math.max(0, height);
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
@@ -2224,6 +2222,35 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
 		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
+
+	// Clamp the size to the window bounds, respecting the aspect ratio
+	switch (direction) {
+		case "left":
+		case "bottom-left":
+		case "top-left":
+			newW = Math.min(newW, oldRight - bounds.left);
+			break;
+		default:
+			newW = Math.min(newW, bounds.right - oldX);
+			break;
+	}
+	newH = newW / ratio;
+
+	switch (direction) {
+		case "top":
+		case "top-left":
+		case "top-right":
+			newH = Math.min(newH, oldBottom - bounds.top);
+			break;
+		default:
+			newH = Math.min(newH, bounds.bottom - oldY);
+			break;
+	}
+	newW = newH * ratio;
+
+	// Re-enforce min/max size
+	newW = Math.max(Math.min(newW, this.maxWidth), this.minWidth);
+	newH = Math.max(Math.min(newH, this.maxHeight), this.minHeight);
 
 	var newX = oldX, newY = oldY;
 	switch (direction) {
@@ -2254,9 +2281,14 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		// bottom-right (and default): keep the top-left edge fixed.
 	}
 
-	this.setWidth(newW);
-	this.setHeight(newH);
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === this.minWidth;
+	this._isMinHeight = newH === this.minHeight;
+
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
 };
 Dialog.prototype.update = function () {
 	this.move();
@@ -2453,7 +2485,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "";
 		target.style.left = "";
-		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
@@ -2473,6 +2504,7 @@ Dialog.prototype.updateScale = function(useScale) {
 	if (useScale) {
 		target.style.right = "";
 		target.style.bottom = "";
+		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
 		target.style.right = toPixels(this.right);
@@ -2481,6 +2513,13 @@ Dialog.prototype.updateScale = function(useScale) {
 	target.classList.toggle("use-scale", useScale);
 
 	this.update();
+};
+
+/** @param {boolean} [isMaximized] */
+Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
+    if (!this.target) return;
+    this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
+    this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
 /** @returns {boolean} */
@@ -2637,21 +2676,20 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 //#region Event Listeners
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-window.addEventListener("unload", function() { windowManager.saveState(); }, false);
+window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
 window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
 window.addEventListener("drop", function(e) {
-  e.preventDefault();
-  if (!e.dataTransfer) return;
-  var files = e.dataTransfer.files;
-  if (files.length > 0)
-	 console.log("File dropped anywhere in window:", files[0].name);
+	e.preventDefault();
+	if (!e.dataTransfer) return;
+	var files = e.dataTransfer.files;
+	if (files.length > 0)
+		console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
 //#endregion
 
 //#region Global Variables
-var windowManager = new WindowManager;
-window.windowManager = windowManager;
+window.windowManager = new WindowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 

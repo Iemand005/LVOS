@@ -11,10 +11,12 @@
     "Anim": true,
     "DesktopManager": true,
     "ClickOffset": true,
+    "Modern": true,
     "lerp": true,
     "windowManager": false,
     "toggleReflections": true,
-    "setTheme": true
+    "setTheme": true,
+    "appRegistry": true
   },
   "expr": true,
   "varstmt": false,

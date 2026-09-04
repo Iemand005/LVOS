@@ -524,6 +524,7 @@ button {
 
 .modern .window content,
 .modern button {
+	color: white;
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
 }
