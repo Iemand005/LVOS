@@ -12,6 +12,7 @@
     <mapping directory="$PROJECT_DIR$/Applications/StereogramMaker/WebGraphics" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Applications/Tappy" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Applications/WebGPUFluidSim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/LVOS-dist" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Scripts/WebAudioVisualizer" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Scripts/WebAura" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Scripts/WebGraphics" vcs="Git" />
