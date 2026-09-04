@@ -2192,6 +2192,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldW = this.width, oldH = this.height;
 	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
 	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
+	var bounds = WindowManager.getWindowBounds();
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
@@ -2217,6 +2218,35 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
 		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
+
+	// Clamp the size to the window bounds, respecting the aspect ratio
+	switch (direction) {
+		case "left":
+		case "bottom-left":
+		case "top-left":
+			newW = Math.min(newW, oldRight - bounds.left);
+			break;
+		default:
+			newW = Math.min(newW, bounds.right - oldX);
+			break;
+	}
+	newH = newW / ratio;
+
+	switch (direction) {
+		case "top":
+		case "top-left":
+		case "top-right":
+			newH = Math.min(newH, oldBottom - bounds.top);
+			break;
+		default:
+			newH = Math.min(newH, bounds.bottom - oldY);
+			break;
+	}
+	newW = newH * ratio;
+
+	// Re-enforce min/max size
+	newW = Math.max(Math.min(newW, this.maxWidth), this.minWidth);
+	newH = Math.max(Math.min(newH, this.maxHeight), this.minHeight);
 
 	var newX = oldX, newY = oldY;
 	switch (direction) {
