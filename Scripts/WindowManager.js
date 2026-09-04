@@ -1562,7 +1562,7 @@ Object.defineProperty(Dialog.prototype, "popup", {
 
 Object.defineProperty(Dialog.prototype, "micaElement", {
 	get: function() {
-		try { // TODO: cache the element so it doesn't have to be re-fetched each time! add _micaElement to the dialog thing as an otpional prop
+		try { // TODO: cache the element so it doesn't have to be re-fetched each time! add _micaElement to the dialog thing as an optional prop
 			if (!this.target) return null;
 			var clipElem = this.target.getElementsByClassName("backdrop-filter");
 			if (!clipElem.length) return null;
