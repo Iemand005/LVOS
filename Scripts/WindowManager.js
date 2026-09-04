@@ -254,10 +254,10 @@ function swapMetroBody() {
 
 /** @param {boolean} enable */
 function flip(enable){
-	var tesktop = bodyCrawler.getDesktop();
-	if (!tesktop) return;
-	tesktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
-	flipHandler(tesktop.classList.toggle("flipped", enable));
+	var desktop = bodyCrawler.getDesktop();
+	if (!desktop) return;
+	desktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
+	flipHandler(desktop.classList.toggle("flipped", enable));
 }
 
 /** @param {boolean} enable */
@@ -537,7 +537,7 @@ WindowManager.prototype.killAll = function () {
 };
 
 WindowManager.prototype.synchronizeStates = function () {
-	this.forEachWindow(function(dialoge) { dialoge.reportState(); });
+	this.forEachWindow(function(dialog) { dialog.reportState(); });
 };
 
 /** @param {Application | HTMLElement} app */
