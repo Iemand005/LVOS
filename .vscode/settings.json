@@ -8,8 +8,10 @@
 		"*.hta": "html"
 	},
 	"cSpell.words": [
+		"contenteditable",
 		"devel",
-		"Lasse", "Lauwerys"
+		"Lasse",
+		"Lauwerys"
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.background": "#ca5406",
