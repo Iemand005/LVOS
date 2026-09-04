@@ -1958,6 +1958,7 @@ Dialog.prototype.toggleEjectButton = function (enable) {
 Dialog.prototype.toggleFullButton = function (enable) {
   	this.toggleButton(windowButtons.full, enable);
 };
+// frat
 /**
  * @param {MessageType} type
  * @param {*} [message]
