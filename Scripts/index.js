@@ -21,7 +21,7 @@ function init() {
 			if (dialog.application) launchpad.addApp(dialog);
 		});
 		if (!isBlink) DesktopManager.removeTheme("glass");
-		windowManager.ininializeDialogs();
+		windowManager.initializeDialogs();
 		toggleReflections(reflections);
 
 		LVMessenger.receive(messageReceived);

@@ -545,7 +545,7 @@ WindowManager.prototype.loadApp = function(app) {
 	try {
 		this._windows[app.id] = new Dialog(app);
 		this._windows[app.id].mica = this.isMicaEnabled || false;
-	} catch(ex) { console.warn("Appleload failed", ex); }
+	} catch(ex) { console.warn("App load failed", ex); }
 };
 /**
  * @param {string} url
@@ -677,7 +677,7 @@ WindowManager.prototype.focusDialog = function(dialog) {
 
 WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
 
-WindowManager.prototype.ininializeDialogs = function() {
+WindowManager.prototype.initializeDialogs = function() {
 	var self = this;
 	var stop = function() { self.disableDialogDrag(); };
 	var event = supportsPointer ? "pointerup" : "mouseup";
