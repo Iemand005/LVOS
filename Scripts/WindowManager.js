@@ -2453,7 +2453,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	if (useTransform) {
 		target.style.top = "";
 		target.style.left = "";
-		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
