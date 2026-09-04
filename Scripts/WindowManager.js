@@ -656,9 +656,6 @@ Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
 });
 
-WindowManager.getWindowBounds = function() {
-	return WindowManager.windowBounds;
-};
 /** @param {Dialog} dialog */
 WindowManager.prototype.focusDialog = function(dialog) {
 	if (this.focusedDialog !== null && this.focusedDialog.target)
@@ -1393,7 +1390,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 Object.defineProperty(Dialog.prototype, "top", {
 	get: function() { return this.y; },
 	set: function(top) {
-		var bounds = WindowManager.getWindowBounds();
+		var bounds = WindowManager.windowBounds;
 		var bottom = this.bottomFromTop;
 		if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
 		if (top < bounds.top) top = bounds.top;
@@ -1412,7 +1409,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
 	get: function() { return this.x; },
 	set: function(left) {
-		var bounds = WindowManager.getWindowBounds();
+		var bounds = WindowManager.windowBounds;
 		var right = this.rightFromLeft;
 		if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
 		if (left < bounds.left) left = bounds.left;
@@ -1437,7 +1434,7 @@ Object.defineProperty(Dialog.prototype, "right", {
 	get: function() { return window.innerWidth - this.rightFromLeft; },
 	set: function(right) {
 		if (typeof right === "number") {
-			var bounds = WindowManager.getWindowBounds();
+			var bounds = WindowManager.windowBounds;
 			if (right > bounds.right) right = bounds.right;
 			if (right < bounds.left) right = bounds.left;
 			this.width = (window.innerWidth - right) - this.x;
@@ -1454,7 +1451,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 	get: function() { return window.innerHeight - this.bottomFromTop; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
-			var bounds = WindowManager.getWindowBounds();
+			var bounds = WindowManager.windowBounds;
 			if (bottom > bounds.bottom) bottom = bounds.bottom;
 			if (bottom < bounds.top) bottom = bounds.top;
 			this.height = (window.innerHeight - bottom) - this.y;
@@ -1988,7 +1985,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	}
 	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 	if (x < bounds.left) x = bounds.left;
 	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
 	if (y < bounds.top) y = bounds.top;
@@ -2047,7 +2044,7 @@ Dialog.prototype.updateHeight = function () {
 Dialog.prototype.setWidth = function (width, update, animate) {
 	if (typeof width !== "number") return;
 
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	if (bounds.right !== Infinity) {
 		var overflow = this.x + width - bounds.right;
@@ -2075,7 +2072,7 @@ Dialog.prototype.setWidth = function (width, update, animate) {
 Dialog.prototype.setHeight = function (height, update, animate) {
 	if (typeof height !== "number" || !this.target) return;
 
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	if (bounds.bottom !== Infinity) {
 		var overflow = this.y + height - bounds.bottom;
@@ -2126,7 +2123,7 @@ Dialog.prototype.resize = function (width, height, direction) {
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
 	height = Math.max(Math.min(height, this.maxHeight), this.minHeight);
@@ -2192,7 +2189,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldW = this.width, oldH = this.height;
 	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
 	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
-	var bounds = WindowManager.getWindowBounds();
+	var bounds = WindowManager.windowBounds;
 
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
