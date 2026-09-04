@@ -2191,51 +2191,40 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
 	var bounds = WindowManager.windowBounds;
 
-	var isCorner = direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right";
-
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (isCorner) {
+	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
 		// Corners: the requested width/height are the mouse's horizontal/vertical distance from
 		// the stable (non-drag) corner. Whichever axis to lock is decided by which side of the
 		// corner's diagonal (the aspect-ratio line) the mouse is on.
-		var rawW = Math.abs(width), rawH = Math.abs(height);
-		var boxRatio = rawH ? rawW / rawH : (rawW > 0 ? Infinity : 1);
+		var boxRatio = height ? width / height : (width > 0 ? Infinity : 1);
 		// L shape (inner): keep the smaller axis locked so the box hugs the corner under the mouse.
 		// V shape (outer): keep the larger axis locked so the mouse goes away from the window.
 		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
 	}
 
-	// A negative distance means the mouse has crossed the stable corner. Instead of collapsing to
-	// the minimum size, mirror the window over that edge so it keeps growing on the other side.
-	var flipX = isCorner ? width < 0 : false;
-	var flipY = isCorner ? height < 0 : false;
-	var sizeW = isCorner ? Math.abs(width) : width;
-	var sizeH = isCorner ? Math.abs(height) : height;
-
 	var newW, newH;
 	if (driveWidth) {
-		newW = Math.max(Math.min(sizeW, this.maxWidth), this.minWidth);
+		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
 		newH = newW / ratio;
 		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
 		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
 	} else {
-		newH = Math.max(Math.min(sizeH, this.maxHeight), this.minHeight);
+		newH = Math.max(Math.min(height, this.maxHeight), this.minHeight);
 		newW = newH * ratio;
 		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
 		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
 	}
 
-	// Clamp the size to the window bounds, respecting the aspect ratio. The clamped extent is
-	// measured from the fixed edge; which side that edge is on flips with the mirror.
+	// Clamp the size to the window bounds, respecting the aspect ratio
 	switch (direction) {
 		case "left":
 		case "bottom-left":
 		case "top-left":
-			newW = Math.min(newW, flipX ? bounds.right - oldRight : oldRight - bounds.left);
+			newW = Math.min(newW, oldRight - bounds.left);
 			break;
 		default:
-			newW = Math.min(newW, flipX ? oldX - bounds.left : bounds.right - oldX);
+			newW = Math.min(newW, bounds.right - oldX);
 			break;
 	}
 	newH = newW / ratio;
@@ -2244,10 +2233,10 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		case "top":
 		case "top-left":
 		case "top-right":
-			newH = Math.min(newH, flipY ? bounds.bottom - oldBottom : oldBottom - bounds.top);
+			newH = Math.min(newH, oldBottom - bounds.top);
 			break;
 		default:
-			newH = Math.min(newH, flipY ? oldY - bounds.top : bounds.bottom - oldY);
+			newH = Math.min(newH, bounds.bottom - oldY);
 			break;
 	}
 	newW = newH * ratio;
@@ -2259,20 +2248,14 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var newX = oldX, newY = oldY;
 	switch (direction) {
 		case "bottom-left":
-			if (flipX) newX = oldRight; else newX = oldRight - newW;
-			if (flipY) newY = oldY - newH;
+			newX = oldRight - newW;
 			break;
 		case "top-right":
-			if (flipX) newX = oldX - newW;
-			if (flipY) newY = oldBottom; else newY = oldBottom - newH;
+			newY = oldBottom - newH;
 			break;
 		case "top-left":
-			if (flipX) newX = oldRight; else newX = oldRight - newW;
-			if (flipY) newY = oldBottom; else newY = oldBottom - newH;
-			break;
-		case "bottom-right":
-			if (flipX) newX = oldX - newW;
-			if (flipY) newY = oldY - newH;
+			newX = oldRight - newW;
+			newY = oldBottom - newH;
 			break;
 		case "left":
 			newX = oldRight - newW;
@@ -2288,6 +2271,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		case "bottom":
 			newX = oldCenterX - newW / 2;
 			break;
+		// bottom-right (and default): keep the top-left edge fixed.
 	}
 
 	this._width = newW;
