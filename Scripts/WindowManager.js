@@ -1759,18 +1759,6 @@ Dialog.prototype.stopAnimating = function () {
 	if (!this.target) return;
 	this.target.classList.remove("animating");
 };
-/**
- * @param {string} className
- * @param {boolean} [force]
- * @param {string} [animationEndTrigger]
- * @param {()=>void} [onEnd]
- * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
- */
-Dialog.prototype.toggleClassAnimatedOld = function (className, force, animationEndTrigger, onEnd, onToggled) {
-	this.toggleClassAnimated(className, force, function(propertyName) {
-		return propertyName === animationEndTrigger;
-	}, onEnd, onToggled);
-};
 
 /**
  * @param {(this:Dialog)=>void} [onToggled]
