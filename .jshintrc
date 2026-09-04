@@ -11,6 +11,7 @@
     "Anim": true,
     "DesktopManager": true,
     "ClickOffset": true,
+    "Modern": true,
     "lerp": true,
     "windowManager": false,
     "toggleReflections": true,
