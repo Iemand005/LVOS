@@ -2191,6 +2191,13 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
 	var bounds = WindowManager.windowBounds;
 
+	// The mouse can move past the stable (non-drag) edge, which makes one of the distances
+	// negative. A negative distance hijacks the driven axis, collapsing the window to its minimum
+	// size and cutting off the other axis. Clamp the distances at zero instead, so the edge pins at
+	// the stable edge and the other axis keeps controlling the resize.
+	width = Math.max(0, width);
+	height = Math.max(0, height);
+
 	var driveWidth = true;
 	if (direction === "top" || direction === "bottom") driveWidth = false;
 	else if (direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right") {
