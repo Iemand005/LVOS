@@ -8,12 +8,13 @@
 		"*.hta": "html"
 	},
 	"cSpell.words": [
-		"contenteditable",
-		"devel",
+		"LVOS",
 		"Lasse",
 		"Lauwerys",
-		"lerp",
-		"LVOS"
+		"contenteditable",
+		"devel",
+		"endregion",
+		"lerp"
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.background": "#ca5406",
