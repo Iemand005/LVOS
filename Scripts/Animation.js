@@ -3,9 +3,9 @@ function Anim() {
 }
 
 /**
- * @param {number} duration 
- * @param {(time:number)=>void} update 
- * @param {()=>void} complete 
+ * @param {number} duration
+ * @param {(time:number)=>void} update
+ * @param {()=>void} complete
  */
 Anim.animate = function(duration, update, complete) {
     var start = new Date().getTime();
@@ -28,10 +28,9 @@ Anim.animate = function(duration, update, complete) {
     tick();
 };
 /**
- * @param {number} a 
- * @param {number} b 
- * @param {number} t 
- * @returns 
+ * @param {number} a
+ * @param {number} b
+ * @param {number} t
  */
 Anim.lerp = function(a, b, t) {
     return a + (b - a) * t;
