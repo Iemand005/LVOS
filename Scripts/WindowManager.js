@@ -2136,9 +2136,11 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
 	var bounds = WindowManager.windowBounds;
+	var maxW = this._maxWidth, maxH = this._maxHeight;
+	var minW = this._minWidth, minH = this._minHeight;
 
-	width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
-	height = Math.max(Math.min(height, this.maxHeight), this.minHeight);
+	width = Math.max(Math.min(width, maxW), minW);
+	height = Math.max(Math.min(height, maxH), minH);
 
 	var newW = width, newH = height;
 
@@ -2155,6 +2157,10 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 	} else if (direction !== "left" && direction !== "right") {
 		newH = Math.min(newH, bounds.bottom - oldY);
 	}
+
+	// The repositioned edges are a pure function of the size, so unchanged dimensions mean the
+	// window did not move either — skip every remaining assignment and style/layout write.
+	if (newW === oldW && newH === oldH) return;
 
 	var newX = oldX, newY = oldY;
 
@@ -2174,8 +2180,8 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 
 	this._width = newW;
 	this._height = newH;
-	this._isMinWidth = newW === this.minWidth;
-	this._isMinHeight = newH === this.minHeight;
+	this._isMinWidth = newW === minW;
+	this._isMinHeight = newH === minH;
 
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
 	this.updateWidth();
@@ -2194,106 +2200,93 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
 	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
-	var oldCenterX = oldX + oldW / 2, oldCenterY = oldY + oldH / 2;
 	var bounds = WindowManager.windowBounds;
-
-	// The mouse can move past the stable (non-drag) edge, which makes one of the distances
-	// negative. A negative distance hijacks the driven axis, collapsing the window to its minimum
-	// size and cutting off the other axis. Clamp the distances at zero instead, so the edge pins at
-	// the stable edge and the other axis keeps controlling the resize.
-	var signedWidth = width, signedHeight = height;
-	width = Math.max(0, width);
-	height = Math.max(0, height);
+	var maxW = this._maxWidth, maxH = this._maxHeight;
+	var minW = this._minWidth, minH = this._minHeight;
 
 	var isCorner = direction === "top-left" || direction === "top-right" || direction === "bottom-left" || direction === "bottom-right";
 
-	var driveWidth = true;
-	if (direction === "top" || direction === "bottom") driveWidth = false;
-	else if (isCorner) {
-		// Corners: the requested width/height are the mouse's horizontal/vertical distance from
-		// the stable (non-drag) corner. Whichever axis to lock is decided by which side of the
-		// corner's diagonal (the aspect-ratio line) the mouse is on.
-		var boxRatio = height ? width / height : (width > 0 ? Infinity : 1);
-		// L shape (inner): keep the smaller axis locked so the box hugs the corner under the mouse.
-		// V shape (outer): keep the larger axis locked so the mouse goes away from the window.
-		driveWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
-	}
-
-	var lineMode = isCorner && this._constrainAspectRatioLine;
 	var newW, newH;
-	if (lineMode) {
+	if (isCorner && this._constrainAspectRatioLine) {
 		// Straight-line mode: pin the dragged corner onto the window's own diagonal and scale the
 		// window with the cursor's projection onto that diagonal, so the corner glides along a
-		// straight path between the corners instead of snapping to either axis.
-		var cX, cY, fX, fY, diagX, diagY;
+		// straight path between the corners. No clamping or axis-locking logic runs here.
+		var fX, fY, cX, cY, diagX, diagY;
 		switch (direction) {
 			case "top-left":
 				fX = oldRight; fY = oldBottom;
-				cX = oldRight - signedWidth; cY = oldBottom - signedHeight;
+				cX = oldRight - width; cY = oldBottom - height;
 				diagX = -1; diagY = -1 / ratio;
 				break;
 			case "top-right":
 				fX = oldX; fY = oldBottom;
-				cX = oldX + signedWidth; cY = oldBottom - signedHeight;
+				cX = oldX + width; cY = oldBottom - height;
 				diagX = 1; diagY = -1 / ratio;
 				break;
 			case "bottom-left":
 				fX = oldRight; fY = oldY;
-				cX = oldRight - signedWidth; cY = oldY + signedHeight;
+				cX = oldRight - width; cY = oldY + height;
 				diagX = -1; diagY = 1 / ratio;
 				break;
 			default:
 				fX = oldX; fY = oldY;
-				cX = oldX + signedWidth; cY = oldY + signedHeight;
+				cX = oldX + width; cY = oldY + height;
 				diagX = 1; diagY = 1 / ratio;
 				break;
 		}
-		var denom = diagX * diagX + diagY * diagY;
-		var dot = (cX - fX) * diagX + (cY - fY) * diagY;
-		var scale = dot / denom;
+		// Project the cursor onto the diagonal; scale clamps at 0 so a cursor crossing the stable
+		// corner pins the window instead of collapsing it.
+		var scale = ((cX - fX) * diagX + (cY - fY) * diagY) / (diagX * diagX + diagY * diagY);
 		if (scale < 0) scale = 0;
 		newW = scale;
 		newH = scale / ratio;
-	} else if (driveWidth) {
-		newW = Math.max(Math.min(width, this.maxWidth), this.minWidth);
-		newH = newW / ratio;
-		if (newH > this.maxHeight) { newH = this.maxHeight; newW = newH * ratio; }
-		if (newH < this.minHeight) { newH = this.minHeight; newW = newH * ratio; }
 	} else {
-		newH = Math.max(Math.min(height, this.maxHeight), this.minHeight);
-		newW = newH * ratio;
-		if (newW > this.maxWidth) { newW = this.maxWidth; newH = newW / ratio; }
-		if (newW < this.minWidth) { newW = this.minWidth; newH = newW / ratio; }
+		// The mouse can move past the stable (non-drag) edge, making one of the distances negative.
+		// Clamp them at zero so the edge pins there instead of collapsing the window to min size.
+		if (width < 0) width = 0;
+		if (height < 0) height = 0;
+
+		var driveByWidth;
+		if (direction === "top" || direction === "bottom") {
+			driveByWidth = false;
+		} else if (isCorner) {
+			// The requested width/height are the mouse's distances from the stable corner. Which
+			// axis to lock is decided by which side of the corner's aspect-ratio diagonal the mouse
+			// is on. L (inner): hug the corner; V (outer): extend straight away from the window.
+			var boxRatio = height ? width / height : (width > 0 ? Infinity : 1);
+			driveByWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
+		} else {
+			driveByWidth = true;
+		}
+
+		if (driveByWidth) {
+			newW = Math.max(Math.min(width, maxW), minW);
+			newH = newW / ratio;
+			if (newH > maxH) { newH = maxH; newW = newH * ratio; }
+			if (newH < minH) { newH = minH; newW = newH * ratio; }
+		} else {
+			newH = Math.max(Math.min(height, maxH), minH);
+			newW = newH * ratio;
+			if (newW > maxW) { newW = maxW; newH = newW / ratio; }
+			if (newW < minW) { newW = minW; newH = newW / ratio; }
+		}
 	}
 
-	// Clamp the size to the window bounds, respecting the aspect ratio
-	switch (direction) {
-		case "left":
-		case "bottom-left":
-		case "top-left":
-			newW = Math.min(newW, oldRight - bounds.left);
-			break;
-		default:
-			newW = Math.min(newW, bounds.right - oldX);
-			break;
-	}
+	// Clamp to the window bounds, keeping the aspect ratio
+	var fromLeft = direction === "left" || direction === "bottom-left" || direction === "top-left";
+	newW = Math.min(newW, fromLeft ? oldRight - bounds.left : bounds.right - oldX);
 	newH = newW / ratio;
-
-	switch (direction) {
-		case "top":
-		case "top-left":
-		case "top-right":
-			newH = Math.min(newH, oldBottom - bounds.top);
-			break;
-		default:
-			newH = Math.min(newH, bounds.bottom - oldY);
-			break;
-	}
+	var fromTop = direction === "top" || direction === "top-left" || direction === "top-right";
+	newH = Math.min(newH, fromTop ? oldBottom - bounds.top : bounds.bottom - oldY);
 	newW = newH * ratio;
 
 	// Re-enforce min/max size
-	newW = Math.max(Math.min(newW, this.maxWidth), this.minWidth);
-	newH = Math.max(Math.min(newH, this.maxHeight), this.minHeight);
+	newW = Math.max(Math.min(newW, maxW), minW);
+	newH = Math.max(Math.min(newH, maxH), minH);
+
+	// The repositioned edges are a pure function of the size, so unchanged dimensions mean the
+	// window did not move either — skip every remaining assignment and style/layout write.
+	if (newW === oldW && newH === oldH) return;
 
 	var newX = oldX, newY = oldY;
 	switch (direction) {
@@ -2302,27 +2295,25 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 			break;
 		case "top-left":
 			newX = oldRight - newW;
+		case "top-right":
 			newY = oldBottom - newH;
 			break;
 		case "left":
 			newX = oldRight - newW;
 		case "right":
-			newY = oldCenterY - newH / 2;
-			break;
-		case "top-right":
-			newY = oldBottom - newH;
+			newY = oldY + oldH / 2 - newH / 2;
 			break;
 		case "top":
 			newY = oldBottom - newH;
 		case "bottom":
-			newX = oldCenterX - newW / 2;
+			newX = oldX + oldW / 2 - newW / 2;
 			break;
 	}
 
 	this._width = newW;
 	this._height = newH;
-	this._isMinWidth = newW === this.minWidth;
-	this._isMinHeight = newH === this.minHeight;
+	this._isMinWidth = newW === minW;
+	this._isMinHeight = newH === minH;
 
 	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
 	this.updateWidth();
