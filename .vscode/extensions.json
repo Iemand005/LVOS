@@ -4,6 +4,7 @@
     "VisualStudioExptTeam.vscodeintellicode",
     "VisualStudioExptTeam.vscodeintellicode-completions",
     "dbaeumer.vscode-eslint",
-    "firefox-devtools.vscode-firefox-debug"
+    "firefox-devtools.vscode-firefox-debug",
+    "streetsidesoftware.code-spell-checker"
   ]
 }
