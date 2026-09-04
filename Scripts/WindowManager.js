@@ -1364,8 +1364,8 @@ Object.defineProperty(Dialog.prototype, "aspectRatioConstraint", {
 Object.defineProperty(Dialog.prototype, "constrainAspectRatio", {
 	get: function() { return this._aspectRatioEnabled; },
 	set: function(enabled) {
+		if (!this._aspectRatio) this._aspectRatio = this.aspectRatio;
 		this._aspectRatioEnabled = !!enabled;
-		this._aspectRatio = this.aspectRatio;
 	}
 });
 
