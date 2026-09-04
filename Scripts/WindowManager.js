@@ -2317,7 +2317,6 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		case "bottom":
 			newX = oldCenterX - newW / 2;
 			break;
-		// bottom-right (and default): keep the top-left edge fixed.
 	}
 
 	this._width = newW;
