@@ -11,7 +11,9 @@
 		"contenteditable",
 		"devel",
 		"Lasse",
-		"Lauwerys"
+		"Lauwerys",
+		"lerp",
+		"LVOS"
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.background": "#ca5406",
