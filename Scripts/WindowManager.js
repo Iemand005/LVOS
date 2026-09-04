@@ -2441,6 +2441,7 @@ Dialog.prototype.updateScale = function(useScale) {
 	if (useScale) {
 		target.style.right = "";
 		target.style.bottom = "";
+		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
 		target.style.right = toPixels(this.right);
@@ -2449,6 +2450,13 @@ Dialog.prototype.updateScale = function(useScale) {
 	target.classList.toggle("use-scale", useScale);
 
 	this.update();
+};
+
+/** @param {boolean} [isMaximized] */
+Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
+    if (!this.target) return;
+    this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
+    this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
 /** @returns {boolean} */
