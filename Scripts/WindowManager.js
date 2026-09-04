@@ -2642,8 +2642,7 @@ window.addEventListener("drop", function(e) {
 //#endregion
 
 //#region Global Variables
-var windowManager = new WindowManager;
-// window.windowManager = windowManager;
+window.windowManager = new WindowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 
