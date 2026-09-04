@@ -8,7 +8,7 @@
   "globals": {
     "Vector": true,
     "LVMessenger": true,
-    "Animation": true,
+    "Anim": true,
     "DesktopManager": true,
     "ClickOffset": true,
     "lerp": true,
