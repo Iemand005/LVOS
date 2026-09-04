@@ -1286,7 +1286,7 @@ Object.defineProperty(Dialog.prototype, "mica", {
 
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () {
-		return this._x * window.innerWidth; // TODO: get ehe window bounds calced on resize evt
+		return this._x * window.innerWidth; // TODO: get ehe window bounds calculated on resize evt
 	},
 	set: function (x) {
 		if (typeof x === "number") this.move(x, this.y);
@@ -1562,7 +1562,7 @@ Object.defineProperty(Dialog.prototype, "popup", {
 
 Object.defineProperty(Dialog.prototype, "micaElement", {
 	get: function() {
-		try { // TODO: cache the element so it doesn't have to be refretched each time! add _micaElement to the dialog thing as an otpional prop
+		try { // TODO: cache the element so it doesn't have to be re-fetched each time! add _micaElement to the dialog thing as an otpional prop
 			if (!this.target) return null;
 			var clipElem = this.target.getElementsByClassName("backdrop-filter");
 			if (!clipElem.length) return null;
