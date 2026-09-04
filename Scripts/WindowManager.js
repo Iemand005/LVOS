@@ -1680,7 +1680,7 @@ Dialog.prototype.setRotation = function(rotation) {
 };
 
 
-Dialog.prototype.focus = function() { windowManager.focusDialog(this); };
+Dialog.prototype.focus = function() { window.windowManager.focusDialog(this); };
 Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ();
