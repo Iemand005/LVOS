@@ -62,7 +62,7 @@ var flags = {
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
-		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+		window.windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
@@ -205,7 +205,7 @@ function messageReceived(type, data, source){
 
 	if (source) {
 
-		var dialog = windowManager.windows[source];
+		var dialog = window.windowManager.windows[source];
 
 		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
@@ -248,8 +248,8 @@ function messageReceived(type, data, source){
 }
 
 function swapMetroBody() {
-	if (!windowManager.flipped) return;
-	windowManager.activeDialogToMetro();
+	if (!window.windowManager.flipped) return;
+	window.windowManager.activeDialogToMetro();
 }
 
 /** @param {boolean} enable */
@@ -264,8 +264,8 @@ function flip(enable){
 function flipHandler(enable){
 	DesktopManager.toggleCharms(false);
 	swapMetroBody();
-	windowManager.flipped = enable;
-	return windowManager.flipped;
+	window.windowManager.flipped = enable;
+	return window.windowManager.flipped;
 }
 
 
@@ -314,7 +314,7 @@ function handleStorageException(exception){
 	console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
 	console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
 	localStorage.windowState = null;
-	windowManager.canSave = false;
+	window.windowManager.canSave = false;
 }
 
 
@@ -407,11 +407,11 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY);
+					window.windowManager.handleWindowDrag(event.clientX, event.clientY);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
+			} else window.windowManager.handleWindowDrag(event.clientX, event.clientY);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -459,7 +459,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
   set: function (value) {
 	if (typeof value !== "boolean") return;
 	document.body.classList.toggle("mica", value);
-	windowManager.forEachWindow(function(window) { window.mica = value; });
+	window.windowManager.forEachWindow(function(window) { window.mica = value; });
 	this._isMicaEnabled = value;
   }
 });
@@ -623,13 +623,13 @@ WindowManager.prototype.getVisualizerApps = function() {
 
 WindowManager.prototype.injectApplications = function() {
 	for (var i = 0; i < arguments.length; i++)
-		arguments[i].forEach(windowManager.loadApp, windowManager);
-	windowManager.loadState();
+		arguments[i].forEach(window.windowManager.loadApp, windowManager);
+	window.windowManager.loadState();
 };
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
-	windowManager.windows[appId].kill();
+	window.windowManager.windows[appId].kill();
 };
 
 /** @param {boolean} [enabled] */
@@ -891,7 +891,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
-		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
+		window.windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 		return;
 	}
 
@@ -1094,7 +1094,7 @@ Dialog.prototype.initWithObject = function(object) {
 	var activationHandler = function (ev) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-		windowManager.windowActivationEvent(ev, self);
+		window.windowManager.windowActivationEvent(ev, self);
 		return true;
 	};
 
@@ -1124,7 +1124,7 @@ Dialog.prototype.initWithObject = function(object) {
 				/** @param {PointerEvent | MouseEvent} ev */
 				var pointerDown = function (ev) {
 					if (!activationHandler(ev)) return;
-					windowManager.dragAction.set(id);
+					window.windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				};
 				if (supportsPointer) sizer.onpointerdown = pointerDown;
@@ -1182,7 +1182,7 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 	}
 
-	if (this.id) windowManager.windows[this.id] = this;
+	if (this.id) window.windowManager.windows[this.id] = this;
 
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
@@ -1227,7 +1227,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 		}, 1000);
 	});
 
-	windowManager.saveState();
+	window.windowManager.saveState();
 	self.reportState();
 
 };
@@ -1523,7 +1523,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
 	set: function(id) {
 		this._id = id;
-		windowManager.windows[id] = this;
+		window.windowManager.windows[id] = this;
 		if (this.target) this.target.setAttribute("id", id);
 	}
 });
@@ -2023,7 +2023,7 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (typeof z === "undefined") {
-		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
+		if (this._z !== window.windowManager.topZ) this._z = ++window.windowManager.topZ;
 	} else this._z = z;
 	if (isElement(this.target))
 		this.target.style.zIndex = String(this._z);
