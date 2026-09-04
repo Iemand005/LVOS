@@ -268,13 +268,6 @@ function flipHandler(enable){
 	return windowManager.flipped;
 }
 
-/** @param {boolean} [enable] */
-function toggleOverlay(enable) {
-	var overlay = bodyCrawler.getOverlay();
-	if (!overlay) return;
-	overlay.classList.toggle("open", enable);
-}
-
 
 var windowButtons = {
 	eject: 0,

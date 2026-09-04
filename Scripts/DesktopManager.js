@@ -298,6 +298,13 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
 
 };
 
+/** @param {boolean} [enable] */
+DesktopManager.prototype.toggleOverlay = function(enable) {
+	var overlay = bodyCrawler.getOverlay();
+	if (!overlay) return;
+	overlay.classList.toggle("open", enable);
+};
+
 // DesktopManager.hasTheme
 
 window.desktopManager = new DesktopManager();
