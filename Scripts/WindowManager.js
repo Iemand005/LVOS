@@ -2605,7 +2605,7 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 //#region Event Listeners
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-window.addEventListener("unload", function() { windowManager.saveState(); }, false);
+window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
 window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
 window.addEventListener("drop", function(e) {
   e.preventDefault();
