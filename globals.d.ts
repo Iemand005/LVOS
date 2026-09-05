@@ -96,4 +96,9 @@ interface WindowManager {
     _windows: DialogMap;
 }
 
+interface Dialog {
+	
+}
+
 declare function WindowManager(): WindowManager;
+declare function Dialog(): Dialog;
