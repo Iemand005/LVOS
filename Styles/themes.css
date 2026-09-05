@@ -467,8 +467,10 @@ button {
 }
 
 .window > div {
-    width: calc(max(var(--window-radius) * 0.75, 5px));
-    height: calc(max(var(--window-radius) * 0.75, 5px));
+    width: calc(var(--window-radius) * 0.75);
+	min-width: 5px; 
+	height: calc(var(--window-radius) * 0.75);
+	min-height: 5px; 
 }
 
 .modern .window header {
