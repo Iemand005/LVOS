@@ -407,6 +407,15 @@ function loadElements() {
 	elements.installAppButton = document.getElementById("install-app-button");
 	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");
 
+	var applist = document.getElementById("applist");
+	var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
+	
+	charmsButton.textContent = "Settings";
+
+	window.addEventListener("mousedown", toggleCharmsEvent, false);
+
+	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
+
 	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
 	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
 	// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
@@ -427,7 +436,6 @@ function loadElements() {
 			installAppFromUrl(false);
 		}, false);
 	}
-	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
 
 	if (typeof flags !== "undefined") settings.loadFlags(flags);
@@ -442,17 +450,7 @@ var metroAppList = document.getElementById("metroapplist");
 // var blurToggle = document.getElementById("blurtoggle");
 // var reflectionToggle = document.getElementById("reflectiontoggle");
 
-var applist = document.getElementById("applist");
-var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
-// var charmsbutton2 = elements.dockAppList.appendChild(document.createElement("button"));
 
-// if (windowManager.windows && windowManager.windows.browser)
-//     elements.dockAppList.appendChild(windowManager.windows.browser.createOpenButton());
-
-charmsButton.textContent = "Settings";
-// charmsbutton2.innerText = "Settings";
-
-window.addEventListener("mousedown", toggleCharmsEvent, false);
 
 
 /**
