@@ -352,6 +352,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 
 //#region Window Manager
 
+/** @this {WindowManager} */
 function WindowManager() {
 	/** @type {DialogMap} @readonly */
 	this._windows = {};
