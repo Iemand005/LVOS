@@ -354,6 +354,10 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 
 /**
  * @constructor
+ * #poop
+ * @poop
+ * @class WindowManager
+ * @this {WindowManager}
  */
 function WindowManager() {
 	/** @type {DialogMap} @readonly */
