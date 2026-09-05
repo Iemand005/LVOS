@@ -1203,7 +1203,6 @@ Dialog.prototype.initWithObject = function(object) {
 };
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
-	/** @this {Dialog} */
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
 	set: function(open) { this.toggleOpen(open); }
 });
