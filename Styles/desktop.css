@@ -23,10 +23,18 @@ body {
 }
 
 body > header {
-	padding-top: env(titlebar-area-y, 0px);
-	height: env(titlebar-area-height, 0px);
-	-webkit-app-region: drag;
+	display: none;
+	height: 0;
 	overflow: hidden;
+}
+
+@media (display-mode: window-controls-overlay) {
+	body > header {
+		display: block;
+		padding-top: env(titlebar-area-y, 0px);
+		height: env(titlebar-area-height, 0px);
+		-webkit-app-region: drag;
+	}
 }
 
 body > header h1 {
