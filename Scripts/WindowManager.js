@@ -62,6 +62,7 @@ var flags = {
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
+		if (!window.windowManager) return;
 		window.windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: true,
@@ -82,6 +83,7 @@ var flags = {
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
+		if (!window.windowManager) return;
 		window.windowManager.toggleMica(value);
 		this._useMica = value;
 	},
