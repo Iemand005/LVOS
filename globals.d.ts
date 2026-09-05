@@ -91,3 +91,9 @@ interface LVMessage {
 	data: unknown;
 	id: string;
 }
+
+interface WindowManager {
+    _windows: DialogMap;
+}
+
+declare function WindowManager(): WindowManager;
