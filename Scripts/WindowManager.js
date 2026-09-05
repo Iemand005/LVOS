@@ -205,7 +205,7 @@ function getRect(element, index) {
  */
 function messageReceived(type, data, source){
 
-	if (source) {
+	if (source && window.windowManager) {
 
 		var dialog = window.windowManager.windows[source];
 
