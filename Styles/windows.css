@@ -198,6 +198,7 @@ svg {
 
 .window header > img {
     max-height: 22px;
+    max-width: 22px;
     margin: 5px;
     border-radius: 5px;
 }
