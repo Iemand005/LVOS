@@ -158,8 +158,8 @@ html:has(body.slow-animations)::view-transition-group(*) {
 .windows-11 .window header button {
 	background: transparent;
 	display: flex;
-    justify-content: center;
-    width: 45px;
+	justify-content: center;
+	width: 45px;
 }
 
 .windows .window header button:hover,
