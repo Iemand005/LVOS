@@ -160,6 +160,8 @@ html:has(body.slow-animations)::view-transition-group(*) {
 	display: flex;
     place-content: center;
     place-items: center;
+	align-items: center;
+    justify-content: center;
     width: 45px;
 }
 
