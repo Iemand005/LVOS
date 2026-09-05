@@ -96,7 +96,7 @@ html:has(body.slow-animations)::view-transition-group(*) {
 .windows #dockapplist,
 .windows-10 #launchpad {
 	width: 100%;
-    background: #0d0d0d57;
+    background: rgba(13, 13, 13, 0.47);
     backdrop-filter: blur(10px);
 
 	transform: none;
