@@ -1763,7 +1763,11 @@ Dialog.prototype.togglePointerEvents = function(enable) {
  */
 Dialog.prototype.toggleButton = function (buttonId, enable) {
 	var button = this.getButton(buttonId);
-	return button && button.toggleAttribute("disabled", !enable);
+	if (!button) return enable;
+	if (typeof enable !== "undefined") {
+		return button.disabled = !enable;
+	}
+	return button.toggleAttribute("disabled", !enable);
 };
 
 
@@ -2283,9 +2287,14 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	newH = Math.min(newH, fromTop ? oldBottom - bounds.top : bounds.bottom - oldY);
 	newW = newH * ratio;
 
-	// Re-enforce min/max size
-	newW = Math.max(Math.min(newW, maxW), minW);
-	newH = Math.max(Math.min(newH, maxH), minH);
+	// Re-enforce min/max, keeping the aspect ratio. newW === newH * ratio here in every mode,
+	// so clamp the width scale against both axes' limits and re-derive the height — clamping
+	// each axis independently instead would squish the window away from the ratio.
+	var minScale = Math.max(minW, minH * ratio);
+	var maxScale = Math.min(maxW, maxH * ratio);
+	if (newW < minScale) newW = minScale;
+	if (newW > maxScale) newW = maxScale;
+	newH = newW / ratio;
 
 	// The repositioned edges are a pure function of the size, so unchanged dimensions mean the
 	// window did not move either — skip every remaining assignment and style/layout write.
