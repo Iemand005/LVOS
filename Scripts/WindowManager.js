@@ -923,6 +923,9 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  * @param {boolean} [create]
+ * 
+ * @constructor
+ * @class Dialog
  */
 function Dialog(object, create) {
 
