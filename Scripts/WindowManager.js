@@ -392,7 +392,8 @@ function WindowManager() {
 	this.focusedDialog = null;
 
 
-	var self = this;
+	/** @type {WindowManager} */
+    var self = this;
 	this.resizeHandler = function() {
 		self.forEachWindow(function (window) { window.update(); });
 	};
