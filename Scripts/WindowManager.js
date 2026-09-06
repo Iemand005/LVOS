@@ -91,8 +91,6 @@ var flags = {
 	verboseLogs: false
 };
 
-flags.
-
 //#region Functions
 
 /** @param {Event} event */
