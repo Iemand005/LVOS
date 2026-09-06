@@ -2751,18 +2751,6 @@ var bodyCrawler = new DocumentCrawler;
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
 
-/** @type {Record<string, any>} */
-const user = {};
-
-Object.defineProperties(user, {
-  name: { value: 'Alex', writable: true },
-  age: { value: 30, writable: true }
-});
-
-// Werkt nu vlekkeloos in je editor!
-console.log(user.name); 
-
-
 //#endregion
 
 /*\  The purpose is for this website to be functional on every browser that's less than or a decade old. I created my own polyfills for some functions that don't exist in ES5, so performance on ES6 browsers is expected to be better. Meow.

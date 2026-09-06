@@ -14,7 +14,8 @@ Object.defineProperties(user, {
   age: {
     value: 30,
     writable: true
-  }
+  },
+  r: {}
 });
 
 // TypeScript herkent nu zowel 'name' als 'age' perfect!
