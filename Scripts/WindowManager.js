@@ -430,17 +430,17 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 });
 
 Object.defineProperty(WindowManager.prototype, "windowStates", {
-  get: function () {
+get: function () {
 	if (!this._windowStates && localStorage)
-	  try {
+	try {
 		var string = localStorage.getItem("windowState");
 		if (string === null) return null;
-		  this._windowStates = JSON.parse(string);
-	  } catch (ex) {
+		this._windowStates = JSON.parse(string);
+	} catch (ex) {
 		if (ex instanceof Error) console.error(ex.message);
-	  }
+	}
 	return this._windowStates;
-  }
+}
 });
 
 Object.defineProperty(WindowManager.prototype, "state", {
@@ -453,26 +453,29 @@ Object.defineProperty(WindowManager.prototype, "state", {
 });
 
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
-  get: function () { return this._isBlurEnabled; },
-  set: function (value) {
-	if (typeof value === "boolean") this._isBlurEnabled = value;
-  }
+	get: function () { return this._isBlurEnabled; },
+	set: function (value) {
+		if (typeof value === "boolean") this._isBlurEnabled = value;
+	}
 });
 
 Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
-  get: function () {
-	return this._isMicaEnabled;
-  },
-  set: function (value) {
-	if (typeof value !== "boolean") return;
-	document.body.classList.toggle("mica", value);
-	window.windowManager.forEachWindow(function(window) { window.mica = value; });
-	this._isMicaEnabled = value;
-  }
+	get: function () {
+		return this._isMicaEnabled;
+	},
+	set: function (value) {
+		if (typeof value !== "boolean") return;
+		document.body.classList.toggle("mica", value);
+		window.windowManager.forEachWindow(function(window) { window.mica = value; });
+		this._isMicaEnabled = value;
+	}
 });
 
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
-	get: /**@this {WindowManager}*/function() { return this._isWindowUpdatesEnabled; },
+	 /**
+     * @this {WindowManager}
+     */
+	get: function() { return this._isWindowUpdatesEnabled; },
 	set: function(value) {
 		if (value) window.addEventListener("resize", this.resizeHandler, false);
 		else window.removeEventListener("resize", this.resizeHandler, false);
