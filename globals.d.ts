@@ -149,7 +149,11 @@ interface Dialog {
 	windowTarget: WindowElement?;
 }
 
-declare function WindowManager(): void;
+declare function WindowManager(): {
+	new (): WindowManager;
+
+	windowBounds: Bounds;
+}
 declare function Dialog(): void;
 
 interface Animal {
