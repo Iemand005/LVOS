@@ -95,6 +95,7 @@ interface LVMessage {
 interface WindowManager {
     _windows: DialogMap;
 	windows: DialogMap;
+	installedApps: Application[];
 }
 
 interface Dialog {
