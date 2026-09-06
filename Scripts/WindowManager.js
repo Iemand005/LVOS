@@ -1786,7 +1786,7 @@ Dialog.prototype.togglePointerEvents = function(enable) {
 Dialog.prototype.toggleButton = function (buttonId, enable) {
 	var button = this.getButton(buttonId);
 	if (!button) return enable;
-	if (typeof enable === "undefined") enable = !button.disabled;
+	if (typeof enable === "undefined") enable = button.disabled;
 	return button.disabled = !enable;
 };
 
