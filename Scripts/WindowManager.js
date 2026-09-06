@@ -435,6 +435,7 @@ get: function () {
 	try {
 		var string = localStorage.getItem("windowState");
 		if (string === null) return null;
+		
 		this._windowStates = JSON.parse(string);
 	} catch (ex) {
 		if (ex instanceof Error) console.error(ex.message);
