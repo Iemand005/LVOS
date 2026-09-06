@@ -124,6 +124,10 @@ interface Dialog {
 	right: number;
 	bottom: number;
 
+	aspectRatio: number;
+
+	useScale: boolean';
+
 	useTransform: boolean;
 	maximized: boolean;
 
