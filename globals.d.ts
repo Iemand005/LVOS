@@ -100,6 +100,8 @@ interface WindowManager {
 }
 
 interface Dialog {
+	x: number;
+	y: number;
 	width: number;
 	height: number;
 	useTransform: boolean;
