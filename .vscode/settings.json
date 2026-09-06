@@ -44,4 +44,5 @@
 	"tabStack.gitIntegration.enabled": false,
 	"tabStack.gitIntegration.mode": "auto-create",
 	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"js/ts.tsdk.path": "node_modules\\typescript\\lib",
 }
