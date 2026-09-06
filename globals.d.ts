@@ -97,7 +97,7 @@ interface WindowManager {
 }
 
 interface Dialog {
-	
+	useTransform: boolean
 }
 
 declare function WindowManager(): WindowManager;
