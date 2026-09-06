@@ -2726,7 +2726,10 @@ DragAction.prototype.set = function (direction) {
 
 //#region DocumentCrawler
 
-/** @param {HTMLDocument} [customDocument] */
+/**
+ * @param {HTMLDocument} [customDocument]
+ * @class
+ */
 function DocumentCrawler(customDocument){
 	this.document = customDocument || document;
 }
