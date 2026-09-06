@@ -234,6 +234,11 @@ var applications = [
 		title: "Cavetown - Big Strong Man",
 		id: "cavetown.bigstrongmen",
 		src: "https://www.youtube.com/embed/uKn0BtAAEyw?si=s3Pz0PzIpQDCxizU"
+	},
+	{
+		title: "Gamepad Input Recorder",
+		id: "inputrecorder",
+		src: "https://iemand005.github.io/GamepadRecorder/"
 	}
 ];
 
