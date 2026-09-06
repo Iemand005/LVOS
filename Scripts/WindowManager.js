@@ -2703,7 +2703,7 @@ function DragAction() {
 	/** @type {DragFunction} */
 	this.execute = function(){};
 	/** @type {DragFunction[]} */
-	this.resizeFunctions = [
+	var resizeFunctions = [
 		function move(dialog, offset, d){ dialog.move(offset.startX + d.x, offset.startY + d.y); },
 		function top(dialog, offset, d){ dialog.resize(offset.width, offset.height - d.y, "top"); },
 		function right(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height, "right"); },
@@ -2714,6 +2714,7 @@ function DragAction() {
 		function bottomRight(dialog, offset, d){ dialog.resize(offset.width + d.x, offset.height + d.y, "bottom-right"); },
 		function bottomLeft(dialog, offset, d){ dialog.resize(offset.width - d.x, offset.height + d.y, "bottom-left"); }
 	];
+	this.resizeFunctions = resizeFunctions;
 }
 
 /** @param {number} [direction] */
