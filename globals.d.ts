@@ -116,8 +116,8 @@ interface Dialog {
 
 	top: number;
 	left: number;
-	bottom: number;
 	right: number;
+	bottom: number;
 
 	useTransform: boolean;
 	maximized: boolean;
