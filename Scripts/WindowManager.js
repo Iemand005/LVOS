@@ -2754,14 +2754,8 @@ window.__LVMessenger = {};
 const user = {};
 
 Object.defineProperties(user, {
-  name: {
-    value: 'Alex',
-    writable: false
-  },
-  age: {
-    value: 30,
-    writable: true
-  }
+  name: { value: 'Alex', writable: true },
+  age: { value: 30, writable: true }
 });
 
 user.name
