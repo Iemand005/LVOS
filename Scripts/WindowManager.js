@@ -2696,6 +2696,10 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 
 //#region DragAction
 
+/**
+ * @constructor
+ * @class DragActioin
+ */
 function DragAction() {
 	/** @type {DragFunction} */
 	this.execute = function(){};
