@@ -2683,6 +2683,17 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	});
 };
 
+function Dog(name) {
+    Dialog.call(this);
+}
+
+Dog.prototype = Object.create(Dialog.prototype);
+Dog.prototype.constructor = Dog;
+
+var a= new Dog;
+
+a.
+
 //#endregion
 
 //#region DragAction
