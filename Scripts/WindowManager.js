@@ -2430,7 +2430,7 @@ Dialog.prototype.moveBody = function (x, y) {
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (!this.target) return;
-	if (this.target.style.inset) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
+	if ("inset" in this.target.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
 	else {
 		this.target.style.top = toPixels(top);
 		this.target.style.left = toPixels(left);

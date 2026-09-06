@@ -120,4 +120,8 @@ declare global {
 		ctx: CanvasRenderingContext2D;
 		resize();
 	}
+
+	interface CSSStyleDeclaration {
+		inset?: unknown;
+	}
 }
