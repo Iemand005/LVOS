@@ -2683,7 +2683,7 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	});
 };
 
-function Dog(name) {
+function Dog() {
     Dialog.call(this);
 }
 
