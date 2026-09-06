@@ -110,8 +110,15 @@ interface WindowManager {
 interface Dialog {
 	x: number;
 	y: number;
+
 	width: number;
 	height: number;
+
+	top: number;
+	left: number;
+	bottom: number;
+	right: number;
+
 	useTransform: boolean;
 	maximized: boolean;
 
@@ -121,6 +128,7 @@ interface Dialog {
 	content: HTMLElement?;
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
+	micaElement: HTMLElement?;
 
 	position: Vector;
 
