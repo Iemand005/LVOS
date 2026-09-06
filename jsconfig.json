@@ -15,7 +15,7 @@
 	"ignoreDeprecations": "6.0",
 	"include": [
 		"./Scripts/**/*.js",
-		// "./Scripts/**/*.d.ts",
+		"./Scripts/**/*.d.ts",
 		"*.d.ts",
 	],
 	"exclude": [
