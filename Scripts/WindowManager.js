@@ -2751,6 +2751,7 @@ var bodyCrawler = new DocumentCrawler;
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
 
+/** @type {Record<string, any>} */
 const user = {};
 
 Object.defineProperties(user, {
@@ -2758,7 +2759,9 @@ Object.defineProperties(user, {
   age: { value: 30, writable: true }
 });
 
-user.name
+// Werkt nu vlekkeloos in je editor!
+console.log(user.name); 
+
 
 //#endregion
 
