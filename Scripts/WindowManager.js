@@ -793,6 +793,10 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 
 //#region ClickOffset
 
+/**
+ * @constructor
+ * @class ClickOffset
+ */
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
