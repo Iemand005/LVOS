@@ -126,10 +126,15 @@ interface Dialog {
 
 	aspectRatio: number;
 
-	useScale: boolean';
-
 	useTransform: boolean;
+	useScale: boolean;
+
 	maximized: boolean;
+	closeable: boolean;
+	mica: boolean
+	isOpen: boolean;
+
+	contentDocument: Document;
 
 	href: string;
 
