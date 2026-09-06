@@ -62,8 +62,8 @@ var flags = {
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
-		if (!window.windowManager) return;
-		window.windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+		if (!windowManager) return;
+		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
@@ -83,8 +83,8 @@ var flags = {
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
-		if (!window.windowManager) return;
-		window.windowManager.toggleMica(value);
+		if (!windowManager) return;
+		windowManager.toggleMica(value);
 		this._useMica = value;
 	},
 	windowReaper: false,
@@ -205,9 +205,9 @@ function getRect(element, index) {
  */
 function messageReceived(type, data, source){
 
-	if (source && window.windowManager) {
+	if (source && windowManager) {
 
-		var dialog = window.windowManager.windows[source];
+		var dialog = windowManager.windows[source];
 
 		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
@@ -242,7 +242,7 @@ function messageReceived(type, data, source){
 				dialog.moveElementIntoPipById(data.id);
 				break;
 			case "visualizers":
-				dialog.messageFrame("visualizers", window.windowManager.getVisualizerApps());
+				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
 		}
 		console.log("Received message " + type);
@@ -250,8 +250,8 @@ function messageReceived(type, data, source){
 }
 
 function swapMetroBody() {
-	if (!window.windowManager.flipped) return;
-	window.windowManager.activeDialogToMetro();
+	if (!windowManager.flipped) return;
+	windowManager.activeDialogToMetro();
 }
 
 /** @param {boolean} enable */
@@ -266,8 +266,8 @@ function flip(enable){
 function flipHandler(enable){
 	DesktopManager.toggleCharms(false);
 	swapMetroBody();
-	window.windowManager.flipped = enable;
-	return window.windowManager.flipped;
+	windowManager.flipped = enable;
+	return windowManager.flipped;
 }
 
 
@@ -316,7 +316,7 @@ function handleStorageException(exception){
 	console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
 	console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
 	localStorage.windowState = null;
-	window.windowManager.canSave = false;
+	windowManager.canSave = false;
 }
 
 
@@ -414,11 +414,11 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					window.windowManager.handleWindowDrag(event.clientX, event.clientY);
+					windowManager.handleWindowDrag(event.clientX, event.clientY);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else window.windowManager.handleWindowDrag(event.clientX, event.clientY);
+			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -467,7 +467,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 	set: function (value) {
 		if (typeof value !== "boolean") return;
 		document.body.classList.toggle("mica", value);
-		window.windowManager.forEachWindow(function(window) { window.mica = value; });
+		windowManager.forEachWindow(function(window) { window.mica = value; });
 		this._isMicaEnabled = value;
 	}
 });
@@ -634,13 +634,13 @@ WindowManager.prototype.getVisualizerApps = function() {
 
 WindowManager.prototype.injectApplications = function() {
 	for (var i = 0; i < arguments.length; i++)
-		arguments[i].forEach(window.windowManager.loadApp, windowManager);
-	window.windowManager.loadState();
+		arguments[i].forEach(windowManager.loadApp, windowManager);
+	windowManager.loadState();
 };
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
-	window.windowManager.windows[appId].kill();
+	windowManager.windows[appId].kill();
 };
 
 /** @param {boolean} [enabled] */
@@ -903,7 +903,7 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
-		window.windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
+		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 		return;
 	}
 
@@ -1115,7 +1115,7 @@ Dialog.prototype.initWithObject = function(object) {
 	var activationHandler = function (ev) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-		window.windowManager.windowActivationEvent(ev, self);
+		windowManager.windowActivationEvent(ev, self);
 		return true;
 	};
 
@@ -1145,7 +1145,7 @@ Dialog.prototype.initWithObject = function(object) {
 				/** @param {PointerEvent | MouseEvent} ev */
 				var pointerDown = function (ev) {
 					if (!activationHandler(ev)) return;
-					window.windowManager.dragAction.set(id);
+					windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				};
 				if (supportsPointer) sizer.onpointerdown = pointerDown;
@@ -1203,7 +1203,7 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 	}
 
-	if (this.id) window.windowManager.windows[this.id] = this;
+	if (this.id) windowManager.windows[this.id] = this;
 
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
@@ -1248,7 +1248,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 		}, 1000);
 	});
 
-	window.windowManager.saveState();
+	windowManager.saveState();
 	self.reportState();
 
 };
@@ -2747,7 +2747,7 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 //#region Event Listeners
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
+window.addEventListener("unload", function() { windowManager.saveState(); }, false);
 window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
@@ -2761,7 +2761,7 @@ window.addEventListener("drop", function(e) {
 
 //#region Global Variables
 var windowManager = new WindowManager;
-window.windowManager = windowManager;
+windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 
