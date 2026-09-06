@@ -112,15 +112,6 @@ declare global {
 
 	var ActiveXObject: ActiveXObjectConstructor | undefined;
 
-	interface GraphicsBase {
-		canvas: HTMLCanvasElement;
-	}
-
-	interface Graphics2D extends GraphicsBase {
-		ctx: CanvasRenderingContext2D;
-		resize();
-	}
-
 	interface CSSStyleDeclaration {
 		inset?: string;
 	}
