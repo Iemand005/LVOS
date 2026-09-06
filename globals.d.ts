@@ -106,8 +106,9 @@ interface Dialog {
 	height: number;
 	useTransform: boolean;
 	maximized: boolean;
-	
+
 	body: HTMLElement;
+	frame: HTMLIFrameElement?;
 }
 
 declare function WindowManager(): WindowManager;
