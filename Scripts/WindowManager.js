@@ -1095,7 +1095,7 @@ Dialog.prototype.initWithObject = function(object) {
 	this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
 	var self = this;
-	/** @param {Position} difference */
+	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
 	};
