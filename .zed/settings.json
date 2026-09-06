@@ -3,6 +3,6 @@
     "enabled": true
   },
   "minimap": {
-    "show: ": auto
+    "show": "auto"
   }
 }
