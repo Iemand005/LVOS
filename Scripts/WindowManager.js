@@ -1155,7 +1155,7 @@ Dialog.prototype.initWithObject = function(object) {
 				if (createTouchSizers) {
 					var touchSizerId = "touch-sizer-" + id;
 
-					var touchSizer = this.getElementByTagOrClassName(touchSizerId);
+					var touchSizer = self.getElementByTagOrClassName(touchSizerId);
 					if (!touchSizer || !isElement(touchSizer)) touchSizer = document.createElement("div");
 
 					touchSizer.draggable = false;
