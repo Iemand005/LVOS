@@ -115,9 +115,13 @@ interface Dialog {
 	useTransform: boolean;
 	maximized: boolean;
 
+	href: string;
+
 	body: HTMLElement?;
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
+
+	windowTarget: WindowElement?;
 }
 
 declare function WindowManager(): WindowManager;
