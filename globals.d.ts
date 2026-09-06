@@ -122,7 +122,7 @@ interface Dialog {
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
 
-	position: Coord;
+	position: Vector;
 
 	windowTarget: WindowElement?;
 }
