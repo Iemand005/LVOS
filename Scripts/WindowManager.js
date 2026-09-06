@@ -1425,7 +1425,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 });
 
 Object.defineProperty(Dialog.prototype, "top", {
-	get: function() { return this.y; },
+	get: /**@type {(this:Dialog)=>void}*/function() { return this.y; },
 	set: function(top) {
 		var bounds = WindowManager.windowBounds;
 		var bottom = this.bottomFromTop;
