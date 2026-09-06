@@ -35,7 +35,7 @@ declare global {
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
-		
+
 		documentPictureInPicture: DocumentPictureInPicture | undefined;
 
 		inspect?: (value: any) => void;
@@ -89,7 +89,7 @@ declare global {
 
 	interface HTMLElement {
 		msRequestFullscreen?: () => Promise<void> | void;
-		ontransitionend?: () => void;
+		// ontransitionend?: () => void;
 	}
 
 	interface HTMLElementEventMap {
