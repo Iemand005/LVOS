@@ -1,7 +1,4 @@
 {
-  "minimap": {
-    "show": "always"
-  },
   "inlay_hints": {
     "enabled": true
   }
