@@ -42,8 +42,8 @@ interface Coord {
 interface Bounds {
 	top: number;
 	left: number;
-	bottom: number;
 	right: number;
+	bottom: number;
 }
 
 type Side = "left" | "right" | "top" | "bottom";
@@ -113,6 +113,11 @@ interface Dialog {
 
 	width: number;
 	height: number;
+
+	minWidth: number;
+	minHeight: number;
+	maxWidth: number;
+	maxHeight: number;
 
 	top: number;
 	left: number;
