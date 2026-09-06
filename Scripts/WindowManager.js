@@ -359,7 +359,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @class WindowManager
  */
 function WindowManager() {
-	/** @type {DialogMap} @readonly */
+	/** @type {DialogMap} @const */
 	this._windows = {};
 
 	/** @type {DesktopState | null} */
@@ -370,7 +370,7 @@ function WindowManager() {
 	this._isWindowUpdatesEnabled = false;
 
 	this.isDragging = false;
-	/** @readonly */
+	/** @const */
 	this.dragAction = new DragAction;
 
 	/** @type {Dialog | null} */
