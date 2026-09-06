@@ -104,7 +104,6 @@ interface WindowManager {
 	windows: DialogMap;
 	installedApps: Application[];
 	isMicaEnabled: boolean;
-	static windowBounds: Bounds;
 }
 
 interface Dialog {

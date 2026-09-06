@@ -1137,7 +1137,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 				var sizerId = "sizer-" + id;
 
-				var sizer = this.getElementByTagOrClassName(sizerId);
+				var sizer = self.getElementByTagOrClassName(sizerId);
 				if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
 				sizer.draggable = false;
 				sizer.id = id.toString();
