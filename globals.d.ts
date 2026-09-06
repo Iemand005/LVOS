@@ -149,8 +149,8 @@ interface Dialog {
 	windowTarget: WindowElement?;
 }
 
-declare function WindowManager(): WindowManager;
-declare function Dialog(): Dialog;
+declare function WindowManager(): void;
+declare function Dialog(): void;
 
 interface Animal {
     name: string;
