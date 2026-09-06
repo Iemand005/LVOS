@@ -1315,8 +1315,12 @@ Object.defineProperty(Dialog.prototype, "z", {
 });
 
 Object.defineProperty(Dialog.prototype, "width", {
-	get: function() { return this._width; },
-	set: function(width) { this.setWidth(width); }
+	get: function() {
+		// return this._width;
+	},
+	set: function(width) {
+		// this.setWidth(width);
+	}
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
@@ -1359,7 +1363,7 @@ Object.defineProperty(Dialog.prototype, "size", {
 
 Object.defineProperty(Dialog.prototype, "aspectRatio", {
 	get: function() { return this.width / this.height; },
-	set: function(aspect) { this.width = this.height * aspect; }
+	// set: function(aspect) { this.width = this.height * aspect; }
 });
 
 /**
@@ -1924,7 +1928,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var toggleMaximized = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
-			self.width = startSize.x;
+			// self.width = startSize.x;
 			self.height = startSize.y;
 			if (self.target) self.target.classList.toggle("maximized", enable);
 		};
