@@ -34,7 +34,7 @@ interface DialogState {
 	maximized: boolean;
 }
 
-interface Position {
+interface Coord {
 	x: number;
 	y: number;
 }
@@ -43,7 +43,7 @@ type Side = "left" | "right" | "top" | "bottom";
 
 type DesktopState = {[key: string]: DialogState};
 type DialogMap = {[id: string]: Dialog};
-type DragFunction = (dialog: Dialog, offset: ClickOffset, difference: Position) => void;
+type DragFunction = (dialog: Dialog, offset: ClickOffset, difference: Coord) => void;
 type WindowCallback = (dialog: Dialog, id: string) => void
 
 
