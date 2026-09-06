@@ -2683,10 +2683,6 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	});
 };
 
-/**
- * @constructor
- * @param {string} name
- */
 function Animal(name) {
     this.name = name;
 }
@@ -2694,11 +2690,6 @@ function Animal(name) {
 /** @returns {void} */
 Animal.prototype.speak = function () {};
 
-/**
- * @constructor
- * @extends {Animal}
- * @param {string} name
- */
 function Dog(name) {
     Animal.call(this, name);
 }
