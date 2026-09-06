@@ -2749,7 +2749,7 @@ windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 
 window.__LVMessengerReceive = messageReceived;
-window.__LVMessenger = {};\
+window.__LVMessenger = {};
 
 const user = {};
 
@@ -2763,6 +2763,8 @@ Object.defineProperties(user, {
     writable: true
   }
 });
+
+user.name
 
 //#endregion
 
