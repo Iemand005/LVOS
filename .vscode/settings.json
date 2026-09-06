@@ -43,4 +43,5 @@
 	"tabStack.history.maxEntries": 100,
 	"tabStack.gitIntegration.enabled": false,
 	"tabStack.gitIntegration.mode": "auto-create",
+	"typescript.tsdk": "node_modules\\typescript\\lib",
 }
