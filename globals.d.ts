@@ -39,7 +39,7 @@ interface Coord {
 	y: number;
 }
 
-interface Bounds{
+interface Bounds {
 	top: number;
 	left: number;
 	bottom: number;
@@ -104,6 +104,7 @@ interface WindowManager {
 	windows: DialogMap;
 	installedApps: Application[];
 	isMicaEnabled: boolean;
+	static windowBounds: Bounds;
 }
 
 interface Dialog {
