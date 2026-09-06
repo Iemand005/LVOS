@@ -10,13 +10,15 @@
 		],
 		"types": ["w3c-web-hid"],
 		"traceResolution": true,
-		"noImplicitThis": true
+		"noImplicitThis": true,
+		"ignoreDeprecations": "6.0"
 	},
+
 	"ignoreDeprecations": "6.0",
 	"include": [
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
-		"*.d.ts",
+		"*.d.ts"
 	],
 	"exclude": [
 		"node_modules",
