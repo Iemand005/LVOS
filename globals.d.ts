@@ -94,11 +94,11 @@ interface LVMessage {
 
 interface WindowManager {
     _windows: DialogMap;
+	windows: DialogMap;
 }
 
 interface Dialog {
 	useTransform: boolean;
-	windows: DialogMap;
 }
 
 declare function WindowManager(): WindowManager;
