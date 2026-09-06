@@ -435,7 +435,7 @@ get: function () {
 	try {
 		var string = localStorage.getItem("windowState");
 		if (string === null) return null;
-		
+
 		this._windowStates = JSON.parse(string);
 	} catch (ex) {
 		if (ex instanceof Error) console.error(ex.message);
@@ -1060,7 +1060,9 @@ Dialog.prototype.initWithObject = function(object) {
 		} else {
 			this.application = object;
 			this.target = createDialog();
-			if (this.target && "dialog" in this.target) this.target.dialog = this;
+			// if (this.target && "dialog" in this.target) this.target.dialog = this;
+			var windowDiv = this.windowTarget;
+			if (windowDiv) windowDiv.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
 				object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
