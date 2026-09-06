@@ -1,5 +1,8 @@
 {
   "inlay_hints": {
     "enabled": true
+  },
+  "minimap": {
+    "show: ": auto
   }
 }
