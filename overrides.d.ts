@@ -122,6 +122,6 @@ declare global {
 	}
 
 	interface CSSStyleDeclaration {
-		inset?: unknown;
+		inset?: string;
 	}
 }
