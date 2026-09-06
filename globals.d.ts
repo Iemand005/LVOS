@@ -39,6 +39,13 @@ interface Coord {
 	y: number;
 }
 
+interface Bounds{
+	top: number;
+	left: number;
+	bottom: number;
+	right: number;
+}
+
 type Side = "left" | "right" | "top" | "bottom";
 
 type DesktopState = {[key: string]: DialogState};
