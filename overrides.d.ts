@@ -89,6 +89,7 @@ declare global {
 
 	interface HTMLElement {
 		msRequestFullscreen?: () => Promise<void> | void;
+		ontransitionend?: () => void;
 	}
 
 	interface HTMLElementEventMap {
