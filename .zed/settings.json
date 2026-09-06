@@ -1,4 +1,5 @@
 {
+  "hard_tabs": true,
   "inlay_hints": {
     "enabled": true
   }
