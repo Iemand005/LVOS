@@ -2683,15 +2683,32 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	});
 };
 
-function Dog() {
-    Dialog.call(this);
+/**
+ * @constructor
+ * @param {string} name
+ */
+function Animal(name) {
+    this.name = name;
 }
 
-Dog.prototype = Object.create(Dialog.prototype);
+/** @returns {void} */
+Animal.prototype.speak = function () {};
+
+/**
+ * @constructor
+ * @extends {Animal}
+ * @param {string} name
+ */
+function Dog(name) {
+    Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
 Dog.prototype.constructor = Dog;
 
-var a= new Dog;
+Dog.prototype.bark = function () {};
 
+var a = new Dog;
 a.
 
 //#endregion
