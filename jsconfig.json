@@ -15,7 +15,8 @@
 	"ignoreDeprecations": "6.0",
 	"include": [
 		"./Scripts/**/*.js",
-		"**/*.d.ts",
+		"./Scripts/**/*.d.ts",
+		"*.d.ts",
 	],
 	"exclude": [
 		"node_modules",
