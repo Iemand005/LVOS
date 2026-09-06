@@ -1349,7 +1349,7 @@ Object.defineProperty(Dialog.prototype, "maxHeight", {
 	get: function() { return this._maxHeight; },
 	set: function(height) { this.setMaxSize(this.maxWidth, height); }
 });
-/** @type {{x:number,y:number}} */
+/** @type {Coord}} */
 Object.defineProperty(Dialog.prototype, "position", {
 	get: function() { return new Vector(this.x, this.y); },
 	set: function(position) {

@@ -122,6 +122,8 @@ interface Dialog {
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
 
+	position: Coord;
+
 	windowTarget: WindowElement?;
 }
 
