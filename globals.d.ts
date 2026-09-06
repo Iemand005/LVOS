@@ -103,3 +103,16 @@ interface Dialog {
 
 declare function WindowManager(): WindowManager;
 declare function Dialog(): Dialog;
+
+
+interface Animal {
+    name: string;
+    speak(): void;
+}
+
+interface Dog extends Animal {
+    bark(): void;
+}
+
+declare function Animal(name: string): Animal;
+declare function Dog(name: string): Dog;

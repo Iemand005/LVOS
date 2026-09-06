@@ -2709,7 +2709,7 @@ Dog.prototype.constructor = Dog;
 Dog.prototype.bark = function () {};
 
 var a = new Dog("kink" );
-a.
+a.speak();
 
 //#endregion
 
