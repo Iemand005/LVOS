@@ -96,6 +96,7 @@ interface WindowManager {
     _windows: DialogMap;
 	windows: DialogMap;
 	installedApps: Application[];
+	isMicaEnabled: boolean;
 }
 
 interface Dialog {
