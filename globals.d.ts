@@ -97,7 +97,8 @@ interface WindowManager {
 }
 
 interface Dialog {
-	useTransform: boolean
+	useTransform: boolean;
+	windows: DialogMap;
 }
 
 declare function WindowManager(): WindowManager;
