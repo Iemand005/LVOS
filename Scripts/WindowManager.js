@@ -1558,7 +1558,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	get: function() { return this._id || (this.target && this.target.getAttribute("id")); },
 	set: function(id) {
 		this._id = id;
-		window.windowManager.windows[id] = this;
+		windowManager.windows[id] = this;
 		if (this.target) this.target.setAttribute("id", id);
 	}
 });
@@ -2760,7 +2760,8 @@ window.addEventListener("drop", function(e) {
 //#endregion
 
 //#region Global Variables
-window.windowManager = new WindowManager;
+var windowManager = new WindowManager;
+window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 
