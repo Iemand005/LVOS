@@ -100,7 +100,10 @@ interface WindowManager {
 }
 
 interface Dialog {
+	width: number;
+	height: number;
 	useTransform: boolean;
+	maximized: boolean;
 }
 
 declare function WindowManager(): WindowManager;
