@@ -937,10 +937,15 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
  */
 function Dialog(object, create) {
 
+	/** @type {number} */
 	this._x = 0;
+	/** @type {number} */
 	this._y = 0;
+	/** @type {number} */
 	this._z = 0;
+	/** @type {number} */
 	this._width = 0;
+	/** @type {number} */
 	this._height = 0;
 	this._isMinWidth = false;
 	this._isMinHeight = false;
