@@ -1148,7 +1148,12 @@ Dialog.prototype.initWithObject = function(object) {
 					windowManager.dragAction.set(id);
 					cancelDomEvent(ev);
 				};
-				if (supportsPointer) sizer.onpointerdown = pointerDown;
+				var pointerUp = function () { windowManager.disableDialogDrag(); };
+				if (supportsPointer) {
+					sizer.onpointerdown = pointerDown;
+					sizer.onpointerup = pointerUp;
+					sizer.onpointercancel = pointerUp;
+				}
 				else sizer.onmousedown = pointerDown;
 				target.appendChild(sizer);
 
@@ -1163,7 +1168,11 @@ Dialog.prototype.initWithObject = function(object) {
 					touchSizer.classList.add(touchSizerId);
 					touchSizer.classList.add("touch");
 
-					if (supportsPointer) touchSizer.onpointerdown = pointerDown;
+					if (supportsPointer) {
+						touchSizer.onpointerdown = pointerDown;
+						touchSizer.onpointerup = pointerUp;
+						touchSizer.onpointercancel = pointerUp;
+					}
 
 					target.appendChild(touchSizer);
 				}
