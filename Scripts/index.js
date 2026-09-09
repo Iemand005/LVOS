@@ -31,7 +31,7 @@ function init() {
 
 	if (location.protocol === 'file:') {
 		var script = document.createElement('script');
-		script.src = 'WebComponents.js';
+		script.src = './Scripts/WebComponents.js';
 		document.head.appendChild(script);
 	}
 
