@@ -30,9 +30,11 @@ function init() {
 
 
 	if (location.protocol === 'file:') {
-		var script = document.createElement('script');
-		script.src = './Scripts/WebComponents.js';
-		document.head.appendChild(script);
+		document.querySelectorAll('script[type="module"]').forEach(function (s) {
+			var replacement = document.createElement('script');
+			replacement.src = s.src;
+			s.replaceWith(replacement);
+		});
 	}
 
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
