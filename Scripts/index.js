@@ -30,7 +30,8 @@ function init() {
 
 
 	if (location.protocol === 'file:') {
-		document.querySelectorAll('script[type="module"]').forEach(function (s) {
+		var scripts = /** @type {NodeListOf<HTMLScriptElement>} */document.querySelectorAll('script[type="module"]');
+		scripts.forEach(function (s) {
 			var replacement = document.createElement('script');
 			replacement.src = s.src;
 			s.replaceWith(replacement);
