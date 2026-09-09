@@ -29,7 +29,11 @@ function init() {
 
 
 
-	
+	if (location.protocol === 'file:') {
+		var script = document.createElement('script');
+		script.src = 'WebComponents.js';
+		document.head.appendChild(script);
+	}
 
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
 	if (window.__LVMessenger)
