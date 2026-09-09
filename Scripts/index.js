@@ -16,11 +16,11 @@ function init() {
 		// launchpad.open();
 	} else if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {
-			if (dialog.application) launchpad.addApp(dialog);
+			if (launchpad && dialog.application) launchpad.addApp(dialog);
 		});
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.initializeDialogs();
-		toggleReflections(reflections);
+		toggleReflections(false);
 
 		LVMessenger.receive(messageReceived);
 	}
