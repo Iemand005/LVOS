@@ -28,6 +28,7 @@ function init() {
 
 
 	if (location.protocol === 'file:') {
+		/**@type {NodeListOf<HTMLScriptElement>}*/
 		var scripts = document.querySelectorAll('script[type="module"]');
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
 			var replacement = document.createElement('script');
@@ -36,7 +37,6 @@ function init() {
 		});
 	}
 
-	/**@type {NodeListOf<HTMLScriptElement>}*/
 	var modules = document.querySelectorAll('script[type="module"]');
 	for (var s in modules) {
 		var replacement = document.createElement('script');
