@@ -37,13 +37,6 @@ function init() {
 		});
 	}
 
-	var modules = document.querySelectorAll('script[type="module"]');
-	for (var s in modules) {
-		var replacement = document.createElement('script');
-		replacement.src = modules[s].src;
-		modules[s].replaceWith(replacement);
-	}
-
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
 	if (window.__LVMessenger)
 		window.__LVMessenger.accent = window.metaThemeColor;
