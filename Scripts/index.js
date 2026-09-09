@@ -12,9 +12,7 @@ function init() {
 	launchpad.init(launchpadElement);
 
 	if (typeof appRegistry !== "undefined") {
-		appRegistry.forEachApp(function(app, id) {
-			launchpad.addApp(app);
-		});
+		appRegistry.forEachApp(launchpad.addApp);
 		// launchpad.open();
 	} else if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {
@@ -30,9 +28,8 @@ function init() {
 
 
 	if (location.protocol === 'file:') {
-		/** @type {NodeListOf<HTMLScriptElement>} */
 		var scripts = document.querySelectorAll('script[type="module"]');
-		scripts.forEach(function (s) {
+		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
 			var replacement = document.createElement('script');
 			replacement.src = s.src;
 			s.replaceWith(replacement);
