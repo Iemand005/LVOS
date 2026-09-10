@@ -21,6 +21,7 @@ interface Application {
 	wallpaper?: boolean;
 	iconUrl?: string;
 	accentColor?: string;
+	distSrc: string;
 }
 
 interface DialogState {
