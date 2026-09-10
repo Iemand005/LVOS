@@ -2456,11 +2456,6 @@ Dialog.prototype.openUrl = function(url) {
 
 	var fallbackUrls = [this.application.distSrc].concat(this.application.altUrls);
 
-	setTimeout(function() {
-		if (!isLoaded && frame && self.application && self.application.distSrc)
-			frame.src = self.application.distSrc;
-	}, 5000);
-
 	let index = 0;
 	let timeout = -1;
 
@@ -2474,7 +2469,7 @@ Dialog.prototype.openUrl = function(url) {
 		timeout = setTimeout(tryNext, 5000);
 	}
 
-	frame.addEventListener("load", () => {
+	frame.addEventListener("load", function() {
 		clearTimeout(timeout);
 	});
 
