@@ -244,54 +244,54 @@ var applications = [
 
 /** @type {Application[]} */
 var games = [
-  {
-    title: "Conway",
-    id: "conway",
-    src: "./Games/Conway/index.html",
-    classes: ["rounded-corners"]
-  },
-  {
-    title: "Velocities",
-    id: "velocities",
-    src: "./Applications/Velocities/index.html",
-    moveEvents: true // This flag enables attaching window movement statistic listener.
-  },
-  {
-    title: "Minesweeper",
-    id: "minesweeper",
-    src: "./Games/Minesweeper/index.html",
-    fixed: true,
-    scroll: false
-  },
-  {
-    title: "Chess",
-    id: "chess",
-    src: "./Games/Chess/index.html",
-    hidden: true
-  },
-  {
-    title: "Tetris",
-    id: "tetris",
-    src: "./Games/Tetris/tetris.html",
-    hidden: true
-  },
-  {
-    title: "Sudoku",
-    id: "sudoku",
-    src: "./Games/Sudoku/sudoku.html",
-    hidden: true
-  },
-  {
-    title: "Clicker",
-    id: "clicker",
-    src: "./Games/ChoccyClicker/clicker.html",
-    hidden: true
-  },
-  {
-	title: "FAT",
-	id : "mountain",
-	src : "https://iemand005.github.io/MountainWeb/"
-  },
+	{
+		title: "Conway",
+		id: "conway",
+		src: "./Games/Conway/index.html",
+		classes: ["rounded-corners"]
+	},
+	{
+		title: "Velocities",
+		id: "velocities",
+		src: "./Applications/Velocities/index.html",
+		moveEvents: true // This flag enables attaching window movement statistic listener.
+	},
+	{
+		title: "Minesweeper",
+		id: "minesweeper",
+		src: "./Games/Minesweeper/index.html",
+		fixed: true,
+		scroll: false
+	},
+	{
+		title: "Chess",
+		id: "chess",
+		src: "./Games/Chess/index.html",
+		hidden: true
+	},
+	{
+		title: "Tetris",
+		id: "tetris",
+		src: "./Games/Tetris/tetris.html",
+		hidden: true
+	},
+	{
+		title: "Sudoku",
+		id: "sudoku",
+		src: "./Games/Sudoku/sudoku.html",
+		hidden: true
+	},
+	{
+		title: "Clicker",
+		id: "clicker",
+		src: "./Games/ChoccyClicker/clicker.html",
+		hidden: true
+	},
+	{
+		title: "FAT",
+		id : "mountain",
+		src : "https://iemand005.github.io/MountainWeb/"
+	},
 	{
 		title: "Planet Life",
 		id : "planetlife",
