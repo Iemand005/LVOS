@@ -129,7 +129,10 @@ Launchpad.prototype.addApp = function(app) {
 	// /**@type {isMobile is Dialog} */
 	// var isMobile = this._isMobile
 	
-	if (this._isMobile) {
+	if ("createOpenButton" in app) {
+		var openButton = app.createOpenButton();
+		appElement.appendChild(openButton);
+	} else {
 		var openButton = this._createMobileButton(app);
 		appElement.appendChild(openButton);
 
@@ -140,9 +143,6 @@ Launchpad.prototype.addApp = function(app) {
 		var appLabel = document.createElement("label");
 		appLabel.textContent = (app && app.title) || "Unknown";
 		appElement.appendChild(appLabel);
-	} else {
-		var openButton = app.createOpenButton();
-		appElement.appendChild(openButton);
 	}
 
 	this.list.appendChild(appElement);
