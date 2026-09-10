@@ -27,14 +27,16 @@ window.addEventListener("load", function(e){
 
 	const blurGradient = document.createElement("div");
 	blurGradient.className = "blur-gradient";
+	blurGradient.classList.add("horizontal");
 
 	const layers = 10;
 	const blur = 0.5;
+	const reverse = true;
 
 	for (let i = 0; i < layers; i++) {
 		const element = document.createElement('div');
 		const start = 0;
-		const end = Math.pow((layers - i) / layers, 0.5) * 100;
+		const end = Math.pow((reverse ? i + 1 : layers - i) / layers, 0.5) * 100;
 
 		element.style.setProperty('--blur', `${blur * i}px`);
 		element.style.setProperty('--start', `${start}%`);
