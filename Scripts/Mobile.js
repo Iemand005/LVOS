@@ -67,7 +67,7 @@ window.addEventListener("load", function(e){
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
 		const maskProgress = 1 - degrees / Number(rotation.max);
-		const maskStop = 70 + maskProgress * 30;
+		const maskStop = 40 + maskProgress * 0;
 
 		springBoard.style.setProperty(
 			"--mask",
