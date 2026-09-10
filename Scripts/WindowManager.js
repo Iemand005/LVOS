@@ -2441,6 +2441,7 @@ Dialog.prototype.openUrl = function(url) {
 	let timeout = -1;
 
 	frame.onload = function() {
+		clearTimeout(timeout);
 		self.reportState();
 	};
 
@@ -2460,10 +2461,6 @@ Dialog.prototype.openUrl = function(url) {
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 15000);
 	}
-
-	frame.addEventListener("load", function() {
-		clearTimeout(timeout);
-	});
 
 	frame.addEventListener("error", tryNext);
 
