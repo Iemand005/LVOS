@@ -2454,12 +2454,33 @@ Dialog.prototype.openUrl = function(url) {
 
 	if (!this.application) return;
 
-	var fallbacks = [this.application.distSrc].concat(this.application.altUrls);
+	var fallbackUrls = [this.application.distSrc].concat(this.application.altUrls);
 
 	setTimeout(function() {
 		if (!isLoaded && frame && self.application && self.application.distSrc)
 			frame.src = self.application.distSrc;
 	}, 5000);
+
+	let index = 0;
+	let timeout = -1;
+
+	function tryNext() {
+		var url = fallbackUrls[index++];
+		if (index >= fallbackUrls.length || !frame || !url) return;
+
+		frame.src = url;
+
+		clearTimeout(timeout);
+		timeout = setTimeout(tryNext, 5000);
+	}
+
+	frame.addEventListener("load", () => {
+		clearTimeout(timeout);
+	});
+
+	frame.addEventListener("error", tryNext);
+
+	tryNext();
 };
 
 Dialog.prototype.quit = function() {
