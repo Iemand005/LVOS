@@ -40,10 +40,11 @@ class WindowElement extends HTMLDivElement {
 }
 
 class OdometerDigit extends HTMLSpanElement {
-	constructor()  { super(); this.lineHeight = 40; }
+	constructor()  { super(); this.lineHeight = 40, this._value = 0; }
 	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
+	get value() { return this._value;}
 }
 
 class OdometerDisplay extends HTMLTimeElement {
