@@ -72,9 +72,8 @@ window.addEventListener("load", function(e){
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
-		const maskProgress = 1 - degrees / (max / 2);
-		const fade = Math.max(0, (2 - maskProgress - 0.5) / 0.5);
-		const opacity = 1 - fade * fade * (3 - 2 * fade);
+		const maskProgress = 1 - degrees / (max / 1.7);
+		const opacity = Math.min(1, maskProgress * 1.2);
 
 		springBoard.style.setProperty("--mask",`linear-gradient(to right, rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
 	};

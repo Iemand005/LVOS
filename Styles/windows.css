@@ -18,7 +18,6 @@ main, main > section, main > section > section {
 
 body {
     pointer-events: none;
-    /*perspective: 1000px;*/
     background-color: black;
     background: radial-gradient(#333, black);
 }
