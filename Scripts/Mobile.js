@@ -67,6 +67,11 @@ window.addEventListener("load", function(e){
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
-		rotationValue.textContent = `${degrees}°`;
+		const maskProgress = degrees / Number(rotation.max);
+
+		springBoard.style.setProperty(
+			"--mask",
+			`linear-gradient(to bottom, black 0%, black ${maskProgress * 70}%, transparent 100%)`
+		);
 	});
 });
