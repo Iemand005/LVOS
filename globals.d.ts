@@ -22,6 +22,7 @@ interface Application {
 	iconUrl?: string;
 	accentColor?: string;
 	distSrc?: string;
+	altUrls?: string[];
 }
 
 interface DialogState {
