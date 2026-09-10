@@ -2388,22 +2388,6 @@ Dialog.prototype.setMinAspectRatio = function (ratio) {
 	this.resize();
 };
 
-/**
- * @param {number} width
- * @param {number} height
- */
-Dialog.prototype.resizeWithAspect = function (width, height) {
-	var ratio = this.aspectRatio;
-
-	var widthDelta = Math.abs(width - this.width);
-	var heightDelta = Math.abs(height - this.height);
-
-	if (widthDelta > heightDelta) {
-		this.resize(width, width / ratio);
-	} else {
-		this.resize(height * ratio, height);
-	}
-};
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
 	if (!bodyRect || (bodyRect.width === 0 && bodyRect.height === 0 && bodyRect.x === 0 && bodyRect.y === 0)) return;
