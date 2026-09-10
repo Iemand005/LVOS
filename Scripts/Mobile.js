@@ -32,6 +32,7 @@ window.addEventListener("load", function(e){
 	const layers = 30;
 	const blur = 0.2;
 	const reverse = true;
+	const blurLayers = [];
 
 	for (let i = 0; i < layers; i++) {
 		const element = document.createElement("div");
@@ -45,6 +46,7 @@ window.addEventListener("load", function(e){
 		element.style.setProperty("--end", `${end}%`);
 
 		blurGradient.appendChild(element);
+		blurLayers.push(element);
 	}
 
 	this.document.body.appendChild(blurGradient);
@@ -56,6 +58,11 @@ window.addEventListener("load", function(e){
 	rotation.addEventListener("input", () => {
 		const degrees = Number(rotation.value);
 		const scale = 1 + degrees / 150;
+		const blurScale = degrees / 30;
+
+		blurLayers.forEach((element, i) => {
+			element.style.setProperty("--blur", `${blur * i * blurScale}px`);
+		});
 
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
