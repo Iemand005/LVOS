@@ -253,6 +253,9 @@ function setDisplayValue(value, id) {
 }
 function initDisplay(id) {
 	var display = document.getElementById(id);
+	if (!(display instanceof OdometerDisplay)) {
+		display
+	}
 }
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
