@@ -77,12 +77,9 @@ class OdometerTime extends HTMLTimeElement {
 
 	/** @param {number} digits */
 	init(digits) {
-		for (let i = 0; i < 6; i++) {
+		this.innerHTML = "";
+		for (let i = 0; i < digits; i++)
 			this.addDigit();
-
-			if (i === 1 || i === 3)
-				this.append(":");
-		}
 	}
 
 	addDigit() {
