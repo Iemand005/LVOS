@@ -56,6 +56,10 @@ window.addEventListener("load", function(e){
 	const rotation = document.querySelector("#rotation");
 	if (!rotation || !(springBoard instanceof HTMLElement)) return;
 
+	/**
+	 * @param {number} value
+	 * @param {number} max
+	 */
 	var setProgress = function(value, max) {
 		const degrees = value;
 		const scale = 1 + degrees / 150;
