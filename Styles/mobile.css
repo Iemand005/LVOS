@@ -26,7 +26,7 @@ main {
 	    display: flex;
     flex-direction: column;
 	transform-origin: left center;
-	transform: perspective(1000px) rotateY(30deg);
+	transform: perspective(5000px) rotateY(20deg);
 }
 
 
