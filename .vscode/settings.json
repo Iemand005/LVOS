@@ -49,6 +49,6 @@
 		"**/node_modules": true,
 		"**/bower_components": true,
 		"**/*.code-search": true,
-		"LVOS-dist": true,
+		"**/LVOS-dist": true,
 	},
 }
