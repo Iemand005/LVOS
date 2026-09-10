@@ -12,7 +12,7 @@ function init() {
 	launchpad.init(launchpadElement);
 
 	if (typeof appRegistry !== "undefined") {
-		appRegistry.forEachApp(launchpad.addApp);
+		appRegistry.forEachApp(launchpad.addApp.bind(launchpad));
 		// launchpad.open();
 	} else if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {
