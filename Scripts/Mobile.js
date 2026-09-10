@@ -71,7 +71,7 @@ window.addEventListener("load", function(e){
 
 		springBoard.style.setProperty(
 			"--mask",
-			`linear-gradient(to bottom, black 0%, black ${maskProgress * 70}%, transparent 100%)`
+			`linear-gradient(to right, black 0%, black ${1 / maskProgress}%, transparent 100%)`
 		);
 	});
 });

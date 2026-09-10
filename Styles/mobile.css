@@ -27,6 +27,11 @@ main {
     flex-direction: column;
 	transform-origin: left center;
 	transform: perspective(5000px) rotateY(30deg) scaleX(1.2);
+
+	--mask: linear-gradient(to right, black 0%, black 100%);
+
+	mask-image: var(--mask);
+	-webkit-mask-image: var(--mask);
 }
 
 #rotation {
