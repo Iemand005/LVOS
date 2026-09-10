@@ -55,3 +55,27 @@
 	white-space: nowrap;
 	font-size: smaller;
 }
+
+
+.blur-gradient {
+	position: fixed;
+	z-index: 10;
+	inset: 0;
+	pointer-events: none;
+
+	height: 100px;
+}
+
+.blur-gradient > * {
+	position: absolute;
+	inset: 0;
+	backdrop-filter: blur(var(--blur));
+	clip-path: polygon(0 var(--start), 100% var(--start), 100% var(--end), 0 var(--end));
+}
+
+.blur-gradient > * {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(var(--blur));
+    clip-path: polygon(0 var(--start), 100% var(--start), 100% var(--end), 0 var(--end));
+}
