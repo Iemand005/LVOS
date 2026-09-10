@@ -46,7 +46,11 @@ class OdometerDigit extends HTMLSpanElement {
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
 }
 
-class OdometerTime extends HTMLTimeElement {
+class OdometerDisplay extends HTMLTimeElement {
+
+}
+
+class OdometerTime extends OdometerDisplay {
 
 	static get observedAttributes() { return ["datetime"]; }
 
