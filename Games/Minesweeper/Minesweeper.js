@@ -252,8 +252,9 @@ function setDisplayValue(value, id) {
 	if (display) display.textContent = valueStr;
 }
 function initDisplay(id) {
+	/** @type {HTMLElement | OdometerDisplay} */
 	var display = document.getElementById(id);
-	if (!(display instanceof OdometerDisplay)) {
+	if ((display instanceof OdometerDisplay)) {
 		display
 	}
 }
