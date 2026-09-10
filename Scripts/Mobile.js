@@ -48,4 +48,18 @@ window.addEventListener("load", function(e){
 	}
 
 	this.document.body.appendChild(blurGradient);
+
+	const springBoard = document.querySelector(".spring-board");
+	const rotation = document.querySelector("#rotation");
+	const rotationValue = document.querySelector("#rotation-value");
+
+	rotation.addEventListener("input", () => {
+		const degrees = Number(rotation.value);
+		const scale = 1 + degrees / 150;
+
+		springBoard.style.transform =
+			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
+
+		rotationValue.textContent = `${degrees}°`;
+	});
 });
