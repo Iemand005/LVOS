@@ -2452,6 +2452,10 @@ Dialog.prototype.openUrl = function(url) {
 	frame.src = url;
 	this._src = url;
 
+	if (!this.application) return;
+
+	var fallbacks = [this.application.distSrc].concat(this.application.altUrls);
+
 	setTimeout(function() {
 		if (!isLoaded && frame && self.application && self.application.distSrc)
 			frame.src = self.application.distSrc;
