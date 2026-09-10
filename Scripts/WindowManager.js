@@ -981,6 +981,8 @@ function Dialog(object, create) {
 	this._maximizing = false;
 	this.maximizeAnimations = 0;
 
+	// this._isLoa
+
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
 	this._stateOpen = false;
@@ -2438,10 +2440,23 @@ Dialog.prototype.openUrl = function(url) {
 	var self = this;
 	frame.onload = function() {
 		self.reportState();
+		isLoaded = true;
 	};
+
+	var isLoaded = false;
+
+	frame.onerror = function() {
+		console.error("YOU FAILED!!!");
+	}
 
 	frame.src = url;
 	this._src = url;
+
+	setTimeout(() => {
+		if (!isLoaded && frame) {
+			frame.src = "https://fallback.example.com/";
+		}
+	}, 5000);
 };
 
 Dialog.prototype.quit = function() {
