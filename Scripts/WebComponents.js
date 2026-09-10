@@ -70,6 +70,9 @@ class OdometerTime extends HTMLTimeElement {
 
 
 		this.update();
+
+		this.style.display = "flex";
+		this.style.overflow = "hidden";
 	}
 
 	addDigit() {
