@@ -25,7 +25,7 @@ window.addEventListener("load", function(e){
 		goBack();
 	});
 
-	const blurGradient = this.document.createElement("div");
+	const blurGradient = document.createElement("div");
 
 	const layers = 10;
 	const blur = 0.5;
