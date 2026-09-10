@@ -2439,7 +2439,7 @@ Dialog.prototype.openUrl = function(url) {
 
 	var self = this;
 	let timeout = -1;
-	
+
 	frame.onload = function() {
 		self.reportState();
 	};
@@ -2455,7 +2455,7 @@ Dialog.prototype.openUrl = function(url) {
 		if (index >= fallbackUrls.length || !frame || !url) return;
 
 		frame.src = url;
-		this._src = url;
+		self._src = url;
 
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 15000);
