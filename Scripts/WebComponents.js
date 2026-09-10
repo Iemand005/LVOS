@@ -85,10 +85,6 @@ class OdometerDisplay extends HTMLTimeElement {
 
 class OdometerTime extends OdometerDisplay {
 
-	constructor() {
-		super();
-	}
-
 	static get observedAttributes() { return ["datetime"]; }
 
 
@@ -148,7 +144,7 @@ customElements.define("odometer-track", OdometerDigit, {
 	extends: "span"
 });
 
-customElements.define("odometer-display", OdometerTime, {
+customElements.define("odometer-display", OdometerDisplay, {
 	extends: "time"
 });
 
