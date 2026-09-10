@@ -35,8 +35,10 @@ window.addEventListener("load", function(e){
 
 	for (let i = 0; i < layers; i++) {
 		const element = document.createElement("div");
-		const start = 0;
-		const end = Math.pow((reverse ? i + 1 : layers - i) / layers, 0.5) * 100;
+
+		const progress = Math.pow((layers - i) / layers, 0.5);
+		const start = reverse ? (1 - progress) * 100 : 0;
+		const end = reverse ? 100 : progress * 100;
 		const blurAmount = blur * (reverse ? layers - 1 - i : i);
 
 		element.style.setProperty("--blur", `${blurAmount}px`);
@@ -45,6 +47,4 @@ window.addEventListener("load", function(e){
 
 		blurGradient.appendChild(element);
 	}
-
-	this.document.body.appendChild(blurGradient);
 });
