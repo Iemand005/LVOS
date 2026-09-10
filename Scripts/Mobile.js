@@ -47,4 +47,6 @@ window.addEventListener("load", function(e){
 
 		blurGradient.appendChild(element);
 	}
+
+	this.document.body.appendChild(blurGradient);
 });
