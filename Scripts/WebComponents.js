@@ -84,6 +84,10 @@ class OdometerDisplay extends HTMLTimeElement {
 
 class OdometerTime extends OdometerDisplay {
 
+	constructor() {
+		super();
+	}
+
 	static get observedAttributes() { return ["datetime"]; }
 
 
