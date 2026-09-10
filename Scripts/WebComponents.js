@@ -90,7 +90,7 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 	/** @param {number} value */
 	set value(value) {
-
+		this.tracks.forEach(track =? )
 	}
 }
 
