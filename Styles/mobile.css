@@ -6,12 +6,12 @@
 body {
 	display: flex;
 	flex-direction: column;
-	transform-origin: left center;
-	transform: perspective(1000px) rotateY(30deg);
 }
 
 main {
 	position: relative;
+	transform-origin: left center;
+	transform: perspective(1000px) rotateY(30deg);
 }
 
 #footer , footer {
