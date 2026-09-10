@@ -29,8 +29,8 @@ window.addEventListener("load", function(e){
 	blurGradient.className = "blur-gradient";
 	blurGradient.classList.add("horizontal");
 
-	const layers = 10;
-	const blur = 0.5;
+	const layers = 30;
+	const blur = 0.2;
 	const reverse = true;
 
 	for (let i = 0; i < layers; i++) {
