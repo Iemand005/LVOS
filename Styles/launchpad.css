@@ -27,7 +27,8 @@
 	display: block;
 
 	/* width: 25%; */
-	
+	width: 70px;
+	height: 70px;
 
 	padding: 10px;
 }
@@ -39,9 +40,6 @@
 }
 
 #launchpad li button {
-	width: 70px;
-	height: 70px;
-
 	border-radius: 20px;
 }
 
