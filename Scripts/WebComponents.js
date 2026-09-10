@@ -47,6 +47,11 @@ class OdometerDigit extends HTMLSpanElement {
 }
 
 class OdometerDisplay extends HTMLTimeElement {
+	constructor() {
+		super();
+		/** @type {OdometerDigit[]} @readonly */
+		this.tracks = [];
+	}
 
 }
 
@@ -54,11 +59,6 @@ class OdometerTime extends OdometerDisplay {
 
 	static get observedAttributes() { return ["datetime"]; }
 
-	constructor() {
-		super();
-		/** @type {OdometerDigit[]} @readonly */
-		this.tracks = [];
-	}
 
 	connectedCallback() {
 		this.setAttribute("is", "odometer-time");
