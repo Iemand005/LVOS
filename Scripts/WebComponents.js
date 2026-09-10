@@ -62,6 +62,15 @@ class OdometerDisplay extends HTMLTimeElement {
 			if (digit) digit.lineHeight = height;
 		}
 	}
+
+	addDigit() {
+		const track = document.createElement("span", { is: "odometer-track" });
+		if (!(track instanceof OdometerDigit)) return;
+		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+		this.tracks.push(track);
+		this.appendChild(track);
+		return track;
+	}
 }
 
 class OdometerTime extends OdometerDisplay {
@@ -88,14 +97,6 @@ class OdometerTime extends OdometerDisplay {
 		this.style.overflow = "hidden";
 	}
 
-	addDigit() {
-		const track = document.createElement("span", { is: "odometer-track" });
-		if (!(track instanceof OdometerDigit)) return;
-		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-		this.tracks.push(track);
-		this.appendChild(track);
-		return track;
-	}
 	/**
 	 * @param {string} name Name of the attribute
 	 * @param {string} oldValue Old value
