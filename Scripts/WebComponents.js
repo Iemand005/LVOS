@@ -91,8 +91,8 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 	/** @param {number} value */
 	set value(value) {
-		this.tracks.forEach((track, INdiex) => {
-			track.value = this.getDigit(value, INdiex);
+		this.tracks.forEach((track, i) => {
+			track.value = this.getDigit(value, this.tracks.length -1  - i);
 		});
 	}
 }
