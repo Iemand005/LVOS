@@ -54,7 +54,7 @@ window.addEventListener("load", function(e){
 
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
-	if (!rotation || !(springBoard instanceof HTMLElement)) return;
+	if (!(springBoard instanceof HTMLElement)) return;
 
 	/**
 	 * @param {number} value
@@ -79,6 +79,7 @@ window.addEventListener("load", function(e){
 		springBoard.style.setProperty("--mask",`linear-gradient(to right, rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
 	};
 
+	if (!(rotation instanceof HTMLInputElement)) return;
 	rotation.addEventListener("input", function () {
 		setProgress(Number(rotation.value), Number(rotation.max));
 	});
