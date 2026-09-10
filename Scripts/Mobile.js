@@ -53,6 +53,7 @@ window.addEventListener("load", function(e){
 
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
+	if (!rotation || !springBoard || !rotation) return;
 
 	var setProgress = () => {
 		const degrees = Number(rotation.value);
@@ -71,7 +72,7 @@ window.addEventListener("load", function(e){
 		const opacity = 1 - fade * fade * (3 - 2 * fade);
 
 		springBoard.style.setProperty("--mask",`linear-gradient(to right, rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
-	});
+	};
 
-	rotation.addEventListener("input", StereoPannerNode);
+	rotation.addEventListener("input", setProgress);
 });
