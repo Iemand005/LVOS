@@ -53,6 +53,15 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.tracks = [];
 	}
 
+	connectedCallback() {
+		this.setAttribute("is", "odometer-time");
+
+		this.textContent = "";
+
+		this.style.display = "flex";
+		this.style.overflow = "hidden";
+	}
+
 	/** @param {number} digits */
 	init(digits) {
 		this.innerHTML = "";
