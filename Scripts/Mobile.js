@@ -53,7 +53,6 @@ window.addEventListener("load", function(e){
 
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
-	const rotationValue = document.querySelector("#rotation-value");
 
 	rotation.addEventListener("input", () => {
 		const degrees = Number(rotation.value);
@@ -67,11 +66,12 @@ window.addEventListener("load", function(e){
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
-		const maskProgress = degrees / Number(rotation.max);
+		const maskProgress = 1 - degrees / Number(rotation.max);
+		const maskStop = 70 + maskProgress * 30;
 
 		springBoard.style.setProperty(
 			"--mask",
-			`linear-gradient(to right, black 0%, black ${1 / maskProgress}%, transparent 100%)`
+			`linear-gradient(to right, black 0%, black ${maskStop}%, transparent 100%)`
 		);
 	});
 });
