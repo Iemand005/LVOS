@@ -133,6 +133,10 @@ customElements.define("odometer-track", OdometerDigit, {
 	extends: "span"
 });
 
+customElements.define("odometer-display", OdometerTime, {
+	extends: "time"
+});
+
 customElements.define("odometer-time", OdometerTime, {
 	extends: "time"
 });
