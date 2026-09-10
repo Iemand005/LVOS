@@ -31,14 +31,16 @@ window.addEventListener("load", function(e){
 
 	const layers = 10;
 	const blur = 0.5;
-	const reverse = true;
+	const reverse = false;
 
 	for (let i = 0; i < layers; i++) {
 		const element = document.createElement('div');
 		const start = 0;
 		const end = Math.pow((reverse ? i + 1 : layers - i) / layers, 0.5) * 100;
+		const blurAmount = blur * (reverse ? layers - 1 - i : i);
+		// const end = Math.pow((layers - i) / layers, 0.5) * 100;
 
-		element.style.setProperty('--blur', `${blur * i}px`);
+		element.style.setProperty('--blur', `${blurAmount}px`);
 		element.style.setProperty('--start', `${start}%`);
 		element.style.setProperty('--end', `${end}%`);
 
