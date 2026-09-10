@@ -29,6 +29,10 @@ main {
 	transform: perspective(5000px) rotateY(30deg) scaleX(1.2);
 }
 
+#rotation {
+	z-index: 2000;
+}
+
 
 #launchpad {
 	position: absolute;
