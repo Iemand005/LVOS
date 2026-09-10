@@ -54,7 +54,7 @@ window.addEventListener("load", function(e){
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
 
-	rotation.addEventListener("input", () => {
+	var setProgress = () => {
 		const degrees = Number(rotation.value);
 		const scale = 1 + degrees / 150;
 		const blurScale = degrees / 30;
@@ -66,10 +66,12 @@ window.addEventListener("load", function(e){
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
-		const maskProgress = 1 - degrees / Number(rotation.max / 2);
-		const fade = Math.max(0, (maskProgress - 0.5) / 0.5);
+		const maskProgress = 1 - degrees / (Number(rotation.max) / 2);
+		const fade = Math.max(0, (2 - maskProgress - 0.5) / 0.5);
 		const opacity = 1 - fade * fade * (3 - 2 * fade);
 
-		springBoard.style.setProperty("--mask",`linear-gradient(	to right,	rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
+		springBoard.style.setProperty("--mask",`linear-gradient(to right, rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
 	});
+
+	rotation.addEventListener("input", StereoPannerNode);
 });
