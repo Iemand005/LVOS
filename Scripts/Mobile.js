@@ -68,6 +68,6 @@ window.addEventListener("load", function(e){
 
 		const maskProgress = 1 - degrees / Number(rotation.max / 2);
 
-		springBoard.style.setProperty("--mask",`linear-gradient(	to right,	rgb(0 0 0 / ${Math.min(221``1maskProgress)}), rgb(0 0 0 / ${maskProgress}))`);
+		springBoard.style.setProperty("--mask",`linear-gradient(	to right,	rgb(0 0 0 / ${Math.min(1, (maskProgress + 1) * 2)}), rgb(0 0 0 / ${maskProgress}))`);
 	});
 });
