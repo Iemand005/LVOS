@@ -245,6 +245,12 @@ var applications = [
 		id: "mobile",
 		src: "./mobile.html",
 		distSrc: "https://iemand005.github.io/LVOS/mobile.html"
+	},
+	{
+		title: "LVOS",
+		id: "lvos",
+		src: "index.html",
+		distSrc: "https://iemand005.github.io/LVOS"
 	}
 ];
 
