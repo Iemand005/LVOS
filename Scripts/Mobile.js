@@ -53,10 +53,10 @@ window.addEventListener("load", function(e){
 
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
-	if (!rotation || !springBoard || !rotation) return;
+	if (!rotation || !springBoard) return;
 
-	var setProgress = () => {
-		const degrees = Number(rotation.value);
+	var setProgress = function(value, max) {
+		const degrees = value;
 		const scale = 1 + degrees / 150;
 		const blurScale = degrees / 30;
 
@@ -67,7 +67,7 @@ window.addEventListener("load", function(e){
 		springBoard.style.transform =
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
-		const maskProgress = 1 - degrees / (Number(rotation.max) / 2);
+		const maskProgress = 1 - degrees / (max / 2);
 		const fade = Math.max(0, (2 - maskProgress - 0.5) / 0.5);
 		const opacity = 1 - fade * fade * (3 - 2 * fade);
 
