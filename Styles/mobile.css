@@ -21,6 +21,10 @@ main {
 }
 
 .spring-board {
+	width: 100%;
+	height: 100%;
+	    display: flex;
+    flex-direction: column;
 	transform-origin: left center;
 	transform: perspective(1000px) rotateY(30deg);
 }
