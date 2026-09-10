@@ -32,6 +32,7 @@ window.addEventListener("load", function(e){
 	const layers = 30;
 	const blur = 0.2;
 	const reverse = true;
+	/** @type {HTMLDivElement[]} */
 	const blurLayers = [];
 
 	for (let i = 0; i < layers; i++) {
@@ -53,7 +54,7 @@ window.addEventListener("load", function(e){
 
 	const springBoard = document.querySelector(".spring-board");
 	const rotation = document.querySelector("#rotation");
-	if (!rotation || !springBoard) return;
+	if (!rotation || !(springBoard instanceof HTMLElement)) return;
 
 	var setProgress = function(value, max) {
 		const degrees = value;
@@ -74,5 +75,7 @@ window.addEventListener("load", function(e){
 		springBoard.style.setProperty("--mask",`linear-gradient(to right, rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
 	};
 
-	rotation.addEventListener("input", setProgress);
+	rotation.addEventListener("input", function () {
+		setProgress(Number(rotation.value), Number(rotation.max));
+	});
 });
