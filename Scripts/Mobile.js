@@ -67,7 +67,9 @@ window.addEventListener("load", function(e){
 			`perspective(5000px) rotateY(${degrees}deg) scaleX(${scale})`;
 
 		const maskProgress = 1 - degrees / Number(rotation.max / 2);
+		const fade = Math.max(0, (maskProgress - 0.5) / 0.5);
+		const opacity = 1 - fade * fade * (3 - 2 * fade);
 
-		springBoard.style.setProperty("--mask",`linear-gradient(	to right,	rgb(0 0 0 / ${Math.min(0.5, maskProgress / 2) * 2}), rgb(0 0 0 / ${maskProgress}))`);
+		springBoard.style.setProperty("--mask",`linear-gradient(	to right,	rgb(0 0 0 / ${opacity}), rgb(0 0 0 / ${maskProgress}))`);
 	});
 });
