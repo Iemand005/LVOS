@@ -2466,7 +2466,7 @@ Dialog.prototype.openUrl = function(url) {
 		frame.src = url;
 
 		clearTimeout(timeout);
-		timeout = setTimeout(tryNext, 5000);
+		timeout = setTimeout(tryNext, 15000);
 	}
 
 	frame.addEventListener("load", function() {
