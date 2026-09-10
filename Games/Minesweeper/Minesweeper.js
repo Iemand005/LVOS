@@ -246,10 +246,10 @@ function activateTimer() {
  * @param {string} id
  */
 function setDisplayValue(value, id) {
-	var bombCount = document.getElementById(id);
+	var display = document.getElementById(id);
 	var valueStr = value.toString();
 	while (valueStr.length < 3) valueStr = "0" + valueStr;
-	if (bombCount) bombCount.textContent = valueStr;
+	if (display) display.textContent = valueStr;
 }
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
