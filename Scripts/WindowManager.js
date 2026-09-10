@@ -209,7 +209,7 @@ function messageReceived(type, data, source){
 
 		var dialog = windowManager.windows[source];
 
-		if (type === "windowSize") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
+		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
 			case "launchOverlay":
 				var overlay = bodyCrawler.getOverlay();
@@ -1232,7 +1232,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Dialog.prototype.reportState = function() {
-	this.messageFrame("windowSize", {});
+	this.messageFrame("window-size", {});
 	this.messageFrame("theme", {className: document.body.className});
 };
 /**

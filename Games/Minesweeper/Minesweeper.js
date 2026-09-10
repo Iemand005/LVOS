@@ -186,7 +186,7 @@ function sendDesiredSize(){
 	try {
 		var form = document.querySelector("form");
 		if (!form) return;
-		LVMessenger.broadcastToParent("windowSize", {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Broken tooth 23/08/2026.
+		LVMessenger.broadcastToParent("window-size", {width: form.offsetWidth, height: form.offsetHeight}, "minesweeper"); // Broken tooth 23/08/2026.
 	} catch(ex) {
 		console.error("Failed to post desired size", ex);
 	}
