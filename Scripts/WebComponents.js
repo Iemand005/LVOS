@@ -78,8 +78,11 @@ class OdometerTime extends HTMLTimeElement {
 	/** @param {number} digits */
 	init(digits) {
 		this.innerHTML = "";
-		for (let i = 0; i < digits; i++)
-			this.addDigit();
+		const height = this.clientHeight;
+		for (let i = 0; i < digits; i++) {
+			const digit = this.addDigit();
+			if (digit) digit.lineHeight = height;
+		}
 	}
 
 	addDigit() {
@@ -88,6 +91,7 @@ class OdometerTime extends HTMLTimeElement {
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		this.tracks.push(track);
 		this.appendChild(track);
+		return track;
 	}
 	/**
 	 * @param {string} name Name of the attribute
