@@ -250,7 +250,8 @@ var applications = [
 		title: "LVOS",
 		id: "lvos",
 		src: "index.html",
-		distSrc: "https://iemand005.github.io/LVOS"
+		distSrc: "https://iemand005.github.io/LVOS",
+		altUrls: ["https://lvos.neocities.org", "https://localhost:5000", "https://localhost:5001"]
 	}
 ];
 
