@@ -53,6 +53,15 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.tracks = [];
 	}
 
+	/** @param {number} digits */
+	init(digits) {
+		this.innerHTML = "";
+		const height = this.clientHeight;
+		for (let i = 0; i < digits; i++) {
+			const digit = this.addDigit();
+			if (digit) digit.lineHeight = height;
+		}
+	}
 }
 
 class OdometerTime extends OdometerDisplay {
@@ -77,16 +86,6 @@ class OdometerTime extends OdometerDisplay {
 
 		this.style.display = "flex";
 		this.style.overflow = "hidden";
-	}
-
-	/** @param {number} digits */
-	init(digits) {
-		this.innerHTML = "";
-		const height = this.clientHeight;
-		for (let i = 0; i < digits; i++) {
-			const digit = this.addDigit();
-			if (digit) digit.lineHeight = height;
-		}
 	}
 
 	addDigit() {
