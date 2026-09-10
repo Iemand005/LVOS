@@ -2459,7 +2459,7 @@ Dialog.prototype.openUrl = function(url) {
 		self._src = url;
 
 		clearTimeout(timeout);
-		timeout = setTimeout(tryNext, 15000);
+		timeout = setTimeout(tryNext, 3000);
 	}
 
 	frame.addEventListener("error", tryNext);
