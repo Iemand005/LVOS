@@ -251,6 +251,9 @@ function setDisplayValue(value, id) {
 	while (valueStr.length < 3) valueStr = "0" + valueStr;
 	if (display) display.textContent = valueStr;
 }
+function initDisplay(id) {
+	var display = document.getElementById(id);
+}
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
 /** @param {number} time */
