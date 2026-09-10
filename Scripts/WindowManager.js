@@ -2452,10 +2452,9 @@ Dialog.prototype.openUrl = function(url) {
 	frame.src = url;
 	this._src = url;
 
-	setTimeout(() => {
-		if (!isLoaded && frame) {
-			frame.src = "https://fallback.example.com/";
-		}
+	setTimeout(function () {
+		if (!isLoaded && frame && self.application && self.application.distSrc)
+			frame.src = self.application.distSrc;
 	}, 5000);
 };
 
