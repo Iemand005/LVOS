@@ -75,6 +75,16 @@ class OdometerTime extends HTMLTimeElement {
 		this.style.overflow = "hidden";
 	}
 
+	/** @param {number} digits */
+	init(digits) {
+		for (let i = 0; i < 6; i++) {
+			this.addDigit();
+
+			if (i === 1 || i === 3)
+				this.append(":");
+		}
+	}
+
 	addDigit() {
 		const track = document.createElement("span", { is: "odometer-track" });
 		if (!(track instanceof OdometerDigit)) return;
