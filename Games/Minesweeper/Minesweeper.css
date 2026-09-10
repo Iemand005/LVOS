@@ -160,6 +160,10 @@ form, button, div button {
 	border-bottom-color: darkgray;
 }
 
+form > div {
+	display: flex;
+}
+
 button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 	border-top-color: darkgray;
 	border-left-color: darkgray;
