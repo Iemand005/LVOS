@@ -2438,32 +2438,24 @@ Dialog.prototype.openUrl = function(url) {
 	if (!frame) return;
 
 	var self = this;
+	let timeout = -1;
+	
 	frame.onload = function() {
 		self.reportState();
-		isLoaded = true;
 	};
-
-	var isLoaded = false;
-
-	frame.onerror = function() {
-		console.error("YOU FAILED!!!");
-	}
-
-	frame.src = url;
-	this._src = url;
 
 	if (!this.application) return;
 
 	var fallbackUrls = [this.application.distSrc].concat(this.application.altUrls);
 
 	let index = 0;
-	let timeout = -1;
 
 	function tryNext() {
 		var url = fallbackUrls[index++];
 		if (index >= fallbackUrls.length || !frame || !url) return;
 
 		frame.src = url;
+		this._src = url;
 
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 15000);
