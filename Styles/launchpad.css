@@ -73,9 +73,6 @@
 	clip-path: polygon(0 var(--start), 100% var(--start), 100% var(--end), 0 var(--end));
 }
 
-.blur-gradient > * {
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(var(--blur));
-    clip-path: polygon(0 var(--start), 100% var(--start), 100% var(--end), 0 var(--end));
+.blur-gradient.horizontal > * {
+	clip-path: polygon(var(--start) 0, var(--start) 100%, var(--end) 100%, var(--end) 0);
 }
