@@ -239,6 +239,12 @@ var applications = [
 		title: "Gamepad Input Recorder",
 		id: "inputrecorder",
 		src: "https://iemand005.github.io/GamepadRecorder/"
+	},
+	{
+		title: "LVOS Mobile",
+		id: "mobile",
+		src: "./mobile.html",
+		distSrc: "https://iemand005.github.io/LVOS/mobile.html"
 	}
 ];
 
