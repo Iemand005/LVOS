@@ -10,8 +10,6 @@ body {
 
 main {
 	position: relative;
-	transform-origin: left center;
-	transform: perspective(1000px) rotateY(30deg);
 }
 
 #footer , footer {
@@ -20,6 +18,11 @@ main {
 	position: sticky;
 	background: black;
 	z-index: 10000000;
+}
+
+.spring-board {
+	transform-origin: left center;
+	transform: perspective(1000px) rotateY(30deg);
 }
 
 
