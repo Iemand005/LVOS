@@ -8,14 +8,15 @@
     <script src="../../Scripts/CustomPrototypes.js" defer></script>
     <script src="../../Scripts/Messenger.js" defer></script>
     <script src="./Minesweeper.js" defer></script>
+    <script src="../../Scripts/WebComponents.js" defer></script>
     <link rel="stylesheet" href="./Minesweeper.css">
 </head>
 <body>
     <form>
         <div align="center">
-            <time class="display" id="bomb-count"></time>
+            <time class="display" id="bomb-count" is="odometer-time"></time>
             <button>😃</button>
-            <time class="display" id="timer"></time>
+            <time class="display" id="timer" is="odometer-time"></time>
         </div>
         <table></table>
     </form>
