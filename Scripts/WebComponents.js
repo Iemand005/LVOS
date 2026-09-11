@@ -119,6 +119,7 @@ class OdometerTime extends OdometerDisplay {
 
 		this.style.display = "flex";
 		this.style.overflow = "hidden";
+		this.style.justifyContent = "center";
 	}
 
 	/**
