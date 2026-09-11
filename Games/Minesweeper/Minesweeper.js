@@ -269,8 +269,8 @@ function initDisplay(id) {
 	}
 }
 function initDisplays() {
-	initDisplay(count, "bomb-count");
-	initDisplay(time, "timer");
+	initDisplay("bomb-count");
+	initDisplay("timer");
 }
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
