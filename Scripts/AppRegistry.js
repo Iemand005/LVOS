@@ -195,7 +195,7 @@ AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
 	frame.onload = function() {
 		clearTimeout(timeout);
-		if (onLoad0 onLoad(src);
+		if (onLoad) onLoad(src);
 	};
 
 	var application = this.getApp(id);
