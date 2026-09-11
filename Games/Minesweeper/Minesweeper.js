@@ -314,7 +314,7 @@ function load() {
 	minesweeper.startGame();
 }
 
-window.addEventListener("load", load, false);
+window.addEventListener("DOMContentLoaded", load, false);
 
 	// suppress spellchecking
 // noinspection SpellCheckingInspection
