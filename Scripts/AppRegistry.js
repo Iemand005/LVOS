@@ -182,8 +182,8 @@ AppRegistry.prototype.setWallpaper = function(id) {
 	wallpaperFrame.src = app.src;
 };
 
-AppRegistry.prototype.openIframeInApp = function(id, iframe) {
-	
+AppRegistry.prototype.openAppInIFrame = function(id, iframe) {
+
 }
 
 AppRegistry.prototype.reloadWallpaper = function() {
