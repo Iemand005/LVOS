@@ -24,6 +24,8 @@ var supportsTransform = false;
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
+var isLocal = location.protocol === "file:" || location.hostname === "localhost";
+
 (function () {
 	var style = document.createElement("div").style;
 
@@ -2445,9 +2447,7 @@ Dialog.prototype.openUrl = function(url) {
 		self.reportState();
 	};
 
-	if (!this.application) return;
-
-	var isLocal = location.protocol === "file:" || location.hostname === "localhost";
+	if (!this.application) return;\
 
 	var baseUrls = [url, this.application.distSrc];
 
