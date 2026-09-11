@@ -14,6 +14,7 @@ function init() {
 	if (typeof appRegistry !== "undefined") {
 		appRegistry.forEachApp(launchpad.addApp.bind(launchpad));
 		// launchpad.open();
+		appRegistry.reloadWallpaper();
 	}
 	if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {
