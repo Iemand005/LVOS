@@ -246,7 +246,7 @@ function activateTimer() {
  * @returns {element is OdometerDisplay}
  */
 function isOdometerDisplay(element) {
-	if ("OdometerDisplay" in window) return element instanceof OdometerDisplay;
+	if (typeof OdometerDisplay !== "undefined") return element instanceof OdometerDisplay;
 }
 /**
  * @param {number} value
