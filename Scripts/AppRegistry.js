@@ -56,6 +56,8 @@ function handleStorageException(exception) {
 function AppRegistry() {
 	/** @type {{[id:string]: Application}} */
 	this._apps = {};
+	/** @type {{[id:string]: Application}} */
+	this._wallpapers = {};
 }
 
 /* --- Registry (no persistence) --- */
@@ -65,6 +67,7 @@ AppRegistry.prototype.addApp = function(app) {
 	if (!app || typeof app !== "object") return;
 	if (!app.id) app.id = app.title || "unknown";
 	this._apps[app.id] = app;
+	if (app.wallpaper) this._wallpapers[app.id] = app;
 };
 /**
 //  * @param {arguments: any[]}
