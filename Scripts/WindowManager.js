@@ -2447,7 +2447,7 @@ Dialog.prototype.openUrl = function(url) {
 		self.reportState();
 	};
 
-	if (!this.application) return;\
+	if (!this.application) return;
 
 	var baseUrls = [url, this.application.distSrc];
 
