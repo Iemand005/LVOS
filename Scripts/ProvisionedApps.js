@@ -252,6 +252,13 @@ var applications = [
 		src: "index.html",
 		distSrc: "https://iemand005.github.io/LVOS",
 		altUrls: ["https://iemand005.github.io/LVOS-dist", "https://localhost:5000/index.html", "https://localhost:5001/index.html", "https://lvos.neocities.org"]
+	},
+	{
+		title: "Frosted Colors",
+		id : "colors",
+		distSrc : "https://iemand005.github.io/FrostedColours",
+		src : "Applications/FrostedColours/index.html",
+		wallpaper: true
 	}
 ];
 
