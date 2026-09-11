@@ -81,4 +81,6 @@ window.addEventListener("load", function(e){
 	rotation.addEventListener("input", function () {
 		setProgress(Number(rotation.value), Number(rotation.max));
 	});
+
+	setProgress(0, Number(rotation.max));
 });
