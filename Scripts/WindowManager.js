@@ -2473,6 +2473,10 @@ Dialog.prototype.openUrl = function(url) {
 	tryNext();
 };
 
+Dialog.prototype.loadFrame = function() {
+	
+}
+
 Dialog.prototype.quit = function() {
 	this.close();
 };
