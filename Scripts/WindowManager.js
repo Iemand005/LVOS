@@ -2447,7 +2447,9 @@ Dialog.prototype.openUrl = function(url) {
 
 	if (!this.application) return;
 
-	var fallbackUrls = [url, this.application.distSrc].concat(this.application.altUrls);
+	var isLocal = location.protocol === "file:" || location.hostname === "localhost";
+
+	var fallbackUrls = ( isLocal ? [url, this.application.distSrc] : []).concat(this.application.altUrls);
 
 	let index = 0;
 
