@@ -183,7 +183,7 @@ AppRegistry.prototype.setWallpaper = function(id) {
 };
 
 AppRegistry.prototype.reloadWallpaper = function() {
-
+	if (this._wallpaper) this.setWallpaper(this._wallpaper.id)
 };
 
 var appRegistry = new AppRegistry;
