@@ -184,7 +184,7 @@ AppRegistry.prototype.setWallpaper = function(id) {
 /**
  * @param {string} id
  * @param {HTMLIFrameElement} frame
- * @param {(url: string)=>void} onLoad
+ * @param {(url: string | null)=>void} onLoad
  */
 AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
