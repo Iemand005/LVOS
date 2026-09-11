@@ -183,10 +183,42 @@ AppRegistry.prototype.setWallpaper = function(id) {
 };
 /**
  * @param {string} id
- * @param {HTMLIFrameElement} iframe
+ * @param {HTMLIFrameElement} frame
  */
-AppRegistry.prototype.openAppInIFrame = function(id, iframe) {
+AppRegistry.prototype.openAppInIFrame = function(id, frame) {
 
+	var self = this;
+	let timeout = -1;
+
+	frame.onload = function() {
+		clearTimeout(timeout);
+		self.reportState();
+	};
+
+	if (!this.application) return;
+
+	var baseUrls = [url, this.application.distSrc];
+
+	if (!isLocal) baseUrls.reverse();
+
+	var fallbackUrls = baseUrls.concat(this.application.altUrls);
+
+	let index = 0;
+
+	function tryNext() {
+		var url = fallbackUrls[index++];
+		if (index >= fallbackUrls.length || !frame || !url) return;
+
+		frame.src = url;
+		self._src = url;
+
+		clearTimeout(timeout);
+		timeout = setTimeout(tryNext, 3000);
+	}
+
+	frame.addEventListener("error", tryNext);
+
+	tryNext();
 }
 
 AppRegistry.prototype.reloadWallpaper = function() {
