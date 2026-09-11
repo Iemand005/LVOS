@@ -242,14 +242,20 @@ function activateTimer() {
 	}, 1000);
 }
 /**
+ * @param {HTMLElement | null} element
+ * @returns {element is OdometerDisplay}
+ */
+function isOdometerDisplay(element) {
+	if ("OdometerDisplay" in window) return element instanceof OdometerDisplay;
+}
+/**
  * @param {number} value
  * @param {string} id
  */
 function setDisplayValue(value, id) {
-	/** @type {HTMLElement | OdometerDisplay} */
 	var display = document.getElementById(id);
-	if ((display instanceof OdometerDisplay)) {
-		disp.value = value;
+	if (isOdometerDisplay(display)) {
+		display.value = value;
 		return;
 	}
 	var valueStr = value.toString();
@@ -257,9 +263,8 @@ function setDisplayValue(value, id) {
 	if (display) display.textContent = valueStr;
 }
 function initDisplay(id) {
-	/** @type {HTMLElement | OdometerDisplay} */
 	var display = document.getElementById(id);
-	if ((display instanceof OdometerDisplay)) {
+	if (isOdometerDisplay(display)) {
 		display.init(3);
 	}
 }
