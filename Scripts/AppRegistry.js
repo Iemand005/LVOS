@@ -69,7 +69,10 @@ AppRegistry.prototype.addApp = function(app) {
 	if (!app || typeof app !== "object") return;
 	if (!app.id) app.id = app.title || "unknown";
 	this._apps[app.id] = app;
-	if (app.wallpaper) this._wallpapers[app.id] = app;
+	if (app.wallpaper)  {
+		this._wallpapers[app.id] = app;
+		if (!this._wallpaper) this._wallpaper = app;
+	}
 };
 /**
 //  * @param {arguments: any[]}
