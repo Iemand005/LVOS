@@ -246,7 +246,12 @@ function activateTimer() {
  * @param {string} id
  */
 function setDisplayValue(value, id) {
+	/** @type {HTMLElement | OdometerDisplay} */
 	var display = document.getElementById(id);
+	if ((display instanceof OdometerDisplay)) {
+		disp.value = value;
+		return;
+	}
 	var valueStr = value.toString();
 	while (valueStr.length < 3) valueStr = "0" + valueStr;
 	if (display) display.textContent = valueStr;
@@ -255,8 +260,12 @@ function initDisplay(id) {
 	/** @type {HTMLElement | OdometerDisplay} */
 	var display = document.getElementById(id);
 	if ((display instanceof OdometerDisplay)) {
-		display
+		display.init(3);
 	}
+}
+function initDisplays() {
+	initDisplay(count, "bomb-count");
+	initDisplay(time, "timer");
 }
 /** @param {number} count */
 function setBombCount(count) { setDisplayValue(count, "bomb-count"); }
