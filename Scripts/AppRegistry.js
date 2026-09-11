@@ -184,25 +184,28 @@ AppRegistry.prototype.setWallpaper = function(id) {
 /**
  * @param {string} id
  * @param {HTMLIFrameElement} frame
- * @param {()=>void} onLoad
+ * @param {(url: string)=>void} onLoad
  */
 AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
 	var self = this;
 	let timeout = -1;
+	/** @type {string | null} */
+	var src = null;
 
 	frame.onload = function() {
 		clearTimeout(timeout);
-		onLoad();
+		onLoad(src);
 	};
 
-	if (!this.application) return;
+	var application = this.getApp(id);
+	if (!application) return;
 
-	var baseUrls = [url, this.application.distSrc];
+	var baseUrls = [application.src, application.distSrc];
 
 	if (!isLocal) baseUrls.reverse();
 
-	var fallbackUrls = baseUrls.concat(this.application.altUrls);
+	var fallbackUrls = baseUrls.concat(application.altUrls);
 
 	let index = 0;
 
@@ -211,7 +214,7 @@ AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
 		if (index >= fallbackUrls.length || !frame || !url) return;
 
 		frame.src = url;
-		self._src = url;
+		src = url;
 
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 3000);
