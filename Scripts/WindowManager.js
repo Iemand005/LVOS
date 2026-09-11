@@ -2474,7 +2474,9 @@ Dialog.prototype.openUrl = function(url) {
 };
 
 Dialog.prototype.loadFrame = function() {
-	
+	if (!this.application) return;
+	var frame = this.getOrCreateFrame(true);
+	appRegistry.openAppInIFrame(this.application.id, frame);
 }
 
 Dialog.prototype.quit = function() {
