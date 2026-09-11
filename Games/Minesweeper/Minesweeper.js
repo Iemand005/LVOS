@@ -309,6 +309,8 @@ function load() {
 		return false;
 	};
 
+	initDisplays();
+
 	minesweeper.startGame();
 }
 
