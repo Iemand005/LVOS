@@ -58,6 +58,8 @@ function AppRegistry() {
 	this._apps = {};
 	/** @type {{[id:string]: Application}} */
 	this._wallpapers = {};
+	/** @type {Application | null} */
+	this._wallpaper = null;
 }
 
 /* --- Registry (no persistence) --- */
@@ -175,6 +177,10 @@ AppRegistry.prototype.setWallpaper = function(id) {
 	if (!app) return;
 
 	wallpaperFrame.src = app.src;
+};
+
+AppRegistry.prototype.reloadWallpaper = function() {
+
 };
 
 var appRegistry = new AppRegistry;
