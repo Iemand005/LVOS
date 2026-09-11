@@ -2451,7 +2451,7 @@ Dialog.prototype.openUrl = function(url) {
 
 	var baseUrls = [url, this.application.distSrc];
 
-	if (isLocal) baseUrls.reverse();
+	if (!isLocal) baseUrls.reverse();
 
 	var fallbackUrls = baseUrls.concat(this.application.altUrls);
 
