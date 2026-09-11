@@ -2449,7 +2449,11 @@ Dialog.prototype.openUrl = function(url) {
 
 	var isLocal = location.protocol === "file:" || location.hostname === "localhost";
 
-	var fallbackUrls = (isLocal ? [url, this.application.distSrc] : [this.application.distSrc, url]).concat(this.application.altUrls);
+	var baseUrls = [url, this.application.distSrc];
+
+	if (isLocal) baseUrls.reverse();
+
+	var fallbackUrls = baseUrls.concat(this.application.altUrls);
 
 	let index = 0;
 
