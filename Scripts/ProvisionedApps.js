@@ -185,6 +185,12 @@ var applications = [
 		iconUrl: "https://image-cdn-fa.spotifycdn.com/image/ab6761610000f17845ec07bbcf1fed2a4747e780"
 	},
 	{
+		title: "Awolnation",
+		id: "foxyz.awolnation",
+		src: "https://open.spotify.com/embed/artist/4njdEjTnLfcGImKZu1iSrz",
+		iconUrl: "https://image-cdn-fa.spotifycdn.com/image/ab6761610000f17845ec07bbcf1fed2a4747e780"
+	},
+	{
 		title: "Monaco",
 		id: "foxyz.monaco",
 		src: "./Applications/Monaco/monaco.html"
