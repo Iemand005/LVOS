@@ -191,6 +191,12 @@ var applications = [
 		iconUrl: "https://image-cdn-fa.spotifycdn.com/image/ab6761610000f17845ec07bbcf1fed2a4747e780"
 	},
 	{
+		title: "Papa Roach",
+		id: "foxyz.papa-roach",
+		src: "https://open.spotify.com/embed/artist/4RddZ3iHvSpGV4dvATac9X",
+		iconUrl: "https://image-cdn-fa.spotifycdn.com/image/ab6761610000f17845ec07bbcf1fed2a4747e780"
+	},
+	{
 		title: "Monaco",
 		id: "foxyz.monaco",
 		src: "./Applications/Monaco/monaco.html"
