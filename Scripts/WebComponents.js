@@ -96,16 +96,9 @@ class OdometerDisplay extends HTMLTimeElement {
 		});
 	}
 }
-
 class OdometerTime extends OdometerDisplay {
 
-	static get observedAttributes() { return ["datetime", "format"]; }
-
-	constructor() {
-		super();
-		/** @type {"hms" | "dhms"} */
-		this._format = "hms"; // "hms" = HH:MM:SS, "dhms" = DD:HH:MM:SS
-	}
+	static get observedAttributes() { return ["datetime"]; }
 
 	connectedCallback() {
 		this.setAttribute("is", "odometer-time");
@@ -117,72 +110,43 @@ class OdometerTime extends OdometerDisplay {
 		this.style.justifyContent = "center";
 	}
 
-	get format() { return this._format; }
-	set format(val) {
-		if (val !== "hms" && val !== "dhms") return;
-		if (this._format === val) return;
-		this._format = val;
-		this.setAttribute("format", val);
-		this.buildTracks();
-		this.update();
-	}
-
 	buildTracks() {
 		this.textContent = "";
 		this.tracks.length = 0;
 
-		const groups = this._format === "dhms" ? 4 : 3;
-
-		for (let i = 0; i < groups; i++) {
+		// DD:HH:MM:SS -> 4 groups of 2 digits
+		for (let i = 0; i < 4; i++) {
 			this.addDigit();
 			this.addDigit();
-			if (i < groups - 1) this.append(":");
+			if (i < 3) this.append(":");
 		}
 	}
+
 	/**
 	 * @param {string} name Name of the attribute
 	 * @param {string} oldValue Old value
 	 * @param {string} newValue New value
 	 */
 	attributeChangedCallback(name, oldValue, newValue) {
-		if (oldValue === newValue) return;
-		if (name === "format") {
-			this.format = newValue === "dhms" ? "dhms" : "hms";
-			return;
-		}
-		if (name === "datetime") this.update();
+		if (name === "datetime" && oldValue !== newValue) this.update();
 	}
 
 	update() {
 		const target = new Date(this.dateTime);
-		let digits;
+		const diff = Math.max(0, target.getTime() - Date.now());
+		const totalSeconds = Math.floor(diff / 1000);
 
-		if (this._format === "dhms") {
-			const diff = Math.max(0, target.getTime() - Date.now());
-			const totalSeconds = Math.floor(diff / 1000);
+		const days = Math.floor(totalSeconds / 86400);
+		const hours = Math.floor((totalSeconds % 86400) / 3600);
+		const minutes = Math.floor((totalSeconds % 3600) / 60);
+		const seconds = totalSeconds % 60;
 
-			const days = Math.floor(totalSeconds / 86400);
-			const hours = Math.floor((totalSeconds % 86400) / 3600);
-			const minutes = Math.floor((totalSeconds % 3600) / 60);
-			const seconds = totalSeconds % 60;
-
-			digits = [
-				Math.floor(days / 10) % 10, days % 10,
-				Math.floor(hours / 10), hours % 10,
-				Math.floor(minutes / 10), minutes % 10,
-				Math.floor(seconds / 10), seconds % 10
-			];
-		} else {
-			const hours = target.getHours();
-			const minutes = target.getMinutes();
-			const seconds = target.getSeconds();
-
-			digits = [
-				Math.floor(hours / 10), hours % 10,
-				Math.floor(minutes / 10), minutes % 10,
-				Math.floor(seconds / 10), seconds % 10
-			];
-		}
+		const digits = [
+			Math.floor(days / 10) % 10, days % 10,
+			Math.floor(hours / 10), hours % 10,
+			Math.floor(minutes / 10), minutes % 10,
+			Math.floor(seconds / 10), seconds % 10
+		];
 
 		this.tracks.forEach((track, i) => track.value = digits[i]);
 	}
