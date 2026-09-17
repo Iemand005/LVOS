@@ -96,13 +96,19 @@ class OdometerDisplay extends HTMLTimeElement {
 		});
 	}
 }
+
 class OdometerTime extends OdometerDisplay {
 
-	static get observedAttributes() { return ["datetime"]; }
+	static get observedAttributes() { return ["datetime", "value"]; }
 
 	connectedCallback() {
 		this.setAttribute("is", "odometer-time");
-		this.buildTracks();
+
+		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim()) {
+			this.setAttribute("value", this.textContent.trim());
+		}
+
+		this.buildTracks(this.currentGroupCount());
 		this.update();
 
 		this.style.display = "flex";
@@ -110,15 +116,27 @@ class OdometerTime extends OdometerDisplay {
 		this.style.justifyContent = "center";
 	}
 
-	buildTracks() {
+	/** value wins if present; otherwise fall back to datetime */
+	usingValue() {
+		return this.hasAttribute("value");
+	}
+
+	currentGroupCount() {
+		if (this.usingValue()) {
+			const v = this.getAttribute("value") || "00:00:00:00";
+			return v.split(":").length;
+		}
+		return 4; // datetime mode always renders DD:HH:MM:SS
+	}
+
+	buildTracks(groups) {
 		this.textContent = "";
 		this.tracks.length = 0;
 
-		// DD:HH:MM:SS -> 4 groups of 2 digits
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < groups; i++) {
 			this.addDigit();
 			this.addDigit();
-			if (i < 3) this.append(":");
+			if (i < groups - 1) this.append(":");
 		}
 	}
 
@@ -128,27 +146,50 @@ class OdometerTime extends OdometerDisplay {
 	 * @param {string} newValue New value
 	 */
 	attributeChangedCallback(name, oldValue, newValue) {
-		if (name === "datetime" && oldValue !== newValue) this.update();
+		if (oldValue === newValue) return;
+
+		if (name === "value") {
+			const groups = newValue ? newValue.split(":").length : this.tracks.length;
+			if (groups !== this.tracks.length) this.buildTracks(groups);
+			this.update();
+			return;
+		}
+
+		if (name === "datetime" && !this.usingValue()) {
+			if (this.tracks.length !== 4) this.buildTracks(4);
+			this.update();
+		}
 	}
 
 	update() {
-		const target = new Date(this.dateTime);
-		const diff = Math.max(0, target.getTime() - Date.now());
-		const totalSeconds = Math.floor(diff / 1000);
+		let digits;
 
-		const days = Math.floor(totalSeconds / 86400);
-		const hours = Math.floor((totalSeconds % 86400) / 3600);
-		const minutes = Math.floor((totalSeconds % 3600) / 60);
-		const seconds = totalSeconds % 60;
+		if (this.usingValue()) {
+			const value = this.getAttribute("value") || "00:00:00:00";
+			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
+			digits = [];
+			parts.forEach(part => digits.push(Math.floor(part / 10) % 10, part % 10));
+		} else {
+			const target = new Date(this.getAttribute("datetime"));
+			const diff = Math.max(0, target.getTime() - Date.now());
+			const totalSeconds = Math.floor(diff / 1000);
 
-		const digits = [
-			Math.floor(days / 10) % 10, days % 10,
-			Math.floor(hours / 10), hours % 10,
-			Math.floor(minutes / 10), minutes % 10,
-			Math.floor(seconds / 10), seconds % 10
-		];
+			const days = Math.floor(totalSeconds / 86400);
+			const hours = Math.floor((totalSeconds % 86400) / 3600);
+			const minutes = Math.floor((totalSeconds % 3600) / 60);
+			const seconds = totalSeconds % 60;
 
-		this.tracks.forEach((track, i) => track.value = digits[i]);
+			digits = [
+				Math.floor(days / 10) % 10, days % 10,
+				Math.floor(hours / 10), hours % 10,
+				Math.floor(minutes / 10), minutes % 10,
+				Math.floor(seconds / 10), seconds % 10
+			];
+		}
+
+		this.tracks.forEach((track, i) => {
+			if (digits[i] !== undefined) track.value = digits[i];
+		});
 	}
 }
 
