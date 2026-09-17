@@ -99,22 +99,16 @@ class OdometerDisplay extends HTMLTimeElement {
 
 class OdometerTime extends OdometerDisplay {
 
-	static get observedAttributes() { return ["datetime"]; }
+	static get observedAttributes() { return ["datetime", "format"]; }
 
+	constructor() {
+		super();
+		this._format = "hms"; // "hms" = HH:MM:SS, "dhms" = DD:HH:MM:SS
+	}
 
 	connectedCallback() {
 		this.setAttribute("is", "odometer-time");
-
-		this.textContent = "";
-
-		for (let i = 0; i < 6; i++) {
-			this.addDigit();
-
-			if (i === 1 || i === 3)
-				this.append(":");
-		}
-
-
+		this.buildTracks();
 		this.update();
 
 		this.style.display = "flex";
@@ -122,30 +116,70 @@ class OdometerTime extends OdometerDisplay {
 		this.style.justifyContent = "center";
 	}
 
-	/**
-	 * @param {string} name Name of the attribute
-	 * @param {string} oldValue Old value
-	 * @param {string} newValue New value
-	 */
+	get format() { return this._format; }
+	set format(val) {
+		if (val !== "hms" && val !== "dhms") return;
+		if (this._format === val) return;
+		this._format = val;
+		this.setAttribute("format", val);
+		this.buildTracks();
+		this.update();
+	}
+
+	buildTracks() {
+		this.textContent = "";
+		this.tracks.length = 0;
+
+		const groups = this._format === "dhms" ? 4 : 3;
+
+		for (let i = 0; i < groups; i++) {
+			this.addDigit();
+			this.addDigit();
+			if (i < groups - 1) this.append(":");
+		}
+	}
+
 	attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "datetime" && oldValue !== newValue) this.update();
-    }
+		if (oldValue === newValue) return;
+		if (name === "format") {
+			this.format = newValue;
+			return;
+		}
+		if (name === "datetime") this.update();
+	}
 
 	update() {
 		const date = new Date(this.dateTime);
+		let digits;
 
-		const hours = date.getHours();
-		const minutes = date.getMinutes();
-		const seconds = date.getSeconds();
+		if (this._format === "dhms") {
+			// treat datetime as a TARGET; show remaining days/hours/min/sec until it
+			const diff = Math.max(0, date.getTime() - Date.now());
 
-		const digits = [
-			Math.floor(hours / 10),
-			hours % 10,
-			Math.floor(minutes / 10),
-			minutes % 10,
-			Math.floor(seconds / 10),
-			seconds % 10
-		];
+			const totalSeconds = Math.floor(diff / 1000);
+			const days = Math.floor(totalSeconds / 86400);
+			const hours = Math.floor((totalSeconds % 86400) / 3600);
+			const minutes = Math.floor((totalSeconds % 3600) / 60);
+			const seconds = totalSeconds % 60;
+
+			digits = [
+				Math.floor(days / 10) % 10, days % 10,
+				Math.floor(hours / 10), hours % 10,
+				Math.floor(minutes / 10), minutes % 10,
+				Math.floor(seconds / 10), seconds % 10
+			];
+		} else {
+			// original behavior: wall-clock HH:MM:SS from the date itself
+			const hours = date.getHours();
+			const minutes = date.getMinutes();
+			const seconds = date.getSeconds();
+
+			digits = [
+				Math.floor(hours / 10), hours % 10,
+				Math.floor(minutes / 10), minutes % 10,
+				Math.floor(seconds / 10), seconds % 10
+			];
+		}
 
 		this.tracks.forEach((track, i) => track.value = digits[i]);
 	}
