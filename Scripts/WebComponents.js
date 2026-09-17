@@ -147,7 +147,7 @@ class OdometerTime extends OdometerDisplay {
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (oldValue === newValue) return;
 		if (name === "format") {
-			this.format = newValue;
+			this.format = newValue === "hms" ? "hms" : "dhms";
 			return;
 		}
 		if (name === "datetime") this.update();
