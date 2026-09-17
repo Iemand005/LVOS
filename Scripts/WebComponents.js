@@ -150,7 +150,7 @@ class OdometerTime extends OdometerDisplay {
 
 		if (name === "value") {
 			const groups = newValue ? newValue.split(":").length : this.tracks.length;
-			if (groups !== this.tracks.length) this.buildTracks(groups);
+			// if (groups !== this.tracks.length) this.buildTracks(groups);
 			this.update();
 			return;
 		}
