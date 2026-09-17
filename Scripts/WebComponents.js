@@ -157,16 +157,14 @@ class OdometerTime extends OdometerDisplay {
 		const date = new Date(this.dateTime);
 		let digits;
 
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+		const seconds = date.getSeconds();
+
 		if (this._format === "dhms") {
-			// treat datetime as a TARGET; show remaining days/hours/min/sec until it
-			const diff = Math.max(0, date.getTime() - Date.now());
 
-			const totalSeconds = Math.floor(diff / 1000);
+			const totalSeconds = Math.floor(date.getTime() / 1000);
 			const days = Math.floor(totalSeconds / 86400);
-			const hours = Math.floor((totalSeconds % 86400) / 3600);
-			const minutes = Math.floor((totalSeconds % 3600) / 60);
-			const seconds = totalSeconds % 60;
-
 			digits = [
 				Math.floor(days / 10) % 10, days % 10,
 				Math.floor(hours / 10), hours % 10,
@@ -174,10 +172,7 @@ class OdometerTime extends OdometerDisplay {
 				Math.floor(seconds / 10), seconds % 10
 			];
 		} else {
-			// original behavior: wall-clock HH:MM:SS from the date itself
-			const hours = date.getHours();
-			const minutes = date.getMinutes();
-			const seconds = date.getSeconds();
+			
 
 			digits = [
 				Math.floor(hours / 10), hours % 10,
