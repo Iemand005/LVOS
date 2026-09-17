@@ -103,6 +103,7 @@ class OdometerTime extends OdometerDisplay {
 
 	constructor() {
 		super();
+		/** @type {"hms" | "dhms"} */
 		this._format = "hms"; // "hms" = HH:MM:SS, "dhms" = DD:HH:MM:SS
 	}
 
