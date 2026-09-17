@@ -111,9 +111,9 @@ class OdometerTime extends OdometerDisplay {
 		this.buildTracks(this.currentGroupCount());
 		this.update();
 
-		this.style.display = "flex";
+		// this.style.display = "flex";
 		this.style.overflow = "hidden";
-		this.style.justifyContent = "center";
+		// this.style.justifyContent = "center";
 	}
 
 	/** value wins if present; otherwise fall back to datetime */
