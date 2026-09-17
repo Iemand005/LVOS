@@ -139,7 +139,11 @@ class OdometerTime extends OdometerDisplay {
 			if (i < groups - 1) this.append(":");
 		}
 	}
-
+	/**
+	 * @param {string} name Name of the attribute
+	 * @param {string} oldValue Old value
+	 * @param {string} newValue New value
+	 */
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (oldValue === newValue) return;
 		if (name === "format") {
