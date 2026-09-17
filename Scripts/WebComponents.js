@@ -134,8 +134,8 @@ class OdometerTime extends OdometerDisplay {
 		this.tracks.length = 0;
 
 		for (let i = 0; i < groups; i++) {
-			this.addDigit();
-			this.addDigit();
+			const digitsInGroup = (i === 0 && groups === 4) ? 3 : 2; // days group gets 3 digits
+			for (let j = 0; j < digitsInGroup; j++) this.addDigit();
 			if (i < groups - 1) this.append(":");
 		}
 	}
@@ -168,7 +168,11 @@ class OdometerTime extends OdometerDisplay {
 			const value = this.getAttribute("value") || "00:00:00:00";
 			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
 			digits = [];
-			parts.forEach(part => digits.push(Math.floor(part / 10) % 10, part % 10));
+			parts.forEach((part, i) => {
+				const width = (i === 0 && parts.length === 4) ? 3 : 2;
+				const str = String(part).padStart(width, "0");
+				for (const ch of str) digits.push(parseInt(ch, 10));
+			});
 		} else {
 			const target = new Date(this.getAttribute("datetime"));
 			const diff = Math.max(0, target.getTime() - Date.now());
@@ -180,7 +184,7 @@ class OdometerTime extends OdometerDisplay {
 			const seconds = totalSeconds % 60;
 
 			digits = [
-				Math.floor(days / 10) % 10, days % 10,
+				...String(days).padStart(3, "0").split("").map(Number),
 				Math.floor(hours / 10), hours % 10,
 				Math.floor(minutes / 10), minutes % 10,
 				Math.floor(seconds / 10), seconds % 10
