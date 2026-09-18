@@ -395,7 +395,7 @@ function WindowManager() {
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
 
-	this.webosChannel = new BroadcastChannel('lvos');
+	this.channel = new BroadcastChannel('lvos');
 
 	/** @type {WindowManager} */
     var self = this;
