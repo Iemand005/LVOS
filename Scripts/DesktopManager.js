@@ -305,7 +305,6 @@ DesktopManager.prototype.toggleOverlay = function(enable) {
 	overlay.classList.toggle("open", enable);
 };
 
-const webosChannel = new BroadcastChannel('lvos');
 
 // DesktopManager.hasTheme
 
