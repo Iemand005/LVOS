@@ -305,6 +305,8 @@ DesktopManager.prototype.toggleOverlay = function(enable) {
 	overlay.classList.toggle("open", enable);
 };
 
+const webosChannel = new BroadcastChannel('webos_state');
+
 // DesktopManager.hasTheme
 
 window.desktopManager = new DesktopManager();
