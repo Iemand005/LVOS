@@ -33,7 +33,7 @@
 	"workbench.browser.autoReloadOnFileChange": true,
 	"workbench.browser.showInTitleBar": true,
 	"git.detectSubmodulesLimit": 20,
-	"liveServer.settings.port": 5501,
+	"liveServer.settings.port": 3621,
 	"javascript.inlayHints.parameterTypes.enabled": true,
 	"javascript.inlayHints.variableTypes.enabled": true,
 	"javascript.inlayHints.propertyDeclarationTypes.enabled": true,
@@ -51,4 +51,6 @@
 		"**/*.code-search": true,
 		"**/LVOS-dist": true,
 	},
+	// liveserve
+	// "liveServer.settings.port": 
 }
