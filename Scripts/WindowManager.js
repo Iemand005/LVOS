@@ -398,7 +398,8 @@ function WindowManager() {
 	this.channel = new BroadcastChannel('lvos');
 
 	this.channel.onmessage = function(ev) {
-		ev
+		var data = ev.data;
+		console.log("Got a broadcast from another tab!", data);
 	};
 
 	/** @type {WindowManager} */
