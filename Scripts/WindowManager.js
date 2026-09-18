@@ -397,8 +397,8 @@ function WindowManager() {
 
 	this.channel = new BroadcastChannel('lvos');
 
-	this.channel.onmessage = function(event) {
-
+	this.channel.onmessage = function(ev) {
+		ev
 	};
 
 	/** @type {WindowManager} */
