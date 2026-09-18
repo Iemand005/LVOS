@@ -792,6 +792,12 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	});
 };
 
+WindowManager.prototype.broadcast = function() {
+	this.channel.postMessage({
+		type: "Hi"
+	})
+}
+
 //#endregion
 
 //#region ClickOffset
