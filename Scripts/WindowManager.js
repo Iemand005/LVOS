@@ -397,6 +397,10 @@ function WindowManager() {
 
 	this.channel = new BroadcastChannel('lvos');
 
+	this.channel.onmessage = function(event) {
+
+	};
+
 	/** @type {WindowManager} */
     var self = this;
 	this.resizeHandler = function() {
