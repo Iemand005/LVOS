@@ -18,6 +18,15 @@ LVMessenger.broadcast = function (target, type, message, id){
 };
 
 /**
+ * @param {MessageType} type
+ * @param {*} message
+ * @param {string} [id]
+ */
+LVMessenger.broadcast = function (type, message, id){
+	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
+};
+
+/**
  * @param {(type:MessageType,data:*,id?:string)=>void} callback
  * @param {MessageType} [destroyWhenType]
  */

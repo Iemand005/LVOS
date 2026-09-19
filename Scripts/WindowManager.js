@@ -2001,6 +2001,8 @@ Dialog.prototype.toggleFullButton = function (enable) {
 Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
+	var target = this.target;
+	if (frame) this.target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
 };
 Dialog.prototype.updateTranslation = function () {
 	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
