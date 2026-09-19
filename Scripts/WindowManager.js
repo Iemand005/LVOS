@@ -658,7 +658,9 @@ WindowManager.prototype.injectApplications = function() {
 
 /** @param {string} appId  */
 WindowManager.prototype.closeApp = function(appId) {
-	windowManager.windows[appId].kill();
+	var window = windowManager.windows[appId];
+	if (window)
+	window.kill();
 };
 
 /** @param {boolean} [enabled] */
