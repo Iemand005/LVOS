@@ -43,6 +43,7 @@ function getSiteName(url) {
 	var domain = getDomain(url);
 	if (!domain) return "";
 	var parts = domain.split(".");
+	/** @type {string} */
 	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
 	return name.charAt(0).toUpperCase() + name.slice(1);
 }
