@@ -42,7 +42,7 @@ var onLoad = function () {
     var wallpaper = DesktopManager.getWallpaper();
     if (wallpaper) {
         wallpaper.onerror = function () {
-            wallpaper.src = "https://iemand005.github.io/FrostedColours/";
+            if (wallpaper instanceof HTMLIFrameElement) wallpaper.src = "https://iemand005.github.io/FrostedColours/";
         }
     }
 
