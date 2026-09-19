@@ -54,5 +54,8 @@
 	// liveserve
 	// "liveServer.settings.port": 
 	// javascript.suggest
-	"js/ts.suggest.paths": false
+	"js/ts.suggest.paths": false,
+	"path-intellisense.mappings": {
+		"/": "${workspaceFolder}"
+	}
 }
