@@ -2122,7 +2122,7 @@ Dialog.prototype.updatePosition = function() {
  * (e.g. the maximized flag when the class toggle is still deferred by animation).
  */
 Dialog.prototype.broadcastState = function (overrides) {
-	if (!windowManager || !flags.broadcastWindowMoves || windowManager.synchronizing || !document.hasFocus()) return;
+	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
 	if (!this.id) return;
 	var state = this.getState();
 	if (overrides) for (var key in overrides) state[key] = overrides[key];
