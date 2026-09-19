@@ -24,7 +24,6 @@ interface Application {
 	distSrc?: string;
 	altUrls?: string[];
 	borderless?: boolean;
-	fixed?: boolean;
 	launch?: boolean;
 	exists?: boolean;
 }

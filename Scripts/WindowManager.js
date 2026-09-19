@@ -1611,7 +1611,7 @@ Object.defineProperty(Dialog.prototype, "maximized", {
 });
 
 Object.defineProperty(Dialog.prototype, "fixed", {
-	get: function() { returh this.application && this.application.fixed || false; }
+	get: function() { return this.application && this.application.fixed || false; }
 })
 
 Object.defineProperty(Dialog.prototype, "windowTarget", {
