@@ -41,6 +41,7 @@ function getDomain(url) {
 /** @param {string} url */
 function getSiteName(url) {
 	var domain = getDomain(url);
+	if (!domain) return "";
 	var parts = domain.split(".");
 	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
 	return name.charAt(0).toUpperCase() + name.slice(1);
@@ -100,8 +101,10 @@ AppManager.prototype.removeApp = function(id) {
 AppManager.prototype.forEachApp = function(callback) {
 	if (typeof callback !== "function") return;
 	for (var id in this._apps)
-		if (this._apps.hasOwnProperty(id) && this._apps[id])
-			callback(this._apps[id], id);
+		if (this._apps.hasOwnProperty(id)) {
+			var app = this._apps[id];
+			if (app) callback(app, id);
+		}
 };
 
 Object.defineProperty(AppManager.prototype, "apps", {
