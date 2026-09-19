@@ -405,7 +405,7 @@ function WindowManager() {
 		var data = ev.data;
 		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return; }
 		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
-		console.log("Got a broadcast from another tab!", data);
+		if (flags.verboseLogs) console.log("Got a broadcast from another tab!", data);
 		windowManager.handleBroadcast(data.type, data.data, data.id);
 	};
 
