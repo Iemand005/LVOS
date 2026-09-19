@@ -463,7 +463,10 @@ Object.defineProperty(WindowManager.prototype, "state", {
   get: function () {
 	/** @type {DesktopState} */
 	var state = {};
-	for (var id in this.windows) if (this.windows[id]) state[id] = this.windows[id].getState();
+	for (var id in this.windows) {
+		var window = this.windows[id];
+		if (window) state[id] = window.getState();
+	}
 	return state;
   }
 });
