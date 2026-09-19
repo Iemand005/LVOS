@@ -53,7 +53,7 @@ function handleStorageException(exception) {
 	canSave = false;
 }
 
-function AppRegistry() {
+function AppManager() {
 	/** @type {{[id:string]: Application}} */
 	this._apps = {};
 	/** @type {{[id:string]: Application}} */
@@ -65,7 +65,7 @@ function AppRegistry() {
 /* --- Registry (no persistence) --- */
 
 /** @param {Application} app */
-AppRegistry.prototype.addApp = function(app) {
+AppManager.prototype.addApp = function(app) {
 	if (!app || typeof app !== "object") return;
 	if (!app.id) app.id = app.title || "unknown";
 	this._apps[app.id] = app;
@@ -77,7 +77,7 @@ AppRegistry.prototype.addApp = function(app) {
 /**
 //  * @param {arguments: any[]}
  */
-AppRegistry.prototype.addApps = function() {
+AppManager.prototype.addApps = function() {
 	for (var i = 0; i < arguments.length; i++) {
 		var arr = arguments[i];
 		if (arr instanceof Array)
@@ -86,31 +86,31 @@ AppRegistry.prototype.addApps = function() {
 	}
 };
 /** @param {string} id */
-AppRegistry.prototype.getApp = function(id) {
+AppManager.prototype.getApp = function(id) {
 	if (!id) return null;
 	return this._apps[id] || null;
 };
 
 /** @param {string} id */
-AppRegistry.prototype.removeApp = function(id) {
+AppManager.prototype.removeApp = function(id) {
 	if (!id) return;
 	delete this._apps[id];
 };
 /** @param {(app: Application, id: string)=>void} callback */
-AppRegistry.prototype.forEachApp = function(callback) {
+AppManager.prototype.forEachApp = function(callback) {
 	if (typeof callback !== "function") return;
 	for (var id in this._apps)
 		if (this._apps.hasOwnProperty(id))
 			callback(this._apps[id], id);
 };
 
-Object.defineProperty(AppRegistry.prototype, "apps", {
+Object.defineProperty(AppManager.prototype, "apps", {
 	get: function() { return this._apps; }
 });
 
 /* --- Persistence (localStorage) --- */
 
-Object.defineProperty(AppRegistry.prototype, "installedApps", {
+Object.defineProperty(AppManager.prototype, "installedApps", {
 	get: function() {
 		if (!hasLocalStorage) return [];
 		try {
@@ -125,7 +125,7 @@ Object.defineProperty(AppRegistry.prototype, "installedApps", {
 	}
 });
 /** @param {Application} app */
-AppRegistry.prototype.saveApp = function(app) {
+AppManager.prototype.saveApp = function(app) {
 	if (!canSave || !hasLocalStorage) return;
 	if (!app || typeof app !== "object" || !app.id) return;
 	try {
@@ -140,7 +140,7 @@ AppRegistry.prototype.saveApp = function(app) {
 	}
 };
 
-AppRegistry.prototype.loadApps = function() {
+AppManager.prototype.loadApps = function() {
 	if (!canSave || !hasLocalStorage) return;
 	var self = this;
 	try {
@@ -160,7 +160,7 @@ AppRegistry.prototype.loadApps = function() {
  * @param {string} id
  * @param {string} [iconUrl]
  */
-AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
+AppManager.prototype.createApp = function(url, title, id, iconUrl) {
 	/** @type {Application} */
 	var app = {
 		src: url,
@@ -172,7 +172,7 @@ AppRegistry.prototype.createApp = function(url, title, id, iconUrl) {
 };
 
 /** @param {string} id */
-AppRegistry.prototype.setWallpaper = function(id) {
+AppManager.prototype.setWallpaper = function(id) {
 	var wallpaperFrame = document.getElementById("wallpaper-frame");
 	if (!(wallpaperFrame instanceof HTMLIFrameElement)) return;
 
@@ -186,7 +186,7 @@ AppRegistry.prototype.setWallpaper = function(id) {
  * @param {HTMLIFrameElement} frame
  * @param {(url: string | null)=>void} [onLoad]
  */
-AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
+AppManager.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
 	var self = this;
 	let timeout = -1;
@@ -225,9 +225,9 @@ AppRegistry.prototype.openAppInIFrame = function(id, frame, onLoad) {
 	tryNext();
 }
 
-AppRegistry.prototype.reloadWallpaper = function() {
+AppManager.prototype.reloadWallpaper = function() {
 	if (this._wallpaper) this.setWallpaper(this._wallpaper.id)
 };
 
-var appRegistry = new AppRegistry;
+var appRegistry = new AppManager;
 window.appRegistry = appRegistry;
