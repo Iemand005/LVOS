@@ -11,6 +11,7 @@
 		"types": ["w3c-web-hid"],
 		"traceResolution": true,
 		"noImplicitThis": true,
+		"noUncheckedIndexedAccess": true,
 		"ignoreDeprecations": "6.0"
 	},
 
