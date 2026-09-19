@@ -39,7 +39,7 @@ var onLoad = function () {
         contextMenu.close();
 	}, false);
 
-    var wallpaper = DesktopManager.getWallpaper();
+    var wallpaper = window.windows["wallpaper"];
     if (wallpaper instanceof HTMLIFrameElement) {
         wallpaper.onerror = function () {
             if (wallpaper instanceof HTMLIFrameElement) wallpaper.src = "https://iemand005.github.io/FrostedColours/";
