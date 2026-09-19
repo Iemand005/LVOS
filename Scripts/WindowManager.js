@@ -2563,6 +2563,10 @@ Dialog.prototype.openUrl = function(url) {
 	tryNext();
 };
 
+Dialog.prototype.refresh = function() {
+	this.openUrl(this.url);
+}
+
 Dialog.prototype.loadFrame = function() {
 	if (!this.application) return;
 	var frame = this.getOrCreateFrame(true);
