@@ -100,7 +100,7 @@ AppManager.prototype.removeApp = function(id) {
 AppManager.prototype.forEachApp = function(callback) {
 	if (typeof callback !== "function") return;
 	for (var id in this._apps)
-		if (this._apps.hasOwnProperty(id))
+		if (this._apps.hasOwnProperty(id) && this._apps[id])
 			callback(this._apps[id], id);
 };
 
