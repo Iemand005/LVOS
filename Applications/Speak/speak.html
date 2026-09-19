@@ -9,7 +9,7 @@
 <body>
 	<label for="message">Tekst</label>
 	<input id="message" type="text">
-	<button id="speak">Praat</button>
+	<button id="speak">Speak</button>
 	<script>
 		document.getElementById("speak").addEventListener("click", function() {
 			speech.say(document.getElementById("message").value);
