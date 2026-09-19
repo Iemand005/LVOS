@@ -804,6 +804,11 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	});
 };
 
+/** @param {string} [id] */
+WindowManager.prototype.getWindowById = function(id) {
+
+};
+
 /**
  * @param {MessageType} type
  * @param {*} [data]
