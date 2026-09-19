@@ -1135,7 +1135,7 @@ Dialog.prototype.initWithObject = function(object) {
 			if (object.exists) {
 				this.target = document.getElementById(object.id);
 				var doc = this.contentDocument;
-				if (doc && doc.readyState !== "complete") this.openUrl();
+				if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 			} else {
 				createDialog();
 				this.openUrl(object.src);
