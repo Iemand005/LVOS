@@ -2002,7 +2002,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 	var target = this.target;
-	if (frame && frame.contentWindow) frame.contentWindow.postMessage(JSON.stringify({type: type, data: message}), "*");
+	if (frame && frame.contentWindow) frame.contentWindow.postMessage({type: type, data: message}, "*");
 };
 Dialog.prototype.updateTranslation = function () {
 	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
