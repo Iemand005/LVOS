@@ -2113,27 +2113,20 @@ Dialog.prototype.updatePosition = function() {
 	} catch(ex) { console.warn(ex); }
 };
 /**
- * Broadcasts a message about this window to other tabs. Only the active tab
- * broadcasts; background tabs only listen and apply.
- * @param {MessageType} type
- * @param {*} [data]
- */
-Dialog.prototype.broadcastUpdate = function (type, data) {
-	if (!windowManager || !flags.broadcastWindowMoves || windowManager.synchronizing || !document.hasFocus()) return;
-	if (this.id) windowManager.broadcast(type, data, this.id);
-};
-
-/**
  * Broadcasts this window's full DialogState to other tabs through the window manager.
  * open/close, geometry (move/resize), z-order and maximized all report through the
  * single "dialog-state" message so receiving tabs apply the state wholesale.
+ * Only the active tab broadcasts; background tabs only listen and apply
+ * (guarded by focus + synchronizing, so applying never echoes back).
  * @param {Partial<DialogState>} [overrides] Optional state fields to override before sending
  * (e.g. the maximized flag when the class toggle is still deferred by animation).
  */
 Dialog.prototype.broadcastState = function (overrides) {
+	if (!windowManager || !flags.broadcastWindowMoves || windowManager.synchronizing || !document.hasFocus()) return;
+	if (!this.id) return;
 	var state = this.getState();
 	if (overrides) for (var key in overrides) state[key] = overrides[key];
-	this.broadcastUpdate("dialog-state", state);
+	windowManager.broadcast("dialog-state", state, this.id);
 };
 
 /**
