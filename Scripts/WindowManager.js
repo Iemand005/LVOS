@@ -396,6 +396,9 @@ function WindowManager() {
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
 
+	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
+	this.synchronizing = false;
+
 	this.channel = new BroadcastChannel('lvos');
 
 	this.channel.onmessage = function(ev) {
@@ -807,7 +810,7 @@ WindowManager.prototype.broadcast = function(type, data, id) {
 
 /**
  * Applies a broadcast received from another tab. Window geometry updates are
- * applied to the matching local window.
+ * applied to the matching local window without re-broadcasting.
  * @param {MessageType} type
  * @param {*} [data]
  * @param {string} [id]
@@ -826,22 +829,40 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 				dialog = this.windows[id];
 			}
 			if (!dialog) return;
-			dialog.toggleOpen(true);
-			if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
-			if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			this.synchronizing = true;
+			try {
+				// launch() (re)initializes the dialog so it gains a target; a
+				// dialog registered by loadApp() alone has target === null.
+				dialog.launch();
+				if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
+				if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			} finally {
+				this.synchronizing = false;
+			}
 			return;
 		case "window-close":
 			if (!id) return;
 			dialog = this.windows[id];
-			if (dialog) dialog.toggleOpen(false);
+			if (!dialog) return;
+			this.synchronizing = true;
+			try {
+				dialog.toggleOpen(false);
+			} finally {
+				this.synchronizing = false;
+			}
 			return;
 		case "window-move":
 		case "window-size":
 			if (!data || !id) return;
 			dialog = this.windows[id];
 			if (!dialog) return;
-			if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
-			if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			this.synchronizing = true;
+			try {
+				if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
+				if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			} finally {
+				this.synchronizing = false;
+			}
 			return;
 	}
 	messageReceived(type, data, id);
@@ -2102,7 +2123,7 @@ Dialog.prototype.updatePosition = function() {
  * @param {*} [data]
  */
 Dialog.prototype.broadcastUpdate = function (type, data) {
-	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
+	if (!windowManager || !flags.broadcastWindowMoves || windowManager.synchronizing || !document.hasFocus()) return;
 	windowManager.broadcast(type, data, this.id);
 };
 
