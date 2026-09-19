@@ -12,6 +12,11 @@ var dockAppList = document.getElementById("dockapplist");
 /** @type {Application[]} */
 var applications = [
 	{
+		title: "Wallpaper",
+		id: "wallpaper",
+		src: "./Applications/FrostedColours/index.html"
+	},
+	{
 		title: "Calculator",
 		id: "calculator",
 		minWidth: 180,
