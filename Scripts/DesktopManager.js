@@ -40,10 +40,11 @@ var onLoad = function () {
 	}, false);
 
     var wallpaper = DesktopManager.getWallpaper();
-    if (wallpaper) {
+    if (wallpaper instanceof HTMLIFrameElement) {
         wallpaper.onerror = function () {
             if (wallpaper instanceof HTMLIFrameElement) wallpaper.src = "https://iemand005.github.io/FrostedColours/";
         }
+        wallpaper.src = wallpaper.src
     }
 
 	var applist = document.getElementById("applist");
