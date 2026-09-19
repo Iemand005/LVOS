@@ -797,11 +797,8 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	});
 };
 
-WindowManager.prototype.broadcast = function() {
-	this.channel.postMessage({
-		type: "Hi"
-	})
-	LVMessenger.broadcast(this.channel, "window-move", {x: 2});
+WindowManager.prototype.broadcast = function(type, data, id) {
+	LVMessenger.broadcast(this.channel, type, data, id);
 }
 
 //#endregion
