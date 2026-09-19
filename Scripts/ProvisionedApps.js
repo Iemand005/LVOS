@@ -284,7 +284,7 @@ var applications = [
 	{
 		"title": "Speak",
 		id: "speak",
-		src: "Applications/"
+		src: "Applications/Speak/speak.html"
 	}
 ];
 
