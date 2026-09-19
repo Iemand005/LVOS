@@ -1,0 +1,37 @@
+html, body {
+	margin: 0;
+	height: 100%;
+	background: transparent;
+}
+
+body {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+	padding: 12px;
+	box-sizing: border-box;
+}
+
+label {
+	grid-column: 1 / -1;
+}
+
+input[type="text"] {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+button {
+	width: 100%;
+	padding: 6px;
+	font-size: 14px;
+}
+
+input[type="range"] {
+	width: 100%;
+}
+
+output {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
