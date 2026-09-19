@@ -1014,6 +1014,8 @@ function Dialog(object, create) {
 	/** @type {string| null} */
 	this._src = null;
 
+	this._loaded = false;
+
 	this._previousX = 0;
 	this._previousY = 0;
 	this._minWidth = 200;
@@ -1286,6 +1288,8 @@ Dialog.prototype.initWithObject = function(object) {
 		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 	
 	if (this.application && this.application.launch) this.launch();
+
+	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
