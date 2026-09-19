@@ -25,6 +25,7 @@ interface Application {
 	altUrls?: string[];
 	borderless?: boolean;
 	fixed?: boolean;
+	launch?: boolean;
 }
 
 interface DialogState {
