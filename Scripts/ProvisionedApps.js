@@ -12,14 +12,11 @@ var dockAppList = document.getElementById("dockapplist");
 /** @type {Application[]} */
 var applications = [
 	{
-		title: "Wallpaper",
-		id: "wallpaper",
-		src: "./Applications/FrostedColours/indexfuck.html",
-		distSrc: "https://iemand005.github.io/FrostedColours/",
-		borderless: true,
-		fixed: true,
-		launch: true,
-		exists: true,
+		title: "Frosted Colors",
+		id : "colors",
+		distSrc : "https://iemand005.github.io/FrostedColours",
+		src : "Applications/FrostedColours/index.html",
+		wallpaper: true
 	},
 	{
 		title: "Calculator",
@@ -275,13 +272,6 @@ var applications = [
 		distSrc: "https://iemand005.github.io/LVOS",
 		altUrls: ["https://iemand005.github.io/LVOS-dist", "https://localhost:5000/index.html", "https://localhost:5001/index.html", "https://lvos.neocities.org"]
 	},
-	// {
-	// 	title: "Frosted Colors",
-	// 	id : "colors",
-	// 	distSrc : "https://iemand005.github.io/FrostedColours",
-	// 	src : "Applications/FrostedColours/index.html",
-	// 	wallpaper: true
-	// },
 	{
 		"title": "Speak",
 		id: "speak",
