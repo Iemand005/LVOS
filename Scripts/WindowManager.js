@@ -2522,7 +2522,7 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 		}
 	}
 };
-/** @param {string} url */
+/** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
 	var frame = this.getOrCreateFrame(true);
 	if (!frame) return;
@@ -2537,7 +2537,7 @@ Dialog.prototype.openUrl = function(url) {
 
 	if (!this.application) return;
 
-	var baseUrls = [url, this.application.distSrc];
+	var baseUrls = [url || this.src, this.application.distSrc];
 
 	if (!isLocal) baseUrls.reverse();
 
