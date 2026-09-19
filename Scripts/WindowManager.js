@@ -1282,6 +1282,8 @@ Dialog.prototype.initWithObject = function(object) {
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
 		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
+	
+	if (this.application && this.application.launch) this.launch();
 };
 
 Object.defineProperty(Dialog.prototype, "isOpen", {
