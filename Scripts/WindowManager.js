@@ -60,6 +60,7 @@ var flags = {
 	aeroSnap: false,
 	updateRateLimit: isBlink,
 	useDragOverlay: true,
+	broadcastWindowMoves: true,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
@@ -2035,6 +2036,15 @@ Dialog.prototype.updatePosition = function() {
 	} catch(ex) { console.warn(ex); }
 };
 /**
+ * Broadcasts this window's current geometry to other tabs through the window manager.
+ * @param {MessageType} type
+ */
+Dialog.prototype.broadcastState = function (type) {
+	if (!windowManager || !flags.broadcastWindowMoves) return;
+	windowManager.broadcast(type, { x: this.x, y: this.y, width: this.width, height: this.height }, this.id);
+};
+
+/**
  * @param {number} [x]
  * @param {number} [y]
  * @param {boolean} [update]
@@ -2054,6 +2064,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
+	var previousX = this._x, previousY = this._y;
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
 
@@ -2061,6 +2072,8 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (animate) this.animate(this.updatePosition);
 		else this.updatePosition();
 	}
+
+	if (previousX !== this._x || previousY !== this._y) this.broadcastState("window-move");
 };
 /**
  * @param {number} deltaX
@@ -2172,8 +2185,12 @@ Dialog.prototype.resize = function (width, height, direction) {
 	if (typeof width === "undefined" || width === null) width = this.width;
 	if (typeof height === "undefined" || height === null) height = this.height;
 
+	var oldWidth = this.width, oldHeight = this.height;
+
 	if (this._aspectRatioEnabled && this._aspectRatio) this._resizeWithAspect(width, height, direction);
 	else this._resizeFree(width, height, direction);
+
+	if (oldWidth !== this.width || oldHeight !== this.height) this.broadcastState("window-size");
 };
 
 /**
