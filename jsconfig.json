@@ -12,7 +12,8 @@
 		"traceResolution": true,
 		"noImplicitThis": true,
 		"noUncheckedIndexedAccess": true,
-		"ignoreDeprecations": "6.0"
+		"ignoreDeprecations": "6.0",
+		"baseUrl": "./"
 	},
 
 	"ignoreDeprecations": "6.0",

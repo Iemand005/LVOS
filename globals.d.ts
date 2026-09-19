@@ -6,7 +6,7 @@ interface Array<T> {
 interface Application {
 	title: string;
 	id: string;
-	src: FilePath;
+	src: string;
 	fixed?: boolean;
 	scroll?: boolean;
 	hidden?: boolean;
