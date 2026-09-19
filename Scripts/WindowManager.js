@@ -460,15 +460,15 @@ get: function () {
 });
 
 Object.defineProperty(WindowManager.prototype, "state", {
-  get: function () {
-	/** @type {DesktopState} */
-	var state = {};
-	for (var id in this.windows) {
-		var window = this.windows[id];
-		if (window) state[id] = window.getState();
+	get: function () {
+		/** @type {DesktopState} */
+		var state = {};
+		for (var id in this.windows) {
+			var window = this.windows[id];
+			if (window) state[id] = window.getState();
+		}
+		return state;
 	}
-	return state;
-  }
 });
 
 Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
