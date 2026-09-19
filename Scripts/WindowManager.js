@@ -804,13 +804,16 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	});
 };
 
+/**
+ * @param {MessageType} type
+ * @param {*} [data]
+ * @param {string} [id]
+ */
 WindowManager.prototype.broadcast = function(type, data, id) {
 	LVMessenger.broadcast(this.channel, type, data, id);
 }
 
 /**
- * Applies a broadcast received from another tab. Window geometry updates are
- * applied to the matching local window without re-broadcasting.
  * @param {MessageType} type
  * @param {*} [data]
  * @param {string} [id]
