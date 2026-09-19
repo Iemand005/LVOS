@@ -11,6 +11,8 @@
 var canSave = true;
 var hasLocalStorage = false;
 
+var isLocal = location.protocol === "file:" || location.hostname === "localhost";
+
 try {
 	hasLocalStorage = typeof localStorage !== "undefined";
 } catch (ex) {
@@ -186,8 +188,8 @@ AppManager.prototype.setWallpaper = function(id) {
 	wallpaperFrame.onerror = function() {
 
 	};
-	
-	wallpaperFrame.src = app.src;
+
+	wallpaperFrame.src = isLocal ? app.src : app.distSrc || app.src;
 };
 /**
  * @param {string} id
