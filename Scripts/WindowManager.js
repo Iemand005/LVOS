@@ -2568,7 +2568,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 Dialog.prototype.loadFrame = function() {
 	if (!this.application) return;
 	var frame = this.getOrCreateFrame(true);
-	appRegistry.openAppInIFrame(this.application.id, frame);
+	if (frame) appRegistry.openAppInIFrame(this.application.id, frame);
 };
 
 Dialog.prototype.quit = function() {
