@@ -1,7 +1,6 @@
-# LVOS
+# VulpOS
 
-Web OS
-[Open](https://iemand005.github.io/LVOS)
+[Open on Desktop](https://iemand005.github.io/LVOS)
 [Mobile version](https://iemand005.github.io/LVOS/mobile.html)
 
 
