@@ -824,7 +824,7 @@ WindowManager.prototype.broadcast = function(type, data, id) {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	var dialog = id ? this.windows[id] : null;
+	var dialog = this.getWindowById(id);
 	switch (type) {
 		case "window-open":
 			if (!data || !id) return;
