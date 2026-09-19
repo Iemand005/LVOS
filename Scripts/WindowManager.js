@@ -2563,9 +2563,7 @@ Dialog.prototype.openUrl = function(url) {
 	tryNext();
 };
 
-Dialog.prototype.refresh = function() {
-	if (this.frame) this.openUrl(this.frame.src);
-};
+Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.src); };
 
 Dialog.prototype.loadFrame = function() {
 	if (!this.application) return;
