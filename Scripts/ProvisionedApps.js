@@ -280,6 +280,11 @@ var applications = [
 		distSrc : "https://iemand005.github.io/FrostedColours",
 		src : "Applications/FrostedColours/index.html",
 		wallpaper: true
+	},
+	{
+		"title": "Speak",
+		id: "speak",
+		src: "./"
 	}
 ];
 
