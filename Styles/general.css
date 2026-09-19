@@ -99,3 +99,13 @@ input[type="number"] {
     outline: 3px solid LinkText;
   }
 }
+
+/* SEO helper text: invisible to users but crawlable by search engines */
+.seo-description {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}

@@ -14,8 +14,9 @@ var applications = [
 	{
 		title: "Wallpaper",
 		id: "wallpaper",
-		src: "./Applications/FrostedColours/index.html"
-		
+		src: "./Applications/FrostedColours/index.html",
+		borderless: true,
+		fixed: true
 	},
 	{
 		title: "Calculator",
