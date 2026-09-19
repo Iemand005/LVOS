@@ -359,7 +359,7 @@ function dockApp(dialog) {
 }
 
 // function loadApps
-var initApps = function () {
+function initApps() {
 
 	if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
