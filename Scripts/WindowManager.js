@@ -828,7 +828,7 @@ WindowManager.prototype.broadcast = function(type, data, id) {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	if (type !== "dialogState") {
+	if (type !== "dialog-state") {
 		// Non-window-state messages (e.g. iframe framing messages) are still forwarded
 		// to the classic receive path.
 		messageReceived(type, data, id);
@@ -2126,14 +2126,14 @@ Dialog.prototype.broadcastUpdate = function (type, data) {
 /**
  * Broadcasts this window's full DialogState to other tabs through the window manager.
  * open/close, geometry (move/resize), z-order and maximized all report through the
- * single "dialogState" message so receiving tabs apply the state wholesale.
+ * single "dialog-state" message so receiving tabs apply the state wholesale.
  * @param {Partial<DialogState>} [overrides] Optional state fields to override before sending
  * (e.g. the maximized flag when the class toggle is still deferred by animation).
  */
 Dialog.prototype.broadcastState = function (overrides) {
 	var state = this.getState();
 	if (overrides) for (var key in overrides) state[key] = overrides[key];
-	this.broadcastUpdate("dialogState", state);
+	this.broadcastUpdate("dialog-state", state);
 };
 
 /**
