@@ -43,7 +43,7 @@ declare global {
 		GearsFactory?: unknown;
 
 
-		appRegistry?: AppManager;
+		appManager?: AppManager;
 		windowManager?: WindowManager;
 		windows?: Dialog[];
 

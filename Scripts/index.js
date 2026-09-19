@@ -11,10 +11,10 @@ function init() {
 
 	launchpad.init(launchpadElement);
 
-	if (typeof appRegistry !== "undefined") {
-		appRegistry.forEachApp(launchpad.addApp.bind(launchpad));
+	if (typeof appManager !== "undefined") {
+		appManager.forEachApp(launchpad.addApp.bind(launchpad));
 		// launchpad.open();
-		appRegistry.reloadWallpaper();
+		appManager.reloadWallpaper();
 	}
 	if (typeof windowManager !== "undefined" && "windowManager" in window) {
 		windowManager.forEachWindow(function(dialog) {

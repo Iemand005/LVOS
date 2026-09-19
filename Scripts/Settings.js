@@ -362,21 +362,21 @@ var elements = {
 function installAppFromUrl(useProxy) {
 	var url = (elements.installAppUrl && elements.installAppUrl.value || "").trim();
 	if (!url) return;
-	if (typeof appRegistry !== "undefined") {
+	if (typeof appManager !== "undefined") {
 		var app;
 		if (useProxy) {
 			var proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
-			app = appRegistry.createApp(
+			app = appManager.createApp(
 				proxyUrl + url,
 				getSiteName(url),
 				"custom." + getDomain(url),
 				getFaviconUrl(url)
 			);
 		} else {
-			app = appRegistry.createApp(url);
+			app = appManager.createApp(url);
 		}
-		appRegistry.addApp(app);
-		appRegistry.saveApp(app);
+		appManager.addApp(app);
+		appManager.saveApp(app);
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
 		return;
 	}

@@ -819,8 +819,8 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 			if (!data || !id) return;
 			dialog = this.windows[id];
 			if (!dialog) {
-				if (!appRegistry) return;
-				var app = appRegistry.getApp(id);
+				if (!appManager) return;
+				var app = appManager.getApp(id);
 				if (!app) return;
 				this.loadApp(app);
 				dialog = this.windows[id];
@@ -2568,7 +2568,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 Dialog.prototype.loadFrame = function() {
 	if (!this.application) return;
 	var frame = this.getOrCreateFrame(true);
-	if (frame) appRegistry.openAppInIFrame(this.application.id, frame);
+	if (frame) appManager.openAppInIFrame(this.application.id, frame);
 };
 
 Dialog.prototype.quit = function() {
@@ -2760,7 +2760,7 @@ Dialog.prototype.flip = function(enable) {
 	this.toggleClassAnimated("flipped", enable);
 };
 
-Dialog.prototype.makeWallpaper = function() { if (this.id) appRegistry.setWallpaper(this.id); };
+Dialog.prototype.makeWallpaper = function() { if (this.id) appManager.setWallpaper(this.id); };
 
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {

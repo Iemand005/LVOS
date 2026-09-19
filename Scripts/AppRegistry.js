@@ -229,5 +229,5 @@ AppManager.prototype.reloadWallpaper = function() {
 	if (this._wallpaper) this.setWallpaper(this._wallpaper.id)
 };
 
-var appRegistry = new AppManager;
-window.appRegistry = appRegistry;
+var appManager = new AppManager;
+window.appManager = appManager;
