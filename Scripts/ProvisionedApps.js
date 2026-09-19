@@ -14,7 +14,7 @@ var applications = [
 	{
 		title: "Wallpaper",
 		id: "wallpaper",
-		src: "./Applications/FrostedColours/index.html",
+		src: "./Applications/FrostedColours/indexfuck.html",
 		distSrc: "https://iemand005.github.io/FrostedColours/",
 		borderless: true,
 		fixed: true,
