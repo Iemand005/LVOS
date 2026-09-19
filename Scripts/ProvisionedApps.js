@@ -17,7 +17,8 @@ var applications = [
 		src: "./Applications/FrostedColours/index.html",
 		borderless: true,
 		fixed: true,
-		launch: true
+		launch: true,
+		exists: true,
 	},
 	{
 		title: "Calculator",

@@ -1128,7 +1128,8 @@ Dialog.prototype.initWithObject = function(object) {
 			this.close();
 		} else {
 			this.application = object;
-			this.target = createDialog();
+
+			this.target = object.exists ? document.getElementById(object.id) : createDialog();
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
