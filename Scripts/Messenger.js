@@ -10,20 +10,11 @@ function LVMessenger(){
 /**
  * @param {Window | BroadcastChannel} target
  * @param {MessageType} type
- * @param {*} message
+ * @param {*} data
  * @param {string} [id]
  */
-LVMessenger.broadcast = function (target, type, message, id){
-	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
-};
-
-/**
- * @param {MessageType} type
- * @param {*} message
- * @param {string} [id]
- */
-LVMessenger.broadcast = function (type, message, id){
-	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: message, id: id}), "*");
+LVMessenger.broadcast = function (target, type, data, id){
+	if(target && "JSON" in window) target.postMessage(JSON.stringify({type: type, data: data, id: id}), "*");
 };
 
 /**
