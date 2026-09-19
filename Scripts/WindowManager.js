@@ -2111,7 +2111,7 @@ Dialog.prototype.broadcastState = function (type) {
  * @param {boolean} [animate]
  */
 Dialog.prototype.move = function (x, y, update, animate) {
-	if (this.application && this.application.fixed) return;
+	if (this.fixed) return;
 	if (flags.useSkewAnimations) {
 		this._previousX = this.x;
 		this._previousY = this.y;
@@ -2156,7 +2156,7 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
-	if (this.application && this.application.fixed) return;
+	if (this.fixed) return;
 	if (typeof z === "undefined") {
 		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
 	} else this._z = z;
@@ -2244,7 +2244,7 @@ Dialog.prototype.setHeight = function (height, update, animate) {
  * the handle stay put (so resizing up/left/top-left also moves the window).
  */
 Dialog.prototype.resize = function (width, height, direction) {
-	if (this.application && this.application.fixed) return;
+	if (this.fixed) return;
 	if (typeof width === "undefined" || width === null) width = this.width;
 	if (typeof height === "undefined" || height === null) height = this.height;
 
