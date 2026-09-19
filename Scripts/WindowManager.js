@@ -1140,7 +1140,7 @@ Dialog.prototype.initWithObject = function(object) {
 			}
 			this.openUrl(object.src);
 			this.setTitle(object.title);
-			this.fixed = object.fixed;
+			this.fixed = object.fixed || false;
 			this.scroll = object.scroll;
 			if (this.frame) {
 				if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
