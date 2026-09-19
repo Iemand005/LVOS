@@ -8,7 +8,7 @@ function LVMessenger(){
 }
 
 /**
- * @param {Window} target
+ * @param {Window | BroadcastChannel} target
  * @param {MessageType} type
  * @param {*} message
  * @param {string} [id]
