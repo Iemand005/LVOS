@@ -83,4 +83,8 @@ window.addEventListener("load", function(e){
 	});
 
 	setProgress(0, Number(rotation.max));
+
+	LVMessenger.onHostBeingLVOS(function() {
+		document.body.classList.add("transparent");
+	});
 });
