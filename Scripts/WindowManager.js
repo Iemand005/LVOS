@@ -2163,7 +2163,7 @@ Dialog.prototype.updatePosition = function() {
  */
 Dialog.prototype.broadcastUpdate = function (type, data) {
 	if (!windowManager || !flags.broadcastWindowMoves || windowManager.synchronizing || !document.hasFocus()) return;
-	windowManager.broadcast(type, data, this.id);
+	if (this.id) windowManager.broadcast(type, data, this.id);
 };
 
 /**
