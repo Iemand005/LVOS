@@ -987,7 +987,7 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 /**
  * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
- * @param {HTMLElement | Application} object This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ * @param {HTMLElement | Application} [object] This is a dialog element from the HTML structure, or an object that defines the properties of the window.
  * @param {boolean} [create]
  *
  * @constructor
