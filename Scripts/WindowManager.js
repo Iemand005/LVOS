@@ -1802,7 +1802,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 	if (!headers.length) return;
 	var header = headers[0];
 	if (!header) return;
-	this._appIcon = header.getElementsByTagName("img")[0];
+	this._appIcon = header.getElementsByTagName("img")[0] || null;
 
 	var self = this;
 	this._appIcon.onload = function () {
