@@ -26,6 +26,7 @@ interface Application {
 	borderless?: boolean;
 	fixed?: boolean;
 	launch?: boolean;
+	exists?: boolean;
 }
 
 interface DialogState {
