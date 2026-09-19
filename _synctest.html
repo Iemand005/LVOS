@@ -1,0 +1,362 @@
+<!DOCTYPE html>     <!--< Lasses Virtual Operating System >-->
+<html lang="en">         <!--< Lasse Lauwerys © 2023 >-->
+<head>                         <!--< 17/12/2023 >-->
+    
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>LVOS - Virtual Operating System in the Browser | Free Online Web OS</title>
+	<meta name="description" content="LVOS (Lasses Virtual Operating System) is a free virtual operating system that runs entirely in your web browser. Play with apps, switch themes, and explore a full desktop experience on any device. The best free online web OS.">
+	<meta name="keywords" content="LVOS, virtual operating system, web OS, online OS, browser operating system, web desktop, Lasses Virtual Operating System, free web OS, web-based OS, online desktop environment">
+	<meta name="author" content="Lasse Lauwerys">
+	<meta name="robots" content="index, follow">
+	<meta name="color-scheme" content="light dark">
+	<meta name="theme-color" content="#ff8000">
+	<link rel="canonical" href="https://iemand005.github.io/LVOS/">
+	<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+	<link rel="apple-touch-icon" href="./icon-192.png">
+	<link rel="stylesheet" href="./Styles/windows.css">
+	<link rel="stylesheet" href="./Styles/ProvisionedApps.css">
+	<link rel="stylesheet" href="./Styles/desktop.css">
+	<link rel="stylesheet" href="./Styles/general.css">
+	<link rel="stylesheet" href="./Styles/themes.css">
+	<link rel="stylesheet" href="./Styles/Mica.css">
+	<link rel="stylesheet" href="./Styles/launchpad.css">
+	<link rel="manifest" href="./manifest.json">
+
+	<script src="./Scripts/Launchpad.js"></script>
+	<script src="./Scripts/AppRegistry.js" async></script>
+	<script src="Scripts/WindowManager.js"></script>
+	<script src="./Scripts/physics.js" defer></script>
+	<script src="./Scripts/youtube.js" defer></script>
+	<script src="./Scripts/Messenger.js" defer></script>
+	<script nomodule src="./Scripts/CustomPrototypes.js" defer></script>
+	<script src="./Scripts/Reflector.js" defer></script>
+	<script src="./Scripts/DesktopManager.js" defer></script>
+	<script src="./Scripts/Settings.js" defer></script>
+	<script src="./Scripts/ProvisionedApps.js" defer></script> <!-- The script order is very important here! -->
+	<script src="./Scripts/Console.js" defer></script>
+	<script src="./Scripts/FileSystem.js" defer></script>
+	<script src="./Scripts/index.js" defer></script>
+	<script src="./Scripts/NewtonVirus.js" defer></script>
+	<script type="module" src="./Scripts/WebComponents.js"></script>
+
+	<!-- Open Graph / Social embed info (Discord, Facebook, WhatsApp...) -->
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="LVOS" />
+	<meta property="og:url" content="https://iemand005.github.io/LVOS/" />
+	<meta property="og:title" content="LVOS - Virtual Operating System in the Browser" />
+	<meta property="og:description" content="Free virtual operating system that runs entirely in your web browser. Open apps, switch themes, and enjoy a full desktop experience on any device - no install required." />
+	<meta property="og:image" content="https://iemand005.github.io/LVOS/icon-512.png" />
+	<meta property="og:image:alt" content="LVOS - Lasses Virtual Operating System" />
+	<meta property="og:locale" content="en_US" />
+
+	<!-- Twitter / X card -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="LVOS - Virtual Operating System in the Browser" />
+	<meta name="twitter:description" content="Free virtual operating system that runs entirely in your web browser. Open apps, switch themes, and enjoy a full desktop experience - no install required." />
+	<meta name="twitter:image" content="https://iemand005.github.io/LVOS/icon-512.png" />
+	
+	<meta name="google-site-verification" content="CnE4622NqYOZ8z3uVAD5SjyaIhog9wl_aMoTEDQ44UU" />
+
+	<!-- Structured data for search engines -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "WebSite",
+				"@id": "https://iemand005.github.io/LVOS/#website",
+				"url": "https://iemand005.github.io/LVOS/",
+				"name": "LVOS",
+				"alternateName": "Lasses Virtual Operating System",
+				"description": "Free virtual operating system running entirely in your web browser. Open apps, switch themes, and explore an online desktop experience on any device.",
+				"inLanguage": "en",
+				"publisher": {
+					"@id": "https://iemand005.github.io/LVOS/#author"
+				}
+			},
+			{
+				"@type": "WebApplication",
+				"@id": "https://iemand005.github.io/LVOS/#software",
+				"name": "LVOS",
+				"alternateName": "Lasses Virtual Operating System",
+				"url": "https://iemand005.github.io/LVOS/",
+				"applicationCategory": "BrowserApplication",
+				"operatingSystem": "Any (modern web browser)",
+				"browserRequirements": "Requires JavaScript",
+				"isAccessibleForFree": true,
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "EUR"
+				},
+				"description": "Free web-based virtual operating system with a desktop, dock, launchpad, console, settings and installable apps that runs in any modern browser.",
+				"author": {
+					"@id": "https://iemand005.github.io/LVOS/#author"
+				}
+			},
+			{
+				"@type": "Person",
+				"@id": "https://iemand005.github.io/LVOS/#author",
+				"name": "Lasse Lauwerys",
+				"url": "https://github.com/Iemand005"
+			}
+		]
+	}
+	</script>
+
+</head>
+<!-- <body class="blur gnome"> -->
+<!-- <body class="gradient"> -->
+<body class="modern windows gnome desktop">
+	<header><h1>LVOS - Lasses Virtual Operating System</h1></header>
+	<section class="seo-description" aria-label="About LVOS">
+		<h2>Welcome to LVOS, Virtual Operating System</h2>
+		<p>LVOS (Lasses Virtual Operating System) is a free virtual operating system that runs entirely in your web browser. It offers a full web desktop experience with movable windows, a dock, a launchpad, a console and file system, plus apps you can install from any URL. Choose from Windows, macOS and many other themes, and try the online operating system on your desktop, tablet or phone - no download or installation needed.</p>
+	</section>
+	<noscript>
+		<section class="seo-description">
+			<h2>LVOS - Virtual Operating System in the Browser</h2>
+			<p>LVOS (Lasses Virtual Operating System) is a free web-based operating system that runs in your browser. It features a desktop with floating windows, a dock, launchpad, console command line, file system, and installable web apps. Multiple themes are included such as Windows, Windows 95, Windows 10, Windows 11, macOS, Mica, Modern and Gnome. JavaScript is required to run this web OS.</p>
+		</section>
+	</noscript>
+	<main>
+
+        <section id="desktop">
+			<div id="desktop-area">
+				<section id="window-section">
+					<!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
+					<div id="wallpaper">
+						<iframe id="wallpaper-frame" src="./Applications/FrostedColours/index.html" frameborder="0"></iframe>
+					</div>
+					 <article class="folder-content">
+
+					</article>
+					<div class="context-menu" id="context-menu">
+
+					</div>
+					<!-- <article id="dockcontaner">
+
+					</article> -->
+
+
+					<template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
+						<div class="window" is="window-div">
+							<content class=""><!-- Visual Sudio 2013 suggested me to use content instead here to make it semantic. This places the dialog inside the shadow DOM. I don't know if it's proper HTML 5 or HTML 4 but I used it so I'm keeping it the way it is for now. -->
+								<!-- I was forced to add this extra wrapping article to work around a bug in EdgeHTML 18 that causes the backdrop filter to shift by the amount of pixels the box-shadow blur size has minus the top and left value. I don't know if it's a known bug but the browser is no longer officially supported. I will be adding this tag anyways but it's not necessary for functionality of the application. -->
+								<header><!-- This header identifies the most near ancestor (dialog). In the header are the title and the navigation buttons. -->
+									<img alt="App icon">
+									<h1></h1><!-- Title of the window and also identifier of the header and dialog. -->
+									<div class="window-buttons"><!-- Section used for thematic grouping of content. The grouping is necessary to keep the buttons together without needing extra unstable css tricks. -->
+										<button disabled><svg viewBox="0 0 10 1" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10v1H0z"></path></svg></button>
+										<button disabled><svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 0v10h10V0H0zm1 1h8v8H1V1z"></path></svg></button>
+										<button disabled><svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M10.2.7L9.5 0 5.1 4.4.7 0 0 .7l4.4 4.4L0 9.5l.7.7 4.4-4.4 4.4 4.4.7-.7-4.4-4.4z"></path></svg></button><!-- The navigation button styling is completely taken care of by css. -->
+									</div>
+								</header>
+								<article><!-- The article tag is used for an interactive widget, which can range from a hard-coded app to an iframe containing an external website. -->
+									<!-- This is the client area! Here the application itself should be placed. -->
+								</article><!-- Adding a wrapper aound this allows the corners inside the window to be rounded too, in a similar way done on Windows 11. We can do it without wrapping with overflow hidden but that results in the scroll bars being rendered over top which looks ugly. Rounded corners also appear to break the experimental blur support on EdgeHTML 18 when a scrollbar appears as the blur layer then gets rendered to the screen after the border causing it to show a jagged inside lining of the quarter circle. I can't find any mentions of the bug online as it's a weird edge case (pun intended). Turns out, Edge Legacy is not the only browser that has problems here. Chrome has a very similar bug but it disappears upon resize (tested in Chrome 118), that would mean Edge Chromium, Opera, Brave and all other Chromium browsers likely have this weird effect too. I will thus not be implementing this! -->
+								<!-- This is the non-client area! -->
+							</content><!-- This unnecessary wrapping that is only here for EdgeHTML and WebView 1 compatibility. -->
+							<span class="backdrop-clip">
+								<div class="backdrop-filter"></div>
+							</span>
+							<!-- This is also the non-client area. Primarily reserved for the borders. -->
+						</div>
+					</template><!-- The client area in graphical user interface design refers to the area of the window where the user's content should be placed. The non-client area is for managing the window itself. -->
+
+					<div class="window" id="console">
+						<content>
+							<header>
+								<h1>Console</h1>
+								<section>
+									<button disabled>🡕</button>
+									<button disabled>❐</button>
+									<button disabled>✕</button>
+								</section>
+							</header>
+							<article>
+								<form action="">
+									<input type="text" name="input" id="stdin">
+									<output name="stdout" id="stdout"></output>
+								</form>
+							</article>
+						</content>
+					</div>
+					<section>
+						<form action="" id="applist"></form>
+					</section>
+				</section>
+				<div id="dock-area">
+					<section id="dock">
+						<section id="reflection"></section>
+					</section>
+					<section id="dockapplist"></section>
+				</div>
+			</div>
+            <section id="metro">
+                <!-- <iframe src="mobile.html" frameborder="0"></iframe> -->
+            </section>
+        </section>
+        <aside id="charms">
+			<h1>Settings</h1>
+            <form id="settings">
+				<label for="theme">Theme: </label>
+                <select name="theme" id="theme">
+                    <option value="">None</option>
+                    <option value="default-theme">Default</option>
+                    <option value="blur">Blur</option>
+                    <option value="flippy">Flippy</option>
+                    <option value="glass">Glass (Blur)</option>
+                    <option value="gnome">Gnome</option>
+                    <option value="mica">Mica</option>
+                    <option value="modern">Modern</option>
+                    <option value="mac-os">macOS</option>
+                    <option value="modern-blur">Modern Blur</option>
+                    <option value="windows">Windows</option>
+                    <option value="windows-10">Windows 10</option>
+                    <option value="windows-11">Windows 11</option>
+                    <option value="windows-95">Windows 95</option>
+                </select>
+                <label for="color-debug">Color debug</label>
+                <input type="checkbox" name="color-debug" id="color-debug">
+                <label for="squircles">Squircles</label>
+                <input type="checkbox" name="squircles" id="squircles">
+                <label for="no-blur-fullscreen">Disable blur on fullscreen</label>
+                <input type="checkbox" name="no-blur-fullscreen" id="no-blur-fullscreen" checked>
+                <label for="color">Color: </label>
+                <input type="color" name="color" id="color">
+                <input type="button" id="resetcolor" value="Reset color">
+                <label for="accent">Accent color: </label>
+                <input type="color" name="accent" id="accent">
+                <input type="button" id="resetaccent" value="Reset accent">
+                <label for="border">Border size: </label>
+                <input type="range" value="0" min="0" max="50" step="0.01" name="borderslider" id="border">
+                <label for="install-app-url">Install app from URL: </label>
+                <input type="url" name="install-app-url" id="install-app-url" placeholder="https://example.com" autocomplete="off">
+                <button type="button" id="install-app-button">Install</button>
+                <button type="button" id="install-app-proxied-button">Install proxied</button>
+                <label for="blurtoggle">Blur: <input type="checkbox" id="blurtoggle" value="toggleblur"></label>
+                <label for="reflectiontoggle">Reflections: <input type="checkbox" id="reflectiontoggle" value="togglereflections"></label>
+                <input type="file" name="wallpaper-input" id="wallpaper-input">
+                <ul id="flag-settings"></ul>
+            </form>
+        </aside>
+	<section id="overlay" class=""></section>
+
+	<section id="launchpad"></section>
+        <svg width="0" height="0">
+            <filter id="firefox-glass-simple">
+                <feTurbulence id="noise" type="fractalNoise" result="noise" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
+
+                <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="100"></feDisplacementMap>
+            </filter>
+        </svg>
+        
+        <svg class="filter" xmlns="http://www.w3.org/2000/svg" style="touch-action: none;">
+        <defs style="touch-action: none;">
+          <filter id="glass" color-interpolation-filters="sRGB" style="touch-action: none;">
+			<feTurbulence id="noise" type="fractalNoise" result="map" numOctaves="2" seed="69" baseFrequency="0.01 0.01"></feTurbulence>
+
+            <feDisplacementMap in="SourceGraphic" in2="map" id="redchannel" xChannelSelector="R" yChannelSelector="B" result="dispRed" scale="30" style="touch-action: none;"></feDisplacementMap>
+            <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0" result="red" style="touch-action: none;"></feColorMatrix>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="greenchannel" xChannelSelector="R" yChannelSelector="B" result="dispGreen" scale="60" style="touch-action: none;"></feDisplacementMap>
+            <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0
+                      0 1 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0" result="green" style="touch-action: none;"></feColorMatrix>
+            <feDisplacementMap in="SourceGraphic" in2="map" id="bluechannel" xChannelSelector="R" yChannelSelector="B" result="dispBlue" scale="80" style="touch-action: none;"></feDisplacementMap>
+            <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 1 0 0
+                      0 0 0 1 0" result="blue" style="touch-action: none;"></feColorMatrix>
+            <feBlend in="red" in2="green" mode="screen" result="rg" style="touch-action: none;"></feBlend>
+            <feBlend in="rg" in2="blue" mode="screen" result="output" style="touch-action: none;"></feBlend>
+            <feGaussianBlur in="output" stdDeviation="0" style="touch-action: none;"></feGaussianBlur>
+          </filter>
+        </defs>
+      </svg>
+    </main>
+    <footer>2026 © Lasse Lauwerys - LVOS, the free virtual operating system and web OS running in your browser.</footer>
+<script>
+(function () {
+	var testChannel = null;
+	var received = [];
+	var seq = 0;
+	function slog(msg) {
+		seq++;
+		var div = document.createElement("div");
+		div.className = "trace";
+		div.textContent = "#" + seq + " TRACE " + msg;
+		document.body.appendChild(div);
+	}
+	function sreport(name, ok, detail) {
+		seq++;
+		var div = document.createElement("div");
+		div.className = ok ? "test-pass" : "test-fail";
+		div.textContent = "#" + seq + " " + (ok ? "PASS " : "FAIL ") + name + (detail ? " :: " + detail : "");
+		document.body.appendChild(div);
+	}
+
+	window.addEventListener("load", function () {
+		setTimeout(function () {
+			var wm = window.windowManager;
+			if (!wm) { sreport("init", false, "no windowManager"); return; }
+			var origToggleMax = Dialog.prototype.toggleMaximized;
+			Dialog.prototype.toggleMaximized = function (enable) {
+				slog("toggleMaximized(" + enable + ") pre=" + this.maximized");
+				var r = origToggleMax.call(this, enable);
+				slog("toggleMaximized done, maximized=" + this.maximized");
+				return r;
+			};
+			var origHandle = wm.handleBroadcast.bind(wm);
+			wm.handleBroadcast = function (type, data, id) {
+				slog("== handleBroadcast(" + type + "," + id + ") ==");
+				return origHandle(type, data, id);
+			};
+
+			testChannel = new BroadcastChannel("lvos");
+			testChannel.onmessage = function (ev) {
+				var d = ev.data;
+				if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { return; } }
+				if (d && typeof d === "object" && typeof d.type === "string")
+					received.push({ type: d.type, id: d.id, maximized: d.maximized });
+				slog("channel saw: " + d.type + " id=" + d.id + " maximized=" + d.maximized);
+			};
+
+			var calc = wm.windows["calculator"];
+			if (!calc) { sreport("init", false, "no calculator window"); return; }
+			slog("calc registered, target=" + !!calc.target);
+
+			var deliver = function (payload) {
+				received.length = 0;
+				wm.channel.onmessage({ data: JSON.stringify(payload) });
+			};
+
+			// Open from another tab (never launched here).
+			deliver({ type: "window-open", data: {}, id: "calculator" });
+			sreport("recv-open", calc._stateOpen === true && !!calc.target, "stateOpen=" + calc._stateOpen + " target=" + !!calc.target);
+
+			// RECEIVE maximize -> the window must become maximized locally.
+			deliver({ type: "window-maximize", data: { maximized: true }, id: "calculator" });
+			sreport("recv-maximize-on", calc.maximized === true, "maximized=" + calc.maximized);
+
+			// RECEIVE unmaximize.
+			deliver({ type: "window-maximize", data: { maximized: false }, id: "calculator" });
+			sreport("recv-maximize-off", calc.maximized === false, "maximized=" + calc.maximized);
+
+			// SEND: local user action must broadcast.
+			deliver({ type: "window-maximize", data: { maximized: false }, id: "calculator" });
+			calc.toggleMaximized(true);
+			sreport("send-maximize", received.some(function (x) { return x.type === "window-maximize" && x.maximized === true; }), "saw=" + received.length);
+
+			document.body.setAttribute("data-synctest-done", "true");
+		}, 700);
+	}, false);
+})();
+</script></body>
+</html>

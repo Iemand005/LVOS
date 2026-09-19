@@ -840,6 +840,28 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 				this.synchronizing = false;
 			}
 			return;
+		case "window-maximize":
+			if (!data || !id) return;
+			dialog = this.windows[id];
+			if (!dialog) {
+				if (!appManager) return;
+				var app = appManager.getApp(id);
+				if (!app) return;
+				this.loadApp(app);
+				dialog = this.windows[id];
+			}
+			if (!dialog) return;
+			this.synchronizing = true;
+			try {
+				// launch() (re)initializes the dialog so it gains a target (a dialog
+				// registered by loadApp() alone has target === null), then apply the
+				// maximized state; each tab maximizes to its own viewport.
+				dialog.launch();
+				dialog.toggleMaximized(data.maximized === true);
+			} finally {
+				this.synchronizing = false;
+			}
+			return;
 		case "window-close":
 			if (!id) return;
 			dialog = this.windows[id];
@@ -1945,6 +1967,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
 
+	if (enable == null) enable = !this.maximized;
 	if (this.maximized === enable) return;
 	if (!this.target) return;
 
@@ -1952,6 +1975,9 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var content = this.content;
 
 	this.setZ();
+
+	// Only the active tab broadcasts; background tabs apply (guarded by focus + synchronizing).
+	this.broadcastUpdate("window-maximize", { maximized: enable === true });
 
 	this.maximizeAnimations++;
 	if (flags.useViewTransitionMaximize && this.windowTarget)
