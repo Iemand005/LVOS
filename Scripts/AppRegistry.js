@@ -183,6 +183,10 @@ AppManager.prototype.setWallpaper = function(id) {
 	var app = this.getApp(id);
 	if (!app) return;
 
+	wallpaperFrame.onerror = function() {
+
+	};
+	
 	wallpaperFrame.src = app.src;
 };
 /**
