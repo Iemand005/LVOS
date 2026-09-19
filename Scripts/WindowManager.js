@@ -1344,7 +1344,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 
 	windowManager.saveState();
 	self.reportState();
-	if (wasOpen !== this._stateOpen) this.broadcastState();
+	if (wasOpen !== this._stateOpen) this.broadcastState({ open: this._stateOpen === true });
 };
 /**
  * @param {boolean} [create]
@@ -2113,20 +2113,17 @@ Dialog.prototype.updatePosition = function() {
 	} catch(ex) { console.warn(ex); }
 };
 /**
- * Broadcasts this window's full DialogState to other tabs through the window manager.
- * open/close, geometry (move/resize), z-order and maximized all report through the
- * single "dialog-state" message so receiving tabs apply the state wholesale.
- * Only the active tab broadcasts; background tabs only listen and apply
- * (guarded by focus + synchronizing, so applying never echoes back).
- * @param {Partial<DialogState>} [overrides] Optional state fields to override before sending
- * (e.g. the maximized flag when the class toggle is still deferred by animation).
+ * Broadcasts this window's state change to other tabs through the window manager.
+ * When a partial is given, exactly those changed fields are sent (a move emits only
+ * {x,y}, maximize only {maximized}, etc.); when omitted, the full DialogState snapshot
+ * is sent. Only the active tab broadcasts; background tabs only listen and apply
+ * (guarded by focus, so applying never echoes back).
+ * @param {Partial<DialogState>} [overrides] The state fields that actually changed.
  */
 Dialog.prototype.broadcastState = function (overrides) {
 	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
 	if (!this.id) return;
-	var state = this.getState();
-	if (overrides) for (var key in overrides) state[key] = overrides[key];
-	windowManager.broadcast("dialog-state", state, this.id);
+	windowManager.broadcast("dialog-state", overrides || this.getState(), this.id);
 };
 
 /**
@@ -2159,7 +2156,12 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		else this.updatePosition();
 	}
 
-	if (previousX !== this._x || previousY !== this._y) this.broadcastState();
+	if (previousX !== this._x || previousY !== this._y) {
+		var state = {};
+		if (previousX !== this._x) state.x = this.x;
+		if (previousY !== this._y) state.y = this.y;
+		this.broadcastState(state);
+	}
 };
 /**
  * @param {number} deltaX
@@ -2182,11 +2184,13 @@ Dialog.prototype.moveToCenter = function(centerX, centerY) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (this.fixed) return;
+	var previous = this._z;
 	if (typeof z === "undefined") {
 		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
 	} else this._z = z;
 	if (isElement(this.target))
 		this.target.style.zIndex = String(this._z);
+	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
 Dialog.prototype.updateWidth = function () {
 	if (!this.target) return;
@@ -2278,7 +2282,12 @@ Dialog.prototype.resize = function (width, height, direction) {
 	if (this._aspectRatioEnabled && this._aspectRatio) this._resizeWithAspect(width, height, direction);
 	else this._resizeFree(width, height, direction);
 
-	if (oldWidth !== this.width || oldHeight !== this.height) this.broadcastState();
+	if (oldWidth !== this.width || oldHeight !== this.height) {
+		var state = {};
+		if (oldWidth !== this.width) state.width = this.width;
+		if (oldHeight !== this.height) state.height = this.height;
+		this.broadcastState(state);
+	}
 };
 
 /**
@@ -2801,15 +2810,25 @@ Dialog.prototype.getState = function() {
 	};
 };
 
-/** @param {DialogState} state */
+/**
+ * Applies a (possibly partial) DialogState. Only the fields present in the state are
+ * touched, so a geometry-only broadcast never disturbs open/maximized/title and vice
+ * versa. Used both for cross-tab dialog-state broadcasts and local restore.
+ * @param {Partial<DialogState>} state
+ */
 Dialog.prototype.loadState = function(state) {
-	if (state.open) this.launch();
-	else if (this.target) this.toggleOpen(false);
-	this.title = state.title;
-	this.move(state.x, state.y);
-	this.setZ(state.z);
-	this.resize(state.width, state.height);
-	this.toggleMaximized(state.maximized);
+	if (!state) return;
+	if ("open" in state) {
+		if (state.open) this.launch();
+		else if (this.target) this.toggleOpen(false);
+	}
+	if ("title" in state) this.title = state.title;
+	if ("x" in state || "y" in state)
+		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y);
+	if ("z" in state && typeof state.z === "number") this.setZ(state.z);
+	if ("width" in state || "height" in state)
+		this.resize("width" in state ? state.width : this.width, "height" in state ? state.height : this.height);
+	if ("maximized" in state) this.toggleMaximized(state.maximized === true);
 };
 
 Dialog.prototype.exportDialogBodyToMetro = function() {
