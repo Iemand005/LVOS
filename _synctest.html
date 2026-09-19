@@ -308,9 +308,9 @@
 			if (!wm) { sreport("init", false, "no windowManager"); return; }
 			var origToggleMax = Dialog.prototype.toggleMaximized;
 			Dialog.prototype.toggleMaximized = function (enable) {
-				slog("toggleMaximized(" + enable + ") pre=" + this.maximized");
+				slog("toggleMaximized(" + enable + ") pre=" + this.maximized);
 				var r = origToggleMax.call(this, enable);
-				slog("toggleMaximized done, maximized=" + this.maximized");
+				slog("toggleMaximized done, maximized=" + this.maximized);
 				return r;
 			};
 			var origHandle = wm.handleBroadcast.bind(wm);
