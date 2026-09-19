@@ -113,7 +113,7 @@ var onLoad = function () {
 		};
 		
 		// if (supportsPointer)
-			tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
+        tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
 			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -124,7 +124,7 @@ var onLoad = function () {
 			
 			// translateElement(selector, ev.clientX, ev.clientY);
 			selector.className = "selector";
-			tingeling.appendChild(selector);
+			if (tingeling) tingeling.appendChild(selector);
 
 			clickOffset.toggleDragEventHandler(true);
 			// document.body.hasPointerCapture
