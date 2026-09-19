@@ -13,7 +13,10 @@
 		"noImplicitThis": true,
 		"noUncheckedIndexedAccess": true,
 		"ignoreDeprecations": "6.0",
-		"baseUrl": "./"
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		}
 	},
 
 	"ignoreDeprecations": "6.0",
