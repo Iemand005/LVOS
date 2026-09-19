@@ -39,13 +39,13 @@ var onLoad = function () {
         contextMenu.close();
 	}, false);
 
-    var wallpaper = window.windows["wallpaper"];
-    if (wallpaper instanceof HTMLIFrameElement) {
-        wallpaper.onerror = function () {
-            if (wallpaper instanceof HTMLIFrameElement) wallpaper.src = "https://iemand005.github.io/FrostedColours/";
-        }
-        wallpaper.src = wallpaper.src
-    }
+    // var wallpaper = window.windows["wallpaper"];
+    // if (wallpaper instanceof HTMLIFrameElement) {
+    //     wallpaper.onerror = function () {
+    //         if (wallpaper instanceof HTMLIFrameElement) wallpaper.src = "https://iemand005.github.io/FrostedColours/";
+    //     }
+    //     wallpaper.src = wallpaper.src
+    // }
 
 	var applist = document.getElementById("applist");
 
