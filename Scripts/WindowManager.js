@@ -1610,6 +1610,10 @@ Object.defineProperty(Dialog.prototype, "maximized", {
 	set: function(maximized) { this.toggleMaximized(maximized); }
 });
 
+Object.defineProperty(Dialog.prototype, "fixed", {
+	get: function() { returh this.application && this.application.fixed || false; }
+})
+
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
