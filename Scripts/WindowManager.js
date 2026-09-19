@@ -1040,6 +1040,7 @@ function Dialog(object, create) {
 	this.maximizeAnimations = 0;
 
 	// this._isLoa
+	this.fixed = false;
 
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
