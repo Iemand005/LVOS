@@ -396,11 +396,15 @@ function WindowManager() {
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
 
+	this.synchronizing = false;
+
 	this.channel = new BroadcastChannel('lvos');
 
 	this.channel.onmessage = function(ev) {
 		var data = ev.data;
+		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
 		console.log("Got a broadcast from another tab!", data);
+		windowManager.handleBroadcast(data.type, data.data, data.id);
 	};
 
 	/** @type {WindowManager} */
@@ -800,6 +804,30 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 
 WindowManager.prototype.broadcast = function(type, data, id) {
 	LVMessenger.broadcast(this.channel, type, data, id);
+}
+
+/**
+ * Applies a broadcast received from another tab. Window geometry updates are
+ * applied to the matching local window without re-broadcasting.
+ * @param {MessageType} type
+ * @param {*} [data]
+ * @param {string} [id]
+ */
+WindowManager.prototype.handleBroadcast = function(type, data, id) {
+	if (type === "window-move" || type === "window-size") {
+		if (!data || !id) return;
+		var dialog = this.windows[id];
+		if (!dialog) return;
+		this.synchronizing = true;
+		try {
+			if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
+			if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+		} finally {
+			this.synchronizing = false;
+		}
+		return;
+	}
+	messageReceived(type, data, id);
 }
 
 //#endregion
@@ -2040,7 +2068,7 @@ Dialog.prototype.updatePosition = function() {
  * @param {MessageType} type
  */
 Dialog.prototype.broadcastState = function (type) {
-	if (!windowManager || !flags.broadcastWindowMoves) return;
+	if (!windowManager || windowManager.synchronizing || !flags.broadcastWindowMoves) return;
 	windowManager.broadcast(type, { x: this.x, y: this.y, width: this.width, height: this.height }, this.id);
 };
 
