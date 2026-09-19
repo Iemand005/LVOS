@@ -23,6 +23,8 @@ interface Application {
 	accentColor?: string;
 	distSrc?: string;
 	altUrls?: string[];
+	borderless?: boolean;
+	fixed?: boolean;
 }
 
 interface DialogState {
