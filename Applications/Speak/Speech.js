@@ -1,10 +1,10 @@
-function Speach() {
+function Speech() {
 	this.volume = 1;
 	this.speed = 1;
 	this.pitch = 1;
 }
 
-Speach.prototype.say = function(msg) {
+Speech.prototype.say = function(msg) {
 	var utterance = new SpeechSynthesisUtterance(msg);
 	utterance.rate = this.speed;
 	utterance.volume = this.volume;
@@ -12,4 +12,4 @@ Speach.prototype.say = function(msg) {
 	speechSynthesis.speak(utterance);
 };
 
-var speech = new Speach();
+var speech = new Speech;
