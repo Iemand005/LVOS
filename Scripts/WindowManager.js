@@ -806,7 +806,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 
 /** @param {string} [id] */
 WindowManager.prototype.getWindowById = function(id) {
-
+	return id ? this.windows[id] : null;
 };
 
 /**
