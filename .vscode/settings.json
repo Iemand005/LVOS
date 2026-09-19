@@ -57,6 +57,7 @@
 	"js/ts.suggest.paths": false,
 	"path-intellisense.mappings": {
 		"/": "${workspaceFolder}",
+		"./": "${workspaceFolder}",
         "Applications": "${workspaceFolder}/Applications"
 	}
 }
