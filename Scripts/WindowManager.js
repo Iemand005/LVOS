@@ -845,7 +845,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		dialog = this.windows[id];
 	}
 	if (!dialog) return;
-	this.synchronizing = true;
+	this.synchronizing = false;
 	try {
 		// Full-state apply: covers open/close, geometry (move/resize), z-order and
 		// maximized. loadState() (re)initializes the dialog so it gains a target
@@ -853,7 +853,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		// tabs never re-broadcast while synchronizing.
 		dialog.loadState(data);
 	} finally {
-		this.synchronizing = false;
+		// this.synchronizing = false;
 	}
 }
 
