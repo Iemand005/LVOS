@@ -369,9 +369,9 @@ var initApps = function () {
 		
 		var windows = windowManager.windows;
 		if (dockAppList) {
-			dockApp(windows.browser);
-			dockApp(windows.console);
-			dockApp(windows.music);
+			if (windows.browser) dockApp(windows.browser);
+			if (windows.console) dockApp(windows.console);
+			if (windows.music) dockApp(windows.music);
 		}
 	}
 };
