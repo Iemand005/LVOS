@@ -828,76 +828,33 @@ WindowManager.prototype.broadcast = function(type, data, id) {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	var dialog = this.getWindowById(id);
-	switch (type) {
-		case "window-open":
-			if (!data || !id) return;
-			if (!dialog) {
-				if (!appManager) return;
-				var app = appManager.getApp(id);
-				if (!app) return;
-				this.loadApp(app);
-				dialog = this.windows[id];
-			}
-			if (!dialog) return;
-			this.synchronizing = true;
-			try {
-				// launch() (re)initializes the dialog so it gains a target; a
-				// dialog registered by loadApp() alone has target === null.
-				dialog.launch();
-				if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
-				if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
-			} finally {
-				this.synchronizing = false;
-			}
-			return;
-		case "window-maximize":
-			if (!data || !id) return;
-			if (!dialog) {
-				if (!appManager) return;
-				var app = appManager.getApp(id);
-				if (!app) return;
-				this.loadApp(app);
-				dialog = this.windows[id];
-			}
-			if (!dialog) return;
-			this.synchronizing = true;
-			try {
-				// launch() (re)initializes the dialog so it gains a target (a dialog
-				// registered by loadApp() alone has target === null), then apply the
-				// maximized state; each tab maximizes to its own viewport.
-				dialog.launch();
-				dialog.toggleMaximized(data.maximized === true);
-			} finally {
-				this.synchronizing = false;
-			}
-			return;
-		case "window-close":
-			if (!id) return;
-			dialog = this.windows[id];
-			if (!dialog) return;
-			this.synchronizing = true;
-			try {
-				dialog.toggleOpen(false);
-			} finally {
-				this.synchronizing = false;
-			}
-			return;
-		case "window-move":
-		case "window-size":
-			if (!data || !id) return;
-			dialog = this.windows[id];
-			if (!dialog) return;
-			this.synchronizing = true;
-			try {
-				if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
-				if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
-			} finally {
-				this.synchronizing = false;
-			}
-			return;
+	if (type !== "dialogState") {
+		// Non-window-state messages (e.g. iframe framing messages) are still forwarded
+		// to the classic receive path.
+		messageReceived(type, data, id);
+		return;
 	}
-	messageReceived(type, data, id);
+	if (!data || !id) return;
+	/** @type {Dialog} */
+	var dialog = this.getWindowById(id);
+	if (!dialog) {
+		if (!appManager) return;
+		var app = appManager.getApp(id);
+		if (!app) return;
+		this.loadApp(app);
+		dialog = this.windows[id];
+	}
+	if (!dialog) return;
+	this.synchronizing = true;
+	try {
+		// Full-state apply: covers open/close, geometry (move/resize), z-order and
+		// maximized. loadState() (re)initializes the dialog so it gains a target
+		// (a dialog registered by loadApp() alone has target === null); background
+		// tabs never re-broadcast while synchronizing.
+		dialog.loadState(data);
+	} finally {
+		this.synchronizing = false;
+	}
 }
 
 //#endregion
@@ -1387,7 +1344,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 
 	windowManager.saveState();
 	self.reportState();
-	if (wasOpen !== this._stateOpen) this.broadcastUpdate(forceOpen ? "window-open" : "window-close", { x: this.x, y: this.y, width: this.width, height: this.height });
+	if (wasOpen !== this._stateOpen) this.broadcastState();
 };
 /**
  * @param {boolean} [create]
@@ -1990,7 +1947,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.setZ();
 
 	// Only the active tab broadcasts; background tabs apply (guarded by focus + synchronizing).
-	this.broadcastUpdate("window-maximize", { maximized: enable === true });
+	this.broadcastState({ maximized: enable === true });
 
 	this.maximizeAnimations++;
 	if (flags.useViewTransitionMaximize && this.windowTarget)
@@ -2167,11 +2124,16 @@ Dialog.prototype.broadcastUpdate = function (type, data) {
 };
 
 /**
- * Broadcasts this window's current geometry to other tabs through the window manager.
- * @param {MessageType} type
+ * Broadcasts this window's full DialogState to other tabs through the window manager.
+ * open/close, geometry (move/resize), z-order and maximized all report through the
+ * single "dialogState" message so receiving tabs apply the state wholesale.
+ * @param {Partial<DialogState>} [overrides] Optional state fields to override before sending
+ * (e.g. the maximized flag when the class toggle is still deferred by animation).
  */
-Dialog.prototype.broadcastState = function (type) {
-	this.broadcastUpdate(type, { x: this.x, y: this.y, width: this.width, height: this.height });
+Dialog.prototype.broadcastState = function (overrides) {
+	var state = this.getState();
+	if (overrides) for (var key in overrides) state[key] = overrides[key];
+	this.broadcastUpdate("dialogState", state);
 };
 
 /**
@@ -2204,7 +2166,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		else this.updatePosition();
 	}
 
-	if (previousX !== this._x || previousY !== this._y) this.broadcastState("window-move");
+	if (previousX !== this._x || previousY !== this._y) this.broadcastState();
 };
 /**
  * @param {number} deltaX
@@ -2323,7 +2285,7 @@ Dialog.prototype.resize = function (width, height, direction) {
 	if (this._aspectRatioEnabled && this._aspectRatio) this._resizeWithAspect(width, height, direction);
 	else this._resizeFree(width, height, direction);
 
-	if (oldWidth !== this.width || oldHeight !== this.height) this.broadcastState("window-size");
+	if (oldWidth !== this.width || oldHeight !== this.height) this.broadcastState();
 };
 
 /**
@@ -2849,11 +2811,11 @@ Dialog.prototype.getState = function() {
 /** @param {DialogState} state */
 Dialog.prototype.loadState = function(state) {
 	if (state.open) this.launch();
+	else if (this.target) this.toggleOpen(false);
 	this.title = state.title;
 	this.move(state.x, state.y);
 	this.setZ(state.z);
 	this.resize(state.width, state.height);
-	console.log(state.title, "window loaded width: ", state.width, state.height);
 	this.toggleMaximized(state.maximized);
 };
 
