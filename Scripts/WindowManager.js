@@ -445,18 +445,18 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 });
 
 Object.defineProperty(WindowManager.prototype, "windowStates", {
-get: function () {
-	if (!this._windowStates && localStorage)
-	try {
-		var string = localStorage.getItem("windowState");
-		if (string === null) return null;
+	get: function () {
+		if (!this._windowStates && localStorage)
+		try {
+			var string = localStorage.getItem("windowState");
+			if (string === null) return null;
 
-		this._windowStates = JSON.parse(string);
-	} catch (ex) {
-		if (ex instanceof Error) console.error(ex.message);
+			this._windowStates = JSON.parse(string);
+		} catch (ex) {
+			if (ex instanceof Error) console.error(ex.message);
+		}
+		return this._windowStates;
 	}
-	return this._windowStates;
-}
 });
 
 Object.defineProperty(WindowManager.prototype, "state", {
