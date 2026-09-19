@@ -813,13 +813,36 @@ WindowManager.prototype.broadcast = function(type, data, id) {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	if (type === "window-move" || type === "window-size") {
-		if (!data || !id) return;
-		var dialog = this.windows[id];
-		if (!dialog) return;
-		if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
-		if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
-		return;
+	var dialog;
+	switch (type) {
+		case "window-open":
+			if (!data || !id) return;
+			dialog = this.windows[id];
+			if (!dialog) {
+				if (!appRegistry) return;
+				var app = appRegistry.getApp(id);
+				if (!app) return;
+				this.loadApp(app);
+				dialog = this.windows[id];
+			}
+			if (!dialog) return;
+			dialog.toggleOpen(true);
+			if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
+			if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			return;
+		case "window-close":
+			if (!id) return;
+			dialog = this.windows[id];
+			if (dialog) dialog.toggleOpen(false);
+			return;
+		case "window-move":
+		case "window-size":
+			if (!data || !id) return;
+			dialog = this.windows[id];
+			if (!dialog) return;
+			if (typeof data.x === "number" || typeof data.y === "number") dialog.move(data.x, data.y);
+			if (typeof data.width === "number" || typeof data.height === "number") dialog.resize(data.width, data.height);
+			return;
 	}
 	messageReceived(type, data, id);
 }
@@ -1280,6 +1303,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	var target = this.target;
 	if (!target) return;
 	var self = this;
+	var wasOpen = this._stateOpen;
 	this._stateOpen = forceOpen || false;
 	this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
@@ -1296,7 +1320,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 
 	windowManager.saveState();
 	self.reportState();
-
+	if (wasOpen !== this._stateOpen) this.broadcastUpdate(forceOpen ? "window-open" : "window-close", { x: this.x, y: this.y, width: this.width, height: this.height });
 };
 /**
  * @param {boolean} [create]
@@ -2058,13 +2082,22 @@ Dialog.prototype.updatePosition = function() {
 	} catch(ex) { console.warn(ex); }
 };
 /**
+ * Broadcasts a message about this window to other tabs. Only the active tab
+ * broadcasts; background tabs only listen and apply.
+ * @param {MessageType} type
+ * @param {*} [data]
+ */
+Dialog.prototype.broadcastUpdate = function (type, data) {
+	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
+	windowManager.broadcast(type, data, this.id);
+};
+
+/**
  * Broadcasts this window's current geometry to other tabs through the window manager.
  * @param {MessageType} type
  */
 Dialog.prototype.broadcastState = function (type) {
-	if (!windowManager || !flags.broadcastWindowMoves) return;
-	if (!document.hasFocus()) return;
-	windowManager.broadcast(type, { x: this.x, y: this.y, width: this.width, height: this.height }, this.id);
+	this.broadcastUpdate(type, { x: this.x, y: this.y, width: this.width, height: this.height });
 };
 
 /**
