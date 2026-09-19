@@ -1132,13 +1132,18 @@ Dialog.prototype.initWithObject = function(object) {
 		} else {
 			this.application = object;
 
-			this.target = object.exists ? document.getElementById(object.id) : createDialog();
+			if (object.exists) {
+				this.target = object.exists ? document.getElementById(object.id) :
+			} else {
+				this.frame && this.frame.load
+				 createDialog();
+				this.openUrl(object.src);
+			}
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
 				object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
 			}
-			this.openUrl(object.src);
 			this.setTitle(object.title);
 			this.fixed = object.fixed || false;
 			this.scroll = object.scroll;
