@@ -816,11 +816,10 @@ WindowManager.prototype.broadcast = function(type, data, id) {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	var dialog;
+	var dialog = id ? this.windows[id] : null;
 	switch (type) {
 		case "window-open":
 			if (!data || !id) return;
-			dialog = this.windows[id];
 			if (!dialog) {
 				if (!appManager) return;
 				var app = appManager.getApp(id);
@@ -842,7 +841,6 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 			return;
 		case "window-maximize":
 			if (!data || !id) return;
-			dialog = this.windows[id];
 			if (!dialog) {
 				if (!appManager) return;
 				var app = appManager.getApp(id);
