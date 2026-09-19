@@ -5,7 +5,7 @@ function Speach() {
 }
 
 Speach.prototype.say = function(msg) {
-	var utterance = new SpeechSynthesisUtterance("Hello world");
+	var utterance = new SpeechSynthesisUtterance(msg);
 	utterance.rate = this.speed;
 	utterance.volume = this.volume;
 	utterance.pitch = this.pitch;
