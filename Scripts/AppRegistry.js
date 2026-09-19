@@ -186,7 +186,7 @@ AppManager.prototype.setWallpaper = function(id) {
 	if (!app) return;
 
 	wallpaperFrame.onerror = function() {
-
+		if (app?.distSrc) wallpaperFrame.src = app.distSrc;
 	};
 
 	wallpaperFrame.src = isLocal ? app.src : app.distSrc || app.src;
