@@ -39,6 +39,13 @@ var onLoad = function () {
         contextMenu.close();
 	}, false);
 
+    var wallpaper = DesktopManager.getWallpaper();
+    if (wallpaper) {
+        wallpaper.onerror = function () {
+            wallpaper.src = "https://iemand005.github.io/FrostedColours/";
+        }
+    }
+
 	var applist = document.getElementById("applist");
 
 	if (applist) {
