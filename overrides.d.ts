@@ -22,13 +22,13 @@ interface DocumentPictureInPicture extends EventTarget {
 	): void;
 }
 
-interface CustomElementsTagNameMap {
-    "odometer-time": OdometerTime;
-	"odometer-display": OdometerDisplay;
-	"odometer-track": OdometerDigit;
-}
-
 declare global {
+	interface HTMLElementTagNameMap {
+		"odometer-time": OdometerTime;
+		"odometer-display": OdometerDisplay;
+		"odometer-track": OdometerDigit;
+	}
+
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
@@ -68,14 +68,10 @@ declare global {
 		preferInitialWindowPlacement?: boolean;
 	}
 
-	interface HTMLElementTagNameMap {
-		"odometer-time": OdometerTime;
-		"odometer-display": OdometerDisplay;
-		"odometer-track": OdometerDigit;
-	}
-
 	interface Document {
 		documentMode?: number;
+
+		createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K];
 	}
 
 	interface Navigator {

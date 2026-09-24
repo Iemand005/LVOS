@@ -110,6 +110,16 @@ AppManager.prototype.forEachApp = function(callback) {
 		}
 };
 
+/** @param {(app: Application, id: string)=>void} callback */
+AppManager.prototype.forEachWallpaper = function(callback) {
+	if (typeof callback !== "function") return;
+	for (var id in this._wallpapers)
+		if (this._wallpapers.hasOwnProperty(id)) {
+			var app = this._wallpapers[id];
+			if (app) callback(app, id);
+		}
+};
+
 Object.defineProperty(AppManager.prototype, "apps", {
 	get: function() { return this._apps; }
 });

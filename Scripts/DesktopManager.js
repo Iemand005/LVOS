@@ -349,6 +349,19 @@ DesktopManager.prototype.restoreDefaultWallpaper = function() {
 	this.applyRegisteredWallpaper(defaultId);
 };
 
+/** Forget the user-picked wallpaper image so "None" persists across reloads. */
+DesktopManager.prototype.clearWallpaperCache = function() {
+	try {
+		if (typeof settings != "undefined" && settings.set) settings.set("wallpaperImage", null);
+	} catch (ex) {}
+	try { window.localStorage.removeItem("wallpaperImage"); } catch (ex) {}
+	initWallpaperDB(function(db) {
+		var transaction = db.transaction(["wallpapers"], "readwrite");
+		var store = transaction.objectStore("wallpapers");
+		store.delete("current");
+	}, function() {});
+};
+
 /** @param {boolean} [enable] */
 DesktopManager.prototype.toggleOverlay = function(enable) {
 	var overlay = bodyCrawler.getOverlay();
