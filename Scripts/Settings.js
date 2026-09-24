@@ -298,6 +298,12 @@ function loadSettings() {
 	updateBlurState();
 }
 
+/** Show the "Select image" button only while the image option is active. */
+function updateWallpaperImageButton() {
+	if (!elements.wallpaperImageButton || !elements.wallpaperSelect) return;
+	elements.wallpaperImageButton.hidden = elements.wallpaperSelect.value !== "image";
+}
+
 /** Fill the wallpaper dropdown with the registered wallpapers plus the image option. */
 function loadWallpaperOptions() {
 	if (!elements.wallpaperSelect) return;
@@ -324,6 +330,7 @@ function loadWallpaperOptions() {
 	elements.wallpaperSelect.appendChild(imageOption);
 
 	elements.wallpaperSelect.value = current;
+	updateWallpaperImageButton();
 }
 
 /** Apply the stored wallpaper selection on startup. */
@@ -341,8 +348,10 @@ function restoreWallpaperSetting() {
 /** @param {string} value */
 function setWallpaperOption(value) {
 	settings.set("wallpaper", value);
+	updateWallpaperImageButton();
 	if (value === "image") {
-		if (elements.wallpaperInput) elements.wallpaperInput.click();
+		// Reload the image that was picked before (if any) instead of asking again.
+		if (typeof loadWallpaperFromCache == "function") loadWallpaperFromCache();
 		return;
 	}
 	if (value.indexOf("registered:") === 0) {
@@ -440,7 +449,8 @@ var elements = {
 	installAppButton: null,
 	installAppProxiedButton: null,
 	wallpaperSelect: null,
-	wallpaperInput: null
+	wallpaperInput: null,
+	wallpaperImageButton: null
 };
 
 function installAppFromUrl(useProxy) {
@@ -492,6 +502,7 @@ function loadElements() {
 	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");
 	elements.wallpaperSelect = document.getElementById("wallpaper-select");
 	elements.wallpaperInput = document.getElementById("wallpaper-input");
+	elements.wallpaperImageButton = document.getElementById("wallpaper-image-button");
 
 	var applist = document.getElementById("applist");
 	var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
@@ -518,6 +529,7 @@ function loadElements() {
 	if (elements.installAppProxiedButton) elements.installAppProxiedButton.onclick = function () { installAppFromUrl(true); };
 	if (elements.wallpaperSelect) elements.wallpaperSelect.onchange = function () { setWallpaperOption(this.value); };
 	if (elements.wallpaperInput) elements.wallpaperInput.onchange = function () { applyWallpaperFile(this.files); };
+	if (elements.wallpaperImageButton) elements.wallpaperImageButton.onclick = function () { if (elements.wallpaperInput) elements.wallpaperInput.click(); };
 	if (elements.installAppUrl && elements.installAppUrl.form) {
 		elements.installAppUrl.form.addEventListener("submit", function (event) {
 			event.preventDefault();
@@ -552,11 +564,4 @@ function downloadObject(object, fileName) {
 	a.setAttribute("href", uri);
 	a.setAttribute("download", fileName || "öbject" + ".json");
 	
-	document.body.appendChild(a);     
-	a.click();
-	document.body.removeChild(a);
-}
-
-function downloadSettings() {
-	downloadObject(localStorage);
-}
+	document.body.appendChild
