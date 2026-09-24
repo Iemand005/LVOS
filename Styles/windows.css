@@ -654,17 +654,18 @@ button:hover {
 }
 
 @media (prefers-color-scheme: dark) {
-.window, button {
-	color: white;
-}
+	.window, button {
+		color: white;
+	}
 }
 
 @media (prefers-color-scheme: light) {
-.window, button {
-	color: black;
-	/* background-color: #ffffff2b; */
-}
-	svg {
+	.window, button {
+		color: black;
+		/* background-color: #ffffff2b; */
+	}
+
+	.window header svg {
 		fill: rgb(0, 0, 0);
 	}
 }
