@@ -174,19 +174,29 @@ class OdometerTime extends OdometerDisplay {
 				for (const ch of str) digits.push(parseInt(ch, 10));
 			});
 		} else {
-			const dateTime = this.getAttribute("datetime");
-			if (!dateTime) return;
-			const target = new Date(dateTime);
-			const diff = Math.max(0, target.getTime() - Date.now());
-			const totalSeconds = Math.floor(diff / 1000);
+			// const dateTime = this.getAttribute("datetime");
+			// if (!dateTime) return;
+			// const target = new Date(dateTime);
+			// const diff = Math.max(0, target.getTime() - Date.now());
+			// const totalSeconds = Math.floor(diff / 1000);
 
-			const days = Math.floor(totalSeconds / 86400);
-			const hours = Math.floor((totalSeconds % 86400) / 3600);
-			const minutes = Math.floor((totalSeconds % 3600) / 60);
-			const seconds = totalSeconds % 60;
+			// const days = Math.floor(totalSeconds / 86400);
+			// const hours = Math.floor((totalSeconds % 86400) / 3600);
+			// const minutes = Math.floor((totalSeconds % 3600) / 60);
+			// const seconds = totalSeconds % 60;
+
+			// digits = [
+			// 	...String(days).padStart(3, "0").split("").map(Number),
+			// 	Math.floor(hours / 10), hours % 10,
+			// 	Math.floor(minutes / 10), minutes % 10,
+			// 	Math.floor(seconds / 10), seconds % 10
+			// ];
+			const date = new Date(this.dateTime);
+			const hours = date.getHours();
+			const minutes = date.getMinutes();
+			const seconds = date.getSeconds();
 
 			digits = [
-				...String(days).padStart(3, "0").split("").map(Number),
 				Math.floor(hours / 10), hours % 10,
 				Math.floor(minutes / 10), minutes % 10,
 				Math.floor(seconds / 10), seconds % 10
