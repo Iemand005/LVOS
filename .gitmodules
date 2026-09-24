@@ -41,5 +41,5 @@
 	path = Applications/WebGPUFluidSim
 	url = https://github.com/Iemand005/WebGPUFluidSim
 [submodule "LVOS-dist"]
-	path = LVOS-dist
+	path = Dist
 	url = https://github.com/Iemand005/LVOS-dist
