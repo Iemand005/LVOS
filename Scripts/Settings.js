@@ -438,7 +438,9 @@ var elements = {
 	noBlurFullscreen: null,
 	installAppUrl: null,
 	installAppButton: null,
-	installAppProxiedButton: null
+	installAppProxiedButton: null,
+	wallpaperSelect: null,
+	wallpaperInput: null
 };
 
 function installAppFromUrl(useProxy) {
@@ -488,6 +490,8 @@ function loadElements() {
 	elements.installAppUrl = document.getElementById("install-app-url");
 	elements.installAppButton = document.getElementById("install-app-button");
 	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");
+	elements.wallpaperSelect = document.getElementById("wallpaper-select");
+	elements.wallpaperInput = document.getElementById("wallpaper-input");
 
 	var applist = document.getElementById("applist");
 	var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
