@@ -76,7 +76,10 @@ class OdometerDisplay extends HTMLTimeElement {
 
 	addDigit() {
 		let track = document.createElement("span", { is: "odometer-track" });
-		if (!(track instanceof OdometerDigit)) promoteOdometerElement(track, OdometerDigit);
+		if (!(track instanceof OdometerDigit)) {
+			if (track.getAttribute("is") !== "odometer-track") track.setAttribute("is", "odometer-track");
+			promoteOdometerElement(track, OdometerDigit);
+		}
 		if (!(track instanceof OdometerDigit)) return;
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		this.tracks.push(track);
