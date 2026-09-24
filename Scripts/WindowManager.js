@@ -568,6 +568,7 @@ WindowManager.prototype.loadApp = function(app) {
 		var dialog = new Dialog(app);
 		dialog.mica = this.isMicaEnabled || false;
 		this._windows[app.id] = dialog;
+		if (!(app instanceof HTMLElement)) appManager.addApp(app);
 	} catch(ex) { console.warn("App load failed", ex); }
 };
 /**
