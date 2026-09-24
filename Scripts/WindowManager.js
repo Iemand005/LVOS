@@ -550,8 +550,10 @@ WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: 
 
 /** @param {WindowCallback} callback */
 WindowManager.prototype.forEachWindow = function (callback) {
-	for (var id in this.windows)
-		if (this.windows.hasOwnProperty(id)) callback(this.windows[id], id);
+	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
+		var dialog = this.windows[id];
+		if (dialog) callback(dialog, id);
+	}
 };
 
 WindowManager.prototype.killAll = function () {

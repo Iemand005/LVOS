@@ -66,7 +66,7 @@ var onLoad = function () {
 		appButtons.appendChild(startButton);
 
         // /** @type {HTMLTimeElement | OdometerTime} */
-        var clock = document.createElement("odometer-time");
+        var clock = document.createElement("time", { is: "odometer-time" });
 		clock.id = "clock";
 
 		var updateClock = function() {
