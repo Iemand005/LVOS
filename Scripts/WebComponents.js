@@ -174,7 +174,9 @@ class OdometerTime extends OdometerDisplay {
 				for (const ch of str) digits.push(parseInt(ch, 10));
 			});
 		} else {
-			const target = new Date(this.getAttribute("datetime"));
+			const dateTime = this.getAttribute("datetime");
+			if (!dateTime) return;
+			const target = new Date(dateTime);
 			const diff = Math.max(0, target.getTime() - Date.now());
 			const totalSeconds = Math.floor(diff / 1000);
 
