@@ -135,7 +135,7 @@ class OdometerTime extends OdometerDisplay {
 		}
 		return 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
 	}
-
+	/** @param {number} groups */
 	buildTracks(groups) {
 		this.textContent = "";
 		this.tracks.length = 0;
@@ -156,7 +156,7 @@ class OdometerTime extends OdometerDisplay {
 		this.tracks.forEach(track => { track.lineHeight = height; });
 	}
 
-	/** Number of digit tracks needed for the given number of segments. */
+	/** @param {number} groups */
 	expectedTrackCount(groups) {
 		let total = 0;
 		for (let i = 0; i < groups; i++)
@@ -187,6 +187,7 @@ class OdometerTime extends OdometerDisplay {
 	}
 
 	update() {
+		/** @type {number[]} */
 		let digits;
 
 		if (this.usingValue()) {
