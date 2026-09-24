@@ -86,7 +86,7 @@ const BUNDLES = {
 
 function resolveDist() {
 	// Prefer the sibling LVOS-dist repo if it exists.
-	const sibling = join(ROOT, "LVOS-dist");
+	const sibling = join(ROOT, "Dist");
 	if (existsSync(sibling)) return sibling;
 	return join(ROOT, "dist");
 }

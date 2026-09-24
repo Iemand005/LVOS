@@ -142,7 +142,7 @@ VulpOS/
 ├── Games/           Games
 ├── Scripts/         Core JavaScript and TypeScript
 ├── Styles/          System and application styles
-├── LVOS-dist/       Built distribution
+├── Dist/       	 Built distribution
 ├── build.js         Build system
 ├── index.html       Main desktop
 ├── mobile.html      Mobile version
