@@ -291,10 +291,92 @@ function setAccentColor(color) {
 
 function loadSettings() {
 	loadThemeSetting();
+	restoreWallpaperSetting();
 	setColor(settings.get("color"));
 	setAccentColor(settings.get("accentColor"));
 	// getBorderSize(settings.get("borderSize"));
 	updateBlurState();
+}
+
+/** Fill the wallpaper dropdown with the registered wallpapers plus the image option. */
+function loadWallpaperOptions() {
+	if (!elements.wallpaperSelect) return;
+	var current = settings.get("wallpaper") || "";
+	elements.wallpaperSelect.innerHTML = "";
+
+	var noneOption = document.createElement("option");
+	noneOption.value = "";
+	noneOption.textContent = "None";
+	elements.wallpaperSelect.appendChild(noneOption);
+
+	if (typeof appManager != "undefined" && typeof appManager.forEachWallpaper == "function") {
+		appManager.forEachWallpaper(function (app, id) {
+			var option = document.createElement("option");
+			option.value = "registered:" + id;
+			option.textContent = app.title || id;
+			elements.wallpaperSelect.appendChild(option);
+		});
+	}
+
+	var imageOption = document.createElement("option");
+	imageOption.value = "image";
+	imageOption.textContent = "Image\u2026";
+	elements.wallpaperSelect.appendChild(imageOption);
+
+	elements.wallpaperSelect.value = current;
+}
+
+/** Apply the stored wallpaper selection on startup. */
+function restoreWallpaperSetting() {
+	loadWallpaperOptions();
+	var wallpaper = settings.get("wallpaper");
+	if (typeof wallpaper != "string" || !wallpaper) return;
+	if (wallpaper === "image") return; // handled by the cached wallpaper loader
+	if (wallpaper.indexOf("registered:") === 0 && window.desktopManager &&
+		typeof window.desktopManager.applyRegisteredWallpaper == "function") {
+		window.desktopManager.applyRegisteredWallpaper(wallpaper.slice("registered:".length));
+	}
+}
+
+/** @param {string} value */
+function setWallpaperOption(value) {
+	settings.set("wallpaper", value);
+	if (value === "image") {
+		if (elements.wallpaperInput) elements.wallpaperInput.click();
+		return;
+	}
+	if (value.indexOf("registered:") === 0) {
+		var id = value.slice("registered:".length);
+		if (window.desktopManager && typeof window.desktopManager.applyRegisteredWallpaper == "function")
+			window.desktopManager.applyRegisteredWallpaper(id);
+		return;
+	}
+	if (window.desktopManager) {
+		if (typeof window.desktopManager.restoreDefaultWallpaper == "function")
+			window.desktopManager.restoreDefaultWallpaper();
+		if (typeof window.desktopManager.clearWallpaperCache == "function")
+			window.desktopManager.clearWallpaperCache();
+	}
+}
+
+/** @param {FileList | null} files */
+function applyWallpaperFile(files) {
+	if (!files || !files.length) return;
+	var file = files[0];
+	if (typeof file.type != "string" || !file.type.match(/^image\//)) return;
+
+	var reader = new FileReader();
+	reader.onload = function (e) {
+		if (!e.target) return;
+		var dataUrl = e.target.result;
+		if (typeof dataUrl != "string" || !window.desktopManager) return;
+		window.desktopManager.applyWallpaperImage(dataUrl, undefined, function () {
+			console.warn("Failed to apply wallpaper image");
+		});
+		saveWallpaperToCache(file, dataUrl);
+		settings.set("wallpaper", "image");
+	};
+	reader.readAsDataURL(file);
 }
 
 function loadThemeSetting() {
