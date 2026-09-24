@@ -211,6 +211,8 @@ function setThemeOption(theme) {
 	}
 	if (theme === "blur" || theme === "glass") DesktopManager.removeTheme("modern");
 	else if (blurWasOn && theme !== "modern-blur") setTheme("modern");
+	if (typeof windowManager !== "undefined" && typeof windowManager.broadcastTheme === "function")
+		windowManager.broadcastTheme();
 }
 
 /** @param {boolean} enabled */

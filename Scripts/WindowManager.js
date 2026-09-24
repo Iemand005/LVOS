@@ -826,12 +826,26 @@ WindowManager.prototype.broadcast = function(type, data, id) {
 	LVMessenger.broadcast(this.channel, type, data, id);
 }
 
+/** Share the current theme with the other running OS instances. */
+WindowManager.prototype.broadcastTheme = function() {
+	if (!document.hasFocus()) return; // only the active tab drives theme sync
+	this.broadcast("theme", { className: document.body.className });
+}
+
 /**
  * @param {MessageType} type
  * @param {*} [data]
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
+	if (type === "theme") {
+		var className = data && data.className;
+		if (typeof className !== "string") return;
+		// Follow the other instance's theme and let this instance's apps know too.
+		document.body.className = className;
+		this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
+		return;
+	}
 	if (type !== "dialog-state") {
 		// Non-window-state messages (e.g. iframe framing messages) are still forwarded
 		// to the classic receive path.
@@ -1322,6 +1336,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 Dialog.prototype.reportState = function() {
 	this.messageFrame("window-size", {});
 	this.messageFrame("theme", {className: document.body.className});
+	if (windowManager) windowManager.broadcastTheme();
 };
 /**
  * @param {boolean} [forceOpen]
