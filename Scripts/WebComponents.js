@@ -39,14 +39,15 @@ class WindowElement extends HTMLDivElement {
 	}
 }
 
-class OdometerDigit extends HTMLElement {
+class OdometerDigit extends HTMLSpanElement {
 	constructor()  { super(); this.lineHeight = 40, this._value = 0; }
+	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
 	get value() { return this._value;}
 }
 
-class OdometerDisplay extends HTMLElement {
+class OdometerDisplay extends HTMLTimeElement {
 	constructor() {
 		super();
 		/** @type {OdometerDigit[]} @readonly */
@@ -54,6 +55,8 @@ class OdometerDisplay extends HTMLElement {
 	}
 
 	connectedCallback() {
+		this.setAttribute("is", "odometer-time");
+
 		this.textContent = "";
 
 		this.style.display = "flex";
@@ -72,7 +75,8 @@ class OdometerDisplay extends HTMLElement {
 	}
 
 	addDigit() {
-		const track = document.createElement("odometer-track");
+		let track = document.createElement("span", { is: "odometer-track" });
+		if (!(track instanceof OdometerDigit)) promoteOdometerElement(track, OdometerDigit);
 		if (!(track instanceof OdometerDigit)) return;
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		this.tracks.push(track);
@@ -99,6 +103,8 @@ class OdometerTime extends OdometerDisplay {
 	static get observedAttributes() { return ["datetime", "value"]; }
 
 	connectedCallback() {
+		this.setAttribute("is", "odometer-time");
+
 		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim()) {
 			this.setAttribute("value", this.textContent.trim());
 		}
@@ -216,15 +222,130 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
-customElements.define("window-div", WindowElement, {
-	extends: "div"
-});
+/* ---------------------------------------------------------------------------
+   Customized built-in elements ("<time is=...>") are not supported by every
+   browser (notably Firefox and Safari). Rather than inventing autonomous tag
+   names, we keep the vanilla `is` markup and upgrade those elements manually
+   here. Browsers without any customElements support keep the plain tag so the
+   calling code can fall back to normal time/span rendering.
+--------------------------------------------------------------------------- */
 
-customElements.define("odometer-track", OdometerDigit);
+/** @returns {boolean} True when the browser natively upgrades customized built-ins. */
+function supportsCustomizedBuiltIn() {
+	if (typeof customElements == "undefined" || typeof customElements.define != "function") return false;
+	try {
+		const name = "lvos-customized-built-in-test";
+		class Test extends HTMLDivElement { constructor() { super(); this.upgraded = true; } }
+		customElements.define(name, Test, { extends: "div" });
+		return document.createElement("div", { is: name }).upgraded === true;
+	} catch (ex) {
+		return false;
+	}
+}
 
-customElements.define("odometer-display", OdometerDisplay);
+/** @type {{[isName:string]: {klass: Function}}} */
+var ODOMETER_IS_MAP = {
+	"odometer-time": { klass: OdometerTime },
+	"odometer-display": { klass: OdometerDisplay },
+	"odometer-track": { klass: OdometerDigit }
+};
 
-customElements.define("odometer-time", OdometerTime);
+/**
+ * Manually attach the component prototype + instance fields to a vanilla element.
+ * Does NOT call connectedCallback (the caller decides when the element is live).
+ * @param {HTMLElement} el
+ * @param {Function} klass
+ */
+function promoteOdometerElement(el, klass) {
+	if (!el || typeof Object.setPrototypeOf != "function") return;
+	if (el instanceof klass) return;
+	Object.setPrototypeOf(el, klass.prototype);
+	if (klass === OdometerDisplay || klass === OdometerTime) el.tracks = [];
+	if (klass === OdometerDigit) {
+		if (el.lineHeight == null) el.lineHeight = 40;
+		if (el._value == null) el._value = 0;
+	}
+}
+
+/**
+ * Upgrade a single element based on its `is` attribute (and run its lifecycle
+ * callback if it is live in the document).
+ * @param {HTMLElement} el
+ */
+function evaluateIsElement(el) {
+	if (!el || el.nodeType !== 1 || typeof el.getAttribute != "function") return;
+	const is = el.getAttribute("is");
+	if (!is) return;
+	const entry = ODOMETER_IS_MAP[is];
+	if (!entry) return;
+	const klass = entry.klass;
+	if (el instanceof klass) return;
+	promoteOdometerElement(el, klass);
+	if (typeof el.connectedCallback == "function") el.connectedCallback();
+}
+
+/**
+ * @param {MutationRecord} record
+ */
+function forwardOdometerAttribute(record) {
+	const el = record.target;
+	if (!el || el.nodeType !== 1 || typeof el.attributeChangedCallback != "function") return;
+	const name = record.attributeName;
+	if (name !== "datetime" && name !== "value") return;
+	const is = el.getAttribute("is");
+	if (!is || !ODOMETER_IS_MAP[is]) return;
+	el.attributeChangedCallback(name, record.oldValue, el.getAttribute(name));
+}
+
+/**
+ * Install the upgrade observer when customized built-ins are missing so the
+ * vanilla `<time is="odometer-time">` / `<span is="odometer-track">` markup
+ * still gets the odometer behaviour and animation.
+ */
+function polyfillCustomizedBuiltIns() {
+	if (supportsCustomizedBuiltIn()) return;
+	if (typeof MutationObserver == "undefined") return;
+
+	/** @param {Node} root */
+	const scan = function(root) {
+		if (root.nodeType === 1) evaluateIsElement(root);
+		if (!root.querySelectorAll) return;
+		const found = root.querySelectorAll("[is]");
+		for (let i = 0; i < found.length; i++) evaluateIsElement(found[i]);
+	};
+
+	scan(document);
+
+	new MutationObserver(function(mutations) {
+		for (let i = 0; i < mutations.length; i++) {
+			const record = mutations[i];
+			if (record.type === "attributes") {
+				forwardOdometerAttribute(record);
+				continue;
+			}
+			if (!record.addedNodes) continue;
+			for (let j = 0; j < record.addedNodes.length; j++)
+				scan(record.addedNodes[j]);
+		}
+	}).observe(document.documentElement, {
+		childList: true,
+		subtree: true,
+		attributes: true,
+		attributeFilter: ["datetime", "value"],
+		attributeOldValue: true
+	});
+}
+
+function defineOdometerElements() {
+	if (typeof customElements == "undefined" || typeof customElements.define != "function") return;
+	try { customElements.define("window-div", WindowElement, { extends: "div" }); } catch (ex) {}
+	try { customElements.define("odometer-track", OdometerDigit, { extends: "span" }); } catch (ex) {}
+	try { customElements.define("odometer-display", OdometerDisplay, { extends: "time" }); } catch (ex) {}
+	try { customElements.define("odometer-time", OdometerTime, { extends: "time" }); } catch (ex) {}
+}
+
+defineOdometerElements();
+polyfillCustomizedBuiltIns();
 
 
 class Modern {

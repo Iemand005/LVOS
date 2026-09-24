@@ -565,8 +565,9 @@ WindowManager.prototype.synchronizeStates = function () {
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
 	try {
-		this._windows[app.id] = new Dialog(app);
-		this._windows[app.id].mica = this.isMicaEnabled || false;
+		var dialog = new Dialog(app);
+		dialog.mica = this.isMicaEnabled || false;
+		this._windows[app.id] = dialog;
 	} catch(ex) { console.warn("App load failed", ex); }
 };
 /**
