@@ -74,10 +74,13 @@ var onLoad = function () {
             clock.dateTime = date.toISOString();
             if (!("tracks" in clock))
                 clock.innerHTML = date.toLocaleTimeString();
+            // Re-arm to the next whole second instead of a fixed interval, so the
+            // displayed time stays in sync with the system clock (drift = how far
+            // we currently are into the second).
+            setTimeout(updateClock, 1000 - (Date.now() % 1000));
 		};
 
 		updateClock();
-		setInterval(updateClock, 1000);
 
 		appButtons.appendChild(clock);
 	}
