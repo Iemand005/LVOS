@@ -664,4 +664,7 @@ button:hover {
 	color: black;
 	/* background-color: #ffffff2b; */
 }
+	svg {
+		fill: rgb(0, 0, 0);
+	}
 }
