@@ -825,6 +825,12 @@ body.no-blur.modern.blur .window content {
 	}
 }
 
+@media (prefers-color-scheme: light) {
+	.windows #dockapplist, .windows-10 #launchpad {
+		background: rgba(209, 209, 209, 0.47);
+	}
+}
+
 @media (prefers-color-scheme: dark) {
 
 	.windows-95 time, .windows-95 footer nav svg * {
