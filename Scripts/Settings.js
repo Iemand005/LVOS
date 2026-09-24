@@ -516,6 +516,8 @@ function loadElements() {
 	if (elements.noBlurFullscreen) elements.noBlurFullscreen.onchange = function () { toggleNoBlurFullscreen(this.checked); };
 	if (elements.installAppButton) elements.installAppButton.onclick = function () { installAppFromUrl(false); };
 	if (elements.installAppProxiedButton) elements.installAppProxiedButton.onclick = function () { installAppFromUrl(true); };
+	if (elements.wallpaperSelect) elements.wallpaperSelect.onchange = function () { setWallpaperOption(this.value); };
+	if (elements.wallpaperInput) elements.wallpaperInput.onchange = function () { applyWallpaperFile(this.files); };
 	if (elements.installAppUrl && elements.installAppUrl.form) {
 		elements.installAppUrl.form.addEventListener("submit", function (event) {
 			event.preventDefault();
