@@ -153,6 +153,14 @@ class OdometerTime extends OdometerDisplay {
 		this.tracks.forEach(track => { track.lineHeight = height; });
 	}
 
+	/** Number of digit tracks needed for the given number of segments. */
+	expectedTrackCount(groups) {
+		let total = 0;
+		for (let i = 0; i < groups; i++)
+			total += (i === 0 && groups === 4) ? 3 : 2;
+		return total;
+	}
+
 	/**
 	 * @param {string} name Name of the attribute
 	 * @param {string} oldValue Old value
@@ -162,14 +170,15 @@ class OdometerTime extends OdometerDisplay {
 		if (oldValue === newValue) return;
 
 		if (name === "value") {
-			const groups = newValue ? newValue.split(":").length : this.tracks.length;
-			if (groups !== this.tracks.length) this.buildTracks(groups);
+			const groups = newValue ? newValue.split(":").length : this.currentGroupCount();
+			if (this.tracks.length !== this.expectedTrackCount(groups)) this.buildTracks(groups);
 			this.update();
 			return;
 		}
 
 		if (name === "datetime" && !this.usingValue()) {
-			if (this.tracks.length !== 3) this.buildTracks(3);
+			const groups = 3;
+			if (this.tracks.length !== this.expectedTrackCount(groups)) this.buildTracks(groups);
 			this.update();
 		}
 	}

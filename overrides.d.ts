@@ -33,9 +33,6 @@ interface CustomElementsByIs {
 }
 
 declare global {
-	interface HTMLElementTagNameMap {
-	}
-
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
