@@ -22,11 +22,18 @@ interface DocumentPictureInPicture extends EventTarget {
 	): void;
 }
 
+interface CustomElementsByIs {
+    time: {
+        "odometer-time": OdometerTime;
+        "odometer-display": OdometerDisplay;
+    };
+	span: {
+		"odometer-track": OdometerDigit;
+	}
+}
+
 declare global {
 	interface HTMLElementTagNameMap {
-		"odometer-time": OdometerTime;
-		"odometer-display": OdometerDisplay;
-		"odometer-track": OdometerDigit;
 	}
 
 	interface Window {
@@ -71,7 +78,7 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K];
+		createElement<K extends keyof CustomElementsByIs & keyof HTMLElementTagNameMap, I extends keyof CustomElementsByIs[K]>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
 	}
 
 	interface Navigator {
