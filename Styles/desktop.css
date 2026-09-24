@@ -508,7 +508,8 @@ aside#charms form {
 
 @media (prefers-color-scheme: light) {
 	#start-button > img {
-	filter: none;
+		filter: none;
+	}
 }
 
 #launchpad {
