@@ -333,10 +333,11 @@ var games = [
 		title: "Planet Life",
 		id : "planetlife",
 		src : "https://www.planetlife.space/static/game/index.html"
-	},f {
+	}, {
 		title: "Horizon Background",
 		id:"horizon-bg",
 		src: "https://iemand005.github.io/HorizonBackground/",
+		wallpaper: true
 	}
 ];
 
