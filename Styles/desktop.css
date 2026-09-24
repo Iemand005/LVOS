@@ -558,19 +558,20 @@ desktop #launchpad {
 	display: block;
 }
 
-time {
+odometer-time {
 	display: flex;
 	line-height: 40px;
 	height: 40px;
 	overflow: hidden;
 }
 
-time span {
+odometer-time odometer-track {
 	transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 	/* transition: transform 0.6s cubic-bezier(0.33, 0.34, 0.19, 1.28);
 	transition: transform 0.6s cubic-bezier(0.42, 0.4, 0.19, 1.23); */
 	will-change: transform;
 	white-space: pre;
+	display: inline-block;
 }
 
 @keyframes opensesame {

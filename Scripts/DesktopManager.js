@@ -66,7 +66,7 @@ var onLoad = function () {
 		appButtons.appendChild(startButton);
 
         // /** @type {HTMLTimeElement | OdometerTime} */
-		var clock = document.createElement("time", {is: "odometer-time"});
+        var clock = document.createElement("odometer-time");
 		clock.id = "clock";
 
 		var updateClock = function() {
@@ -306,6 +306,49 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
 
 };
 
+/** Recreate the wallpaper frame that the registered wallpaper apps render in. */
+DesktopManager.prototype.ensureWallpaperFrame = function() {
+	var wallpaper = DesktopManager.getWallpaper();
+	if (!wallpaper) return null;
+	var frame = document.getElementById("wallpaper-frame");
+	if (frame instanceof HTMLIFrameElement) return frame;
+	frame = document.createElement("iframe");
+	frame.id = "wallpaper-frame";
+	frame.frameBorder = "0";
+	wallpaper.appendChild(frame);
+	return frame;
+};
+
+/** Remove whatever is currently shown (image or frame) so switching is clean. */
+DesktopManager.prototype.clearWallpaperContent = function() {
+	var wallpaper = DesktopManager.getWallpaper();
+	if (!wallpaper) return;
+	this.wallpaperImage = null;
+	while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+	wallpaper.classList.remove("legacy-wallpaper");
+	wallpaper.classList.remove("legacy-wallpaper-image");
+	wallpaper.removeAttribute("data-blurred-src");
+	wallpaper.style.backgroundImage = "";
+};
+
+/** Apply one of the registered (provisioned) wallpaper apps, e.g. Frosted Colours or Horizon Background. */
+DesktopManager.prototype.applyRegisteredWallpaper = function(id) {
+	this.clearWallpaperContent();
+	var frame = this.ensureWallpaperFrame();
+	if (!frame) return;
+	if (typeof appManager != "undefined" && typeof appManager.setWallpaper == "function")
+		appManager.setWallpaper(id);
+	else frame.src = "https://iemand005.github.io/FrostedColours/";
+};
+
+/** Restore the default registered wallpaper (the first one registered). */
+DesktopManager.prototype.restoreDefaultWallpaper = function() {
+	var defaultId = "colors";
+	if (typeof appManager != "undefined" && appManager._wallpaper)
+		defaultId = appManager._wallpaper.id;
+	this.applyRegisteredWallpaper(defaultId);
+};
+
 /** @param {boolean} [enable] */
 DesktopManager.prototype.toggleOverlay = function(enable) {
 	var overlay = bodyCrawler.getOverlay();
@@ -317,12 +360,6 @@ DesktopManager.prototype.toggleOverlay = function(enable) {
 // DesktopManager.hasTheme
 
 window.desktopManager = new DesktopManager();
-
-window.desktopManager.applyWallpaperImage(
-  "file:///C:/Users/Lasse/Downloads/daniil-silantev-Rl7SZ19fgRQ-unsplash.jpg",
-  "file:///C:/Users/Lasse/Downloads/fox-blur.jpg"
-);
-
 
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
 window.ondrag = document.ondrag = function(ev){
@@ -449,6 +486,13 @@ function saveWallpaperToCache(blob, dataUrl) {
     });
 }
 
+/** @returns {boolean} True when the user chose a registered wallpaper, so cached images should not override it. */
+function hasRegisteredWallpaperSelection() {
+	if (typeof settings == "undefined" || !settings || typeof settings.get != "function") return false;
+	var selection = settings.get("wallpaper");
+	return typeof selection == "string" && selection.indexOf("registered:") === 0;
+}
+
 /**
  * Load wallpaper from IndexedDB cache or localStorage fallback.
  */
@@ -460,7 +504,7 @@ function loadWallpaperFromCache() {
         
         request.onsuccess = function() {
             var result = request.result;
-            if (result && result.blob && window.desktopManager) {
+            if (result && result.blob && window.desktopManager && !hasRegisteredWallpaperSelection()) {
                 var objectUrl = URL.createObjectURL(result.blob);
                 console.log("Loading cached wallpaper from IndexedDB");
                 window.desktopManager.applyWallpaperImage(objectUrl);
@@ -484,6 +528,7 @@ function loadWallpaperFromCache() {
  * Load wallpaper from localStorage as fallback.
  */
 function loadWallpaperFromLocalStorage() {
+    if (hasRegisteredWallpaperSelection()) return;
     console.log("Attempting to load wallpaper from localStorage...");
     console.log("settings defined:", typeof settings != "undefined");
     if (typeof settings == "undefined") {

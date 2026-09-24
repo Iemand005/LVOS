@@ -39,15 +39,14 @@ class WindowElement extends HTMLDivElement {
 	}
 }
 
-class OdometerDigit extends HTMLSpanElement {
+class OdometerDigit extends HTMLElement {
 	constructor()  { super(); this.lineHeight = 40, this._value = 0; }
-	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
 	get value() { return this._value;}
 }
 
-class OdometerDisplay extends HTMLTimeElement {
+class OdometerDisplay extends HTMLElement {
 	constructor() {
 		super();
 		/** @type {OdometerDigit[]} @readonly */
@@ -55,8 +54,6 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
-
 		this.textContent = "";
 
 		this.style.display = "flex";
@@ -70,12 +67,12 @@ class OdometerDisplay extends HTMLTimeElement {
 		const height = this.clientHeight;
 		for (let i = 0; i < digits; i++) {
 			const digit = this.addDigit();
-			if (digit) digit.lineHeight = height;
+			if (digit && height > 0) digit.lineHeight = height;
 		}
 	}
 
 	addDigit() {
-		const track = document.createElement("span", { is: "odometer-track" });
+		const track = document.createElement("odometer-track");
 		if (!(track instanceof OdometerDigit)) return;
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		this.tracks.push(track);
@@ -102,8 +99,6 @@ class OdometerTime extends OdometerDisplay {
 	static get observedAttributes() { return ["datetime", "value"]; }
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
-
 		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim()) {
 			this.setAttribute("value", this.textContent.trim());
 		}
@@ -116,6 +111,9 @@ class OdometerTime extends OdometerDisplay {
 		// this.style.justifyContent = "center";
 	}
 
+	get dateTime() { return this.getAttribute("datetime") || ""; }
+	set dateTime(value) { this.setAttribute("datetime", value); }
+
 	/** value wins if present; otherwise fall back to datetime */
 	usingValue() {
 		return this.hasAttribute("value");
@@ -123,10 +121,10 @@ class OdometerTime extends OdometerDisplay {
 
 	currentGroupCount() {
 		if (this.usingValue()) {
-			const v = this.getAttribute("value") || "00:00:00:00";
+			const v = this.getAttribute("value") || "00:00:00";
 			return v.split(":").length;
 		}
-		return 4; // datetime mode always renders DD:HH:MM:SS
+		return 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
 	}
 
 	buildTracks(groups) {
@@ -138,6 +136,15 @@ class OdometerTime extends OdometerDisplay {
 			for (let j = 0; j < digitsInGroup; j++) this.addDigit();
 			if (i < groups - 1) this.append(":");
 		}
+
+		this.adjustTrackHeights();
+	}
+
+	/** Align each digit's roll to the element's own height so one full digit is visible. */
+	adjustTrackHeights() {
+		const height = this.clientHeight;
+		if (height <= 0) return;
+		this.tracks.forEach(track => { track.lineHeight = height; });
 	}
 
 	/**
@@ -150,13 +157,13 @@ class OdometerTime extends OdometerDisplay {
 
 		if (name === "value") {
 			const groups = newValue ? newValue.split(":").length : this.tracks.length;
-			// if (groups !== this.tracks.length) this.buildTracks(groups);
+			if (groups !== this.tracks.length) this.buildTracks(groups);
 			this.update();
 			return;
 		}
 
 		if (name === "datetime" && !this.usingValue()) {
-			if (this.tracks.length !== 4) this.buildTracks(4);
+			if (this.tracks.length !== 3) this.buildTracks(3);
 			this.update();
 		}
 	}
@@ -165,7 +172,7 @@ class OdometerTime extends OdometerDisplay {
 		let digits;
 
 		if (this.usingValue()) {
-			const value = this.getAttribute("value") || "00:00:00:00";
+			const value = this.getAttribute("value") || "00:00:00";
 			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
 			digits = [];
 			parts.forEach((part, i) => {
@@ -213,17 +220,11 @@ customElements.define("window-div", WindowElement, {
 	extends: "div"
 });
 
-customElements.define("odometer-track", OdometerDigit, {
-	extends: "span"
-});
+customElements.define("odometer-track", OdometerDigit);
 
-customElements.define("odometer-display", OdometerDisplay, {
-	extends: "time"
-});
+customElements.define("odometer-display", OdometerDisplay);
 
-customElements.define("odometer-time", OdometerTime, {
-	extends: "time"
-});
+customElements.define("odometer-time", OdometerTime);
 
 
 class Modern {

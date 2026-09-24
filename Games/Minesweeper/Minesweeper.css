@@ -169,10 +169,11 @@ button:active:not(:disabled):not(.mine), button.active, table, div, .display {
 	border-left-color: darkgray;
 }
 
-time span {
+odometer-time odometer-track {
 	transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 	will-change: transform;
 	white-space: pre;
+	display: inline-block;
 }
 
 @media (prefers-color-scheme: dark) {
