@@ -2,204 +2,207 @@
 /* General */
 
 html, body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100%;
-    width: 100%;
+	margin: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	height: 100%;
+	width: 100%;
 }
 
 body > footer, header.hidden {
-    display: none;
+	display: none;
 }
 
 main, main > section, main > section > section {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 body {
-    pointer-events: none;
-    background-color: black;
-    background: radial-gradient(#333, black);
+	pointer-events: none;
+	background-color: black;
+	background: radial-gradient(#333, black);
 }
 
 .window *, #desktop, #desktop img {
-    -wg-user-select: none;
-    -moz-user-select: none;
-    -moz-user-drag: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    -o-user-drag: none;
-    user-select: none;
-    cursor: default;
+	-wg-user-select: none;
+	-moz-user-select: none;
+	-moz-user-drag: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-drag: none;
+	-khtml-user-drag: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	-o-user-drag: none;
+	user-select: none;
+	cursor: default;
 }
 
 /* Main */
 
 main {
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-    /*perspective: 1000px;*/
+	height: 100%;
+	width: 100%;
+	pointer-events: none;
+	/*perspective: 1000px;*/
 }
 
 .window {
-    background-color: rgba(255, 255, 255, 255);
-    -o-transform-origin: bottom left;
-    -ms-transform-origin: bottom left;
-    -moz-transform-origin: bottom left;
-    -webkit-transform-origin: bottom left;
-    transform-origin: center;
-    margin: 0;
-    padding: 0;
-    z-index: 1;
-    overflow: hidden;
-    position: absolute;
-    background: transparent;
-    border: none;
-    overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! Well shit... I need this to be hidden, but the backdrop  swhadow isn't applied to this anymroe anywais weait... hm shit. I need this. */
-    /* color: black; */
-    box-sizing: border-box;
-    border-radius: 5px;
-    /* border: 5px; */
-    /* transform: rotateY(0deg); */
-    /* transform-style: preserve-3d; */
-    contain: size layout;
+	background-color: rgba(255, 255, 255, 255);
+	-o-transform-origin: bottom left;
+	-ms-transform-origin: bottom left;
+	-moz-transform-origin: bottom left;
+	-webkit-transform-origin: bottom left;
+	transform-origin: center;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+	overflow: hidden;
+	position: absolute;
+	background: transparent;
+	border: none;
+	overflow: visible; /* Here is thus where we solve that bug in Edge where the backdrop is shifted when an item is moved behind the left border. This is a messy solution but works better than having no shadows due to the backdrop shifting from shadows too! Well shit... I need this to be hidden, but the backdrop  swhadow isn't applied to this anymroe anywais weait... hm shit. I need this. */
+	/* color: black; */
+	box-sizing: border-box;
+	border-radius: 5px;
+	/* border: 5px; */
+	/* transform: rotateY(0deg); */
+	/* transform-style: preserve-3d; */
+	contain: size layout;
 	will-change: transform;
 }
 
 .window.flipped {
-    transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 
 .window header,
 .window .header {
-    margin: 0;
-    pointer-events: auto;
-    justify-content: space-between;
-    padding: 8px;
-    border-width: 0px;
-    border-color: inherit;
-    cursor: grab;
+	margin: 0;
+	pointer-events: auto;
+	justify-content: space-between;
+	padding: 8px;
+	border-width: 0px;
+	border-color: inherit;
+	cursor: grab;
 
-    display: flex;
-    /* flex-direction: row; make the icons lookright but I need a noflex solution or this!*/
-    justify-content: flex-start;
-    align-items: center;
+	display: flex;
+	/* flex-direction: row; make the icons lookright but I need a noflex solution or this!*/
+	justify-content: flex-start;
+	align-items: center;
 }
 
 .window header,
 .window header section,
 .window header nav {
-    /* border-top-right-radius: inherit;
-    border-bottom-left-radius: inherit; */
+	/* border-top-right-radius: inherit;
+	border-bottom-left-radius: inherit; */
 	border-radius: inherit;
 }
 
 svg {
-    fill: rgb(255, 255, 255);
+	fill: rgb(255, 255, 255);
 }
 
 .window header button:disabled {
-    width: 0px !important;
+	width: 0px !important;
 }
 
 .window header button svg {
 	
-    margin: 0px 1px 2px 0px;
-    width: 10px;
+	margin: 0px 1px 2px 0px;
+	width: 10px;
 }
 
 .window header section,
 .window .header .section,
 .window header nav {
-    border-top-right-radius: inherit;
-    border-bottom-left-radius: inherit;
-    position: absolute;
-    top: 0;
-    right: 0;
-    overflow: hidden;
-    pointer-events: auto;
-    border: inherit;
-    border-width: inherit;
-    border-color: inherit;
-    border-style: solid;
+	border-top-right-radius: inherit;
+	border-bottom-left-radius: inherit;
+	position: absolute;
+	top: 0;
+	right: 0;
+	overflow: hidden;
+	pointer-events: auto;
+	border: inherit;
+	border-width: inherit;
+	border-color: inherit;
+	border-style: solid;
 
-    display: inline-block;
-    white-space: nowrap;
+	display: inline-block;
+	white-space: nowrap;
 
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    border: 0px solid black;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	border: 0px solid black;
 
 }
 
 .window header button,
 .window .header button {
-    width: 30px;
-    height: 30px;
-    font-family: sans-serif;
-    transition: inherit;
-    overflow: hidden;
-    padding: 0;
-    display: inline-block;
-    vertical-align: top;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    margin: 0;
-    border: none;
-    border-radius: unset;
-    border-bottom-left-radius: inherit;
-    border: inherit;
-    border-style: solid;
-    border-width: inherit;
-    border-color: inherit;
-    /* border: 1px solid black; */
-    background-color: transparent;
-    border: 0px solid black;
+	width: 30px;
+	height: 30px;
+	font-family: sans-serif;
+	transition: inherit;
+	overflow: hidden;
+	padding: 0;
+	display: inline-block;
+	vertical-align: top;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	margin: 0;
+	border: none;
+	border-radius: unset;
+	border-bottom-left-radius: inherit;
+	border: inherit;
+	border-style: solid;
+	border-width: inherit;
+	border-color: inherit;
+	/* border: 1px solid black; */
+	background-color: transparent;
+	border: 0px solid black;
 
 }
 
 
 .window header button:hover {
-    background-color: #ffffff2b;
+	background-color: #ffffff2b;
 }
 
 .window header button:active {
-    background-color: #0000002b;
+	background-color: #0000002b;
 }
 
 .window header button:disabled {
-    outline: none;
-    width: 0px;
-    /* transition: all 500ms ease-out, border 10s ease 1s; */
-    font-size: 0px;
-    border: none;
-    margin: 0;
-    display: none;
+	outline: none;
+	width: 0px;
+	/* transition: all 500ms ease-out, border 10s ease 1s; */
+	font-size: 0px;
+	border: none;
+	margin: 0;
+	display: none;
 }
 
 .window header > h1,
 .window .header h1 {
-    padding: 0;
-    margin: 0;
-    font-size: 15px;
-    pointer-events: none;
+	padding: 0;
+	margin: 0;
+	font-size: 15px;
+	pointer-events: none;
+	text-wrap: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .window header > img {
-    max-height: 22px;
-    max-width: 22px;
-    margin: 5px;
-    border-radius: 5px;
+	max-height: 22px;
+	max-width: 22px;
+	margin: 5px;
+	border-radius: 5px;
 }
 
 .window header > img:not(.loaded) {
@@ -207,287 +210,287 @@ svg {
 }
 
 .window header > img.loaded + h1 {
-    margin-left: 0 !important;
+	margin-left: 0 !important;
 }
 
 .window > content,
 .window > .content {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    flex-direction: column;
-    pointer-events: none;
-    /* border-radius: inherit; */
-    border-radius: inherit;
-    border: 1px solid #0000005c;
-    /* padding: 5px; */
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: orange;
-    transition: inherit;
-    /* color: black; */
-    transform-origin: center;
-    /* background:     linear-gradient(0deg, #0000002b, #ffffff00); */
-    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.2);
-    transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out, background-color 170ms ease-out;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	flex-direction: column;
+	pointer-events: none;
+	/* border-radius: inherit; */
+	border-radius: inherit;
+	border: 1px solid #0000005c;
+	/* padding: 5px; */
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: orange;
+	transition: inherit;
+	/* color: black; */
+	transform-origin: center;
+	/* background:     linear-gradient(0deg, #0000002b, #ffffff00); */
+	box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.2);
+	transition: filter 0.2s ease-in-out, box-shadow 0.3s ease-in-out, background-color 170ms ease-out;
 
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* z-index: 1; */
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	/* z-index: 1; */
 }
 
 .window[focus].dragging > content {
-    box-shadow: 0 1rem 7rem rgba(0, 0, 0, 0.311);
+	box-shadow: 0 1rem 7rem rgba(0, 0, 0, 0.311);
 }
 
 .window[focus] > content {
-    filter: saturate(1);
-    box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.3);
+	filter: saturate(1);
+	box-shadow: 0 1rem 6rem rgba(0, 0, 0, 0.3);
 }
 
 .window:not([focus]) > content {
-    filter: saturate(0.8);
+	filter: saturate(0.8);
 }
 
 iframe {
-    border: 0;
-    background: transparent;
+	border: 0;
+	background: transparent;
 }
 
 input {
-    border: 0;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    /* text-align: center; */
-    align-items: center;
-    align-content: center;
-    background-color: rgba(255, 255, 255, 0.758);
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	/* text-align: center; */
+	align-items: center;
+	align-content: center;
+	background-color: rgba(255, 255, 255, 0.758);
 }
 
 input[type=checkbox] {
-    width: unset;
+	width: unset;
 }
 
 template, .template {
-    display: none; /* Internet Explorer 11 does not seem to know template, so for all browsers that don't support this it'll be hidden anyways. */
+	display: none; /* Internet Explorer 11 does not seem to know template, so for all browsers that don't support this it'll be hidden anyways. */
 }
 
 article, .article {
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
 }
 
 .window > div {
-    position: absolute;
-    pointer-events: auto;
+	position: absolute;
+	pointer-events: auto;
 }
 
 .window.open {
-    pointer-events: auto;
+	pointer-events: auto;
 }
 
 .window:not(.open) > content,
 .window:not(.open) > .content {
-    /*display: none; /* The display attribute is set to none by default */
-    z-index: -1000;
-    transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
-    -webkit-transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
-    opacity: 0;
-    /*pointer-events: none !important;*/
+	/*display: none; /* The display attribute is set to none by default */
+	z-index: -1000;
+	transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
+	-webkit-transform: perspective(4cm) rotateX(4deg) rotateY(2deg) translateZ(-3cm) translateY(-1cm) !important;
+	opacity: 0;
+	/*pointer-events: none !important;*/
 }
 
 .window:not(.open):not(.animating) {
-    display: none !important;
+	display: none !important;
 }
 
 .window:not(.open), .window:not(.open) > content, .window:not(.open) > div,
 .window:not(.open) > content > article, .window:not(.open) > content > article *,
 .window:not(.open), .window:not(.open) > .content, .window:not(.open) > div,
 .window:not(.open) > .content > .article, .window:not(.open) > .content > .article * {
-    pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
+	pointer-events: none !important; /*  Disable the pointer events on all interactable children. Some older browsers I tested like Chrome 48 and IE11 don't disable the pointer events for the children when a parent is set do none. */ /**/
 }
 
 .window-buttons {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
- /*{
-    pointer-events: none !important;
+/*{
+	pointer-events: none !important;
 }*/
 
 .window > content > article,
 .window > .content > .article { 
-    width: 100%;
-    /* height: 100%; */
-    -webkit-box-flex: 1;
-    flex: 1;
-    overflow: auto;
-    box-sizing: border-box;
-    pointer-events: auto;
-    display: flex;
-    z-index: 1;
-    transition: inherit;
-    /* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
+	width: 100%;
+	/* height: 100%; */
+	-webkit-box-flex: 1;
+	flex: 1;
+	overflow: auto;
+	box-sizing: border-box;
+	pointer-events: auto;
+	display: flex;
+	z-index: 1;
+	transition: inherit;
+	/* box-sizing: content-box; Allows us to resize the window from the inside without extra calculations. */
 }
 
 /* .window > content > article */
 
 .window > content > article *,
 .window > .content > .article * {
-    width: 100%;
-    display: -webkit-box;
-    -webkit-box-flex: 1;
-    flex: 1;
+	width: 100%;
+	display: -webkit-box;
+	-webkit-box-flex: 1;
+	flex: 1;
 }
 
 .window > content > article > *,
 .window > content > article > iframe,
 .window > .content > .article > *,
 .window > .content > .article > iframe {
-    /*z-index: -1; but tizabIe thiz noz cuz itz naxing it breax*/ /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any .window body which gives the illusion of the prescense of lag. */
-    vertical-align: bottom;
+	/*z-index: -1; but tizabIe thiz noz cuz itz naxing it breax*/ /* By setting z-index of the container to 1 and the iframe or other interactive content to -1 we can mask this when pointer-events are set to "none". If we don't do this we can't capture the events in Internet Explorer 11 because the iframe is then on top of the container (because the opening tag is below it in HTML) and captures the mousemove events but throws them away causing the windows to stop following the mouse when the cursor goes over any .window body which gives the illusion of the prescense of lag. */
+	vertical-align: bottom;
 }
 
 .window.animating,
 .window.animating > content,
 .window.animating > .backdrop-clip * {
-    -webkit-transition: all 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
-    transition: all 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
+	-webkit-transition: all 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
+	transition: all 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
 }
 
 .compositor-animations .window.animating {
-    transition-property: transform !important;
-    will-change: transform !important;
+	transition-property: transform !important;
+	will-change: transform !important;
 }
 
 .compositor-animations .window.animating > content {
-    transition: none;
+	transition: none;
 }
 
 .compositor-animations .window > content {
-    transition: none !important;
-    transform-origin: left top;
+	transition: none !important;
+	transform-origin: left top;
 }
 
 .window.maximized {
-    top: 0 !important;
-    left: 0 !important;
-    bottom: 0 !important;
-    right: 0 !important;
-    border: none !important;
-    border-radius: 0 !important;
-    z-index: 9999 !important;
+	top: 0 !important;
+	left: 0 !important;
+	bottom: 0 !important;
+	right: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	z-index: 9999 !important;
 }
 
 body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
-    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
+	transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
 }
 
 .window.maximized:not(.scaled-max) {
-    transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg);
+	transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg);
 }
 
 .use-scale .window.maximized,
 .window.maximized.use-scale {
-    width: 100% !important;
-    height: 100% !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .window.maximized > content {
-    border: 0px solid transparent !important;
+	border: 0px solid transparent !important;
 }
 
 .window.maximized > .backdrop-clip * {
-    transform: translate(0px, 0px) !important;
+	transform: translate(0px, 0px) !important;
 }
 
 .slow-animations *,
 body.slow-animations *.window,
 .slow-animations *.window > content,
 .slow-animations .window.animating > .backdrop-clip * {
-    -webkit-transition-duration: 3s !important;
-    transition-duration: 3s !important;
+	-webkit-transition-duration: 3s !important;
+	transition-duration: 3s !important;
 }
 
 article > *,
 .article > *,
 .article {
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
 }
 
 .drag-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: none;
 }
 
 .dragging .drag-overlay {
-    display: block;
-    z-index: 1000;
-    width: 100% !important;
-    height: 100% !important;
+	display: block;
+	z-index: 1000;
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .dragging header {
-    cursor: grabbing;
+	cursor: grabbing;
 }
 
 .acrylic {
-    background-color: rgba(0, 0, 0, 0.507);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background-repeat: repeat;
-    z-index: -1;
+	background-color: rgba(0, 0, 0, 0.507);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	background-repeat: repeat;
+	z-index: -1;
 }
 
 .acrylic::before {
-    pointer-events: none;
-    content: "";
-    opacity: 4;
-    z-index: 2;
-    background-image: url("./Assets/Noise.png");
-    width: 100%;
-    height: 100%;
+	pointer-events: none;
+	content: "";
+	opacity: 4;
+	z-index: 2;
+	background-image: url("./Assets/Noise.png");
+	width: 100%;
+	height: 100%;
 }
 
 /* button {
-    background-color: rgba(0, 0, 0, 0.219);
-    border: 1px solid black;
-    text-rendering: geometricPrecision;
-    pointer-events: auto !important;
+	background-color: rgba(0, 0, 0, 0.219);
+	border: 1px solid black;
+	text-rendering: geometricPrecision;
+	pointer-events: auto !important;
 } */
 
 button {
-    pointer-events: auto !important;
+	pointer-events: auto !important;
 }
 
 button:hover {
-    background-color: rgba(153, 153, 153, 0.219);
+	background-color: rgba(153, 153, 153, 0.219);
 }
 
 .blur button {
-    backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
 }
 
 /* Resize grabbers */
 
 .window > div.touch {
 	width: 20px;
-    height: 20px;
+	height: 20px;
 	z-index: 1000;
 	cursor: unset !important;
 }
@@ -499,87 +502,87 @@ button:hover {
 }
 
 .window > .sizer-1, .window > div.touch-sizer-1 {
-    top: 0;
-    left: 0;
-    cursor: n-resize;
-    width: 100%;
+	top: 0;
+	left: 0;
+	cursor: n-resize;
+	width: 100%;
 }
 
 .window > .sizer-2, .window > div.touch-sizer-2 {
-    top: 0;
-    right: 0;
-    cursor: e-resize;
-    height: 100%;
+	top: 0;
+	right: 0;
+	cursor: e-resize;
+	height: 100%;
 }
 
 .window > .sizer-3, .window > div.touch-sizer-3 {
-    bottom: 0;
-    left: 0;
-    cursor: s-resize;
-    width: 100%;
+	bottom: 0;
+	left: 0;
+	cursor: s-resize;
+	width: 100%;
 }
 
 .window > .sizer-4, .window > div.touch-sizer-4 {
-    top: 0;
-    left: 0;
-    cursor: w-resize;
-    height: 100%;
+	top: 0;
+	left: 0;
+	cursor: w-resize;
+	height: 100%;
 }
 
 .window > .sizer-5 {
-    top: 0;
-    left: 0;
-    cursor: nw-resize;
+	top: 0;
+	left: 0;
+	cursor: nw-resize;
 }
 
 .window > .sizer-6 {
-    top: 0;
-    right: 0;
-    cursor: ne-resize;
+	top: 0;
+	right: 0;
+	cursor: ne-resize;
 }
 
 .window > .sizer-7 {
-    bottom: 0;
-    right: 0;
-    cursor: se-resize;
+	bottom: 0;
+	right: 0;
+	cursor: se-resize;
 }
 
 .window > .sizer-8 {
-    bottom: 0;
-    left: 0;
-    cursor: sw-resize;
+	bottom: 0;
+	left: 0;
+	cursor: sw-resize;
 }
 
 .window > div.touch-sizer-6,
 .window > div.touch-sizer-5,
 .window > div.touch-sizer-1 {
-    top: -20px;
+	top: -20px;
 }
 
 .window > div.touch-sizer-7,
 .window > div.touch-sizer-6,
 .window > div.touch-sizer-2 {
-    right: -20px;
+	right: -20px;
 }
 
 .window > div.touch-sizer-8,
 .window > div.touch-sizer-7,
 .window > div.touch-sizer-3 {
-    bottom: -20px;
+	bottom: -20px;
 }
 
 .window > div.touch-sizer-8,
 .window > div.touch-sizer-5,
 .window > div.touch-sizer-4 {
-    left: -20px;
+	left: -20px;
 }
 
 .window:not([focus]) content > article > * {
-    pointer-events: none !important;
+	pointer-events: none !important;
 }
 
 .jelly .window {
-    transition: transform 100ms;
+	transition: transform 100ms;
 }
 
 .phazt-rezize .window {
@@ -592,73 +595,73 @@ button:hover {
 }
 
 /* @supports (display: flex) {
-    tbody {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+	tbody {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
 
-    .window tr:nth-of-type(2) {
-        height: 100%;
-        display: block;
-    }
+	.window tr:nth-of-type(2) {
+		height: 100%;
+		display: block;
+	}
 } */
 
 @supports (backdrop-filter: none) or (-webkit-backdrop-filter: none) {
 
-    body.blur .window > content {
-        background-color: rgba(255, 255, 255, 0.267);
-        /* backdrop-filter: saturate(150%) blur(20px); */
-        /* padding: 0; */
-        border: 1px solid rgba(255, 255, 255, 0.267);
-    }
+	body.blur .window > content {
+		background-color: rgba(255, 255, 255, 0.267);
+		/* backdrop-filter: saturate(150%) blur(20px); */
+		/* padding: 0; */
+		border: 1px solid rgba(255, 255, 255, 0.267);
+	}
 
 	body.blur:not(.modern) .window > content {
 		padding: 0;
 	}
 
-    .blur .backdrop-filter {
-        backdrop-filter: saturate(150%) blur(20px);
-        -webkit-backdrop-filter: saturate(150%) blur(20px);
-    }
+	.blur .backdrop-filter {
+		backdrop-filter: saturate(150%) blur(20px);
+		-webkit-backdrop-filter: saturate(150%) blur(20px);
+	}
 
-    body.no-blur *,
-    body.no-blur *::before,
-    body.no-blur *::after {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
+	body.no-blur *,
+	body.no-blur *::before,
+	body.no-blur *::after {
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+	}
 
-    body.blur .window > content > *, body.blur .window > content > article > * {
-        background: none;
-    }
+	body.blur .window > content > *, body.blur .window > content > article > * {
+		background: none;
+	}
 
-    body.blur .window header button {
-        backdrop-filter: unset;
-    }
+	body.blur .window header button {
+		backdrop-filter: unset;
+	}
 
-    .blur #dock {
-        background: linear-gradient(0deg, #b2b2b2, #73737329);
-        backdrop-filter: blur(10px);
-    }
+	.blur #dock {
+		background: linear-gradient(0deg, #b2b2b2, #73737329);
+		backdrop-filter: blur(10px);
+	}
 
-    @media (prefers-color-scheme: dark) {
-        body.blur .window > content {
-            background-color: rgba(0, 0, 0, 0.468);
-            border: 1px solid rgba(147, 147, 147, 0.27);
-        }
-    }
+	@media (prefers-color-scheme: dark) {
+		body.blur .window > content {
+			background-color: rgba(0, 0, 0, 0.468);
+			border: 1px solid rgba(147, 147, 147, 0.27);
+		}
+	}
 }
 
 @media (prefers-color-scheme: dark) {
-  .window, button {
-    color: white;
-  }
+.window, button {
+	color: white;
+}
 }
 
 @media (prefers-color-scheme: light) {
-  .window, button {
-    color: black;
-    /* background-color: #ffffff2b; */
-  }
+.window, button {
+	color: black;
+	/* background-color: #ffffff2b; */
+}
 }
