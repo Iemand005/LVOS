@@ -564,4 +564,11 @@ function downloadObject(object, fileName) {
 	a.setAttribute("href", uri);
 	a.setAttribute("download", fileName || "öbject" + ".json");
 	
-	document.body.appendChild
+	document.body.appendChild(a);     
+	a.click();
+	document.body.removeChild(a);
+}
+
+function downloadSettings() {
+	downloadObject(localStorage);
+}
