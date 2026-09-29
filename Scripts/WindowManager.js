@@ -1224,9 +1224,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		if (!supportsPointer) createTouchSizers = false;
 
-		if(this.application?.resizable !== false && createSizers) {
-			
-		}
+		if(this.application?.resizable !== false && createSizers) this._createSizers(createTouchSizers);
 
 		target.addEventListener("dragstart", cancelDomEvent, false);
 		target.addEventListener("selectstart", cancelDomEvent, false);
