@@ -669,3 +669,10 @@ button:hover {
 		fill: rgb(0, 0, 0);
 	}
 }
+
+@supports (frame-sizing: content-height) {
+  .window {
+    height: auto;
+    frame-sizing: content-height;
+  }
+}
