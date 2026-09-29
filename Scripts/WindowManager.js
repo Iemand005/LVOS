@@ -1126,8 +1126,8 @@ function Dialog(object, create) {
 	this._appIcon = null;
 
 	var self = this;
-	/** @param {MouseEvent|PointerEvent} ev */
-	this.activationHandler = function (ev) {
+	
+	this.activationHandler = function (/** @type {MouseEvent | PointerEvent} */ev) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self);
