@@ -1226,57 +1226,7 @@ Dialog.prototype.initWithObject = function(object) {
 		if (!supportsPointer) createTouchSizers = false;
 
 		if(this.application?.resizable !== false && createSizers) {
-			/**
-			 * @this {Dialog}
-			 * @param {number} id
-			 */
-			var createSizer = function (id) {
-				if (!target) return;
-
-				var sizerId = "sizer-" + id;
-
-				var sizer = self.getElementByTagOrClassName(sizerId);
-				if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
-				sizer.draggable = false;
-				sizer.id = id.toString();
-				sizer.classList.add(sizerId);
-				/** @param {PointerEvent | MouseEvent} ev */
-				var pointerDown = function (ev) {
-					if (!activationHandler(ev)) return;
-					windowManager.dragAction.set(id);
-					cancelDomEvent(ev);
-				};
-				var pointerUp = function () { windowManager.disableDialogDrag(); };
-				if (supportsPointer) {
-					sizer.onpointerdown = pointerDown;
-					sizer.onpointerup = pointerUp;
-					sizer.onpointercancel = pointerUp;
-				}
-				else sizer.onmousedown = pointerDown;
-				target.appendChild(sizer);
-
-				if (createTouchSizers) {
-					var touchSizerId = "touch-sizer-" + id;
-
-					var touchSizer = self.getElementByTagOrClassName(touchSizerId);
-					if (!touchSizer || !isElement(touchSizer)) touchSizer = document.createElement("div");
-
-					touchSizer.draggable = false;
-					touchSizer.id = "touch-" + id;
-					touchSizer.classList.add(touchSizerId);
-					touchSizer.classList.add("touch");
-
-					if (supportsPointer) {
-						touchSizer.onpointerdown = pointerDown;
-						touchSizer.onpointerup = pointerUp;
-						touchSizer.onpointercancel = pointerUp;
-					}
-
-					target.appendChild(touchSizer);
-				}
-			};
-
-			for (var i = 0; i < 8; i++) createSizer.call(this, i + 1);
+			
 		}
 
 		target.addEventListener("dragstart", cancelDomEvent, false);
@@ -1324,6 +1274,61 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.application && this.application.launch) this.launch();
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
+};
+
+Dialog.prototype._createSizezrs = function(){
+
+	/**
+	 * @this {Dialog}
+	 * @param {number} id
+	 */
+	var createSizer = function (id) {
+		if (!target) return;
+
+		var sizerId = "sizer-" + id;
+
+		var sizer = self.getElementByTagOrClassName(sizerId);
+		if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
+		sizer.draggable = false;
+		sizer.id = id.toString();
+		sizer.classList.add(sizerId);
+		/** @param {PointerEvent | MouseEvent} ev */
+		var pointerDown = function (ev) {
+			if (!activationHandler(ev)) return;
+			windowManager.dragAction.set(id);
+			cancelDomEvent(ev);
+		};
+		var pointerUp = function () { windowManager.disableDialogDrag(); };
+		if (supportsPointer) {
+			sizer.onpointerdown = pointerDown;
+			sizer.onpointerup = pointerUp;
+			sizer.onpointercancel = pointerUp;
+		}
+		else sizer.onmousedown = pointerDown;
+		target.appendChild(sizer);
+
+		if (createTouchSizers) {
+			var touchSizerId = "touch-sizer-" + id;
+
+			var touchSizer = self.getElementByTagOrClassName(touchSizerId);
+			if (!touchSizer || !isElement(touchSizer)) touchSizer = document.createElement("div");
+
+			touchSizer.draggable = false;
+			touchSizer.id = "touch-" + id;
+			touchSizer.classList.add(touchSizerId);
+			touchSizer.classList.add("touch");
+
+			if (supportsPointer) {
+				touchSizer.onpointerdown = pointerDown;
+				touchSizer.onpointerup = pointerUp;
+				touchSizer.onpointercancel = pointerUp;
+			}
+
+			target.appendChild(touchSizer);
+		}
+	};
+
+	for (var i = 0; i < 8; i++) createSizer.call(this, i + 1);
 };
 
 Dialog.prototype.reportState = function() {
