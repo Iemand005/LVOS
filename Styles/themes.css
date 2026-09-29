@@ -721,6 +721,10 @@ body.no-blur.modern.blur .window content {
     background-color: #ff5f57;
 }
 
+.google .window header {
+	background: linear-gradient(90deg,red,red 25%,#fbbc04,#34a853,#1967d2 75%);
+}
+
 .color-debug .window header,
 .color-debug .window article {
 	background-color: black;
