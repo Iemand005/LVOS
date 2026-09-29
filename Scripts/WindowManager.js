@@ -1225,7 +1225,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		if (!supportsPointer) createTouchSizers = false;
 
-		if(!this.fixed && createSizers) {
+		if(this.application?.resizable !== false && createSizers) {
 			/**
 			 * @this {Dialog}
 			 * @param {number} id
