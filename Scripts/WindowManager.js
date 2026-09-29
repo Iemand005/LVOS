@@ -1326,13 +1326,6 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
-Object.defineProperty(Dialog.prototype, "isOpen", {
-	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
-	set: function(open) { this.toggleOpen(open); }
-});
-Object.defineProperty(Dialog.prototype, "frame", {
-	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
-});
 Dialog.prototype.reportState = function() {
 	this.messageFrame("window-size", {});
 	this.messageFrame("theme", {className: document.body.className});
@@ -1374,6 +1367,13 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 	if (frame || !create || !this.body) return frame;
 	return this.body.appendChild(document.createElement("iframe"));
 };
+Object.defineProperty(Dialog.prototype, "isOpen", {
+	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
+	set: function(open) { this.toggleOpen(open); }
+});
+Object.defineProperty(Dialog.prototype, "frame", {
+	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
+});
 Object.defineProperty(Dialog.prototype, "src", {
 	get: function() { return this._src || this.application && this.application.src; },
 	set: function(url) { this.openUrl(url); }
