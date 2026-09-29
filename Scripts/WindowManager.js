@@ -1277,7 +1277,8 @@ Dialog.prototype.initWithObject = function(object) {
 };
 
 Dialog.prototype._createSizezrs = function(){
-
+	var self = this;
+	var target = this.target;
 	/**
 	 * @this {Dialog}
 	 * @param {number} id
