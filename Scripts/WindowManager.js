@@ -1244,8 +1244,8 @@ Dialog.prototype.initWithObject = function(object) {
 			header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
 
 
-		if (supportsPointer) target.addEventListener("pointerdown", activationHandler, false);
-		else target.addEventListener("mousedown", activationHandler, false);
+		if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
+		else target.addEventListener("mousedown", this.activationHandler, false);
 
 		target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function() {
 			self.createPopOut();
