@@ -1376,7 +1376,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 });
 Object.defineProperty(Dialog.prototype, "resizable", {
 	get: function() {
-		return this.application && this.application.resizable !== false;
+		return !this.application ? true : this.application.resizable !== false;
 	}
 })
 Object.defineProperty(Dialog.prototype, "src", {
