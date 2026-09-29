@@ -1278,7 +1278,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 	var self = this;
 	var target = this.target;
 
-	if (typeof createTouchSizers === "undefined")
+	if (typeof createTouchSizers === "undefined") createTouchSizers = supportsPointer;
 
 	/**
 	 * @this {Dialog}
