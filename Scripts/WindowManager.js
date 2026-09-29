@@ -1217,7 +1217,7 @@ Dialog.prototype.initWithObject = function(object) {
 	};
 
 	var target = this.target;
-	if (target) {
+	if (target && this.activationHandler) {
 
 		var createSizers = true;
 		var createTouchSizers = true;
