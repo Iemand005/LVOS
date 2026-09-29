@@ -1374,6 +1374,11 @@ Object.defineProperty(Dialog.prototype, "isOpen", {
 Object.defineProperty(Dialog.prototype, "frame", {
 	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
+Object.defineProperty(Dialog.prototype, "resizable", {
+	get: function() {
+		return this.application && this.application.resizable || true;
+	}
+})
 Object.defineProperty(Dialog.prototype, "src", {
 	get: function() { return this._src || this.application && this.application.src; },
 	set: function(url) { this.openUrl(url); }
