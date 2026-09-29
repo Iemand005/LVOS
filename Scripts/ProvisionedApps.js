@@ -297,7 +297,7 @@ var games = [
 		title: "Minesweeper",
 		id: "minesweeper",
 		src: "./Games/Minesweeper/index.html",
-		fixed: true,
+		resizable: false,
 		scroll: false
 	},
 	{

@@ -7,6 +7,7 @@ interface Application {
 	title: string;
 	id: string;
 	src: string;
+	resizable?: boolean;
 	fixed?: boolean;
 	scroll?: boolean;
 	hidden?: boolean;
