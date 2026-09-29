@@ -1382,7 +1382,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Object.defineProperty(Dialog.prototype, "resizable", {
-	get: function() { return !this.application ? true : this.application.resizable !== false; }
+	get: function() { return !this.application ? true : this.application.resizable !== false; },
 	set: function(v) { if (v) this._createSizers(); }
 })
 Object.defineProperty(Dialog.prototype, "src", {
