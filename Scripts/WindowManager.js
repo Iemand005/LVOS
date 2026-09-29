@@ -1283,7 +1283,7 @@ Dialog.prototype._createSizezrs = function(){
 	 * @param {number} id
 	 */
 	var createSizer = function (id) {
-		if (!target) return;
+		if (!target || !self.activationHandlerthat's okay) return;
 
 		var sizerId = "sizer-" + id;
 
@@ -1294,7 +1294,7 @@ Dialog.prototype._createSizezrs = function(){
 		sizer.classList.add(sizerId);
 		/** @param {PointerEvent | MouseEvent} ev */
 		var pointerDown = function (ev) {
-			if (!activationHandler(ev)) return;
+			if (!self.activationHandler(ev)) return;
 			windowManager.dragAction.set(id);
 			cancelDomEvent(ev);
 		};
