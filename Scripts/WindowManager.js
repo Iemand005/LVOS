@@ -1124,6 +1124,15 @@ function Dialog(object, create) {
 
 	/** @type {HTMLImageElement| null} */
 	this._appIcon = null;
+
+	var self = this;
+	/** @param {MouseEvent|PointerEvent} ev */
+	this.activationHandler = function (ev) {
+		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
+			return false;
+		windowManager.windowActivationEvent(ev, self);
+		return true;
+	};
 }
 
 
@@ -1205,16 +1214,6 @@ Dialog.prototype.initWithObject = function(object) {
 	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
-	};
-
-	/**
-	 * @param {MouseEvent|PointerEvent} ev
-	 */
-	var activationHandler = function (ev) {
-		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
-			return false;
-		windowManager.windowActivationEvent(ev, self);
-		return true;
 	};
 
 	var target = this.target;
