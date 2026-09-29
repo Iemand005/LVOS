@@ -1275,7 +1275,8 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
-Dialog.prototype._createSizezrs = function(){
+/** @param {boolean createTouchSizers} */
+Dialog.prototype._createSizezrs = function(createTouchSizers){
 	var self = this;
 	var target = this.target;
 	/**
