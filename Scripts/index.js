@@ -35,7 +35,10 @@ function init() {
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
 			var replacement = document.createElement('script');
 			replacement.src = s.src;
-			s.replaceWith(replacement);
+			try {
+
+				s.replaceWith(replacement);
+			} catch(ex) {}
 		});
 	}
 
