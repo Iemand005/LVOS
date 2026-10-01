@@ -1,10 +1,10 @@
 {
-	"name": "LVOS",
-	"short_name": "LVOS",
+	"name": "VulpOS",
+	"short_name": "VulpOS",
 	"start_url": "./index.html",
 	"display": "standalone",
-	"background_color": "#ffffff",
-	"theme_color": "#007bff",
+	"background_color": "#242424",
+	"theme_color": "#FF7b00",
 	"icons": [
 		{
 			"src": "icon-192.png",
