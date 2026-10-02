@@ -1244,15 +1244,18 @@ Dialog.prototype.initWithObject = function(object) {
 		else target.addEventListener("mousedown", this.activationHandler, false);
 
 		var ejectButton = buttons[windowButtons.eject];
-		if (ejectButton) ejectButton.addEventListener("click", function() {
+		if (ejectButton)
+			ejectButton.addEventListener("click", function() {
 			self.createPopOut();
 			self.quit();
 		}, false);
 
 		var closeButton = buttons[windowButtons.close];
-		if (closeButton) closeButton.addEventListener("click", this.close.bind(this), false);
+		if (closeButton)
+			closeButton.addEventListener("click", this.close.bind(this), false);
 		var fullscreenButton = buttons[windowButtons.full];
-		if (fullscreenButton) fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+		if (fullscreenButton)
+			fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
 		this.toggleOpen(false);
 	}
