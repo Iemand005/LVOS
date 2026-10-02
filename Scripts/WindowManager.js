@@ -853,7 +853,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		return;
 	}
 	if (!data || !id) return;
-	/** @type {Dialog} */
+
 	var dialog = this.getWindowById(id);
 	if (!dialog) {
 		if (!appManager) return;
