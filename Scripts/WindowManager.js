@@ -212,6 +212,8 @@ function messageReceived(type, data, source){
 
 		var dialog = windowManager.windows[source];
 
+		if (!dialog) return;
+
 		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
 			case "launchOverlay":
