@@ -1218,6 +1218,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 	var target = this.target;
 	if (target && this.activationHandler) {
+		var buttons = target.getElementsByTagName("button");
 
 		var createSizers = true;
 
@@ -1247,7 +1248,6 @@ Dialog.prototype.initWithObject = function(object) {
 			self.quit();
 		}, false);
 
-		var buttons = target.getElementsByTagName("button");
 		buttons[windowButtons.close].addEventListener("click", this.close.bind(this), false);
 		buttons[windowButtons.full].addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
