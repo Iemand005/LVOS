@@ -1243,7 +1243,8 @@ Dialog.prototype.initWithObject = function(object) {
 		if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
 		else target.addEventListener("mousedown", this.activationHandler, false);
 
-		buttons[windowButtons.eject].addEventListener("click", function() {
+		var ejectButton = buttons[windowButtons.eject];
+		if (ejectButton) ejectButton.addEventListener("click", function() {
 			self.createPopOut();
 			self.quit();
 		}, false);
