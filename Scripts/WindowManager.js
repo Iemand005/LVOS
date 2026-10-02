@@ -116,8 +116,12 @@ function getDomain(url) {
 
 /** @param {string} url */
 function getSiteName(url) {
-	var parts = getDomain(url).split(".");
+	var domain = getDomain(url);
+	if (!domain) return null;
+	var parts = domain.split(".");
 	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+
+	if (!name) return null;
 
 	return name.charAt(0).toUpperCase() + name.slice(1);
 }
