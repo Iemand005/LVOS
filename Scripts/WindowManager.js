@@ -110,7 +110,8 @@ function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico
 
 /** @param {string} url */
 function getDomain(url) {
-	return url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0].split("?")[0];
+	var regged = url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0];
+	return regged && regged.split("?")[0];
 }
 
 /** @param {string} url */
