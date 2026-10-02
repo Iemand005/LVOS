@@ -2,7 +2,7 @@
 	"editor.tabSize": 4,
 	"editor.indentSize": "tabSize",
 	"editor.insertSpaces": false,
-	"chat.disableAIFeatures": false,
+	"chat.disableAIFeatures": true,
 	"editor.inlineSuggest.enabled": true,
 	"files.associations": {
 		"*.hta": "html"
