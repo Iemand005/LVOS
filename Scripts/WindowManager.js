@@ -1249,8 +1249,10 @@ Dialog.prototype.initWithObject = function(object) {
 			self.quit();
 		}, false);
 
-		buttons[windowButtons.close].addEventListener("click", this.close.bind(this), false);
-		buttons[windowButtons.full].addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+		var closeButton = buttons[windowButtons.close];
+		if (closeButton) closeButton.addEventListener("click", this.close.bind(this), false);
+		var fullscreenButton = buttons[windowButtons.full];
+		if (fullscreenButton) fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
 		this.toggleOpen(false);
 	}
