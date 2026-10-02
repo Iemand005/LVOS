@@ -1232,7 +1232,7 @@ Dialog.prototype.initWithObject = function(object) {
 			self.verifyEjectCapability();
 		} catch (exception) {
 			console.warn("Failed to verify eject capability" + exception);
-			if (target) target.getElementsByTagName("button")[0].style.display = "none";
+			if (buttons[0]) buttons[0].style.display = "none";
 		}}, false);
 
 		var header = this.titleBar;
@@ -1243,7 +1243,7 @@ Dialog.prototype.initWithObject = function(object) {
 		if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
 		else target.addEventListener("mousedown", this.activationHandler, false);
 
-		target.getElementsByTagName("button")[windowButtons.eject].addEventListener("click", function() {
+		buttons[windowButtons.eject].addEventListener("click", function() {
 			self.createPopOut();
 			self.quit();
 		}, false);
