@@ -221,6 +221,7 @@ function messageReceived(type, data, source){
 				if (!overlay) break;
 
 				overlay.ontransitionend = function () {
+					if (!dialog) return;
 					dialog.messageFrame("prepareToLaunchOverlay");
 					if (dialog.frame) {
 						var oriel = new URL(dialog.frame.src);
