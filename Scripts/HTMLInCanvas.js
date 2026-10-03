@@ -1,4 +1,10 @@
 
+// @type
+
+/**
+ * @typedef CanvasContext
+ * 
+ */
 
 class CanvasMaker {
 
