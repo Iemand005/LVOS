@@ -1,6 +1,9 @@
 
 
 class CanvasMaker {
+
+	canvas = document.createElement("canvas");;
+
 	createCanvas() {
 		const canvas = document.createElement("canvas");
 
