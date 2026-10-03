@@ -3,7 +3,7 @@
 
 /**
  * @typedef CanvasContext
- * 
+ * @property {WebGLRenderingContext} gl
  */
 
 class CanvasMaker {
@@ -31,7 +31,7 @@ class CanvasMaker {
 	}
 
 	startDrawing() {
-		const c = this.canvas, gl = c.getContext('webgl');
+		const c = this.canvas, gl = c.getContext('webgl2');
 c.width = innerWidth; c.height = innerHeight;
 const W = c.width, H = c.height;
 gl.viewport(0, 0, W, H);
