@@ -1,139 +1,254 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HTML in Canvas + WebGL Playground</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML-in-Canvas: live HTML on a 3D cube</title>
 <style>
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #111;
-    font-family: system-ui, sans-serif;
-}
+  html, body { margin: 0; height: 100%; background: #14181f; overflow: hidden; font-family: system-ui, sans-serif; }
 
-#canvas {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-}
+  /* The WebGL canvas. layoutsubtree lets its children be laid out (but not painted) */
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  #stage:active { cursor: grabbing; }
 
-#page {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 48px;
-    background: linear-gradient(135deg, #182848, #4b6cb7);
-    color: white;
-}
+  /* The live HTML that becomes the cube's texture (a direct child of the canvas) */
+  #panel {
+    width: 512px; height: 512px; box-sizing: border-box; padding: 36px;
+    display: flex; flex-direction: column; gap: 18px;
+    background: linear-gradient(155deg, #f6f1e7 0%, #e8dcc3 100%);
+    color: #2a2218; font-family: Georgia, "Times New Roman", serif;
+  }
+  #panel h1 { margin: 0; font-size: 40px; line-height: 1.05; letter-spacing: -0.01em; }
+  #panel p  { margin: 0; font-size: 19px; line-height: 1.4; }
+  #clock    { font: 700 54px/1 "Courier New", monospace; color: #b3341c; }
+  .bar      { height: 14px; background: #2a221822; border-radius: 7px; overflow: hidden; }
+  .bar i    { display: block; height: 100%; width: 40%; background: #b3341c; border-radius: 7px;
+              animation: slide 2.2s ease-in-out infinite alternate; }
+  @keyframes slide { from { margin-left: 0; } to { margin-left: 60%; } }
+  .row      { display: flex; gap: 12px; align-items: center; }
+  #count    { font: 700 28px/1 system-ui, sans-serif; min-width: 2.5ch; }
+  input, button { font: 18px system-ui, sans-serif; padding: 10px 14px; border-radius: 8px; border: 2px solid #2a2218; }
+  input  { flex: 1; background: #fffdf8; }
+  button { background: #2a2218; color: #f6f1e7; }
 
-.card {
-    max-width: 700px;
-    padding: 32px;
-    border-radius: 24px;
-    background: rgb(255 255 255 / 15%);
-    border: 1px solid rgb(255 255 255 / 25%);
-    box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
-    backdrop-filter: blur(12px);
-}
-
-h1 {
-    margin-top: 0;
-    font-size: 48px;
-}
-
-button {
-    padding: 12px 18px;
-    border: 0;
-    border-radius: 10px;
-    font: inherit;
-    cursor: pointer;
-}
-
-#status {
-    position: fixed;
-    left: 16px;
-    bottom: 16px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: rgb(0 0 0 / 70%);
-    color: white;
-    font: 13px monospace;
-    z-index: 10;
-}
+  #warn {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 460px;
+    background: #fff; color: #222; padding: 24px 28px; border-radius: 12px; line-height: 1.5; display: none;
+  }
+  #hint { position: fixed; left: 16px; bottom: 14px; color: #8b95a7; font-size: 14px; pointer-events: none; }
 </style>
 </head>
 <body>
 
-<canvas id="canvas" layoutsubtree>
-    <div id="page">
-        <div class="card">
-            <h1>Hello from HTML</h1>
-            <p>
-                This is actual HTML inside an HTML-in-Canvas canvas.
-                The eventual goal is to feed this rendered element into WebGL.
-            </p>
-            <button id="button">Click me</button>
-        </div>
+<canvas id="stage" layoutsubtree content="drawable">
+  <div id="panel" drawable>
+    <h1>Hello from the DOM</h1>
+    <p>This is ordinary HTML and CSS, laid out by the browser and drawn onto every face of a WebGL cube.</p>
+    <div id="clock">00:00:00</div>
+    <div class="bar"><i></i></div>
+    <div class="row">
+      <input value="Editable text field" aria-label="Sample input">
+      <button id="btn" type="button">Count</button>
+      <span id="count">0</span>
     </div>
+  </div>
 </canvas>
 
-<div id="status">initialising…</div>
+<div id="warn">
+  <strong>HTML-in-Canvas isn't available in this browser.</strong><br>
+  It's an experimental Chromium feature. Open this file in a recent Chrome or Canary and enable
+  <code>chrome://flags/#canvas-draw-element</code> and <code>chrome://flags/#enable-experimental-web-platform-features</code>, then relaunch.
+</div>
+<div id="hint">Drag to rotate</div>
 
 <script>
-const canvas = document.querySelector("#canvas");
-const page = document.querySelector("#page");
-const status = document.querySelector("#status");
+(() => {
+  const canvas = document.getElementById('stage');
+  const panel  = document.getElementById('panel');
+  const warn   = document.getElementById('warn');
+  const gl     = canvas.getContext('webgl', { antialias: true });
 
-const gl = canvas.getContext("webgl", {
-    alpha: false,
-    antialias: true
-});
+  // --- Feature detection ---------------------------------------------------
+  const hasSub = gl && typeof gl.texElementSubImage2D === 'function';   // current spec
+  const hasOld = gl && typeof gl.texElementImage2D === 'function';      // earlier builds
+  if (!gl || (!hasSub && !hasOld)) {
+    warn.style.display = 'block';
+    return;
+  }
+  function showError(e) {
+    console.error(e);
+    warn.innerHTML = '<strong>HTML-in-Canvas call failed.</strong><br>' + String(e && e.message || e);
+    warn.style.display = 'block';
+  }
 
-function resize() {
-    const dpr = devicePixelRatio;
-    const width = Math.round(canvas.clientWidth * dpr);
-    const height = Math.round(canvas.clientHeight * dpr);
+  // --- Live content: things that change, to prove the texture is live -------
+  const clock = document.getElementById('clock');
+  const count = document.getElementById('count');
+  let n = 0;
+  document.getElementById('btn').addEventListener('click', () => { count.textContent = ++n; });
+  setInterval(() => {
+    clock.textContent = new Date().toLocaleTimeString('en-GB');
+  }, 100);
+  // The cube is draggable, so also bump the counter automatically
+  setInterval(() => { count.textContent = ++n; }, 1000);
 
-    if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-        if (gl) gl.viewport(0, 0, width, height);
+  // --- Shaders ---------------------------------------------------------------
+  const vs = `
+    attribute vec3 aPos; attribute vec3 aNormal; attribute vec2 aUV;
+    uniform mat4 uMVP; uniform mat4 uModel;
+    varying vec2 vUV; varying float vLight;
+    void main() {
+      vec3 n = normalize((uModel * vec4(aNormal, 0.0)).xyz);
+      vLight = 0.62 + 0.38 * max(dot(n, normalize(vec3(0.4, 0.8, 0.7))), 0.0);
+      vUV = aUV;
+      gl_Position = uMVP * vec4(aPos, 1.0);
+    }`;
+  const fs = `
+    precision mediump float;
+    uniform sampler2D uTex; varying vec2 vUV; varying float vLight;
+    void main() { vec4 c = texture2D(uTex, vUV); gl_FragColor = vec4(c.rgb * vLight, 1.0); }`;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+
+  // --- Cube geometry: each face gets the full texture ------------------------
+  // face = [normal, u axis (right), v axis (up)]
+  const faces = [
+    [[0,0,1],  [1,0,0],  [0,1,0]],
+    [[0,0,-1], [-1,0,0], [0,1,0]],
+    [[1,0,0],  [0,0,-1], [0,1,0]],
+    [[-1,0,0], [0,0,1],  [0,1,0]],
+    [[0,1,0],  [1,0,0],  [0,0,-1]],
+    [[0,-1,0], [1,0,0],  [0,0,1]],
+  ];
+  const corners = [[-1,-1, 0,1], [1,-1, 1,1], [1,1, 1,0], [-1,1, 0,0]]; // su, sv, texU, texV (V=0 is the top row)
+  const pos = [], nor = [], uv = [], idx = [];
+  faces.forEach(([n, u, v], f) => {
+    corners.forEach(([su, sv, tu, tv]) => {
+      for (let k = 0; k < 3; k++) pos.push(n[k] + su * u[k] + sv * v[k]);
+      nor.push(...n); uv.push(tu, tv);
+    });
+    const b = f * 4; idx.push(b, b+1, b+2, b, b+2, b+3);
+  });
+
+  function attr(name, data, size) {
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, name);
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+  }
+  attr('aPos', pos, 3); attr('aNormal', nor, 3); attr('aUV', uv, 2);
+  const ibuf = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(idx), gl.STATIC_DRAW);
+
+  // --- Texture that will hold the rendered HTML ------------------------------
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  const TEX = 1024, SRC = 512;   // texture size in texels, panel size in CSS px
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, TEX, TEX, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+  // The API's method signature has changed between Chrome builds, so try each known form
+  // and keep using the first one that works.
+  const uploaders = [];
+  if (hasSub) uploaders.push(() => gl.texElementSubImage2D(gl.TEXTURE_2D, 0, 0, 0, panel, { width: TEX, height: TEX }));
+  if (hasOld) {
+    uploaders.push(() => gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, panel));
+    uploaders.push(() => gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SRC, SRC, 0, gl.RGBA, gl.UNSIGNED_BYTE, panel));
+    uploaders.push(() => gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SRC, SRC, gl.RGBA, gl.UNSIGNED_BYTE, panel));
+  }
+  let uploader = null;
+  function upload() {
+    if (uploader) return uploader();
+    let lastErr;
+    for (const u of uploaders) {
+      try { u(); uploader = u; return; } catch (e) { lastErr = e; }
     }
-}
+    throw lastErr;
+  }
 
-new ResizeObserver(resize).observe(canvas);
-resize();
+  // The browser fires "paint" whenever the canvas children change.
+  // This is where the HTML element is captured into the texture.
+  canvas.onpaint = () => {
+    try {
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      upload();
+      // Optional: tell the browser where the element was "drawn" (used for accessibility/hit testing)
+      if (canvas.updateElementGeometry) canvas.updateElementGeometry(panel, {});
+    } catch (e) { canvas.onpaint = null; showError(e); }
+  };
+  canvas.requestPaint?.(); // make sure the first capture happens
 
-document.querySelector("#button").addEventListener("click", () => {
-    alert("The button is still HTML!");
-});
+  // --- Tiny matrix helpers (column-major) -------------------------------------
+  const mul = (a, b) => { const o = new Float32Array(16);
+    for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++)
+      o[c*4+r] = a[r]*b[c*4] + a[4+r]*b[c*4+1] + a[8+r]*b[c*4+2] + a[12+r]*b[c*4+3];
+    return o; };
+  const persp = (fov, asp, n, f) => { const t = 1 / Math.tan(fov / 2);
+    return new Float32Array([t/asp,0,0,0, 0,t,0,0, 0,0,(f+n)/(n-f),-1, 0,0,2*f*n/(n-f),0]); };
+  const rotX = a => { const c = Math.cos(a), s = Math.sin(a); return new Float32Array([1,0,0,0, 0,c,s,0, 0,-s,c,0, 0,0,0,1]); };
+  const rotY = a => { const c = Math.cos(a), s = Math.sin(a); return new Float32Array([c,0,-s,0, 0,1,0,0, s,0,c,0, 0,0,0,1]); };
+  const move = (x, y, z) => new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1]);
 
-if (!gl) {
-    status.textContent = "WebGL unavailable";
-} else {
-    status.textContent = "WebGL OK — testing HTML → texture API…";
-}
+  // --- Interaction: drag to rotate, otherwise auto-spin -----------------------
+  let rx = -0.35, ry = 0.6, dragging = false, lastX = 0, lastY = 0, idleSpin = true;
+  window.addEventListener('pointerdown', e => { dragging = true; idleSpin = false; lastX = e.clientX; lastY = e.clientY; });
+  window.addEventListener('pointerup',   () => { dragging = false; });
+  window.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    ry += (e.clientX - lastX) * 0.01; rx += (e.clientY - lastY) * 0.01;
+    lastX = e.clientX; lastY = e.clientY;
+  });
 
-console.log("canvas:", canvas);
-console.log("HTML element:", page);
-console.log("WebGL:", gl);
+  // --- Resize ----------------------------------------------------------------
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = Math.round(innerWidth  * dpr);
+    canvas.height = Math.round(innerHeight * dpr);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    canvas.requestPaint?.();
+  }
+  addEventListener('resize', resize);
+  resize();
 
-console.log("Canvas prototype methods:",
-    Object.getOwnPropertyNames(Object.getPrototypeOf(canvas.getContext("2d") || {}))
-);
+  // --- Render loop -------------------------------------------------------------
+  gl.enable(gl.DEPTH_TEST);
+  const uMVP = gl.getUniformLocation(prog, 'uMVP');
+  const uModel = gl.getUniformLocation(prog, 'uModel');
 
-console.log("WebGL prototype methods:",
-    Object.getOwnPropertyNames(Object.getPrototypeOf(gl))
-);
+  function frame() {
+    if (idleSpin) ry += 0.008;
+    const model = mul(rotX(rx), rotY(ry));
+    const size = Math.min(1, canvas.width / canvas.height) * 0.9 + 0.1; // keep it in view on portrait screens
+    const view = move(0, 0, -5.2 / size);
+    const mvp = mul(persp(Math.PI / 4, canvas.width / canvas.height, 0.1, 50), mul(view, model));
 
-console.log("Possible HTML-in-Canvas APIs:",
-    Object.getOwnPropertyNames(Object.getPrototypeOf(gl))
-        .filter(x => /element|image|draw/i.test(x))
-);
+    gl.clearColor(0.078, 0.094, 0.122, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.uniformMatrix4fv(uMVP, false, mvp);
+    gl.uniformMatrix4fv(uModel, false, model);
+    gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_SHORT, 0);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
 </script>
-
 </body>
 </html>
