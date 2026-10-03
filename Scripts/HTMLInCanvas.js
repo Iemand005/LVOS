@@ -13,6 +13,9 @@ class CanvasMaker {
 	/** @type {HTMLElement | null} */
 	element = null;
 
+	/** @type {WebGL2RenderingContext | null} */
+	gl = null;
+
 	/** @param {HTMLElement} element */
 	createCanvas(element) {
 
