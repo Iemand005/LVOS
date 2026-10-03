@@ -43,3 +43,6 @@
 [submodule "LVOS-dist"]
 	path = Dist
 	url = https://github.com/Iemand005/LVOS-dist
+[submodule "Assets"]
+	path = Assets
+	url = https://github.com/Iemand005/VulpOS-Assets
