@@ -5,9 +5,9 @@ class CanvasMaker {
 	canvas = document.createElement("canvas");;
 
 	createCanvas() {
-		const canvas = document.createElement("canvas");
 
-		canvas.setAttribute("layoutsubtree", '');
+		this.canvas.setAttribute("layoutsubtree", '');
+		document.body.appendChild(this.canvas);
 	}
 }
 
