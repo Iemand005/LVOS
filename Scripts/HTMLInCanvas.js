@@ -4,6 +4,9 @@ class CanvasMaker {
 
 	canvas = document.createElement("canvas");;
 
+	/** @type {HTMLElement | null} */
+	element = null;
+
 	/** @param {HTMLElement} element */
 	createCanvas(element) {
 
