@@ -17,6 +17,121 @@ class CanvasMaker {
 		const main = document.querySelector("main");
 		if (main) this.createCanvas(main);
 	}
+
+	startDrawing() {
+		const c = this.canvas, gl = c.getContext('webgl');
+c.width = innerWidth; c.height = innerHeight;
+const W = c.width, H = c.height;
+gl.viewport(0, 0, W, H);
+
+// ---------- helpers ----------
+function makeProgram(vs, fs) {
+  const p = gl.createProgram();
+  for (const [type, src] of [[gl.VERTEX_SHADER, vs], [gl.FRAGMENT_SHADER, fs]]) {
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, src); gl.compileShader(sh); gl.attachShader(p, sh);
+  }
+  gl.linkProgram(p);
+  return p;
+}
+const FRAG = `precision mediump float; uniform sampler2D s; varying vec2 v;
+              void main() { gl_FragColor = texture2D(s, v); }`;
+
+// ---------- background: one big triangle covering the screen ----------
+const bgProg = makeProgram(`
+  attribute vec2 p; varying vec2 v;
+  void main() {
+    v = vec2(p.x * .5 + .5, .5 - p.y * .5);   // texture is top-down
+    gl_Position = vec4(p, 0., 1.);
+  }`, FRAG);
+const bgBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+
+// ---------- cube ----------
+const cubeProg = makeProgram(`
+  attribute vec3 p; attribute vec2 t; uniform float a, asp; varying vec2 v;
+  void main() {
+    vec3 q = p;
+    q.xz = mat2(cos(a), sin(a), -sin(a), cos(a)) * q.xz;        // spin around Y
+    q.yz = mat2(cos(.5), sin(.5), -sin(.5), cos(.5)) * q.yz;    // tilt around X
+    q.z -= 5.;
+    v = t;
+    gl_Position = vec4(q.x * 2.4 / asp, q.y * 2.4, -1.105 * q.z - 2.105, -q.z);
+  }`, FRAG);
+
+const V = [], I = [];
+for (let f = 0; f < 6; f++) {
+  const a = f % 3, s = f < 3 ? 1 : -1, u = (a + 1) % 3, w = (a + 2) % 3;
+  for (const [x, y] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    const p = [0, 0, 0]; p[a] = s; p[u] = x; p[w] = y;
+    V.push(...p, (x * s + 1) / 2, (1 - y) / 2);
+  }
+  I.push(f * 4, f * 4 + 1, f * 4 + 2, f * 4, f * 4 + 2, f * 4 + 3);
+}
+const cubeBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, cubeBuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(V), gl.STATIC_DRAW);
+const idxBuf = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(I), gl.STATIC_DRAW);
+
+const bgP = gl.getAttribLocation(bgProg, 'p');
+const cubeP = gl.getAttribLocation(cubeProg, 'p');
+const cubeT = gl.getAttribLocation(cubeProg, 't');
+const uAngle = gl.getUniformLocation(cubeProg, 'a');
+const uAsp = gl.getUniformLocation(cubeProg, 'asp');
+
+// ---------- one texture, shared by background + cube (viewport sized) ----------
+gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+c.onpaint = () => {
+  const panel = document.getElementById('panel');
+  if (gl.texElementSubImage2D) gl.texElementSubImage2D(gl.TEXTURE_2D, 0, 0, 0, panel, { width: W, height: H });
+  else gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, panel);
+
+  // WebGL doesn't sync hit-testing automatically. The background triangle shows the
+  // page 1:1 with the canvas, so the element's drawn position is the identity transform.
+  // (The cube is not registered, so only the fullscreen background is interactive.)
+  if (c.updateElementGeometry) c.updateElementGeometry(panel, { canvasTransform: new DOMMatrix() });
+};
+c.requestPaint();
+
+// ---------- draw ----------
+(function draw(t) {
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // 1) background triangle (no depth, so the cube always lands on top)
+  gl.disable(gl.DEPTH_TEST);
+  gl.useProgram(bgProg);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
+  gl.enableVertexAttribArray(bgP);
+  gl.vertexAttribPointer(bgP, 2, gl.FLOAT, false, 0, 0);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.disableVertexAttribArray(bgP);
+
+  // 2) spinning cube
+  gl.enable(gl.DEPTH_TEST);
+  gl.useProgram(cubeProg);
+  gl.bindBuffer(gl.ARRAY_BUFFER, cubeBuf);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
+  gl.enableVertexAttribArray(cubeP);
+  gl.vertexAttribPointer(cubeP, 3, gl.FLOAT, false, 20, 0);
+  gl.enableVertexAttribArray(cubeT);
+  gl.vertexAttribPointer(cubeT, 2, gl.FLOAT, false, 20, 12);
+  gl.uniform1f(uAsp, W / H);
+  gl.uniform1f(uAngle, t / 1000);
+  gl.drawElements(gl.TRIANGLES, I.length, gl.UNSIGNED_SHORT, 0);
+  gl.disableVertexAttribArray(cubeP);
+  gl.disableVertexAttribArray(cubeT);
+
+  requestAnimationFrame(draw);
+})(0);
+	}
 }
 
 const canvasMaker = new CanvasMaker;
