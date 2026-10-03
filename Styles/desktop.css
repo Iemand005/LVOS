@@ -22,6 +22,10 @@ body {
 	-webkit-user-drop: element;
 }
 
+body {
+	display: flex;
+}
+
 body > header {
 	display: none;
 	height: 0;
