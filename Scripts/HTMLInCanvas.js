@@ -19,8 +19,8 @@ class CanvasMaker {
 
 	putMainInCanvas() {
 		const main = document.querySelector("main");
-		if (!main)return;
-		 this.createCanvas(main);
+		if (!main) return;
+		this.createCanvas(main);
 		this.startDrawing();
 	}
 
@@ -96,7 +96,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
 c.onpaint = () => {
-  const panel = document.getElementById('panel');
+  const panel = this.element;
   if (gl.texElementSubImage2D) gl.texElementSubImage2D(gl.TEXTURE_2D, 0, 0, 0, panel, { width: W, height: H });
   else gl.texElementImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, panel);
 
