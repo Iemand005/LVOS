@@ -7,3 +7,5 @@ class CanvasMaker {
 		canvas.setAttribute("layoutsubtree", '');
 	}
 }
+
+const canvasMaker = new CanvasMaker;
