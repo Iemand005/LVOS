@@ -8,6 +8,7 @@ class CanvasMaker {
 	createCanvas(element) {
 
 		this.canvas.setAttribute("layoutsubtree", '');
+		element.setAttribute("drawable", '');
 		this.canvas.appendChild(element);
 		document.body.appendChild(this.canvas);
 	}
