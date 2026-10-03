@@ -13,12 +13,15 @@ class CanvasMaker {
 		this.canvas.setAttribute("layoutsubtree", '');
 		element.setAttribute("drawable", '');
 		this.canvas.appendChild(element);
+		this.element = element;
 		document.body.appendChild(this.canvas);
 	}
 
 	putMainInCanvas() {
 		const main = document.querySelector("main");
-		if (main) this.createCanvas(main);
+		if (!main)return;
+		 this.createCanvas(main);
+		this.startDrawing();
 	}
 
 	startDrawing() {
