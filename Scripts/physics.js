@@ -38,9 +38,9 @@ Vector.prototype.clone = function () { return new Vector(this.x, this.y); };
 
 /**
  * 
- * @param {number | {x:number,y:number,z:number}} x 
- * @param {number} y 
- * @param {number} z 
+ * @param {number | {x:number,y:number,z:number}} [x] 
+ * @param {number} [y] 
+ * @param {number} [z] 
  */
 function Vector3D(x, y, z) {
     this.x = 0;
