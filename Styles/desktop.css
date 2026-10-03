@@ -581,6 +581,11 @@ time span {
 	display: inline-block;
 }
 
+body > canvas {
+	width: 100%;
+	height: 100%;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
