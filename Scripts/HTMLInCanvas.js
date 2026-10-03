@@ -1,7 +1,5 @@
 
 
-function CanvasMaker() {
+class CanvasMaker {
 
 }
-
-Canva
