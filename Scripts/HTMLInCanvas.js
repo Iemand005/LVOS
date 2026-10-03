@@ -4,6 +4,6 @@ class CanvasMaker {
 	createCanvas() {
 		const canvas = document.createElement("canvas");
 
-		canvas.
+		canvas.setAttribute("layoutsubtree", '');
 	}
 }
