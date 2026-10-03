@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HTML in Canvas + WebGL Playground</title>
+<style>
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+    font-family: system-ui, sans-serif;
+}
+
+#canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+
+#page {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 48px;
+    background: linear-gradient(135deg, #182848, #4b6cb7);
+    color: white;
+}
+
+.card {
+    max-width: 700px;
+    padding: 32px;
+    border-radius: 24px;
+    background: rgb(255 255 255 / 15%);
+    border: 1px solid rgb(255 255 255 / 25%);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
+    backdrop-filter: blur(12px);
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 48px;
+}
+
+button {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    cursor: pointer;
+}
+
+#status {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgb(0 0 0 / 70%);
+    color: white;
+    font: 13px monospace;
+    z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas" layoutsubtree>
+    <div id="page">
+        <div class="card">
+            <h1>Hello from HTML</h1>
+            <p>
+                This is actual HTML inside an HTML-in-Canvas canvas.
+                The eventual goal is to feed this rendered element into WebGL.
+            </p>
+            <button id="button">Click me</button>
+        </div>
+    </div>
+</canvas>
+
+<div id="status">initialising…</div>
+
+<script>
+const canvas = document.querySelector("#canvas");
+const page = document.querySelector("#page");
+const status = document.querySelector("#status");
+
+const gl = canvas.getContext("webgl", {
+    alpha: false,
+    antialias: true
+});
+
+function resize() {
+    const dpr = devicePixelRatio;
+    const width = Math.round(canvas.clientWidth * dpr);
+    const height = Math.round(canvas.clientHeight * dpr);
+
+    if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        if (gl) gl.viewport(0, 0, width, height);
+    }
+}
+
+new ResizeObserver(resize).observe(canvas);
+resize();
+
+document.querySelector("#button").addEventListener("click", () => {
+    alert("The button is still HTML!");
+});
+
+if (!gl) {
+    status.textContent = "WebGL unavailable";
+} else {
+    status.textContent = "WebGL OK — testing HTML → texture API…";
+}
+
+console.log("canvas:", canvas);
+console.log("HTML element:", page);
+console.log("WebGL:", gl);
+
+console.log("Canvas prototype methods:",
+    Object.getOwnPropertyNames(Object.getPrototypeOf(canvas.getContext("2d") || {}))
+);
+
+console.log("WebGL prototype methods:",
+    Object.getOwnPropertyNames(Object.getPrototypeOf(gl))
+);
+
+console.log("Possible HTML-in-Canvas APIs:",
+    Object.getOwnPropertyNames(Object.getPrototypeOf(gl))
+        .filter(x => /element|image|draw/i.test(x))
+);
+</script>
+
+</body>
+</html>
