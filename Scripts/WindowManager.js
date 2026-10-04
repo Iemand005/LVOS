@@ -451,6 +451,8 @@ function WindowManager() {
 				return;
 			}
 			cancelDomEvent(event);
+
+			if ("pointerType" in event)
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
