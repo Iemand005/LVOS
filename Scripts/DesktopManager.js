@@ -673,7 +673,7 @@ var picker = new ElementPicker({
     onMove: function(el) {
         if (el.nodeName === "ARTICLE") {
              var dialog = windowManager.getWindowOwningElement(el);
-             if (dialog) this.highlight(dialog.target);
+             if (dialog && dialog.target) this.highlight(dialog.target);
         }
         else this.highlight(el);
         // console.log(el)
