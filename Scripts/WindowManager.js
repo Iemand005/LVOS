@@ -454,11 +454,11 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY);
+					windowManager.handleWindowDrag(event.clientX, event.clientY, event.pointerType);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else windowManager.handleWindowDrag(event.clientX, event.clientY);
+			} else windowManager.handleWindowDrag(event.clientX, event.clientY, event.pointerType);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -793,7 +793,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
  * @param {number} newX
  * @param {number} hewY
  */
-WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
+WindowManager.prototype.handleWindowDrag = function(newX, hewY, pointerType) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 	/** @type {Coord} */
@@ -808,7 +808,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	this.moveWindowSnapToDialog(dialog);
+	if (pointerType === "touch") this.moveWindowSnapToDialog(dialog);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
