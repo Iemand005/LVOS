@@ -1300,10 +1300,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		var ejectButton = buttons[windowButtons.eject];
 		if (ejectButton)
-			ejectButton.addEventListener("click", function() {
-			self.createPopOut();
-			self.quit();
-		}, false);
+			ejectButton.addEventListener("click", this.eject.bind(this), false);
 
 		var closeButton = buttons[windowButtons.close];
 		if (closeButton)
