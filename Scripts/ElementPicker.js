@@ -66,9 +66,11 @@ ElementPicker.prototype.highlight = function (/** @type {HTMLElement} */ el) {
 	el.style.outline = '3px solid #2f81f7';
 };
 
-ElementPicker.prototype.unhighlight = function () {
+/** @param {boolean} [skipRemove] */
+ElementPicker.prototype.unhighlight = function (skipRemove) {
 	if (!this.hovered) return;
 	this.hovered.style.outline = this.prevOutline;
+	if (skipRemove) return;
 	this.hovered = null;
 	this.prevOutline = '';
 };
@@ -98,7 +100,12 @@ ElementPicker.prototype.onClick = function (e) {
 	e.preventDefault();   // don't trigger links/buttons while picking
 	e.stopPropagation();
 	this.stop();
+	this.unhighlight();
 	if (this.hovered) this.onSelect(this.hovered);
+	var el = this.hovered;
+	if (!el) return;
+	this.hovered = null;
+	this.highlight(el);
 };
  
 /** @param {KeyboardEvent} e */
