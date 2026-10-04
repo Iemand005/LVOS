@@ -24,8 +24,6 @@ function ElementPicker(options) {
 		if (options.onMove && options.onMove.call(self, el)) return;
 		this.highlight(el);
 	};
-	this.onClick = this.onClick.bind(this);
-	this.onKey = this.onKey.bind(this);
 }
  
 ElementPicker.prototype.register = function () {
@@ -42,9 +40,9 @@ ElementPicker.prototype.start = function () {
 	this.active = true;
 	this.createBox();
 	document.body.style.cursor = 'crosshair';
-	document.addEventListener('mousemove', this.onMove, true);
-	document.addEventListener('click', this.onClick, true);
-	document.addEventListener('keydown', this.onKey, true);
+	document.addEventListener('mousemove', this.onMove.bind(this), true);
+	document.addEventListener('click', this.onClick.bind(this), true);
+	document.addEventListener('keydown', this.onKey.bind(this), true);
 	this.status('Pick mode: click an element (Esc to cancel)');
 	document.body.classList.add("picking");
 };
@@ -94,6 +92,7 @@ ElementPicker.prototype.drawRectAround = function (el) {
 	s.height = r.height + 'px';
 };
  
+/** @param {MouseEvent} e */
 ElementPicker.prototype.onClick = function (e) {
 	e.preventDefault();   // don't trigger links/buttons while picking
 	e.stopPropagation();
@@ -102,6 +101,7 @@ ElementPicker.prototype.onClick = function (e) {
 	this.onSelect(el);
 };
  
+/** @param {KeyboardEvent} e */
 ElementPicker.prototype.onKey = function (e) {
 	if (e.key === 'Escape') this.stop();
 };
