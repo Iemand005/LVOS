@@ -184,7 +184,7 @@ ContextMenu.prototype.addItem = function(title, callback, icon) {
 var contextMenu = new ContextMenu;
 
 
-var docontexthook = false;
+var docontexthook = true;
 if (docontexthook) document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
