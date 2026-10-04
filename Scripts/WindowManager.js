@@ -452,15 +452,15 @@ function WindowManager() {
 			}
 			cancelDomEvent(event);
 
-			if ("pointerType" in event)
+			var pointerType = "pointerType" in event ? event.pointerType : null;
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY, event.pointerType);
+					windowManager.handleWindowDrag(event.clientX, event.clientY, pointerType);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else windowManager.handleWindowDrag(event.clientX, event.clientY, event.pointerType);
+			} else windowManager.handleWindowDrag(event.clientX, event.clientY, pointerType);
 		} catch (ex) {
 			console.error(ex);
 		}
@@ -794,6 +794,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 /**
  * @param {number} newX
  * @param {number} hewY
+ * @param {string} pointerType
  */
 WindowManager.prototype.handleWindowDrag = function(newX, hewY, pointerType) {
 	var dialog = this.activeDialog;
