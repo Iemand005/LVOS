@@ -182,7 +182,7 @@ function insetElement(element, top, left, bottom, right) {
 	else {
 		element.style.top = toPixels(top);
 		element.style.left = toPixels(left);
-		if (right === "undefined")
+		if (typeof right === "undefined" || typeof bottom === "undefined") return;
 		element.style.right = toPixels(right);
 		element.style.bottom = toPixels(bottom);
 	}
