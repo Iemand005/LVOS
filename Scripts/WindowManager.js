@@ -465,6 +465,8 @@ function WindowManager() {
 	};
 
 	this.windowSnap = document.createElement("div");
+	this.windowSnap.style.background = "red";
+	// this.windowSnap.style.background = ReadableByteStreamController;
 
 	// document.body.appendChild(this.windowSnap);
 
