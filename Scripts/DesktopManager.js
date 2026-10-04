@@ -671,7 +671,7 @@ var picker = new ElementPicker({
         screenShooter.screenshotElement(el);
 	},
     onMove: function(el) {
-        
+        this.highlight(el);
         return true;
     }
 });
