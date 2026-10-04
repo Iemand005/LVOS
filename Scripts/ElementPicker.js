@@ -24,6 +24,10 @@ function ElementPicker(options) {
 		if (options.onMove && options.onMove.call(self, el)) return;
 		this.highlight(el);
 	};
+
+	this.boundMove = this.onMove.bind(this);
+	this.boundClick = this.onClick.bind(this);
+	this.boundKey = this.onKey.bind(this);
 }
  
 ElementPicker.prototype.register = function () {
@@ -40,20 +44,25 @@ ElementPicker.prototype.start = function () {
 	this.active = true;
 	this.createBox();
 	document.body.style.cursor = 'crosshair';
-	document.addEventListener('mousemove', this.onMove.bind(this), true);
-	document.addEventListener('click', this.onClick.bind(this), true);
-	document.addEventListener('keydown', this.onKey.bind(this), true);
+
+	document.addEventListener('mousemove', this.boundMove, true);
+	document.addEventListener('click', this.boundClick, true);
+	document.addEventListener('keydown', this.boundKey, true);
+
 	this.status('Pick mode: click an element (Esc to cancel)');
 	document.body.classList.add("picking");
 };
- 
+
 ElementPicker.prototype.stop = function () {
 	this.active = false;
 	document.body.style.cursor = '';
+
 	if (this.box) this.box.style.display = 'none';
-	document.removeEventListener('mousemove', this.onMove, true);
-	document.removeEventListener('click', this.onClick, true);
-	document.removeEventListener('keydown', this.onKey, true);
+
+	document.removeEventListener('mousemove', this.boundMove, true);
+	document.removeEventListener('click', this.boundClick, true);
+	document.removeEventListener('keydown', this.boundKey, true);
+
 	this.status('');
 	document.body.classList.remove("picking");
 };
