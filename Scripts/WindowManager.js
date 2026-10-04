@@ -177,7 +177,7 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
  * @param {number} [right]
  * @param {number} [bottom]
  */
-function insetElement(element, top, left, bottom, right) {
+function insetElement(element, top, left, right, bottom) {
 	if ("inset" in element.style) element.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
 	else {
 		element.style.top = toPixels(top);
@@ -2636,6 +2636,7 @@ Dialog.prototype.moveBody = function (x, y) {
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (!this.target) return;
+	insetElement(this.target, top, left, right, bottom);
 	if ("inset" in this.target.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
 	else {
 		this.target.style.top = toPixels(top);
