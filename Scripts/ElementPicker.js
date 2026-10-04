@@ -46,6 +46,7 @@ ElementPicker.prototype.start = function () {
 	document.addEventListener('click', this.onClick, true);
 	document.addEventListener('keydown', this.onKey, true);
 	this.status('Pick mode: click an element (Esc to cancel)');
+	document.body.classList.add("picking");
 };
  
 ElementPicker.prototype.stop = function () {
@@ -56,6 +57,7 @@ ElementPicker.prototype.stop = function () {
 	document.removeEventListener('click', this.onClick, true);
 	document.removeEventListener('keydown', this.onKey, true);
 	this.status('');
+	document.body.classList.remove("picking");
 };
 
 ElementPicker.prototype.highlight = function (/** @type {HTMLElement} */ el) {
