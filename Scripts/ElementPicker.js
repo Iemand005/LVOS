@@ -97,7 +97,7 @@ ElementPicker.prototype.drawRectAround = function (el) {
 /** @param {MouseEvent} e */
 ElementPicker.prototype.onClick = function (e) {
 	if (!e.isTrusted) return;
-	e.preventDefault();   // don't trigger links/buttons while picking
+	e.preventDefault();
 	e.stopPropagation();
 	this.stop();
 	this.unhighlight(true);
