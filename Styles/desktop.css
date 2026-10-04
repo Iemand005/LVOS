@@ -47,7 +47,7 @@ body > header h1 {
 }
 
 body.picking iframe {
-	pointer-events: none;;
+	pointer-events: none !important;
 }
 
 iframe {
