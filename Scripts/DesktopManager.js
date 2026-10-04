@@ -671,8 +671,9 @@ var picker = new ElementPicker({
         screenShooter.screenshotElement(el);
 	},
     onMove: function(el) {
-        if (el.nodeName === "IFRAME")
+        if (el.nodeName === "ARTICLE")
         this.highlight(el);
+    console.log(el)
         return true;
     }
 });
