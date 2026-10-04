@@ -1,6 +1,6 @@
 
 /**
- * @param {{onSelect: (el: Element)=>void, onMove?: (this: ElementPicker, el: Element) => boolean}} options
+ * @param {{onSelect: (el: Element)=>void, onMove?: (this: ElementPicker, el: HTMLElement) => boolean}} options
  */
 function ElementPicker(options) {
 	options = options || {};
