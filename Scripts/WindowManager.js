@@ -2697,7 +2697,7 @@ Dialog.prototype.launch = function() {
 };
 
 Dialog.prototype.relaunch = function() {
-	this.quit();
+	this.close();
 	this.launch();
 };
 
@@ -2707,7 +2707,7 @@ Dialog.prototype.kill = function() {
 };
 Dialog.prototype.eject = function() {
 	this.createPopOut();
-	this.quit();
+	this.close();
 };
 Dialog.prototype.createPopOut = function() {
 	var body = this.body;
