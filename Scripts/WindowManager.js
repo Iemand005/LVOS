@@ -2912,6 +2912,10 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 	});
 };
 
+Dialog.prototype.screenshot = function() {
+	if (screenShooter) screenShooter.screenshotElement(this.target);
+}
+
 //#endregion
 
 //#region DragAction
@@ -2985,6 +2989,9 @@ var windowManager = new WindowManager;
 windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
+
+var screenShooter = new ScreenShooter;
+
 
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};

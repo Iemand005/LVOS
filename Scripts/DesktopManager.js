@@ -663,7 +663,6 @@ function loadMetro() {
     }
 }
 
-var screenShooter = new ScreenShooter;
 
 var picker = new ElementPicker({
 	onSelect: function (el) {
