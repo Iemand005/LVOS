@@ -881,6 +881,13 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 	} finally {
 		// this.synchronizing = false;
 	}
+};
+
+/** @param {HTMLElement} el */
+WindowManager.prototype.getWindowOwningElement = function(el) {
+	this.forEachWindow(function(dialog) {
+		dialog.body === el;
+	});
 }
 
 //#endregion
