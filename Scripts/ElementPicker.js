@@ -55,7 +55,11 @@ ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
 	if (!el || el === this.box || el === this.statusEl || !(el instanceof HTMLElement) || this.box === null) return;
 	el.style.outline = '3px solid #2f81f7'
-	
+
+};
+
+/** @param {HTMLElement} el */
+ElementPicker.prototype.drawRectArond = function (el) {
 	var r = el.getBoundingClientRect();
 	var s = this.box.style;
 	s.display = 'block';
