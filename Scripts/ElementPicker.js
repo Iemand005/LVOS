@@ -29,7 +29,7 @@ function ElementPicker(options) {
 ElementPicker.prototype.register = function () {
 	var self = this;
 	document.addEventListener('keydown', function (e) {
-		if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 's') {
+		if (e.shiftKey && e.key.toLowerCase() === 's') {
 			e.preventDefault();
 			self.active ? self.stop() : self.start();
 		}
