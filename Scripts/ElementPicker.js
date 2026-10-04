@@ -102,6 +102,7 @@ ElementPicker.prototype.onClick = function (e) {
 	this.stop();
 	this.unhighlight(true);
 	if (this.hovered) this.onSelect(this.hovered);
+	this.unhighlight();
 };
  
 /** @param {KeyboardEvent} e */
