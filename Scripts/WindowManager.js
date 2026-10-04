@@ -452,16 +452,16 @@ function WindowManager() {
 			}
 			cancelDomEvent(event);
 
-			var pointerType = "pointerType" in event ? event.pointerType : undefined;
-			if ("pointerType" in event && )
+			var isTouch = "pointerType" in event && event.pointerType === "touch";
+
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY, pointerType);
+					windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
 					self.ticking = false;
 				});
 				self.ticking = true;
-			} else windowManager.handleWindowDrag(event.clientX, event.clientY, pointerType);
+			} else windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
 		} catch (ex) {
 			console.error(ex);
 		}
