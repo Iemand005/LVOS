@@ -46,11 +46,7 @@ ElementPicker.prototype.stop = function () {
 	this.status('');
 };
 
-/**
- * 
- * @param {Event} e 
- * @returns 
- */
+/** @param {Event} e */
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
 	if (!(el instanceof HTMLElement)) return;
