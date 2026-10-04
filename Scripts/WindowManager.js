@@ -453,6 +453,7 @@ function WindowManager() {
 			cancelDomEvent(event);
 
 			var pointerType = "pointerType" in event ? event.pointerType : undefined;
+			if ("pointerType" in event && )
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
@@ -794,9 +795,9 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 /**
  * @param {number} newX
  * @param {number} hewY
- * @param {string} [pointerType]
+ * @param {boolean} [isTouch]
  */
-WindowManager.prototype.handleWindowDrag = function(newX, hewY, pointerType) {
+WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 	/** @type {Coord} */
@@ -811,7 +812,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, pointerType) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (pointerType === "touch") this.moveWindowSnapToDialog(dialog);
+	if (isTouch) this.moveWindowSnapToDialog(dialog);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
