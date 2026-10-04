@@ -467,6 +467,8 @@ function WindowManager() {
 
 	this.windowSnap = document.createElement("div");
 
+	document.body.appendChild(this.windowSnap);
+
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -922,11 +924,10 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-/** @param {Dialog} dloag */
-WindowManager.prototype.moveWindowSnapToDialog = function(dloag) {
-	var target = dloag.target;
+/** @param {Dialog} dialog */
+WindowManager.prototype.moveWindowSnapToDialog = function(dialog) {
 
-	if (target) insetElement(target, dloag.top, dloag.left, dloag.right, dloag.bottom);
+	if (target) insetElement(this.windowSnap, dialog.top, dialog.left, dialog.right, dialog.bottom);
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
