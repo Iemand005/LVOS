@@ -100,12 +100,8 @@ ElementPicker.prototype.onClick = function (e) {
 	e.preventDefault();   // don't trigger links/buttons while picking
 	e.stopPropagation();
 	this.stop();
-	this.unhighlight();
+	this.unhighlight(true);
 	if (this.hovered) this.onSelect(this.hovered);
-	var el = this.hovered;
-	if (!el) return;
-	this.hovered = null;
-	this.highlight(el);
 };
  
 /** @param {KeyboardEvent} e */
