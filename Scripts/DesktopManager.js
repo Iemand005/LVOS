@@ -667,7 +667,7 @@ var screenShooter = new ScreenShooter;
 
 var picker = new ElementPicker({
 	onSelect: function (el, selector) {
-		el.style.outline = '3px solid #2f81f7';
+		// el.style.outline = '3px solid #2f81f7';
 		console.log(selector);
         screenShooter.screenshotElement(el);
 	}
