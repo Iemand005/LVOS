@@ -96,9 +96,8 @@ ElementPicker.prototype.drawRectAround = function (el) {
 ElementPicker.prototype.onClick = function (e) {
 	e.preventDefault();   // don't trigger links/buttons while picking
 	e.stopPropagation();
-	var el = e.target;
 	this.stop();
-	this.onSelect(el);
+	if (this.hovered) this.onSelect(this.hovered);
 };
  
 /** @param {KeyboardEvent} e */
