@@ -184,8 +184,8 @@ ContextMenu.prototype.addItem = function(title, callback, icon) {
 var contextMenu = new ContextMenu;
 
 
-
-document.addEventListener("contextmenu", function(e) {
+var docontexthook = false;
+if (docontexthook) document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 
     console.log("Open contex tp ples");
