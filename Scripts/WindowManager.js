@@ -922,8 +922,11 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
+/** @param {Dialog} dloag */
 WindowManager.prototype.moveWindowSnapToDialog = function(dloag) {
+	var target = dloag.target;
 
+	if (target) insetElement(target, dloag.top, dloag.left, dloag.right, dloag.bottom);
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
