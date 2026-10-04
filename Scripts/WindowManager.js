@@ -172,22 +172,18 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 
 /**
  * @param {HTMLElement} element
- * @param {number} x
- * @param {number} y
- * @param {number} [skew]
- * @param {number} [scaleX]
- * @param {number} [scaleY]
- * @param {number} [rotation]
+ * @param {number} top
+ * @param {number} left
+ * @param {number} bottom
+ * @param {number} right
  */
-function insetElement(element, x, y, width, height) {
-	if ("inset" in this.target.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
+function insetElement(element, top, left, bottom, right) {
+	if ("inset" in element.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
 	else {
-		this.target.style.top = toPixels(top);
-		this.target.style.left = toPixels(left);
-		if (!this.useScale) {
-			this.target.style.right = toPixels(right);
-			this.target.style.bottom = toPixels(bottom);
-		}
+		element.style.top = toPixels(top);
+		element.style.left = toPixels(left);
+		element.style.right = toPixels(right);
+		element.style.bottom = toPixels(bottom);
 	}
 }
 
