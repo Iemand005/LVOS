@@ -600,7 +600,7 @@ body > canvas {
 	border-radius: 10px;
 	background: #3d3d3d6e;
     border: 1px solid black;
-	transition: all 1s linear;
+	transition: all 200ms linear;
 }
 
 @keyframes opensesame {

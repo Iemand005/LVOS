@@ -789,7 +789,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	this.dragAction.set(0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
-	if (this.isTouchDrag) this.moveWindowSnapToDialog(dialog, 10);
+	if (this.isTouchDrag) this.moveWindowSnapToDialog(dialog, 10, this.dragAction.direction);
 	return dialog;
 };
 
@@ -814,7 +814,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (isTouch) this.moveWindowSnapToDialog(dialog);
+	if (isTouch) this.moveWindowSnapToDialog(dialog, 10, this.dragAction.direction);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
@@ -830,7 +830,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.activeDialog.maximize();
 
 	if (this.isTouchDrag) {
-		this.moveWindowSnapToDialog(this.activeDialog, 0);
+		this.moveWindowSnapToDialog(this.activeDialog, 0, this.dragAction.direction);
 		this.isTouchDrag = false;
 	}
 
@@ -937,10 +937,27 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-/** @param {Dialog} dialog @param {number} [outset] */
-WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset) {
+/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] */
+WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction) {
 	outset = outset || 0;
-	insetElement(this.windowSnap, dialog.top - outset, dialog.left - outset, dialog.right - outset, dialog.bottom - outset);
+	var sides = [
+		{ top: true, right: true, bottom: true, left: true },
+		{ top: true, right: false, bottom: false, left: false },
+		{ top: false, right: true, bottom: false, left: false },
+		{ top: false, right: false, bottom: true, left: false },
+		{ top: false, right: false, bottom: false, left: true },
+		{ top: true, right: false, bottom: false, left: true },
+		{ top: true, right: true, bottom: false, left: false },
+		{ top: false, right: true, bottom: true, left: false },
+		{ top: false, right: false, bottom: true, left: true }
+	];
+	var s = sides[direction || 0] || sides[0];
+	insetElement(this.windowSnap,
+		dialog.top - (s.top ? outset : 0),
+		dialog.left - (s.left ? outset : 0),
+		dialog.right - (s.right ? outset : 0),
+		dialog.bottom - (s.bottom ? outset : 0)
+	);
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
@@ -2977,7 +2994,8 @@ function DragAction() {
 
 /** @param {number} [direction] */
 DragAction.prototype.set = function (direction) {
-	this.execute = this.resizeFunctions[direction || 0] || function () {};
+	this.direction = direction || 0;
+	this.execute = this.resizeFunctions[this.direction] || function () {};
 };
 
 //#endregion
