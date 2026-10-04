@@ -2631,21 +2631,13 @@ Dialog.prototype.moveBody = function (x, y) {
 /**
  * @param {number} top
  * @param {number} left
- * @param {number} right
- * @param {number} bottom
+ * @param {number} [right]
+ * @param {number} [bottom]
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (!this.target) return;
+	if (this.useScale) right = undefined, bottom = undefined;
 	insetElement(this.target, top, left, right, bottom);
-	if ("inset" in this.target.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
-	else {
-		this.target.style.top = toPixels(top);
-		this.target.style.left = toPixels(left);
-		if (!this.useScale) {
-			this.target.style.right = toPixels(right);
-			this.target.style.bottom = toPixels(bottom);
-		}
-	}
 };
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
