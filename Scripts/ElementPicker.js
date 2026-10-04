@@ -3,7 +3,7 @@
  * @param {{onSelect: (el: Element)=>void, onMove?: (this: ElementPicker, el: HTMLElement) => boolean}} options
  */
 function ElementPicker(options) {
-	options = options || {};
+	options = options;
 	this.active = false;
 	this.onSelect = options.onSelect || function (el) {
 		console.log('Selected:', el);
