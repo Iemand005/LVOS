@@ -58,6 +58,13 @@ ElementPicker.prototype.highlight = function (/** @type {HTMLElement} */ el) {
 	el.style.outline = '3px solid #2f81f7';
 };
 
+ElementPicker.prototype.unhighlight = function () {
+	if (!this.hovered) return;
+	this.hovered.style.outline = this.prevOutline;
+	this.hovered = null;
+	this.prevOutline = '';
+};
+
 /** @param {Event} e */
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
