@@ -117,10 +117,3 @@ ElementPicker.prototype.getSelector = function (el) {
 	return parts.join(' > ');
 };
 
-var picker = new ElementPicker({
-	onSelect: function (el, selector) {
-		el.style.outline = '3px solid #2f81f7';
-		console.log(selector);
-	}
-});
-picker.register();

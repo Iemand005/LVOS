@@ -662,3 +662,13 @@ function loadMetro() {
         metro.appendChild(metroFrame);
     }
 }
+
+var screenShooter = new ScreenShooter;
+
+var picker = new ElementPicker({
+	onSelect: function (el, selector) {
+		el.style.outline = '3px solid #2f81f7';
+		console.log(selector);
+	}
+});
+picker.register();
