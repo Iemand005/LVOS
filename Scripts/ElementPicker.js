@@ -59,7 +59,8 @@ ElementPicker.prototype.onMove = function (e) {
 };
 
 /** @param {HTMLElement} el */
-ElementPicker.prototype.drawRectArond = function (el) {
+ElementPicker.prototype.drawRectAround = function (el) {
+	if (!this.box) return;
 	var r = el.getBoundingClientRect();
 	var s = this.box.style;
 	s.display = 'block';
