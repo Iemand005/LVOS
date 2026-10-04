@@ -814,7 +814,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (isTouch) this.moveWindowSnapToDialog(dialog, 10, this.dragAction.direction);
+	if (isTouch) this.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
