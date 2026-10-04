@@ -172,6 +172,27 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 
 /**
  * @param {HTMLElement} element
+ * @param {number} x
+ * @param {number} y
+ * @param {number} [skew]
+ * @param {number} [scaleX]
+ * @param {number} [scaleY]
+ * @param {number} [rotation]
+ */
+function insetElement(element, x, y, width, height) {
+	if ("inset" in this.target.style) this.target.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
+	else {
+		this.target.style.top = toPixels(top);
+		this.target.style.left = toPixels(left);
+		if (!this.useScale) {
+			this.target.style.right = toPixels(right);
+			this.target.style.bottom = toPixels(bottom);
+		}
+	}
+}
+
+/**
+ * @param {HTMLElement} element
  * @param {number} skew
  */
 function skewElement(element, skew) {
@@ -905,7 +926,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 };
 
 WindowManager.prototype.moveWindowSnapToDialog = function(dloag) {
-	
+
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
