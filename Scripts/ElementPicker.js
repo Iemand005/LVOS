@@ -63,7 +63,7 @@ ElementPicker.prototype.onClick = function (e) {
 	e.stopPropagation();
 	var el = e.target;
 	this.stop();
-	this.onSelect(el, this.getSelector(el));
+	this.onSelect(el);
 };
  
 ElementPicker.prototype.onKey = function (e) {
@@ -98,22 +98,3 @@ ElementPicker.prototype.status = function (msg) {
 	this.statusEl.textContent = msg;
 	this.statusEl.style.display = msg ? 'block' : 'none';
 };
- 
-ElementPicker.prototype.getSelector = function (el) {
-	if (el.id) return '#' + CSS.escape(el.id);
-	var parts = [];
-	while (el && el.nodeType === 1 && el !== document.body) {
-		var part = el.tagName.toLowerCase();
-		var parent = el.parentElement;
-		if (parent) {
-			var same = Array.prototype.filter.call(parent.children, function (c) {
-				return c.tagName === el.tagName;
-			});
-			if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(el) + 1) + ')';
-		}
-		parts.unshift(part);
-		el = parent;
-	}
-	return parts.join(' > ');
-};
-
