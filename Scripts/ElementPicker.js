@@ -1,6 +1,6 @@
 
 /**
- * @param {{onSelect: (el: Element)=>void, onMove?: (el: Element) => boolean}} options
+ * @param {{onSelect: (el: Element)=>void, onMove?: (this: ElementPicker, el: Element) => boolean}} options
  */
 function ElementPicker(options) {
 	options = options || {};
@@ -14,12 +14,14 @@ function ElementPicker(options) {
 	/** @type {HTMLElement | null} */
 	this.hovered = null;
 	this.prevOutline = '';
+
+	var self = this;
  
 	/** @param {Event} e */
 	this.onMove = function(e) {
 		var el = e.target;
 		if (!(el instanceof HTMLElement)) return;
-		if (options.onMove && options.onMove(el)) return;
+		if (options.onMove && options.onMove.call(self, el)) return;
 		this.highlight(el);
 	};
 	this.onClick = this.onClick.bind(this);
