@@ -2913,7 +2913,9 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 };
 
 Dialog.prototype.screenshot = function() {
-	if (screenShooter) screenShooter.screenshotElement(this.target);
+	var target = this.target;
+	if (!target) return;
+	if (screenShooter) screenShooter.screenshotElement(target);
 }
 
 //#endregion
