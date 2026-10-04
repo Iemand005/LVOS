@@ -2682,10 +2682,6 @@ Dialog.prototype.loadFrame = function() {
 	if (frame) appManager.openAppInIFrame(this.application.id, frame);
 };
 
-Dialog.prototype.quit = function() {
-	this.close();
-};
-
 Dialog.prototype.launch = function() {
 	if (!this.isOpen) this.initWithObject(this);
 	if (this.mica) this.injectMica();
