@@ -782,12 +782,14 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	}
 	if (flags.verboseLogs) console.log("Activating window", dialog);
 	this.activeDialog = dialog;
+	this.isTouchDrag = event && event.pointerType === "touch";
 	this.enableDialogDrag();
 	// Default a window grab to a move; the sizer handler overrides this with a
 	// resize direction right after, so a stuck resize can never hijack dragging.
 	this.dragAction.set(0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
+	if (this.isTouchDrag) this.moveWindowSnapToDialog(dialog, 10);
 	return dialog;
 };
 
@@ -826,6 +828,11 @@ WindowManager.prototype.disableDialogDrag = function() {
 
 	if (flags.aeroSnap && this.activeDialog.y <= 0)
 		this.activeDialog.maximize();
+
+	if (this.isTouchDrag) {
+		this.moveWindowSnapToDialog(this.activeDialog, 0);
+		this.isTouchDrag = false;
+	}
 
 	if (!this.activeDialog.moveEvents) return;
 
@@ -930,9 +937,9 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-/** @param {Dialog} dialog */
-WindowManager.prototype.moveWindowSnapToDialog = function(dialog) {
-	var outset = 10;
+/** @param {Dialog} dialog @param {number} [outset] */
+WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset) {
+	outset = outset || 0;
 	insetElement(this.windowSnap, dialog.top - outset, dialog.left - outset, dialog.right - outset, dialog.bottom - outset);
 }
 
