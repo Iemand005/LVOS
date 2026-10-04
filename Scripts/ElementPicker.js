@@ -5,8 +5,8 @@
 function ElementPicker(options) {
 	options = options || {};
 	this.active = false;
-	this.onSelect = options.onSelect || function (el, selector) {
-		console.log('Selected:', el, selector);
+	this.onSelect = options.onSelect || function (el) {
+		console.log('Selected:', el);
 	};
 	this.box = null;
 	this.statusEl = null;
