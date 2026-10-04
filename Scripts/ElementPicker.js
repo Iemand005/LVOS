@@ -10,6 +10,10 @@ function ElementPicker(options) {
 	};
 	this.box = null;
 	this.statusEl = null;
+
+	/** @type {HTMLElement | null} */
+	this.hovered = null;
+	this.prevOutline = '';
  
 	this.onMove = this.onMove.bind(this);
 	this.onClick = this.onClick.bind(this);
