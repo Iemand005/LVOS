@@ -883,7 +883,10 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 	}
 };
 
-/** @param {HTMLElement} el */
+/**
+ * @param {HTMLElement} el
+ * @returns {Dialog | null}
+ */
 WindowManager.prototype.getWindowOwningElement = function(el) {
 	var found = false;
 	/** @type {Dialog | null} */
