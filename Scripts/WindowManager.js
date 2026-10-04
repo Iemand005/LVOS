@@ -888,7 +888,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	this.forEachWindow(function(dialog) {
 		dialog.body === el;
 	});
-}
+};
 
 //#endregion
 
