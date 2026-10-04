@@ -885,9 +885,17 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 
 /** @param {HTMLElement} el */
 WindowManager.prototype.getWindowOwningElement = function(el) {
+	var found = false;
+	/** @type {Dialog | null} */
+	var foundDialog = null;
 	this.forEachWindow(function(dialog) {
-		dialog.body === el;
+		if (found) return;
+		if (dialog.body === el) {
+			found = true;
+			foundDialog = dialog;
+		}
 	});
+	return foundDialog;
 };
 
 //#endregion

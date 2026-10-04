@@ -671,9 +671,11 @@ var picker = new ElementPicker({
         screenShooter.screenshotElement(el);
 	},
     onMove: function(el) {
-        if (el.nodeName === "ARTICLE")
-        this.highlight(el);
-    console.log(el)
+        if (el.nodeName === "ARTICLE") {
+            windowManager.getWindowOwningElement(el);
+        }
+        else this.highlight(el);
+        // console.log(el)
         return true;
     }
 });
