@@ -671,6 +671,7 @@ var picker = new ElementPicker({
         screenShooter.screenshotElement(el);
 	},
     onMove: function(el) {
+        if (el.nodeName === "IFRAME")
         this.highlight(el);
         return true;
     }
