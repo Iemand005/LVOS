@@ -1,3 +1,7 @@
+
+/**
+ * @param {(el: Element, onSelect: ()=>void)=>void} options
+ */
 function ElementPicker(options) {
 	options = options || {};
 	this.active = false;
