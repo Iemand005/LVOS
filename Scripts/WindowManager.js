@@ -446,6 +446,9 @@ function WindowManager() {
 			console.error(ex);
 		}
 	};
+
+	this.windowSnap = document.createElement("div");
+
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -902,7 +905,6 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 };
 
 WindowManager.prototype.createWindowSnap = function() {
-	this.windowSnap = document.createElement("div");
 }
 
 WindowManager.prototype.moveWindowSnapToDialog = function(dloag) {
