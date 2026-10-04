@@ -76,7 +76,7 @@ var flags = {
 		if (value) this._useViewTransitionMaximize = false;
 		this._compositorResize = value;
 	},
-	_useViewTransitionMaximize: false,
+	_useViewTransitionMaximize: true,
 	get useViewTransitionMaximize() { return this._useViewTransitionMaximize; },
 	set useViewTransitionMaximize(value) {
 
