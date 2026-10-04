@@ -466,11 +466,6 @@ function WindowManager() {
 
 	this.windowSnap = document.createElement("div");
 	this.windowSnap.id = "window-snap";
-	this.windowSnap.style.position = "absolute";
-	this.windowSnap.style.background = "red";
-	// this.windowSnap.style.background = ReadableByteStreamController;
-
-	// document.body.appendChild(this.windowSnap);
 
 }
 
