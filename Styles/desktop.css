@@ -595,8 +595,12 @@ body > canvas {
 }
 
 #window-snap {
+	position: absolute;
 	backdrop-filter: blur(10px);
 	border-radius: 10px;
+	background: #3d3d3d6e;
+    inset: 448px 367px;
+    border: 1px solid black;
 }
 
 @keyframes opensesame {
