@@ -467,7 +467,7 @@ function WindowManager() {
 
 	this.windowSnap = document.createElement("div");
 
-	document.body.appendChild(this.windowSnap);
+	// document.body.appendChild(this.windowSnap);
 
 }
 
@@ -747,6 +747,9 @@ WindowManager.prototype.initializeDialogs = function() {
 
 	});
 	this.loadState();
+
+	// document.body.document.body.appendChild(this.windowSnap);
+	document.body.appendChild(this.windowSnap);
 };
 
 /**
