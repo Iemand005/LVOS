@@ -1,6 +1,6 @@
 
 /**
- * @param {{onSelect: (el: Element)=>void, onMove?: (el: Element) => void}} options
+ * @param {{onSelect: (el: Element)=>void, onMove?: (el: Element) => boolean}} options
  */
 function ElementPicker(options) {
 	options = options || {};
@@ -19,7 +19,7 @@ function ElementPicker(options) {
 	this.onMove = function(e) {
 		var el = e.target;
 		if (!(el instanceof HTMLElement)) return;
-		if (options.onMove) options.onMove(el);
+		if (options.onMove && options.onMove(el)) return;
 		this.highlight(el);
 	};
 	this.onClick = this.onClick.bind(this);
