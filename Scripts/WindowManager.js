@@ -926,8 +926,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 
 /** @param {Dialog} dialog */
 WindowManager.prototype.moveWindowSnapToDialog = function(dialog) {
-
-	if (target) insetElement(this.windowSnap, dialog.top, dialog.left, dialog.right, dialog.bottom);
+	insetElement(this.windowSnap, dialog.top, dialog.left, dialog.right, dialog.bottom);
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
