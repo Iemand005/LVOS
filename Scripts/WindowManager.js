@@ -452,7 +452,7 @@ function WindowManager() {
 			}
 			cancelDomEvent(event);
 
-			var pointerType = "pointerType" in event ? event.pointerType : null;
+			var pointerType = "pointerType" in event ? event.pointerType : undefined;
 			if (flags.updateRateLimit) {
 				if (self.ticking) return;
 				window.requestAnimationFrame(function() {
@@ -794,7 +794,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 /**
  * @param {number} newX
  * @param {number} hewY
- * @param {string} pointerType
+ * @param {string} [pointerType]
  */
 WindowManager.prototype.handleWindowDrag = function(newX, hewY, pointerType) {
 	var dialog = this.activeDialog;
