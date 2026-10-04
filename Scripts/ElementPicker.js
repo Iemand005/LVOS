@@ -15,7 +15,12 @@ function ElementPicker(options) {
 	this.hovered = null;
 	this.prevOutline = '';
  
-	this.onMove = this.onMove.bind(this);
+	/** @param {Event} e */
+	this.onMove = function(e) {
+		var el = e.target;
+		if (!(el instanceof HTMLElement)) return;
+		this.highlight(el);
+	};
 	this.onClick = this.onClick.bind(this);
 	this.onKey = this.onKey.bind(this);
 }
@@ -65,12 +70,12 @@ ElementPicker.prototype.unhighlight = function () {
 	this.prevOutline = '';
 };
 
-/** @param {Event} e */
-ElementPicker.prototype.onMove = function (e) {
-	var el = e.target;
-	if (!(el instanceof HTMLElement)) return;
-	this.highlight(el);
-};
+// /** @param {Event} e */
+// ElementPicker.prototype.onMove = function (e) {
+// 	var el = e.target;
+// 	if (!(el instanceof HTMLElement)) return;
+// 	this.highlight(el);
+// };
 
 /** @param {HTMLElement} el */
 ElementPicker.prototype.drawRectAround = function (el) {
