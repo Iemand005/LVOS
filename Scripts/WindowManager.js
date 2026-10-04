@@ -904,11 +904,8 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-WindowManager.prototype.createWindowSnap = function() {
-}
-
 WindowManager.prototype.moveWindowSnapToDialog = function(dloag) {
-
+	
 }
 
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
