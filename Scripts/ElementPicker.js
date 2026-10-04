@@ -53,7 +53,7 @@ ElementPicker.prototype.stop = function () {
  */
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
-	if (!el || el === this.box || el === this.statusEl || !(el instanceof HTMLElement) || this.box === null) return;
+	if (!(el instanceof HTMLElement)) return;
 	el.style.outline = '3px solid #2f81f7';
 
 };
