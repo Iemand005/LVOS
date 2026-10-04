@@ -669,6 +669,9 @@ var picker = new ElementPicker({
 	onSelect: function (el) {
 		// el.style.outline = '3px solid #2f81f7';
         screenShooter.screenshotElement(el);
-	}
+	},
+    onMove: function(el) {
+
+    }
 });
 picker.register();
