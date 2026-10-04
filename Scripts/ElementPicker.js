@@ -45,10 +45,15 @@ ElementPicker.prototype.stop = function () {
 	document.removeEventListener('keydown', this.onKey, true);
 	this.status('');
 };
- 
+
+/**
+ * 
+ * @param {Event} e 
+ * @returns 
+ */
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
-	if (el === this.box || el === this.statusEl) return;
+	if (!el || el === this.box || el === this.statusEl || !(el instanceof HTMLElement) || this.box === null) return;
 	var r = el.getBoundingClientRect();
 	var s = this.box.style;
 	s.display = 'block';
