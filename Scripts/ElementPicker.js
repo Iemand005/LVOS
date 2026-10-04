@@ -69,8 +69,7 @@ ElementPicker.prototype.unhighlight = function () {
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
 	if (!(el instanceof HTMLElement)) return;
-	el.style.outline = '3px solid #2f81f7';
-
+	this.highlight(el);
 };
 
 /** @param {HTMLElement} el */
