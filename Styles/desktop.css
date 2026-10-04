@@ -594,6 +594,11 @@ body > canvas {
 	height: 100%;
 }
 
+#window-snap {
+	backdrop-filter: blur(10px);
+	border-radius: 10px;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
