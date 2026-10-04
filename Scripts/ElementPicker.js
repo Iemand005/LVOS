@@ -50,6 +50,14 @@ ElementPicker.prototype.stop = function () {
 	this.status('');
 };
 
+ElementPicker.prototype.highlight = function (/** @type {HTMLElement} */ el) {
+	if (el === this.hovered) return;
+	this.unhighlight();
+	this.hovered = el;
+	this.prevOutline = el.style.outline;
+	el.style.outline = '3px solid #2f81f7';
+};
+
 /** @param {Event} e */
 ElementPicker.prototype.onMove = function (e) {
 	var el = e.target;
