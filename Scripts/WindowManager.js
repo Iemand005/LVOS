@@ -2992,9 +2992,6 @@ windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
 var bodyCrawler = new DocumentCrawler;
 
-var screenShooter = new ScreenShooter;
-
-
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
 

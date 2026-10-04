@@ -663,10 +663,12 @@ function loadMetro() {
     }
 }
 
+var screenShooter = new ScreenShooter;
+
 
 var picker = new ElementPicker({
 	onSelect: function (el) {
-        screenShooter.screenshotElement(el);
+        window.screenShooter.screenshotElement(el);
 	},
     onMove: function(el) {
         if (el.nodeName === "ARTICLE") {
