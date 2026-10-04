@@ -666,9 +666,8 @@ function loadMetro() {
 var screenShooter = new ScreenShooter;
 
 var picker = new ElementPicker({
-	onSelect: function (el, selector) {
+	onSelect: function (el) {
 		// el.style.outline = '3px solid #2f81f7';
-		console.log(selector);
         screenShooter.screenshotElement(el);
 	}
 });
