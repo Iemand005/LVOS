@@ -1047,9 +1047,17 @@ WindowSnap.prototype.setInset = function(inset) {
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
 	this.hidden = false;
-	switch(type) {
-		case "maximize": this.setInset(15);
-	}
+
+	animateElement(this.element, function() {
+
+		switch(type) {
+			case "maximize": this.setInset(15);
+		}
+	}, function(name) {
+		return name === "inset";
+	}, function() {
+		this.hidden = true;
+	}, this, 500);
 }
 
 /** @param {Dialog} dialog */
