@@ -1047,7 +1047,8 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
  * was snapped into by a gap. Two windows already fill the area between them, so gaps
  * only ever exist while the group holds one.
  * @param {WindowTile[]} windows
- * @param {"left" | "right"} side
+ * @param {"left" | "right"} [side] Which half the lone window is held in. Read from
+ * the window's current offset when omitted.
  */
 WindowManager.prototype.fitSnapGaps = function (windows, side) {
 	// Clear any gap left from when the group was smaller.
@@ -1057,8 +1058,11 @@ WindowManager.prototype.fitSnapGaps = function (windows, side) {
 
 	if (windows.length !== 1) return;
 
+	var dialog = this.windows[windows[0].id];
+	if (!side && dialog && dialog.target) side = dialog.target.style.getPropertyValue("--snap-left") === "0%" ? "left" : "right";
+
 	// Opposite side: a window snapped right is held there by the gap on its left.
-	windows.splice(side === "left" ? 1 : 0, 0, { gap: true, width: this.snapGapWidth });
+	windows.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
 };
 
 /**
@@ -1088,6 +1092,9 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 
 	windows.splice(index, 1);
 	dialog.toggleSnapped(false);
+
+	if (this.snapInsertGaps) this.fitSnapGaps(windows);
+
 	this.reflowSnapGroup();
 };
 
@@ -3522,4 +3529,8 @@ window.__LVMessenger = {};
  *  \  Chrome for Android Chrome targeting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expe
+ *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
+ *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
+ *  /  Pale Moon 34
+ * /  Safari 5+ (Windows and Mac OS X)
+\*/
