@@ -14,7 +14,7 @@ test('should load website and verify elements with TS', async ({ page }) => {
 });
 
 test('should verify the global windowManager object', async ({ page }) => {
-  await page.goto('https://your-website.com');
+  await page.goto('https://localhost:3621');
 
   const managerData = await page.evaluate((): WindowManager => {
     // This block runs INSIDE the browser tab
