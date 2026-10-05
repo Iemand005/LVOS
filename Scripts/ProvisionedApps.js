@@ -273,7 +273,7 @@ var applications = [
 		altUrls: ["https://iemand005.github.io/LVOS-dist/", "https://vulpos.pages.dev/", "https://localhost:5000/index.html", "https://localhost:5001/index.html", "https://lvos.neocities.org"]
 	},
 	{
-		"title": "Speak",
+		title: "Speak",
 		id: "speak",
 		src: "Applications/Speak/speak.html"
 	},
