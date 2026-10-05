@@ -399,9 +399,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (onEnd) onEnd.call(boundContext);
 	}
 
-	var time = setTimeout(function() {
-
-	})
+	var time = setTimeout(callEnd, timeout);
 	if (supportsTransitions) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
@@ -409,8 +407,8 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 			if (!element || (onTransitionEnd && !onTransitionEnd(event.propertyName))) return;
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
-			ended = true;
-			if (onEnd) onEnd.call(boundContext);
+			clearTimeout(time);
+			callEnd();
 		};
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
