@@ -418,7 +418,7 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
    untouched and comes back intact when it leaves the group. */
 .window.snapped {
 	top: 0 !important;
-	left: 0 !important;
+	left: var(--snap-left, 0) !important;
 	bottom: 0 !important;
 	right: 0 !important;
 	width: var(--snap-width, 50%) !important;

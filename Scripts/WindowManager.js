@@ -902,6 +902,10 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 
+	// Dragging a tiled window takes it out of the group; its geometry was never
+	// altered, so it picks up floating again where it was left.
+	if (dialog.snapped) this.unsnapDialog(dialog);
+
 	if (dialog.maximized) {
 		if (!flags.aeroSnap) return;
 
@@ -973,35 +977,94 @@ WindowManager.prototype.getSnapZone = function(dialog) {
  * @param {Dialog} dialog
  * @param {"" | "maximize" | "left" | "right"} zone
  */
-WindowManager.prototype.snapDialog = function(dialog, zone) {
+WindowManager.prototype.snapDialog = function (dialog, zone) {
 	if (zone === "maximize") {
+		this.unsnapDialog(dialog);
 		dialog.maximize();
 		return;
 	}
 
 	if (zone !== "left" && zone !== "right") return;
+	this.tileDialog(dialog, zone);
+};
 
-	var section = document.getElementById("window-section");
-	var width = section ? section.clientWidth : window.innerWidth;
-	var height = section ? section.clientHeight : window.innerHeight;
-	var halfWidth = Math.round(width / 2);
+/**
+ * Adds a window to the snap group and redistributes the group's widths.
+ * @param {Dialog} dialog
+ * @param {"left" | "right"} side Which end of the group it joins.
+ */
+WindowManager.prototype.tileDialog = function (dialog, side) {
+	var group = /** @type {WindowGroup} */ (this.windowGroup);
+	var windows = /** @type {WindowTile[]} */ (group.windows);
 
-	// setWidth/setHeight clamp to the app's max size, which would leave the window
-	// narrower than the half the indicator is already showing. Raise the ceiling for
-	// the duration of the snap so the two still agree, the same way maximizing does.
-	var maxWidth = dialog._maxWidth, maxHeight = dialog._maxHeight;
-	if (maxWidth < halfWidth) dialog._maxWidth = halfWidth;
-	if (maxHeight < height) dialog._maxHeight = height;
+	// Already tiled: the drop just reorders it, so leave its width alone.
+	var index = this.findSnapTile(dialog.id);
+	var tile = index === -1 ? { id: dialog.id, width: 0.5 } : windows[index];
 
-	dialog.setWidth(halfWidth);
-	dialog.setHeight(height);
+	if (index !== -1) windows.splice(index, 1);
 
-	dialog._maxWidth = maxWidth;
-	dialog._maxHeight = maxHeight;
+	if (side === "left") windows.unshift(tile);
+	else windows.push(tile);
 
-	// Last: setWidth and setHeight move the window to stay inside the bounds, so pin
-	// the final position only once both are done.
-	dialog.move(zone === "left" ? 0 : halfWidth, 0);
+	dialog.toggleSnapped(true);
+	this.reflowSnapGroup();
+};
+
+/**
+ * Index of a window's tile in the snap group, or -1.
+ * @param {string} id
+ */
+WindowManager.prototype.findSnapTile = function (id) {
+	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
+
+	for (var i = 0; i < windows.length; i++) {
+		if (windows[i].id === id) return i;
+	}
+
+	return -1;
+};
+
+/**
+ * Removes a window from the snap group, if it is in one.
+ * @param {Dialog} dialog
+ */
+WindowManager.prototype.unsnapDialog = function (dialog) {
+	var group = /** @type {WindowGroup} */ (this.windowGroup);
+	var windows = /** @type {WindowTile[]} */ (group.windows);
+
+	var index = this.findSnapTile(dialog.id);
+	if (index === -1) return;
+
+	windows.splice(index, 1);
+	dialog.toggleSnapped(false);
+	this.reflowSnapGroup();
+};
+
+/**
+ * Shares the window area out over the group's windows by width and writes each one's
+ * share onto the element for the .snapped class to pick up. Every window but the last
+ * takes its own width; the last one soaks up whatever is left, so the group always
+ * fills the area exactly.
+ */
+WindowManager.prototype.reflowSnapGroup = function () {
+	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
+
+	var remaining = 1;
+	var offset = 0;
+
+	for (var i = 0; i < windows.length; i++) {
+		var tile = windows[i];
+		var isLast = i === windows.length - 1;
+		var width = isLast ? remaining : (tile.width || 0.5);
+		remaining -= width;
+
+		var dialog = this.windows[tile.id];
+		if (!dialog || !dialog.target) continue;
+
+		dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
+		dialog.target.style.setProperty("--snap-left", (offset * 100) + "%");
+		offset += width;
+	}
 };
 
 WindowManager.prototype.disableDialogDrag = function() {
@@ -2047,6 +2110,14 @@ Object.defineProperty(Dialog.prototype, "maximized", {
 	set: function(maximized) { this.toggleMaximized(maximized); }
 });
 
+Object.defineProperty(Dialog.prototype, "snapped", {
+	get: function() {
+		if (!this.target) return false;
+		return this.target.classList.contains("snapped");
+	},
+	set: function(snapped) { this.toggleSnapped(snapped); }
+});
+
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
@@ -2374,11 +2445,31 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 };
 
 /** @param {boolean} [enable] */
+/**
+ * Tiled state, the sibling of maximized: purely visual, so the window keeps its own
+ * width/height/position and returns to them untouched when it leaves the group.
+ * @param {boolean} [enable]
+ */
+Dialog.prototype.toggleSnapped = function (enable) {
+	var target = this.target;
+	if (!target) return;
+	if (enable == null) enable = !target.classList.contains("snapped");
+
+	target.classList.toggle("snapped", enable);
+	if (!enable) {
+		target.style.removeProperty("--snap-width");
+		target.style.removeProperty("--snap-left");
+	}
+};
+
 Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (enable == null) enable = !this.maximized;
 	if (this.maximized === enable) return;
 	if (!this.target) return;
+
+	// Maximized and tiled both claim the whole area, so they cannot overlap.
+	if (enable && this.snapped && windowManager) windowManager.unsnapDialog(this);
 
 	var self = this;
 	var content = this.content;
