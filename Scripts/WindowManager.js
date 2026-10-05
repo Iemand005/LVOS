@@ -912,7 +912,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 
 	var snapFull = newY <= this.snapFullThreshold;
 
-	if (snapFull) {
+	if (snapFull && flags.aeroSnap) {
 		if (!this._snapFull) {
 			this._snapFull = true;
 			this.windowSnap.snap("maximize");
