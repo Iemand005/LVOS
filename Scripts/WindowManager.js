@@ -987,6 +987,8 @@ WindowSnap.prototype.init = function() { document.body.appendChild(this.element)
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
+	this.hidden = false;
+
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
 		{ top: true, right: false, bottom: false, left: false },
@@ -1034,6 +1036,7 @@ WindowSnap.prototype.setInset = function(inset) {
 
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
+	this.hidden = false;
 	switch(type) {
 		case "maximize": this.setInset(15);
 	}
@@ -1045,12 +1048,8 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 
 		this.moveToDialog(dialog);
 	}, undefined, function() {
-		this.hide();
+		this.hidden = true;
 	}, this);
-}
-
-WindowSnap.prototype.hide = function() {
-	this.element.classList.add("hidden");
 }
 
 //#endregion
