@@ -64,7 +64,7 @@ export class VulpOSTester {
 		expect(maximized).toBe(true);
 	}
 
-	async assertWindowNotMaximized(window: JSHandle) {
+	async assertWindowNotMaximized(window: JSHandle<Dialog>) {
 		const maximized = await window.evaluate(window =>
 			window.maximized === true
 		);
@@ -76,7 +76,7 @@ export class VulpOSTester {
 		await window.evaluate(dialog => dialog.open());
 	}
 
-	async maximizeWindow(window: JSHandle) {
+	async maximizeWindow(window: JSHandle<Dialog>) {
 		await window.evaluate(window => {
 			window.maximize();
 		});
@@ -87,7 +87,7 @@ export class VulpOSTester {
 		);
 	}
 
-	async unmaximizeWindow(window: JSHandle) {
+	async unmaximizeWindow(window: JSHandle<Dialog>) {
 		await window.evaluate(window => {
 			window.toggleMaximized(false);
 		});
