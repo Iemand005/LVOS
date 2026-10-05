@@ -397,13 +397,13 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
 			if (!element || (onTransitionEnd && !onTransitionEnd(event.propertyName))) return;
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(thisArg);
+			if (onEnd) if (thisArg) onEnd.call(thisArg); else onEnd();
 		};
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
 	window.requestAnimationFrame(function() {
-		if (onToggled) onToggled.call(thisArg);
+		if (onToggled) if (thisArg) onToggled.call(thisArg);
 	});
 };
 
