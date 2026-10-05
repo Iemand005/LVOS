@@ -399,7 +399,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (onEnd) onEnd.call(boundContext);
 	}
 
-	var time = setTimeout(callEnd, timeout);
+	var time = timeout && setTimeout(callEnd, timeout);
 	if (supportsTransitions) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
