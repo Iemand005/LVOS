@@ -1899,16 +1899,6 @@ Object.defineProperty(Dialog.prototype, "id", {
 	}
 });
 
-Object.defineProperty(Dialog.prototype, "header", {
-	get: function() {
-		if (!this.target) return null;
-		var headers = this.target.getElementsByTagName("header");
-		if (!headers.length) return;
-		var header = headers[0];
-		if (!header) return;
-	}
-})
-
 Object.defineProperty(Dialog.prototype, "content", {
 	get: function() {
 		if (!this.target) return null;
@@ -2008,7 +1998,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 		if (onError) onError();
 		return;
 	}
-	var header = this.header;
+	var header = this.titleBar;
 	if (!header) return;
 	this._appIcon = header.getElementsByTagName("img")[0] || null;
 	if (!this._appIcon) return;
