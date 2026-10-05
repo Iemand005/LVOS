@@ -1000,6 +1000,11 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		{ top: false, right: true, bottom: true, left: false },
 		{ top: false, right: false, bottom: true, left: true }
 	];
+
+		dialog.top - (s.top ? outset : 0),
+		dialog.left - (s.left ? outset : 0),
+		dialog.right - (s.right ? outset : 0),
+		dialog.bottom - (s.bottom ? outset : 0)
 	var s = sides[direction || 0] || sides[0];
 	if (s) insetElement(this.element,
 		dialog.top - (s.top ? outset : 0),
@@ -1014,9 +1019,8 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
  * @param {number} [left]
  * @param {number} [right]
  * @param {number} [bottom]
- * @param {boolean} [animate]
  */
-WindowSnap.prototype.applyInsetStyle = function(top, left, right, bottom, animate) {
+WindowSnap.prototype.applyInsetStyle = function(top, left, right, bottom) {
 
 }
 
