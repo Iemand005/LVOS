@@ -998,7 +998,6 @@ WindowSnap.prototype.snap = function(type) {
 
 /** @param {Dialog} dialog */
 WindowSnap.prototype.hideBehind = function(dialog) {
-	this.animate = true;
 	this.moveWindowSnapToDialog(dialog);
 }
 
