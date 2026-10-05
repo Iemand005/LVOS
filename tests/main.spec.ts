@@ -6,7 +6,7 @@ async function checkWelcomeMessage(page: Page, expectedText: string): Promise<vo
 }
 
 test('should load website and verify elements with TS', async ({ page }) => {
-  await page.goto('https://example.com');
+  await page.goto('https://localhost:3621');
 
   await expect(page).toHaveTitle(/Example Domain/);
 
