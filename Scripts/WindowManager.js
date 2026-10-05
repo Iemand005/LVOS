@@ -936,7 +936,10 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	} else if (dialog.snapped) {
 		var frame = dialog._snapFrame;
 		if (frame) dialog.remapClickOffset(frame.x, frame.y, frame.width, frame.height);
-		this.unsnapDialog(dialog);
+		// No animation: the window is under the pointer and has to track it 1:1. Every
+		// later pointermove calls stopAnimating anyway, which would strip the animating
+		// class before the transition had a chance to play.
+		this.unsnapDialog(dialog, true);
 	}
 
 	/** @type {Coord} */
