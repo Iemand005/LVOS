@@ -2020,8 +2020,9 @@ Dialog.prototype.setSkew = function(skew) {
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  * @param {boolean} [update]
+ * @param {boolean} [animage]
  */
-Dialog.prototype.setScale = function(scaleX, scaleY, update) {
+Dialog.prototype.setScale = function(scaleX, scaleY, update, animate) {
 	this._scaleX = scaleX || 1;
 	this._scaleY = scaleY || 1;
 	if (update !== false) this.updateTranslation();
