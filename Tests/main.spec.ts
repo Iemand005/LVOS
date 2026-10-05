@@ -98,7 +98,7 @@ export class VulpOSTester {
 		);
 	}
 
-	async closeWindow(window: DialogHandler) {
+	async closeWindow(window: DialogHandle) {
 		await window.evaluate(window => {
 			window.close();
 		});
