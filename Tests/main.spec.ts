@@ -21,14 +21,11 @@ export class VulpOSTester {
 	}
 
 	async getWindow(windowId: string): Promise<JSHandle> {
-		const window = await this.page.evaluateHandle((windowId) =>
-			window.windowManager.windows[windowId],
-			windowId
-		);
+		const dialog = await this.page.evaluateHandle((windowId) => window.windowManager.windows[windowId], windowId);
 
-		expect(await window.evaluate(window => window !== undefined)).toBe(true);
+		expect(await dialog.evaluate(window => window !== undefined)).toBe(true);
 
-		return window;
+		return dialog;
 	}
 
 	async installApp(
