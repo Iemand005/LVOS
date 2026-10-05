@@ -475,6 +475,15 @@ function WindowManager() {
 	/** @const */
 	this.dragAction = new DragAction;
 
+	/**
+	 * How close to the top edge a dragged window must be for aero snap to engage,
+	 * in CSS pixels. Shared by the live preview (the snap indicator appearing during
+	 * the drag) and the actual snap on drop, so the indicator can never promise a
+	 * snap that the drop handler then refuses. Set to 0 to require the very top edge.
+	 * @type {number}
+	 */
+	this.snapFullThreshold = 30;
+
 	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
@@ -908,7 +917,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 
-	var snapFull = newY <= 30;
+	var snapFull = newY <= this.snapFullThreshold;
 
 	if (snapFull) {
 		// Entering the snap zone: animate once. Re-entering the same zone on later
@@ -942,7 +951,9 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	if (flags.aeroSnap && this.activeDialog.y <= 0)
+	// Same threshold the live preview used, so the indicator never promises a snap
+	// that the drop then refuses.
+	if (flags.aeroSnap && this.activeDialog.y <= this.snapFullThreshold)
 		this.activeDialog.maximize();
 
 	if (this.isTouchDrag) {
