@@ -413,6 +413,30 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
+/* Tiled into a snap group. The geometry comes from two custom properties the group
+   writes onto the element, so the window's own width/height/position state is left
+   untouched and comes back intact when it leaves the group. */
+.window.snapped {
+	top: 0 !important;
+	left: 0 !important;
+	bottom: 0 !important;
+	right: 0 !important;
+	width: var(--snap-width, 50%) !important;
+	height: 100% !important;
+	border: none !important;
+	border-radius: 0 !important;
+	z-index: 9999 !important;
+	transform: translate(0px, 0px) scale(1, 1) skew(0deg, 0deg) !important;
+}
+
+.window.snapped > content {
+	border: 0px solid transparent !important;
+}
+
+.window.snapped > .backdrop-clip * {
+	transform: translate(0px, 0px) !important;
+}
+
 .slow-animations *,
 body.slow-animations *.window,
 .slow-animations *.window > content,
