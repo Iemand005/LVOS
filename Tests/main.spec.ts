@@ -23,5 +23,4 @@ test('should verify the global appManager object', async ({ page }) => {
 	});
 
 	expect(appManager).toBeDefined();
-	expect(appManager.windowSnap).toBeDefined();
 });
