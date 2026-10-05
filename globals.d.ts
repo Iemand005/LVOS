@@ -164,6 +164,10 @@ declare function Dialog(): void;
 
 interface WindowTile {
 	id: string;
-	width: number; // Percentage of the uh width?
-	height: number; // Percentage of the uh width?
+	width?: number; // Percentage of the uh width?
+	height?: number; // Percentage of the uh width?
+}
+
+interface WindowGroup {
+	windows: WindowTile[] | WindowGroup;
 }
