@@ -950,7 +950,7 @@ function WindowSnap() {
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
 
 /** @param {boolean} enabled */
-WindowSnap.prototype.setAnimations = function(enabled) {
+WindowSnap.prototype.setAnimate = function(enabled) {
 	this.element.style.transition = enabled ? "" : "none";
 };
 
@@ -958,7 +958,7 @@ WindowSnap.prototype.setAnimations = function(enabled) {
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	this.setAnimations(!noAnimation);
+	this.setAnimate(!noAnimation);
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
