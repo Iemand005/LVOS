@@ -406,10 +406,9 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (onEnd) onEnd.call(boundContext);
 	};
 
-	// Any animation still in flight on this element is cancelled up front. The snap
-	// states (snap(), moveToDialog(), hideBehind()) share a single element, so a
-	// leftover timer, transitionend listener or queued frame from the previous state
-	// would otherwise fire mid-transition and undo the new one.
+	// Cancel any animation still in flight on this element. The snap states share a
+	// single element, so a leftover timer or listener would otherwise fire mid-transition
+	// and undo the new one.
 	var previous = element._animationState;
 	if (previous) {
 		if (previous.timer) clearTimeout(previous.timer);
@@ -920,29 +919,17 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var snapFull = newY <= this.snapFullThreshold;
 
 	if (snapFull) {
-		// Entering the snap zone: animate once. Re-entering the same zone on later
-		// mouse moves must not restart it, or the rect never settles.
 		if (!this._snapFull) {
 			this._snapFull = true;
 			this.windowSnap.snap("maximize");
 		}
+	} else if (this._snapFull) {
+		this._snapFull = false;
+		this.windowSnap.hideBehind(dialog, !!isTouch);
 	} else {
-		if (this._snapFull) {
-			// Just left the snap zone: animate back behind the window exactly once.
-			this._snapFull = false;
-			this.windowSnap.hideBehind(dialog, !!isTouch);
-		} else {
-			// Still dragging outside the zone. Track the window without animating:
-			// restarting an animation per mousemove leaves "animating" set, and with
-			// `transition: all` every inset change becomes a new 100ms transition, so
-			// the rect lags and jitters behind the cursor instead of tracking it.
-			this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, !!isTouch);
-		}
-
-		// Re-assert the touch lift. moveToDialog only applied it on the animated path,
-		// which the drag loop skips, so returning from the snap zone would otherwise
-		// leave the window at its unscaled size.
-		if (isTouch) dialog.setScale(0.9, 0.9);
+		// Track the window without animating, or every mousemove restarts the
+		// indicator animation and it lags behind the cursor.
+		this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, !!isTouch);
 	}
 	
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
@@ -1121,11 +1108,14 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	var bottom = dialog.bottom - (s.bottom ? outset : 0);
 
 	this.element.style.zIndex = dialog.z.toString();
-	 
+
 	this.hidden = false;
+	// noAnimation=false applies the scale without going through animate(), which would
+	// put the "animating" class on a window that is being dragged, not animated.
+	if (isTouch) dialog.setScale(0.9, 0.9, undefined, false);
+
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
-		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
 	}, undefined, this, 200);
@@ -1171,17 +1161,14 @@ WindowSnap.prototype.snap = function(type) {
 }
 
 /**
- * Animates the indicator back behind the window and then hides it.
  * @param {Dialog} dialog
- * @param {boolean} [keepScale] Leave the dialog's scale alone. Set while a touch
- * drag is still in progress: the lift is re-asserted on the next drag move, so
- * dropping it here would visibly snap the window to full size mid-drag.
+ * @param {boolean} [keepScale] Skip the scale reset, for a touch drag still in progress.
  */
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	animateElement(this.element, function() {
 
 		this.moveToDialog(dialog);
-		if (!keepScale) dialog.setScale();
+		if (!keepScale) dialog.setScale(1, 1, undefined, false);
 	}, function(name) {
 		return name === "inset";
 	}, function() {
