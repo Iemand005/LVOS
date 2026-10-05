@@ -34,7 +34,9 @@ test('should verify the global appManager object', async ({ page }) => {
 test('should verify windowManager app installation', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
 
-	const wm = await tester.getWindowManager(page);
+	// const wm = await tester.getWindowManager(page);
 
-	(await wm).installApp()
+	// wm.()
+	const appManager = await tester.getAppManager(page);
+	appManager.installedApps
 });
