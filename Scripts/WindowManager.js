@@ -1055,7 +1055,7 @@ WindowSnap.prototype.setInset = function(inset) {
 WindowSnap.prototype.snap = function(type) {
 	this.hidden = false;
 
-	this.element.style.transitionDuration = "300ms";
+	// this.element.style.transitionDuration = "300ms";
 
 	animateElement(this.element, function() {
 
