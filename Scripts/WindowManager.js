@@ -958,8 +958,7 @@ WindowSnap.prototype.toggleAnimations = function(enabled) {
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	if (noAnimation) this.element.style.transition = "none";
-	else this.element.style.transition = "";
+	this.toggleAnimations(!noAnimation);
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
