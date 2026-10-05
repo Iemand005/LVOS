@@ -596,11 +596,11 @@ body > canvas {
 
 #window-snap {
 	position: absolute;
-	backdrop-filter: blur(10px);
-	border-radius: 10px;
-	background: #3d3d3d6e;
-    border: 1px solid black;
-	/* transition: opacity 100ms linear; */
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    background: #3d3d3d3d;
+    border: 1px solid #ffffff40;
+    box-shadow: 0px 0px 50px 10px #0000001a;
 }
 
 #window-snap.animating {
