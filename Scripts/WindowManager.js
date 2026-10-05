@@ -2149,23 +2149,14 @@ Dialog.prototype.stopAnimating = function () {
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
 	var target = this.target;
 	if (!target) return;
-	var dialog = this;
-	if (supportsTransitions) {
-		target.classList.add("animating");
-		/** @type {(ev: TransitionEvent)=>void} */
-		var animationHandler = function(event) {
-			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !target) return;
-			dialog.stopAnimating();
-			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
-			target.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(dialog);
-		};
-		target.addEventListener(transitionEndEvent, animationHandler, false);
-	}
 
-	window.requestAnimationFrame(function() {
-		if (onToggled) onToggled.call(dialog);
-	});
+	animateElement(
+		target,
+		onToggled,
+		onTransitionEnd,
+		onEnd,
+		this
+	);
 };
 /**
  * @param {string} className
