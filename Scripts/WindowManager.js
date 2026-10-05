@@ -1022,7 +1022,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
-		console.log( "isnot touch ", isTouch)
+		console.log( "isnot touch ", isTouch, direction)
 		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
