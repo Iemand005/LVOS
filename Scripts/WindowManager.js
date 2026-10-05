@@ -1021,6 +1021,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
+		if (!direction) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
 	}, function() {	console.log("stoppinga nimating the move")
