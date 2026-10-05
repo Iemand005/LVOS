@@ -396,9 +396,29 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 	var boundContext = thisArg || element;
 
 	var callEnd = function() {
+		// A superseded animation must not run its callback, or it would fight the
+		// animation that replaced it (e.g. hiding the element right after it snapped).
+		if (!state.active) return;
+		state.active = false;
+		if (element._animationState === state) element._animationState = null;
+
 		element.classList.remove("animating");
 		if (onEnd) onEnd.call(boundContext);
 	};
+
+	// Any animation still in flight on this element is cancelled up front. The snap
+	// states (snap(), moveToDialog(), hideBehind()) share a single element, so a
+	// leftover timer, transitionend listener or queued frame from the previous state
+	// would otherwise fire mid-transition and undo the new one.
+	var previous = element._animationState;
+	if (previous) {
+		if (previous.timer) clearTimeout(previous.timer);
+		if (previous.frame) window.cancelAnimationFrame(previous.frame);
+		if (previous.handler) element.removeEventListener(transitionEndEvent, previous.handler, false);
+	}
+
+	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean }} */
+	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true };
 
 	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
@@ -406,7 +426,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		return;
 	}
 
-	var time = timeout && setTimeout(callEnd, timeout);
+	state.timer = timeout && setTimeout(callEnd, timeout);
 
 	if (supportsTransitions) {
 		element.classList.add("animating");
@@ -418,14 +438,16 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
-			clearTimeout(time);
+			clearTimeout(state.timer);
 			callEnd();
 		};
 
+		state.handler = animationHandler;
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
-	window.requestAnimationFrame(function() {
+	state.frame = window.requestAnimationFrame(function() {
+		state.frame = 0;
 		if (onToggled) onToggled.call(boundContext);
 	});
 }
@@ -3184,7 +3206,4 @@ window.__LVMessenger = {};
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
  *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
+ *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 
