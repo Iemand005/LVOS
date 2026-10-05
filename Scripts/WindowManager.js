@@ -389,22 +389,20 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @param {any} [thisArg]
  */
 function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
-	var dialog = this;
 	if (supportsTransitions) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
 			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !element) return;
-			dialog.stopAnimating();
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
-			if (onEnd) onEnd.call(dialog);
+			if (onEnd) onEnd.call(thisArg);
 		};
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
 	window.requestAnimationFrame(function() {
-		if (onToggled) onToggled.call(dialog);
+		if (onToggled) onToggled.call(thisArg);
 	});
 };
 
