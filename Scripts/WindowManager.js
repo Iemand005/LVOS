@@ -954,16 +954,11 @@ Object.defineProperty(WindowSnap.prototype, "animate", {
 
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
 
-/** @param {boolean} enabled */
-WindowSnap.prototype.setAnimate = function(enabled) {
-	this.element.style.transition = enabled ? "" : "none";
-};
-
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	this.setAnimate(!noAnimation);
+	this.animate = !noAnimation;
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
@@ -996,7 +991,7 @@ WindowSnap.prototype.setInset = function(inset) {
 
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
-	this.setAnimate(true);
+	this.animate = true;
 	switch(type) {
 		case "maximize": this.setInset(15);
 	}
