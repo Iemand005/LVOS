@@ -980,6 +980,8 @@ WindowSnap.prototype.setInset = function(inset) {
 	insetElement(this.element, inset);
 }
 
+WindowSnap.prototype.snap()
+
 //#endregion
 
 //#region ClickOffset
