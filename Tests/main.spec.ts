@@ -1,37 +1,41 @@
-import { test, expect, Page } from '@playwright/test';
+import { test as base, expect, Page } from '@playwright/test';
 
-class VulpOSTester {
-
+export class VulpOSTester {
+	// Use readonly so the page instance is locked to this runner
 	constructor(readonly page: Page) {}
 
-	async getWindowManager(page: Page) {
-		const windowManager = await page.evaluate(() => window.windowManager);
-
-		expect(windowManager).toBeDefined();
-		return windowManager;
+	async assertWindowManagerExists() {
+		const exists = await this.page.evaluate(() => typeof window.windowManager !== 'undefined');
+		expect(exists).toBe(true);
 	}
 
-	async getAppManager(page: Page) {
-		const appManager = await page.evaluate(() => window.appManager);
-
-		expect(appManager).toBeDefined();
-		return appManager;
+	async assertAppManagerExists() {
+		const exists = await this.page.evaluate(() => typeof window.appManager !== 'undefined');
+		expect(exists).toBe(true);
 	}
 
-	async windowManagerInstallApp(page: Page) {
-		const wm = await this.getWindowManager(page);
+	async installApp(id: string = 'cube', name: string = 'Cube', path: string = './Applications/Cube/cube.html') {
+		// Everything involving 'window.windowManager' must happen inside the browser context
+		await this.page.evaluate(({ path, name, id }) => {
+			window.windowManager.installApp(path, name, id);
+		}, { path, name, id });
 
-		const id = "cube";
+		// Wait and assert that the window is successfully tracked in the DOM/State
+		const isWindowTracked = await this.page.evaluate((windowId) => {
+			return typeof window.windowManager.windows[windowId] !== 'undefined';
+		}, id);
 
-		wm.installApp("./Applications/Cube/cube.html", "Cube", id);
-
-		expect(wm.windows[id]).toBeDefined();
-
-		return wm.windows[id];
+		expect(isWindowTracked).toBe(true);
 	}
 }
 
-const tester = new VulpOSTester();
+const test = base.extend<{ vulpOS: VulpOSTester }>({
+  vulpOS: async ({ page }, use) => {
+    await page.goto('http://localhost:3621/'); 
+    
+    await use(new VulpOSTester(page));
+  },
+});
 
 test('should verify the global windowManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
