@@ -1044,9 +1044,13 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 	animateElement(this.element, function() {
 
 		this.moveToDialog(dialog);
-	}, function() {
+	}, undefined, function() {
 
-	}, function() {}, this);
+	}, this);
+}
+
+WindowSnap.prototype.hide = function() {
+	
 }
 
 //#endregion
