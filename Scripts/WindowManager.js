@@ -975,7 +975,7 @@ WindowSnap.prototype.moveWindowSnapTo = function(x, y, width, height) {
 
 /** @param {number} inset */
 WindowSnap.prototype.setInset = function(inset) {
-	insetElement(this.element, )
+	insetElement(this.element, inset);
 }
 
 //#endregion
