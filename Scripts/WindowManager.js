@@ -996,9 +996,10 @@ WindowSnap.prototype.snap = function(type) {
 	}
 }
 
-WindowSnap.prototype.hide = function() {
+/** @param {Dialog} dialog */
+WindowSnap.prototype.hideBehind = function(dialog) {
 	this.animate = true;
-	
+	this.moveWindowSnapToDialog(dialog);
 }
 
 //#endregion
