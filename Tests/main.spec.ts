@@ -30,16 +30,16 @@ export class VulpOSTester {
 		return dialog as JSHandle<Dialog>;
 	}
 
-	async installApp(
-		id: string = 'cube',
-		name: string = 'Cube',
-		path: string = './Applications/Cube/cube.html'
-	) {
+	async installApp(id: string = 'cube', name: string = 'Cube', path: string = './Applications/Cube/cube.html') {
 		await this.page.evaluate(({ path, name, id }) => {
 			window.windowManager.installApp(path, name, id);
 		}, { path, name, id });
 
 		return this.getWindow(id);
+	}
+
+	async assertAppInstalled(windowId: string) {
+		await this.getWindow(windowId);
 	}
 
 	async assertWindowOpen(window: JSHandle) {
