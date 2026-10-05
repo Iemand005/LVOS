@@ -490,6 +490,14 @@ function WindowManager() {
 	this.snapSideThreshold = 30;
 
 	/**
+	 * Whether the last window in the snap group absorbs the leftover width. Off by
+	 * default: a lone tiled window then stays at its own width and leaves the rest of
+	 * the desktop free. On gives the full-tiling behaviour where the group always fills
+	 * the window area. @type {boolean}
+	 */
+	this.snapFillLastTile = false;
+
+	/**
 	 * The snap zone the indicator is currently showing, or "" for none. Shared by the
 	 * drag preview and the snap on drop so the two cannot disagree.
 	 * @type {"" | "maximize" | "left" | "right"}
@@ -1042,9 +1050,12 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 
 /**
  * Shares the window area out over the group's windows by width and writes each one's
- * share onto the element for the .snapped class to pick up. Every window but the last
- * takes its own width; the last one soaks up whatever is left, so the group always
- * fills the area exactly.
+ * share onto the element for the .snapped class to pick up.
+ *
+ * Every window takes its own width, so a lone tiled window stays at 50% and leaves the
+ * rest of the desktop free to drag a second window onto. Set {@link
+ * WindowManager#snapFillLastTile} for a full tiling window manager, where the last
+ * window soaks up whatever width is left over so the group always fills the area.
  */
 WindowManager.prototype.reflowSnapGroup = function () {
 	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
@@ -1055,7 +1066,7 @@ WindowManager.prototype.reflowSnapGroup = function () {
 	for (var i = 0; i < windows.length; i++) {
 		var tile = windows[i];
 		var isLast = i === windows.length - 1;
-		var width = isLast ? remaining : (tile.width || 0.5);
+		var width = this.snapFillLastTile && isLast ? remaining : (tile.width || 0.5);
 		remaining -= width;
 
 		var dialog = this.windows[tile.id];
