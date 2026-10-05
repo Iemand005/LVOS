@@ -2015,13 +2015,13 @@ Dialog.prototype.setSkew = function(skew) {
 	else if (this.target) skewElement(this.target, skew);
 };
 /**
- * @param {number} scaleX
- * @param {number} scaleY
+ * @param {number} [scaleX]
+ * @param {number} [scaleY]
  * @param {boolean} [update]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update) {
-	this._scaleX = scaleX;
-	this._scaleY = scaleY;
+	this._scaleX = scaleX || 1;
+	this._scaleY = scaleY || 1;
 	if (update !== false) this.updateTranslation();
 };
 /** @param {number} scaleX */
