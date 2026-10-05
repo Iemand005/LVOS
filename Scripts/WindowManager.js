@@ -980,7 +980,10 @@ WindowSnap.prototype.setInset = function(inset) {
 	insetElement(this.element, inset);
 }
 
-WindowSnap.prototype.snap()
+/** @param {"maximize" | "left" | "right"} type */
+WindowSnap.prototype.snap = function(ftype) {
+
+}
 
 //#endregion
 
