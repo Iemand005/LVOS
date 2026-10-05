@@ -1550,7 +1550,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 Dialog.prototype.reportState = function() {
 	this.messageFrame("window-size", {});
 	this.messageFrame("theme", {className: document.body.className});
-	if (windowManager) windowManager.broadcastTheme();
+	windowManager.broadcastTheme();
 };
 /**
  * @param {boolean} [forceOpen]

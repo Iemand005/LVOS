@@ -136,6 +136,7 @@ test('should maximize and close an app', async ({ vulpOS }) => {
 
 	window
 
+	await vulpOS.openWindow(window);
 	await vulpOS.assertWindowOpen(window);
 
 	await vulpOS.maximizeWindow(window);
