@@ -512,6 +512,13 @@ function WindowManager() {
 	 */
 	this._snapZone = "";
 
+	/**
+	 * Last pointer position during a drag, so the drop can decide the same zone the
+	 * preview did once the pointer has gone.
+	 * @type {Coord}
+	 */
+	this.pointerPosition = { x: 0, y: 0 };
+
 	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
@@ -1102,10 +1109,11 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  * Shares the window area out over the group's windows by width and writes each one's
  * share onto the element for the .snapped class to pick up.
  *
- * Every window takes its own width, so a lone tiled window stays at 50% and leaves the
- * rest of the desktop free to drag a second window onto. Set {@link
- * WindowManager#snapFillLastTile} for a full tiling window manager, where the last
- * window soaks up whatever width is left over so the group always fills the area.
+ * Every window takes its own width, and gap tiles only reserve space, so a lone tiled
+ * window stays at 50% and leaves the rest of the desktop free to drag a second window
+ * onto. Clear {@link WindowManager#snapInsertGaps} for a full tiling window manager:
+ * no gaps are inserted and the last window soaks up whatever width is left over, so
+ * the group always fills the area.
  */
 WindowManager.prototype.reflowSnapGroup = function () {
 	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
@@ -1141,7 +1149,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	var snapZone = flags.aeroSnap ? this.getSnapZone(this.activeDialog) : "";
+	var snapZone = flags.aeroSnap ? this.getSnapZone(this.pointerPosition.x, this.pointerPosition.y) : "";
 	if (snapZone) this.snapDialog(this.activeDialog, snapZone);
 
 	if (this.isTouchDrag) {
