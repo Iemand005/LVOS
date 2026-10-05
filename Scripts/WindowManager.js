@@ -981,8 +981,10 @@ WindowSnap.prototype.setInset = function(inset) {
 }
 
 /** @param {"maximize" | "left" | "right"} type */
-WindowSnap.prototype.snap = function(ftype) {
-
+WindowSnap.prototype.snap = function(type) {
+	switch(type) {
+		case "maximize": this.setInset(15);
+	}
 }
 
 //#endregion
