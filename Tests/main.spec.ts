@@ -1,8 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
-async function getAppManager() {
-	
+class VulpOSTester {
+
+	async getAppManager(page: Page) {
+		const appManager = await page.evaluate((): AppManager => {
+			return window.appManager; 
+		});
+
+		expect(appManager).toBeDefined();
+	}
 }
+
+const tester = new VulpOSTester();
 
 test('should verify the global windowManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
@@ -19,10 +28,5 @@ test('should verify the global windowManager object', async ({ page }) => {
 test('should verify the global appManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
 
-	const appManager = await page.evaluate((): AppManager => {
-
-		return window.appManager; 
-	});
-
-	expect(appManager).toBeDefined();
+	const appManager = tester.getAppManager(page);
 });
