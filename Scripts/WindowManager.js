@@ -2025,7 +2025,12 @@ Dialog.prototype.setSkew = function(skew) {
 Dialog.prototype.setScale = function(scaleX, scaleY, update, animate) {
 	this._scaleX = scaleX || 1;
 	this._scaleY = scaleY || 1;
-	if (update !== false) this.updateTranslation();
+	if (update === false) return;
+
+	if (animage ) this.animate(function() {
+		this.updateTranslation();
+	});
+		else this.updateTranslation();
 };
 /** @param {number} scaleX */
 Dialog.prototype.setScaleX = function(scaleX) {
