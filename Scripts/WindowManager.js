@@ -393,7 +393,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (onTransitionEnd && !onTransitionEnd(event.propertyName) || !element) return;
+			if (!element || (onTransitionEnd && !onTransitionEnd(event.propertyName))) return;
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
 			if (onEnd) onEnd.call(thisArg);
