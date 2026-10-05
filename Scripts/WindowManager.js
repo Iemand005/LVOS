@@ -816,7 +816,9 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (isTouch) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
+	var snapFull = newX <= 10;
+	if (snapFull) this.windowSnap.snap("maximize");
+	else if (isTouch) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
