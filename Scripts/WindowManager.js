@@ -983,6 +983,10 @@ WindowSnap.prototype.init = function() { document.body.appendChild(this.element)
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
+	animateElement(this.element, function() {
+
+	}, );
+
 	this.animate = !noAnimation;
 
 	var sides = [
