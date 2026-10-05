@@ -976,9 +976,9 @@ function WindowSnap() {
 	this.element.id = "window-snap";
 }
 
-Object.defineProperty(WindowSnap.prototype, "animate", {
-	get: function() { return this.element.style.transition !== "none"; },
-	set: function(enable) { this.element.style.transition = enable ? "" : "none"; }
+Object.defineProperty(WindowSnap.prototype, "hidden", {
+	get: function() { return this.element.classList.contains("hidden"); },
+	set: function(enable) { if (enable) this.element.classList.add("hidden"); else this.element.classList.remove("hidden"); }
 })
 
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
