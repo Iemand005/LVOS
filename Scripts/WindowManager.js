@@ -1045,7 +1045,7 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 
 		this.moveToDialog(dialog);
 	}, undefined, function() {
-
+		this.hide();
 	}, this);
 }
 
