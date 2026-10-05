@@ -1022,6 +1022,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	var bottom = dialog.bottom - (s.bottom ? outset : 0);
 	 
 	if (!noAnimation) animateElement(this.element, function() {
+		this.hidden = false;
 		this.applyInsetStyle(top, left, right, bottom);
 		console.log( "isnot touch ", isTouch, direction)
 		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
@@ -2233,7 +2234,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var scaleX = window.innerWidth / startWidth;
 		var scaleY = height / startHeight;
 
-		target.style.transformOrigin = "top left";
+		target.style.transformOrigin = enabled ? "top left" : "";
 		target.style.pointerEvents = "none";
 
 		if (!enabled) {
