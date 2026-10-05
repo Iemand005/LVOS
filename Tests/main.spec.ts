@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-
+async function getAppManager() {
+	
+}
 
 test('should verify the global windowManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
