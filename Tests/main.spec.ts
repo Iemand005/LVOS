@@ -36,14 +36,14 @@ const test = base.extend<{ vulpOS: VulpOSTester }>({
 });
 
 
-test('should verify the global windowManager object', async ({ vulpOS }) => {
-  await vulpOS.assertWindowManagerExists();
-});
+test('should verify the global windowManager object', async ({ vulpOS }) => 
+	vulpOS.assertWindowManagerExists()
+);
 
-test('should verify the global appManager object', async ({ vulpOS }) => {
-  await vulpOS.assertAppManagerExists();
-});
+test('should verify the global appManager object', async ({ vulpOS }) =>
+  vulpOS.assertAppManagerExists()
+);
 
-test('should verify windowManager app installation', async ({ vulpOS }) => {
-  await vulpOS.installApp('cube', 'Cube');
-});
+test('should verify windowManager app installation', async ({ vulpOS }) =>
+  vulpOS.installApp('cube', 'Cube')
+);
