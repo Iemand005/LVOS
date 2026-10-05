@@ -163,5 +163,6 @@ declare function WindowManager(): {
 declare function Dialog(): void;
 
 interface WindowTile {
-	
+	id: string;
+	size: number; // Percentage of the uh width?
 }
