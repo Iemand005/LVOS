@@ -482,20 +482,28 @@ function WindowManager() {
 	this.snapFullThreshold = 30;
 
 	/**
-	 * How close to the left or right edge a dragged window must be to snap to that
-	 * half of the screen, in CSS pixels. Shared by the drag preview and the snap on
+	 * How close to the left or right edge the pointer must be for a dragged window to
+	 * snap to that half, in CSS pixels. Shared by the drag preview and the snap on
 	 * drop, for the same reason as {@link WindowManager#snapFullThreshold}.
 	 * @type {number}
 	 */
 	this.snapSideThreshold = 30;
 
 	/**
-	 * Whether the last window in the snap group absorbs the leftover width. Off by
-	 * default: a lone tiled window then stays at its own width and leaves the rest of
-	 * the desktop free. On gives the full-tiling behaviour where the group always fills
-	 * the window area. @type {boolean}
+	 * Width of a gap tile as a share of the window area. One gap matches one half-width
+	 * window, so a lone window snapped right sits exactly in the right half.
+	 * @type {number}
 	 */
-	this.snapFillLastTile = false;
+	this.snapGapWidth = 0.5;
+
+	/**
+	 * Whether snapping a window to a side inserts a gap tile to hold its position.
+	 * With gaps on, a window snapped right sits flush against the right edge and a lone
+	 * window keeps its own width, leaving the rest of the desktop free. Turn this off
+	 * for a full tiling window manager: no gaps, and the last window absorbs the
+	 * leftover width so the group always fills the area. @type {boolean}
+	 */
+	this.snapInsertGaps = true;
 
 	/**
 	 * The snap zone the indicator is currently showing, or "" for none. Shared by the
@@ -940,9 +948,11 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 
-	// Read from the window's own geometry rather than the pointer: the drop in
-	// disableDialogDrag runs after the pointer is gone, and both must agree.
-	var snapZone = flags.aeroSnap ? this.getSnapZone(dialog) : "";
+	// Remember where the pointer was: the drop in disableDialogDrag happens after the
+	// pointer is gone and must still decide the same zone.
+	this.setPointerPosition(newX, newY);
+
+	var snapZone = flags.aeroSnap ? this.getSnapZone(newX, newY) : "";
 
 	if (snapZone) {
 		// snap() early-outs on an unchanged zone, so only the transition needs guarding:
@@ -965,19 +975,31 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 };
 
 /**
- * Which aero snap zone a window currently occupies, or "" for none.
- * @param {Dialog} dialog
+ * Which aero snap zone the pointer is currently in, or "" for none. The pointer
+ * decides, not the window's edges, so a window stays left-aligned no matter which way
+ * it was dragged until the pointer itself reaches an edge.
+ * @param {number} x Pointer position.
+ * @param {number} y Pointer position.
  * @returns {"" | "maximize" | "left" | "right"}
  */
-WindowManager.prototype.getSnapZone = function(dialog) {
-	if (dialog.top <= this.snapFullThreshold) return "maximize";
-
-	// left, right and top are all distances from the screen edge: left is x, and
-	// right is the gap to the right edge rather than the window's own coordinate.
-	if (dialog.left <= this.snapSideThreshold) return "left";
-	if (dialog.right <= this.snapSideThreshold) return "right";
+WindowManager.prototype.getSnapZone = function (x, y) {
+	if (y <= this.snapFullThreshold) return "maximize";
+	if (x <= this.snapSideThreshold) return "left";
+	if (x >= this.snapWidth() - this.snapSideThreshold) return "right";
 
 	return "";
+};
+
+/** Width of the window area snaps lay out against. */
+WindowManager.prototype.snapWidth = function () {
+	var section = document.getElementById("window-section");
+	return section ? section.clientWidth : window.innerWidth;
+};
+
+/** @param {number} x @param {number} y */
+WindowManager.prototype.setPointerPosition = function (x, y) {
+	this.pointerPosition.x = x;
+	this.pointerPosition.y = y;
 };
 
 /**
@@ -1014,8 +1036,29 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
 	if (side === "left") windows.unshift(tile);
 	else windows.push(tile);
 
+	if (this.snapInsertGaps) this.fitSnapGaps(windows, side);
+
 	dialog.toggleSnapped(true);
 	this.reflowSnapGroup();
+};
+
+/**
+ * Keeps the group either fully tiled or, for a single window, held against the half it
+ * was snapped into by a gap. Two windows already fill the area between them, so gaps
+ * only ever exist while the group holds one.
+ * @param {WindowTile[]} windows
+ * @param {"left" | "right"} side
+ */
+WindowManager.prototype.fitSnapGaps = function (windows, side) {
+	// Clear any gap left from when the group was smaller.
+	for (var i = windows.length - 1; i >= 0; i--) {
+		if (windows[i].gap) windows.splice(i, 1);
+	}
+
+	if (windows.length !== 1) return;
+
+	// Opposite side: a window snapped right is held there by the gap on its left.
+	windows.splice(side === "left" ? 1 : 0, 0, { gap: true, width: this.snapGapWidth });
 };
 
 /**
@@ -1066,14 +1109,19 @@ WindowManager.prototype.reflowSnapGroup = function () {
 	for (var i = 0; i < windows.length; i++) {
 		var tile = windows[i];
 		var isLast = i === windows.length - 1;
-		var width = this.snapFillLastTile && isLast ? remaining : (tile.width || 0.5);
+		// Only a gapless group gives its leftover width to the last window.
+		var width = !this.snapInsertGaps && isLast ? remaining : (tile.width || 0.5);
 		remaining -= width;
 
-		var dialog = this.windows[tile.id];
-		if (!dialog || !dialog.target) continue;
+		// A gap only reserves space; it has no window to place.
+		if (!tile.gap) {
+			var dialog = this.windows[tile.id];
+			if (dialog && dialog.target) {
+				dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
+				dialog.target.style.setProperty("--snap-left", (offset * 100) + "%");
+			}
+		}
 
-		dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
-		dialog.target.style.setProperty("--snap-left", (offset * 100) + "%");
 		offset += width;
 	}
 };
@@ -3474,8 +3522,4 @@ window.__LVMessenger = {};
  *  \  Chrome for Android Chrome targeting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
+ *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expe
