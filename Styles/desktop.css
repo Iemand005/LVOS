@@ -604,7 +604,7 @@ body > canvas {
 }
 
 #window-snap.animating {
-	transition: all 100ms linear;
+	transition: all 100ms ease-in-out;
 }
 
 /* visibility keeps the element out of the render tree once faded, so its
