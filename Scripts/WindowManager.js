@@ -467,8 +467,7 @@ function WindowManager() {
 		}
 	};
 
-	this.windowSnap = document.createElement("div");
-	this.windowSnap.id = "window-snap";
+	this.windowSnap = new WindowSnap;
 
 }
 
@@ -937,6 +936,11 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
+function WindowSnap() {
+	this.element = document.createElement("div");
+	this.element.id = "window-snap";
+}
+
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
 WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
@@ -967,6 +971,8 @@ WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direct
 WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
 
 }
+
+WindowManager
 
 //#endregion
 
