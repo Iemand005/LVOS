@@ -991,6 +991,7 @@ WindowSnap.prototype.setInset = function(inset) {
 
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
+	this.setAnimate(true);
 	switch(type) {
 		case "maximize": this.setInset(15);
 	}
