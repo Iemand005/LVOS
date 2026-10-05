@@ -34,13 +34,13 @@ const tester = new VulpOSTester();
 test('should verify the global windowManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
 
-	tester.getWindowManager(page);
+	await tester.getWindowManager(page);
 });
 
 test('should verify the global appManager object', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
 
-	tester.getAppManager(page);
+	await tester.getAppManager(page);
 });
 
 test('should verify windowManager app installation', async ({ page }) => {
