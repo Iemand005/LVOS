@@ -936,10 +936,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	} else if (dialog.snapped) {
 		var frame = dialog._snapFrame;
 		if (frame) dialog.remapClickOffset(frame.x, frame.y, frame.width, frame.height);
-		// No animation: the window is under the pointer and has to track it 1:1. Every
-		// later pointermove calls stopAnimating anyway, which would strip the animating
-		// class before the transition had a chance to play.
-		this.unsnapDialog(dialog, true);
+		this.unsnapDialog(dialog);
 	}
 
 	/** @type {Coord} */
@@ -2513,8 +2510,9 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 Dialog.prototype.stopAnimating = function () {
 	// The drag scale-down relies on "animating" to play its transition. Drag handlers
 	// call this on every pointermove to cancel the window's own animations, which would
-	// otherwise kill that transition after a single frame.
-	if (this._dragScaleAnimating) return;
+	// otherwise kill that transition after a single frame. Snapping out is exempt for
+	// the same reason: it is the drag itself that starts it.
+	if (this._dragScaleAnimating || this._snappingOut) return;
 	if (this.target) this.target.classList.remove("animating");
 };
 
@@ -2571,9 +2569,16 @@ Dialog.prototype.toggleSnapped = function (enable, noAnimation) {
 		return;
 	}
 
+	// Leaving the group has to survive the drag's own animation cancelling, so it is
+	// exempt from stopAnimating the same way the drag scale-down already is. Without
+	// this the window drops to floating in one frame instead of easing out, because the
+	// next pointermove cancels the transition.
+	this._snappingOut = !enable;
+
 	this.toggleClassAnimated("snapped", enable, function (name) {
 		return name === "width" || name === "left";
 	}, function (isSnapped) {
+		this._snappingOut = false;
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
 		if (!isSnapped) clearSnapProperties();
