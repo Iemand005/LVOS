@@ -61,5 +61,7 @@
 		"/": "${workspaceFolder}",
 		"./": "${workspaceFolder}",
         "Applications": "${workspaceFolder}/Applications"
-	}
+	},
+	"playwright.reuseBrowser": true,
+	"playwright.updateSnapshots": "changed"
 }
