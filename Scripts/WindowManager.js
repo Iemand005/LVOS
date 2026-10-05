@@ -829,7 +829,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	this.dragAction.set(0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
-	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, false, this.isTouchDrag);
+	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, false, this.isTouchDrag);
 	return dialog;
 };
 
