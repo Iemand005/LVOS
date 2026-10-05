@@ -24,7 +24,7 @@
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
 		"*.d.ts",
-		"tests/**/*"
+		"Tests/**/*"
 	],
 	"exclude": [
 		"node_modules",
