@@ -111,10 +111,13 @@ export class VulpOSTester {
 
 const test = base.extend<{ vulpOS: VulpOSTester }>({
 	vulpOS: async ({ page }, use) => {
-		await page.addInitScript(() => {
+
+		await page.goto('http://localhost:3621/');
+
+		await page.evaluate(() => {
 			window.flags.useAnimations = false;
 		});
-		await page.goto('http://localhost:3621/');
+
 		await use(new VulpOSTester(page));
 	},
 });
