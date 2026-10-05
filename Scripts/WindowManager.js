@@ -1098,9 +1098,9 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	this.element.style.zIndex = dialog.z.toString();
 
 	this.hidden = false;
-	// noAnimation=false applies the scale without going through animate(), which would
-	// put the "animating" class on a window that is being dragged, not animated.
-	if (isTouch) dialog.setScale(0.9, 0.9, undefined, false);
+	// Direction 0 is a positional drag; the rest are resize handles, which stay at
+	// scale 1. noAnimation=false keeps animate() off a window that is being dragged.
+	if (isTouch && !direction) dialog.setScale(0.9, 0.9, undefined, false);
 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
