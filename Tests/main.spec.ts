@@ -6,7 +6,7 @@ async function checkWelcomeMessage(page: Page, expectedText: string): Promise<vo
 }
 
 test('should load website and verify elements with TS', async ({ page }) => {
-  await page.goto('https://localhost:3621');
+  await page.goto('http://localhost:3621/');
 
   await expect(page).toHaveTitle(/Example Domain/);
 
@@ -14,7 +14,7 @@ test('should load website and verify elements with TS', async ({ page }) => {
 });
 
 test('should verify the global windowManager object', async ({ page }) => {
-  await page.goto('https://localhost:3621');
+  await page.goto('http://localhost:3621/');
 
   const managerData = await page.evaluate((): WindowManager => {
     // This block runs INSIDE the browser tab
