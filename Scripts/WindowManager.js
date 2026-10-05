@@ -2124,20 +2124,23 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 	else this.updateTransform();
 };
 /**
- * Scales the window for a touch drag. The downscale animates over
- * {@link Dialog#dragScaleDuration} and then stops animating, so the rest of the drag
- * moves the window without a transition. The duration is a fallback: while the finger
- * moves, the window's own transform keeps re-targeting the transition, so
+ * Scales the window for a touch drag. A change of scale animates over
+ * {@link Dialog#dragScaleDuration}, in either direction; once it has run, the rest of
+ * the drag moves the window without a transition. The duration is a fallback: while the
+ * finger moves, the window's own transform keeps re-targeting the transition, so
  * transitionend may never arrive on its own.
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  */
 Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	var self = this;
-	var downscale = (scaleX || 1) < this._scaleX || (scaleY || 1) < this._scaleY;
+	var nextX = scaleX || 1;
+	var nextY = scaleY || 1;
 
-	if (!downscale || this._dragScaleAnimating) {
-		this.setScale(scaleX, scaleY, undefined, false);
+	// Already at this scale, or an animation is still playing and must not be restarted.
+	if (nextX === this._scaleX && nextY === this._scaleY) return;
+	if (this._dragScaleAnimating) {
+		this.setScale(nextX, nextY, undefined, false);
 		return;
 	}
 
@@ -2149,8 +2152,8 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	}, function() {
 		self._dragScaleAnimating = false;
 	}, this.dragScaleDuration);
-	this._scaleX = scaleX || 1;
-	this._scaleY = scaleY || 1;
+	this._scaleX = nextX;
+	this._scaleY = nextY;
 };
 /** @param {number} scaleX */
 Dialog.prototype.setScaleX = function(scaleX) {
