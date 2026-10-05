@@ -2,10 +2,15 @@ import { test, expect, Page } from '@playwright/test';
 
 class VulpOSTester {
 
+	async getWindowManager(page: Page) {
+		const wm = await page.evaluate(() => window.windowManager);
+
+		expect(wm).toBeDefined();
+		return wm;
+	}
+
 	async getAppManager(page: Page) {
-		const appManager = await page.evaluate((): AppManager => {
-			return window.appManager; 
-		});
+		const appManager = await page.evaluate(() => window.appManager);
 
 		expect(appManager).toBeDefined();
 		return appManager;
