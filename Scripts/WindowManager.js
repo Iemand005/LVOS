@@ -57,7 +57,7 @@ if (!supportsTransform) useTransform = false;
 
 var flags = {
 	useSkewAnimations: false,
-	aeroSnap: true,
+	aeroSnap: false,
 	updateRateLimit: isBlink,
 	useDragOverlay: true,
 	broadcastWindowMoves: true,
