@@ -36,7 +36,9 @@ test('should verify windowManager app installation', async ({ page }) => {
 
 	const wm = await tester.getWindowManager(page);
 
-	wm.installApp("./Applications/Cube/cube.html", "Cube", "cube");
+	const id = "cube";
 
-	expect(wm.windows["cube"])
+	wm.installApp("./Applications/Cube/cube.html", "Cube", id);
+
+	expect(wm.windows[id]).toBeDefined();
 });
