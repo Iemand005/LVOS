@@ -62,10 +62,10 @@ var flags = {
 	useDragOverlay: true,
 	broadcastWindowMoves: true,
 	_useTransform: useTransform,
+	useAnimations: true,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
-		if (!windowManager) return;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_compositorResize: true,
@@ -400,7 +400,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (onEnd) onEnd.call(boundContext);
 	};
 
-	if (animationless) {
+	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
 		callEnd();
 		return;
