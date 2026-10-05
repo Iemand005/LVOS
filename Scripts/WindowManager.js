@@ -1057,7 +1057,7 @@ WindowSnap.prototype.snap = function(type) {
 		return name === "inset";
 	}, function() {
 		this.hidden = true;
-	}, this, 500);
+	}, this, 120);
 }
 
 /** @param {Dialog} dialog */
@@ -1069,7 +1069,7 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 		return name === "inset";
 	}, function() {
 		this.hidden = true;
-	}, this, 500);
+	}, this, 120);
 }
 
 //#endregion
