@@ -607,8 +607,13 @@ body > canvas {
 	transition: all 100ms linear;
 }
 
+/* visibility keeps the element out of the render tree once faded, so its
+   backdrop-filter stops compositing. The delayed visibility step lets opacity
+   finish first; a plain visibility change would hide it immediately. */
 #window-snap.hidden {
 	opacity: 0;
+	visibility: hidden;
+	transition: opacity 120ms linear, visibility 0s linear 120ms;
 }
 
 @keyframes opensesame {
