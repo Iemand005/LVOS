@@ -600,6 +600,7 @@ body > canvas {
 	border-radius: 10px;
 	background: #3d3d3d6e;
     border: 1px solid black;
+	transition: opacity 1s, linear;
 }
 
 #window-snap.animating {
