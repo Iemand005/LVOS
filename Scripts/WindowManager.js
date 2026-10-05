@@ -388,11 +388,13 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @param {(name: string) => boolean} [onTransitionEnd]
  * @param {(this: T) => void} [onEnd]
  * @param {T} [thisArg]
+ * @param {number} [timeout]
  */
-function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
+function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout) {
 	/** @type {T} */
 	// @ts-ignore of gebruik een type cast om TS gerust te stellen dat dit runtime klopt
 	var boundContext = thisArg || element;
+	bool ended = false;
 	if (supportsTransitions) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
@@ -400,6 +402,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
 			if (!element || (onTransitionEnd && !onTransitionEnd(event.propertyName))) return;
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
+			ended = true;
 			if (onEnd) onEnd.call(boundContext);
 		};
 		element.addEventListener(transitionEndEvent, animationHandler, false);
