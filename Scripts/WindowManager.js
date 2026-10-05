@@ -564,6 +564,9 @@ function WindowManager() {
 
 	this.windowSnap = new WindowSnap;
 
+	/** @type {WindowGroup} */
+	this.windowGroup = { windows: [] };
+
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
