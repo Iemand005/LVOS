@@ -996,6 +996,11 @@ WindowSnap.prototype.snap = function(type) {
 	}
 }
 
+WindowSnap.prototype.hide = function() {
+	this.animate = true;
+	
+}
+
 //#endregion
 
 //#region ClickOffset
