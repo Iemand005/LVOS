@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import {}
 
 async function checkWelcomeMessage(page: Page, expectedText: string): Promise<void> {
   const header = page.locator('h1');
@@ -11,4 +12,17 @@ test('should load website and verify elements with TS', async ({ page }) => {
   await expect(page).toHaveTitle(/Example Domain/);
 
   await checkWelcomeMessage(page, 'Example Domain');
+});
+
+test('should verify the global windowManager object', async ({ page }) => {
+  await page.goto('https://your-website.com');
+
+  const managerData = await page.evaluate((): WindowManager => {
+    // This block runs INSIDE the browser tab
+    return (window as any).windowManager; 
+  });
+
+  expect(managerData).toBeDefined();
+  expect(managerData.version).toBe('1.4.0');
+  expect(managerData.isReady).toBe(true);
 });

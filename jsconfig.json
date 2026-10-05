@@ -23,7 +23,8 @@
 	"include": [
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
-		"*.d.ts"
+		"*.d.ts",
+		"tests/**/*"
 	],
 	"exclude": [
 		"node_modules",
