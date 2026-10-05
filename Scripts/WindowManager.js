@@ -877,14 +877,32 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
-	/** @type {Coord} */
-	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
 	if (dialog.maximized) {
 		if (!flags.aeroSnap) return;
+
+		// Maximizing is purely visual (the .maximized class pins the window with
+		// top/left/bottom/right: 0 !important), so x/y/width/height keep the restored
+		// geometry for as long as the window is maximized. Remap the grab point from the
+		// maximized frame (origin 0,0, sized against #window-section just like
+		// toggleMaximized does) into the restored frame. This has to happen before
+		// `difference` is computed below, or the first move after un-maximizing snaps
+		// the window to a stale offset instead of under the cursor.
+		var windowSection = document.getElementById("window-section");
+		var maxWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
+		var maxHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
+		var offset = dialog.clickOffset;
+
+		if (maxWidth > 0 && maxHeight > 0) {
+			offset.clickX = dialog.x + offset.clickX * (dialog.width / maxWidth);
+			offset.clickY = dialog.y + offset.clickY * (dialog.height / maxHeight);
+		}
+
 		dialog.maximized = false;
-		dialog.clickOffset.clickX /= window.innerWidth / dialog.width;
 	}
+
+	/** @type {Coord} */
+	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
 	dialog.stopAnimating();
 
