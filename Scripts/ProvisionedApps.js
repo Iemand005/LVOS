@@ -276,6 +276,11 @@ var applications = [
 		"title": "Speak",
 		id: "speak",
 		src: "Applications/Speak/speak.html"
+	},
+	{
+		title: "Tepartive.NET",
+		id: "tepartive",
+		src: "https://tepartive.net/"
 	}
 ];
 
