@@ -1002,7 +1002,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	outset = outset || 0;
 
 	this.hidden = !outset;
-	// this._snapped = "";
+	this._snapped = "";
 	
 	if (!direction) outset = 0;
 
