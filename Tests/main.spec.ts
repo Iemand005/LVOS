@@ -20,7 +20,7 @@ export class VulpOSTester {
 		expect(exists).toBe(true);
 	}
 
-	async getWindow(windowId: string): Promise<JSHandle> {
+	async getWindow(windowId: string) {
 		const dialog = await this.page.evaluateHandle((windowId) => window.windowManager.windows[windowId], windowId);
 
 		expect(await dialog.evaluate(window => window !== undefined)).toBe(true);
@@ -70,6 +70,10 @@ export class VulpOSTester {
 		);
 
 		expect(maximized).toBe(false);
+	}
+
+	async openWindow(window: JSHandle<Dialog>) {
+		await window.evaluate(dialog => dialog.open());
 	}
 
 	async maximizeWindow(window: JSHandle) {
@@ -129,6 +133,8 @@ test('should install an app', async ({ vulpOS }) => {
 
 test('should maximize and close an app', async ({ vulpOS }) => {
 	const window = await vulpOS.installApp('cube', 'Cube');
+
+	window
 
 	await vulpOS.assertWindowOpen(window);
 
