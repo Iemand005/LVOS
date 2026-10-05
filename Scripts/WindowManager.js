@@ -1030,9 +1030,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
-	}, function() {	console.log("stoppinga nimating the move")
-		
-	}, this,  500);
+	}, undefined, this, 200);
 	else this.applyInsetStyle(top, left, right, bottom);
 }
 
