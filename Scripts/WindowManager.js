@@ -153,7 +153,7 @@ function getWindowChromeHeight(window) {
  * @param {number} [scaleY]
  * @param {number} [rotation]
  */
-function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
+function transformElement(element, x, y, skew, scaleX, scaleY, rotation) {
 	var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
 	if (skew) transform += " skewX(" + skew + "deg)";
 	if (scaleX === 1) scaleX = undefined;
@@ -1763,7 +1763,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 		this._y = top / window.innerHeight;
 		if (this.useTransform) {
 			if (this.target) this.target.style.height = toPixels(height);
-			if (this.useTransform) this.updateTranslation();
+			if (this.useTransform) this.updateTransform();
 		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
 		this._isMinHeight = height === this.minHeight;
 	}
@@ -1782,7 +1782,7 @@ Object.defineProperty(Dialog.prototype, "left", {
 		this._x = left / window.innerWidth;
 		if (this.useTransform) {
 			if (this.target) this.target.style.width = toPixels(width);
-			if (this.useTransform) this.updateTranslation();
+			if (this.useTransform) this.updateTransform();
 		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
 	}
@@ -2013,39 +2013,39 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 Dialog.prototype.setSkew = function(skew) {
 	this._skew = skew;
 	if (this.useTransform)
-			this.updateTranslation();
+			this.updateTransform();
 	else if (this.target) skewElement(this.target, skew);
 };
 /**
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  * @param {boolean} [update]
- * @param {boolean} [animage]
+ * @param {boolean} [animate]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, animate) {
 	this._scaleX = scaleX || 1;
 	this._scaleY = scaleY || 1;
 	if (update === false) return;
 
-	if (animage ) this.animate(function() {
-		this.updateTranslation();
+	if (animate) this.animate(function() {
+		this.updateTransform();
 	});
-		else this.updateTranslation();
+	else this.updateTransform();
 };
 /** @param {number} scaleX */
 Dialog.prototype.setScaleX = function(scaleX) {
 	this._scaleX = scaleX;
-	this.updateTranslation();
+	this.updateTransform();
 };
 /** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
 	this._scaleY = scaleY;
-	this.updateTranslation();
+	this.updateTransform();
 };
 /** @param {number} rotation */
 Dialog.prototype.setRotation = function(rotation) {
 	this._rotation = rotation;
-	this.updateTranslation();
+	this.updateTransform();
 };
 
 
@@ -2208,7 +2208,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this.setScale(1, 1);
 		if (!content) return;
-		translateElement(content, 0, 0, 0, 1, 1);
+		transformElement(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
 		content.style.height = "";
 		this.maximizeAnimations--;
@@ -2256,7 +2256,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 
-				translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+				transformElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 			});
 		}, timeOffsetMs);
 	});
@@ -2316,12 +2316,12 @@ Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 };
-Dialog.prototype.updateTranslation = function () {
-	if (this.useTransform && this.target) translateElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
+Dialog.prototype.updateTransform = function () {
+	if (this.useTransform && this.target) transformElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
 	if (!this.target) return;
-	if (this.useTransform) this.updateTranslation();
+	if (this.useTransform) this.updateTransform();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
 
 	if (flags.useSkewAnimations) {
@@ -2341,7 +2341,7 @@ Dialog.prototype.updatePosition = function() {
 		if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
 		if (!(isElement(backdrop)) || !wallpaperImage) return;
-		translateElement(backdrop, -this.x, -this.y);
+		transformElement(backdrop, -this.x, -this.y);
 
 		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
 		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;

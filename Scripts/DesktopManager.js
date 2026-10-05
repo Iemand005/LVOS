@@ -106,7 +106,7 @@ var onLoad = function () {
 			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 
-			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			transformElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 			
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
@@ -117,7 +117,7 @@ var onLoad = function () {
 			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
-			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			transformElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 			
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
