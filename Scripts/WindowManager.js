@@ -816,7 +816,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	this.dragAction.set(0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
-	if (this.isTouchDrag) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction);
+	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction);
 	return dialog;
 };
 
@@ -843,7 +843,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	var snapFull = newY <= 30;
 	if (snapFull) this.windowSnap.snap("maximize");
-	else if (isTouch) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
+	else if (isTouch) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true);
 	else this.windowSnap.hideBehind(dialog);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
@@ -860,7 +860,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.activeDialog.maximize();
 
 	if (this.isTouchDrag) {
-		this.windowSnap.moveWindowSnapToDialog(this.activeDialog, 0, this.dragAction.direction);
+		this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
 		this.isTouchDrag = false;
 	}
 
@@ -980,7 +980,7 @@ Object.defineProperty(WindowSnap.prototype, "animate", {
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
-WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
+WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
 	animateElement(this.element, function() {
@@ -1014,8 +1014,9 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
  * @param {number} [left]
  * @param {number} [right]
  * @param {number} [bottom]
+ * @param {boolean} [animate]
  */
-WindowSnap.prototype.moveTo = function(top, left, right, bottom) {
+WindowSnap.prototype.applyInsetStyle = function(top, left, right, bottom, animate) {
 
 }
 
@@ -1034,7 +1035,7 @@ WindowSnap.prototype.snap = function(type) {
 
 /** @param {Dialog} dialog */
 WindowSnap.prototype.hideBehind = function(dialog) {
-	this.moveWindowSnapToDialog(dialog);
+	this.moveToDialog(dialog);
 }
 
 //#endregion
@@ -1460,7 +1461,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev)) return;
 			windowManager.dragAction.set(id);
-			if (windowManager.isTouchDrag) windowManager.windowSnap.moveWindowSnapToDialog(self, 20, id);
+			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id);
 			cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
