@@ -791,7 +791,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	this.dragAction.set(0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
-	if (this.isTouchDrag) this.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction);
+	if (this.isTouchDrag) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction);
 	return dialog;
 };
 
@@ -948,8 +948,8 @@ function WindowSnap() {
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	if (noAnimation) this.windowSnap.style.transition = "none";
-	else this.windowSnap.style.transition = "";
+	if (noAnimation) this.element.style.transition = "none";
+	else this.element.style.transition = "";
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
@@ -963,7 +963,8 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
 		{ top: false, right: false, bottom: true, left: true }
 	];
 	var s = sides[direction || 0] || sides[0];
-	insetElement(this.windowSnap,
+	if (!s) return;
+	insetElement(this.element,
 		dialog.top - (s.top ? outset : 0),
 		dialog.left - (s.left ? outset : 0),
 		dialog.right - (s.right ? outset : 0),
@@ -1403,7 +1404,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev)) return;
 			windowManager.dragAction.set(id);
-			if (windowManager.isTouchDrag) windowManager.moveWindowSnapToDialog(self, 20, id);
+			if (windowManager.isTouchDrag) windowManager.windowSnap.moveWindowSnapToDialog(self, 20, id);
 			cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
