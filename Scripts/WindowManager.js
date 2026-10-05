@@ -957,10 +957,10 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 WindowManager.prototype.getSnapZone = function(dialog) {
 	if (dialog.top <= this.snapFullThreshold) return "maximize";
 
-	var section = document.getElementById("window-section");
-	var width = section ? section.clientWidth : window.innerWidth;
+	// left, right and top are all distances from the screen edge: left is x, and
+	// right is the gap to the right edge rather than the window's own coordinate.
 	if (dialog.left <= this.snapSideThreshold) return "left";
-	if (width - dialog.right <= this.snapSideThreshold) return "right";
+	if (dialog.right <= this.snapSideThreshold) return "right";
 
 	return "";
 };
