@@ -1066,7 +1066,7 @@ WindowSnap.prototype.snap = function(type) {
 		return name === "inset";
 	}, function() {
 		// this.hidden = true;
-	}, this, 120);
+	}, this, );
 }
 
 /** @param {Dialog} dialog */
