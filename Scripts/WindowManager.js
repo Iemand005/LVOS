@@ -1025,7 +1025,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	var right = dialog.right - (s.right ? outset : 0);
 	var bottom = dialog.bottom - (s.bottom ? outset : 0);
 
-	this.element.style.zIndex = dialog.zIndex;
+	this.element.style.zIndex = dialog.z.toString();
 	 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.hidden = false;
