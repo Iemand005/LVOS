@@ -949,6 +949,11 @@ function WindowSnap() {
 
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
 
+/** @param {boolean} enabled */
+WindowSnap.prototype.toggleAnimations = function(enabled) {
+	this.element.style.transition = enabled ? "" : "none";
+};
+
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
 WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
