@@ -2840,6 +2840,7 @@ Dialog.prototype.loadFrame = function() {
 };
 
 Dialog.prototype.launch = function() {
+	// TODO: initstate cuz it might nt have to init again to open
 	if (!this.isOpen) this.initWithObject(this);
 	if (this.mica) this.injectMica();
 
