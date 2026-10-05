@@ -995,7 +995,7 @@ WindowSnap.prototype.init = function() { document.body.appendChild(this.element)
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	this.hidden = false;
+	// this.hidden = false;
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
