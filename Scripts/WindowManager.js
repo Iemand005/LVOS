@@ -382,7 +382,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /**
- * @template [T=HTMLElement]
+ * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
  * @param {(name: string) => boolean} [onTransitionEnd]
@@ -390,6 +390,8 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @param {T} [thisArg]
  */
 function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
+	/** @type {T} */
+	// @ts-ignore of gebruik een type cast om TS gerust te stellen dat dit runtime klopt
 	var boundContext = thisArg || element;
 	if (supportsTransitions) {
 		element.classList.add("animating");
