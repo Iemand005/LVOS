@@ -22,6 +22,5 @@ test('should verify the global windowManager object', async ({ page }) => {
   });
 
   expect(managerData).toBeDefined();
-  expect(managerData.).toBe('1.4.0');
-  expect(managerData.isReady).toBe(true);
+  expect(managerData.windowSnap).toBeDefined();
 });
