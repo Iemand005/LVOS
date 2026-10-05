@@ -392,32 +392,43 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  */
 function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout) {
 	/** @type {T} */
-	// @ts-ignore of gebruik een type cast om TS gerust te stellen dat dit runtime klopt
+	// @ts-ignore
 	var boundContext = thisArg || element;
 
 	var callEnd = function() {
 		element.classList.remove("animating");
 		if (onEnd) onEnd.call(boundContext);
+	};
+
+	if (animationless) {
+		if (onToggled) onToggled.call(boundContext);
+		callEnd();
+		return;
 	}
 
 	var time = timeout && setTimeout(callEnd, timeout);
+
 	if (supportsTransitions) {
 		element.classList.add("animating");
+
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (!element || (onTransitionEnd && !onTransitionEnd(event.propertyName))) return;
+			if (onTransitionEnd && !onTransitionEnd(event.propertyName)) return;
+
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
+
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
 			clearTimeout(time);
 			callEnd();
 		};
+
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
 	window.requestAnimationFrame(function() {
 		if (onToggled) onToggled.call(boundContext);
 	});
-};
+}
 
 //#endregion
 
