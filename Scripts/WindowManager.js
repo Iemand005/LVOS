@@ -396,8 +396,8 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 	var boundContext = thisArg || element;
 
 	var callEnd = function() {
-		if (onEnd) onEnd.call(boundContext);
 		element.classList.remove("animating");
+		if (onEnd) onEnd.call(boundContext);
 	}
 
 	var time = timeout && setTimeout(callEnd, timeout);
