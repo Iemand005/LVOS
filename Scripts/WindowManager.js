@@ -2240,6 +2240,10 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 
 
 Dialog.prototype.stopAnimating = function () {
+	// The drag scale-down relies on "animating" to play its transition. Drag handlers
+	// call this on every pointermove to cancel the window's own animations, which would
+	// otherwise kill that transition after a single frame.
+	if (this._dragScaleAnimating) return;
 	if (this.target) this.target.classList.remove("animating");
 };
 
