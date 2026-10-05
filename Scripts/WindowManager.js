@@ -173,11 +173,12 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
 /**
  * @param {HTMLElement} element
  * @param {number} top
- * @param {number} left
+ * @param {number} [left]
  * @param {number} [right]
  * @param {number} [bottom]
  */
 function insetElement(element, top, left, right, bottom) {
+	if (typeof left === "undefined") left = top, right = top, bottom = top;
 	if ("inset" in element.style) element.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
 	else {
 		element.style.top = toPixels(top);
@@ -974,7 +975,7 @@ WindowSnap.prototype.moveWindowSnapTo = function(x, y, width, height) {
 
 /** @param {number} inset */
 WindowSnap.prototype.setInset = function(inset) {
-
+	insetElement(this.element, )
 }
 
 //#endregion
