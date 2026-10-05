@@ -8,6 +8,7 @@ class VulpOSTester {
 		});
 
 		expect(appManager).toBeDefined();
+		return appManager;
 	}
 }
 
