@@ -819,7 +819,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	if (isTouch) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
-fixe
+
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
 	// if (flipped) return;
