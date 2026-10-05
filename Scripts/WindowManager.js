@@ -937,9 +937,12 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] */
-WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction) {
+/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
+WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
+
+	if (noAnimation) this.windowSnap.style.transform = "";
+
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
 		{ top: true, right: false, bottom: false, left: false },
