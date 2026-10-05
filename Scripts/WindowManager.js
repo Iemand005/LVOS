@@ -396,8 +396,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 	var boundContext = thisArg || element;
 
 	var callEnd = function() {
-		// A superseded animation must not run its callback, or it would fight the
-		// animation that replaced it (e.g. hiding the element right after it snapped).
+		// A superseded animation must not run its callback.
 		if (!state.active) return;
 		state.active = false;
 		if (element._animationState === state) element._animationState = null;
@@ -475,10 +474,9 @@ function WindowManager() {
 	this.dragAction = new DragAction;
 
 	/**
-	 * How close to the top edge a dragged window must be for aero snap to engage,
-	 * in CSS pixels. Shared by the live preview (the snap indicator appearing during
-	 * the drag) and the actual snap on drop, so the indicator can never promise a
-	 * snap that the drop handler then refuses. Set to 0 to require the very top edge.
+	 * How close to the top edge a dragged window must be for aero snap to engage, in
+	 * CSS pixels. Shared by the drag preview and the snap on drop, so the indicator
+	 * cannot promise a snap the drop then refuses. 0 requires the very top edge.
 	 * @type {number}
 	 */
 	this.snapFullThreshold = 30;
@@ -890,12 +888,8 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		if (!flags.aeroSnap) return;
 
 		// Maximizing is purely visual (the .maximized class pins the window with
-		// top/left/bottom/right: 0 !important), so x/y/width/height keep the restored
-		// geometry for as long as the window is maximized. Remap the grab point from the
-		// maximized frame (origin 0,0, sized against #window-section just like
-		// toggleMaximized does) into the restored frame. This has to happen before
-		// `difference` is computed below, or the first move after un-maximizing snaps
-		// the window to a stale offset instead of under the cursor.
+		// top/left/bottom/right: 0 !important), so x/y/width/height still hold the
+		// restored geometry. Remap the grab point from the maximized frame into it.
 		var windowSection = document.getElementById("window-section");
 		var maxWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
 		var maxHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
@@ -943,8 +937,6 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	// Same threshold the live preview used, so the indicator never promises a snap
-	// that the drop then refuses.
 	if (flags.aeroSnap && this.activeDialog.y <= this.snapFullThreshold)
 		this.activeDialog.maximize();
 
@@ -954,10 +946,6 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.isTouchDrag = false;
 	}
 
-	// Dropping the drag hides the snap indicator. This also covers the mouse path,
-	// where handleWindowDrag tracks the element without animating, so nothing else
-	// would ever hide it again. Skipped when the window actually snapped to maximize
-	// above, so the indicator is not torn down mid-animation.
 	if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
 	this._snapFull = false;
 
