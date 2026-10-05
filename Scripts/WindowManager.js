@@ -2148,8 +2148,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 
 
 Dialog.prototype.stopAnimating = function () {
-	if (!this.target) return;
-	this.target.classList.remove("animating");
+	if (this.target) this.target.classList.remove("animating");
 };
 
 /**
