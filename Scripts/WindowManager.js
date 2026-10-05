@@ -481,6 +481,21 @@ function WindowManager() {
 	 */
 	this.snapFullThreshold = 30;
 
+	/**
+	 * How close to the left or right edge a dragged window must be to snap to that
+	 * half of the screen, in CSS pixels. Shared by the drag preview and the snap on
+	 * drop, for the same reason as {@link WindowManager#snapFullThreshold}.
+	 * @type {number}
+	 */
+	this.snapSideThreshold = 30;
+
+	/**
+	 * The snap zone the indicator is currently showing, or "" for none. Shared by the
+	 * drag preview and the snap on drop so the two cannot disagree.
+	 * @type {"" | "maximize" | "left" | "right"}
+	 */
+	this._snapZone = "";
+
 	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
@@ -870,7 +885,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
 	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, false, this.isTouchDrag);
-	this._snapFull = false;
+	this._snapZone = "";
 	return dialog;
 };
 
@@ -910,15 +925,20 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 
-	var snapFull = newY <= this.snapFullThreshold;
+	// Read from the window's own geometry rather than the pointer: the drop in
+	// disableDialogDrag runs after the pointer is gone, and both must agree.
+	var snapZone = flags.aeroSnap ? this.getSnapZone(dialog) : "";
 
-	if (snapFull && flags.aeroSnap) {
-		if (!this._snapFull) {
-			this._snapFull = true;
-			this.windowSnap.snap("maximize");
+	if (snapZone) {
+		// snap() early-outs on an unchanged zone, so only the transition needs guarding:
+		// leaving a zone must put the indicator back behind the window exactly once.
+		if (snapZone !== this._snapZone) {
+			if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
+			this._snapZone = snapZone;
+			this.windowSnap.snap(snapZone);
 		}
-	} else if (this._snapFull) {
-		this._snapFull = false;
+	} else if (this._snapZone) {
+		this._snapZone = "";
 		this.windowSnap.hideBehind(dialog, !!isTouch);
 	} else if (isTouch) {
 		// Only a touch drag tracks the window. A mouse drag leaves the indicator
@@ -929,6 +949,58 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
+/**
+ * Which aero snap zone a window currently occupies, or "" for none.
+ * @param {Dialog} dialog
+ * @returns {"" | "maximize" | "left" | "right"}
+ */
+WindowManager.prototype.getSnapZone = function(dialog) {
+	if (dialog.top <= this.snapFullThreshold) return "maximize";
+
+	var section = document.getElementById("window-section");
+	var width = section ? section.clientWidth : window.innerWidth;
+	if (dialog.left <= this.snapSideThreshold) return "left";
+	if (width - dialog.right <= this.snapSideThreshold) return "right";
+
+	return "";
+};
+
+/**
+ * Applies an aero snap zone to a window on drop.
+ * @param {Dialog} dialog
+ * @param {"" | "maximize" | "left" | "right"} zone
+ */
+WindowManager.prototype.snapDialog = function(dialog, zone) {
+	if (zone === "maximize") {
+		dialog.maximize();
+		return;
+	}
+
+	if (zone !== "left" && zone !== "right") return;
+
+	var section = document.getElementById("window-section");
+	var width = section ? section.clientWidth : window.innerWidth;
+	var height = section ? section.clientHeight : window.innerHeight;
+	var halfWidth = Math.round(width / 2);
+
+	// setWidth/setHeight clamp to the app's max size, which would leave the window
+	// narrower than the half the indicator is already showing. Raise the ceiling for
+	// the duration of the snap so the two still agree, the same way maximizing does.
+	var maxWidth = dialog._maxWidth, maxHeight = dialog._maxHeight;
+	if (maxWidth < halfWidth) dialog._maxWidth = halfWidth;
+	if (maxHeight < height) dialog._maxHeight = height;
+
+	dialog.setWidth(halfWidth);
+	dialog.setHeight(height);
+
+	dialog._maxWidth = maxWidth;
+	dialog._maxHeight = maxHeight;
+
+	// Last: setWidth and setHeight move the window to stay inside the bounds, so pin
+	// the final position only once both are done.
+	dialog.move(zone === "left" ? 0 : halfWidth, 0);
+};
+
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
 	// if (flipped) return;
@@ -937,8 +1009,8 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	if (flags.aeroSnap && this.activeDialog.y <= this.snapFullThreshold)
-		this.activeDialog.maximize();
+	var snapZone = flags.aeroSnap ? this.getSnapZone(this.activeDialog) : "";
+	if (snapZone) this.snapDialog(this.activeDialog, snapZone);
 
 	if (this.isTouchDrag) {
 		// this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
@@ -947,7 +1019,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	}
 
 	if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
-	this._snapFull = false;
+	this._snapZone = "";
 
 	if (!this.activeDialog.moveEvents) return;
 
@@ -1125,6 +1197,18 @@ WindowSnap.prototype.setInset = function(inset) {
 	insetElement(this.element, inset);
 }
 
+/**
+ * Covers exactly one half of the window area, butting against the given side.
+ * @param {"left" | "right"} side
+ */
+WindowSnap.prototype.setHalfInset = function(side) {
+	var section = document.getElementById("window-section");
+	var half = Math.round((section ? section.clientWidth : window.innerWidth) / 2);
+	var left = side === "left" ? 0 : half;
+	var right = side === "left" ? half : 0;
+	insetElement(this.element, 0, left, right, 0);
+}
+
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
 	
@@ -1139,7 +1223,9 @@ WindowSnap.prototype.snap = function(type) {
 		console.log("snapping", type);
 
 		switch(type) {
-			case "maximize": this.setInset(15);
+			case "maximize": this.setInset(15); break;
+			case "left":
+			case "right": this.setHalfInset(type); break;
 		}
 	}, function(name) {
 		return name === "inset";
