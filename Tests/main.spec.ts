@@ -27,7 +27,7 @@ export class VulpOSTester {
 
 		expect(await dialog.evaluate(window => window !== undefined)).toBe(true);
 
-		return dialog;
+		return dialog as JSHandle<Dialog>;
 	}
 
 	async installApp(
