@@ -1,12 +1,14 @@
-import { test as base, expect, Page } from '@playwright/test';
+import { test as base, expect, Page, JSHandle } from '@playwright/test';
 
 export class VulpOSTester {
+
 	constructor(readonly page: Page) {}
 
 	async assertWindowManagerExists() {
 		const exists = await this.page.evaluate(() =>
 			typeof window.windowManager !== 'undefined'
 		);
+
 		expect(exists).toBe(true);
 	}
 
@@ -14,7 +16,19 @@ export class VulpOSTester {
 		const exists = await this.page.evaluate(() =>
 			typeof window.appManager !== 'undefined'
 		);
+
 		expect(exists).toBe(true);
+	}
+
+	async getWindow(windowId: string): Promise<JSHandle> {
+		const window = await this.page.evaluateHandle((windowId) =>
+			window.windowManager.windows[windowId],
+			windowId
+		);
+
+		expect(await window.evaluate(window => window !== undefined)).toBe(true);
+
+		return window;
 	}
 
 	async installApp(
@@ -26,79 +40,72 @@ export class VulpOSTester {
 			window.windowManager.installApp(path, name, id);
 		}, { path, name, id });
 
-		await this.assertWindowExists(id);
-
-		return id;
+		return this.getWindow(id);
 	}
 
-	async assertWindowExists(windowId: string) {
-		const exists = await this.page.evaluate((windowId) =>
-			typeof window.windowManager.windows[windowId] !== 'undefined'
-		, windowId);
-
-		expect(exists).toBe(true);
-	}
-
-	async assertWindowOpen(windowId: string) {
-		const open = await this.page.evaluate((windowId) =>
-			window.windowManager.windows[windowId]?.isOpen === true
-		, windowId);
+	async assertWindowOpen(window: JSHandle) {
+		const open = await window.evaluate(window =>
+			window.isOpen === true
+		);
 
 		expect(open).toBe(true);
 	}
 
-	async assertWindowClosed(windowId: string) {
-		const open = await this.page.evaluate((windowId) =>
-			window.windowManager.windows[windowId]?.isOpen === true
-		, windowId);
+	async assertWindowClosed(window: JSHandle) {
+		const open = await window.evaluate(window =>
+			window.isOpen === true
+		);
 
 		expect(open).toBe(false);
 	}
 
-	async assertWindowMaximized(windowId: string) {
-		const maximized = await this.page.evaluate((windowId) =>
-			window.windowManager.windows[windowId]?.maximized === true
-		, windowId);
+	async assertWindowMaximized(window: JSHandle) {
+		const maximized = await window.evaluate(window =>
+			window.maximized === true
+		);
 
 		expect(maximized).toBe(true);
 	}
 
-	async assertWindowNotMaximized(windowId: string) {
-		const maximized = await this.page.evaluate((windowId) =>
-			window.windowManager.windows[windowId]?.maximized === true
-		, windowId);
+	async assertWindowNotMaximized(window: JSHandle) {
+		const maximized = await window.evaluate(window =>
+			window.maximized === true
+		);
 
 		expect(maximized).toBe(false);
 	}
 
-	async maximizeWindow(windowId: string) {
-		await this.page.evaluate((windowId) => {
-			window.windowManager.windows[windowId]?.maximize();
-		}, windowId);
+	async maximizeWindow(window: JSHandle) {
+		await window.evaluate(window => {
+			window.maximize();
+		});
 
-		await this.page.waitForFunction((windowId) =>
-			window.windowManager.windows[windowId]?.maximized === true
-		, windowId);
+		await this.page.waitForFunction(window =>
+			window.maximized === true,
+			window
+		);
 	}
 
-	async unmaximizeWindow(windowId: string) {
-		await this.page.evaluate((windowId) => {
-			window.windowManager.windows[windowId]?.toggleMaximized(false);
-		}, windowId);
+	async unmaximizeWindow(window: JSHandle) {
+		await window.evaluate(window => {
+			window.toggleMaximized(false);
+		});
 
-		await this.page.waitForFunction((windowId) =>
-			window.windowManager.windows[windowId]?.maximized === false
-		, windowId);
+		await this.page.waitForFunction(window =>
+			window.maximized === false,
+			window
+		);
 	}
 
-	async closeWindow(windowId: string) {
-		await this.page.evaluate((windowId) => {
-			window.windowManager.windows[windowId]?.close();
-		}, windowId);
+	async closeWindow(window: JSHandle) {
+		await window.evaluate(window => {
+			window.close();
+		});
 
-		await this.page.waitForFunction((windowId) =>
-			window.windowManager.windows[windowId]?.isOpen === false
-		, windowId);
+		await this.page.waitForFunction(window =>
+			window.isOpen === false,
+			window
+		);
 	}
 }
 
@@ -118,23 +125,22 @@ test('should verify the global appManager object', async ({ vulpOS }) =>
 );
 
 test('should install an app', async ({ vulpOS }) => {
-	const windowId = await vulpOS.installApp('cube', 'Cube');
+	const window = await vulpOS.installApp('cube', 'Cube');
 
-	await vulpOS.assertWindowExists(windowId);
-	await vulpOS.assertWindowOpen(windowId);
+	await vulpOS.assertWindowOpen(window);
 });
 
 test('should maximize and close an app', async ({ vulpOS }) => {
-	const windowId = await vulpOS.installApp('cube', 'Cube');
+	const window = await vulpOS.installApp('cube', 'Cube');
 
-	await vulpOS.assertWindowOpen(windowId);
+	await vulpOS.assertWindowOpen(window);
 
-	await vulpOS.maximizeWindow(windowId);
-	await vulpOS.assertWindowMaximized(windowId);
+	await vulpOS.maximizeWindow(window);
+	await vulpOS.assertWindowMaximized(window);
 
-	await vulpOS.unmaximizeWindow(windowId);
-	await vulpOS.assertWindowNotMaximized(windowId);
+	await vulpOS.unmaximizeWindow(window);
+	await vulpOS.assertWindowNotMaximized(window);
 
-	await vulpOS.closeWindow(windowId);
-	await vulpOS.assertWindowClosed(windowId);
+	await vulpOS.closeWindow(window);
+	await vulpOS.assertWindowClosed(window);
 });
