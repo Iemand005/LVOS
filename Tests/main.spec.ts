@@ -2,6 +2,8 @@ import { test, expect, Page } from '@playwright/test';
 
 class VulpOSTester {
 
+	constructor(readonly page: Page) {}
+
 	async getWindowManager(page: Page) {
 		const windowManager = await page.evaluate(() => window.windowManager);
 
