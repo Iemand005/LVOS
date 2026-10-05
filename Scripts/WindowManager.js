@@ -856,7 +856,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 	var snapFull = newY <= 30;
 	if (snapFull) this.windowSnap.snap("maximize");
-	else if (isTouch) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true);
+	else if (isTouch) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, isTouch);
 	else this.windowSnap.hideBehind(dialog);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
@@ -994,8 +994,8 @@ WindowSnap.prototype.init = function() {
 	(document.getElementById("window-section") || document.body).appendChild(this.element);
 };
 
-/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
-WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
+/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] */
+WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch) {
 	outset = outset || 0;
 
 	this.hidden = !outset;
@@ -1021,7 +1021,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
-		if (!direction) dialog.setScale(0.9, 0.9);
+		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
 	}, function() {	console.log("stoppinga nimating the move")
