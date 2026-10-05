@@ -394,7 +394,14 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 	/** @type {T} */
 	// @ts-ignore of gebruik een type cast om TS gerust te stellen dat dit runtime klopt
 	var boundContext = thisArg || element;
-	bool ended = false;
+
+	var callEnd = function() {
+		if (onEnd) onEnd.call(boundContext);
+	}
+
+	var time = setTimeout(function() {
+
+	})
 	if (supportsTransitions) {
 		element.classList.add("animating");
 		/** @type {(ev: TransitionEvent)=>void} */
