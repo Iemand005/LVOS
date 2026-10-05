@@ -984,7 +984,7 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
 	outset = outset || 0;
 
 	animateElement(this.element, function() {
-
+		
 	}, );
 
 	this.animate = !noAnimation;
