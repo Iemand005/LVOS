@@ -1,5 +1,4 @@
 import { test, expect, Page } from '@playwright/test';
-import {}
 
 async function checkWelcomeMessage(page: Page, expectedText: string): Promise<void> {
   const header = page.locator('h1');
@@ -23,6 +22,6 @@ test('should verify the global windowManager object', async ({ page }) => {
   });
 
   expect(managerData).toBeDefined();
-  expect(managerData.version).toBe('1.4.0');
+  expect(managerData.).toBe('1.4.0');
   expect(managerData.isReady).toBe(true);
 });
