@@ -1002,7 +1002,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	outset = outset || 0;
 
 	this.hidden = !outset;
-	this._snapped = "";
+	// this._snapped = "";
 	
 	if (!direction) outset = 0;
 
@@ -1028,7 +1028,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	if (!noAnimation) animateElement(this.element, function() {
 		this.hidden = false;
 		this.applyInsetStyle(top, left, right, bottom);
-		console.log( "isnot touch ", isTouch, direction)
+		// console.log( "isnot touch ", isTouch, direction)
 		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
 	}, function(name) {
 		return name === "inset";
@@ -1061,6 +1061,8 @@ WindowSnap.prototype.snap = function(type) {
 
 
 	animateElement(this.element, function() {
+
+		console.log("snapping", type);
 
 		switch(type) {
 			case "maximize": this.setInset(15);
