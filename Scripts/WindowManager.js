@@ -985,6 +985,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 function WindowSnap() {
 	this.element = document.createElement("div");
 	this.element.id = "window-snap";
+	this._snapped = "";
 }
 
 Object.defineProperty(WindowSnap.prototype, "hidden", {
@@ -1001,6 +1002,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	outset = outset || 0;
 
 	this.hidden = !outset;
+	this._snapped = "";
 	
 	if (!direction) outset = 0;
 
@@ -1054,6 +1056,9 @@ WindowSnap.prototype.snap = function(type) {
 	this.hidden = false;
 
 	// this.element.style.transitionDuration = "300ms";
+	if (type === this._snapped) return;
+	this._snapped = type;
+
 
 	animateElement(this.element, function() {
 
