@@ -873,7 +873,8 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.activeDialog.maximize();
 
 	if (this.isTouchDrag) {
-		this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
+		// this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
+		this.windowSnap.hideBehind(this.activeDialog);
 		this.isTouchDrag = false;
 	}
 
