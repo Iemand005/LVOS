@@ -382,11 +382,12 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /**
+ * @template T
  * @param {HTMLElement} element
- * @param {(this:Dialog)=>void} [onToggled]
+ * @param {(this:T)=>void} [onToggled]
  * @param {(name:string)=>boolean} [onTransitionEnd]
- * @param {(this:Dialog)=>void} [onEnd]
- * @param {any} [thisArg]
+ * @param {(this:T)=>void} [onEnd]
+ * @param {T} [thisArg]
  */
 function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
 	if (supportsTransitions) {
@@ -983,9 +984,7 @@ WindowSnap.prototype.init = function() { document.body.appendChild(this.element)
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	animateElement(this.element, function() {
-
-	}, );
+	
 
 	this.animate = !noAnimation;
 
@@ -1008,6 +1007,10 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	var right = dialog.right - (s.right ? outset : 0);
 	var bottom = dialog.bottom - (s.bottom ? outset : 0);
 	 
+	if (!noAnimation) animateElement(this.element, function() {
+		this.applyInsetStyle(top, left, right, bottom);
+	}, );
+	else this.applyInsetStyle(top, left, right, bottom);
 }
 
 /**
