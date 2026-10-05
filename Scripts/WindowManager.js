@@ -801,7 +801,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
  * @param {number} hewY
  * @param {boolean} [isTouch]
  */
-WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
+WindowManager.prototype.handleWindowDrag = function(newX, hennewwY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 	/** @type {Coord} */
@@ -816,8 +816,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	var snapFull = newX <= 10;
-	console.log (newX, snapFull)
+	var snapFull = newY <= 10;
 	if (snapFull) this.windowSnap.snap("maximize");
 	else if (isTouch) this.windowSnap.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
