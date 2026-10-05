@@ -1009,7 +1009,10 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
-	}, );
+	}, function(name) {
+		if (name === "inset") return true;
+		return false;
+	});
 	else this.applyInsetStyle(top, left, right, bottom);
 }
 
