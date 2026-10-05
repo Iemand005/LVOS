@@ -2563,6 +2563,9 @@ Dialog.prototype.toggleSnapped = function (enable) {
 			target.style.removeProperty("--snap-width");
 			target.style.removeProperty("--snap-left");
 		}
+	}, function () {
+		// Required, not optional: toggleClassAnimated only calls setClass from this
+		// callback, so omitting it means the class is never applied at all.
 	});
 };
 
