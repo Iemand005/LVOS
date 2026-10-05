@@ -1153,9 +1153,11 @@ WindowSnap.prototype.snap = function(type) {
  * @param {boolean} [keepScale] Skip the scale reset, for a touch drag still in progress.
  */
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
+	// noAnimation: this method already animates the element, and moveToDialog must not
+	// start a competing animation on the same element or it cancels this one.
 	animateElement(this.element, function() {
 
-		this.moveToDialog(dialog);
+		this.moveToDialog(dialog, 0, undefined, true);
 		if (!keepScale) dialog.setDragScale(1, 1);
 	}, function(name) {
 		return name === "inset";
