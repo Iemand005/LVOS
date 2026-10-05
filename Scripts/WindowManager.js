@@ -942,7 +942,7 @@ function WindowSnap() {
 }
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
-WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
+WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
 	if (noAnimation) this.windowSnap.style.transition = "none";
@@ -968,11 +968,14 @@ WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direct
 	);
 }
 
-WindowManager.prototype.moveWindowSnapTo = function(x, y, width, height) {
+WindowSnap.prototype.moveWindowSnapTo = function(x, y, width, height) {
 
 }
 
-WindowManager
+/** @param {number} inset */
+WindowSnap.prototype.setInset = function(inset) {
+
+}
 
 //#endregion
 
