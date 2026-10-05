@@ -1327,8 +1327,8 @@ function Dialog(object, create) {
 	this._appIcon = null;
 
 	var self = this;
-	
-	this.activationHandler = function (/** @type {MouseEvent | PointerEvent} */ev) {
+	/** @param {MouseEvent | PointerEvent} ev @param {number} id */
+	this.activationHandler = function (ev, id) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self);
@@ -1497,7 +1497,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		sizer.classList.add(sizerId);
 		/** @param {PointerEvent | MouseEvent} ev */
 		var pointerDown = function (ev) {
-			if (!self.activationHandler || !self.activationHandler(ev)) return;
+			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
 			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id);
 			cancelDomEvent(ev);
