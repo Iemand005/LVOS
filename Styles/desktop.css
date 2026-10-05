@@ -607,6 +607,10 @@ body > canvas {
 	transition: all 100ms linear;
 }
 
+#window-snap.hidden {
+	opacity: 0;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
