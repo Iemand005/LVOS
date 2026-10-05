@@ -74,9 +74,8 @@ export class VulpOSTester {
 		expect(maximized).toBe(false);
 	}
 
-	async openWindow(window: DialogHandle) {
-		await window.evaluate(dialog => dialog.open());
-	}
+	openWindow = async (window: DialogHandle) => window.evaluate(dialog => dialog.open());
+	launchWindow = async (window: DialogHandle) => window.evaluate(dialog => dialog.launch());
 
 	async maximizeWindow(window: DialogHandle) {
 		await window.evaluate(window => {
