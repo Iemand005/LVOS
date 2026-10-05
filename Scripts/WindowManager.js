@@ -382,11 +382,11 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /**
- * @template T
+ * @template [T=HTMLElement]
  * @param {HTMLElement} element
- * @param {(this:T | HTMLElement)=>void} [onToggled]
- * @param {(name:string)=>boolean} [onTransitionEnd]
- * @param {(this:T | HTMLElement)=>void} [onEnd]
+ * @param {(this: T) => void} [onToggled]
+ * @param {(name: string) => boolean} [onTransitionEnd]
+ * @param {(this: T) => void} [onEnd]
  * @param {T} [thisArg]
  */
 function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg) {
