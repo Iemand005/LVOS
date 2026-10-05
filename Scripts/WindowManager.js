@@ -1053,12 +1053,12 @@ WindowSnap.prototype.setInset = function(inset) {
 
 /** @param {"maximize" | "left" | "right"} type */
 WindowSnap.prototype.snap = function(type) {
-	this.hidden = false;
-
+	
 	// this.element.style.transitionDuration = "300ms";
 	if (type === this._snapped) return;
 	this._snapped = type;
-
+	
+	this.hidden = false;
 
 	animateElement(this.element, function() {
 
