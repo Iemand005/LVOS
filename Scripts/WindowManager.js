@@ -1089,8 +1089,9 @@ WindowManager.prototype.findSnapTile = function (id) {
 /**
  * Removes a window from the snap group, if it is in one.
  * @param {Dialog} dialog
+ * @param {boolean} [noAnimation] Leave at once instead of shrinking back.
  */
-WindowManager.prototype.unsnapDialog = function (dialog) {
+WindowManager.prototype.unsnapDialog = function (dialog, noAnimation) {
 	var group = /** @type {WindowGroup} */ (this.windowGroup);
 	var windows = /** @type {WindowTile[]} */ (group.windows);
 
@@ -1098,7 +1099,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 	if (index === -1) return;
 
 	windows.splice(index, 1);
-	dialog.toggleSnapped(false);
+	dialog.toggleSnapped(false, noAnimation);
 
 	if (this.snapInsertGaps) this.fitSnapGaps(windows);
 
@@ -2549,22 +2550,31 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
  * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
  * the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
+ * @param {boolean} [noAnimation] Drop out at once, for a window being dragged.
  */
-Dialog.prototype.toggleSnapped = function (enable) {
+Dialog.prototype.toggleSnapped = function (enable, noAnimation) {
 	var target = this.target;
 	if (!target) return;
 	if (enable == null) enable = !target.classList.contains("snapped");
 	if (target.classList.contains("snapped") === enable) return;
+
+	var clearSnapProperties = function () {
+		target.style.removeProperty("--snap-width");
+		target.style.removeProperty("--snap-left");
+	};
+
+	if (noAnimation) {
+		clearSnapProperties();
+		setClass(target, "snapped", enable);
+		return;
+	}
 
 	this.toggleClassAnimated("snapped", enable, function (name) {
 		return name === "width" || name === "left";
 	}, function (isSnapped) {
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
-		if (!isSnapped) {
-			target.style.removeProperty("--snap-width");
-			target.style.removeProperty("--snap-left");
-		}
+		if (!isSnapped) clearSnapProperties();
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.
@@ -3572,8 +3582,4 @@ window.__LVMessenger = {};
  *  \  Chrome for Android Chrome targeting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
  *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
+ *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for F
