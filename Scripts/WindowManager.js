@@ -798,14 +798,14 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 
 /**
  * @param {number} newX
- * @param {number} hewY
+ * @param {number} newY
  * @param {boolean} [isTouch]
  */
-WindowManager.prototype.handleWindowDrag = function(newX, hennewwY, isTouch) {
+WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 	/** @type {Coord} */
-	var difference = { x: newX - dialog.clickOffset.clickX, y: hewY - dialog.clickOffset.clickY };
+	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
 	if (dialog.maximized) {
 		if (!flags.aeroSnap) return;
