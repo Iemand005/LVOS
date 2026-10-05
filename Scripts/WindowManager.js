@@ -984,7 +984,7 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
 	outset = outset || 0;
 
 	animateElement(this.element, function() {
-		
+
 	}, );
 
 	this.animate = !noAnimation;
@@ -1009,7 +1009,13 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
 	);
 }
 
-WindowSnap.prototype.moveWindowSnapTo = function(x, y, width, height) {
+/**
+ * @param {number} top
+ * @param {number} [left]
+ * @param {number} [right]
+ * @param {number} [bottom]
+ */
+WindowSnap.prototype.moveTo = function(top, left, right, bottom) {
 
 }
 
