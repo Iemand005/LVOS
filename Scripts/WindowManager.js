@@ -963,8 +963,7 @@ WindowSnap.prototype.moveWindowSnapToDialog = function(dialog, outset, direction
 		{ top: false, right: false, bottom: true, left: true }
 	];
 	var s = sides[direction || 0] || sides[0];
-	if (!s) return;
-	insetElement(this.element,
+	if (s) insetElement(this.element,
 		dialog.top - (s.top ? outset : 0),
 		dialog.left - (s.left ? outset : 0),
 		dialog.right - (s.right ? outset : 0),
