@@ -814,7 +814,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, hewY, isTouch) {
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
-	if (isTouch) this.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction);
+	if (isTouch) this.moveWindowSnapToDialog(dialog, 20, this.dragAction.direction, true);
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
 };
 
@@ -941,7 +941,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	if (noAnimation) this.windowSnap.style.transition = "";
+	this.windowSnap.style.transition = "";
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
