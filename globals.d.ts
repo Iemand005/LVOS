@@ -162,14 +162,6 @@ declare function WindowManager(): {
 }
 declare function Dialog(): void;
 
-interface Animal {
-    name: string;
-    speak(): void;
+interface WindowTile {
+	
 }
-
-interface Dog extends Animal {
-    bark(): void;
-}
-
-declare function Animal(name: string): Animal;
-declare function Dog(name: string): Dog;
