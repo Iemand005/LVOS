@@ -822,7 +822,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	}
 	if (flags.verboseLogs) console.log("Activating window", dialog);
 	this.activeDialog = dialog;
-	this.isTouchDrag = event && event.pointerType === "touch";
+	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
 	this.enableDialogDrag();
 	// Default a window grab to a move; the sizer handler overrides this with a
 	// resize direction right after, so a stuck resize can never hijack dragging.
