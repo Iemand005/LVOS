@@ -437,6 +437,12 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
+/* Tiling moves by geometry rather than transform, so it opts out of the
+   compositor-only transform transition. */
+.compositor-animations .window.snapped.animating {
+	transition-property: width, left !important;
+}
+
 .slow-animations *,
 body.slow-animations *.window,
 .slow-animations *.window > content,

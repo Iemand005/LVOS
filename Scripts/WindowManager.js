@@ -925,27 +925,18 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 
-	// Dragging a tiled window takes it out of the group; its geometry was never
-	// altered, so it picks up floating again where it was left.
-	if (dialog.snapped) this.unsnapDialog(dialog);
-
+	// Both maximized and tiled windows are drawn in a frame of their own while their
+	// x/y/width/height still hold the floating geometry underneath. The grab point was
+	// recorded against that drawn frame, so remap it into the floating geometry before
+	// dragging or the window jumps away from the cursor.
 	if (dialog.maximized) {
 		if (!flags.aeroSnap) return;
-
-		// Maximizing is purely visual (the .maximized class pins the window with
-		// top/left/bottom/right: 0 !important), so x/y/width/height still hold the
-		// restored geometry. Remap the grab point from the maximized frame into it.
-		var windowSection = document.getElementById("window-section");
-		var maxWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
-		var maxHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
-		var offset = dialog.clickOffset;
-
-		if (maxWidth > 0 && maxHeight > 0) {
-			offset.clickX = dialog.x + offset.clickX * (dialog.width / maxWidth);
-			offset.clickY = dialog.y + offset.clickY * (dialog.height / maxHeight);
-		}
-
+		dialog.remapClickOffset(0, 0, this.snapWidth(), this.snapHeight());
 		dialog.maximized = false;
+	} else if (dialog.snapped) {
+		var frame = dialog._snapFrame;
+		if (frame) dialog.remapClickOffset(frame.x, frame.y, frame.width, frame.height);
+		this.unsnapDialog(dialog);
 	}
 
 	/** @type {Coord} */
@@ -1001,6 +992,12 @@ WindowManager.prototype.getSnapZone = function (x, y) {
 WindowManager.prototype.snapWidth = function () {
 	var section = document.getElementById("window-section");
 	return section ? section.clientWidth : window.innerWidth;
+};
+
+/** Height of the window area snaps lay out against. */
+WindowManager.prototype.snapHeight = function () {
+	var section = document.getElementById("window-section");
+	return section ? section.clientHeight : window.innerHeight;
 };
 
 /** @param {number} x @param {number} y */
@@ -1118,6 +1115,8 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 WindowManager.prototype.reflowSnapGroup = function () {
 	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
 
+	var areaWidth = this.snapWidth();
+	var areaHeight = this.snapHeight();
 	var remaining = 1;
 	var offset = 0;
 
@@ -1132,6 +1131,10 @@ WindowManager.prototype.reflowSnapGroup = function () {
 		if (!tile.gap) {
 			var dialog = this.windows[tile.id];
 			if (dialog && dialog.target) {
+				// Recorded in pixels as well, so a drag out of the group can remap the
+				// grab point out of this frame without measuring the element.
+				dialog._snapFrame = { x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight };
+
 				dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
 				dialog.target.style.setProperty("--snap-left", (offset * 100) + "%");
 			}
@@ -2451,6 +2454,24 @@ Dialog.prototype.setClickOffset = function(x, y) {
 	if (!this.clickOffset || !rect) return;
 	return this.clickOffset.init(x, y, this.width || rect.width, this.height || rect.height, this.x, this.y);
 };
+
+/**
+ * Moves the grab point out of the frame the window is currently drawn in and into its
+ * own floating geometry, which is where x/y/width/height have been pointing all along.
+ * Without this, dragging a maximized or tiled window moves it by the difference between
+ * the two frames and it slides out from under the cursor.
+ * @param {number} frameX Left edge of the drawn frame.
+ * @param {number} frameY Top edge of the drawn frame.
+ * @param {number} frameWidth Width of the drawn frame.
+ * @param {number} frameHeight Height of the drawn frame.
+ */
+Dialog.prototype.remapClickOffset = function (frameX, frameY, frameWidth, frameHeight) {
+	var offset = this.clickOffset;
+	if (!offset || frameWidth <= 0 || frameHeight <= 0) return;
+
+	offset.clickX = this.x + (offset.clickX - frameX) * (this.width / frameWidth);
+	offset.clickY = this.y + (offset.clickY - frameY) * (this.height / frameHeight);
+};
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
 	if (!this.application) return null;
@@ -2522,18 +2543,27 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 /**
  * Tiled state, the sibling of maximized: purely visual, so the window keeps its own
  * width/height/position and returns to them untouched when it leaves the group.
+ *
+ * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
+ * the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
  */
 Dialog.prototype.toggleSnapped = function (enable) {
 	var target = this.target;
 	if (!target) return;
 	if (enable == null) enable = !target.classList.contains("snapped");
+	if (target.classList.contains("snapped") === enable) return;
 
-	target.classList.toggle("snapped", enable);
-	if (!enable) {
-		target.style.removeProperty("--snap-width");
-		target.style.removeProperty("--snap-left");
-	}
+	this.toggleClassAnimated("snapped", enable, function (name) {
+		return name === "width" || name === "left";
+	}, function (isSnapped) {
+		// Cleared only once the window has finished shrinking back, or it would jump to
+		// its floating size in a single frame.
+		if (!isSnapped) {
+			target.style.removeProperty("--snap-width");
+			target.style.removeProperty("--snap-left");
+		}
+	});
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
