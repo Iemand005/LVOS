@@ -1355,6 +1355,11 @@ function Dialog(object, create) {
 	this._scaleY = 0;
 	this._rotation = 0;
 
+	/** How long the touch-drag downscale animates for, in ms. Must match the transform transition in windows.css; after it elapses the drag stops animating. */
+	this.dragScaleDuration = 280;
+	/** @type {boolean} True while the touch-drag downscale is playing, so the drag handlers do not strip the "animating" class out from under it. */
+	this._dragScaleAnimating = false;
+
 	this._maximizing = false;
 	this.maximizeAnimations = 0;
 
@@ -2119,9 +2124,11 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 	else this.updateTransform();
 };
 /**
- * Scales the window for a touch drag. Only the initial downscale animates; the
- * return to full size and any repeat call apply directly, so the window is not
- * left holding the "animating" class once it has settled.
+ * Scales the window for a touch drag. The downscale animates over
+ * {@link Dialog#dragScaleDuration} and then stops animating, so the rest of the drag
+ * moves the window without a transition. The duration is a fallback: while the finger
+ * moves, the window's own transform keeps re-targeting the transition, so
+ * transitionend may never arrive on its own.
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  */
@@ -2141,7 +2148,7 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 		return name === "transform";
 	}, function() {
 		self._dragScaleAnimating = false;
-	});
+	}, this.dragScaleDuration);
 	this._scaleX = scaleX || 1;
 	this._scaleY = scaleY || 1;
 };
@@ -2251,10 +2258,11 @@ Dialog.prototype.stopAnimating = function () {
  * @param {(this:Dialog)=>void} [onToggled]
  * @param {(name:string)=>boolean} [onTransitionEnd]
  * @param {(this:Dialog)=>void} [onEnd]
+ * @param {number} [timeout]
  */
-Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
+Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout) {
 	var element = this.target;
-	if (element) animateElement(element, onToggled, onTransitionEnd, onEnd, this);
+	if (element) animateElement(element, onToggled, onTransitionEnd, onEnd, this, timeout);
 };
 /**
  * @param {string} className
