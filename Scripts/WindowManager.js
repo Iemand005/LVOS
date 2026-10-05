@@ -920,10 +920,10 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	} else if (this._snapFull) {
 		this._snapFull = false;
 		this.windowSnap.hideBehind(dialog, !!isTouch);
-	} else {
-		// Track the window without animating, or every mousemove restarts the
-		// indicator animation and it lags behind the cursor.
-		this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, !!isTouch);
+	} else if (isTouch) {
+		// Only a touch drag tracks the window. A mouse drag leaves the indicator
+		// hidden; snapping is the one thing that reveals it for mouse input.
+		this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, true);
 	}
 	
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
@@ -1099,8 +1099,8 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 
 	this.hidden = false;
 	// Direction 0 is a positional drag; the rest are resize handles, which stay at
-	// scale 1. noAnimation=false keeps animate() off a window that is being dragged.
-	if (isTouch && !direction) dialog.setScale(0.9, 0.9, undefined, false);
+	// scale 1.
+	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
 
 	if (!noAnimation) animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
@@ -1156,7 +1156,7 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	animateElement(this.element, function() {
 
 		this.moveToDialog(dialog);
-		if (!keepScale) dialog.setScale(1, 1, undefined, false);
+		if (!keepScale) dialog.setDragScale(1, 1);
 	}, function(name) {
 		return name === "inset";
 	}, function() {
@@ -2117,6 +2117,33 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 		this.updateTransform();
 	});
 	else this.updateTransform();
+};
+/**
+ * Scales the window for a touch drag. Only the initial downscale animates; the
+ * return to full size and any repeat call apply directly, so the window is not
+ * left holding the "animating" class once it has settled.
+ * @param {number} [scaleX]
+ * @param {number} [scaleY]
+ */
+Dialog.prototype.setDragScale = function(scaleX, scaleY) {
+	var self = this;
+	var downscale = (scaleX || 1) < this._scaleX || (scaleY || 1) < this._scaleY;
+
+	if (!downscale || this._dragScaleAnimating) {
+		this.setScale(scaleX, scaleY, undefined, false);
+		return;
+	}
+
+	this._dragScaleAnimating = true;
+	this.animate(function() {
+		this.updateTransform();
+	}, function(name) {
+		return name === "transform";
+	}, function() {
+		self._dragScaleAnimating = false;
+	});
+	this._scaleX = scaleX || 1;
+	this._scaleY = scaleY || 1;
 };
 /** @param {number} scaleX */
 Dialog.prototype.setScaleX = function(scaleX) {
