@@ -1055,6 +1055,8 @@ WindowSnap.prototype.setInset = function(inset) {
 WindowSnap.prototype.snap = function(type) {
 	this.hidden = false;
 
+	this.element.style.transitionDuration = "300ms";
+
 	animateElement(this.element, function() {
 
 		switch(type) {
@@ -1063,7 +1065,7 @@ WindowSnap.prototype.snap = function(type) {
 	}, function(name) {
 		return name === "inset";
 	}, function() {
-		this.hidden = true;
+		// this.hidden = true;
 	}, this, 120);
 }
 
