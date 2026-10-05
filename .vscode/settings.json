@@ -40,6 +40,7 @@
 	"javascript.inlayHints.functionLikeReturnTypes.enabled": true,
 	"js/ts.inlayHints.parameterTypes.enabled": true,
 	"js/ts.inlayHints.parameterNames.enabled": "all",
+	"js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
 	"tabStack.history.maxEntries": 100,
 	"tabStack.gitIntegration.enabled": false,
 	"tabStack.gitIntegration.mode": "auto-create",
