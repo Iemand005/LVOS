@@ -90,9 +90,7 @@ export class VulpOSTester {
 	}
 
 	async unmaximizeWindow(window: DialogHandle) {
-		await window.evaluate(window => {
-			window.toggleMaximized(false);
-		});
+		await window.evaluate(window => window.toggleMaximized(false));
 
 		await this.page.waitForFunction(window =>
 			window.maximized === false,
@@ -100,7 +98,7 @@ export class VulpOSTester {
 		);
 	}
 
-	async closeWindow(window: JSHandle) {
+	async closeWindow(window: DialogHandler) {
 		await window.evaluate(window => {
 			window.close();
 		});
