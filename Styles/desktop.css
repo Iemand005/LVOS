@@ -596,7 +596,7 @@ body > canvas {
 
 #window-snap {
 	position: absolute;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(1.5);
     border-radius: 10px;
     background: #3d3d3d3d;
     border: 1px solid #ffffff40;
