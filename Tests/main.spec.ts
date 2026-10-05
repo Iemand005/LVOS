@@ -15,6 +15,18 @@ class VulpOSTester {
 		expect(appManager).toBeDefined();
 		return appManager;
 	}
+
+	async windowManagerInstallApp(page: Page) {
+		const wm = await this.getWindowManager(page);
+
+		const id = "cube";
+
+		wm.installApp("./Applications/Cube/cube.html", "Cube", id);
+
+		expect(wm.windows[id]).toBeDefined();
+
+		return wm.windows[id];
+	}
 }
 
 const tester = new VulpOSTester();
@@ -34,11 +46,5 @@ test('should verify the global appManager object', async ({ page }) => {
 test('should verify windowManager app installation', async ({ page }) => {
 	await page.goto('http://localhost:3621/');
 
-	const wm = await tester.getWindowManager(page);
-
-	const id = "cube";
-
-	wm.installApp("./Applications/Cube/cube.html", "Cube", id);
-
-	expect(wm.windows[id]).toBeDefined();
+	const app = await tester.windowManagerInstallApp(page);
 });
