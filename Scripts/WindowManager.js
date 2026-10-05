@@ -947,6 +947,11 @@ function WindowSnap() {
 	this.element.id = "window-snap";
 }
 
+Object.defineProperty(WindowSnap.prototype, "animate", {
+	get: function() { return this.element.style.transition !== "none"; },
+	set: function(enable) { this.element.style.transition = enable ? "" : "none"; }
+})
+
 WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
 
 /** @param {boolean} enabled */
