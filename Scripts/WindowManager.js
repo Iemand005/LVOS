@@ -990,7 +990,9 @@ Object.defineProperty(WindowSnap.prototype, "hidden", {
 	set: function(enable) { if (enable) this.element.classList.add("hidden"); else this.element.classList.remove("hidden"); }
 })
 
-WindowSnap.prototype.init = function() { document.body.appendChild(this.element); };
+WindowSnap.prototype.init = function() {
+	(document.getElementById("window-section") || document.body).appendChild(this.element);
+};
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation) {
