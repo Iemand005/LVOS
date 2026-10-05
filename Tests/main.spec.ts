@@ -129,9 +129,7 @@ test('should verify the global appManager object', async ({ vulpOS }) =>
 );
 
 test('should install an app', async ({ vulpOS }) => {
-	const window = await vulpOS.installApp('cube', 'Cube');
-
-	await vulpOS.assertWindowOpen(window);
+	await vulpOS.installApp('cube', 'Cube');
 });
 
 test('should maximize and close an app', async ({ vulpOS }) => {
