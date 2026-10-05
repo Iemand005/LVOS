@@ -178,11 +178,11 @@ function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
  * @param {number} [bottom]
  */
 function insetElement(element, top, left, right, bottom) {
-	if (typeof left === "undefined") left = top, right = top, bottom = top;
 	if ("inset" in element.style)
 		if (typeof left === "undefined") element.style.inset = toPixels(top);
-		else element.style.inset = toPixels(top) + " " + toPixels(right) + " " + toPixels(bottom) + " " + toPixels(left);
+	else element.style.inset = toPixels(top) + " " + toPixels(right || 0) + " " + toPixels(bottom || 0) + " " + toPixels(left);
 	else {
+		if (typeof left === "undefined") left = top, right = top, bottom = top;
 		element.style.top = toPixels(top);
 		element.style.left = toPixels(left);
 		if (typeof right !== "undefined") element.style.right = toPixels(right);
