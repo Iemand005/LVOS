@@ -1066,6 +1066,7 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 	animateElement(this.element, function() {
 
 		this.moveToDialog(dialog);
+		dialog.setScale(1, 1);
 	}, function(name) {
 		return name === "inset";
 	}, function() {
