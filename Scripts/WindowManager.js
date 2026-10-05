@@ -1027,8 +1027,8 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 
 	this.element.style.zIndex = dialog.z.toString();
 	 
+	this.hidden = false;
 	if (!noAnimation) animateElement(this.element, function() {
-		this.hidden = false;
 		this.applyInsetStyle(top, left, right, bottom);
 		// console.log( "isnot touch ", isTouch, direction)
 		if (!direction && isTouch) dialog.setScale(0.9, 0.9);
