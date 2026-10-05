@@ -941,7 +941,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 WindowManager.prototype.moveWindowSnapToDialog = function(dialog, outset, direction, noAnimation) {
 	outset = outset || 0;
 
-	if (noAnimation) this.windowSnap.style.transform = "";
+	if (noAnimation) this.windowSnap.style.transition = "";
 
 	var sides = [
 		{ top: true, right: true, bottom: true, left: true },
