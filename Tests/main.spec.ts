@@ -27,10 +27,10 @@ export class VulpOSTester {
 
 		expect(await dialog.evaluate(window => window !== undefined)).toBe(true);
 
-		return dialog as JSHandle<Dialog>;
+		return dialog as DialogHandle;
 	}
 
-	async installApp(id: string = 'cube', name: string = 'Cube', path: string = './Applications/Cube/cube.html') {
+	async installApp(id = 'cube', name = 'Cube', path = './Applications/Cube/cube.html') {
 		await this.page.evaluate(({ path, name, id }) => {
 			window.windowManager.installApp(path, name, id);
 		}, { path, name, id });
@@ -42,7 +42,7 @@ export class VulpOSTester {
 		await this.getWindow(windowId);
 	}
 
-	async assertWindowOpen(window: JSHandle) {
+	async assertWindowOpen(window: DialogHandle) {
 		const open = await window.evaluate(window =>
 			window.isOpen === true
 		);
@@ -50,7 +50,7 @@ export class VulpOSTester {
 		expect(open).toBe(true);
 	}
 
-	async assertWindowClosed(window: JSHandle) {
+	async assertWindowClosed(window: DialogHandle) {
 		const open = await window.evaluate(window =>
 			window.isOpen === true
 		);
@@ -58,7 +58,7 @@ export class VulpOSTester {
 		expect(open).toBe(false);
 	}
 
-	async assertWindowMaximized(window: JSHandle) {
+	async assertWindowMaximized(window: DialogHandle) {
 		const maximized = await window.evaluate(window =>
 			window.maximized === true
 		);
