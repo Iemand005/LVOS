@@ -1050,7 +1050,7 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 }
 
 WindowSnap.prototype.hide = function() {
-	
+	this.element.style.opacity = "0";
 }
 
 //#endregion
