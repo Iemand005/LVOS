@@ -137,8 +137,6 @@ test('should install an app', async ({ vulpOS }) => {
 test('should maximize and close an app', async ({ vulpOS }) => {
 	const window = await vulpOS.installApp('cube', 'Cube');
 
-	window
-
 	await vulpOS.openWindow(window);
 	await vulpOS.assertWindowOpen(window);
 
