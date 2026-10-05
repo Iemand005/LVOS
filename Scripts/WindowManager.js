@@ -1022,7 +1022,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		return name === "inset";
 	}, function() {
 		
-	}, this);
+	}, this,  200);
 	else this.applyInsetStyle(top, left, right, bottom);
 }
 
