@@ -752,7 +752,7 @@ WindowManager.prototype.initializeDialogs = function() {
 	this.loadState();
 
 	// document.body.document.body.appendChild(this.windowSnap);
-	document.body.appendChild(this.windowSnap);
+	this.windowSnap.init();
 };
 
 /**
@@ -832,7 +832,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.activeDialog.maximize();
 
 	if (this.isTouchDrag) {
-		this.moveWindowSnapToDialog(this.activeDialog, 0, this.dragAction.direction);
+		this.windowSnap.moveWindowSnapToDialog(this.activeDialog, 0, this.dragAction.direction);
 		this.isTouchDrag = false;
 	}
 
