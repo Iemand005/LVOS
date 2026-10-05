@@ -2539,7 +2539,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); });
 };
 
-/** @param {boolean} [enable] */
 /**
  * Tiled state, the sibling of maximized: purely visual, so the window keeps its own
  * width/height/position and returns to them untouched when it leaves the group.
