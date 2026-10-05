@@ -797,8 +797,9 @@ WindowManager.prototype.initializeDialogs = function() {
  * Activates the window on which the provided event was fired.
  * @param {MouseEvent | PointerEvent} event
  * @param {Dialog} dialog
+ * @param {number} [id]
  */
-WindowManager.prototype.windowActivationEvent = function(event, dialog) {
+WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	// If the event originated from an interactive element, don't start a drag
 	try {
 		var node = event && (event.target || event.srcElement);
@@ -826,7 +827,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog) {
 	this.enableDialogDrag();
 	// Default a window grab to a move; the sizer handler overrides this with a
 	// resize direction right after, so a stuck resize can never hijack dragging.
-	this.dragAction.set(0);
+	this.dragAction.set(id || 0);
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
 	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, false, this.isTouchDrag);
@@ -1327,11 +1328,11 @@ function Dialog(object, create) {
 	this._appIcon = null;
 
 	var self = this;
-	/** @param {MouseEvent | PointerEvent} ev @param {number} id */
+	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
-		windowManager.windowActivationEvent(ev, self);
+		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
 }
