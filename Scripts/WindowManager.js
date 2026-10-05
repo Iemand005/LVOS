@@ -2147,16 +2147,8 @@ Dialog.prototype.stopAnimating = function () {
  * @param {(this:Dialog)=>void} [onEnd]
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd) {
-	var target = this.target;
-	if (!target) return;
-
-	animateElement(
-		target,
-		onToggled,
-		onTransitionEnd,
-		onEnd,
-		this
-	);
+	var element = this.target;
+	if (element) animateElement(element, onToggled, onTransitionEnd, onEnd, this);
 };
 /**
  * @param {string} className
