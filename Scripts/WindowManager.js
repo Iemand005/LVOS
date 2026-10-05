@@ -1023,7 +1023,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		return false;
 	}, function() {
 		
-	}, this);
+	}, this, 500);
 	else this.applyInsetStyle(top, left, right, bottom);
 }
 
@@ -1059,7 +1059,7 @@ WindowSnap.prototype.hideBehind = function(dialog) {
 		return name === "inset";
 	}, function() {
 		this.hidden = true;
-	}, this);
+	}, this, 500);
 }
 
 //#endregion
