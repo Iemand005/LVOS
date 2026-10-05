@@ -397,6 +397,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 
 	var callEnd = function() {
 		if (onEnd) onEnd.call(boundContext);
+		element.classList.remove("animating");
 	}
 
 	var time = timeout && setTimeout(callEnd, timeout);
@@ -1020,7 +1021,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		this.applyInsetStyle(top, left, right, bottom);
 	}, function(name) {
 		return name === "inset";
-	}, function() {
+	}, function() {	console.log("stoppinga nimating the move")
 		
 	}, this,  200);
 	else this.applyInsetStyle(top, left, right, bottom);
