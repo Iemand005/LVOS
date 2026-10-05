@@ -5,6 +5,8 @@
     "build:dev": "node build.js --no-minify"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.4",
     "@types/w3c-web-hid": "^1.0.7",
     "esbuild": "^0.28.2",
     "eslint-plugin-jsdoc": "^63.3.3",
