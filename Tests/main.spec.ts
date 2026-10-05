@@ -1,5 +1,7 @@
 import { test as base, expect, Page, JSHandle } from '@playwright/test';
 
+type DialogHandle = JSHandle<Dialog>;
+
 export class VulpOSTester {
 
 	constructor(readonly page: Page) {}
@@ -64,7 +66,7 @@ export class VulpOSTester {
 		expect(maximized).toBe(true);
 	}
 
-	async assertWindowNotMaximized(window: JSHandle<Dialog>) {
+	async assertWindowNotMaximized(window: DialogHandle) {
 		const maximized = await window.evaluate(window =>
 			window.maximized === true
 		);
@@ -72,11 +74,11 @@ export class VulpOSTester {
 		expect(maximized).toBe(false);
 	}
 
-	async openWindow(window: JSHandle<Dialog>) {
+	async openWindow(window: DialogHandle) {
 		await window.evaluate(dialog => dialog.open());
 	}
 
-	async maximizeWindow(window: JSHandle<Dialog>) {
+	async maximizeWindow(window: DialogHandle) {
 		await window.evaluate(window => {
 			window.maximize();
 		});
@@ -87,7 +89,7 @@ export class VulpOSTester {
 		);
 	}
 
-	async unmaximizeWindow(window: JSHandle<Dialog>) {
+	async unmaximizeWindow(window: DialogHandle) {
 		await window.evaluate(window => {
 			window.toggleMaximized(false);
 		});
