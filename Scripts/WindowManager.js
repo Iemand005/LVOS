@@ -864,6 +864,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	dialog.setClickOffset(event.clientX, event.clientY);
 	dialog.activate();
 	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, false, this.isTouchDrag);
+	this._snapFull = false;
 	return dialog;
 };
 
@@ -890,15 +891,26 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
 
 	var snapFull = newY <= 30;
-	if (snapFull && !this._snapFull) {
-		this.windowSnap.snap("maximize");
-		this._snapFull = true;
-	} else if (!snapFull && this._snapFull) {
-		this._snapFull = false;
-	}
-	if (!snapFull) {
-		if (isTouch) this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, isTouch);
-		else this.windowSnap.hideBehind(dialog);
+
+	if (snapFull) {
+		// Entering the snap zone: animate once. Re-entering the same zone on later
+		// mouse moves must not restart it, or the rect never settles.
+		if (!this._snapFull) {
+			this._snapFull = true;
+			this.windowSnap.snap("maximize");
+		}
+	} else {
+		if (this._snapFull) {
+			// Just left the snap zone: animate back behind the window exactly once.
+			this._snapFull = false;
+			this.windowSnap.hideBehind(dialog);
+		} else {
+			// Still dragging outside the zone. Track the window without animating:
+			// restarting an animation per mousemove leaves "animating" set, and with
+			// `transition: all` every inset change becomes a new 100ms transition, so
+			// the rect lags and jitters behind the cursor instead of tracking it.
+			this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, !!isTouch);
+		}
 	}
 	
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
@@ -920,6 +932,13 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this.windowSnap.hideBehind(this.activeDialog);
 		this.isTouchDrag = false;
 	}
+
+	// Dropping the drag hides the snap indicator. This also covers the mouse path,
+	// where handleWindowDrag tracks the element without animating, so nothing else
+	// would ever hide it again. Skipped when the window actually snapped to maximize
+	// above, so the indicator is not torn down mid-animation.
+	if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
+	this._snapFull = false;
 
 	if (!this.activeDialog.moveEvents) return;
 
