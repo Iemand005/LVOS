@@ -551,7 +551,7 @@ function WindowManager() {
 	this.ticking = false;
 
 	/** @type {PointerEvent | MouseEvent | null} Newest drag event waiting for the next frame. */
-	this.pendingDragEvent = null;
+	this._pendingDragEvent = null;
 
 	this.flipped = false;
 
@@ -602,12 +602,12 @@ function WindowManager() {
 			if (flags.updateRateLimit) {
 				// Keep the newest event instead of discarding the ones that arrive while a
 				// frame is pending, or the gesture's final position is never dragged at all.
-				self.pendingDragEvent = event;
+				self._pendingDragEvent = event;
 				if (self.ticking) return;
 				self.ticking = true;
 				window.requestAnimationFrame(function() {
-					var pending = self.pendingDragEvent;
-					self.pendingDragEvent = null;
+					var pending = self._pendingDragEvent;
+					self._pendingDragEvent = null;
 					self.ticking = false;
 					if (!pending) return;
 					var touch = "pointerType" in pending && pending.pointerType === "touch";
