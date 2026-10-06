@@ -2692,8 +2692,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (this.maximized === enable) return;
 	if (!this.target) return;
 
-	// Maximized and tiled both claim the whole area, so they cannot overlap.
+	// Maximized and tiled both claim the whole area, so they cannot overlap. Full-height
+	// snap claims the vertical half of it, and the grab point for maximizing is recorded
+	// against the maximized frame, so it has to go before the geometry is remapped.
 	if (enable && this.snapped && windowManager) windowManager.unsnapDialog(this);
+	if (enable && this.heightSnapped) this.toggleHeightSnapped(false);
 
 	var self = this;
 	var content = this.content;
@@ -2894,6 +2897,9 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	}
 	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
+	// Full-height snap pins the window vertically: sideways dragging is all it allows,
+	// so y keeps holding the top edge it was entered from and the drop finds it there.
+	if (this.heightSnapped) y = this.y;
 	var bounds = WindowManager.windowBounds;
 	if (x < bounds.left) x = bounds.left;
 	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
