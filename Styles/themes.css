@@ -311,10 +311,12 @@ button {
 }
 
 .windows-10 #launchpad button {
-	border-radius: 0;
-	/* border: 4px solid black;
-	 */
-	 box-shadow: inset 0px 0px 0px 0.7mm #ffffff45;
+	border: none;
+	padding: 0;
+}
+
+.windows-10 #launchpad button:hover {
+	box-shadow: inset 0px 0px 0px 0.7mm #ffffff45;
 }
 
 .windows .window article > * {
