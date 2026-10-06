@@ -1258,7 +1258,9 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  * the group always fills the area.
  */
 WindowManager.prototype.reflowSnapGroup = function () {
-	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
+	var windows = this.windowGroup.windows;
+
+	if (!("length" in windows)) return;
 
 	var areaWidth = this.snapWidth();
 	var areaHeight = this.snapHeight();
