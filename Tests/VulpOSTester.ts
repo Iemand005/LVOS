@@ -239,6 +239,52 @@ export class VulpOSTester {
 		await this.moveTo(to);
 		await this.release();
 	}
+
+	/**
+	 * Trusted touch input through CDP, so the page sees real pointerType: "touch"
+	 * events rather than synthetic MouseEvents. Only used for the touch drag path,
+	 * which mouse helpers cannot reach.
+	 */
+	private async touchPoints(points: Point[]) {
+		const client = await this.page.context().newCDPSession(this.page);
+		try {
+			await client.send('Input.dispatchTouchEvent', {
+				type: points.length > 1 ? 'touchMove' : 'touchStart',
+				touchPoints: points.map(function (p) { return { x: p.x, y: p.y }; }),
+			});
+		} finally {
+			await client.detach();
+		}
+	}
+
+	private async touchEnd() {
+		const client = await this.page.context().newCDPSession(this.page);
+		try {
+			await client.send('Input.dispatchTouchEvent', {
+				type: 'touchEnd',
+				touchPoints: [],
+			});
+		} finally {
+			await client.detach();
+		}
+	}
+
+	/** A whole touch gesture: press at `from`, drag to `to`, let go. */
+	async touchDrag(from: Point, to: Point) {
+		await this.touchPoints([from]);
+		// A few interpolated stops, the way a finger actually travels.
+		const steps = 8;
+		for (let i = 1; i <= steps; i++) {
+			const t = i / steps;
+			await this.touchPoints([{
+				x: from.x + (to.x - from.x) * t,
+				y: from.y + (to.y - from.y) * t,
+			}]);
+		}
+		await this.touchEnd();
+		// Let any pointerup handlers and rAF frames settle before measuring.
+		await this.page.waitForTimeout(50);
+	}
 }
 
 export const test = base.extend<{ vulpOS: VulpOSTester }>({

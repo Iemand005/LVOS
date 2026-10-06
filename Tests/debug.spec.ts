@@ -1,41 +1,31 @@
-import { test } from './VulpOSTester';
+import { test, expect } from './VulpOSTester';
 
-test('debug drag', async ({ vulpOS, page }) => {
+test('diagnose title bar hit testing', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
 
-	const point = await vulpOS.titleBarPoint(window);
-	const probe = await window.evaluate((dialog, point) => {
-		const el = document.elementFromPoint(point.x, point.y);
-		return {
-			point,
-			titleBar: Boolean(dialog.titleBar),
-			underCursor: el ? el.tagName + '.' + el.className : 'none',
-			x: dialog.x, y: dialog.y, width: dialog.width, height: dialog.height,
-		};
-	}, point);
-	console.log('PROBE', JSON.stringify(probe));
+	const info = await window.evaluate(window => {
+		const bar = window.titleBar || window.target!;
+		const rect = bar.getBoundingClientRect();
+		const y = rect.y + rect.height / 2;
+		const samples: any[] = [];
 
-	await vulpOS.grabAt(point);
-	const dragging = await page.evaluate(() => ({
-		isDragging: windowManager.isDragging,
-		hasActive: Boolean(windowManager.activeDialog),
-	}));
-	console.log('AFTER GRAB', JSON.stringify(dragging));
+		for (let i = 6; i <= 14; i++) {
+			const x = rect.x + (rect.width * i) / 20;
+			const under = document.elementFromPoint(x, y);
+			samples.push({
+				x,
+				under: under ? (under.tagName + '.' + (under.className || '')).slice(0, 80) : null,
+				inBar: under ? bar.contains(under) : false,
+				rect: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+				tag: bar.tagName, cls: bar.className,
+				visible: !!(rect.width && rect.height),
+			});
+		}
 
-	await vulpOS.moveTo({ x: 2, y: 400 });
-	const mid = await page.evaluate(() => ({
-		isDragging: windowManager.isDragging,
-		snapZone: windowManager._snapZone,
-		pointer: { ...windowManager.pointerPosition },
-		direction: windowManager.dragAction.direction,
-	}));
-	console.log('AFTER MOVE', JSON.stringify(mid));
+		return { samples, titleBarExists: !!window.titleBar, id: window.id };
+	});
 
-	await vulpOS.release();
-	const end = await window.evaluate(dialog => ({
-		snapped: dialog.snapped,
-		x: dialog.x, y: dialog.y,
-	}));
-	console.log('AFTER RELEASE', JSON.stringify(end));
+	console.log(JSON.stringify(info, null, 2));
+	expect(info.titleBarExists).toBe(true);
 });

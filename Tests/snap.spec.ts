@@ -96,3 +96,57 @@ test('leaves a window alone when a resize never reaches the edge', async ({ vulp
 	expect((await vulpOS.state(window)).heightSnapped).toBe(false);
 	expect(await vulpOS.snapIndicatorShown()).toBe(false);
 });
+
+test('tiles a window dragged to the side with touch, even while animations run', async ({ vulpOS }) => {
+	const window = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+
+	// The touch drop path restores the drag scale after the snap applies. With
+	// animations on, that restore runs its own animation on the window element, which
+	// cancels the pending class application — the indicator offers the snap and the
+	// window then stays floating. Reproducing that needs the transitions on.
+	await vulpOS.page.evaluate(() => {
+		window.flags.useAnimations = true;
+	});
+
+	const titleBar = await vulpOS.titleBarPoint(window);
+	await vulpOS.touchDrag(titleBar, { x: 2, y: 400 });
+
+	const snapped = await vulpOS.state(window);
+	expect(snapped.snapped).toBe(true);
+
+	const tiled = await vulpOS.measure(window);
+	expectNear(tiled.width, tiled.sectionWidth / 2);
+	expectNear(tiled.x, tiled.sectionX);
+});
+
+test('lets go of a full-height snap by dragging the top edge down', async ({ vulpOS }) => {
+	const window = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+
+	// Enter full-height snap the same way the offer test does: resize to the bottom
+	// edge and drop there.
+	const area = await vulpOS.measure(window);
+	const bottomSizer = await vulpOS.sizerPoint(window, 3);
+	await vulpOS.grabAt(bottomSizer);
+	await vulpOS.moveTo({ x: bottomSizer.x, y: area.sectionY + area.sectionHeight - 1 });
+	await vulpOS.release();
+
+	expect((await vulpOS.state(window)).heightSnapped).toBe(true);
+
+	// The top edge of the drawn frame is what the user holds: grab it and pull down.
+	// The resize has to start from the full height the window is drawn at, not from
+	// the size stored underneath the CSS layer, or the top edge would not follow.
+	const topSizer = await vulpOS.sizerPoint(window, 1);
+	const pulled = 120;
+	await vulpOS.drag(topSizer, { x: topSizer.x, y: topSizer.y + pulled });
+
+	const released = await vulpOS.state(window);
+	expect(released.heightSnapped).toBe(false);
+	expectNear(released.y, pulled);
+	expectNear(released.height, area.sectionHeight - pulled);
+
+	const drawn = await vulpOS.measure(window);
+	expectNear(drawn.y, drawn.sectionY + pulled);
+	expectNear(drawn.height, drawn.sectionHeight - pulled);
+});

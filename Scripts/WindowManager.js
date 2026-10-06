@@ -527,6 +527,15 @@ function WindowManager() {
 	 */
 	this.pointerPosition = { x: 0, y: 0 };
 
+	/**
+	 * Set when a gesture lets go of a full-height snapped window by resizing it down,
+	 * so the rest of that gesture claims no snap zone: a small pull off the edge would
+	 * otherwise bounce straight back into full height on release. Cleared when the next
+	 * gesture starts.
+	 * @type {boolean}
+	 */
+	this._heightSnapReleased = false;
+
 	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
@@ -937,6 +946,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	dialog.activate();
 	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, false, this.isTouchDrag);
 	this._snapZone = "";
+	this._heightSnapReleased = false;
 	return dialog;
 };
 
@@ -1036,6 +1046,47 @@ WindowManager.prototype.getSnapZone = function (x, y) {
 };
 
 /**
+ * Whether a drag direction is a resize that moves a vertical edge — top, bottom, or
+ * any corner. Those are the gestures that can take a full-height snapped window's edge
+ * away from the screen, which is how it lets go of the state.
+ * @param {number} direction
+ */
+WindowManager.prototype.isVerticalResizeDirection = function (direction) {
+	return direction === 1 || direction === 3 || direction === 5 || direction === 6 || direction === 7 || direction === 8;
+};
+
+/**
+ * Lets go of a full-height snapped window by adopting the frame it is drawn at as its
+ * real geometry, so a top/bottom resize continues from what the user is holding rather
+ * than from the size stored underneath the CSS layer.
+ *
+ * The class comes off synchronously: move()/resize() pin against it, and an animated
+ * exit would leave the CSS layer overriding the geometry the resize is about to write.
+ * The grab is re-recorded against the adopted frame: pointerdown measured the offset
+ * against the floating height, which is not the edge the user has hold of.
+ * @param {Dialog} dialog
+ */
+WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
+	var drawnHeight = this.snapHeight();
+	if (dialog.target) setClass(dialog.target, "height-snapped", false);
+	dialog._snappingOut = false;
+	dialog._snappingOutState = null;
+	this._heightSnapReleased = true;
+
+	dialog._y = 0;
+	dialog._height = drawnHeight;
+	dialog.updatePosition();
+	dialog.updateHeight();
+
+	var offset = dialog.clickOffset;
+	if (offset) {
+		offset.height = dialog.height;
+		offset.startX = dialog.x;
+		offset.startY = dialog.y;
+	}
+};
+
+/**
  * The aero snap zone the current gesture may use, or "" when it may not snap at all.
  * Shared by the drag preview and the drop so they can never disagree about it.
  *
@@ -1047,7 +1098,9 @@ WindowManager.prototype.getSnapZone = function (x, y) {
  *
  * A window that is already full-height snapped owns its gesture: sideways dragging is
  * what the state exists for, so neither the indicator nor the drop may put it into a
- * tile group behind the state's back.
+ * tile group behind the state's back. A gesture that already let go of the state by
+ * resizing claims nothing either, or a small pull off the edge would bounce straight
+ * back into full height on release.
  * @param {Dialog} dialog
  * @param {number} [direction] The gesture's drag direction, read before it is reset.
  *   Only ever unset before a gesture has set one, and an unset direction claims nothing.
@@ -1056,7 +1109,7 @@ WindowManager.prototype.getSnapZone = function (x, y) {
  * @returns {"" | "maximize" | "left" | "right" | "height"}
  */
 WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) {
-	if (!flags.aeroSnap || dialog.heightSnapped) return "";
+	if (!flags.aeroSnap || dialog.heightSnapped || this._heightSnapReleased) return "";
 
 	if (direction === 1 || direction === 3) {
 		var bounds = WindowManager.windowBounds;
