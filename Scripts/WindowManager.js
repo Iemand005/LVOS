@@ -490,6 +490,15 @@ function WindowManager() {
 	this.snapSideThreshold = 30;
 
 	/**
+	 * How far below its grab point a full-height snapped window has to be pulled before
+	 * it lets go, in CSS pixels. Sideways dragging keeps the state, so this is the only
+	 * number that decides when the window drops back onto its own height. Shared by the
+	 * drag preview and the drop for the same reason as the other snap thresholds.
+	 * @type {number}
+	 */
+	this.heightSnapReleaseThreshold = 10;
+
+	/**
 	 * Width of a gap tile as a share of the window area. One gap matches one half-width
 	 * window, so a lone window snapped right sits exactly in the right half.
 	 * @type {number}
@@ -942,6 +951,12 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	/** @type {Coord} */
 	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
+	// Full-height snap only lets go when the window is pulled back down: sideways
+	// dragging is what the state exists for, so it has to outlive the grab it was
+	// entered from. Releasing before move() runs puts the window under the cursor
+	// instead of back at the edge, which is where the hand already is.
+	if (dialog.heightSnapped && difference.y > this.heightSnapReleaseThreshold) dialog.toggleHeightSnapped(false);
+
 	dialog.stopAnimating();
 
 	this.dragAction.execute(dialog, dialog.clickOffset, difference);
@@ -950,7 +965,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	// pointer is gone and must still decide the same zone.
 	this.setPointerPosition(newX, newY);
 
-	var snapZone = flags.aeroSnap ? this.getSnapZone(newX, newY) : "";
+	var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
 
 	if (snapZone) {
 		// snap() early-outs on an unchanged zone, so only the transition needs guarding:
@@ -991,6 +1006,26 @@ WindowManager.prototype.getSnapZone = function (x, y) {
 	if (y <= this.snapFullThreshold) return "maximize";
 
 	return "";
+};
+
+/**
+ * The aero snap zone the current gesture may use, or "" when it may not snap at all.
+ * Shared by the drag preview and the drop so they can never disagree about it.
+ *
+ * A resize travels along an edge instead of toward one, so it never claims a zone —
+ * that also keeps the top edge free for the full-height snap, which would otherwise
+ * have to offer maximize for the very gesture it is about to take over. And while a
+ * window is full-height snapped it owns the gesture: sideways dragging keeps it, so
+ * neither the indicator nor the drop may put it into a tile group behind the state's back.
+ * @param {Dialog} dialog
+ * @param {number} direction The gesture's drag direction, read before it is reset.
+ * @param {number} x Pointer position.
+ * @param {number} y Pointer position.
+ * @returns {"" | "maximize" | "left" | "right"}
+ */
+WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) {
+	if (!flags.aeroSnap || direction !== 0 || dialog.heightSnapped) return "";
+	return this.getSnapZone(x, y);
 };
 
 /** Width of the window area snaps lay out against. */
