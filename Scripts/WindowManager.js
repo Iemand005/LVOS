@@ -2773,7 +2773,7 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 
 	// Which animation owns the element, so stopAnimating can tell this one from the
 	// drag scale-down that may supersede it and never run the onEnd above.
-	this._snappingOutState = target._animationState;
+	this._snappingOutState = /** @type {any} */ (target)._animationState;
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
