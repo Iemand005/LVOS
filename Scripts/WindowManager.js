@@ -1440,18 +1440,24 @@ WindowSnap.prototype.setHalfInset = function(side) {
 /**
  * Frames the window at the full height of the area, held off the top and bottom by the
  * same margin every other indicator uses: the window's own shape stretched vertically,
- * which is exactly what the full-height snap is about to do to it. The sides take a
- * margin outside the window instead of its exact edges, so the offer reads as a frame
- * around the window rather than as the window itself.
+ * which is exactly what the full-height snap is about to do to it. The sides are the
+ * window's own edges pushed out by that same margin, so the frame reads as sitting just
+ * outside the window rather than as the window itself.
  * @param {Dialog} [dialog]
  */
 WindowSnap.prototype.setHeightInset = function(dialog) {
 	if (!dialog) return;
 	var inset = WindowSnap.margin;
-	var areaWidth = this.areaWidth();
+
+	// Both sides measured from this element's own box, which spans the whole area.
+	// dialog.right is a distance from the far edge rather than an x, so building the
+	// right inset out of it sizes the frame off where the window sits instead of off how
+	// wide it is; the window's right edge as a coordinate is x + width.
+	var right = this.areaWidth() - dialog.x - dialog.width - inset;
+
 	insetElement(this.element, inset,
 		Math.max(inset, dialog.left - inset),
-		Math.max(inset, areaWidth - dialog.right - inset),
+		Math.max(inset, right),
 		inset);
 };
 
@@ -2732,6 +2738,9 @@ Dialog.prototype.toggleSnapped = function (enable) {
  * area, so y is pinned there too, otherwise the grab would be recorded against one frame
  * and the window drawn in another and every sideways drag would walk it off its full
  * height. Only x is left alone, which is what the sideways drag is free to change.
+ *
+ * Animated through the same toggleClassAnimated path tiling uses, so entering and
+ * leaving get the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
  */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
@@ -2742,7 +2751,29 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 
 	// Before the class goes on: while it is off, move() still takes the y it is handed.
 	if (enable) this.move(this.x, 0);
-	setClass(target, "height-snapped", enable);
+
+	// Leaving is started from a drag, whose very next pointermove strips .animating, so
+	// the way out has to be exempt from stopAnimating the same way leaving a tile group
+	// already is. Without this the window drops to its floating height in one frame.
+	this._snappingOut = !enable;
+	this._snappingOutState = null;
+
+	this.toggleClassAnimated("height-snapped", enable, function (name) {
+		// The frame moves on height and the y it pins to on transform. Either settling
+		// means the state has arrived; ending only on transform would hang on a window
+		// that already sat at the top and so never moved it.
+		return name === "height" || name === "transform";
+	}, function () {
+		this._snappingOut = false;
+		this._snappingOutState = null;
+	}, function () {
+		// Required, not optional: toggleClassAnimated only calls setClass from this
+		// callback, so omitting it means the class is never applied at all.
+	}, 1000);
+
+	// Which animation owns the element, so stopAnimating can tell this one from the
+	// drag scale-down that may supersede it and never run the onEnd above.
+	this._snappingOutState = target._animationState;
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
