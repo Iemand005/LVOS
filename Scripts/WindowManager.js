@@ -2526,7 +2526,17 @@ Dialog.prototype.stopAnimating = function () {
 	// call this on every pointermove to cancel the window's own animations, which would
 	// otherwise kill that transition after a single frame. Snapping out is exempt for
 	// the same reason: it is the drag itself that starts it.
-	if (this._dragScaleAnimating || this._snappingOut) return;
+	if (this._snappingOut) {
+		// An animation that supersedes this one never runs its onEnd, so the flag would
+		// otherwise stay set and keep stopAnimating switched off for the rest of the
+		// window's life. Release it as soon as the element is owned by something else.
+		if (this.target && this.target._animationState !== this._snappingOutState) {
+			this._snappingOut = false;
+			this._snappingOutState = null;
+		}
+		return;
+	}
+	if (this._dragScaleAnimating) return;
 	if (this.target) this.target.classList.remove("animating");
 };
 
@@ -2579,9 +2589,12 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOut = !enable;
 
 	this.toggleClassAnimated("snapped", enable, function (name) {
-		// left never moves any more, it holds at 0. transform carries the position and
-		// width carries the size; either one finishing ends the animation.
-		return name === "width" || name === "transform";
+		// transform only. left holds at 0 and never animates any more, and ending on
+		// width would cut the animation off at a fixed 280ms while a drag is still
+		// restarting transform, jumping the window to the cursor. Letting transform
+		// settle means it lands under the cursor instead; the timeout is the backstop
+		// for a drag that never pauses long enough for that.
+		return name === "transform";
 	}, function (isSnapped) {
 		this._snappingOut = false;
 
@@ -2593,7 +2606,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.
-	}, 600);
+	}, 1000);
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
