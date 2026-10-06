@@ -2584,20 +2584,10 @@ Dialog.prototype.toggleSnapped = function (enable) {
 		if (!isSnapped) {
 			target.style.removeProperty("--snap-width");
 			target.style.removeProperty("--snap-left");
-			target.style.removeProperty("left");
-			target.style.removeProperty("width");
 		}
-	}, function onToggled() {
-		// Floating windows place themselves with a transform, so left and width are both
-		// "auto" until .snapped fills them in. auto is not interpolable and gets
-		// resolved against the used value instead, which is what made a right snap
-		// overshoot and an unsnap look like it came in from the left. Seeding the
-		// window's own geometry gives both a concrete starting point: the !important
-		// rules in .snapped still win once the class lands, so these only ever supply
-		// where the transition begins. This is the same trick maximizing uses to set
-		// up concrete geometry before it flips its class.
-		target.style.left = toPixels(self.x);
-		target.style.width = toPixels(self.width);
+	}, function () {
+		// Required, not optional: toggleClassAnimated only calls setClass from this
+		// callback, so omitting it means the class is never applied at all.
 	});
 };
 
