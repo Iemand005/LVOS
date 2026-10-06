@@ -305,6 +305,11 @@ button {
 	background-color: rgb(240, 240, 240);
 }
 
+.windows-10 button,
+.windows-10 #launchpad button {
+	border-radius: 0;
+}
+
 .windows .window article > * {
 	background-color: transparent;
 }
