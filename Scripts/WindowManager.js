@@ -1189,12 +1189,15 @@ WindowManager.prototype.reflowSnapGroup = function () {
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
 	// if (flipped) return;
+	// Read before set() below resets it to a plain move: the drop has to decide the same
+	// zone the preview did, and the preview saw the direction the gesture started with.
+	var dragDirection = this.dragAction.direction;
 	this.dragAction.set();
 	this.toggleDragging(false);
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	var snapZone = flags.aeroSnap ? this.getSnapZone(this.pointerPosition.x, this.pointerPosition.y) : "";
+	var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
 	if (snapZone) this.snapDialog(this.activeDialog, snapZone);
 
 	if (this.isTouchDrag) {
