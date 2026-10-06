@@ -457,11 +457,9 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 
 /* Full-height snap: the vertical half of maximizing, without claiming the horizontal.
    Only height and the top edge are taken, so width and x stay the window's own and it
-   can still be dragged sideways. The geometry underneath is left alone — _height keeps
-   the size the window had when the state was entered, which is what dropping this class
-   hands back. top matches the y the state pins the window to, so the transform that
-   carries it sideways also carries it to the top of the area rather than to wherever
-   the resize stopped. */
+   can still be dragged sideways. _height is untouched underneath, which is what dropping
+   this class hands back. top is pinned to 0 to match the y the state pins the window to,
+   so the stored box and the drawn one start at the same edge. */
 .window.height-snapped {
 	top: 0 !important;
 	height: 100% !important;

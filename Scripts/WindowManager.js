@@ -2670,12 +2670,12 @@ Dialog.prototype.toggleSnapped = function (enable) {
  * dragged sideways. A top or bottom resize that runs out of screen edge enters it, and
  * pulling the window back down leaves it.
  *
- * The geometry is a CSS layer, exactly like maximizing: _y and _height are never
- * written by the state itself, so _height still holds the size the window had when it
- * entered and hands it straight back when the class goes. What does change is y — the
- * drawn frame starts at the top of the area, so y is pinned there too, otherwise the
- * grab point would be recorded against one frame and the window drawn in another and
- * every sideways drag would walk it off its full height.
+ * The height is a CSS layer, exactly like maximizing: _height is never written, so it
+ * still holds the size the window had when the state was entered and hands it straight
+ * back when the class goes. y is the opposite — the drawn frame starts at the top of the
+ * area, so y is pinned there too, otherwise the grab would be recorded against one frame
+ * and the window drawn in another and every sideways drag would walk it off its full
+ * height. Only x is left alone, which is what the sideways drag is free to change.
  * @param {boolean} [enable]
  */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
