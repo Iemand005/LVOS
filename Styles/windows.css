@@ -449,9 +449,8 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
-/* Tiling moves by geometry rather than transform, so it opts out of the
-   compositor-only transform transition. Covers both directions: the offset now rides
-   on transform, so that is the property carrying the position. */
+/* The size still moves by geometry, but the position moves by transform, so the
+   compositor-only transform transition has to let width through as well. */
 .compositor-animations .window.snapped.animating {
 	transition-property: width, transform !important;
 }
