@@ -188,8 +188,9 @@ export class VulpOSTester {
 
 	/**
 	 * Somewhere on the title bar a drag will actually start from: it refuses to begin
-	 * on a button, and the title bar is mostly buttons, so walk the middle of it for a
-	 * stretch that is clear of them. Kept off the ends so the edge sizers are not hit.
+	 * on a button, and on a narrow window the buttons can swallow the whole middle of
+	 * the bar, so walk it from end to end instead. Points an edge sizer is covering
+	 * fall out anyway, because the sizer is not inside the bar.
 	 */
 	async titleBarPoint(window: DialogHandle) {
 		return window.evaluate(window => {
@@ -197,7 +198,7 @@ export class VulpOSTester {
 			const rect = bar.getBoundingClientRect();
 			const y = rect.y + rect.height / 2;
 
-			for (let i = 6; i <= 14; i++) {
+			for (let i = 1; i < 20; i++) {
 				const x = rect.x + (rect.width * i) / 20;
 				const under = document.elementFromPoint(x, y);
 				const interactive = under && under.closest('button, a, input, select, label, output, [contenteditable]');
