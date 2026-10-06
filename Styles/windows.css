@@ -47,6 +47,13 @@ main {
 }
 
 .window {
+	/* Concrete, not auto: floating windows place themselves with a transform and clear
+	   left, so left would otherwise be auto and snapping could not interpolate it. auto
+	   is not animatable, so left jumped at the halfway point of the transition while
+	   transform eased, overshooting on snap and swinging left on unsnap. top is the
+	   same case, it just never showed because both ends resolve to 0 here. */
+	left: 0;
+	top: 0;
 	background-color: rgba(255, 255, 255, 255);
 	-o-transform-origin: bottom left;
 	-ms-transform-origin: bottom left;
