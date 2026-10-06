@@ -951,11 +951,14 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	/** @type {Coord} */
 	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
-	// Full-height snap only lets go when the window is pulled back down: sideways
-	// dragging is what the state exists for, so it has to outlive the grab it was
-	// entered from. Releasing before move() runs puts the window under the cursor
-	// instead of back at the edge, which is where the hand already is.
-	if (dialog.heightSnapped && difference.y > this.heightSnapReleaseThreshold) dialog.toggleHeightSnapped(false);
+	// Full-height snap only lets go when the window itself is pulled back down: sideways
+	// dragging is what the state exists for, and a resize that grew the window to this
+	// point has a large downward difference of its own, so the gesture has to be a move
+	// before that difference means anything. Releasing before move() runs then puts the
+	// window under the cursor instead of back at the edge, which is where the hand is.
+	if (this.dragAction.direction === 0 && dialog.heightSnapped && difference.y > this.heightSnapReleaseThreshold) {
+		dialog.toggleHeightSnapped(false);
+	}
 
 	dialog.stopAnimating();
 
