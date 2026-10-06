@@ -1086,9 +1086,8 @@ WindowManager.prototype.findSnapTile = function (id) {
 /**
  * Removes a window from the snap group, if it is in one.
  * @param {Dialog} dialog
- * @param {boolean} [noAnimation] Leave at once instead of shrinking back.
  */
-WindowManager.prototype.unsnapDialog = function (dialog, noAnimation) {
+WindowManager.prototype.unsnapDialog = function (dialog) {
 	var group = /** @type {WindowGroup} */ (this.windowGroup);
 	var windows = /** @type {WindowTile[]} */ (group.windows);
 
@@ -1096,7 +1095,7 @@ WindowManager.prototype.unsnapDialog = function (dialog, noAnimation) {
 	if (index === -1) return;
 
 	windows.splice(index, 1);
-	dialog.toggleSnapped(false, noAnimation);
+	dialog.toggleSnapped(false);
 
 	if (this.snapInsertGaps) this.fitSnapGaps(windows);
 
@@ -2548,7 +2547,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
  * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
  * the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
- * @param {boolean} [noAnimation] Drop out at once, for a window being dragged.
+ * @param {boolean} [noAnimation] Apply and forget, with no transition at all.
  */
 Dialog.prototype.toggleSnapped = function (enable, noAnimation) {
 	var target = this.target;
