@@ -492,8 +492,7 @@ function WindowManager() {
 	/**
 	 * How far below its grab point a full-height snapped window has to be pulled before
 	 * it lets go, in CSS pixels. Sideways dragging keeps the state, so this is the only
-	 * number that decides when the window drops back onto its own height. Shared by the
-	 * drag preview and the drop for the same reason as the other snap thresholds.
+	 * number that decides when the window drops back onto its own height.
 	 * @type {number}
 	 */
 	this.heightSnapReleaseThreshold = 10;
@@ -1420,26 +1419,57 @@ WindowSnap.prototype.setInset = function(inset) {
 	insetElement(this.element, inset);
 }
 
+/** Width of the window area the indicator lays out against. */
+WindowSnap.prototype.areaWidth = function() {
+	var section = document.getElementById("window-section");
+	return section ? section.clientWidth : window.innerWidth;
+};
+
 /**
  * Covers one half of the window area, held off every edge by the same margin the
  * maximize snap uses so both indicators read as the same kind of thing.
  * @param {"left" | "right"} side
  */
 WindowSnap.prototype.setHalfInset = function(side) {
-	var section = document.getElementById("window-section");
-	var half = Math.round((section ? section.clientWidth : window.innerWidth) / 2);
+	var half = Math.round(this.areaWidth() / 2);
 	var inset = WindowSnap.margin;
 	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 }
 
-/** @param {"maximize" | "left" | "right"} type */
-WindowSnap.prototype.snap = function(type) {
+/**
+ * Frames the window at the full height of the area, held off the top and bottom by the
+ * same margin every other indicator uses: the window's own shape stretched vertically,
+ * which is exactly what the full-height snap is about to do to it. The sides take a
+ * margin outside the window instead of its exact edges, so the offer reads as a frame
+ * around the window rather than as the window itself.
+ * @param {Dialog} [dialog]
+ */
+WindowSnap.prototype.setHeightInset = function(dialog) {
+	if (!dialog) return;
+	var inset = WindowSnap.margin;
+	var areaWidth = this.areaWidth();
+	insetElement(this.element, inset,
+		Math.max(inset, dialog.left - inset),
+		Math.max(inset, areaWidth - dialog.right - inset),
+		inset);
+}
+
+/**
+ * @param {"maximize" | "left" | "right" | "height"} type
+ * @param {Dialog} [dialog] The window the offer is about, which the full-height
+ *   indicator frames and the others only need for their z-order.
+ */
+WindowSnap.prototype.snap = function(type, dialog) {
 	
 	// this.element.style.transitionDuration = "300ms";
 	if (type === this._snapped) return;
 	this._snapped = type;
 	
 	this.hidden = false;
+	// Over the window it is previewing. Without this the indicator keeps whatever
+	// z-order the last window it was hidden behind left, and for a window below that
+	// one it would sit behind the very thing it is meant to cover.
+	if (dialog) this.element.style.zIndex = dialog.z.toString();
 
 	animateElement(this.element, function() {
 
@@ -1449,6 +1479,7 @@ WindowSnap.prototype.snap = function(type) {
 			case "maximize": this.setInset(WindowSnap.margin); break;
 			case "left":
 			case "right": this.setHalfInset(type); break;
+			case "height": this.setHeightInset(dialog); break;
 		}
 	}, function(name) {
 		return name === "inset";
@@ -2691,8 +2722,8 @@ Dialog.prototype.toggleSnapped = function (enable) {
 /**
  * Full-height snap, the state that is neither tiled nor maximized: the window paints
  * edge to edge vertically and keeps only its width and x as its own, so it can still be
- * dragged sideways. A top or bottom resize that runs out of screen edge enters it, and
- * pulling the window back down leaves it.
+ * dragged sideways. A top or bottom resize whose edge reaches the screen puts the
+ * offer up, dropping the window there enters it, and pulling it back down leaves it.
  *
  * The height is a CSS layer, exactly like maximizing: _height is never written, so it
  * still holds the size the window had when the state was entered and hands it straight
@@ -3078,18 +3109,6 @@ Dialog.prototype.resize = function (width, height, direction) {
 		if (oldWidth !== this.width) state.width = this.width;
 		if (oldHeight !== this.height) state.height = this.height;
 		this.broadcastState(state);
-	}
-
-	// A top or bottom resize that runs out of screen edge becomes a full-height snap.
-	// The test is on where the resize stopped rather than on the height it reached, so
-	// it fires on the same gesture: the edge has nowhere left to go, and the window
-	// claims the whole height instead of the last few pixels of it.
-	if (!this.heightSnapped && windowManager && (direction === "top" || direction === "bottom")) {
-		var bounds = WindowManager.windowBounds;
-		var atEdge = direction === "top"
-			? this.y <= bounds.top
-			: this.y + this.height >= windowManager.snapHeight();
-		if (atEdge) this.toggleHeightSnapped(true);
 	}
 };
 
