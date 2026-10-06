@@ -967,13 +967,21 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	/** @type {Coord} */
 	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
 
-	// Full-height snap only lets go when the window itself is pulled back down: sideways
-	// dragging is what the state exists for, and a resize that grew the window to this
-	// point has a large downward difference of its own, so the gesture has to be a move
-	// before that difference means anything. Releasing before move() runs then puts the
-	// window under the cursor instead of back at the edge, which is where the hand is.
-	if (this.dragAction.direction === 0 && dialog.heightSnapped && difference.y > this.heightSnapReleaseThreshold) {
-		dialog.toggleHeightSnapped(false);
+	// Full-height snap only lets go when the window itself is pulled back down, or when
+	// a top/bottom (or corner) resize takes its edge away from the screen: sideways
+	// dragging is what the state exists for, so neither may put it into a tile group
+	// behind the state's back. A move needs a real pull — a resize that grew the window
+	// to this point has a large downward difference of its own. A resize that leaves
+	// adopts the drawn full height as the window's real geometry first, so it continues
+	// from what the user is holding rather than from the size stored underneath the CSS
+	// layer, and re-records the grab against that frame.
+	if (dialog.heightSnapped) {
+		var gestureDirection = this.dragAction.direction;
+		if (gestureDirection === 0) {
+			if (difference.y > this.heightSnapReleaseThreshold) dialog.toggleHeightSnapped(false);
+		} else if (this.isVerticalResizeDirection(gestureDirection)) {
+			this.leaveHeightSnappedByResize(dialog);
+		}
 	}
 
 	dialog.stopAnimating();
@@ -1240,6 +1248,14 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.toggleDragging(false);
 	this.saveState();
 	if (!this.activeDialog) return;
+
+	// Restore the touch drag scale before the snap applies. setDragScale runs its own
+	// animation on the window element, and animateElement cancels whatever animation is
+	// already in flight on that element — which is the pending class application from
+	// toggleSnapped/toggleHeightSnapped below. With that rAF cancelled, the drop decides
+	// the zone the indicator just offered and then leaves the window floating. Mouse
+	// drags never change the scale, so this is a no-op for them.
+	if (this.isTouchDrag) this.activeDialog.setDragScale(1, 1);
 
 	var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
 	if (snapZone) this.snapDialog(this.activeDialog, snapZone);
