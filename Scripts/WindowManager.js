@@ -1267,6 +1267,14 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
+/**
+ * Gap the snap indicator keeps from every edge of the area it covers, so it reads as
+ * floating over the desktop rather than filling it. Shared by the maximize and side
+ * snap indicators so they stay consistent.
+ * @type {number}
+ */
+WindowSnap.margin = 15;
+
 function WindowSnap() {
 	this.element = document.createElement("div");
 	this.element.id = "window-snap";
@@ -1341,15 +1349,15 @@ WindowSnap.prototype.setInset = function(inset) {
 }
 
 /**
- * Covers exactly one half of the window area, butting against the given side.
+ * Covers one half of the window area, held off every edge by the same margin the
+ * maximize snap uses so both indicators read as the same kind of thing.
  * @param {"left" | "right"} side
  */
 WindowSnap.prototype.setHalfInset = function(side) {
 	var section = document.getElementById("window-section");
 	var half = Math.round((section ? section.clientWidth : window.innerWidth) / 2);
-	var left = side === "left" ? 0 : half;
-	var right = side === "left" ? half : 0;
-	insetElement(this.element, 0, left, right, 0);
+	var inset = WindowSnap.margin;
+	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 }
 
 /** @param {"maximize" | "left" | "right"} type */
@@ -1366,7 +1374,7 @@ WindowSnap.prototype.snap = function(type) {
 		console.log("snapping", type);
 
 		switch(type) {
-			case "maximize": this.setInset(15); break;
+			case "maximize": this.setInset(WindowSnap.margin); break;
 			case "left":
 			case "right": this.setHalfInset(type); break;
 		}
