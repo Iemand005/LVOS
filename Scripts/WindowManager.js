@@ -1261,6 +1261,7 @@ WindowManager.prototype.reflowSnapGroup = function () {
 	var remaining = 1;
 	var offset = 0;
 
+	var xOffset = 0;
 	for (var i = 0; i < windows.length; i++) {
 		var tile = windows[i];
 		if (!tile || (typeof tile.id === "undefined")) continue;
@@ -1277,10 +1278,9 @@ WindowManager.prototype.reflowSnapGroup = function () {
 				// grab point out of this frame without measuring the element.
 				dialog._snapFrame = { x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight };
 
-				dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
-				// In pixels, because this lands in a translate() and a translate
-				// percentage is relative to the element, not the area it sits in.
-				dialog.target.style.setProperty("--snap-x", toPercent(snapwidth of previous!));
+				dialog.target.style.setProperty("--snap-width", toPercent(width));
+				dialog.target.style.setProperty("--snap-x", toPercent(xOffset));
+				xOffset = width;
 			}
 		}
 
