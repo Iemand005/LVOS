@@ -1280,7 +1280,7 @@ WindowManager.prototype.reflowSnapGroup = function () {
 				dialog.target.style.setProperty("--snap-width", (width * 100) + "%");
 				// In pixels, because this lands in a translate() and a translate
 				// percentage is relative to the element, not the area it sits in.
-				dialog.target.style.setProperty("--snap-x", toPixels(offset * areaWidth));
+				dialog.target.style.setProperty("--snap-x", toPercent(snapwidth of previous!));
 			}
 		}
 
