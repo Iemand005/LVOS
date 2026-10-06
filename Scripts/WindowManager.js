@@ -1269,7 +1269,7 @@ WindowManager.prototype.reflowSnapGroup = function () {
 
 	for (var i = 0; i < windows.length; i++) {
 		var tile = windows[i];
-		if (!tile || !("id" in tile)) continue;
+		if (!tile || (typeof tile.id === "undefined")) continue;
 		var isLast = i === windows.length - 1;
 		// Only a gapless group gives its leftover width to the last window.
 		var width = !this.snapInsertGaps && isLast ? remaining : (tile.width || 0.5);
