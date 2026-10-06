@@ -2248,6 +2248,14 @@ Object.defineProperty(Dialog.prototype, "snapped", {
 	set: function(snapped) { this.toggleSnapped(snapped); }
 });
 
+Object.defineProperty(Dialog.prototype, "heightSnapped", {
+	get: function() {
+		if (!this.target) return false;
+		return this.target.classList.contains("height-snapped");
+	},
+	set: function(snapped) { this.toggleHeightSnapped(snapped); }
+});
+
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
