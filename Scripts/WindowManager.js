@@ -2547,26 +2547,13 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
  * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
  * the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
- * @param {boolean} [noAnimation] Apply and forget, with no transition at all.
+ * @param {boolean} [enable]
  */
-Dialog.prototype.toggleSnapped = function (enable, noAnimation) {
+Dialog.prototype.toggleSnapped = function (enable) {
 	var target = this.target;
 	if (!target) return;
 	if (enable == null) enable = !target.classList.contains("snapped");
 	if (target.classList.contains("snapped") === enable) return;
-
-	var clearSnapProperties = function () {
-		target.style.removeProperty("--snap-width");
-		target.style.removeProperty("--snap-left");
-	};
-
-	if (noAnimation) {
-		// Class off first: while it is still on, the properties are what size the window,
-		// so clearing them beforehand would flash it to the fallback width.
-		setClass(target, "snapped", enable);
-		clearSnapProperties();
-		return;
-	}
 
 	// Leaving the group has to survive the drag's own animation cancelling, so it is
 	// exempt from stopAnimating the same way the drag scale-down already is. Without
@@ -2580,7 +2567,10 @@ Dialog.prototype.toggleSnapped = function (enable, noAnimation) {
 		this._snappingOut = false;
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
-		if (!isSnapped) clearSnapProperties();
+		if (!isSnapped) {
+			target.style.removeProperty("--snap-width");
+			target.style.removeProperty("--snap-left");
+		}
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.
