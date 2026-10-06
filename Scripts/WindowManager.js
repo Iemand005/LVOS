@@ -1351,6 +1351,10 @@ function WindowSnap() {
 	this.element = document.createElement("div");
 	this.element.id = "window-snap";
 	this._snapped = "";
+	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
+	// first snap positions it, so without this the first drop flies it in from wherever
+	// that box sat rather than from behind the window.
+	this.element.classList.add("hidden");
 }
 
 Object.defineProperty(WindowSnap.prototype, "hidden", {
@@ -1500,12 +1504,21 @@ WindowSnap.prototype.snap = function(type, dialog) {
  * @param {boolean} [keepScale] Skip the scale reset, for a touch drag still in progress.
  */
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
+	// The window's drag scale is not the indicator's to hide, so it is restored before
+	// anything else: a touch drag that ends behind an indicator already hidden would
+	// otherwise never bring the window back to full size. A no-op when it is at 1 already.
+	if (!keepScale) dialog.setDragScale(1, 1);
+
+	// Already behind it. Revealing the indicator only to hide it again turns a drop that
+	// offered nothing into a flash of it flying in from its last position, which is the
+	// one thing this method exists to avoid.
+	if (this.hidden) return;
+
 	// noAnimation: this method already animates the element, and moveToDialog must not
 	// start a competing animation on the same element or it cancels this one.
 	animateElement(this.element, function() {
 
 		this.moveToDialog(dialog, 0, undefined, true);
-		if (!keepScale) dialog.setDragScale(1, 1);
 	}, function(name) {
 		return name === "inset";
 	}, function() {
