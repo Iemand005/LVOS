@@ -516,7 +516,7 @@ function WindowManager() {
 	/**
 	 * The snap zone the indicator is currently showing, or "" for none. Shared by the
 	 * drag preview and the snap on drop so the two cannot disagree.
-	 * @type {"" | "maximize" | "left" | "right"}
+	 * @type {"" | "maximize" | "left" | "right" | "height"}
 	 */
 	this._snapZone = "";
 
@@ -1024,7 +1024,8 @@ WindowManager.prototype.getSnapZone = function (x, y) {
  * what the state exists for, so neither the indicator nor the drop may put it into a
  * tile group behind the state's back.
  * @param {Dialog} dialog
- * @param {number} direction The gesture's drag direction, read before it is reset.
+ * @param {number} [direction] The gesture's drag direction, read before it is reset.
+ *   Only ever unset before a gesture has set one, and an unset direction claims nothing.
  * @param {number} x Pointer position.
  * @param {number} y Pointer position.
  * @returns {"" | "maximize" | "left" | "right" | "height"}
