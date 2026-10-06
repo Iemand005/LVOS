@@ -541,6 +541,9 @@ function WindowManager() {
 
 	this.ticking = false;
 
+	/** @type {PointerEvent | MouseEvent | null} Newest drag event waiting for the next frame. */
+	this.pendingDragEvent = null;
+
 	this.flipped = false;
 
 
@@ -580,13 +583,27 @@ function WindowManager() {
 
 			var isTouch = "pointerType" in event && event.pointerType === "touch";
 
+			// The drop in disableDialogDrag decides its snap zone from pointerPosition once
+			// the pointer is already gone, so the last position of the gesture has to be
+			// recorded here rather than down in the throttled call: pointerup outruns the
+			// pending frame, and a touch flick that ends on an edge gets no further events
+			// to catch the recorded position up again.
+			self.setPointerPosition(event.clientX, event.clientY);
+
 			if (flags.updateRateLimit) {
+				// Keep the newest event instead of discarding the ones that arrive while a
+				// frame is pending, or the gesture's final position is never dragged at all.
+				self.pendingDragEvent = event;
 				if (self.ticking) return;
-				window.requestAnimationFrame(function() {
-					windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
-					self.ticking = false;
-				});
 				self.ticking = true;
+				window.requestAnimationFrame(function() {
+					var pending = self.pendingDragEvent;
+					self.pendingDragEvent = null;
+					self.ticking = false;
+					if (!pending) return;
+					var touch = "pointerType" in pending && pending.pointerType === "touch";
+					windowManager.handleWindowDrag(pending.clientX, pending.clientY, touch);
+				});
 			} else windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
 		} catch (ex) {
 			console.error(ex);
