@@ -310,6 +310,11 @@ button {
 	border-radius: 0;
 }
 
+.windows-10 #launchpad button {
+	border-radius: 0;
+	border: 2px solid black;
+}
+
 .windows .window article > * {
 	background-color: transparent;
 }
