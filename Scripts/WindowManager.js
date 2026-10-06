@@ -976,14 +976,19 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
  * Which aero snap zone the pointer is currently in, or "" for none. The pointer
  * decides, not the window's edges, so a window stays left-aligned no matter which way
  * it was dragged until the pointer itself reaches an edge.
+ *
+ * Sides are checked before maximize so the corners resolve to a side: both zones
+ * overlap there, and half a screen is the more useful thing to offer.
  * @param {number} x Pointer position.
  * @param {number} y Pointer position.
  * @returns {"" | "maximize" | "left" | "right"}
  */
 WindowManager.prototype.getSnapZone = function (x, y) {
-	if (y <= this.snapFullThreshold) return "maximize";
+	// Sides are tested first so a corner resolves to the side rather than maximize:
+	// the corner is inside both zones, and half a screen is the more specific offer.
 	if (x <= this.snapSideThreshold) return "left";
 	if (x >= this.snapWidth() - this.snapSideThreshold) return "right";
+	if (y <= this.snapFullThreshold) return "maximize";
 
 	return "";
 };
