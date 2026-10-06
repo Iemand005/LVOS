@@ -2661,6 +2661,31 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOutState = target._animationState;
 };
 
+/**
+ * Full-height snap, the state that is neither tiled nor maximized: the window paints
+ * edge to edge vertically and keeps only its width and x as its own, so it can still be
+ * dragged sideways. A top or bottom resize that runs out of screen edge enters it, and
+ * pulling the window back down leaves it.
+ *
+ * The geometry is a CSS layer, exactly like maximizing: _y and _height are never
+ * written by the state itself, so _height still holds the size the window had when it
+ * entered and hands it straight back when the class goes. What does change is y — the
+ * drawn frame starts at the top of the area, so y is pinned there too, otherwise the
+ * grab point would be recorded against one frame and the window drawn in another and
+ * every sideways drag would walk it off its full height.
+ * @param {boolean} [enable]
+ */
+Dialog.prototype.toggleHeightSnapped = function (enable) {
+	var target = this.target;
+	if (!target) return;
+	if (enable == null) enable = !target.classList.contains("height-snapped");
+	if (target.classList.contains("height-snapped") === enable) return;
+
+	// Before the class goes on: while it is off, move() still takes the y it is handed.
+	if (enable) this.move(this.x, 0);
+	setClass(target, "height-snapped", enable);
+};
+
 Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (enable == null) enable = !this.maximized;
