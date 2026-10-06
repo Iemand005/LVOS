@@ -1068,7 +1068,7 @@ WindowManager.prototype.fitSnapGaps = function (windows, side) {
 	if (windows.length !== 1) return;
 
 	var dialog = this.windows[windows[0].id];
-	if (!side && dialog && dialog.target) side = dialog.target.style.getPropertyValue("--snap-left") === "0%" ? "left" : "right";
+	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("--snap-x")) === 0 ? "left" : "right";
 
 	// Opposite side: a window snapped right is held there by the gap on its left.
 	windows.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
@@ -2546,13 +2546,16 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout)
  * @param {(name:string)=>boolean} [onTransitionEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
+ * @param {number} [timeout] Safety net: a property whose transition keeps being
+ * restarted never fires transitionend, so without this the animation can hang with
+ * `animating` still on the element.
  */
-Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled) {
+Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled, timeout) {
 	var self = this;
 	var enabled = false;
 	this.animate(function() {
 		if (self.target && onToggled) onToggled.call(self, enabled = setClass(self.target, className, force));
-	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); });
+	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
 
 /**
@@ -2576,29 +2579,21 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOut = !enable;
 
 	this.toggleClassAnimated("snapped", enable, function (name) {
-		return name === "width" || name === "left";
+		// left never moves any more, it holds at 0. transform carries the position and
+		// width carries the size; either one finishing ends the animation.
+		return name === "width" || name === "transform";
 	}, function (isSnapped) {
-		var wasSnappingOut = this._snappingOut;
 		this._snappingOut = false;
-		this._snappingOutState = null;
 
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
 		if (isSnapped) return;
 		target.style.removeProperty("--snap-width");
-		target.style.removeProperty("--snap-left");
-
-		// Position was held for the whole animation; catch it up to wherever the drag
-		// actually got to while the window was easing back out.
-		if (wasSnappingOut) this.updateTransform();
+		target.style.removeProperty("--snap-x");
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.
-	});
-
-	// Which animation now owns the element, so updateTransform can tell this one from
-	// the drag scale-down that may supersede it.
-	this._snappingOutState = enable ? null : target._animationState;
+	}, 600);
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
@@ -2748,22 +2743,6 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 };
 Dialog.prototype.updateTransform = function () {
-	// While snapping out, the box is split across two animating properties: left runs
-	// from the tile back to 0 while transform runs from 0 to the window's own position.
-	// They have to finish together, but a drag rewrites transform on every pointermove
-	// and every rewrite restarts that transition, so transform falls behind left and the
-	// window dips to the middle before coming back. Holding the value until the
-	// animation lands keeps the two in step; toggleSnapped re-reads the position once it
-	// releases the flag.
-	if (this._snappingOut) {
-		// Another animation superseded this one and will never run its onEnd, so the
-		// flag would stay set and the window would stop following the cursor for good.
-		// Release it as soon as the element is no longer the one this was started on.
-		if (this.target && this.target._animationState !== this._snappingOutState) {
-			this._snappingOut = false;
-			this._snappingOutState = null;
-		} else return;
-	}
 	if (this.useTransform && this.target) transformElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
