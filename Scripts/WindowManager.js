@@ -2587,6 +2587,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	// this the window drops to floating in one frame instead of easing out, because the
 	// next pointermove cancels the transition.
 	this._snappingOut = !enable;
+	this._snappingOutState = null;
 
 	this.toggleClassAnimated("snapped", enable, function (name) {
 		// transform only. left holds at 0 and never animates any more, and ending on
@@ -2597,6 +2598,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 		return name === "transform";
 	}, function (isSnapped) {
 		this._snappingOut = false;
+		this._snappingOutState = null;
 
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
@@ -2607,6 +2609,10 @@ Dialog.prototype.toggleSnapped = function (enable) {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.
 	}, 1000);
+
+	// Which animation owns the element, so stopAnimating can tell this one from the
+	// drag scale-down that may supersede it and never run the onEnd above.
+	this._snappingOutState = target._animationState;
 };
 
 Dialog.prototype.toggleMaximized = function (enable) {
