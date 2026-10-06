@@ -1452,7 +1452,7 @@ WindowSnap.prototype.setHeightInset = function(dialog) {
 		Math.max(inset, dialog.left - inset),
 		Math.max(inset, areaWidth - dialog.right - inset),
 		inset);
-}
+};
 
 /**
  * @param {"maximize" | "left" | "right" | "height"} type
