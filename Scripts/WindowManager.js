@@ -3036,6 +3036,10 @@ Dialog.prototype.resize = function (width, height, direction) {
 	if (this.fixed) return;
 	if (typeof width === "undefined" || width === null) width = this.width;
 	if (typeof height === "undefined" || height === null) height = this.height;
+	// Full-height snap hands the height back untouched when it is left, so the drag may
+	// keep changing the width but never the size it entered with — otherwise the window
+	// would come back at whatever the resize had grown to underneath the CSS layer.
+	if (this.heightSnapped) height = this.height;
 
 	var oldWidth = this.width, oldHeight = this.height;
 
@@ -3047,6 +3051,18 @@ Dialog.prototype.resize = function (width, height, direction) {
 		if (oldWidth !== this.width) state.width = this.width;
 		if (oldHeight !== this.height) state.height = this.height;
 		this.broadcastState(state);
+	}
+
+	// A top or bottom resize that runs out of screen edge becomes a full-height snap.
+	// The test is on where the resize stopped rather than on the height it reached, so
+	// it fires on the same gesture: the edge has nowhere left to go, and the window
+	// claims the whole height instead of the last few pixels of it.
+	if (!this.heightSnapped && windowManager && (direction === "top" || direction === "bottom")) {
+		var bounds = WindowManager.windowBounds;
+		var atEdge = direction === "top"
+			? this.y <= bounds.top
+			: this.y + this.height >= windowManager.snapHeight();
+		if (atEdge) this.toggleHeightSnapped(true);
 	}
 };
 
