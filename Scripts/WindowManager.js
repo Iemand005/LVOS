@@ -318,15 +318,9 @@ function getViewBoxPosition() {
 	return { x: window.screenLeft, y: window.screenTop };
 }
 
-/** @param {number} value */
-function toPixels(value) {
-	return Math.round(value) + "px";
-}
-
-/** @param {number} value */
-function toDegrees(value) {
-	return Math.round(value) + "deg";
-}
+function toPixels(/** @type {number} */value) { return Math.round(value) + "px"; }
+function toPercent(/** @type {number} */value) { return Math.round(value * 100) + "%"; }
+function toDegrees(/** @type {number} */value) { return Math.round(value) + "deg"; }
 
 /** @param {number} pixels */
 function pixelsToCentimeters(pixels){
