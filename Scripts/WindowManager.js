@@ -2547,7 +2547,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
  * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
  * the identical transition rather than a second implementation of it.
  * @param {boolean} [enable]
- * @param {boolean} [enable]
  */
 Dialog.prototype.toggleSnapped = function (enable) {
 	var target = this.target;
