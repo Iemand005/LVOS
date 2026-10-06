@@ -976,7 +976,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		if (snapZone !== this._snapZone) {
 			if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
 			this._snapZone = snapZone;
-			this.windowSnap.snap(snapZone);
+			this.windowSnap.snap(snapZone, dialog);
 		}
 	} else if (this._snapZone) {
 		this._snapZone = "";
@@ -1015,19 +1015,35 @@ WindowManager.prototype.getSnapZone = function (x, y) {
  * The aero snap zone the current gesture may use, or "" when it may not snap at all.
  * Shared by the drag preview and the drop so they can never disagree about it.
  *
- * A resize travels along an edge instead of toward one, so it never claims a zone —
- * that also keeps the top edge free for the full-height snap, which would otherwise
- * have to offer maximize for the very gesture it is about to take over. And while a
- * window is full-height snapped it owns the gesture: sideways dragging keeps it, so
- * neither the indicator nor the drop may put it into a tile group behind the state's back.
+ * resizeFunctions puts the top sizer at 1 and the bottom sizer at 3: the only two that
+ * push a vertical edge toward the screen, which is where the full-height snap belongs.
+ * They put up that offer and nothing else, and every other resize travels along an edge
+ * instead of toward one, so a resize claims no zone at all — which is also what keeps
+ * the top edge free for the offer instead of having it compete with maximize.
+ *
+ * A window that is already full-height snapped owns its gesture: sideways dragging is
+ * what the state exists for, so neither the indicator nor the drop may put it into a
+ * tile group behind the state's back.
  * @param {Dialog} dialog
  * @param {number} direction The gesture's drag direction, read before it is reset.
  * @param {number} x Pointer position.
  * @param {number} y Pointer position.
- * @returns {"" | "maximize" | "left" | "right"}
+ * @returns {"" | "maximize" | "left" | "right" | "height"}
  */
 WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) {
-	if (!flags.aeroSnap || direction !== 0 || dialog.heightSnapped) return "";
+	if (!flags.aeroSnap || dialog.heightSnapped) return "";
+
+	if (direction === 1 || direction === 3) {
+		var bounds = WindowManager.windowBounds;
+		var threshold = this.snapFullThreshold;
+		var atEdge = direction === 1 ?
+			dialog.y <= bounds.top + threshold :
+			dialog.y + dialog.height >= this.snapHeight() - threshold;
+		return atEdge ? "height" : "";
+	}
+
+	if (direction !== 0) return "";
+
 	return this.getSnapZone(x, y);
 };
 
@@ -1052,9 +1068,17 @@ WindowManager.prototype.setPointerPosition = function (x, y) {
 /**
  * Applies an aero snap zone to a window on drop.
  * @param {Dialog} dialog
- * @param {"" | "maximize" | "left" | "right"} zone
+ * @param {"" | "maximize" | "left" | "right" | "height"} zone
  */
 WindowManager.prototype.snapDialog = function (dialog, zone) {
+	// Same claim on the area as maximize, just the vertical half of it, so it takes the
+	// window out of a tile group first for the same reason maximize does.
+	if (zone === "height") {
+		this.unsnapDialog(dialog);
+		dialog.toggleHeightSnapped(true);
+		return;
+	}
+
 	if (zone === "maximize") {
 		this.unsnapDialog(dialog);
 		dialog.maximize();
