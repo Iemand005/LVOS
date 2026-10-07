@@ -14,6 +14,11 @@ function Clicker() {
 	this.clicks = clicks;
 
 	this.textNode = document.createTextNode(clicks.toString());
+
+	this.clickHandler = function (/** @type {Event} */ev) {
+		ev.preventDefault();
+		this.click();
+	}
 }
 
 Clicker.prototype.click = function() {
@@ -27,4 +32,4 @@ Clicker.prototype.click = function() {
 var clicker = new Clicker();
 
 if (clickCount) clickCount.appendChild(clicker.textNode);
-if (button) button.onclick = clicker.click.bind(button), button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
+if (button) button.onclick = clicker.click.bind(clicker), button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
