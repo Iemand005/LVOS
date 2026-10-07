@@ -32,4 +32,4 @@ Clicker.prototype.click = function() {
 var clicker = new Clicker();
 
 if (clickCount) clickCount.appendChild(clicker.textNode);
-if (button) button.onclick = clicker.click.bind(clicker), button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
+if (button) button.onclick = button.oncontextmenu = clicker.clickHandler;
