@@ -27,4 +27,4 @@ Clicker.prototype.click = function() {
 var clicker = new Clicker();
 
 if (clickCount) clickCount.appendChild(clicker.textNode);
-if (button) button.onclick = clicker.click, button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
+if (button) button.onclick = clicker.click.bind(button), button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
