@@ -15,9 +15,10 @@ function Clicker() {
 
 	this.textNode = document.createTextNode(clicks.toString());
 
+	var self = this;
 	this.clickHandler = function (/** @type {Event} */ev) {
 		ev.preventDefault();
-		this.click();
+		self.click();
 	}
 }
 
