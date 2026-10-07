@@ -19,13 +19,10 @@ function Clicker() {
 Clicker.prototype.click = function() {
 	this.clicks++;
 	localStorage.setItem("clicker_clicks", this.clicks.toString());
+	this.textNode.data = clicker.clicks.toString();
 }
 
 var clicker = new Clicker();
 
-
 if (clickCount) clickCount.appendChild(clicker.textNode);
-if (button) button.onclick = function() {
-	clicker.click();
-	clicker.textNode.data = clicker.clicks.toString();
-};
+if (button) button.onclick = clicker.click, button.oncontextmenu = function(ev) { ev.preventDefault(); clicker.click() };
