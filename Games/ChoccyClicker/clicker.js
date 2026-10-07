@@ -17,7 +17,9 @@ function Clicker() {
 }
 
 Clicker.prototype.click = function() {
-	this.clicks++;
+	if (this.clicks)
+		this.clicks++;
+	else this.clicks = 1;
 	localStorage.setItem("clicker_clicks", this.clicks.toString());
 	this.textNode.data = clicker.clicks.toString();
 }
