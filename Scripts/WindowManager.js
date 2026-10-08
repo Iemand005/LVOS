@@ -2708,14 +2708,7 @@ Dialog.prototype.setSkew = function(skew) {
  * @param {boolean} [noAnimation]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
-	this._scaleX = scaleX || 1;
-	this._scaleY = scaleY || 1;
-	if (update === false) return;
-
-	if (noAnimation !== false) this.animate(function() {
-		this.updateTransform();
-	});
-	else this.updateTransform();
+	if (this.transform) this.transform.scale(scaleX, scaleY, update, !noAnimation);
 };
 /**
  * Scales the window for a touch drag. A change of scale animates over
