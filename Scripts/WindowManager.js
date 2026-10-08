@@ -446,7 +446,10 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (onTransitionEnd && !onTransitionEnd(event.propertyName)) return;
+			if (!onTransitionEnd) return;
+			if (typeof onTransitionEnd === "string") {
+				if (event.propertyName !== onTransitionEnd) return;
+			} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
 
 			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
 
