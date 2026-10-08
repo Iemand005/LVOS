@@ -185,7 +185,7 @@ function transformElement(element, t) {
 	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
 	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
 
-	if (rotation) transform += "rotate(" + rotation + "deg)";
+	if (t.rotate) transform += "rotate(" + t.rotate + "deg)";
 
 	else {
 		element.style.transform = transform;
