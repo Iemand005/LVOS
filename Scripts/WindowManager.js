@@ -2548,9 +2548,7 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Object.defineProperty(Dialog.prototype, "contentTransform", {
-	/** 
-	 * @type {()=>Transformable | null}
-	 */
+	/** @type {()=>Transformable | null} */
 	get: function() {
 		if (this._contentTransform) return this._contentTransform;
 		var content = this.content;
@@ -2560,6 +2558,7 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 });
 
 Object.defineProperty(Dialog.prototype, "transform", {
+	/** @type {()=>Transformable | null} */
 	get: function() {
 		if (this._transform) return this._transform;
 		var self = this;
