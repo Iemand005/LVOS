@@ -1774,8 +1774,12 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 };
 
 //#endregion
-
-function Transformable() {
+/**
+ * @constructor
+ * @class
+ * @param {HTMLElement} target
+ */
+function Transformable(target) {
 	this._transform = {};
 	/** @type {Transform} */
 	this._transform = {};
@@ -1791,7 +1795,7 @@ function Transformable() {
  * @param {boolean} [create]
  *
  * @constructor
- * @class Dialog
+ * @class
  */
 function Dialog(object, create) {
 
