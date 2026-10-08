@@ -1789,7 +1789,7 @@ function Transformable(target) {
 }
 
 Object.defineProperty(Transformable.prototype, "perspective", {
-	get: function() { return this.target.parentElement?.style.perspective; },
+	get: function() { return this._perspective; },
 	set: function(value) {
 		var parent = this.target.parentElement;
 		if (parent) parent.style.perspective = toPixels(this._perspective = value); }
