@@ -2515,7 +2515,7 @@ Object.defineProperty(Dialog.prototype, "transform", {
 	}
 });
 
-Object.defineProperty(Dialog.prototype, "closeable", {
+Object.defineProperty(Dialog.prototype, "killable", {
 	get: function() { return this.application !== null; }
 });
 
@@ -3662,7 +3662,7 @@ Dialog.prototype.relaunch = function() {
 
 Dialog.prototype.kill = function() {
 	var parent = this.target && this.target.parentElement;
-	if (parent && this.closeable && this.target) parent.removeChild(this.target);
+	if (parent && this.killable && this.target) parent.removeChild(this.target);
 };
 Dialog.prototype.eject = function() {
 	this.createPopOut();

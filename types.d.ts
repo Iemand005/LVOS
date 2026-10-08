@@ -136,7 +136,7 @@ interface Dialog {
 	useScale: boolean;
 
 	maximized: boolean;
-	closeable: boolean;
+	killable: boolean;
 	mica: boolean
 	isOpen: boolean;
 
