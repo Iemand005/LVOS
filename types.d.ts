@@ -189,4 +189,4 @@ interface Transform {
 	rotateZ?: number;
 }
 
-type TransitionEndEvent
+type TransitionEndCallback = ((name:string)=>boolean) | string;

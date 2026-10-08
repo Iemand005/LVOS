@@ -400,7 +400,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
- * @param {((name: string) => boolean) | string} [onTransitionEnd]
+ * @param {TransitionEndCallback} [onTransitionEnd]
  * @param {(this: T) => void} [onEnd]
  * @param {T} [thisArg]
  * @param {number} [timeout]
@@ -2781,7 +2781,7 @@ Dialog.prototype.stopAnimating = function () {
 
 /**
  * @param {(this:Dialog)=>void} [onToggled]
- * @param {((name:string)=>boolean) | string} [onTransitionEnd]
+ * @param {TransitionEndCallback} [onTransitionEnd]
  * @param {(this:Dialog)=>void} [onEnd]
  * @param {number} [timeout]
  */
