@@ -2776,7 +2776,8 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	var self = this;
 	var enabled = false;
 	this.animate(function() {
-		if (self.target && onToggled) onToggled.call(self, enabled = setClass(self.target, className, force));
+		if (self.target) enabled = setClass(self.target, className, force);
+		if (onToggled) onToggled.call(self, enabled);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
 
@@ -2867,16 +2868,14 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 	}, function () {
 		this._snappingOut = false;
 		this._snappingOutState = null;
-	}, function () {
-		// Required, not optional: toggleClassAnimated only calls setClass from this
-		// callback, so omitting it means the class is never applied at all.
-	}, 1000);
+	}, function () {}, 1000);
 
 	// Which animation owns the element, so stopAnimating can tell this one from the
 	// drag scale-down that may supersede it and never run the onEnd above.
 	this._snappingOutState = /** @type {any} */ (target)._animationState;
 };
 
+/** @param {boolean} enable */
 Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (enable == null) enable = !this.maximized;
