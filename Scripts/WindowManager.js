@@ -1807,6 +1807,18 @@ Transformable.prototype.update = function(animate) {
 
 /**
  * @param {number} x
+ * @param {number} y
+ * @param {boolean} [animate]
+ */
+Transformable.prototype.move = function(x, y, animate) {
+	this._transform.x = x;
+	this._transform.y = y;
+
+	this.update(animate);
+}
+
+/**
+ * @param {number} x
  * @param {number} [y]
  * @param {number} [z]
  * @param {boolean} [animate]
@@ -2549,7 +2561,8 @@ Object.defineProperty(Dialog.prototype, "transform", {
 		if (this._transform) return this._transform;
 		var target = this.target;
 		if (!target) return null;
-		return this._transform = new Transformable(target);
+		this._transform = new Transformable(target);
+		return this._transform;
 	}
 });
 
@@ -3130,6 +3143,9 @@ Dialog.prototype.messageFrame = function (type, message) {
 Dialog.prototype.updateTransform = function (animate) {
 	if (!(this.useTransform && this.target)) return;
 
+	if (this._maximizing) {
+		this.transform.
+	}
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
 
