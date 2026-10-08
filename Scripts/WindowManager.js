@@ -1787,7 +1787,11 @@ function Transformable(target) {
 }
 
 Transformable.prototype.update = function() {
-	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout);
+	animateElement(this.target, function() {
+		transformElement(this.target, this._transform);
+	}, "transform", function() {
+		
+	}, this, timeout);
 }
 
 //#region Dialog
