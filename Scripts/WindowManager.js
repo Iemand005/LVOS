@@ -3904,4 +3904,4 @@ function genericTyped(type) {
 	return type;
 }
 
-const hey = genericTyped("hi")
+const hey = genericTyped(document.createElement("button"))
