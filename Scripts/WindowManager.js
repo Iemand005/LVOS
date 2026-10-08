@@ -2781,7 +2781,7 @@ Dialog.prototype.stopAnimating = function () {
 
 /**
  * @param {(this:Dialog)=>void} [onToggled]
- * @param {(name:string)=>boolean} [onTransitionEnd]
+ * @param {((name:string)=>boolean) | string} [onTransitionEnd]
  * @param {(this:Dialog)=>void} [onEnd]
  * @param {number} [timeout]
  */
@@ -3061,6 +3061,7 @@ Dialog.prototype.updateTransform = function (animate) {
 
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
+
 
 	this.animate()
 

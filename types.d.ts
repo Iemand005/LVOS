@@ -188,3 +188,5 @@ interface Transform {
 	rotateY?: number;
 	rotateZ?: number;
 }
+
+type TransitionEndEvent
