@@ -145,6 +145,7 @@ function getWindowChromeHeight(window) {
 }
 
 /**
+ * @deprecated
  * @param {HTMLElement} element
  * @param {number} x
  * @param {number} y
@@ -168,6 +169,11 @@ function transformElementOld(element, x, y, skew, scaleX, scaleY, rotation) {
 	else {
 		element.style.transform = transform;
 	}
+}
+
+/** @param {HTMLElement} element @param {Transform} transform */
+function transformElement(element, transform) {
+
 }
 
 /**
