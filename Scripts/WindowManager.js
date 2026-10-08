@@ -3893,3 +3893,15 @@ window.__LVMessenger = {};
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
 \*/
+
+
+/**
+ * @template T
+ * @param {T} type
+ * @returns {T}
+ */
+function genericTyped(type) {
+	return type;
+}
+
+const hey = genericTyped("hi")
