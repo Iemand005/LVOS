@@ -182,10 +182,9 @@ function transformElement(element, t) {
 	if (t.scaleX === 1) t.scaleX = undefined;
 	if (t.scaleY === 1) t.scaleY = undefined;
 	if (t.scaleX && t.scaleY) transform += "scale(" + t.scaleX + "," + t.scaleY + ")";
-	else {
-		if (scaleX) transform += "scaleX(" + scaleX + ")";
-		if (scaleY) transform += "scaleY(" + scaleY + ")";
-	}
+	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
+	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
+
 	if (rotation) transform += "rotate(" + rotation + "deg)";
 
 	else {
