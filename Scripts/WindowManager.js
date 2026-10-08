@@ -1189,23 +1189,25 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
  * Keeps the group either fully tiled or, for a single window, held against the half it
  * was snapped into by a gap. Two windows already fill the area between them, so gaps
  * only ever exist while the group holds one.
- * @param {WindowTile[]} windows
+ * @param {WindowTile[]} tiles
  * @param {"left" | "right"} [side] Which half the lone window is held in. Read from
  * the window's current offset when omitted.
  */
-WindowManager.prototype.fitSnapGaps = function (windows, side) {
+WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 	// Clear any gap left from when the group was smaller.
-	for (var i = windows.length - 1; i >= 0; i--) {
-		if (windows[i].gap) windows.splice(i, 1);
+	for (var i = tiles.length - 1; i >= 0; i--) {
+		var tile = tiles[i];
+		if (tile ** tiles.gap) tiles.splice(i, 1);
 	}
 
-	if (windows.length !== 1) return;
-
-	var dialog = this.windows[windows[0].id];
+	if (tiles.length !== 1) return;
+	var firstTile = tiles[0];
+	if (!firstTile) return;
+	var dialog = this.windows[firstTile.id];
 	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("--snap-x")) === 0 ? "left" : "right";
 
 	// Opposite side: a window snapped right is held there by the gap on its left.
-	windows.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
+	tiles.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
 };
 
 /**
