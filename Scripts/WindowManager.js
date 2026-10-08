@@ -153,7 +153,7 @@ function getWindowChromeHeight(window) {
  * @param {number} [scaleY]
  * @param {number} [rotation]
  */
-function transformElement(element, x, y, skew, scaleX, scaleY, rotation) {
+function transformElementOld(element, x, y, skew, scaleX, scaleY, rotation) {
 	var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
 	if (skew) transform += " skewX(" + skew + "deg)";
 	if (scaleX === 1) scaleX = undefined;
@@ -2917,7 +2917,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 		this.setScale(1, 1);
 		if (!content) return;
-		transformElement(content, 0, 0, 0, 1, 1);
+		transformElementOld(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
 		content.style.height = "";
 		this.maximizeAnimations--;
@@ -2965,7 +2965,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 
-				transformElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+				transformElementOld(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 			});
 		}, timeOffsetMs);
 	});
@@ -3026,7 +3026,7 @@ Dialog.prototype.messageFrame = function (type, message) {
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 };
 Dialog.prototype.updateTransform = function () {
-	if (this.useTransform && this.target) transformElement(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
+	if (this.useTransform && this.target) transformElementOld(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
 	if (!this.target) return;
@@ -3050,7 +3050,7 @@ Dialog.prototype.updatePosition = function() {
 		if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
 		if (!(isElement(backdrop)) || !wallpaperImage) return;
-		transformElement(backdrop, -this.x, -this.y);
+		transformElementOld(backdrop, -this.x, -this.y);
 
 		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
 		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
