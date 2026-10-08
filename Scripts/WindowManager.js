@@ -3067,10 +3067,10 @@ Dialog.prototype.updateTransform = function (animate) {
 
 
 	this.animate(function() {
-
+		if (this.target) transformElement(this.target, this._transform);
 	}, "transform", function() {
 
-	});
+	}, 1000);
 
 	transformElement(this.target, this._transform);
 	// if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
