@@ -3528,9 +3528,11 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
  * @param {number} x
  * @param {number} y
  * @param {number} z
+ * @param {boolean} animate
  */
-Dialog.prototype.rotate = function(x, y, z) {
-
+Dialog.prototype.rotate = function(x, y, z, animate) {
+	if ()
+	this._transform.rota
 }
 
 /** @param {string} [url] */
