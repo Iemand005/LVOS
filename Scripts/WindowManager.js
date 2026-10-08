@@ -2548,7 +2548,7 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Object.defineProperty(Dialog.prototype, "contentTransform", {
-	
+	/** @this Dialog */
 	get: function() {
 		if (this._contentTransform) return this._contentTransform;
 		var content = this.content;
