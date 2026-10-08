@@ -3520,6 +3520,11 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (this.useScale) right = undefined, bottom = undefined;
 	if (this.target) insetElement(this.target, top, left, right, bottom);
 };
+
+Dialog.prototype.rotateY = function() {
+	
+}
+
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
 	var frame = this.getOrCreateFrame(true);
