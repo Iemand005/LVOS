@@ -2815,7 +2815,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
-		if (isSnapped) return;
+		if (isSnapped || !target) return;
 		target.style.removeProperty("--snap-width");
 		target.style.removeProperty("--snap-x");
 	}, function () {
@@ -2868,7 +2868,7 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 	}, function () {
 		this._snappingOut = false;
 		this._snappingOutState = null;
-	}, function () {}, 1000);
+	}, undefined, 1000);
 
 	// Which animation owns the element, so stopAnimating can tell this one from the
 	// drag scale-down that may supersede it and never run the onEnd above.
