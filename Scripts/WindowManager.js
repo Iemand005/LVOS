@@ -1792,7 +1792,7 @@ Transformable.prototype.update = function(animate) {
 		transformElement(this.target, this._transform);
 	}, "transform", function() {
 
-	}, this, timeout);
+	}, this, 1000);
 }
 
 //#region Dialog
