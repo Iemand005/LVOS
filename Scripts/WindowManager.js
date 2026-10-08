@@ -1786,13 +1786,32 @@ function Transformable(target) {
 	this._transform = {};
 }
 
-/** @param {boolean} animate */
+/** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
-	animateElement(this.target, function() {
+	if (animate) animateElement(this.target, function() {
 		transformElement(this.target, this._transform);
 	}, "transform", function() {
 
 	}, this, 1000);
+	else transformElement(this.target, this._transform);
+}
+
+/**
+ * @param {number} x
+ * @param {number} [y]
+ * @param {number} [z]
+ * @param {boolean} [animate]
+ */
+Transformable.prototype.rotate = function(x, y, z, animate) {
+	if (y === undefined && z === undefined)
+		this._transform.rotate = x;
+	else {
+		this._transform.rotateX = x;
+		this._transform.rotateY = y;
+		this._transform.rotateZ = z;
+	}
+
+	this.update(animate);
 }
 
 //#region Dialog
