@@ -2791,7 +2791,7 @@ Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout)
 /**
  * @param {string} className
  * @param {boolean} [force]
- * @param {(name:string)=>boolean} [onTransitionEnd]
+ * @param {TransitionEndCallback} [onTransitionEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
  * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
  * @param {number} [timeout] Safety net: a property whose transition keeps being
