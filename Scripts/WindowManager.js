@@ -1786,6 +1786,10 @@ function Transformable(target) {
 	this._transform = {};
 }
 
+Object.defineProperty(Transformable.prototype, "perspective", {
+	get: function() { return this.target.parentElement?.style.perspective; }
+})
+
 /** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
 	if (animate) animateElement(this.target, function() {
