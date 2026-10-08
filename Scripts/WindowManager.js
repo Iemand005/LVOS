@@ -3611,24 +3611,6 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (this.target) insetElement(this.target, top, left, right, bottom);
 };
 
-/**
- * @param {number} x
- * @param {number} [y]
- * @param {number} [z]
- * @param {boolean} [animate]
- */
-Dialog.prototype.rotate = function(x, y, z, animate) {
-	if (y === undefined && z === undefined)
-		this._transform.rotate = x;
-	else {
-		this._transform.rotateX = x;
-		this._transform.rotateY = y;
-		this._transform.rotateZ = z;
-	}
-
-	this.updateTransform(animate !== false);
-}
-
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
 	var frame = this.getOrCreateFrame(true);
