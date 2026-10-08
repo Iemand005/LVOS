@@ -1216,7 +1216,8 @@ WindowManager.prototype.findSnapTile = function (id) {
 	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
 
 	for (var i = 0; i < windows.length; i++) {
-		if (windows[i].id === id) return i;
+		var dialog = windows[i];
+		if (dialog && dialog.id === id) return i;
 	}
 
 	return -1;
