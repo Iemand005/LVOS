@@ -1174,6 +1174,8 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
 	var index = this.findSnapTile(dialog.id);
 	var tile = index === -1 ? { id: dialog.id, width: 0.5 } : windows[index];
 
+	if (!tile) return;
+
 	if (index !== -1) windows.splice(index, 1);
 
 	if (side === "left") windows.unshift(tile);
@@ -1202,7 +1204,7 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 
 	if (tiles.length !== 1) return;
 	var firstTile = tiles[0];
-	if (!firstTile) return;
+	if (!firstTile || !firstTile.id) return;
 	var dialog = this.windows[firstTile.id];
 	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("--snap-x")) === 0 ? "left" : "right";
 
