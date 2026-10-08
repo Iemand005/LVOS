@@ -2333,7 +2333,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 		this._y = top / window.innerHeight;
 		if (this.useTransform) {
 			if (this.target) this.target.style.height = toPixels(height);
-			if (this.useTransform) this.updateTransform();
+			this.updateTransform();
 		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
 		this._isMinHeight = height === this.minHeight;
 	}
