@@ -162,7 +162,6 @@ declare function WindowManager(): {
 }
 declare function Dialog(): void;
 interface WindowTile {
-interface WindowTile {
 	// Absent on a gap tile, which only reserves space in the group.
 	id?: string;
 	width?: number; // Share of the group along this axis, 0 to 1.
@@ -170,7 +169,6 @@ interface WindowTile {
 	gap?: boolean;
 	direction?: 'horizontal' | 'vertical';
 	group?: boolean;
-	gap?: boolean;
 }
 
 interface WindowGroup {
