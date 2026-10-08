@@ -186,6 +186,9 @@ function transformElement(element, t) {
 	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
 
 	if (t.rotate) transform += "rotate(" + toDegrees(t.rotate) + ")";
+	if (t.rotateX) transform += "rotateX(" + toDegrees(t.rotateX) + ")";
+	if (t.rotateY) transform += "rotateY(" + toDegrees(t.rotateY) + ")";
+	if (t.rotateZ) transform += "rotateZ(" + toDegrees(t.rotateZ) + ")";
 
 	
 	element.style.transform = transform;
