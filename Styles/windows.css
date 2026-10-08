@@ -424,23 +424,7 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 /* Tiled into a snap group. The geometry comes from two custom properties the group
    writes onto the element, so the window's own width/height/position state is left
    untouched and comes back intact when it leaves the group. */
-.window.snapped {
-	top: 0 !important;
-	left: 0 !important;
-	bottom: 0 !important;
-	right: 0 !important;
-	width: var(--snap-width, 50%) !important;
-	height: 100% !important;
-	border: none !important;
-	border-radius: 0 !important;
-	z-index: 9999 !important;
-	/* The horizontal offset rides on transform, not left, so the whole position is one
-	   property. left would otherwise be a second channel animating in the opposite
-	   direction while the drag keeps rewriting transform, and the two never finish
-	   together: left reaches 0 while transform lags, so the window dips to the middle
-	   before coming back. */
-	transform: translate(var(--snap-x, 0px), 0px) scale(1, 1) skew(0deg, 0deg) !important;
-}
+.window.snapped {\n\ttop: 0 !important;\n\tleft: 0 !important;\n\tright: 0 !important;\n\tbottom: 0 !important;\n\theight: 100% !important;\n\twidth: auto !important;\n\tflex: 1 1 0 !important;\n\tborder: none !important;\n\tborder-radius: 0 !important;\n\tz-index: 9999 !important;\n\ttransform: none !important;\n}\n
 
 .window.snapped > content {
 	border: 0px solid transparent !important;
@@ -452,9 +436,7 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 
 /* The size still moves by geometry, but the position moves by transform, so the
    compositor-only transform transition has to let width through as well. */
-.compositor-animations .window.snapped.animating {
-	transition-property: width, transform !important;
-}
+.compositor-animations .window.snapped.animating {\n\ttransition-property: flex-basis, flex-grow, flex-shrink !important;\n}\n
 
 /* Full-height snap: the vertical half of maximizing, without claiming the horizontal.
    Only height and the top edge are taken, so width and x stay the window's own and it
