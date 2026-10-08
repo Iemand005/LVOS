@@ -2548,6 +2548,7 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Object.defineProperty(Dialog.prototype, "contentTransform", {
+	
 	get: function() {
 		if (this._contentTransform) return this._contentTransform;
 		var content = this.content;
@@ -2559,6 +2560,8 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 Object.defineProperty(Dialog.prototype, "transform", {
 	get: function() {
 		if (this._transform) return this._transform;
+		var self = this;
+		(function () {})
 		var target = this.target;
 		if (!target) return null;
 		this._transform = new Transformable(target);
@@ -3149,11 +3152,7 @@ Dialog.prototype.updateTransform = function (animate) {
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
 
-	this._transform.x = x;
-	this._transform.y = y;
-	this._transform.skewY = this._skew;
-	this._transform.scaleX = this._scaleX;
-	this._transform.scaleY = this._scaleY;
+	this.transform.move()
 
 
 	if (animate) this.animate(function() {

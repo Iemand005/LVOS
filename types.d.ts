@@ -153,6 +153,8 @@ interface Dialog {
 	position: Vector;
 
 	windowTarget: WindowElement?;
+
+	_contentTransform?: Transformable | null;
 }
 
 declare function WindowManager(): {
