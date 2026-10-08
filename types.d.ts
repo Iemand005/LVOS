@@ -161,17 +161,21 @@ declare function WindowManager(): {
 	windowBounds: Bounds;
 }
 declare function Dialog(): void;
-
+interface WindowTile {
 interface WindowTile {
 	// Absent on a gap tile, which only reserves space in the group.
 	id?: string;
 	width?: number; // Share of the group along this axis, 0 to 1.
 	height?: number;
 	gap?: boolean;
+	direction?: 'horizontal' | 'vertical';
+	group?: boolean;
+	gap?: boolean;
 }
 
 interface WindowGroup {
-	windows: WindowTile[] | WindowGroup;
+	direction: 'horizontal' | 'vertical';
+	items: (WindowTile | WindowGroup)[];
 }
 
 type ResizeDirection = "bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left";
