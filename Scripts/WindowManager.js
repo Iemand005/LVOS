@@ -1812,9 +1812,6 @@ function Dialog(object, create) {
 	this._isMinWidth = false;
 	this._isMinHeight = false;
 
-	/** @type {Transform} */
-	this._transform = {};
-
 	/** @type {Window | null} */
 	this._popupWindow = null;
 
@@ -1846,7 +1843,7 @@ function Dialog(object, create) {
 	this._rotation = 0;
 
 	/** @type {Transformable | null} */
-	this.transform = null;
+	this._transform = null;
 
 	/** @type {Transformable | null} */
 	this._contentTransform = null;
@@ -2506,6 +2503,15 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 		var content = this.content;
 		if (!content) return null;
 		return this._contentTransform = new Transformable(content);
+	}
+});
+
+Object.defineProperty(Dialog.prototype, "transform", {
+	get: function() {
+		if (this._transform) return this._transform;
+		var content = this.content;
+		if (!content) return null;
+		return this._transform = new Transformable(content);
 	}
 });
 
