@@ -1775,6 +1775,12 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 
 //#endregion
 
+function Transformable() {
+	this._transform = {};
+	/** @type {Transform} */
+	this._transform = {};
+}
+
 //#region Dialog
 
 
