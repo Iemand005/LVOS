@@ -1796,6 +1796,9 @@ function Dialog(object, create) {
 	this._isMinWidth = false;
 	this._isMinHeight = false;
 
+	/** @type {Transform} */
+	this._transform = {};
+
 	/** @type {Window | null} */
 	this._popupWindow = null;
 
