@@ -140,6 +140,10 @@ interface Dialog {
 	mica: boolean
 	isOpen: boolean;
 
+	// The box a tiled window is drawn at, in window-area coordinates, recorded so a
+	// drag out of the group can remap the grab point without measuring the element.
+	_snapFrame?: { x: number; y: number; width: number; height: number };
+
 	contentDocument: Document;
 
 	href: string;
@@ -172,8 +176,10 @@ interface WindowTile {
 }
 
 interface WindowGroup {
-	direction: 'horizontal' | 'vertical';
-	items: (WindowTile | WindowGroup)[];
+	direction?: 'horizontal' | 'vertical';
+	items?: (WindowTile | WindowGroup)[];
+	// The group's members in layout order, gap tiles included.
+	windows: WindowTile[];
 }
 
 type ResizeDirection = "bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left";

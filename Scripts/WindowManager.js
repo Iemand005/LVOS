@@ -645,6 +645,14 @@ function WindowManager() {
 	/** @type {WindowGroup} */
 	this.windowGroup = { windows: [] };
 
+	/** The flex container the snap group lays its windows out in, created on demand.
+	 * @type {HTMLElement | null} */
+	this._snapGroup = null;
+
+	/** The element that reserves a gap tile's share of the group.
+	 * @type {HTMLElement | null} */
+	this._snapSpacer = null;
+
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -1233,7 +1241,15 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 	var firstTile = tiles[0];
 	if (!firstTile || !firstTile.id) return;
 	var dialog = this.windows[firstTile.id];
-	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("")) === 0 ? "left" : "right";
+	if (!side && dialog && dialog.target) {
+		// The element carries no record of which half it was held in, so the side is read
+		// off the box it is drawn at: in the left half of the area it stays left, and the
+		// gap has to go on the other side to keep it there.
+		var rect = dialog.target.getBoundingClientRect();
+		var area = document.getElementById("window-section");
+		var origin = area ? area.getBoundingClientRect() : rect;
+		side = rect.left - origin.left <= origin.width / 2 ? "left" : "right";
+	}
 
 	// Opposite side: a window snapped right is held there by the gap on its left.
 	tiles.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
@@ -1274,8 +1290,37 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 };
 
 /**
- * Shares the window area out over the group's windows by width and writes each one's
- * share onto the element for the .snapped class to pick up.
+ * The flex container the snap group lays its windows out in. Created on demand and
+ * kept attached while the group holds anything, so it never has to be rebuilt.
+ * @returns {HTMLElement}
+ */
+WindowManager.prototype.getSnapGroup = function () {
+	if (!this._snapGroup) {
+		this._snapGroup = document.createElement("div");
+		this._snapGroup.className = "snap-group";
+	}
+	return this._snapGroup;
+};
+
+/**
+ * The flex item that holds a gap tile's share of the group. A gap only reserves
+ * space, so it is a single empty element reused across reflows.
+ * @returns {HTMLElement}
+ */
+WindowManager.prototype.getSnapSpacer = function () {
+	if (!this._snapSpacer) {
+		this._snapSpacer = document.createElement("div");
+		this._snapSpacer.className = "snap-spacer";
+	}
+	return this._snapSpacer;
+};
+
+/**
+ * Lays the group out as a flex container: its windows become the flex items of the one
+ * element {@link WindowManager#getSnapGroup} keeps in #snap-layer, in the group's
+ * order, each taking the share of the area the group holds for it. That share rides
+ * inline on the element as flex, so the window's own geometry state is never written
+ * and comes back intact when it leaves the group.
  *
  * Every window takes its own width, and gap tiles only reserve space, so a lone tiled
  * window stays at 50% and leaves the rest of the desktop free to drag a second window
@@ -1283,13 +1328,102 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  * no gaps are inserted and the last window soaks up whatever width is left over, so
  * the group always fills the area.
  */
-WindowManager.prototype.reflowSnapGroup = function () {\n\tvar group = this.windowGroup;\n\tvar windows = group.windows;\n\tif (!windows || !windows.length) return;\n\t// TODO: Implement DOM flex group layout\n};\n\n\n\n
+WindowManager.prototype.reflowSnapGroup = function () {
+	var group = /** @type {WindowGroup} */ (this.windowGroup);
+	var tiles = /** @type {WindowTile[]} */ (group.windows);
+	var section = document.getElementById("window-section");
 
-				dialog.target.style.setProperty("", toPercent(width));
-				dialog.target.style.setProperty("", toPercent(xOffset));
-				
-			}
+	// A window whose element is gone must not go on taking a share of the group, so
+	// its tile goes with it.
+	for (var s = tiles.length - 1; s >= 0; s--) {
+		var stale = tiles[s];
+		var staleId = stale ? stale.id : "";
+		var staleWindow = staleId ? this.windows[staleId] : null;
+		if (stale && !stale.gap && (!staleWindow || !staleWindow.target || !staleWindow.target.parentNode)) tiles.splice(s, 1);
+	}
+
+	var container = this.getSnapGroup();
+	/** @type {Record<string, boolean>} */
+	var members = {};
+	/** @type {HTMLElement[]} */
+	var desired = [];
+
+	// The flex order is the DOM order, so the container has to hold the group's
+	// members in the group's order, spacers included.
+	for (var i = 0; i < tiles.length; i++) {
+		var tile = tiles[i];
+		if (!tile) continue;
+		if (tile.gap) {
+			desired.push(this.getSnapSpacer());
+			continue;
 		}
+		var tileId = tile.id;
+		var tileWindow = tileId ? this.windows[tileId] : null;
+		if (!tileId || !tileWindow || !tileWindow.target) continue;
+		members[tileId] = true;
+		desired.push(tileWindow.target);
+	}
+
+	// A window the group no longer holds goes back to floating in the window section,
+	// which is where windows are created, and gives up the share it was laid out with.
+	for (var id in this.windows) {
+		var dialog = this.windows[id];
+		if (!dialog || !dialog.target || members[id]) continue;
+		dialog.target.style.removeProperty("flex");
+		if (dialog.target.parentNode === container && section) section.appendChild(dialog.target);
+	}
+
+	// Nothing left to lay out: the container goes with the last window out of it.
+	if (!desired.length) {
+		if (container.parentNode) container.parentNode.removeChild(container);
+		return;
+	}
+
+	var host = document.getElementById("snap-layer") || section || document.body;
+	if (container.parentNode !== host) host.appendChild(container);
+
+	// Reordered in place, so a window that is already where it belongs is never
+	// re-inserted: re-inserting an element tears down and reloads any iframe it holds.
+	var cursor = container.firstChild;
+	for (var n = 0; n < desired.length; n++) {
+		var wanted = desired[n];
+		if (!wanted) continue;
+		if (cursor === wanted) {
+			cursor = cursor.nextSibling;
+			continue;
+		}
+		container.insertBefore(wanted, cursor);
+	}
+	while (container.lastChild && desired.indexOf(/** @type {HTMLElement} */ (container.lastChild)) === -1) {
+		container.removeChild(container.lastChild);
+	}
+
+	var areaWidth = this.snapWidth();
+	var areaHeight = this.snapHeight();
+	var remaining = 1;
+	var offset = 0;
+
+	for (var k = 0; k < tiles.length; k++) {
+		var shareTile = tiles[k];
+		if (!shareTile) continue;
+
+		var isLast = k === tiles.length - 1;
+		// Only a gapless group gives its leftover width to the last window.
+		var width = !this.snapInsertGaps && isLast ? remaining : (shareTile.width || 0.5);
+		remaining -= width;
+
+		var member = shareTile.id ? this.windows[shareTile.id] : null;
+		var element = shareTile.gap ? this.getSnapSpacer() : (member && member.target);
+
+		// The share itself: the container distributes its area over the group's items by
+		// these flex weights, so a gap reserves its part without holding a window.
+		if (element) element.style.flex = width + " 1 0%";
+
+		// Recorded in pixels as well, so a drag out of the group can remap the grab point
+		// out of this frame without measuring the element.
+		if (member && !shareTile.gap) member._snapFrame = {
+			x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight
+		};
 
 		offset += width;
 	}
@@ -2908,11 +3042,10 @@ Dialog.prototype.toggleSnapped = function (enable) {
 		this._snappingOut = false;
 		this._snappingOutState = null;
 
-		// Cleared only once the window has finished shrinking back, or it would jump to
-		// its floating size in a single frame.
+		// The share the group laid this window out with is not this state's to clear:
+		// reflowSnapGroup takes it off the element on its way out of the group, which has
+		// already happened by the time the transition settles.
 		if (isSnapped || !target) return;
-		target.style.removeProperty("");
-		target.style.removeProperty("");
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.

@@ -421,10 +421,24 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
-/* Tiled into a snap group. The geometry comes from two custom properties the group
-   writes onto the element, so the window's own width/height/position state is left
-   untouched and comes back intact when it leaves the group. */
-.window.snapped {\n\ttop: 0 !important;\n\tleft: 0 !important;\n\tright: 0 !important;\n\tbottom: 0 !important;\n\theight: 100% !important;\n\twidth: auto !important;\n\tflex: 1 1 0 !important;\n\tborder: none !important;\n\tborder-radius: 0 !important;\n\tz-index: 9999 !important;\n\ttransform: none !important;\n}\n
+/* Tiled into a snap group. The window is laid out as a flex item of the group
+   element the manager keeps in #snap-layer, so the group's box is what sizes and
+   places it and the window's own width/height/position state is left untouched and
+   comes back intact when it leaves the group. The share itself rides inline on the
+   element, which is why no declaration here or in .snap-group may be !important:
+   the group's own flex value has to win. */
+.window.snapped {
+	top: 0 !important;
+	left: 0 !important;
+	right: auto !important;
+	bottom: auto !important;
+	height: 100% !important;
+	width: auto !important;
+	border: none !important;
+	border-radius: 0 !important;
+	z-index: 9999 !important;
+	transform: none !important;
+}
 
 .window.snapped > content {
 	border: 0px solid transparent !important;
@@ -434,9 +448,12 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
-/* The size still moves by geometry, but the position moves by transform, so the
-   compositor-only transform transition has to let width through as well. */
-.compositor-animations .window.snapped.animating {\n\ttransition-property: flex-basis, flex-grow, flex-shrink !important;\n}\n
+/* The share moves the box on the flex properties, and the position rides on
+   transform, so the compositor-only transition has to let both through. */
+.compositor-animations .window.snapped.animating {
+	transition-property: flex-basis, flex-grow, flex-shrink, transform !important;
+}
+
 
 /* Full-height snap: the vertical half of maximizing, without claiming the horizontal.
    Only height and the top edge are taken, so width and x stay the window's own and it
@@ -734,16 +751,28 @@ button:hover {
 	flex-direction: column;
 }
 
+/* A window in the group is a flex item, not a floating box: out of the absolute
+   positioning every other window lives in, sized by the share the group wrote onto
+   it inline. The declarations here are only the fallback for the frame before that
+   share arrives, so none of them may be !important. */
 .snap-group .window {
-	position: relative !important;
-	flex: 0 0 auto;
-}
-
-.snap-group .window.snapped {
 	position: relative !important;
 	flex: 1 1 0;
 	height: 100%;
+	width: auto;
+	z-index: 9999;
+	/* #snap-layer keeps the pointer off everything it holds, so the group has to hand
+	   it back or nothing inside a tiled window could be clicked. */
+	pointer-events: auto;
 }
+
+.snap-group .snap-spacer {
+	/* The share rides inline, exactly like a window's does; a gap only reserves space. */
+	flex: 0 1 auto;
+	min-width: 0;
+	min-height: 0;
+}
+
 
 .snap-group.vertical .window.snapped {
 	height: auto;
