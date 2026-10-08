@@ -3062,7 +3062,11 @@ Dialog.prototype.updateTransform = function (animate) {
 	var y = this._maximizing ? 0 : this.y;
 
 
-	this.animate()
+	this.animate(function() {
+
+	}, "transform", function() {
+		
+	});
 
 	transformElement(this.target, this._transform);
 	// if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
