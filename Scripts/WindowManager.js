@@ -3146,15 +3146,9 @@ Dialog.prototype.messageFrame = function (type, message) {
  */
 Dialog.prototype.updateTransform = function (animate) {
 	if (!(this.useTransform && this.transform)) return;
-
-	var x = this._maximizing ? 0 : this.x;
-	var y = this._maximizing ? 0 : this.y;
 	
-	if (this._maximizing) {
-		this.transform.move(x, y)
-	}
-	
-	this.transform.move()
+	if (this._maximizing) this.transform.move(0, 0);
+	else this.transform.move(this.x, this.y);
 
 
 	if (animate) this.animate(function() {
