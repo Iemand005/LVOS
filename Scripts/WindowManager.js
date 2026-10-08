@@ -171,9 +171,26 @@ function transformElementOld(element, x, y, skew, scaleX, scaleY, rotation) {
 	}
 }
 
-/** @param {HTMLElement} element @param {Transform} transform */
-function transformElement(element, transform) {
+/** @param {HTMLElement} element @param {Transform} t */
+function transformElement(element, t) {
+	var transform = "";
 
+	
+
+	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
+	if (skew) transform += " skewX(" + skew + "deg)";
+	if (scaleX === 1) scaleX = undefined;
+	if (scaleY === 1) scaleY = undefined;
+	if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
+	else {
+		if (scaleX) transform += "scaleX(" + scaleX + ")";
+		if (scaleY) transform += "scaleY(" + scaleY + ")";
+	}
+	if (rotation) transform += "rotate(" + rotation + "deg)";
+
+	else {
+		element.style.transform = transform;
+	}
 }
 
 /**
