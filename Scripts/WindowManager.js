@@ -1780,9 +1780,14 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
  * @param {HTMLElement} target
  */
 function Transformable(target) {
-	this._transform = {};
+	this.target = target;
+
 	/** @type {Transform} */
 	this._transform = {};
+}
+
+Transformable.prototype.update = function() {
+	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout);
 }
 
 //#region Dialog
