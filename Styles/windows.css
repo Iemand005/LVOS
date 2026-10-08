@@ -368,6 +368,7 @@ article, .article {
 }
 
 .window.animating,
+content.animating,
 .window.animating > content,
 .window.animating > .backdrop-clip * {
 	-webkit-transition: all 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
