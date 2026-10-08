@@ -1786,11 +1786,12 @@ function Transformable(target) {
 	this._transform = {};
 }
 
-Transformable.prototype.update = function() {
+/** @param {boolean} animate */
+Transformable.prototype.update = function(animate) {
 	animateElement(this.target, function() {
 		transformElement(this.target, this._transform);
 	}, "transform", function() {
-		
+
 	}, this, timeout);
 }
 
