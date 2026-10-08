@@ -185,11 +185,10 @@ function transformElement(element, t) {
 	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
 	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
 
-	if (t.rotate) transform += "rotate(" + t.rotate + "deg)";
+	if (t.rotate) transform += "rotate(" + toDegrees(t.rotate) + ")";
 
-	else {
-		element.style.transform = transform;
-	}
+	
+	element.style.transform = transform;
 }
 
 /**
