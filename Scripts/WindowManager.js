@@ -400,7 +400,7 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
- * @param {(name: string) => boolean} [onTransitionEnd]
+ * @param {((name: string) => boolean) | string} [onTransitionEnd]
  * @param {(this: T) => void} [onEnd]
  * @param {T} [thisArg]
  * @param {number} [timeout]
@@ -3058,6 +3058,8 @@ Dialog.prototype.updateTransform = function (animate) {
 
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
+
+	this.animate()
 
 	transformElement(this.target, this._transform);
 	// if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
