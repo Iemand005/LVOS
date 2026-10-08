@@ -2786,8 +2786,7 @@ Dialog.prototype.stopAnimating = function () {
  * @param {number} [timeout]
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout) {
-	var element = this.target;
-	if (element) animateElement(element, onToggled, onTransitionEnd, onEnd, this, timeout);
+	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout);
 };
 /**
  * @param {string} className
