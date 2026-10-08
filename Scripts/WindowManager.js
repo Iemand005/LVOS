@@ -3061,6 +3061,8 @@ Dialog.prototype.updateTransform = function (animate) {
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
 
+	this._transform.x = x;
+	this._transform.y = y;
 	this._transform.skewY = this._skew;
 	this._transform.scaleX = this._scaleX;
 	this._transform.scaleY = this._scaleY;
