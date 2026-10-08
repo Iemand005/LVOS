@@ -2434,7 +2434,7 @@ Dialog.prototype.setTitle = function(title) {
 };
 
 Object.defineProperty(Dialog.prototype, "id", {
-	get: function() { return this._id || (this.target && this.target.id); },
+	get: function() { return this._id || (this.target && this.target.id) || "unk"; },
 	set: function(id) {
 		this._id = id;
 		windowManager.windows[id] = this;
