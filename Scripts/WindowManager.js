@@ -1846,6 +1846,9 @@ function Dialog(object, create) {
 	this._rotation = 0;
 
 	/** @type {Transformable | null} */
+	this.transform = null;
+
+	/** @type {Transformable | null} */
 	this._contentTransform = null;
 
 	/** How long the touch-drag downscale animates for, in ms. Must match the transform transition in windows.css; after it elapses the drag stops animating. */
