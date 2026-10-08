@@ -1818,6 +1818,18 @@ Transformable.prototype.move = function(x, y, animate) {
 }
 
 /**
+ * @param {number} [x]
+ * @param {number} [y]
+ * @param {boolean} [update]
+ * @param {boolean} [animate]
+ */
+Transformable.prototype.scale = function(x, y, update, animate) {
+	this._transform.scaleX = x || 1;
+	this._transform.scaleY = y || 1;
+	if (update) this.update(animate);
+}
+
+/**
  * @param {number} x
  * @param {number} [y]
  * @param {number} [z]
