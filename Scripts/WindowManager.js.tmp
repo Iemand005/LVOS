@@ -1283,32 +1283,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  * no gaps are inserted and the last window soaks up whatever width is left over, so
  * the group always fills the area.
  */
-WindowManager.prototype.reflowSnapGroup = function () {
-	var windows = this.windowGroup.windows;
-
-	if (!("length" in windows)) return;
-
-	var areaWidth = this.snapWidth();
-	var areaHeight = this.snapHeight();
-	var remaining = 1;
-	var offset = 0;
-
-	var xOffset = 0;
-	for (var i = 0; i < windows.length; i++) {
-		var tile = windows[i];
-		if (!tile || (typeof tile.id === "undefined")) continue;
-		var isLast = i === windows.length - 1;
-		// Only a gapless group gives its leftover width to the last window.
-		var width = !this.snapInsertGaps && isLast ? remaining : (tile.width || 0.5);
-		remaining -= width;
-
-		// A gap only reserves space; it has no window to place.
-		if (!tile.gap) {
-			var dialog = this.windows[tile.id];
-			if (dialog && dialog.target) {
-				// Recorded in pixels as well, so a drag out of the group can remap the
-				// grab point out of this frame without measuring the element.
-				dialog._snapFrame = { x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight };
+WindowManager.prototype.reflowSnapGroup = function () {\n\t// TODO: Replace CSS variable-based layout with DOM flex group layout\n\t// For now, keep as placeholder logic\n};\n\n
 
 				dialog.target.style.setProperty("--snap-width", toPercent(width));
 				dialog.target.style.setProperty("--snap-x", toPercent(xOffset));
