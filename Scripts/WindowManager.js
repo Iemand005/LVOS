@@ -179,9 +179,9 @@ function transformElement(element, t) {
 
 	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
 	if (t.skewX) transform += " skewX(" + toDegrees(t.skewX) + ")";
-	if (scaleX === 1) scaleX = undefined;
-	if (scaleY === 1) scaleY = undefined;
-	if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
+	if (t.scaleX === 1) t.scaleX = undefined;
+	if (t.scaleY === 1) t.scaleY = undefined;
+	if (t.scaleX && t.scaleY) transform += "scale(" + t.scaleX + "," + t.scaleY + ")";
 	else {
 		if (scaleX) transform += "scaleX(" + scaleX + ")";
 		if (scaleY) transform += "scaleY(" + scaleY + ")";
