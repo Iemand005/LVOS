@@ -173,3 +173,15 @@ interface WindowTile {
 interface WindowGroup {
 	windows: WindowTile[] | WindowGroup;
 }
+
+interface Transform {
+	x?: number;
+	y?: number;
+	skewX?: number;
+	skewY?: number;
+	scaleX?: number;
+	scaleY?: number;
+	rotateX?: number;
+	rotateY?: number;
+	rotateZ?: number;
+}
