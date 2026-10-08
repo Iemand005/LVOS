@@ -3905,3 +3905,5 @@ function genericTyped(type) {
 }
 
 const hey = genericTyped(document.createElement("button"))
+
+const meow = document.createElement("applet");
