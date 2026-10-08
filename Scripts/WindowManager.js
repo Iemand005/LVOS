@@ -3566,7 +3566,7 @@ Dialog.prototype.rotate = function(x, y, z, animate) {
 		this._transform.rotateZ = z;
 	}
 
-	this.updateTransform();
+	this.updateTransform(animate);
 }
 
 /** @param {string} [url] */
