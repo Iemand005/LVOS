@@ -3051,12 +3051,16 @@ Dialog.prototype.messageFrame = function (type, message) {
 };
 
 /**
- * @param {boolean} animate
+ * @param {boolean} [animate]
  */
 Dialog.prototype.updateTransform = function (animate) {
+	if (!(this.useTransform && this.target)) return;
+
 	var x = this._maximizing ? 0 : this.x;
 	var y = this._maximizing ? 0 : this.y;
-	if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
+
+	transformElement(this.target, this._transform);
+	// if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
 	if (!this.target) return;
