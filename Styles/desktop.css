@@ -286,7 +286,7 @@ section#desktop[flipped] article#metrobody {
 #window-section {
 	height: 100%;
 
-	perspective: 100px; /* TODO: do this maybe iniline per window*/
+	/* perspective: 100px; TODO: do this maybe iniline per window */
 }
 
 aside#charms {
