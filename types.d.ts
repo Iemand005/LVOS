@@ -174,6 +174,8 @@ interface WindowGroup {
 	windows: WindowTile[] | WindowGroup;
 }
 
+type ResizeDirection = "bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left";
+
 interface Transform {
 	x?: number;
 	y?: number;

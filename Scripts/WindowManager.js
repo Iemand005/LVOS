@@ -3231,11 +3231,6 @@ Dialog.prototype.setHeight = function (height, update, animate) {
 		else this.updateHeight();
 	}
 };
-/**
- * Which handle of the window a resize is being performed by. Used both to keep the
- * opposite edges fixed in place while resizing and to enforce the aspect-ratio constraint.
- * @typedef {"bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left"} ResizeDirection
- */
 
 /**
  * @param {number} [width]
