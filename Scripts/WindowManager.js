@@ -1096,7 +1096,7 @@ WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
  * resizing claims nothing either, or a small pull off the edge would bounce straight
  * back into full height on release.
  * @param {Dialog} dialog
- * @param {number} [direction] The gesture's drag direction, read before it is reset.
+ * @param {number} direction The gesture's drag direction, read before it is reset.
  *   Only ever unset before a gesture has set one, and an unset direction claims nothing.
  * @param {number} x Pointer position.
  * @param {number} y Pointer position.
