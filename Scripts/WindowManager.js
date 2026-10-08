@@ -175,7 +175,7 @@ function transformElementOld(element, x, y, skew, scaleX, scaleY, rotation) {
 function transformElement(element, t) {
 	var transform = "";
 
-	
+	if (t.x && t.y) transform += "translate(" + toPixels(t.x) + "," + toPixels(t.y) + ")";
 
 	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
 	if (skew) transform += " skewX(" + skew + "deg)";
