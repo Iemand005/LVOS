@@ -178,7 +178,7 @@ function transformElement(element, t) {
 	if (t.x && t.y) transform += "translate(" + toPixels(t.x) + "," + toPixels(t.y) + ")";
 
 	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
-	if (skew) transform += " skewX(" + skew + "deg)";
+	if (t.skewX) transform += " skewX(" + toDegrees(t.skewX) + ")";
 	if (scaleX === 1) scaleX = undefined;
 	if (scaleY === 1) scaleY = undefined;
 	if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
