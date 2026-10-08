@@ -3066,13 +3066,12 @@ Dialog.prototype.updateTransform = function (animate) {
 	this._transform.scaleY = this._scaleY;
 
 
-	this.animate(function() {
+	if (animate) this.animate(function() {
 		if (this.target) transformElement(this.target, this._transform);
 	}, "transform", function() {
 
 	}, 1000);
-
-	transformElement(this.target, this._transform);
+	else transformElement(this.target, this._transform);
 	// if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
