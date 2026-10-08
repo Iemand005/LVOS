@@ -1233,7 +1233,7 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 	var firstTile = tiles[0];
 	if (!firstTile || !firstTile.id) return;
 	var dialog = this.windows[firstTile.id];
-	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("--snap-x")) === 0 ? "left" : "right";
+	if (!side && dialog && dialog.target) side = parseFloat(dialog.target.style.getPropertyValue("")) === 0 ? "left" : "right";
 
 	// Opposite side: a window snapped right is held there by the gap on its left.
 	tiles.splice(side === "right" ? 0 : 1, 0, { gap: true, width: this.snapGapWidth });
@@ -1283,11 +1283,11 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  * no gaps are inserted and the last window soaks up whatever width is left over, so
  * the group always fills the area.
  */
-WindowManager.prototype.reflowSnapGroup = function () {\n\t// TODO: Replace CSS variable-based layout with DOM flex group layout\n\t// For now, keep as placeholder logic\n};\n\n
+WindowManager.prototype.reflowSnapGroup = function () {\n\tvar group = this.windowGroup;\n\tvar windows = group.windows;\n\tif (!windows || !windows.length) return;\n\t// TODO: Implement DOM flex group layout\n};\n\n\n\n
 
-				dialog.target.style.setProperty("--snap-width", toPercent(width));
-				dialog.target.style.setProperty("--snap-x", toPercent(xOffset));
-				xOffset = width;
+				dialog.target.style.setProperty("", toPercent(width));
+				dialog.target.style.setProperty("", toPercent(xOffset));
+				
 			}
 		}
 
@@ -2911,8 +2911,8 @@ Dialog.prototype.toggleSnapped = function (enable) {
 		// Cleared only once the window has finished shrinking back, or it would jump to
 		// its floating size in a single frame.
 		if (isSnapped || !target) return;
-		target.style.removeProperty("--snap-width");
-		target.style.removeProperty("--snap-x");
+		target.style.removeProperty("");
+		target.style.removeProperty("");
 	}, function () {
 		// Required, not optional: toggleClassAnimated only calls setClass from this
 		// callback, so omitting it means the class is never applied at all.

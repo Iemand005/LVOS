@@ -711,3 +711,60 @@ button:hover {
     frame-sizing: content-height;
   }
 }
+
+/* Snap groups for DOM-based flex layout (no CSS variables) */
+#snap-layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+}
+
+.snap-group {
+	display: flex;
+	align-items: stretch;
+	width: 100%;
+	height: 100%;
+	flex-direction: row;
+}
+
+.snap-group.vertical {
+	flex-direction: column;
+}
+
+.snap-group .window {
+	position: relative !important;
+	flex: 0 0 auto;
+}
+
+.snap-group .window.snapped {
+	position: relative !important;
+	flex: 1 1 0;
+	height: 100%;
+}
+
+.snap-group.vertical .window.snapped {
+	height: auto;
+	width: 100%;
+}
+
+.snap-splitter {
+	flex: 0 0 4px;
+	background: transparent;
+	cursor: col-resize;
+	z-index: 10000;
+	pointer-events: auto;
+}
+
+.snap-group.vertical .snap-splitter {
+	flex: 0 0 4px;
+	height: 4px;
+	width: 100%;
+	cursor: row-resize;
+}
+
+.snap-splitter:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
