@@ -1845,6 +1845,8 @@ function Dialog(object, create) {
 	this._scaleY = 0;
 	this._rotation = 0;
 
+	this._contentTransform = new Transformable(this.content);
+
 	/** How long the touch-drag downscale animates for, in ms. Must match the transform transition in windows.css; after it elapses the drag stops animating. */
 	this.dragScaleDuration = 280;
 	/** @type {boolean} True while the touch-drag downscale is playing, so the drag handlers do not strip the "animating" class out from under it. */
@@ -2491,6 +2493,15 @@ Object.defineProperty(Dialog.prototype, "content", {
 	get: function() {
 		if (!this.target) return null;
 		return this.getElementByTagOrClassName("content");
+	}
+});
+
+Object.defineProperty(Dialog.prototype, "contentTransform", {
+	get: function() {
+		if (this._contentTransform) return this._contentTransform;
+		var content = this.content;
+		if (!content) return null;
+		return this._contentTransform = new Transformable(content);
 	}
 });
 
