@@ -3049,8 +3049,14 @@ Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
 	if (frame) LVMessenger.broadcastToChild(type, frame, message);
 };
-Dialog.prototype.updateTransform = function () {
-	if (this.useTransform && this.target) transformElementOld(this.target, this._maximizing ? 0 : this.x, this._maximizing ? 0 : this.y, this._skew, this._scaleX, this._scaleY, this._rotation);
+
+/**
+ * @param {boolean} animate
+ */
+Dialog.prototype.updateTransform = function (animate) {
+	var x = this._maximizing ? 0 : this.x;
+	var y = this._maximizing ? 0 : this.y;
+	if (this.useTransform && this.target) transformElementOld(this.target, x, y, this._skew, this._scaleX, this._scaleY, this._rotation);
 };
 Dialog.prototype.updatePosition = function() {
 	if (!this.target) return;
@@ -3526,13 +3532,20 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 
 /**
  * @param {number} x
- * @param {number} y
- * @param {number} z
- * @param {boolean} animate
+ * @param {number} [y]
+ * @param {number} [z]
+ * @param {boolean} [animate]
  */
 Dialog.prototype.rotate = function(x, y, z, animate) {
-	if ()
-	this._transform.rota
+	if (y === undefined && z === undefined)
+		this._transform.rotate = x;
+	else {
+		this._transform.rotateX = x;
+		this._transform.rotateY = y;
+		this._transform.rotateZ = z;
+	}
+
+	this.updateTransform();
 }
 
 /** @param {string} [url] */
