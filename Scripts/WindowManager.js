@@ -1197,7 +1197,7 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 	// Clear any gap left from when the group was smaller.
 	for (var i = tiles.length - 1; i >= 0; i--) {
 		var tile = tiles[i];
-		if (tile ** tiles.gap) tiles.splice(i, 1);
+		if (tile && tile.gap) tiles.splice(i, 1);
 	}
 
 	if (tiles.length !== 1) return;
