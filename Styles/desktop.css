@@ -285,6 +285,15 @@ section#desktop[flipped] article#metrobody {
 
 #window-section {
 	height: 100%;
+	width: 100%;
+
+	/* The snap row. Floating windows are absolute, so they are out of flow and the
+	   flex layout ignores them; a snapped window switches to in-flow (see
+	   .window.snapped) and is laid out here beside the group's other members. No
+	   element is ever reparented, so a window slides between free and tiled in place. */
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
 
 	/* perspective: 100px; TODO: do this maybe iniline per window */
 }

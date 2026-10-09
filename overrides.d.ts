@@ -91,6 +91,8 @@ declare global {
 	interface HTMLElement {
 		msRequestFullscreen?: () => Promise<void> | void;
 		// ontransitionend?: () => void;
+		/** rAF id of the FLIP that is currently playing its frame on this element, if any. */
+		_flipFrame?: number;
 	}
 
 	interface HTMLElementEventMap {

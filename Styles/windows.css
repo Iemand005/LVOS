@@ -421,13 +421,13 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
-/* Tiled into a snap group. The window is laid out as a flex item of the group
-   element the manager keeps in #snap-layer, so the group's box is what sizes and
-   places it and the window's own width/height/position state is left untouched and
-   comes back intact when it leaves the group. The share itself rides inline on the
-   element, which is why no declaration here or in .snap-group may be !important:
-   the group's own flex value has to win. */
+/* Tiled into the window section's snap row. Switching to position: relative takes
+   the window out of the absolute positioning every floating window uses and makes it
+   an in-flow flex item of #window-section, sized by the share reflowSnapGroup writes
+   onto it inline. The window never leaves its parent, so its own width/height/position
+   state is left untouched and comes back intact when it leaves the group. */
 .window.snapped {
+	position: relative;
 	top: 0 !important;
 	left: 0 !important;
 	right: auto !important;
@@ -448,10 +448,13 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 	transform: translate(0px, 0px) !important;
 }
 
-/* The share moves the box on the flex properties, and the position rides on
-   transform, so the compositor-only transition has to let both through. */
-.compositor-animations .window.snapped.animating {
-	transition-property: flex-basis, flex-grow, flex-shrink, transform !important;
+/* The absolute <-> flex switch is FLIP-animated: the element is laid out at its new
+   frame, then slid and scaled back over the old one with the independent translate and
+   scale properties, which then ease to identity. Only those two run during the switch,
+   so the flex share is applied up front instead of double-animating the size. */
+.window.flipping.animating,
+.compositor-animations .window.flipping.animating {
+	transition-property: translate, scale !important;
 }
 
 
@@ -729,54 +732,14 @@ button:hover {
   }
 }
 
-/* Snap groups for DOM-based flex layout (no CSS variables) */
-#snap-layer {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	pointer-events: none;
-}
-
-.snap-group {
-	display: flex;
-	align-items: stretch;
-	width: 100%;
-	height: 100%;
-	flex-direction: row;
-}
-
-.snap-group.vertical {
-	flex-direction: column;
-}
-
-/* A window in the group is a flex item, not a floating box: out of the absolute
-   positioning every other window lives in, sized by the share the group wrote onto
-   it inline. The declarations here are only the fallback for the frame before that
-   share arrives, so none of them may be !important. */
-.snap-group .window {
-	position: relative !important;
-	flex: 1 1 0;
-	height: 100%;
-	width: auto;
-	z-index: 9999;
-	/* #snap-layer keeps the pointer off everything it holds, so the group has to hand
-	   it back or nothing inside a tiled window could be clicked. */
-	pointer-events: auto;
-}
-
-.snap-group .snap-spacer {
+/* The gap that holds a lone snapped window off the far edge: one empty flex item in
+   the window section that reserves whatever share reflowSnapGroup gives it. */
+.snap-spacer {
 	/* The share rides inline, exactly like a window's does; a gap only reserves space. */
 	flex: 0 1 auto;
 	min-width: 0;
 	min-height: 0;
-}
-
-
-.snap-group.vertical .window.snapped {
-	height: auto;
-	width: 100%;
+	pointer-events: none;
 }
 
 .snap-splitter {
@@ -785,13 +748,6 @@ button:hover {
 	cursor: col-resize;
 	z-index: 10000;
 	pointer-events: auto;
-}
-
-.snap-group.vertical .snap-splitter {
-	flex: 0 0 4px;
-	height: 4px;
-	width: 100%;
-	cursor: row-resize;
 }
 
 .snap-splitter:hover {

@@ -400,6 +400,62 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
 }
 
 /**
+ * Plays a layout change on an element as a FLIP: the element is measured, the change
+ * is applied, the new frame is measured, and the old frame is then slid and scaled back
+ * over the new one so the browser can ease between them. The independent translate and
+ * scale properties are used rather than transform, because a snapped window pins
+ * transform to none and keeps them free for exactly this.
+ * @param {HTMLElement} element
+ * @param {(this: any) => void} [onToggled] Applies the change. Runs synchronously.
+ * @param {any} [thisArg]
+ */
+function flipElement(element, onToggled, thisArg) {
+	var first = element.getBoundingClientRect();
+
+	// Suppress transitions while the change and the compensation are written, so the
+	// element cannot ease from its un-inverted frame to the inverted one.
+	var previousTransition = element.style.transition;
+	element.style.transition = "none";
+
+	if (onToggled) onToggled.call(thisArg || element);
+
+	var last = element.getBoundingClientRect();
+	var dx = first.left - last.left;
+	var dy = first.top - last.top;
+	var scaleX = last.width ? first.width / last.width : 1;
+	var scaleY = last.height ? first.height / last.height : 1;
+
+	element.style.transformOrigin = "top left";
+	element.style.translate = toPixels(dx) + " " + toPixels(dy);
+	element.style.scale = scaleX + " " + scaleY;
+
+	// Commit the inverted frame as the transition's starting point.
+	void element.offsetWidth;
+
+	element.style.transition = previousTransition;
+	element.classList.add("animating", "flipping");
+
+	element._flipFrame = window.requestAnimationFrame(function() {
+		element._flipFrame = 0;
+		element.style.translate = "0px 0px";
+		element.style.scale = "1";
+	});
+}
+
+/** Undoes everything {@link flipElement} wrote, so the element is back to its own state.
+ * @param {HTMLElement} element */
+function clearFlip(element) {
+	if (element._flipFrame) {
+		window.cancelAnimationFrame(element._flipFrame);
+		element._flipFrame = 0;
+	}
+	element.style.translate = "";
+	element.style.scale = "";
+	element.style.transformOrigin = "";
+	element.classList.remove("flipping");
+}
+
+/**
  * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
@@ -407,8 +463,9 @@ function removeComments(element){ // Removes the comments of an HTMLElement base
  * @param {(this: T) => void} [onEnd]
  * @param {T} [thisArg]
  * @param {number} [timeout]
+ * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
-function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout) {
+function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
 	/** @type {T} */
 	// @ts-ignore
 	var boundContext = thisArg || element;
@@ -420,6 +477,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (element._animationState === state) element._animationState = null;
 
 		element.classList.remove("animating");
+		if (flip) clearFlip(element);
 		if (onEnd) onEnd.call(boundContext);
 	};
 
@@ -431,10 +489,11 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		if (previous.timer) clearTimeout(previous.timer);
 		if (previous.frame) window.cancelAnimationFrame(previous.frame);
 		if (previous.handler) element.removeEventListener(transitionEndEvent, previous.handler, false);
+		if (previous.flip) clearFlip(element);
 	}
 
-	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean }} */
-	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true };
+	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean }} */
+	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip };
 
 	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
@@ -445,7 +504,11 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 	state.timer = timeout && setTimeout(callEnd, timeout);
 
 	if (supportsTransitions) {
-		element.classList.add("animating");
+		if (flip) {
+			// A FLIP has to measure the frames around the change, so it runs now rather
+			// than from the rAF the plain path defers the toggle to.
+			flipElement(element, onToggled, boundContext);
+		} else element.classList.add("animating");
 
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
@@ -465,10 +528,12 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
-	state.frame = window.requestAnimationFrame(function() {
-		state.frame = 0;
-		if (onToggled) onToggled.call(boundContext);
-	});
+	if (!flip || !supportsTransitions) {
+		state.frame = window.requestAnimationFrame(function() {
+			state.frame = 0;
+			if (onToggled) onToggled.call(boundContext);
+		});
+	}
 }
 
 //#endregion
@@ -645,11 +710,7 @@ function WindowManager() {
 	/** @type {WindowGroup} */
 	this.windowGroup = { windows: [] };
 
-	/** The flex container the snap group lays its windows out in, created on demand.
-	 * @type {HTMLElement | null} */
-	this._snapGroup = null;
-
-	/** The element that reserves a gap tile's share of the group.
+	/** The element that reserves a gap tile's share of the snap row.
 	 * @type {HTMLElement | null} */
 	this._snapSpacer = null;
 
@@ -1218,8 +1279,10 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
 
 	if (this.snapInsertGaps) this.fitSnapGaps(windows, side);
 
-	dialog.toggleSnapped(true);
+	// Lay the group out first: the FLIP toggleSnapped runs measures the frame the flex
+	// layout produced, so the share has to be in place before the class lands.
 	this.reflowSnapGroup();
+	dialog.toggleSnapped(true);
 };
 
 /**
@@ -1290,20 +1353,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 };
 
 /**
- * The flex container the snap group lays its windows out in. Created on demand and
- * kept attached while the group holds anything, so it never has to be rebuilt.
- * @returns {HTMLElement}
- */
-WindowManager.prototype.getSnapGroup = function () {
-	if (!this._snapGroup) {
-		this._snapGroup = document.createElement("div");
-		this._snapGroup.className = "snap-group";
-	}
-	return this._snapGroup;
-};
-
-/**
- * The flex item that holds a gap tile's share of the group. A gap only reserves
+ * The flex item that holds a gap tile's share of the snap row. A gap only reserves
  * space, so it is a single empty element reused across reflows.
  * @returns {HTMLElement}
  */
@@ -1316,11 +1366,12 @@ WindowManager.prototype.getSnapSpacer = function () {
 };
 
 /**
- * Lays the group out as a flex container: its windows become the flex items of the one
- * element {@link WindowManager#getSnapGroup} keeps in #snap-layer, in the group's
- * order, each taking the share of the area the group holds for it. That share rides
- * inline on the element as flex, so the window's own geometry state is never written
- * and comes back intact when it leaves the group.
+ * Lays the snap group out across #window-section: the section itself is the flex row,
+ * so its members are the group's windows in the group's order, each taking the share of
+ * the area the group holds for it. That share and the order ride inline on the element,
+ * so the window's own geometry state is never written and comes back intact when it
+ * leaves the group, and no element is ever reparented — a tiled window holding an
+ * iframe is never torn down and reloaded.
  *
  * Every window takes its own width, and gap tiles only reserve space, so a lone tiled
  * window stays at 50% and leaves the rest of the desktop free to drag a second window
@@ -1342,90 +1393,71 @@ WindowManager.prototype.reflowSnapGroup = function () {
 		if (stale && !stale.gap && (!staleWindow || !staleWindow.target || !staleWindow.target.parentNode)) tiles.splice(s, 1);
 	}
 
-	var container = this.getSnapGroup();
 	/** @type {Record<string, boolean>} */
 	var members = {};
-	/** @type {HTMLElement[]} */
-	var desired = [];
-
-	// The flex order is the DOM order, so the container has to hold the group's
-	// members in the group's order, spacers included.
-	for (var i = 0; i < tiles.length; i++) {
-		var tile = tiles[i];
-		if (!tile) continue;
-		if (tile.gap) {
-			desired.push(this.getSnapSpacer());
-			continue;
-		}
-		var tileId = tile.id;
-		var tileWindow = tileId ? this.windows[tileId] : null;
-		if (!tileId || !tileWindow || !tileWindow.target) continue;
-		members[tileId] = true;
-		desired.push(tileWindow.target);
+	for (var m = 0; m < tiles.length; m++) {
+		var memberTile = tiles[m];
+		if (memberTile && memberTile.id) members[memberTile.id] = true;
 	}
 
-	// A window the group no longer holds goes back to floating in the window section,
-	// which is where windows are created, and gives up the share it was laid out with.
+	// A window the group no longer holds goes back to floating and gives up the share
+	// it was laid out with. Its element is already a child of the section, which is
+	// where every window is created, so there is nothing to move: clearing flex/order
+	// drops it back out of the flex row into the absolute box it floats in.
 	for (var id in this.windows) {
 		var dialog = this.windows[id];
 		if (!dialog || !dialog.target || members[id]) continue;
 		dialog.target.style.removeProperty("flex");
-		if (dialog.target.parentNode === container && section) section.appendChild(dialog.target);
+		dialog.target.style.removeProperty("order");
 	}
 
-	// Nothing left to lay out: the container goes with the last window out of it.
-	if (!desired.length) {
-		if (container.parentNode) container.parentNode.removeChild(container);
-		return;
-	}
-
-	var host = document.getElementById("snap-layer") || section || document.body;
-	if (container.parentNode !== host) host.appendChild(container);
-
-	// Reordered in place, so a window that is already where it belongs is never
-	// re-inserted: re-inserting an element tears down and reloads any iframe it holds.
-	var cursor = container.firstChild;
-	for (var n = 0; n < desired.length; n++) {
-		var wanted = desired[n];
-		if (!wanted) continue;
-		if (cursor === wanted) {
-			cursor = cursor.nextSibling;
-			continue;
-		}
-		container.insertBefore(wanted, cursor);
-	}
-	while (container.lastChild && desired.indexOf(/** @type {HTMLElement} */ (container.lastChild)) === -1) {
-		container.removeChild(container.lastChild);
-	}
+	if (!section) return;
 
 	var areaWidth = this.snapWidth();
 	var areaHeight = this.snapHeight();
 	var remaining = 1;
 	var offset = 0;
+	/** @type {HTMLElement | null} */
+	var usedSpacer = null;
 
 	for (var k = 0; k < tiles.length; k++) {
-		var shareTile = tiles[k];
-		if (!shareTile) continue;
+		var tile = tiles[k];
+		if (!tile) continue;
 
 		var isLast = k === tiles.length - 1;
 		// Only a gapless group gives its leftover width to the last window.
-		var width = !this.snapInsertGaps && isLast ? remaining : (shareTile.width || 0.5);
+		var width = !this.snapInsertGaps && isLast ? remaining : (tile.width || 0.5);
 		remaining -= width;
 
-		var member = shareTile.id ? this.windows[shareTile.id] : null;
-		var element = shareTile.gap ? this.getSnapSpacer() : (member && member.target);
+		var member = tile.id ? this.windows[tile.id] : null;
+		var element = tile.gap ? this.getSnapSpacer() : (member && member.target);
+		if (!element) continue;
 
-		// The share itself: the container distributes its area over the group's items by
-		// these flex weights, so a gap reserves its part without holding a window.
-		if (element) element.style.flex = width + " 1 0%";
+		if (element.parentNode !== section) section.appendChild(element);
+
+		// The share and the order ride inline. The section distributes its area over the
+		// items by these flex weights, so a gap reserves its part without holding a
+		// window, and flex order is what lays the tiles out side by side without any
+		// DOM movement.
+		element.style.order = String(k);
+		element.style.flex = width + " 1 0%";
+		if (tile.gap) usedSpacer = element;
 
 		// Recorded in pixels as well, so a drag out of the group can remap the grab point
 		// out of this frame without measuring the element.
-		if (member && !shareTile.gap) member._snapFrame = {
+		if (member && !tile.gap) member._snapFrame = {
 			x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight
 		};
 
 		offset += width;
+	}
+
+	// The single reusable gap spacer goes with the gap it was reserving.
+	var spacer = /** @type {HTMLElement | null} */ (this._snapSpacer);
+	if (spacer && usedSpacer !== spacer) {
+		spacer.style.removeProperty("order");
+		spacer.style.removeProperty("flex");
+		if (spacer.parentNode) spacer.parentNode.removeChild(spacer);
 	}
 };
 
@@ -2987,9 +3019,10 @@ Dialog.prototype.stopAnimating = function () {
  * @param {TransitionEndCallback} [onTransitionEnd]
  * @param {(this:Dialog)=>void} [onEnd]
  * @param {number} [timeout]
+ * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
-Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout) {
-	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout);
+Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout, flip) {
+	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
 };
 /**
  * @param {string} className
@@ -3009,13 +3042,33 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (onToggled) onToggled.call(self, enabled);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
+/**
+ * Same as {@link Dialog#toggleClassAnimated}, but plays the class change as a FLIP.
+ * Used for tiling, where the class switches the window between absolute positioning and
+ * an in-flow flex item: a layout-model change no transition can interpolate on its own.
+ * @param {string} className
+ * @param {boolean} [force]
+ * @param {TransitionEndCallback} [onTransitionEnd]
+ * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
+ * @param {number} [timeout]
+ */
+Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, onEnd, timeout) {
+	var self = this;
+	var enabled = false;
+	this.animate(function() {
+		if (self.target) enabled = setClass(self.target, className, force);
+	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout, true);
+};
 
 /**
  * Tiled state, the sibling of maximized: purely visual, so the window keeps its own
- * width/height/position and returns to them untouched when it leaves the group.
+ * width/height/position and returns to them untouched when it leaves the group. The
+ * window stays a child of #window-section the whole time; the class only switches it
+ * between the absolute box it floats in and a flex item of the section's snap row.
  *
- * Animated through the same toggleClassAnimated path maximizing uses, so tiling gets
- * the identical transition rather than a second implementation of it.
+ * The switch is played as a FLIP rather than a plain transition, because occupying a
+ * different layout box is not something the browser can interpolate: the frames are
+ * measured either side of the change and the old one is eased back over the new one.
  * @param {boolean} [enable]
  */
 Dialog.prototype.toggleSnapped = function (enable) {
@@ -3031,24 +3084,13 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOut = !enable;
 	this._snappingOutState = null;
 
-	this.toggleClassAnimated("snapped", enable, function (name) {
-		// transform only. left holds at 0 and never animates any more, and ending on
-		// width would cut the animation off at a fixed 280ms while a drag is still
-		// restarting transform, jumping the window to the cursor. Letting transform
-		// settle means it lands under the cursor instead; the timeout is the backstop
-		// for a drag that never pauses long enough for that.
-		return name === "transform";
-	}, function (isSnapped) {
+	this.toggleClassFlip("snapped", enable, function (name) {
+		// The FLIP rides on translate and scale, so either settling means the switch
+		// has arrived.
+		return name === "translate" || name === "scale";
+	}, function () {
 		this._snappingOut = false;
 		this._snappingOutState = null;
-
-		// The share the group laid this window out with is not this state's to clear:
-		// reflowSnapGroup takes it off the element on its way out of the group, which has
-		// already happened by the time the transition settles.
-		if (isSnapped || !target) return;
-	}, function () {
-		// Required, not optional: toggleClassAnimated only calls setClass from this
-		// callback, so omitting it means the class is never applied at all.
 	}, 1000);
 
 	// Which animation owns the element, so stopAnimating can tell this one from the

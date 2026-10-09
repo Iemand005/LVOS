@@ -15,22 +15,30 @@ test('debug touch tiling geometry', async ({ vulpOS }) => {
 		const info = await window.evaluate((w: any) => {
 			const el = w.target as HTMLElement;
 			const section = document.getElementById('window-section')!;
-			const layer = document.getElementById('snap-layer');
-			const group = layer ? layer.querySelector('.snap-group') : null;
 			const cs = getComputedStyle(el);
+			const rowItems = section ? Array.from(section.children).filter(c => {
+				return getComputedStyle(c).position !== 'absolute' || c.nodeName.toLowerCase() === 'template';
+			}).map(c => {
+				const cls = (c as HTMLElement).className;
+				return (c as HTMLElement).tagName.toLowerCase() + '.' + (cls || '(noclass)') + ' pos=' + getComputedStyle(c).position;
+			}) : [];
 			return {
 				snapped: w.snapped,
 				rect: el.getBoundingClientRect().toJSON(),
 				sectionW: section.getBoundingClientRect().width,
 				parent: el.parentElement ? el.parentElement.className + '#' + el.parentElement.id : null,
 				inlineFlex: el.style.flex,
+				inlineOrder: el.style.order,
 				computedWidth: cs.width,
 				computedFlex: cs.flex,
 				transform: cs.transform,
+				translate: cs.translate,
+				scale: cs.scale,
 				transition: cs.transitionProperty,
 				animating: el.classList.contains('animating'),
+				flipping: el.classList.contains('flipping'),
 				useScale: el.classList.contains('use-scale'),
-				group: group ? Array.from(group.children).map(c => (c as HTMLElement).className + ' w=' + c.getBoundingClientRect().width + ' flex=' + (c as HTMLElement).style.flex) : null,
+				row: rowItems,
 			};
 		});
 		console.log(label + ': ' + JSON.stringify(info, null, 1));
