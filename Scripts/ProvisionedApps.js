@@ -288,6 +288,11 @@ var applications = [
 		title: "Tepartive.NET",
 		id: "tepartive",
 		src: "https://tepartive.net/"
+	},
+	{
+		title: "ColourTool",
+		id:"color-tool",
+		src: "Applications/ColorTool/colors.html"
 	}
 ];
 
