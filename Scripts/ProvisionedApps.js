@@ -212,8 +212,9 @@ var applications = [
 	},
 	{
 		title: "Monaco",
-		id: "foxyz.monaco",
-		src: "./Applications/Monaco/monaco.html"
+		id: "monaco",
+		src: "./Applications/Monaco/monaco.html",
+		iconUrl: "https://code.visualstudio.com/favicon.ico"
 	},
 	{
 		title: "Furzona Lite",
