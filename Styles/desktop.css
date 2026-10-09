@@ -632,6 +632,10 @@ body > canvas {
 	pointer-events: auto;
 }
 
+main > svg {
+	display: none;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
