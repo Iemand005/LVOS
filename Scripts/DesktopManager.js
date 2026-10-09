@@ -158,6 +158,10 @@ function createDesktop() {
 
     var wallpaper = document.getElementById("wallpaper")?.cloneNode(true);
     windowSection.appendChild(wallpaper);
+
+    var dockArea = document.getElementById("dock-area")?.cloneNode(true);
+    windowSection.appendChild(dockArea);
+
 }
 
 window.addEventListener("load", onLoad, false);
