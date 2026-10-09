@@ -1344,10 +1344,19 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 	var index = this.findSnapTile(dialog.id);
 	if (index === -1) return;
 
+	var survivorSide;
+	if (windows.length === 2 && this.snapInsertGaps) {
+		if (index === 0) {
+			survivorSide = "right";
+		} else if (index === 1) {
+			survivorSide = "left";
+		}
+	}
+
 	windows.splice(index, 1);
 	dialog.toggleSnapped(false);
 
-	if (this.snapInsertGaps) this.fitSnapGaps(windows);
+	if (this.snapInsertGaps) this.fitSnapGaps(windows, survivorSide);
 
 	this.reflowSnapGroup();
 };

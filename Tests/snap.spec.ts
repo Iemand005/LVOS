@@ -150,3 +150,33 @@ test('lets go of a full-height snap by dragging the top edge down', async ({ vul
 	expectNear(drawn.y, drawn.sectionY + pulled);
 	expectNear(drawn.height, drawn.sectionHeight - pulled);
 });
+
+test('keeps the right window on the right half when unsnapping the left window', async ({ vulpOS }) => {
+	const win1 = await vulpOS.openCube();
+	const win2 = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+
+	// Snap first to left, second to right
+	await vulpOS.drag(await vulpOS.titleBarPoint(win1), { x: 2, y: 400 });
+	await vulpOS.drag(await vulpOS.titleBarPoint(win2), { x: 1000, y: 400 });
+
+	expect((await vulpOS.state(win1)).snapped).toBe(true);
+	expect((await vulpOS.state(win2)).snapped).toBe(true);
+
+	const tiled = await vulpOS.measure(win2);
+	const centre = {
+		x: tiled.sectionX + tiled.sectionWidth / 2,
+		y: tiled.sectionY + tiled.sectionHeight / 2,
+	};
+
+	// Unsnap left window by dragging it to center
+	await vulpOS.drag(await vulpOS.titleBarPoint(win1), centre);
+	expect((await vulpOS.state(win1)).snapped).toBe(false);
+
+	// Right window should remain snapped on right half
+	const after = await vulpOS.state(win2);
+	expect(after.snapped).toBe(true);
+	const afterMeasured = await vulpOS.measure(win2);
+	expectNear(afterMeasured.width, afterMeasured.sectionWidth / 2);
+	expectNear(afterMeasured.x, afterMeasured.sectionX + afterMeasured.sectionWidth / 2);
+});
