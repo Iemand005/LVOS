@@ -25,6 +25,13 @@ var applications = [
 		minHeight: 240,
 		src: "./Applications/Calculator/calculator.html"
 	},
+	{
+		title: "Color Tool",
+		id: "colortool",
+		minWidth: 180,
+		minHeight: 240,
+		src: "./Applications/ColorTool/colors.html"
+	},
 	{ title: "Example", id: "0", src: "./example.html" },
 	{
 		title: "Camera",

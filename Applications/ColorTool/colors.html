@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Color Picker</title>
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Color Tool</title>
+	<link rel="stylesheet" href="./colors.css">
+	<script src="./colors.js" defer></script>
 </head>
 <body>
-	
+	<div id="preview" class="preview"></div>
+	<form>
+		<input type="text" id="hex" name="hex" class="hex" value="#ff0000" placeholder="#rrggbb" maxlength="7" autocomplete="off" autocapitalize="off" spellcheck="false">
+	</form>
 </body>
 </html>
