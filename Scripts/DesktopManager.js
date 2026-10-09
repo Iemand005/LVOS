@@ -142,6 +142,8 @@ var onLoad = function () {
     document.onselectstart = function () {
         return false;
     };
+
+    scrollTabs.addTab(document.querySelector("main"))
 };
 
 window.addEventListener("load", onLoad, false);
@@ -684,5 +686,3 @@ picker.register();
 
 
 var scrollTabs = new TabScroller();
-
-scrollTabs.addTab(document.getElementById("desktop"))
