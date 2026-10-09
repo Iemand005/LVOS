@@ -23,6 +23,7 @@
 	"include": [
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
+		"ScrollTabs/**/*.js",
 		"*.d.ts",
 		"Tests/**/*"
 	],

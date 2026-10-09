@@ -681,3 +681,6 @@ var picker = new ElementPicker({
     }
 });
 picker.register();
+
+
+var scrollTabs = new TabScroller();
