@@ -29,7 +29,7 @@ function stopVibrations() {
 }
 
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
-var scrollTabs = new TabScroller();
+var scrollTabs = null;
 
 var onLoad = function () {
 
@@ -143,6 +143,8 @@ var onLoad = function () {
     document.onselectstart = function () {
         return false;
     };
+
+    scrollTabs = new TabScroller(document.querySelector("main"));
 
     scrollTabs.addTab(document.getElementById("desktop"))
 };
