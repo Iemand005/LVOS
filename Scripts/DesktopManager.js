@@ -146,7 +146,8 @@ var onLoad = function () {
 
     scrollTabs = new TabScroller(document.querySelector("main"));
 
-    scrollTabs.addTab(document.getElementById("desktop"))
+    scrollTabs.addTab(document.getElementById("desktop"));
+    scrollTabs.addTab();
 };
 
 window.addEventListener("load", onLoad, false);
