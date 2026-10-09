@@ -298,6 +298,12 @@ section#desktop[flipped] article#metrobody {
 	/* perspective: 100px; TODO: do this maybe iniline per window */
 }
 
+.window-section {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 aside#charms {
 	animation: none;
 	position: fixed;
