@@ -684,3 +684,5 @@ picker.register();
 
 
 var scrollTabs = new TabScroller();
+
+scrollTabs.addTab(document.getElementById("desktop"))
