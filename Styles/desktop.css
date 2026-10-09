@@ -627,6 +627,10 @@ body > canvas {
 	transition: opacity 120ms linear, visibility 0s linear 120ms;
 }
 
+.tab-scroller {
+	position: absolute;
+}
+
 @keyframes opensesame {
 	from {
 		right: -300px;
