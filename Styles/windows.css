@@ -411,6 +411,7 @@ body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
 .window.maximized.use-scale {
 	width: 100% !important;
 	height: 100% !important;
+	position: relative;
 }
 
 .window.maximized > content {
