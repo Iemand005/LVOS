@@ -144,7 +144,7 @@ var onLoad = function () {
         return false;
     };
 
-    scrollTabs = new TabScroller(document.querySelector("main"), true);
+    scrollTabs = new TabScroller(document.querySelector("main"));
 
     scrollTabs.addTab(document.getElementById("desktop"));
     scrollTabs.addTab();
