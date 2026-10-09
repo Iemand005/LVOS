@@ -223,9 +223,9 @@ button {
 	height: 40px;
 }
 
-.windows .window {
+/* .windows .window {
 	max-height: calc(100% - 40px);
-}
+} */
 
 .windows-95 .window {
 	max-height: calc(100% - 27px);
