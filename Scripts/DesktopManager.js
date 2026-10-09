@@ -147,7 +147,9 @@ var onLoad = function () {
     scrollTabs = new TabScroller(document.querySelector("main"));
 
     scrollTabs.addTab(document.getElementById("desktop"));
-    scrollTabs.addTab();
+    var second = document.createElement("iframe");
+    second.src = "index.html";
+    scrollTabs.addTab(second);
 };
 
 window.addEventListener("load", onLoad, false);
