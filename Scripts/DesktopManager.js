@@ -152,6 +152,14 @@ var onLoad = function () {
     scrollTabs.addTab(second);
 };
 
+function createDesktop() {
+    var windowSection = document.createElement("section");
+    windowSection.className = "window-section";
+
+    var wallpaper = document.getElementById("wallpaper")?.cloneNode(true);
+    windowSection.appendChild(wallpaper);
+}
+
 window.addEventListener("load", onLoad, false);
 
 function ContextMenu() {
