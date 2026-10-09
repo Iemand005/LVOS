@@ -147,8 +147,7 @@ var onLoad = function () {
     scrollTabs = new TabScroller(document.querySelector("main"));
 
     scrollTabs.addTab(document.getElementById("desktop"));
-    var second = document.createElement("iframe");
-    second.src = "index.html";
+    var second = createDesktop();
     scrollTabs.addTab(second);
 };
 
@@ -162,6 +161,7 @@ function createDesktop() {
     var dockArea = document.getElementById("dock-area")?.cloneNode(true);
     windowSection.appendChild(dockArea);
 
+    return windowSection;
 }
 
 window.addEventListener("load", onLoad, false);
