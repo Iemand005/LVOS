@@ -17,7 +17,7 @@ async function snap(withClass) {
 	await page.evaluate(() => document.body.classList.add('slow-animations'));
 
 	const p = page.evaluate(() => new Promise(resolve => {
-		const read = s => { const cs = getComputedStyle(document.querySelector(s)); return { w: cs.width, h: cs.height, of: cs.objectFit }; };
+		const read = s => { const cs = getComputedStyle(document.documentElement, s); return { w: cs.width, h: cs.height, of: cs.objectFit }; };
 		const out = [];
 		const start = performance.now();
 		function tick() {
