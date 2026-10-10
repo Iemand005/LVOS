@@ -3827,7 +3827,11 @@ Dialog.prototype.openUrl = function(url) {
 
 	function tryNext() {
 		var url = fallbackUrls[index++];
-		if (index >= fallbackUrls.length || !frame || !url) return;
+		if (!url) {
+			tryNext();
+			return;
+		}
+		if (index >= fallbackUrls.length || !frame) return;
 
 		frame.src = url;
 		self._src = url;
