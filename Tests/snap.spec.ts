@@ -151,6 +151,46 @@ test('lets go of a full-height snap by dragging the top edge down', async ({ vul
 	expectNear(drawn.height, drawn.sectionHeight - pulled);
 });
 
+test('eases the indicator in from behind the window, not from where it was last hidden', async ({ vulpOS }) => {
+	const dialog = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+
+	// The indicator is one shared element that spends most of its life hidden at the
+	// last window it dropped behind. Coming back up it must ease in from behind the
+	// window the offer is about, not fly in from the window it was parked at.
+	await vulpOS.page.evaluate(() => {
+		window.flags.useAnimations = true;
+	});
+
+	const from = await dialog.evaluate(async (d: any) => {
+		const snap = window.windowManager.windowSnap;
+		const el = document.getElementById('window-snap') as HTMLElement;
+
+		// The state a finished drag leaves behind: hidden, parked somewhere else.
+		el.classList.add('hidden');
+		el.classList.remove('animating');
+		el.style.inset = '10px 10px 10px 10px';
+		void el.offsetWidth;
+
+		snap._snapped = '';
+		snap.snap('left', d);
+
+		// Let the snap's rAF install the target so its transition exists, then read the
+		// geometry it is easing away from.
+		await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+		const transitions = el.getAnimations().filter(a => a instanceof CSSTransition) as CSSTransition[];
+		const inset: Record<string, number> = {};
+		for (const t of transitions) inset[t.transitionProperty] = parseFloat((t.effect.getKeyframes()[0] as any)[t.transitionProperty]);
+		return inset;
+	});
+
+	expect(from.top).not.toBe(10);
+	expect(from.left).not.toBe(10);
+	expect(from.right).not.toBe(10);
+	expect(from.bottom).not.toBe(10);
+});
+
 test('keeps the right window on the right half when unsnapping the left window', async ({ vulpOS }) => {
 	const win1 = await vulpOS.openCube();
 	const win2 = await vulpOS.openCube();
