@@ -32,10 +32,15 @@ await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 90, everyNthFr
 await page.waitForTimeout(300);
 
 const t0 = Date.now();
-await page.evaluate(() => window.windowManager.windows['cube'].toggleMaximized(false));
+const toggleAt = await page.evaluate(() => {
+	const t = Date.now();
+	window.windowManager.windows['cube'].toggleMaximized(false);
+	return t;
+});
 await page.waitForTimeout(1500);
 await cdp.send('Page.stopScreencast');
 
 fs.writeFileSync(out + '/screencast-meta.json', JSON.stringify(frames));
-console.log('frames:', frames.length);
+fs.writeFileSync(out + '/toggle-at.json', JSON.stringify({ toggleAt }));
+console.log('frames:', frames.length, 'toggleAt:', toggleAt);
 await browser.close();

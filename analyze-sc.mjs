@@ -45,5 +45,4 @@ for (const m of metrics) {
 	console.log(m.ts + 'ms', 'topMean=' + m.top.mean.toFixed(0), 'topWhite%=' + m.top.whitePct.toFixed(1),
 		'midMean=' + m.mid.mean.toFixed(0), 'midWhite%=' + m.mid.whitePct.toFixed(1));
 }
-
 await browser.close();
