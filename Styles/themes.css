@@ -23,18 +23,34 @@
 	animation: none;
 }
 
+/* The root is always captured, so by default the whole old screen (maximized window)
+   cross-fades into the new one (small window). Two overlapping half-transparent
+   screenshots wash everything out and read as a flicker. The morph is done entirely
+   by the window's group animation, so hide the old snapshots and show only the new
+   ones — that way there is nothing to cross-fade against and the pair's plus-lighter
+   blend reduces to a plain single image. */
+::view-transition-old(root),
+::view-transition-old(window-fullscreen) {
+	animation: none;
+	opacity: 0;
+}
+
+::view-transition-new(root),
+::view-transition-new(window-fullscreen) {
+	animation: none;
+	opacity: 1;
+}
+
 ::view-transition-group(window-fullscreen) {
 	animation-duration: 280ms;
 	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
 }
 
-::view-transition-old(window-fullscreen),
-::view-transition-new(window-fullscreen) {
-	width: 100%;
-	height: 100%;
-	object-fit: fill;
-	/*animation: none;*/
-}
+/* The snapshots must NOT be stretched to the group box. With width/height 100% and
+   object-fit fill, the (small) new window is blown up to fill the whole morphing
+   box, smearing its title bar across the screen mid-animation — that's the smear
+   that reads as a flicker. Keep the snapshots at their own aspect ratio (UA default)
+   so the morph looks like a clean resize. */
 
 html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;
