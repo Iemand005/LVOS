@@ -1102,6 +1102,8 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		if (snapZone !== this._snapZone) {
 			if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
 			this._snapZone = snapZone;
+			// Position the snap indicator behind the dialog before animating to the snap geometry
+			this.windowSnap.moveToDialog(dialog, 0, undefined, true);
 			this.windowSnap.snap(snapZone, dialog);
 		}
 	} else if (this._snapZone) {
@@ -1742,6 +1744,12 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	// this.element.style.transitionDuration = "300ms";
 	if (type === this._snapped) return;
 	this._snapped = type;
+	
+	// Position the indicator behind the dialog before showing/animating so it doesn't
+	// animate in from its previous off-screen/old position.
+	if (dialog) {
+		this.moveToDialog(dialog, 0, undefined, true);
+	}
 	
 	this.hidden = false;
 	// Over the window it is previewing. Without this the indicator keeps whatever
