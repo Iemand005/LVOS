@@ -46,11 +46,22 @@
 	animation-timing-function: cubic-bezier(0.44, 0.41, 0, 1);
 }
 
-/* The snapshots must NOT be stretched to the group box. With width/height 100% and
-   object-fit fill, the (small) new window is blown up to fill the whole morphing
-   box, smearing its title bar across the screen mid-animation — that's the smear
-   that reads as a flicker. Keep the snapshots at their own aspect ratio (UA default)
-   so the morph looks like a clean resize. */
+/* Default: stretch the window snapshots to fill the morphing group box (Windows-style
+   resize morph). The old and new image are forced to the same dimensions as the box
+   as it changes aspect ratio. Add the `preserve-aspect` class to <body> to instead
+   keep each snapshot at its own aspect ratio (no stretching). */
+::view-transition-old(window-fullscreen),
+::view-transition-new(window-fullscreen) {
+	width: 100%;
+	height: 100%;
+	object-fit: fill;
+}
+
+html:has(body.preserve-aspect)::view-transition-old(window-fullscreen),
+html:has(body.preserve-aspect)::view-transition-new(window-fullscreen) {
+	width: auto;
+	height: auto;
+}
 
 html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;

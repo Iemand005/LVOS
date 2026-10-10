@@ -25,7 +25,8 @@ const rec = await page.evaluate(async () => {
 		return cs ? {
 			inset: cs.inset || '-',
 			w: cs.width, h: cs.height, t: cs.transform,
-			op: cs.opacity, mb: cs.mixBlendMode, anim: cs.animationName, disp: cs.display
+			op: cs.opacity, mb: cs.mixBlendMode, anim: cs.animationName, disp: cs.display,
+			of: cs.objectFit, op_pos: cs.objectPosition
 		} : null;
 	};
 	const tick = () => {
@@ -55,10 +56,9 @@ for (const r of rec.filter(x => x.t < 4000 && x.groupWin && x.groupWin.w !== 'au
 	const g = Number.parseFloat(r.groupWin.w);
 	if (g > 400 && g < 1000) console.log(
 		r.t + 'ms',
-		'|old(root):', (r.oldRoot ? r.oldRoot.op + '/' + r.oldRoot.mb : '-'),
-		'|old(win):', (r.oldWin ? r.oldWin.op + '/' + r.oldWin.mb : '-'),
-		'|new(win):', (r.newWin ? r.newWin.op + '/' + r.newWin.mb : '-'),
-		'|win group:', r.groupWin.w + 'x' + r.groupWin.h
+		'|old(win):', r.oldWin ? r.oldWin.w + 'x' + r.oldWin.h + ' of=' + r.oldWin.of + ' pos=' + r.oldWin.op_pos + ' op=' + r.oldWin.op : '-',
+		'|new(win):', r.newWin ? r.newWin.w + 'x' + r.newWin.h + ' of=' + r.newWin.of + ' pos=' + r.newWin.op_pos + ' op=' + r.newWin.op : '-',
+		'|group:', r.groupWin.w + 'x' + r.groupWin.h
 	);
 }
 

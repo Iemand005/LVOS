@@ -83,6 +83,13 @@ var flags = {
 		if (value) this.compositorResize = false;
 		this._useViewTransitionMaximize = value;
 	},
+	_preserveMaximizeAspect: false,
+	get preserveMaximizeAspect() { return this._preserveMaximizeAspect; },
+	set preserveMaximizeAspect(value) {
+
+		document.body.classList.toggle("preserve-aspect", !!value);
+		this._preserveMaximizeAspect = value;
+	},
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
