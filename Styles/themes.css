@@ -23,20 +23,16 @@
 	animation: none;
 }
 
-/* The root is always captured, so by default the whole old screen (maximized window)
-   cross-fades into the new one (small window). Two overlapping half-transparent
-   screenshots wash everything out and read as a flicker. The morph is done entirely
-   by the window's group animation, so hide the old snapshots and show only the new
-   ones — that way there is nothing to cross-fade against and the pair's plus-lighter
-   blend reduces to a plain single image. */
-::view-transition-old(root),
-::view-transition-old(window-fullscreen) {
+/* Only the root snapshots are pinned. The whole old screen cross-fading into the new
+   one double-exposes the desktop and reads as a flicker, and since both captures are
+   the same wallpaper we gain nothing from it. Pin the root and let the window's own
+   snapshots keep their default fade, so the window goes transparent while it morphs. */
+::view-transition-old(root) {
 	animation: none;
 	opacity: 0;
 }
 
-::view-transition-new(root),
-::view-transition-new(window-fullscreen) {
+::view-transition-new(root) {
 	animation: none;
 	opacity: 1;
 }
