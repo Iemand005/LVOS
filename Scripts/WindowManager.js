@@ -1102,8 +1102,6 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		if (snapZone !== this._snapZone) {
 			if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
 			this._snapZone = snapZone;
-			// Position the snap indicator behind the dialog before animating to the snap geometry
-			this.windowSnap.moveToDialog(dialog, 0, undefined, true);
 			this.windowSnap.snap(snapZone, dialog);
 		}
 	} else if (this._snapZone) {
@@ -1635,12 +1633,12 @@ WindowSnap.prototype.init = function() {
 	(document.getElementById("window-section") || document.body).appendChild(this.element);
 };
 
-/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] */
-WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch) {
+/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped] */
+WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
 
 	this.hidden = !outset;
-	this._snapped = "";
+	if (!preserveSnapped) this._snapped = "";
 	
 	if (!direction) outset = 0;
 
@@ -1745,10 +1743,17 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	if (type === this._snapped) return;
 	this._snapped = type;
 	
-	// Position the indicator behind the dialog before showing/animating so it doesn't
-	// animate in from its previous off-screen/old position.
-	if (dialog) {
-		this.moveToDialog(dialog, 0, undefined, true);
+	// Only when the indicator is becoming visible: a switch between two zones keeps it
+	// on screen and should morph straight from one geometry to the other. Coming up from
+	// hidden it must first sit behind the window the offer is about, with no transition,
+	// and commit that frame before the snap animation starts. animateElement sets its
+	// target in a rAF, which runs before this frame paints: without the forced reflow the
+	// browser coalesces the two inset changes and the indicator animates in from wherever
+	// it was last painted instead of from behind the window.
+	if (dialog && this.hidden) {
+		this.element.classList.remove("animating");
+		this.moveToDialog(dialog, 0, undefined, true, false, true);
+		void this.element.offsetWidth;
 	}
 	
 	this.hidden = false;
