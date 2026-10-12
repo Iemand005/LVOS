@@ -287,6 +287,12 @@ section#desktop[flipped] article#metrobody {
 	height: 100%;
 	width: 100%;
 
+	/* Positioned, not static: a floating window is absolutely positioned, so it is
+	   laid out against this section instead of a shared ancestor. That keeps each
+	   desktop's windows on that desktop as the scroller moves it, and lets the snap
+	   frames below be measured in this section's own coordinate space. */
+	position: relative;
+
 	/* The snap row. Floating windows are absolute, so they are out of flow and the
 	   flex layout ignores them; a snapped window switches to in-flow (see
 	   .window.snapped) and is laid out here beside the group's other members. No
@@ -302,6 +308,13 @@ section#desktop[flipped] article#metrobody {
 	position: absolute;
     width: 100%;
     height: 100%;
+
+	/* Every extra desktop is the same snap row as the first one. A snapped window is
+	   an in-flow flex item of the section that already holds it, so the snap layout
+	   happens inside the current desktop and the window is never moved to another. */
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
 }
 
 aside#charms {

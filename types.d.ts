@@ -180,6 +180,8 @@ interface WindowGroup {
 	items?: (WindowTile | WindowGroup)[];
 	// The group's members in layout order, gap tiles included.
 	windows: WindowTile[];
+	// The element that reserves a gap tile's share of this group's snap row.
+	spacer?: HTMLElement | null;
 }
 
 type ResizeDirection = "bottom-right"|"bottom-left"|"top-right"|"top-left"|"bottom"|"right"|"top"|"left";

@@ -716,12 +716,13 @@ function WindowManager() {
 
 	this.windowSnap = new WindowSnap;
 
-	/** @type {WindowGroup} */
-	this.windowGroup = { windows: [] };
-
-	/** The element that reserves a gap tile's share of the snap row.
-	 * @type {HTMLElement | null} */
-	this._snapSpacer = null;
+	/**
+	 * Snap tile groups, one per desktop window-section. A group only ever lays out
+	 * the windows of its own section, so snapping a window on any desktop tiles it
+	 * inside that desktop and never moves it to another one.
+	 * @type {Map<Element, WindowGroup>}
+	 */
+	this.snapGroups = new Map();
 
 }
 
@@ -1065,7 +1066,8 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	// dragging or the window jumps away from the cursor.
 	if (dialog.maximized) {
 		if (!flags.aeroSnap) return;
-		dialog.remapClickOffset(0, 0, this.snapWidth(), this.snapHeight());
+		var snapSection = this.getSnapContainer(dialog);
+		dialog.remapClickOffset(0, 0, this.snapWidth(snapSection), this.snapHeight(snapSection));
 		dialog.maximized = false;
 	} else if (dialog.snapped) {
 		var frame = dialog._snapFrame;
@@ -1132,14 +1134,23 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
  * overlap there, and half a screen is the more useful thing to offer.
  * @param {number} x Pointer position.
  * @param {number} y Pointer position.
+ * @param {HTMLElement | null} [section] The desktop section the gesture belongs to. Its own
+ *   frame is what the edges are measured against, so a window on any desktop snaps
+ *   to that desktop's edges rather than the first one's.
  * @returns {"" | "maximize" | "left" | "right"}
  */
-WindowManager.prototype.getSnapZone = function (x, y) {
+WindowManager.prototype.getSnapZone = function (x, y, section) {
+	var area = section || this.getSnapContainer();
+	var rect = area ? area.getBoundingClientRect() : null;
+	var left = rect ? rect.left : 0;
+	var top = rect ? rect.top : 0;
+	var width = rect ? rect.width : this.snapWidth(area);
+
 	// Sides are tested first so a corner resolves to the side rather than maximize:
 	// the corner is inside both zones, and half a screen is the more specific offer.
-	if (x <= this.snapSideThreshold) return "left";
-	if (x >= this.snapWidth() - this.snapSideThreshold) return "right";
-	if (y <= this.snapFullThreshold) return "maximize";
+	if (x <= left + this.snapSideThreshold) return "left";
+	if (x >= left + width - this.snapSideThreshold) return "right";
+	if (y <= top + this.snapFullThreshold) return "maximize";
 
 	return "";
 };
@@ -1166,7 +1177,7 @@ WindowManager.prototype.isVerticalResizeDirection = function (direction) {
  * @param {Dialog} dialog
  */
 WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
-	var drawnHeight = this.snapHeight();
+	var drawnHeight = this.snapHeight(this.getSnapContainer(dialog));
 	if (dialog.target) setClass(dialog.target, "height-snapped", false);
 	dialog._snappingOut = false;
 	dialog._snappingOutState = null;
@@ -1210,30 +1221,62 @@ WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) {
 	if (!flags.aeroSnap || dialog.heightSnapped || this._heightSnapReleased) return "";
 
+	var section = this.getSnapContainer(dialog);
+
 	if (direction === 1 || direction === 3) {
 		var bounds = WindowManager.windowBounds;
 		var threshold = this.snapFullThreshold;
 		var atEdge = direction === 1 ?
 			dialog.y <= bounds.top + threshold :
-			dialog.y + dialog.height >= this.snapHeight() - threshold;
+			dialog.y + dialog.height >= this.snapHeight(section) - threshold;
 		return atEdge ? "height" : "";
 	}
 
 	if (direction !== 0) return "";
 
-	return this.getSnapZone(x, y);
+	return this.getSnapZone(x, y, section);
 };
 
-/** Width of the window area snaps lay out against. */
-WindowManager.prototype.snapWidth = function () {
-	var section = document.getElementById("window-section");
-	return section ? section.clientWidth : window.innerWidth;
+/**
+ * The desktop window-section that hosts a dialog's windows. Snapping lays out
+ * against whichever section a window already lives in, so a window snapped on any
+ * desktop tiles inside that desktop instead of being moved to the first one.
+ * @param {Dialog} [dialog]
+ * @returns {HTMLElement | null}
+ */
+WindowManager.prototype.getSnapContainer = function (dialog) {
+	var target = dialog && dialog.target;
+	if (target && target.closest) {
+		var section = /** @type {HTMLElement | null} */ (target.closest("#window-section, .window-section"));
+		if (section) return section;
+	}
+	return document.getElementById("window-section");
 };
 
-/** Height of the window area snaps lay out against. */
-WindowManager.prototype.snapHeight = function () {
-	var section = document.getElementById("window-section");
-	return section ? section.clientHeight : window.innerHeight;
+/**
+ * The snap tile group for a desktop's window-section, created on demand.
+ * @param {HTMLElement} section
+ * @returns {WindowGroup}
+ */
+WindowManager.prototype.getSnapGroup = function (section) {
+	var group = this.snapGroups.get(section);
+	if (!group) {
+		group = { windows: [] };
+		this.snapGroups.set(section, group);
+	}
+	return group;
+};
+
+/** Width of the window area snaps lay out against. @param {HTMLElement | null} [section] */
+WindowManager.prototype.snapWidth = function (section) {
+	var area = section || this.getSnapContainer();
+	return area ? area.clientWidth : window.innerWidth;
+};
+
+/** Height of the window area snaps lay out against. @param {HTMLElement | null} [section] */
+WindowManager.prototype.snapHeight = function (section) {
+	var area = section || this.getSnapContainer();
+	return area ? area.clientHeight : window.innerHeight;
 };
 
 /** @param {number} x @param {number} y */
@@ -1272,11 +1315,13 @@ WindowManager.prototype.snapDialog = function (dialog, zone) {
  * @param {"left" | "right"} side Which end of the group it joins.
  */
 WindowManager.prototype.tileDialog = function (dialog, side) {
-	var group = /** @type {WindowGroup} */ (this.windowGroup);
+	var section = this.getSnapContainer(dialog);
+	if (!section) return;
+	var group = this.getSnapGroup(section);
 	var windows = /** @type {WindowTile[]} */ (group.windows);
 
 	// Already tiled: the drop just reorders it, so leave its width alone.
-	var index = this.findSnapTile(dialog.id);
+	var index = this.findSnapTile(dialog.id, section);
 	var tile = index === -1 ? { id: dialog.id, width: 0.5 } : windows[index];
 
 	if (!tile) return;
@@ -1286,11 +1331,11 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
 	if (side === "left") windows.unshift(tile);
 	else windows.push(tile);
 
-	if (this.snapInsertGaps) this.fitSnapGaps(windows, side);
+	if (this.snapInsertGaps) this.fitSnapGaps(section, windows, side);
 
 	// Lay the group out first: the FLIP toggleSnapped runs measures the frame the flex
 	// layout produced, so the share has to be in place before the class lands.
-	this.reflowSnapGroup();
+	this.reflowSnapGroup(section);
 	dialog.toggleSnapped(true);
 };
 
@@ -1298,11 +1343,12 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
  * Keeps the group either fully tiled or, for a single window, held against the half it
  * was snapped into by a gap. Two windows already fill the area between them, so gaps
  * only ever exist while the group holds one.
+ * @param {HTMLElement} section The desktop section the group tiles inside.
  * @param {WindowTile[]} tiles
  * @param {"left" | "right"} [side] Which half the lone window is held in. Read from
  * the window's current offset when omitted.
  */
-WindowManager.prototype.fitSnapGaps = function (tiles, side) {
+WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
 	// Clear any gap left from when the group was smaller.
 	for (var i = tiles.length - 1; i >= 0; i--) {
 		var tile = tiles[i];
@@ -1318,8 +1364,7 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 		// off the box it is drawn at: in the left half of the area it stays left, and the
 		// gap has to go on the other side to keep it there.
 		var rect = dialog.target.getBoundingClientRect();
-		var area = document.getElementById("window-section");
-		var origin = area ? area.getBoundingClientRect() : rect;
+		var origin = section ? section.getBoundingClientRect() : rect;
 		side = rect.left - origin.left <= origin.width / 2 ? "left" : "right";
 	}
 
@@ -1328,11 +1373,12 @@ WindowManager.prototype.fitSnapGaps = function (tiles, side) {
 };
 
 /**
- * Index of a window's tile in the snap group, or -1.
+ * Index of a window's tile in a desktop's snap group, or -1.
  * @param {string} id
+ * @param {HTMLElement} section
  */
-WindowManager.prototype.findSnapTile = function (id) {
-	var windows = /** @type {WindowTile[]} */ (/** @type {WindowGroup} */ (this.windowGroup).windows);
+WindowManager.prototype.findSnapTile = function (id, section) {
+	var windows = /** @type {WindowTile[]} */ (this.getSnapGroup(section).windows);
 
 	for (var i = 0; i < windows.length; i++) {
 		var dialog = windows[i];
@@ -1347,12 +1393,15 @@ WindowManager.prototype.findSnapTile = function (id) {
  * @param {Dialog} dialog
  */
 WindowManager.prototype.unsnapDialog = function (dialog) {
-	var group = /** @type {WindowGroup} */ (this.windowGroup);
+	var section = this.getSnapContainer(dialog);
+	if (!section) return;
+	var group = this.getSnapGroup(section);
 	var windows = /** @type {WindowTile[]} */ (group.windows);
 
-	var index = this.findSnapTile(dialog.id);
+	var index = this.findSnapTile(dialog.id, section);
 	if (index === -1) return;
 
+	/** @type {"left" | "right" | undefined} */
 	var survivorSide;
 	if (windows.length === 2 && this.snapInsertGaps) {
 		if (index === 0) {
@@ -1365,50 +1414,56 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 	windows.splice(index, 1);
 	dialog.toggleSnapped(false);
 
-	if (this.snapInsertGaps) this.fitSnapGaps(windows, survivorSide);
+	if (this.snapInsertGaps) this.fitSnapGaps(section, windows, survivorSide);
 
-	this.reflowSnapGroup();
+	this.reflowSnapGroup(section);
 };
 
 /**
- * The flex item that holds a gap tile's share of the snap row. A gap only reserves
- * space, so it is a single empty element reused across reflows.
+ * The flex item that holds a gap tile's share of a desktop's snap row. A gap only
+ * reserves space, so it is a single empty element per section reused across reflows.
+ * @param {HTMLElement} section
  * @returns {HTMLElement}
  */
-WindowManager.prototype.getSnapSpacer = function () {
-	if (!this._snapSpacer) {
-		this._snapSpacer = document.createElement("div");
-		this._snapSpacer.className = "snap-spacer";
+WindowManager.prototype.getSnapSpacer = function (section) {
+	var group = this.getSnapGroup(section);
+	if (!group.spacer) {
+		group.spacer = document.createElement("div");
+		group.spacer.className = "snap-spacer";
 	}
-	return this._snapSpacer;
+	return group.spacer;
 };
 
 /**
- * Lays the snap group out across #window-section: the section itself is the flex row,
- * so its members are the group's windows in the group's order, each taking the share of
- * the area the group holds for it. That share and the order ride inline on the element,
- * so the window's own geometry state is never written and comes back intact when it
- * leaves the group, and no element is ever reparented — a tiled window holding an
- * iframe is never torn down and reloaded.
+ * Lays a desktop's snap group out across its own window-section: the section itself is
+ * the flex row, so its members are the group's windows in the group's order, each
+ * taking the share of the area the group holds for it. That share and the order ride
+ * inline on the element, so the window's own geometry state is never written and comes
+ * back intact when it leaves the group, and no element is ever reparented — a tiled
+ * window holding an iframe is never torn down and reloaded.
+ *
+ * The layout is scoped to the section the windows already live in, so a snap on any
+ * desktop tiles inside that desktop and never moves the window to another one.
  *
  * Every window takes its own width, and gap tiles only reserve space, so a lone tiled
  * window stays at 50% and leaves the rest of the desktop free to drag a second window
  * onto. Clear {@link WindowManager#snapInsertGaps} for a full tiling window manager:
  * no gaps are inserted and the last window soaks up whatever width is left over, so
  * the group always fills the area.
+ * @param {HTMLElement} section
  */
-WindowManager.prototype.reflowSnapGroup = function () {
-	var group = /** @type {WindowGroup} */ (this.windowGroup);
+WindowManager.prototype.reflowSnapGroup = function (section) {
+	if (!section) return;
+	var group = this.getSnapGroup(section);
 	var tiles = /** @type {WindowTile[]} */ (group.windows);
-	var section = document.getElementById("window-section");
 
-	// A window whose element is gone must not go on taking a share of the group, so
-	// its tile goes with it.
+	// A window whose element is gone, or whose element has moved to another desktop,
+	// must not go on taking a share of this group, so its tile goes with it.
 	for (var s = tiles.length - 1; s >= 0; s--) {
 		var stale = tiles[s];
-		var staleId = stale ? stale.id : "";
-		var staleWindow = staleId ? this.windows[staleId] : null;
-		if (stale && !stale.gap && (!staleWindow || !staleWindow.target || !staleWindow.target.parentNode)) tiles.splice(s, 1);
+		if (!stale || stale.gap) continue;
+		var staleWindow = stale.id ? this.windows[stale.id] : null;
+		if (!staleWindow || !staleWindow.target || !staleWindow.target.parentNode || this.getSnapContainer(staleWindow) !== section) tiles.splice(s, 1);
 	}
 
 	/** @type {Record<string, boolean>} */
@@ -1425,14 +1480,13 @@ WindowManager.prototype.reflowSnapGroup = function () {
 	for (var id in this.windows) {
 		var dialog = this.windows[id];
 		if (!dialog || !dialog.target || members[id]) continue;
+		if (this.getSnapContainer(dialog) !== section) continue;
 		dialog.target.style.removeProperty("flex");
 		dialog.target.style.removeProperty("order");
 	}
 
-	if (!section) return;
-
-	var areaWidth = this.snapWidth();
-	var areaHeight = this.snapHeight();
+	var areaWidth = this.snapWidth(section);
+	var areaHeight = this.snapHeight(section);
 	var remaining = 1;
 	var offset = 0;
 	/** @type {HTMLElement | null} */
@@ -1448,7 +1502,7 @@ WindowManager.prototype.reflowSnapGroup = function () {
 		remaining -= width;
 
 		var member = tile.id ? this.windows[tile.id] : null;
-		var element = tile.gap ? this.getSnapSpacer() : (member && member.target);
+		var element = tile.gap ? this.getSnapSpacer(section) : (member && member.target);
 		if (!element) continue;
 
 		if (element.parentNode !== section) section.appendChild(element);
@@ -1470,8 +1524,8 @@ WindowManager.prototype.reflowSnapGroup = function () {
 		offset += width;
 	}
 
-	// The single reusable gap spacer goes with the gap it was reserving.
-	var spacer = /** @type {HTMLElement | null} */ (this._snapSpacer);
+	// The section's reusable gap spacer goes with the gap it was reserving.
+	var spacer = /** @type {HTMLElement | null} */ (group.spacer);
 	if (spacer && usedSpacer !== spacer) {
 		spacer.style.removeProperty("order");
 		spacer.style.removeProperty("flex");
@@ -1576,7 +1630,6 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 
 	var dialog = this.getWindowById(id);
 	if (!dialog) {
-		if (!appManager) return;
 		var app = appManager.getApp(id);
 		if (!app) return;
 		this.loadApp(app);
@@ -1625,6 +1678,15 @@ function WindowSnap() {
 	this.element = document.createElement("div");
 	this.element.id = "window-snap";
 	this._snapped = "";
+
+	/**
+	 * The desktop section the indicator currently lives in. It is moved into the
+	 * section of the window it is previewing, so its insets are measured in that
+	 * desktop's own space and it scrolls along with that desktop.
+	 * @type {HTMLElement | null}
+	 */
+	this._section = null;
+
 	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
 	// first snap positions it, so without this the first drop flies it in from wherever
 	// that box sat rather than from behind the window.
@@ -1637,13 +1699,30 @@ Object.defineProperty(WindowSnap.prototype, "hidden", {
 })
 
 WindowSnap.prototype.init = function() {
-	var snapParent = document.getElementById("desktop") || document.body;
+	var snapParent = (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section") || document.getElementById("desktop") || document.body;
+	this._section = snapParent;
 	snapParent.appendChild(this.element);
+};
+
+/**
+ * Puts the indicator into the desktop section of the window it is previewing, so its
+ * insets line up with that desktop's coordinate space and it moves with the desktop
+ * instead of being pinned to the first one.
+ * @param {Dialog} dialog
+ */
+WindowSnap.prototype.attachTo = function(dialog) {
+	if (!windowManager) return;
+	var section = windowManager.getSnapContainer(dialog);
+	if (!section) return;
+	this._section = section;
+	if (this.element.parentNode !== section) section.appendChild(this.element);
 };
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped] */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
+
+	if (dialog) this.attachTo(dialog);
 
 	this.hidden = !outset;
 	if (!preserveSnapped) this._snapped = "";
@@ -1701,7 +1780,7 @@ WindowSnap.prototype.setInset = function(inset) {
 
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
-	var section = document.getElementById("window-section");
+	var section = this._section || (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section");
 	return section ? section.clientWidth : window.innerWidth;
 };
 
@@ -1750,7 +1829,11 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	// this.element.style.transitionDuration = "300ms";
 	if (type === this._snapped) return;
 	this._snapped = type;
-	
+
+	// Preview in the desktop the window is on, so the offered frame is drawn against
+	// that desktop's area and its edges rather than the first desktop's.
+	if (dialog) this.attachTo(dialog);
+
 	// Only when the indicator is becoming visible: a switch between two zones keeps it
 	// on screen and should morph straight from one geometry to the other. Coming up from
 	// hidden it must first sit behind the window the offer is about, with no transition,
@@ -2302,6 +2385,9 @@ Dialog.prototype.setParentElement = function(element) {
 
 /** @param {number} i */
 Dialog.prototype.moveToDesktop = function(i){
+	// A tiled window belongs to the desktop it was snapped on; leaving the state first
+	// keeps it from carrying a stale share into the section it is moved to.
+	if (this.snapped && windowManager) windowManager.unsnapDialog(this);
 	window.desktopManager?.desktops[i]?.insertWindow(this);
 };
 
@@ -3247,7 +3333,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var startWidth = this.width;
 		var startHeight = this.height;
 
-		var windowSection = document.getElementById("window-section");
+		var windowSection = windowManager.getSnapContainer(this);
 		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
 
 		var scaleX = window.innerWidth / startWidth;
