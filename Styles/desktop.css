@@ -169,6 +169,12 @@ body:not(.blur) .window > article {
 	animation-timeline: --page-scroll;
 }
 
+
+@keyframes shrink-wallpaper {
+	from { transform: scale(1); }
+	to { transform: scale(0.7); }
+}
+
 #wallpaper.legacy-wallpaper > img {
 	display: block;
 	position: absolute;
@@ -205,11 +211,6 @@ body:not(.blur) .window > article {
 #wallpaper > img,
 .backdrop-clip img {
 	object-fit: cover;
-}
-
-@keyframes shrink-wallpaper {
-	from { transform: scaleX(1); }
-	to { transform: scaleX(0.7); }
 }
 
 article#metrobody {
