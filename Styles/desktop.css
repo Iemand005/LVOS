@@ -56,10 +56,14 @@ main {
     margin-right: -50%;
 }
 
-@keyframes identifier {
-	0% {
+@keyframes shrinkage {
+	from {
+		scale: 1;
+		margin-right: 0;
+	}
+	to {
 		scale: 0.5;
-    margin-right: -50%;
+		margin-right: -50%;
 	}
 }
 
