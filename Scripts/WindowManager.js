@@ -1701,13 +1701,17 @@ Object.defineProperty(WindowSnap.prototype, "hidden", {
 WindowSnap.prototype.init = function() {
 	var snapParent = (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section") || document.getElementById("desktop") || document.body;
 	this._section = snapParent;
-	snapParent.appendChild(this.element);
+	snapParent.insertBefore(this.element, snapParent.firstChild);
 };
 
 /**
  * Puts the indicator into the desktop section of the window it is previewing, so its
  * insets line up with that desktop's coordinate space and it moves with the desktop
  * instead of being pinned to the first one.
+ *
+ * It goes in first rather than last: it shares the previewed window's z-index, and a
+ * later sibling wins that tie, so being the first child is what keeps the frame behind
+ * the window it is offering instead of painting its blur over it.
  * @param {Dialog} dialog
  */
 WindowSnap.prototype.attachTo = function(dialog) {
@@ -1715,7 +1719,8 @@ WindowSnap.prototype.attachTo = function(dialog) {
 	var section = windowManager.getSnapContainer(dialog);
 	if (!section) return;
 	this._section = section;
-	if (this.element.parentNode !== section) section.appendChild(this.element);
+	if (this.element.parentNode !== section || section.firstChild !== this.element)
+		section.insertBefore(this.element, section.firstChild);
 };
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped] */
