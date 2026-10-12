@@ -29,6 +29,8 @@ body {
     scroll-snap-type: y mandatory;
     overflow-y: auto;
 
+	scrollbar-width: none;
+
 	height: 200vh;
     view-timeline: --page-scroll;
 	view-timeline-axis: y;
