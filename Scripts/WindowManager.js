@@ -2299,6 +2299,7 @@ Dialog.prototype.setParentElement = function(element) {
 	if (this.target) element.appendChild(this.target);
 };
 
+/** @param {number} i */
 Dialog.prototype.moveToDesktop = function(i){
 	window.desktopManager?.desktops[i]?.insertWindow(this);
 };
