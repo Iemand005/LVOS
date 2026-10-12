@@ -273,9 +273,11 @@ function DesktopManager() {
     this.desktops = [];
 }
 
-DesktopManager.prototype.addDesktop = function() {
-    this.desktops.push(new Desktop);
-    
+/** @param {string} [name] */
+DesktopManager.prototype.addDesktop = function(name) {
+    var desktop = new Desktop();
+    this.desktops.push(desktop);
+
 }
 
 /** @param {string} theme */
