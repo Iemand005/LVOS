@@ -279,7 +279,6 @@ DesktopManager.prototype.init = function() {
    
     this.addDesktop();
     this.addDesktop();
-    this.addDesktop();
 }
 
 /** @param {string} [name] */
