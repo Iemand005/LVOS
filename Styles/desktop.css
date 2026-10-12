@@ -24,6 +24,8 @@ body {
 
 body {
 	display: flex;
+	height: 200vh;
+    view-timeline: --page-scroll;
 }
 
 body > header {
