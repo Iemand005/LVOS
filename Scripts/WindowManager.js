@@ -3441,7 +3441,7 @@ Dialog.prototype.moveBy = function (deltaX, deltaY) {
 };
 
 /**
- * Move the dialog so its center point lands at the provided coordinates.
+ * Move the dialog so its center point lands at the provided coordinates. I  ggotta renname thifunc
  * @param {number} centerX
  * @param {number} centerY
  */

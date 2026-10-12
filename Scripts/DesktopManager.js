@@ -147,8 +147,8 @@ var onLoad = function () {
     if (window.desktopManager) window.desktopManager.init();
 };
 
-function createDesktop() {
-    var windowSection = document.createElement("section");
+function createDesktop(section) {
+    var windowSection = section || document.createElement("section");
     windowSection.className = "window-section";
 
     var wallpaper = document.getElementById("wallpaper")?.cloneNode(true);
