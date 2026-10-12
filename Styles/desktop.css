@@ -176,6 +176,11 @@ body:not(.blur) .window > article {
 	background-repeat: no-repeat;
 }
 
+#wallpaper, .wallpaper {
+	animation: grow-progress auto linear;
+	animation-timeline: --page-scroll;
+}
+
 #wallpaper > * {
 	position: absolute;
 	top: 0;
