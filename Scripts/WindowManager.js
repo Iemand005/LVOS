@@ -2383,17 +2383,7 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
-/**
- * Moves the window's element under a new parent without rebuilding it.
- *
- * Prefers the state-preserving moveBefore() when the browser offers it: unlike
- * appendChild it relocates the node in place instead of removing and re-inserting it,
- * so an embedded app's iframe, its scroll position, focus, and any running animations
- * or transitions all survive the reparent. It is probed rather than assumed and its
- * preconditions (a connected node, an eligible tree) are checked, falling back to the
- * universally supported appendChild when it is missing or refuses the move.
- * @param {HTMLElement} element
- */
+/** @param {HTMLElement} element */
 Dialog.prototype.setParentElement = function(element) {
 	var target = this.target;
 	if (!target || !element) return;
@@ -2409,10 +2399,11 @@ Dialog.prototype.setParentElement = function(element) {
 
 /** @param {number} i */
 Dialog.prototype.moveToDesktop = function(i){
-	// A tiled window belongs to the desktop it was snapped on; leaving the state first
-	// keeps it from carrying a stale share into the section it is moved to.
 	if (this.snapped && windowManager) windowManager.unsnapDialog(this);
-	window.desktopManager?.desktops[i]?.insertWindow(this);
+	if (window.desktopManager) {
+		var desktop = window.desktopManager.desktops[i];
+		if (desktop) desktop.insertWindow(this);
+	}
 };
 
 /** @param {boolean} [createTouchSizers] */
