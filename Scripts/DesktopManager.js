@@ -277,6 +277,7 @@ DesktopManager.prototype.init = function() {
 
     this.scrollTabs.addTab(document.getElementById("desktop"));
    
+    this.addDesktop();
 }
 
 /** @param {string} [name] */
