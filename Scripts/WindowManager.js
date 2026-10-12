@@ -2294,10 +2294,10 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
+/** @param {HTMLElement} element */
+Dialog.prototype.setParentElement = function(element) {
 
-Dialog.prototype.setParentElement(element) {
-
-}
+};
 
 /** @param {boolean} [createTouchSizers] */
 Dialog.prototype._createSizers = function(createTouchSizers){
