@@ -177,7 +177,7 @@ body:not(.blur) .window > article {
 }
 
 #wallpaper, .wallpaper {
-	animation: grow-progress auto linear;
+	animation: shrink-wallpaper auto linear;
 	animation-timeline: --page-scroll;
 }
 
