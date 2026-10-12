@@ -26,6 +26,7 @@ body {
 	display: flex;
 	height: 200vh;
     view-timeline: --page-scroll;
+	view-timeline-axis: y;
 }
 
 body > header {
