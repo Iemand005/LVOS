@@ -2296,7 +2296,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 /** @param {HTMLElement} element */
 Dialog.prototype.setParentElement = function(element) {
-
+	if (this.target) element.appendChild(this.target);
 };
 
 /** @param {boolean} [createTouchSizers] */
