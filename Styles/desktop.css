@@ -196,6 +196,11 @@ body:not(.blur) .window > article {
 	object-fit: cover;
 }
 
+@keyframes shrink-wallpaper {
+	from { transform: scaleX(0.7); }
+	to { transform: scaleX(1); }
+}
+
 article#metrobody {
 	pointer-events: none !important;
 }
