@@ -52,8 +52,8 @@ main {
 }
 
 .tab-page {
-	scale: 0.5;
-    margin-right: -50%;
+	animation: shrinkage auto linear;
+	animation-timeline: --page-scroll;
 }
 
 @keyframes shrinkage {
