@@ -164,7 +164,7 @@ function createDesktop() {
     return windowSection;
 }
 
-/** @param {string} name */
+/** @param {string} [name] */
 function Desktop(name) {
     this.name = name;
 
@@ -275,6 +275,7 @@ function DesktopManager() {
 
 DesktopManager.prototype.addDesktop = function() {
     this.desktops.push(new Desktop);
+    
 }
 
 /** @param {string} theme */
