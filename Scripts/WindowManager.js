@@ -2390,8 +2390,7 @@ Dialog.prototype.setParentElement = function(element) {
 	if (target.parentNode === element) return;
 
 	if (typeof element.moveBefore === "function" && target.isConnected) try {
-		element.moveBefore(target, null);
-		return;
+		return element.moveBefore(target, null);
 	} catch (ex) { console.warn("Not eligible for a move (e.g. a shadow root): use the compatible path.", ex); }
 
 	element.appendChild(target);
