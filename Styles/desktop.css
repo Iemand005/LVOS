@@ -36,6 +36,10 @@ body > header {
 	overflow: hidden;
 }
 
+main {
+	position: fixed;
+}
+
 @media (display-mode: window-controls-overlay) {
 	body > header {
 		display: block;
