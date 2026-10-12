@@ -2404,9 +2404,7 @@ Dialog.prototype.setParentElement = function(element) {
 		try {
 			container.moveBefore(target, null);
 			return;
-		} catch (ex) {
-			// Not eligible for a move (e.g. a shadow root): use the compatible path.
-		}
+		} catch (ex) { console.warn("Not eligible for a move (e.g. a shadow root): use the compatible path.", ex); }
 	}
 
 	element.appendChild(target);
