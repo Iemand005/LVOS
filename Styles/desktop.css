@@ -27,6 +27,7 @@ body {
 	height: 200vh;
     view-timeline: --page-scroll;
 	view-timeline-axis: y;
+	view-timeline-inset: 100%;
 }
 
 body > header {
