@@ -1637,7 +1637,8 @@ Object.defineProperty(WindowSnap.prototype, "hidden", {
 })
 
 WindowSnap.prototype.init = function() {
-	(document.getElementById("window-section") || document.body).appendChild(this.element);
+	var snapParent = document.getElementById("desktop") || document.body;
+	snapParent.appendChild(this.element);
 };
 
 /** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped] */
