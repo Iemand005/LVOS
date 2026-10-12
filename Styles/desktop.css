@@ -76,7 +76,7 @@ main {
 }
 
 #window-section {
-	border-radius: var((--desktop-border-radius));
+	border-radius: var(--desktop-border-radius);
 	overflow: hidden;
 }
 
