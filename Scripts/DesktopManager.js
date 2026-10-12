@@ -144,11 +144,7 @@ var onLoad = function () {
         return false;
     };
 
-    scrollTabs = new TabScroller(document.querySelector("main"));
-
-    scrollTabs.addTab(document.getElementById("desktop"));
-    var second = createDesktop();
-    scrollTabs.addTab(second);
+    
 };
 
 function createDesktop() {
@@ -271,6 +267,14 @@ function DesktopManager() {
 	this.wallpaperImage = null;
     /** @type {Desktop[]} */
     this.desktops = [];
+}
+
+DesktopManager.prototype.init = function() {
+    this.scrollTabs = new TabScroller(document.querySelector("main"));
+
+    this.scrollTabs.addTab(document.getElementById("desktop"));
+    var second = createDesktop();
+    this.scrollTabs.addTab(second);
 }
 
 /** @param {string} [name] */
