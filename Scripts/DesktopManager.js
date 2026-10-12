@@ -144,7 +144,7 @@ var onLoad = function () {
         return false;
     };
 
-    window.desktopManager?.init();
+    if (window.desktopManager) window.desktopManager.init();
 };
 
 function createDesktop() {
@@ -267,19 +267,23 @@ function DesktopManager() {
 	this.wallpaperImage = null;
     /** @type {Desktop[]} */
     this.desktops = [];
+
+    /** @type {TabScroller | null} */
+    this.scrollTabs = null;
 }
 
 DesktopManager.prototype.init = function() {
     this.scrollTabs = new TabScroller(document.querySelector("main"));
 
     this.scrollTabs.addTab(document.getElementById("desktop"));
-    var second = createDesktop();
-    this.scrollTabs.addTab(second);
+   
 }
 
 /** @param {string} [name] */
 DesktopManager.prototype.addDesktop = function(name) {
+    if (!this.scrollTabs) return;
     var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1));
+    this.scrollTabs.addTab(desktop.target);
     this.desktops.push(desktop);
 
 }
