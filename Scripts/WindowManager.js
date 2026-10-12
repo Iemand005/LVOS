@@ -2399,13 +2399,10 @@ Dialog.prototype.setParentElement = function(element) {
 	if (!target || !element) return;
 	if (target.parentNode === element) return;
 
-	var container = /** @type {HTMLElement & { moveBefore?: (node: Node, referenceNode: Node | null) => void }} */ (element);
-	if (typeof container.moveBefore === "function" && target.isConnected) {
-		try {
-			container.moveBefore(target, null);
-			return;
-		} catch (ex) { console.warn("Not eligible for a move (e.g. a shadow root): use the compatible path.", ex); }
-	}
+	if (typeof element.moveBefore === "function" && target.isConnected) try {
+		element.moveBefore(target, null);
+		return;
+	} catch (ex) { console.warn("Not eligible for a move (e.g. a shadow root): use the compatible path.", ex); }
 
 	element.appendChild(target);
 };
