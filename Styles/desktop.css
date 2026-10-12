@@ -51,6 +51,18 @@ main {
 	position: fixed;
 }
 
+.tab-page {
+	scale: 0.5;
+    margin-right: -50%;
+}
+
+@keyframes identifier {
+	0% {
+		scale: 0.5;
+    margin-right: -50%;
+	}
+}
+
 @media (display-mode: window-controls-overlay) {
 	body > header {
 		display: block;
