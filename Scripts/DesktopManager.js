@@ -161,7 +161,7 @@ function createDesktop() {
 }
 
 /** @param {string} [name] @param {HTMLElement} [desktopElement] */
-function Desktop(namem, desktopElement) {
+function Desktop(name, desktopElement) {
     this.name = name;
 
     this.target = desktopElement || createDesktop();
@@ -286,8 +286,10 @@ DesktopManager.prototype.init = function() {
     this.addDesktop();
 }
 
-/** @param {string} [name] */
-DesktopManager.prototype.addDesktop = function(name) {
+/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+DesktopManager.prototype.addDesktop = function(name, desktopElement
+
+) {
     if (!this.scrollTabs) return;
     var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1));
     this.scrollTabs.addTab(desktop.target);
