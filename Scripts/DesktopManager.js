@@ -164,6 +164,10 @@ function createDesktop() {
     return windowSection;
 }
 
+function addDesktop(name) {
+
+}
+
 window.addEventListener("load", onLoad, false);
 
 function ContextMenu() {
