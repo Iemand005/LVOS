@@ -172,7 +172,7 @@ function Desktop(name) {
 }
 
 function addDesktop() {
-    
+
 }
 
 window.addEventListener("load", onLoad, false);
@@ -269,6 +269,8 @@ function DesktopManager() {
 
 	/** @type {HTMLImageElement | null} */
 	this.wallpaperImage = null;
+    /** @type {Desktop[]} */
+    this.desktops = [];
 }
 
 /** @param {string} theme */
