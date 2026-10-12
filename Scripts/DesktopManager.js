@@ -144,7 +144,7 @@ var onLoad = function () {
         return false;
     };
 
-    
+    window.desktopManager?.init();
 };
 
 function createDesktop() {
