@@ -24,6 +24,11 @@ body {
 
 body {
 	display: flex;
+
+	scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    overflow-y: hidden;
+
 	height: 200vh;
     view-timeline: --page-scroll;
 	view-timeline-axis: y;
