@@ -167,9 +167,10 @@ function Desktop(name) {
     this.target = createDesktop();
 }
 
+/** @param {Dialog} dialog */
 Desktop.prototype.insertWindow = function(dialog) {
 
-}';'
+};
 
 function addDesktop() {
 
