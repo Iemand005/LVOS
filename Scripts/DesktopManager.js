@@ -280,18 +280,16 @@ function DesktopManager() {
 DesktopManager.prototype.init = function() {
     this.scrollTabs = new TabScroller(document.querySelector("main"));
 
-    this.scrollTabs.addTab(document.getElementById("desktop"));
-   
+    // this.scrollTabs.addTab(document.getElementById("desktop"));
+    this.addDesktop("Main", document.getElementById("window-section") || undefined);
     this.addDesktop();
     this.addDesktop();
 }
 
 /** @param {string} [name] @param {HTMLElement} [desktopElement] */
-DesktopManager.prototype.addDesktop = function(name, desktopElement
-
-) {
+DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     if (!this.scrollTabs) return;
-    var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1));
+    var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1), desktopElement);
     this.scrollTabs.addTab(desktop.target);
     this.desktops.push(desktop);
 
