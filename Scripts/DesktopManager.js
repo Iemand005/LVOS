@@ -147,8 +147,8 @@ var onLoad = function () {
     if (window.desktopManager) window.desktopManager.init();
 };
 
-function createDesktop(section) {
-    var windowSection = section || document.createElement("section");
+function createDesktop() {
+    var windowSection = document.createElement("section");
     windowSection.className = "window-section";
 
     var wallpaper = document.getElementById("wallpaper")?.cloneNode(true);
@@ -160,11 +160,11 @@ function createDesktop(section) {
     return windowSection;
 }
 
-/** @param {string} [name] */
-function Desktop(name) {
+/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+function Desktop(namem, desktopElement) {
     this.name = name;
 
-    this.target = createDesktop();
+    this.target = desktopElement || createDesktop();
 }
 
 /** @param {Dialog} dialog */
