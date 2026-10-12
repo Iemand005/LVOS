@@ -26,7 +26,7 @@ body {
 	display: flex;
 
 	scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: y mandatory;
     overflow-y: auto;
 
 	height: 200vh;
