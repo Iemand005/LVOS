@@ -2383,9 +2383,33 @@ Dialog.prototype.initWithObject = function(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
 };
 
-/** @param {HTMLElement} element */
+/**
+ * Moves the window's element under a new parent without rebuilding it.
+ *
+ * Prefers the state-preserving moveBefore() when the browser offers it: unlike
+ * appendChild it relocates the node in place instead of removing and re-inserting it,
+ * so an embedded app's iframe, its scroll position, focus, and any running animations
+ * or transitions all survive the reparent. It is probed rather than assumed and its
+ * preconditions (a connected node, an eligible tree) are checked, falling back to the
+ * universally supported appendChild when it is missing or refuses the move.
+ * @param {HTMLElement} element
+ */
 Dialog.prototype.setParentElement = function(element) {
-	if (this.target) element.appendChild(this.target);
+	var target = this.target;
+	if (!target || !element) return;
+	if (target.parentNode === element) return;
+
+	var container = /** @type {HTMLElement & { moveBefore?: (node: Node, referenceNode: Node | null) => void }} */ (element);
+	if (typeof container.moveBefore === "function" && target.isConnected) {
+		try {
+			container.moveBefore(target, null);
+			return;
+		} catch (ex) {
+			// Not eligible for a move (e.g. a shadow root): use the compatible path.
+		}
+	}
+
+	element.appendChild(target);
 };
 
 /** @param {number} i */
