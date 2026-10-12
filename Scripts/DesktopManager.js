@@ -275,7 +275,7 @@ function DesktopManager() {
 
 /** @param {string} [name] */
 DesktopManager.prototype.addDesktop = function(name) {
-    var desktop = new Desktop(name || "Desktop " + this.desktops.length);
+    var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1));
     this.desktops.push(desktop);
 
 }
