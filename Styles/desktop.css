@@ -202,8 +202,8 @@ body:not(.blur) .window > article {
 }
 
 @keyframes shrink-wallpaper {
-	from { transform: scaleX(0.7); }
-	to { transform: scaleX(1); }
+	from { transform: scaleX(1); }
+	to { transform: scaleX(0.7); }
 }
 
 article#metrobody {
