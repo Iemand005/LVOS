@@ -273,6 +273,10 @@ function DesktopManager() {
     this.desktops = [];
 }
 
+DesktopManager.prototype.addDesktop = function() {
+    this.desktops.push(new Desktop);
+}
+
 /** @param {string} theme */
 function setTheme(theme) {
     document.body.classList.add(theme);
