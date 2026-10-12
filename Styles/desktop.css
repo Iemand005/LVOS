@@ -64,7 +64,20 @@ main {
 	}
 	to {
 		scale: 0.5;
-		margin-right: -50%;
+		margin-right: -40%;
+		border-radius: 10px;
+	}
+}
+
+@keyframes shrinkage {
+	from {
+		scale: 1;
+		margin-right: 0;
+		border-radius: 0;
+	}
+	to {
+		scale: 0.5;
+		margin-right: -40%;
 		border-radius: 10px;
 	}
 }
