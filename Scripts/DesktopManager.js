@@ -167,6 +167,10 @@ function Desktop(name) {
     this.target = createDesktop();
 }
 
+Desktop.prototype.insertWindow = function(dialog) {
+
+}';'
+
 function addDesktop() {
 
 }
@@ -288,7 +292,7 @@ DesktopManager.prototype.addDesktop = function(name) {
     this.scrollTabs.addTab(desktop.target);
     this.desktops.push(desktop);
 
-}
+};
 
 /** @param {string} theme */
 function setTheme(theme) {
