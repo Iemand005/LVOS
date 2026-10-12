@@ -164,8 +164,11 @@ function createDesktop() {
     return windowSection;
 }
 
-function addDesktop(name) {
+/** @param {string} name */
+function Desktop(name) {
+    this.name = name;
 
+    this.target = createDesktop();
 }
 
 window.addEventListener("load", onLoad, false);
