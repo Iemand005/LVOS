@@ -171,6 +171,10 @@ function Desktop(name) {
     this.target = createDesktop();
 }
 
+function addDesktop() {
+    
+}
+
 window.addEventListener("load", onLoad, false);
 
 function ContextMenu() {
