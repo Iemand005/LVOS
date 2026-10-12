@@ -169,7 +169,7 @@ function Desktop(name) {
 
 /** @param {Dialog} dialog */
 Desktop.prototype.insertWindow = function(dialog) {
-
+    dialog.setParentElement(this.target)
 };
 
 function addDesktop() {
