@@ -180,7 +180,7 @@ body:not(.blur) .window > article {
 }
 
 #wallpaper, .wallpaper {
-	animation: shrink-wallpaper auto linear;
+	a  nimation: shrink-wallpaper auto linear;
 	animation-timeline: --page-scroll;
 }
 
