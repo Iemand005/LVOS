@@ -1032,6 +1032,9 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 
 	cancelDomEvent(event);
 
+	if (window.desktopManager && window.desktopManager.isExposé)
+		dialog.setParentElement(document.querySelector("main"));
+
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
 		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.warn(ex); }
 	}
