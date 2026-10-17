@@ -1106,6 +1106,14 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	// counter-scaled to the desktop preview, so the applied movement must be divided by
 	// that scale or the window visual lags behind the cursor.
 	var dragScale = typeof dialog._exposeVisualScale === "number" && dialog._exposeVisualScale > 0 ? dialog._exposeVisualScale : 1;
+	// Remember where inside the window the user grabbed, in unscaled window coordinates:
+	// the grab point stays glued to the cursor at any content scale.
+	if (typeof dialog._exposeVisualScale === "number" && !dialog._exposeGrab && dialog.clickOffset && dialog._exposeVisualOffset && dialog._exposeContentScale) {
+		dialog._exposeGrab = {
+			x: (dialog.clickOffset.clickX - (dialog._exposeVisualScale * dialog.x + dialog._exposeVisualOffset.x)) / dialog._exposeContentScale,
+			y: (dialog.clickOffset.clickY - (dialog._exposeVisualScale * dialog.y + dialog._exposeVisualOffset.y)) / dialog._exposeContentScale
+		};
+	}
 	this.dragAction.execute(dialog, dialog.clickOffset, dragScale === 1 ? difference : { x: difference.x / dragScale, y: difference.y / dragScale });
 
 	// Remember where the pointer was: the drop in disableDialogDrag happens after the
@@ -2471,6 +2479,11 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	}
 
 	this._exposeVisualScale = coefficient;
+	this._exposeContentScale = scale;
+	// Does the content's visual position move `coefficient`× (top-left origin) or 1×
+	// (any other origin) with the window's layout position? Needed to remap at a
+	// different content scale mid-drag.
+	this._exposeCoefficientTracksScale = Math.abs(coefficient - scale) <= Math.abs(coefficient - 1);
 	// visual = coefficient * layout + offset, anchored on the pre-move rect.
 	this._exposeVisualOffset = {
 		x: before.left - coefficient * after.left,
@@ -2490,6 +2503,9 @@ Dialog.prototype.clearExposéVisual = function() {
 	this._exposeVisualScale = undefined;
 	this._exposeVisualOffset = null;
 	this._exposeVisualWidth = undefined;
+	this._exposeContentScale = undefined;
+	this._exposeCoefficientTracksScale = undefined;
+	this._exposeGrab = null;
 };
 
 /**
@@ -4425,23 +4441,4 @@ window.__LVMessenger = {};
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targeting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
- *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
- *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
- *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
- *  /  Pale Moon 34
- * /  Safari 5+ (Windows and Mac OS X)
-\*/
-
-
-/**
- * @template T
- * @param {T} type
- * @returns {T}
- */
-function genericTyped(type) {
-	return type;
-}
-
-const hey = genericTyped(document.createElement("button"))
-
-const meow = document.createElement("applet");
+ *    \  Chromium 36 (That means Chrome, Edge Ch
