@@ -1108,23 +1108,26 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	// pointer is gone and must still decide the same zone.
 	this.setPointerPosition(newX, newY);
 
-	var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
+	var snap = !(window.desktopManager && window.desktopManager.isExposé);
+	if (snap) {
 
-	if (snapZone) {
-		// snap() early-outs on an unchanged zone, so only the transition needs guarding:
-		// leaving a zone must put the indicator back behind the window exactly once.
-		if (snapZone !== this._snapZone) {
-			if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
-			this._snapZone = snapZone;
-			this.windowSnap.snap(snapZone, dialog);
+	var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
+		if (snapZone) {
+			// snap() early-outs on an unchanged zone, so only the transition needs guarding:
+			// leaving a zone must put the indicator back behind the window exactly once.
+			if (snapZone !== this._snapZone) {
+				if (this._snapZone) this.windowSnap.hideBehind(dialog, !!isTouch);
+				this._snapZone = snapZone;
+				this.windowSnap.snap(snapZone, dialog);
+			}
+		} else if (this._snapZone) {
+			this._snapZone = "";
+			this.windowSnap.hideBehind(dialog, !!isTouch);
+		} else if (isTouch) {
+			// Only a touch drag tracks the window. A mouse drag leaves the indicator
+			// hidden; snapping is the one thing that reveals it for mouse input.
+			this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, true);
 		}
-	} else if (this._snapZone) {
-		this._snapZone = "";
-		this.windowSnap.hideBehind(dialog, !!isTouch);
-	} else if (isTouch) {
-		// Only a touch drag tracks the window. A mouse drag leaves the indicator
-		// hidden; snapping is the one thing that reveals it for mouse input.
-		this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, true);
 	}
 	
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
