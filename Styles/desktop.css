@@ -29,6 +29,10 @@ body {
 	min-height: 200vh;
 	touch-action: auto;
 	overscroll-behavior: none;
+
+	view-timeline-name: --page-scroll;
+	view-timeline-axis: y;
+	view-timeline-inset: 100%;
 }
 
 body::before {
