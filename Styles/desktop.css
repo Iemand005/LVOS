@@ -73,6 +73,7 @@ body .tab-scroller {
 
 body .tab-page {
 	flex: 0 0 50%;
+	pointer-events: none;
 }
 
 body .tab-page > * {
