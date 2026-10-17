@@ -2430,7 +2430,8 @@ Dialog.prototype.moveToDesktop = function(i){
 /**
  * Detach the window to the given root (e.g. <main>) for an exposé drag while keeping it
  * visually exactly where it was: the desktop's preview scale/offset is undone by an
- * inverse transform on the content element.
+ * inverse transform on the content element. Everything is measured, not derived — the
+ * browser's actual rendering (transform origin etc.) decides the numbers.
  * @param {HTMLElement} root
  */
 Dialog.prototype.detachToRootKeepingVisual = function(root) {
@@ -2443,16 +2444,38 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	var scale = before.width / after.width;
 	var content = this.content;
 	if (!content || !scale) return;
-	// The content fills the window (absolute, top/left 0, 100%/100%), so its layout
-	// top-left equals the window's. With a top-left origin: visual = scale * layout + offset.
-	var offset = {
-		x: before.left - scale * after.left,
-		y: before.top - scale * after.top
-	};
+
+	// Scale the content back to the preview size it had on the desktop, then measure
+	// where it actually renders and translate it onto the pre-move rect exactly.
 	content.style.transformOrigin = "0 0";
-	content.style.transform = "translate(" + toPixels(offset.x) + "," + toPixels(offset.y) + ") scale(" + scale + ")";
-	this._exposeVisualScale = scale;
-	this._exposeVisualOffset = offset;
+	content.style.transform = "scale(" + scale + ")";
+	var measured = content.getBoundingClientRect();
+	content.style.transform = "translate(" + toPixels(before.left - measured.left) + "," + toPixels(before.top - measured.top) + ") scale(" + scale + ")";
+
+	// Measure how many visual pixels the content moves per layout pixel the window
+	// moves, instead of assuming it equals the scale (that depends on the transform
+	// origin the browser ends up using). This is the factor the drag and the drop
+	// math have to work with.
+	var coefficient = scale;
+	if (this.useTransform && this.transform) {
+		var x = this.x, y = this.y, nudge = 128;
+		var layoutBefore = target.getBoundingClientRect();
+		var contentBefore = content.getBoundingClientRect();
+		this.transform.move(x + nudge, y);
+		var layoutAfter = target.getBoundingClientRect();
+		var contentAfter = content.getBoundingClientRect();
+		this.transform.move(x, y);
+		var layoutDelta = layoutAfter.left - layoutBefore.left;
+		var visualDelta = contentAfter.left - contentBefore.left;
+		if (layoutDelta && Math.abs(visualDelta) > 0.5) coefficient = visualDelta / layoutDelta;
+	}
+
+	this._exposeVisualScale = coefficient;
+	// visual = coefficient * layout + offset, anchored on the pre-move rect.
+	this._exposeVisualOffset = {
+		x: before.left - coefficient * after.left,
+		y: before.top - coefficient * after.top
+	};
 	this._exposeVisualWidth = after.width;
 };
 
