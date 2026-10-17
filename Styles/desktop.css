@@ -37,6 +37,18 @@ body {
 	view-timeline-inset: 100%;
 }
 
+html {
+	scroll-snap-type: y mandatory;
+}
+
+body::before,
+body::after {
+	content: "";
+	display: block;
+	height: 1px;
+	scroll-snap-align: start;
+}
+
 body::-webkit-scrollbar {
 	display: none;
 }
