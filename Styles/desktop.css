@@ -60,14 +60,14 @@ body .tab-scroller {
 }
 
 body .tab-page {
-	/* animation: tab-spacing auto linear;
-	animation-timeline: --page-scroll; */
 	flex: 0 0 50%;
 }
 
 body .tab-page > * {
 	animation: tab-spacing auto linear;
 	animation-timeline: --page-scroll;
+
+	overflow: hidden;
 }
 
 @keyframes shrinkage {
