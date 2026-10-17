@@ -1111,7 +1111,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
 	if (snap) {
 
-	var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
+		var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
 		if (snapZone) {
 			// snap() early-outs on an unchanged zone, so only the transition needs guarding:
 			// leaving a zone must put the indicator back behind the window exactly once.
@@ -1560,17 +1560,21 @@ WindowManager.prototype.disableDialogDrag = function() {
 	// drags never change the scale, so this is a no-op for them.
 	if (this.isTouchDrag) this.activeDialog.setDragScale(1, 1);
 
-	var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
-	if (snapZone) this.snapDialog(this.activeDialog, snapZone);
+	var snap = !(window.desktopManager && window.desktopManager.isExposé);
+	if (snap) {
 
-	if (this.isTouchDrag) {
-		// this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
-		this.windowSnap.hideBehind(this.activeDialog);
-		this.isTouchDrag = false;
+		var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
+		if (snapZone) this.snapDialog(this.activeDialog, snapZone);
+
+		if (this.isTouchDrag) {
+			// this.windowSnap.moveToDialog(this.activeDialog, 0, this.dragAction.direction);
+			this.windowSnap.hideBehind(this.activeDialog);
+			this.isTouchDrag = false;
+		}
+
+		if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
+		this._snapZone = "";
 	}
-
-	if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
-	this._snapZone = "";
 
 	if (!this.activeDialog.moveEvents) return;
 
