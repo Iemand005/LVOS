@@ -1140,9 +1140,52 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 			// hidden; snapping is the one thing that reveals it for mouse input.
 			this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, true);
 		}
-	}
-	
+	} else this.updateExposéDragScale(dialog, newX, newY);
+
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
+};
+
+/**
+ * Keep the dragged window's content scaled to whatever is under the cursor during an
+ * exposé drag: the preview scale of the hovered desktop, or 1:1 when no desktop is
+ * under the cursor, so the user sees where letting go will place it.
+ * @param {Dialog} dialog
+ * @param {number} x
+ * @param {number} y
+ */
+WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
+	var desktopManager = window.desktopManager;
+	if (!desktopManager || typeof dialog._exposeVisualScale !== "number" || !dialog.target || !dialog.content) return;
+	var index = desktopManager.getDesktopIndexAt(x, y);
+	var k = 1;
+	if (index >= 0 && dialog._exposeVisualWidth) {
+		var rect = desktopManager.desktops[index].target.getBoundingClientRect();
+		if (rect.width) k = rect.width / dialog._exposeVisualWidth;
+	}
+	if (!k) k = 1;
+	var current = dialog._exposeContentScale || 1;
+	if (Math.abs(k - current) < 0.002) return;
+
+	// Re-aim the content transform at the new scale so the grab point stays exactly
+	// under the cursor: place the content's visual top-left on cursor - k * grab.
+	var grab = dialog._exposeGrab || { x: 0, y: 0 };
+	var content = dialog.content;
+	content.style.transform = "scale(" + k + ")";
+	var measured = content.getBoundingClientRect();
+	var translateX = (x - grab.x * k) - measured.left;
+	var translateY = (y - grab.y * k) - measured.top;
+	content.style.transform = "translate(" + toPixels(translateX) + "," + toPixels(translateY) + ") scale(" + k + ")";
+
+	// Remap the layout→visual mapping for the new scale. The translate is screen-
+	// additive; how the measured part follows the layout position depends on the
+	// transform origin (k for top-left, 1 otherwise) — same as at attach.
+	var coefficient = dialog._exposeCoefficientTracksScale ? k : 1;
+	dialog._exposeContentScale = k;
+	dialog._exposeVisualScale = coefficient;
+	dialog._exposeVisualOffset = {
+		x: translateX + measured.left - coefficient * dialog.x,
+		y: translateY + measured.top - coefficient * dialog.y
+	};
 };
 
 /**
@@ -4441,4 +4484,23 @@ window.__LVMessenger = {};
  * \  Tested and confirmed functional (can work on stuff I haven't tested too.):
  *  \  Chrome for Android Chrome targeting 36 and up.
  *   \  FireFox 115 ESR and up (should work on any version that's less than 10 years old, or at least has ES5 support (2009))
- *    \  Chromium 36 (That means Chrome, Edge Ch
+ *    \  Chromium 36 (That means Chrome, Edge Chromium, Brave, Opera, ...)
+ *    /  ToDo: Test on Safari on macOS 10.7 Lion and 10.15 Catalina when I have time to do so. Same goes for Firefox and Chrome versions that I have installed on these systems. From the tests in Dialogs 8.1 I expect this to work fine!
+ *   /  Internet Explorer 11 Trident + EdgeHTML 12-18 (Edge Legacy)
+ *  /  Pale Moon 34
+ * /  Safari 5+ (Windows and Mac OS X)
+\*/
+
+
+/**
+ * @template T
+ * @param {T} type
+ * @returns {T}
+ */
+function genericTyped(type) {
+	return type;
+}
+
+const hey = genericTyped(document.createElement("button"))
+
+const meow = document.createElement("applet");
