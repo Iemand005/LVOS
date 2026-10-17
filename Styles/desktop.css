@@ -51,6 +51,11 @@ main {
 	position: fixed;
 }
 
+.tab-scroller {
+	width: 200vw;
+	left: -50%;
+}
+
 .tab-page {
 	animation: shrinkage auto linear;
 	animation-timeline: --page-scroll;
