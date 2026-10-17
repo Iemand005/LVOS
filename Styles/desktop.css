@@ -60,8 +60,8 @@ body .tab-scroller {
 }
 
 body .tab-page {
-	/* animation: shrinkage auto linear;
-	animation-timeline: --page-scroll; */
+	animation: tab-spacing auto linear;
+	animation-timeline: --page-scroll;
 	flex: 0 0 50%;
 }
 
@@ -79,6 +79,15 @@ body .tab-page {
 		/* border-radius: 10px; */
 		left: -50%;
 		--desktop-border-radius: 50px;
+	}
+}
+
+@keyframes tab-spacing {
+	from {
+		scale: 1;
+	}
+	to {
+		scale: 0.96;
 	}
 }
 
