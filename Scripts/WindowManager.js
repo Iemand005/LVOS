@@ -1188,14 +1188,16 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	}
 
 	// Glue the grab point to the cursor from the real rendered geometry, which follows
-	// the animated scale even mid-transition.
+	// the animated scale even mid-transition. The independent `scale` property composes
+	// AFTER the `transform`, so the transform translate is scaled too: divide it out.
 	var rendered = content.getBoundingClientRect();
 	var targetRect = dialog.target.getBoundingClientRect();
 	if (!rendered.width || !targetRect.width) return;
 	var renderedScale = dialog._exposeVisualWidth ? rendered.width / dialog._exposeVisualWidth : k;
+	if (!renderedScale) return;
 	content.style.transform = "translate(" +
-		toPixels(x - grab.x * renderedScale - targetRect.left) + "," +
-		toPixels(y - grab.y * renderedScale - targetRect.top) + ")";
+		toPixels((x - grab.x * renderedScale - targetRect.left) / renderedScale) + "," +
+		toPixels((y - grab.y * renderedScale - targetRect.top) / renderedScale) + ")";
 };
 
 /**
@@ -2508,11 +2510,14 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	// Scale the content back to the preview size it had on the desktop, then measure
 	// where it actually renders and translate it onto the pre-move rect exactly. The
 	// scale lives in the independent `scale` property so it can transition on its own
-	// while the translate keeps tracking the cursor every move.
+	// while the translate keeps tracking the cursor every move. The independent
+	// `scale` composes AFTER the `transform`, so the translate is scaled too: divide.
 	content.style.transformOrigin = "0 0";
 	content.style.scale = String(scale);
 	var measured = content.getBoundingClientRect();
-	content.style.transform = "translate(" + toPixels(before.left - measured.left) + "," + toPixels(before.top - measured.top) + ")";
+	content.style.transform = "translate(" +
+		toPixels((before.left - measured.left) / scale) + "," +
+		toPixels((before.top - measured.top) / scale) + ")";
 
 	this._exposeVisualScale = scale;
 	this._exposeContentScale = scale;
