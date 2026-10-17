@@ -278,7 +278,7 @@ function DesktopManager() {
 }
 
 Object.defineProperty(DesktopManager.prototype, "isExposé", {
-    get: function() { return document.scrollingElement && document.scrollingElement.scrollTop; }
+    get: function() { return Boolean(document.scrollingElement && document.scrollingElement.scrollTop); }
 })
 
 DesktopManager.prototype.init = function() {
