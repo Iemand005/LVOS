@@ -3625,11 +3625,15 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	// Full-height snap pins the window vertically: sideways dragging is all it allows,
 	// so y keeps holding the top edge it was entered from and the drop finds it there.
 	if (this.heightSnapped) y = this.y;
-	var bounds = WindowManager.windowBounds;
-	if (x < bounds.left) x = bounds.left;
-	if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
-	if (y < bounds.top) y = bounds.top;
-	if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
+	// An exposé drag floats the window free of the screen/desktop bounds: the clamp
+	// happens again on the drop, when the window is back inside a desktop.
+	if (typeof this._exposeVisualScale !== "number") {
+		var bounds = WindowManager.windowBounds;
+		if (x < bounds.left) x = bounds.left;
+		if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
+		if (y < bounds.top) y = bounds.top;
+		if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
+	}
 	var windowWidth = window.innerWidth;
 	var windowHeight = window.innerHeight;
 	var previousX = this._x, previousY = this._y;
