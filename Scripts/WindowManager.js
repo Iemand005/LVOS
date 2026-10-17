@@ -1158,9 +1158,11 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	if (!desktopManager || typeof dialog._exposeVisualScale !== "number" || !dialog.target || !dialog.content) return;
 	var index = desktopManager.getDesktopIndexAt(x, y);
 	var k = 1;
-	if (index >= 0 && dialog._exposeVisualWidth) {
-		var rect = desktopManager.desktops[index].target.getBoundingClientRect();
-		if (rect.width) k = rect.width / dialog._exposeVisualWidth;
+	if (index >= 0) {
+		// The hovered desktop's own preview scale (offsetWidth ignores transforms).
+		var desktopTarget = desktopManager.desktops[index].target;
+		var rect = desktopTarget.getBoundingClientRect();
+		if (rect.width && desktopTarget.offsetWidth) k = rect.width / desktopTarget.offsetWidth;
 	}
 	if (!k) k = 1;
 	var current = dialog._exposeContentScale || 1;
@@ -1170,11 +1172,17 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	// under the cursor: place the content's visual top-left on cursor - k * grab.
 	var grab = dialog._exposeGrab || { x: 0, y: 0 };
 	var content = dialog.content;
+	var previousTransform = content.style.transform;
 	content.style.transform = "scale(" + k + ")";
 	var measured = content.getBoundingClientRect();
 	var translateX = (x - grab.x * k) - measured.left;
 	var translateY = (y - grab.y * k) - measured.top;
-	content.style.transform = "translate(" + toPixels(translateX) + "," + toPixels(translateY) + ") scale(" + k + ")";
+	var finalTransform = "translate(" + toPixels(translateX) + "," + toPixels(translateY) + ") scale(" + k + ")";
+	// Put the old transform back so the change below transitions from it.
+	content.style.transform = previousTransform;
+	animateElement(content, function() {
+		content.style.transform = finalTransform;
+	}, "transform", null, null, 300);
 
 	// Remap the layout→visual mapping for the new scale. The translate is screen-
 	// additive; how the measured part follows the layout position depends on the
