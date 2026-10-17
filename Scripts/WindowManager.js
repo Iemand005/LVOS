@@ -1574,6 +1574,12 @@ WindowManager.prototype.disableDialogDrag = function() {
 
 		if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
 		this._snapZone = "";
+	} else if (window.desktopManager) {
+		// Exposé drop: the window was detached to <main> on drag start — put it back
+		// into the desktop that is under the cursor.
+		var desktopIndex = window.desktopManager.getDesktopIndexAt(this.pointerPosition.x, this.pointerPosition.y);
+		if (desktopIndex >= 0) this.activeDialog.moveToDesktop(desktopIndex);
+		this.isTouchDrag = false;
 	}
 
 	if (!this.activeDialog.moveEvents) return;

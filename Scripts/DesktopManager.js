@@ -281,6 +281,22 @@ Object.defineProperty(DesktopManager.prototype, "isExposé", {
     get: function() { return Boolean(document.scrollingElement && document.scrollingElement.scrollTop); }
 })
 
+/**
+ * @param {number} x
+ * @param {number} y
+ * @returns {number} The index of the desktop whose area contains the point, or -1.
+ */
+DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
+    for (var i = 0; i < this.desktops.length; i++) {
+        var desktop = this.desktops[i];
+        var element = desktop.target && desktop.target.parentElement ? desktop.target.parentElement : desktop.target;
+        if (!element || !element.getBoundingClientRect) continue;
+        var rect = element.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return i;
+    }
+    return -1;
+};
+
 DesktopManager.prototype.init = function() {
     this.scrollTabs = new TabScroller(document.querySelector("main"));
 
