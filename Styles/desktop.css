@@ -73,17 +73,11 @@ body .tab-page > * {
 @keyframes shrinkage {
 	from {
 		scale: 1;
-		margin-right: 0;
-		/* border-radius: 0; */
 		left: -0%;
-		--desktop-border-radius: 1px;
 	}
 	to {
 		scale: 0.5;
-		/* margin-right: -40%; */
-		/* border-radius: 10px; */
 		left: -50%;
-		--desktop-border-radius: 50px;
 	}
 }
 
@@ -91,10 +85,12 @@ body .tab-page > * {
 	from {
 		scale: 1;
 		border-radius: 0;
+		translate: 	0% 0;
 	}
 	to {
 		scale: 0.96;
-		border-radius: 10px;
+		border-radius: 100px;
+		translate: 50% 0;
 	}
 }
 
