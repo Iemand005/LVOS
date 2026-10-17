@@ -1034,7 +1034,15 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 
 	if (window.desktopManager && window.desktopManager.isExposé) {
 		var root = document.querySelector("main");
-		if (root) dialog.detachToRootKeepingVisual(root);
+		if (root) {
+			// Remember the desktop and position to fly back to on a miss-drop.
+			var section = dialog.target && dialog.target.closest ? dialog.target.closest("#window-section, .window-section") : null;
+			var origin = -1;
+			if (section) for (var i = 0; i < window.desktopManager.desktops.length; i++)
+				if (window.desktopManager.desktops[i].target === section) { origin = i; break; }
+			dialog._exposeOrigin = origin >= 0 ? { index: origin, x: dialog.x, y: dialog.y } : null;
+			dialog.detachToRootKeepingVisual(root);
+		}
 	} else dialog.clearExposéVisual();
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
@@ -2526,6 +2534,7 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 
 /** Remove the exposé inverse transform left on the content element, if any. */
 Dialog.prototype.clearExposéVisual = function() {
+	this._exposeOrigin = null;
 	if (typeof this._exposeVisualScale !== "number") return;
 	var content = this.content;
 	if (content) {
@@ -2571,6 +2580,18 @@ Dialog.prototype.dropIntoDesktop = function(i) {
 		this.x + (visualLeft - placed.left) / desktopScale,
 		this.y + (visualTop - placed.top) / desktopScale
 	);
+};
+
+/** Reinsert the window into the desktop it was dragged from and animate it back to its pre-drag position there. */
+Dialog.prototype.flyBackToExposéOrigin = function() {
+	var origin = this._exposeOrigin;
+	this.clearExposéVisual();
+	if (!origin || !window.desktopManager) return;
+	var desktop = window.desktopManager.desktops[origin.index];
+	if (!desktop) return;
+	desktop.insertWindow(this);
+	this.move(origin.x, origin.y, false);
+	this.animate(this.updatePosition);
 };
 
 /** @param {boolean} [createTouchSizers] */
