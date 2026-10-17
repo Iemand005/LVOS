@@ -1108,10 +1108,11 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	var dragScale = typeof dialog._exposeVisualScale === "number" && dialog._exposeVisualScale > 0 ? dialog._exposeVisualScale : 1;
 	// Remember where inside the window the user grabbed, in unscaled window coordinates:
 	// the grab point stays glued to the cursor at any content scale.
-	if (typeof dialog._exposeVisualScale === "number" && !dialog._exposeGrab && dialog.clickOffset && dialog._exposeVisualOffset && dialog._exposeContentScale) {
-		dialog._exposeGrab = {
-			x: (dialog.clickOffset.clickX - (dialog._exposeVisualScale * dialog.x + dialog._exposeVisualOffset.x)) / dialog._exposeContentScale,
-			y: (dialog.clickOffset.clickY - (dialog._exposeVisualScale * dialog.y + dialog._exposeVisualOffset.y)) / dialog._exposeContentScale
+	if (typeof dialog._exposeVisualScale === "number" && !dialog._exposeGrab && dialog.clickOffset && dialog.content) {
+		var grabRect = dialog.content.getBoundingClientRect();
+		if (grabRect.width) dialog._exposeGrab = {
+			x: (dialog.clickOffset.clickX - grabRect.left) / dragScale,
+			y: (dialog.clickOffset.clickY - grabRect.top) / dragScale
 		};
 	}
 	this.dragAction.execute(dialog, dialog.clickOffset, dragScale === 1 ? difference : { x: difference.x / dragScale, y: difference.y / dragScale });
