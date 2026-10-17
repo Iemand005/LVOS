@@ -298,7 +298,10 @@ DesktopManager.prototype.addDesktop = function(name, desktopElement) {
 
 DesktopManager.prototype.addOrMoveDesktopGap = function() {
     if (!this.scrollTabs) return;
-    if (!this.gapDesktop) this.gapDesktop = document.createElement("div");
+    if (!this.gapDesktop) {
+        this.gapDesktop = document.createElement("div");
+        this.gapDesktop.className = "tab-page";
+    }
     this.scrollTabs.element.appendChild(this.gapDesktop);
 };
 
