@@ -70,12 +70,14 @@ body .tab-page {
 		scale: 1;
 		margin-right: 0;
 		/* border-radius: 0; */
+		left: -0%;
 		--desktop-border-radius: 0px;
 	}
 	to {
 		scale: 0.5;
 		/* margin-right: -40%; */
 		/* border-radius: 10px; */
+		left: -50%;
 		--desktop-border-radius: 50px;
 	}
 }
