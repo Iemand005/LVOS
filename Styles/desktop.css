@@ -51,7 +51,7 @@ main {
 	position: fixed;
 }
 
-.tab-scroller {
+body .tab-scroller {
 	width: 200vw;
 	left: -50%;
 }
