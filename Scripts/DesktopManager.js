@@ -293,15 +293,13 @@ DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     this.scrollTabs.addTab(desktop.target);
     this.desktops.push(desktop);
 
-    if (!this.gapDesktop) this.gapDesktop = this.addDesktopGap();
-    // else this.scrollTabs.addTab(this.gapDesktop);
+    this.addOrMoveDesktopGap();
 };
 
-DesktopManager.prototype.addDesktopGap = function() {
+DesktopManager.prototype.addOrMoveDesktopGap = function() {
     if (!this.scrollTabs) return;
-    var gap = document.createElement("div");
-    this.scrollTabs.addTab(gap);
-    return gap;
+    if (!this.gapDesktop) this.gapDesktop = document.createElement("div");
+    this.scrollTabs.element.appendChild(this.gapDesktop);
 };
 
 /** @param {string} theme */
