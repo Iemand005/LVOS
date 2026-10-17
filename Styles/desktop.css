@@ -13,7 +13,7 @@
         * *
        * *
       \**/
-
+	  
 html {
 	margin: 0;
 	scroll-behavior: smooth;
@@ -27,23 +27,21 @@ body {
 	flex-direction: column;
 	margin: 0;
 	min-height: 200vh;
-	touch-action: none;
+	touch-action: auto;
 	overscroll-behavior: none;
 }
 
-body::before,
-body::after {
+body::before {
 	content: "";
 	display: block;
 	flex: 0 0 1px;
-	pointer-events: none;
-}
-
-body::before {
 	scroll-snap-align: start;
 }
 
 body::after {
+	content: "";
+	display: block;
+	flex: 1 0 1px;
 	scroll-snap-align: end;
 }
 
