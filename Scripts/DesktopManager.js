@@ -277,6 +277,10 @@ function DesktopManager() {
     this.scrollTabs = null;
 }
 
+Object.defineProperty(DesktopManager.prototype, "isExposé", {
+    get: function() { return document.scrollingElement && document.scrollingElement.scrollTop; }
+})
+
 DesktopManager.prototype.init = function() {
     this.scrollTabs = new TabScroller(document.querySelector("main"));
 
@@ -433,7 +437,6 @@ DesktopManager.prototype.toggleOverlay = function(enable) {
 	if (!overlay) return;
 	overlay.classList.toggle("open", enable);
 };
-
 
 // DesktopManager.hasTheme
 
