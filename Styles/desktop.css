@@ -56,9 +56,10 @@ body .tab-scroller {
 	left: -50%;
 }
 
-.tab-page {
+body .tab-page {
 	animation: shrinkage auto linear;
 	animation-timeline: --page-scroll;
+	flex: 0 0 50%;
 }
 
 @keyframes shrinkage {
@@ -70,7 +71,7 @@ body .tab-scroller {
 	}
 	to {
 		scale: 0.5;
-		margin-right: -40%;
+		/* margin-right: -40%; */
 		border-radius: 10px;
 		--desktop-border-radius: 50px;
 	}
