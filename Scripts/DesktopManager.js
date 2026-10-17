@@ -293,6 +293,15 @@ DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     this.scrollTabs.addTab(desktop.target);
     this.desktops.push(desktop);
 
+    if (!this.gapDesktop) this.gapDesktop = this.addDesktopGap();
+    else this.scrollTabs.addTab(this.gapDesktop);
+};
+
+DesktopManager.prototype.addDesktopGap = function() {
+    if (!this.scrollTabs) return;
+    var gap = document.createElement("div");
+    this.scrollTabs.addTab(gap);
+    return gap;
 };
 
 /** @param {string} theme */
