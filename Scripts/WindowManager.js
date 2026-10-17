@@ -1034,8 +1034,8 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 
 	if (window.desktopManager && window.desktopManager.isExposé) {
 		var root = document.querySelector("main");
-		if (root) dialog.setParentElement(root);
-	}
+		if (root) dialog.detachToRootKeepingVisual(root);
+	} else dialog.clearExposéVisual();
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
 		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.warn(ex); }
@@ -1102,7 +1102,11 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 
 	dialog.stopAnimating();
 
-	this.dragAction.execute(dialog, dialog.clickOffset, difference);
+	// During an exposé drag the window lives in <main> (scale 1) while its content is
+	// counter-scaled to the desktop preview, so the applied movement must be divided by
+	// that scale or the window visual lags behind the cursor.
+	var dragScale = typeof dialog._exposeVisualScale === "number" && dialog._exposeVisualScale > 0 ? dialog._exposeVisualScale : 1;
+	this.dragAction.execute(dialog, dialog.clickOffset, dragScale === 1 ? difference : { x: difference.x / dragScale, y: difference.y / dragScale });
 
 	// Remember where the pointer was: the drop in disableDialogDrag happens after the
 	// pointer is gone and must still decide the same zone.
@@ -1576,9 +1580,9 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this._snapZone = "";
 	} else if (window.desktopManager) {
 		// Exposé drop: the window was detached to <main> on drag start — put it back
-		// into the desktop that is under the cursor.
+		// into the desktop that is under the cursor, at the spot it was dropped.
 		var desktopIndex = window.desktopManager.getDesktopIndexAt(this.pointerPosition.x, this.pointerPosition.y);
-		if (desktopIndex >= 0) this.activeDialog.moveToDesktop(desktopIndex);
+		if (desktopIndex >= 0) this.activeDialog.dropIntoDesktop(desktopIndex);
 		this.isTouchDrag = false;
 	}
 
@@ -2421,6 +2425,76 @@ Dialog.prototype.moveToDesktop = function(i){
 		var desktop = window.desktopManager.desktops[i];
 		if (desktop) desktop.insertWindow(this);
 	}
+};
+
+/**
+ * Detach the window to the given root (e.g. <main>) for an exposé drag while keeping it
+ * visually exactly where it was: the desktop's preview scale/offset is undone by an
+ * inverse transform on the content element.
+ * @param {HTMLElement} root
+ */
+Dialog.prototype.detachToRootKeepingVisual = function(root) {
+	var target = this.target;
+	if (!target || !root) return;
+	var before = target.getBoundingClientRect();
+	this.setParentElement(root);
+	var after = target.getBoundingClientRect();
+	if (!before.width || !after.width) return;
+	var scale = before.width / after.width;
+	var content = this.content;
+	if (!content || !scale) return;
+	// The content fills the window (absolute, top/left 0, 100%/100%), so its layout
+	// top-left equals the window's. With a top-left origin: visual = scale * layout + offset.
+	var offset = {
+		x: before.left - scale * after.left,
+		y: before.top - scale * after.top
+	};
+	content.style.transformOrigin = "0 0";
+	content.style.transform = "translate(" + toPixels(offset.x) + "," + toPixels(offset.y) + ") scale(" + scale + ")";
+	this._exposeVisualScale = scale;
+	this._exposeVisualOffset = offset;
+	this._exposeVisualWidth = after.width;
+};
+
+/** Remove the exposé inverse transform left on the content element, if any. */
+Dialog.prototype.clearExposéVisual = function() {
+	if (typeof this._exposeVisualScale !== "number") return;
+	var content = this.content;
+	if (content) {
+		content.style.transform = "";
+		content.style.transformOrigin = "";
+	}
+	this._exposeVisualScale = undefined;
+	this._exposeVisualOffset = null;
+	this._exposeVisualWidth = undefined;
+};
+
+/**
+ * Drop the window into desktop i, landing it on the new desktop at the exact spot it
+ * visually appeared at under the cursor.
+ * @param {number} i
+ */
+Dialog.prototype.dropIntoDesktop = function(i) {
+	var visualLeft = null, visualTop = null, unscaledWidth = null;
+	if (typeof this._exposeVisualScale === "number" && this._exposeVisualOffset && this.target) {
+		// Where the window currently looks like it is (visual = scale * layout + offset).
+		var current = this.target.getBoundingClientRect();
+		visualLeft = this._exposeVisualScale * current.left + this._exposeVisualOffset.x;
+		visualTop = this._exposeVisualScale * current.top + this._exposeVisualOffset.y;
+		unscaledWidth = this._exposeVisualWidth;
+	}
+	this.moveToDesktop(i);
+	this.clearExposéVisual();
+	if (visualLeft === null || !this.target || !unscaledWidth) return;
+	// Map the visual drop position back through the new desktop's preview scale.
+	var placed = this.target.getBoundingClientRect();
+	if (!placed.width) return;
+	var desktopScale = placed.width / unscaledWidth;
+	if (!desktopScale) return;
+	this.move(
+		this.x + (visualLeft - placed.left) / desktopScale,
+		this.y + (visualTop - placed.top) / desktopScale
+	);
 };
 
 /** @param {boolean} [createTouchSizers] */
