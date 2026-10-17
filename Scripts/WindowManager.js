@@ -1651,9 +1651,11 @@ WindowManager.prototype.disableDialogDrag = function() {
 		this._snapZone = "";
 	} else if (window.desktopManager) {
 		// Exposé drop: the window was detached to <main> on drag start — put it back
-		// into the desktop that is under the cursor, at the spot it was dropped.
+		// into the desktop that is under the cursor, at the spot it was dropped, or
+		// fly it back to where it came from when dropped between desktops.
 		var desktopIndex = window.desktopManager.getDesktopIndexAt(this.pointerPosition.x, this.pointerPosition.y);
 		if (desktopIndex >= 0) this.activeDialog.dropIntoDesktop(desktopIndex);
+		else this.activeDialog.flyBackToExposéOrigin();
 		this.isTouchDrag = false;
 	}
 
