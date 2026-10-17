@@ -294,7 +294,7 @@ DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     this.desktops.push(desktop);
 
     if (!this.gapDesktop) this.gapDesktop = this.addDesktopGap();
-    else this.scrollTabs.addTab(this.gapDesktop);
+    // else this.scrollTabs.addTab(this.gapDesktop);
 };
 
 DesktopManager.prototype.addDesktopGap = function() {
