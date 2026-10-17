@@ -60,9 +60,14 @@ body .tab-scroller {
 }
 
 body .tab-page {
+	/* animation: tab-spacing auto linear;
+	animation-timeline: --page-scroll; */
+	flex: 0 0 50%;
+}
+
+body .tab-page > * {
 	animation: tab-spacing auto linear;
 	animation-timeline: --page-scroll;
-	flex: 0 0 50%;
 }
 
 @keyframes shrinkage {
@@ -71,7 +76,7 @@ body .tab-page {
 		margin-right: 0;
 		/* border-radius: 0; */
 		left: -0%;
-		--desktop-border-radius: 0px;
+		--desktop-border-radius: 1px;
 	}
 	to {
 		scale: 0.5;
@@ -85,9 +90,11 @@ body .tab-page {
 @keyframes tab-spacing {
 	from {
 		scale: 1;
+		border-radius: 0;
 	}
 	to {
 		scale: 0.96;
+		border-radius: 10px;
 	}
 }
 
