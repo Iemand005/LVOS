@@ -1146,9 +1146,9 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 };
 
 /**
- * Keep the dragged window's content scaled to whatever is under the cursor during an
- * exposé drag: the preview scale of the hovered desktop, or 1:1 when no desktop is
- * under the cursor, so the user sees where letting go will place it.
+ * Keep the dragged window's content glued to the cursor during an exposé drag, scaled
+ * to whatever is under it: the preview scale of the hovered desktop, or 1:1 when no
+ * desktop is under the cursor, so the user sees where letting go will place it.
  * @param {Dialog} dialog
  * @param {number} x
  * @param {number} y
@@ -1156,44 +1156,45 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	var desktopManager = window.desktopManager;
 	if (!desktopManager || typeof dialog._exposeVisualScale !== "number" || !dialog.target || !dialog.content) return;
+	var content = dialog.content;
+	var grab = dialog._exposeGrab;
+	if (!grab) return;
+
+	// The scale the content should have for whatever is under the cursor.
 	var index = desktopManager.getDesktopIndexAt(x, y);
 	var k = 1;
 	if (index >= 0) {
 		// The hovered desktop's own preview scale (offsetWidth ignores transforms).
 		var desktopTarget = desktopManager.desktops[index].target;
-		var rect = desktopTarget.getBoundingClientRect();
-		if (rect.width && desktopTarget.offsetWidth) k = rect.width / desktopTarget.offsetWidth;
+		var area = desktopTarget.getBoundingClientRect();
+		if (area.width && desktopTarget.offsetWidth) k = area.width / desktopTarget.offsetWidth;
 	}
 	if (!k) k = 1;
+
+	// Animate scale changes through the independent `scale` property, so the position
+	// (the `transform` translate below) stays free to track the cursor every move.
 	var current = dialog._exposeContentScale || 1;
-	if (Math.abs(k - current) < 0.002) return;
+	if (Math.abs(k - current) >= 0.002) {
+		dialog._exposeContentScale = k;
+		dialog._exposeVisualScale = k;
+		content.style.transition = "scale 280ms cubic-bezier(0.44, 0.41, 0, 1)";
+		content.style.scale = String(k);
+		if (dialog._exposeScaleTimer) clearTimeout(dialog._exposeScaleTimer);
+		dialog._exposeScaleTimer = setTimeout(function() {
+			dialog._exposeScaleTimer = 0;
+			content.style.transition = "";
+		}, 300);
+	}
 
-	// Re-aim the content transform at the new scale so the grab point stays exactly
-	// under the cursor: place the content's visual top-left on cursor - k * grab.
-	var grab = dialog._exposeGrab || { x: 0, y: 0 };
-	var content = dialog.content;
-	var previousTransform = content.style.transform;
-	content.style.transform = "scale(" + k + ")";
-	var measured = content.getBoundingClientRect();
-	var translateX = (x - grab.x * k) - measured.left;
-	var translateY = (y - grab.y * k) - measured.top;
-	var finalTransform = "translate(" + toPixels(translateX) + "," + toPixels(translateY) + ") scale(" + k + ")";
-	// Put the old transform back so the change below transitions from it.
-	content.style.transform = previousTransform;
-	animateElement(content, function() {
-		content.style.transform = finalTransform;
-	}, "transform", null, null, 300);
-
-	// Remap the layout→visual mapping for the new scale. The translate is screen-
-	// additive; how the measured part follows the layout position depends on the
-	// transform origin (k for top-left, 1 otherwise) — same as at attach.
-	var coefficient = dialog._exposeCoefficientTracksScale ? k : 1;
-	dialog._exposeContentScale = k;
-	dialog._exposeVisualScale = coefficient;
-	dialog._exposeVisualOffset = {
-		x: translateX + measured.left - coefficient * dialog.x,
-		y: translateY + measured.top - coefficient * dialog.y
-	};
+	// Glue the grab point to the cursor from the real rendered geometry, which follows
+	// the animated scale even mid-transition.
+	var rendered = content.getBoundingClientRect();
+	var targetRect = dialog.target.getBoundingClientRect();
+	if (!rendered.width || !targetRect.width) return;
+	var renderedScale = dialog._exposeVisualWidth ? rendered.width / dialog._exposeVisualWidth : k;
+	content.style.transform = "translate(" +
+		toPixels(x - grab.x * renderedScale - targetRect.left) + "," +
+		toPixels(y - grab.y * renderedScale - targetRect.top) + ")";
 };
 
 /**
@@ -2488,9 +2489,8 @@ Dialog.prototype.moveToDesktop = function(i){
 
 /**
  * Detach the window to the given root (e.g. <main>) for an exposé drag while keeping it
- * visually exactly where it was: the desktop's preview scale/offset is undone by an
- * inverse transform on the content element. Everything is measured, not derived — the
- * browser's actual rendering (transform origin etc.) decides the numbers.
+ * visually exactly where it was: the desktop's preview scale is undone by an inverse
+ * scale+translate on the content element. Everything is measured, not derived.
  * @param {HTMLElement} root
  */
 Dialog.prototype.detachToRootKeepingVisual = function(root) {
@@ -2505,41 +2505,16 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	if (!content || !scale) return;
 
 	// Scale the content back to the preview size it had on the desktop, then measure
-	// where it actually renders and translate it onto the pre-move rect exactly.
+	// where it actually renders and translate it onto the pre-move rect exactly. The
+	// scale lives in the independent `scale` property so it can transition on its own
+	// while the translate keeps tracking the cursor every move.
 	content.style.transformOrigin = "0 0";
-	content.style.transform = "scale(" + scale + ")";
+	content.style.scale = String(scale);
 	var measured = content.getBoundingClientRect();
-	content.style.transform = "translate(" + toPixels(before.left - measured.left) + "," + toPixels(before.top - measured.top) + ") scale(" + scale + ")";
+	content.style.transform = "translate(" + toPixels(before.left - measured.left) + "," + toPixels(before.top - measured.top) + ")";
 
-	// Measure how many visual pixels the content moves per layout pixel the window
-	// moves, instead of assuming it equals the scale (that depends on the transform
-	// origin the browser ends up using). This is the factor the drag and the drop
-	// math have to work with.
-	var coefficient = scale;
-	if (this.useTransform && this.transform) {
-		var x = this.x, y = this.y, nudge = 128;
-		var layoutBefore = target.getBoundingClientRect();
-		var contentBefore = content.getBoundingClientRect();
-		this.transform.move(x + nudge, y);
-		var layoutAfter = target.getBoundingClientRect();
-		var contentAfter = content.getBoundingClientRect();
-		this.transform.move(x, y);
-		var layoutDelta = layoutAfter.left - layoutBefore.left;
-		var visualDelta = contentAfter.left - contentBefore.left;
-		if (layoutDelta && Math.abs(visualDelta) > 0.5) coefficient = visualDelta / layoutDelta;
-	}
-
-	this._exposeVisualScale = coefficient;
+	this._exposeVisualScale = scale;
 	this._exposeContentScale = scale;
-	// Does the content's visual position move `coefficient`× (top-left origin) or 1×
-	// (any other origin) with the window's layout position? Needed to remap at a
-	// different content scale mid-drag.
-	this._exposeCoefficientTracksScale = Math.abs(coefficient - scale) <= Math.abs(coefficient - 1);
-	// visual = coefficient * layout + offset, anchored on the pre-move rect.
-	this._exposeVisualOffset = {
-		x: before.left - coefficient * after.left,
-		y: before.top - coefficient * after.top
-	};
 	this._exposeVisualWidth = after.width;
 };
 
@@ -2550,12 +2525,16 @@ Dialog.prototype.clearExposéVisual = function() {
 	if (content) {
 		content.style.transform = "";
 		content.style.transformOrigin = "";
+		content.style.scale = "";
+		content.style.transition = "";
+	}
+	if (this._exposeScaleTimer) {
+		clearTimeout(this._exposeScaleTimer);
+		this._exposeScaleTimer = 0;
 	}
 	this._exposeVisualScale = undefined;
-	this._exposeVisualOffset = null;
 	this._exposeVisualWidth = undefined;
 	this._exposeContentScale = undefined;
-	this._exposeCoefficientTracksScale = undefined;
 	this._exposeGrab = null;
 };
 
@@ -2565,13 +2544,14 @@ Dialog.prototype.clearExposéVisual = function() {
  * @param {number} i
  */
 Dialog.prototype.dropIntoDesktop = function(i) {
-	var visualLeft = null, visualTop = null, unscaledWidth = null;
-	if (typeof this._exposeVisualScale === "number" && this._exposeVisualOffset && this.target) {
-		// Where the window currently looks like it is (visual = scale * layout + offset).
-		var current = this.target.getBoundingClientRect();
-		visualLeft = this._exposeVisualScale * current.left + this._exposeVisualOffset.x;
-		visualTop = this._exposeVisualScale * current.top + this._exposeVisualOffset.y;
-		unscaledWidth = this._exposeVisualWidth;
+	var visualLeft = null, visualTop = null, unscaledWidth = this._exposeVisualWidth;
+	// Where the window currently looks like it is: the rendered content rect.
+	if (this.content) {
+		var rendered = this.content.getBoundingClientRect();
+		if (rendered.width) {
+			visualLeft = rendered.left;
+			visualTop = rendered.top;
+		}
 	}
 	this.moveToDesktop(i);
 	this.clearExposéVisual();
