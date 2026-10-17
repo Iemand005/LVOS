@@ -54,11 +54,14 @@ main {
 body .tab-scroller {
 	width: 200vw;
 	/* left: -50%; */
+
+	animation: shrinkage auto linear;
+	animation-timeline: --page-scroll;
 }
 
 body .tab-page {
-	animation: shrinkage auto linear;
-	animation-timeline: --page-scroll;
+	/* animation: shrinkage auto linear;
+	animation-timeline: --page-scroll; */
 	flex: 0 0 50%;
 }
 
@@ -66,13 +69,13 @@ body .tab-page {
 	from {
 		scale: 1;
 		margin-right: 0;
-		border-radius: 0;
+		/* border-radius: 0; */
 		--desktop-border-radius: 0px;
 	}
 	to {
 		scale: 0.5;
 		/* margin-right: -40%; */
-		border-radius: 10px;
+		/* border-radius: 10px; */
 		--desktop-border-radius: 50px;
 	}
 }
