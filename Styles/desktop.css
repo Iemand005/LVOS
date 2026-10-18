@@ -90,7 +90,7 @@ body .tab-page > * {
 }
 
 body.color-debug .tab-page {
-	background-color: red;
+	background-color: cyan;
 }
 
 @keyframes shrinkage {
