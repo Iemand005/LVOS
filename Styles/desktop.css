@@ -80,6 +80,9 @@ body .tab-page {
 
 	view-timeline-name: --page-view;
 	view-timeline-axis: inline;
+
+	perspective: 1000px;
+    perspective-origin: center;
 }
 
 body .tab-page > * {
@@ -133,15 +136,20 @@ body.color-debug .tab-page {
 } */
 
 @keyframes page-scale {
-  33%, 100% {
-    transform: rotateY(-45deg) scale(0.8);
-    opacity: 0.7;
-  }
+	33% {
+		transform: rotateY(-45deg) scale(0.8);
+		opacity: 0.7;
+	}
 
-  66% {
-    transform: rotateY(0deg) scale(1);
-    opacity: 1;
-  }
+	100% {
+		transform: rotateY(45deg) scale(0.8);
+		opacity: 0.7;
+	}
+
+	66% {
+		transform: rotateY(0deg) scale(1);
+		opacity: 1;
+	}
 }
 
 :root {
