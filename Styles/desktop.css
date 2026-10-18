@@ -112,7 +112,7 @@ body .tab-page > * {
 }
 
 @keyframes page-scale {
-	0%, 150% {
+	0%, 100% {
 		scale: 0.8;
 		opacity: 0.5;
 	}
