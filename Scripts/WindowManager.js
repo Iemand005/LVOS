@@ -2334,7 +2334,7 @@ function Dialog(object, create) {
 	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
 		if (ev.ctrlKey) {
-			ev.stopImmediatePropagation();
+			// ev.stopImmediatePropagation();
 			return
 		}
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
@@ -2433,7 +2433,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		if(this.resizable && createSizers) this._createSizers();
 
-		target.addEventListener("dragstart", cancelDomEvent, false);
+		// target.addEventListener("dragstart", cancelDomEvent, false);
 		target.addEventListener("selectstart", cancelDomEvent, false);
 
 		var body = this.body;
@@ -4479,7 +4479,7 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager.saveState(); }, false);
-window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
+// window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
 	if (!e.dataTransfer) return;
