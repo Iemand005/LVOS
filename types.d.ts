@@ -40,6 +40,11 @@ interface DialogState {
 	maximized: boolean;
 }
 
+interface DialogDropState {
+	state: DialogState;
+	// and i might then do the mouse coors and stuff here? for a clean adjsuted drop! and maybe send the applicaion obj yeah!
+}
+
 interface Coord {
 	x: number;
 	y: number;
