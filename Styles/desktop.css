@@ -111,12 +111,10 @@ body.color-debug .tab-page {
 
 @keyframes tab-spacing {
 	from {
-		scale: 1;
 		border-radius: 0;
 		translate: 	0% 0;
 	}
 	to {
-		scale: 1;
 		border-radius: 42px;
 		translate: 50% 0;
 	}
