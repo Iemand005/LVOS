@@ -4484,6 +4484,7 @@ window.addEventListener("dragover", function (e) {
 	cancelDomEvent(e);
  }, false);
 window.addEventListener("drop", function(e) {
+	console.log(e)
 	e.preventDefault();
 	if (!e.dataTransfer) return;
 	var files = e.dataTransfer.files;

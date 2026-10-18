@@ -87,6 +87,14 @@ var onLoad = function () {
 		ev.preventDefault(); 
 		ev.stopPropagation();
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
+        console.log("DADARAGGY")
+	};
+
+    document.body.ondrop = function(ev) { 
+		ev.preventDefault(); 
+		ev.stopPropagation();
+		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
+        console.log("Kronkel")
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
