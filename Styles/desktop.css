@@ -101,11 +101,11 @@ body.color-debug .tab-page {
 @keyframes shrinkage {
 	from {
 		scale: 1;
-		left: -0%;
+		translate: 	0% 0;
 	}
 	to {
 		scale: 0.5;
-		left: -50%;
+		translate: -25% 0;
 	}
 }
 
