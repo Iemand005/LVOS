@@ -83,15 +83,17 @@ body .tab-page {
 }
 
 body .tab-page > * {
-	animation: tab-spacing auto linear;
-	animation-timeline: --page-scroll;
+	animation:
+    tab-spacing auto linear both,
+    page-scale linear both;
 
-	animation: page-scale linear both;
-	animation-timeline: --page-view;
+	animation-timeline:
+		--page-scroll,
+		--page-view;
 
 	overflow: hidden;
 
-	translate: 50% 0;i NEED
+	translate: 50% 0;
 }
 
 body.color-debug .tab-page {
