@@ -89,6 +89,10 @@ body .tab-page > * {
 
 }
 
+body.color-debug .tab-page {
+	background-color: red;
+}
+
 @keyframes shrinkage {
 	from {
 		scale: 1;
@@ -114,7 +118,7 @@ body .tab-page > * {
 }
 
 @keyframes page-scale {
-	25% {
+	25%, 75% {
 		scale: 0.8;
 		opacity: 0.5;
 	}
