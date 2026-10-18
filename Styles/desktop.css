@@ -82,6 +82,9 @@ body .tab-page > * {
 	animation-timeline: --page-scroll;
 
 	overflow: hidden;
+
+	animation: page-scale linear both;
+  animation-timeline: view(inline);
 }
 
 @keyframes shrinkage {
@@ -105,6 +108,18 @@ body .tab-page > * {
 		scale: 0.96;
 		border-radius: 42px;
 		translate: 50% 0;
+	}
+}
+
+@keyframes page-scale {
+	0%, 100% {
+		scale: 0.8;
+		opacity: 0.5;
+	}
+
+	50% {
+		scale: 1;
+		opacity: 1;
 	}
 }
 
