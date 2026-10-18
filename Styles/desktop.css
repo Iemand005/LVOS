@@ -75,6 +75,8 @@ body .tab-scroller {
 body .tab-page {
 	flex: 0 0 50%;
 	pointer-events: none;
+	animation: page-scale linear both;
+	animation-timeline: view(inline);
 }
 
 body .tab-page > * {
@@ -83,8 +85,6 @@ body .tab-page > * {
 
 	overflow: hidden;
 
-	animation: page-scale linear both;
-  animation-timeline: view(inline);
 }
 
 @keyframes shrinkage {
