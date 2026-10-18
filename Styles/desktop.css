@@ -45,7 +45,8 @@ body::before {
 body::after {
 	content: "";
 	display: block;
-	flex: 1 0 1px;
+	flex: 0 0 1px;
+	margin-top: auto;
 	scroll-snap-align: end;
 }
 
