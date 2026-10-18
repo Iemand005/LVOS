@@ -86,7 +86,6 @@ body .tab-page > * {
 	animation-timeline: --page-scroll;
 
 	overflow: hidden;
-
 }
 
 body.color-debug .tab-page {
