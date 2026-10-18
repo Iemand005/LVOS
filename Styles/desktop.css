@@ -88,7 +88,7 @@ body .tab-page {
 body .tab-page > * {
 	animation:
 		tab-spacing auto linear both,
-		page-scale-cube linear both;
+		page-scale linear both;
 
 	animation-timeline:
 		--page-scroll,
