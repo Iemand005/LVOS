@@ -77,13 +77,16 @@ body .tab-scroller {
 body .tab-page {
 	flex: 0 0 50%;
 	pointer-events: none;
-	animation: page-scale linear both;
-	animation-timeline: view(inline);
+	/* animation: page-scale linear both;
+	animation-timeline: view(inline); */
 }
 
 body .tab-page > * {
 	animation: tab-spacing auto linear;
 	animation-timeline: --page-scroll;
+
+	animation: page-scale linear both;
+	animation-timeline: view(inline);
 
 	overflow: hidden;
 }
