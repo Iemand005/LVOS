@@ -83,8 +83,6 @@ body .tab-page {
 
 	scale: 0.8;
 	opacity: 0.5;
-
-	--scale-thing: 0.2;
 }
 
 body .tab-page > * {
@@ -92,8 +90,6 @@ body .tab-page > * {
 	animation-timeline: --page-scroll;
 
 	overflow: hidden;
-
-	scale: var(--scale-thing);
 }
 
 body.color-debug .tab-page {
@@ -133,7 +129,6 @@ body.color-debug .tab-page {
 	50% {
 		scale: 1;
 		opacity: 1;
-		--scale-thing: 1;
 	}
 }
 
