@@ -2333,8 +2333,9 @@ function Dialog(object, create) {
 	var self = this;
 	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
-		 if (ev.ctrlKey) {
+		if (ev.ctrlKey) {
 			ev.stopImmediatePropagation();
+			return
 		}
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
