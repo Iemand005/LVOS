@@ -98,10 +98,12 @@ var onLoad = function () {
         ev.dataTransfer.dropEffect = "copy";
         console.log("Kronkel")
 
-        const json = ev.dataTransfer.getData("application/json");
+        
+        var json = ev.dataTransfer.getData("application/json");
         if (!json) return;
 
-        const data = JSON.parse(json);
+        /** @type {DialogDropState} */
+        var data = JSON.parse(json);
 
         console.log(data)
 	};

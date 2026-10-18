@@ -2477,7 +2477,7 @@ Dialog.prototype.initWithObject = function(object) {
 				app: self.application
 			}
 
-			event.dataTransfer.setData("application/json", JSON.stringify(self.getState()));
+			event.dataTransfer.setData("application/json", JSON.stringify(dragState));
 		});
 	}
 
