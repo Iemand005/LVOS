@@ -2465,7 +2465,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		this.toggleOpen(false);
 
-		target.addEventListener("dragstart", event => {
+		target.addEventListener("dragstart", function (event) {
 			if (!event.ctrlKey || !event.dataTransfer) {
 				event.preventDefault();
 				return;
