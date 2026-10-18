@@ -2466,9 +2466,15 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 
 		target.addEventListener("dragstart", function (event) {
-			if (!event.ctrlKey || !event.dataTransfer) {
+			if (!event.ctrlKey || !event.dataTransfer || !self.application) {
 				event.preventDefault();
 				return;
+			}
+
+			/** @type {DialogDropState} */
+			var dragState = {
+				state: self.getState(),
+				app: self.application
 			}
 
 			event.dataTransfer.setData("application/json", JSON.stringify(self.getState()));
