@@ -2471,10 +2471,7 @@ Dialog.prototype.initWithObject = function(object) {
 				return;
 			}
 
-			event.dataTransfer.setData("application/json", JSON.stringify({
-				type: "element",
-				id: 123
-			}));
+			event.dataTransfer.setData("application/json", JSON.stringify(self.getState()));
 		});
 	}
 
