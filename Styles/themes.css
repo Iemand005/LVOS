@@ -100,8 +100,8 @@ html:has(body.slow-animations)::view-transition-group(*) {
 }
 
 .default-theme .window > content > article > iframe {
-	background-color: rgba(0, 0, 0, 0.267);
-	box-shadow: inset 0px 0px 10px black;
+	background-color: transparent;
+	box-shadow: none;
 }
 
 .default-theme .window content {
