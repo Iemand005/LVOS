@@ -90,6 +90,8 @@ body .tab-page > * {
 	animation-timeline: --page-view;
 
 	overflow: hidden;
+
+	translate: 50% 0;i NEED
 }
 
 body.color-debug .tab-page {
