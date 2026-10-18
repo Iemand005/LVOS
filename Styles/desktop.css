@@ -20,6 +20,8 @@ html {
 	scroll-snap-type: y mandatory;
 	scrollbar-width: none;
 	view-timeline: --page-scroll y;
+
+	background: black;
 }
 
 body {
