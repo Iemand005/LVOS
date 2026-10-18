@@ -2334,7 +2334,7 @@ function Dialog(object, create) {
 	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
 		if (ev.ctrlKey) {
-			// ev.stopImmediatePropagation();
+			ev.stopImmediatePropagation();
 			return
 		}
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
@@ -2464,6 +2464,18 @@ Dialog.prototype.initWithObject = function(object) {
 			fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
 		this.toggleOpen(false);
+
+		target.addEventListener("dragstart", event => {
+			if (!event.ctrlKey || !event.dataTransfer) {
+				event.preventDefault();
+				return;
+			}
+
+			event.dataTransfer.setData("application/json", JSON.stringify({
+				type: "element",
+				id: 123
+			}));
+		});
 	}
 
 	if (this.id) windowManager.windows[this.id] = this;
