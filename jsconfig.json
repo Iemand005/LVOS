@@ -31,6 +31,7 @@
 		"node_modules",
 		"./Applications/**/WebGraphics",
 		"./Applications/StereogramMaker",
-		"LVOS-dist"
+		"LVOS-dist",
+		".git"
 	]
 }
