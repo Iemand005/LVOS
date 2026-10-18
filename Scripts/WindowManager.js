@@ -4479,7 +4479,10 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager.saveState(); }, false);
-// window.addEventListener("dragover", function (e) { cancelDomEvent(e); }, false);
+window.addEventListener("dragover", function (e) { 
+	console.log(e)
+	cancelDomEvent(e);
+ }, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
 	if (!e.dataTransfer) return;
