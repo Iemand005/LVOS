@@ -93,8 +93,17 @@ var onLoad = function () {
     document.body.ondrop = function(ev) { 
 		ev.preventDefault(); 
 		ev.stopPropagation();
-		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
+		if (!ev.dataTransfer) return;
+        
+        ev.dataTransfer.dropEffect = "copy";
         console.log("Kronkel")
+
+        const json = ev.dataTransfer.getData("application/json");
+        if (!json) return;
+
+        const data = JSON.parse(json);
+
+        console.log(data)
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
