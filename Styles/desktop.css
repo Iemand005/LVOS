@@ -123,8 +123,12 @@ body.color-debug .tab-page {
 }
 
 @keyframes page-scale {
+	33%, 100% {
+		scale: 0.96;
+		opacity: 0;
+	}
 
-	66% {
+	0%, 66% {
 		scale: 1;
 		opacity: 1;
 	}
