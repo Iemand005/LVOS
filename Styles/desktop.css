@@ -88,7 +88,7 @@ body .tab-page {
 body .tab-page > * {
 	animation:
 		tab-spacing auto linear both,
-		page-scale linear both;
+		page-scale-cube linear both;
 
 	animation-timeline:
 		--page-scroll,
@@ -122,7 +122,7 @@ body.color-debug .tab-page {
 		translate: 50% 0;
 	}
 }
-/* 
+
 @keyframes page-scale {
 	33%, 100% {
 		scale: 0.8;
@@ -133,7 +133,7 @@ body.color-debug .tab-page {
 		scale: 1;
 		opacity: 1;
 	}
-} */
+}
 
 @keyframes page-scale-cover {
 	33% {
