@@ -103,7 +103,7 @@ body .tab-page > * {
 	}
 	to {
 		scale: 0.96;
-		border-radius: 100px;
+		border-radius: 42px;
 		translate: 50% 0;
 	}
 }
