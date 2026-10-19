@@ -62,7 +62,6 @@ const BUNDLES = {
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
 		"WindowManager.js",
-		"Reflector.js",        // MUST precede DesktopManager (new Reflector at load)
 		"ElementPicker.js",
 		"WebGraphics/Graphics.js",
 		"WebGraphics/Graphics3D.js",
