@@ -44,8 +44,6 @@ type TagOf<N extends CustomElementNames> = CustomElementsByIds[N]["extends"];
 
 type CustomElementName<T extends CustomTag> = { [K in CustomElementNames]: CustomElementsByIds[K]["extends"] extends T ? K : never }[CustomElementNames];
 
-type a = CustomElementName<"time">
-
 declare global {
 
 
@@ -92,7 +90,7 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<K extends CustomTag, I extends CustomElementNames>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
+		createElement<K extends CustomTag, I extends CustomElementNames>(tagName: K, options: { is: CustomElementName<K> }): HTMLElementTagNameMap[K] | ClassOf[I];
 	}
 
 	interface Navigator {
