@@ -38,7 +38,7 @@ declare global {
 
 	type CustomElementNames = keyof CustomElementsByIds;
 
-	type CustomByName<N extends keyof CustomElementsByIds> = CustomElementsByIds[N];
+	type CustomByName<N extends CustomElementNames> = CustomElementsByIds[N];
 
 	type ClassOf<N extends CustomName> = CustomByName<N>[1];
 	type TagOf<N extends CustomName> = CustomByName<N>[2];
