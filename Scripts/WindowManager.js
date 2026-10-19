@@ -959,6 +959,17 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		var grabY = offset ? offset.y : 0;
 		dialog.moveToCenter(x - grabX, y - grabY);
 	}
+
+	// Force a layout pass so the window's rendered size matches the applied state,
+	// especially when restored from a hidden HTML JSON drop.
+	if (dialog.target) {
+		try {
+			dialog.resize();
+			dialog.update();
+		} catch (exception) {
+			/* ignore */
+		}
+	}
 	return dialog;
 };
 

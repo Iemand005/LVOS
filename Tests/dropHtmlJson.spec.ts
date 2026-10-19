@@ -18,9 +18,9 @@ async function dropHtmlJson(page: import('@playwright/test').Page, payload: obje
 
 test('restores window size when JSON is hidden in text/html', async ({ vulpOS }) => {
 	const at = { x: 550, y: 350 };
-	const payload = {
+	const payload: DialogDropState = {
 		app: { id: 'drop.size.app', title: 'Size App', src: './example.html' },
-		state: { x: 0.5, y: 0.5, width: 900, height: 600, open: true },
+		state: { x: 0.5, y: 0.5, width: 900, height: 600, open: true, title: ", ", z: 0, maximized: false },
 		offset: { x: 50, y: 40 },
 	};
 	await dropHtmlJson(vulpOS.page, payload, at);
