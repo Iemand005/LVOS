@@ -7,9 +7,7 @@ class WindowElement extends HTMLDivElement {
 		this.dialog = null;
 	}
 
-	connectedCallback() {
-		console.log("I connected balls");
-	}
+	connectedCallback() { console.log("I connected balls"); }
 	/** @param {boolean} [enable] Enable maximization */
 	toggleMaximizedVT(enable) {
 
