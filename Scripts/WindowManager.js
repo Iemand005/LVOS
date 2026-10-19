@@ -933,8 +933,9 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
  * @param {number} x Pointer position when the drag was dropped, in pixels.
  * @param {number} y Pointer position when the drag was dropped, in pixels.
  * @param {Coord} [offset] Pointer position relative to the window centre when the drag started.
+ * @param {Partial<DialogState>} [state] The saved state that was dragged with the window.
  */
-WindowManager.prototype.dropApplication = function (application, x, y, offset) {
+WindowManager.prototype.dropApplication = function (application, x, y, offset, state) {
 	if (!application || !application.id) return null;
 
 	var dialog = this.windows[application.id];
@@ -943,6 +944,10 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset) {
 		dialog = this.windows[application.id];
 	}
 	if (!dialog) return null;
+
+	// Apply the dragged state first so the window keeps its size (and other state)
+	// from when it was dragged, then position it under the cursor.
+	dialog.loadState(state || {});
 
 	dialog.launch();
 	dialog.setZ();
