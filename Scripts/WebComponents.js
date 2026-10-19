@@ -169,7 +169,7 @@ const customs = customElems = {
 	"odometer-time": { constructor: OdometerTime, extends: "time" },
 };
 
-Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, { extends: c.extends }));
+Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, c));
 
 class Modern {
 
