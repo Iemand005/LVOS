@@ -42,7 +42,7 @@ declare global {
 	type ClassOf<N extends CustomName> = CustomByName<N>[1];
 	type TagOf<N extends CustomName> = CustomByName<N>[2];
 
-	type WindowClass = ClassOf<"window-div">; // typeof WindowElement
+	type WindowClass = ClassOf<"window-div">;
 	type WindowTag = TagOf<"window-div">;
 
 	
