@@ -352,7 +352,6 @@ function getViewBoxPosition() {
 }
 
 function toPixels(/** @type {number} */value) { return Math.round(value) + "px"; }
-function toPercent(/** @type {number} */value) { return Math.round(value * 100) + "%"; }
 function toDegrees(/** @type {number} */value) { return Math.round(value) + "deg"; }
 
 /** @param {number} pixels */
@@ -842,10 +841,6 @@ WindowManager.prototype.forEachWindow = function (callback) {
 	}
 };
 
-WindowManager.prototype.killAll = function () {
-	this.forEachWindow(function (dialog) { dialog.kill(); });
-};
-
 WindowManager.prototype.synchronizeStates = function () {
 	this.forEachWindow(function(dialog) { dialog.reportState(); });
 };
@@ -1037,12 +1032,6 @@ WindowManager.prototype.injectApplications = function() {
 	for (var i = 0; i < arguments.length; i++)
 		arguments[i].forEach(windowManager.loadApp, windowManager);
 	windowManager.loadState();
-};
-
-/** @param {string} appId  */
-WindowManager.prototype.closeApp = function(appId) {
-	var window = windowManager.windows[appId];
-	if (window) window.kill();
 };
 
 /** @param {boolean} [enabled] */
@@ -3344,11 +3333,6 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	this._scaleX = nextX;
 	this._scaleY = nextY;
 };
-/** @param {number} scaleX */
-Dialog.prototype.setScaleX = function(scaleX) {
-	this._scaleX = scaleX;
-	this.updateTransform();
-};
 /** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
 	this._scaleY = scaleY;
@@ -3369,10 +3353,6 @@ Dialog.prototype.activate = function() {
 	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
-/** @param {boolean} force */
-Dialog.prototype.toggleTitleBar = function (force) {
-	return this.titleBar && !this.titleBar.classList.toggle( "hidden", typeof force !== "undefined" ? !force : undefined);
-};
 Dialog.prototype.open = function () {
 	return this.toggleOpen(true);
 };
@@ -3868,14 +3848,6 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	}
 };
 /**
- * @param {number} deltaX
- * @param {number} deltaY
- */
-Dialog.prototype.moveBy = function (deltaX, deltaY) {
-	this.move(this.x + deltaX, this.y + deltaY);
-};
-
-/**
  * Move the dialog so its center point lands at the provided coordinates. I  ggotta renname thifunc
  * @param {number} centerX
  * @param {number} centerY
@@ -4213,12 +4185,6 @@ Dialog.prototype.setMaxSize = function (width, height) {
 	this._maxHeight = typeof height === "number" ? height : 200;
 	this.resize();
 };
-/** @param {number} ratio */
-Dialog.prototype.setMinAspectRatio = function (ratio) {
-	this._minAspectRatio = ratio;
-	this.resize();
-};
-
 Dialog.prototype.updateBodyOffset = function () {
 	var bodyRect = this.getBodyRect();
 	if (!bodyRect || (bodyRect.width === 0 && bodyRect.height === 0 && bodyRect.x === 0 && bodyRect.y === 0)) return;
@@ -4298,23 +4264,12 @@ Dialog.prototype.openUrl = function(url) {
 
 Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.src); };
 
-Dialog.prototype.loadFrame = function() {
-	if (!this.application) return;
-	var frame = this.getOrCreateFrame(true);
-	if (frame) appManager.openAppInIFrame(this.application.id, frame);
-};
-
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
 	if (!this.isOpen) this.initWithObject(this);
 	if (this.mica) this.injectMica();
 
 	this.open();
-};
-
-Dialog.prototype.relaunch = function() {
-	this.close();
-	this.launch();
 };
 
 Dialog.prototype.kill = function() {
@@ -4490,8 +4445,6 @@ Dialog.prototype.flip = function(enable) {
 	this.toggleClassAnimated("flipped", enable);
 };
 
-Dialog.prototype.makeWallpaper = function() { if (this.id) appManager.setWallpaper(this.id); };
-
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
 	return {
@@ -4600,7 +4553,6 @@ function DocumentCrawler(customDocument){
 }
 
 DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
-DocumentCrawler.prototype.getMetroBody = function () { var metro = this.getMetro(); return metro && metro.firstChild; };
 DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
 DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
