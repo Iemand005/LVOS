@@ -92,7 +92,7 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<K extends CustomTag, I extends CustomElementName<K>>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | ClassOf[I];
+		createElement<K extends CustomTag, I extends CustomElementName<K>>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | InstanceType<ClassOf<I>>;
 	}
 
 	interface Navigator {
