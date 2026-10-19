@@ -9,13 +9,10 @@ class WindowElement extends HTMLDivElement {
 
 	connectedCallback() { console.log("I connected balls"); }
 	/** @param {boolean} [enable] Enable maximization */
-	toggleMaximizedVT(enable) {
-
-		if (document.activeViewTransition)
-			document.activeViewTransition.skipTransition();
-
+	toggleMaximizedVT(enable) {		
 		this.style.viewTransitionName = "window-fullscreen";
-
+		
+		if (document.activeViewTransition) document.activeViewTransition.skipTransition();
 		if ("startViewTransition" in document) {
 			var transition = document.startViewTransition(() => this.classList.toggle("maximized", enable));
 
