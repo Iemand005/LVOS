@@ -103,9 +103,17 @@ var onLoad = function () {
         if (!json) return;
 
         /** @type {DialogDropState} */
-        var data = JSON.parse(json);
+        var data;
+        try {
+            data = JSON.parse(json);
+        } catch (exception) {
+            console.warn("Could not read the dropped window state.", exception);
+            return;
+        }
 
-        console.log(data)
+        if (!data || !data.app || !window.windowManager) return;
+
+        window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY);
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {

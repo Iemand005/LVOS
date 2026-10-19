@@ -925,6 +925,29 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 	this.installApp(proxyUrl + url, getSiteName(url) || "unkle", "custom." + getDomain(url), getFaviconUrl(url));
 };
 
+/**
+ * Opens the application carried by a drop as a window and centres it under the
+ * pointer, so it lands where it was let go rather than at its saved position.
+ * @param {Application} application
+ * @param {number} x
+ * @param {number} y
+ */
+WindowManager.prototype.dropApplication = function (application, x, y) {
+	if (!application || !application.id) return null;
+
+	var dialog = this.windows[application.id];
+	if (!dialog) {
+		this.loadApp(application);
+		dialog = this.windows[application.id];
+	}
+	if (!dialog) return null;
+
+	dialog.launch();
+	dialog.setZ();
+	if (typeof x === "number" && typeof y === "number") dialog.moveToCenter(x, y);
+	return dialog;
+};
+
 /** @param {boolean} enabled */
 WindowManager.prototype.toggleDragging = function(enabled) {
 	ClickOffset.toggleDragEventHandler(enabled, this.windowDragEvent, "grabbing");
