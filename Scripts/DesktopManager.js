@@ -107,6 +107,8 @@ var onLoad = function () {
 
         console.log("url shit", html);
 
+        var doc = new Document(html);
+
         var droppedUrl = "";
 
         if (uriList) {
