@@ -132,11 +132,15 @@ var onLoad = function () {
             if (maybeJson.charAt(0) === "{" || maybeJson.charAt(0) === "[") json = maybeJson;
         }
 
+        /** @type {DialogDropState | null} */
         var data = null;
 
         if (json) {
             try {
-                data = JSON.parse(json);
+                var parser = new DOMParser()
+                var newDoc = parser.parseFromString(html,   "text/html");
+                data = JSON.parse(newDoc.body.textContent)
+                console.log("got da json", data);
             } catch (exception) {
                 data = null;
             }
