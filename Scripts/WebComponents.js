@@ -167,12 +167,12 @@ class OdometerTime extends OdometerDisplay {
 }
 
 /** @constant */
-const customs = [
-	["window-div", WindowElement, "div"],
-	["odometer-track", OdometerDigit, "span"],
-	["odometer-display", OdometerDisplay, "time"],
-	["odometer-time", OdometerTime, "time"],	 
-];
+const customs = {
+	"window-div": { constructor: WindowElement, extends: "div" },
+	"odometer-track": { constructor: OdometerDigit, extends: "span" },
+	"odometer-display": { constructor: OdometerDisplay, extends: "time" },
+	"odometer-time": { constructor: OdometerTime, extends: "time" },
+};
 
 customs.forEach(c => customElements.define(c[0], c[1], { extends: c[2] }));
 
