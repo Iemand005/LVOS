@@ -32,6 +32,8 @@ interface CustomElementsByIs {
 	}
 }
 
+type CustomElementMap = {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }};
+
 type CustomElementsByIds = typeof customs;
 
 type CustomElementNames = keyof CustomElementsByIds;
