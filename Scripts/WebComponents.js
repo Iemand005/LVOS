@@ -101,7 +101,6 @@ class OdometerTime extends OdometerDisplay {
 	set dateTime(value) { this.setAttribute("datetime", value); }
 
 	usingValue = () => this.hasAttribute("value");
-
 	currentGroupCount = () => this.usingValue() && this.getAttribute("value")?.split(":").length || 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
 
 	/** @param {number} groups */
@@ -115,7 +114,6 @@ class OdometerTime extends OdometerDisplay {
 			if (i < groups - 1) this.append(":");
 		}
 
-		// Align each digit's roll to the element's own height so one full digit is visible.
 		const height = this.clientHeight;
 		if (height > 0) this.tracks.forEach(track => { track.lineHeight = height; });
 	}
