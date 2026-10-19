@@ -32,9 +32,12 @@ interface CustomElementsByIs {
 	}
 }
 
-type CustomElementsByIds = global.customs
 
 declare global {
+	
+	// type CustomElementsByIds = 
+
+	
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
