@@ -2525,10 +2525,7 @@ Dialog.prototype.initWithObject = function(object) {
 			var data = JSON.stringify(dragState);
 			event.dataTransfer.setData("application/json", data);
 			event.dataTransfer.setData("text/plain", self.src || self.title || self.id);
-			event.dataTransfer.setData(
-				"text/uri-list",
-				data
-			);
+			if (self.src) event.dataTransfer.setData("text/uri-list", self.src);
 
 			event.dataTransfer.setData(
 				"text/html",
