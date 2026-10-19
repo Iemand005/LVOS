@@ -16,7 +16,7 @@ class WindowElement extends HTMLDivElement {
 
 		this.style.viewTransitionName = "window-fullscreen";
 
-		if (document.startViewTransition) {
+		if ("startViewTransition" in document) {
 			var transition = document.startViewTransition(() => this.classList.toggle("maximized", enable));
 
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
