@@ -178,28 +178,12 @@ class OdometerTime extends OdometerDisplay {
 /** @type {CustomElementList} */
 const customs = [
 	["window-div", WindowElement, "div"],
-	["odometer-track"],
-	["odometer-display"],
-	["odometer-time"],
+	["odometer-track", OdometerDigit, "span"],
+	["odometer-display", OdometerDisplay, "time"],
+	["odometer-time", OdometerTime, "time"],
 ];
 
 customs.forEach(c => customElements.define(c[0], c[1], { extends: c[2] }));
-
-customElements.define("window-div", WindowElement, {
-	extends: "div"
-});
-
-customElements.define("odometer-track", OdometerDigit, {
-	extends: "span"
-});
-
-customElements.define("odometer-display", OdometerDisplay, {
-	extends: "time"
-});
-
-customElements.define("odometer-time", OdometerTime, {
-	extends: "time"
-});
 
 
 class Modern {
