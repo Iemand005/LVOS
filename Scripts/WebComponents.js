@@ -104,16 +104,13 @@ class OdometerTime extends OdometerDisplay {
 	connectedCallback() {
 		this.setAttribute("is", "odometer-time");
 
-		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim()) {
+		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim())
 			this.setAttribute("value", this.textContent.trim());
-		}
 
 		this.buildTracks(this.currentGroupCount());
 		this.update();
 
-		// this.style.display = "flex";
 		this.style.overflow = "hidden";
-		// this.style.justifyContent = "center";
 	}
 
 	get dateTime() { return this.getAttribute("datetime") || ""; }
@@ -126,8 +123,7 @@ class OdometerTime extends OdometerDisplay {
 
 	currentGroupCount() {
 		if (this.usingValue()) {
-			const v = this.getAttribute("value") || "00:00:00";
-			return v.split(":").length;
+			return (this.getAttribute("value"))?.split(":").length || 3;
 		}
 		return 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
 	}
