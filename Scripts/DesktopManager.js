@@ -99,21 +99,77 @@ var onLoad = function () {
         console.log("Kronkel")
 
         
-        var json = ev.dataTransfer.getData("application/json") || ev.dataTransfer.getData("text/plain");
-        if (!json) return;
+        var dt = ev.dataTransfer;
+        var json = dt.getData("application/json");
+        var plain = dt.getData("text/plain");
+        var uriList = dt.getData("text/uri-list") || "";
 
-        /** @type {DialogDropState} */
-        var data;
-        try {
-            data = JSON.parse(json);
-        } catch (exception) {
-            console.warn("Could not read the dropped window state.", exception);
+        var droppedUrl = "";
+
+        if (uriList) {
+            var lines = uriList.replace(/\r\n/g, "\n").split("\n");
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                if (line && line.charAt(0) !== "#") {
+                    droppedUrl = line;
+                    break;
+                }
+            }
+        }
+
+        if (!json && plain) {
+            var maybeJson = plain.trim();
+            if (maybeJson.charAt(0) === "{" || maybeJson.charAt(0) === "[") json = maybeJson;
+        }
+
+        var data = null;
+
+        if (json) {
+            try {
+                data = JSON.parse(json);
+            } catch (exception) {
+                data = null;
+            }
+        }
+
+        if (data && data.app && window.windowManager) {
+            window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY, data.offset, data.state);
             return;
         }
 
-        if (!data || !data.app || !window.windowManager) return;
+        // If it's not our internal drop, treat the dropped URL as an app to open.
+        if (!droppedUrl && plain && !/^\{|\[/.test(plain.trim())) {
+            droppedUrl = plain.trim();
+        }
 
-        window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY, data.offset, data.state);
+        if (!droppedUrl) return;
+
+        try {
+            var url = new URL(droppedUrl, location.href).href;
+        } catch (exception) {
+            console.warn("Could not interpret dropped content as a URL.", exception);
+            return;
+        }
+
+        if (!window.appManager || !window.windowManager) return;
+
+        var existing = null;
+        // Try to find an app with this src (or distSrc)
+        for (var id in window.appManager.apps) {
+            if (window.appManager.apps.hasOwnProperty(id)) {
+                var a = window.appManager.apps[id];
+                if (a && (a.src === url || a.distSrc === url)) { existing = a; break; }
+            }
+        }
+        if (existing) {
+            window.windowManager.dropApplication(existing, ev.clientX, ev.clientY, null, null);
+            return;
+        }
+
+        // Create a basic app for the dropped URL and open it.
+        var newApp = window.appManager.createApp(url, url, "dropped." + Date.now());
+        window.appManager.addApp(newApp);
+        window.windowManager.dropApplication(newApp, ev.clientX, ev.clientY, null, null);
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
