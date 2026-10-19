@@ -171,7 +171,7 @@ const customs = [
 	["window-div", WindowElement, "div"],
 	["odometer-track", OdometerDigit, "span"],
 	["odometer-display", OdometerDisplay, "time"],
-	["odometer-time", OdometerTime, "time"],
+	["odometer-time", OdometerTime, "time"],	 
 ];
 
 customs.forEach(c => customElements.define(c[0], c[1], { extends: c[2] }));
