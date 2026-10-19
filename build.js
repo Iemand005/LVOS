@@ -67,15 +67,15 @@ const BUNDLES = {
 		"WebGraphics/Graphics.js",
 		"WebGraphics/Graphics3D.js",
 		"WebGraphics/HTMLInCanvas.js",
-		"WebGraphics/ScreenShooter.js", // DesktopManager does `new ScreenShooter` at load
+		"WebGraphics/ScreenShooter.js",
+		"ScrollTabs/ScrollTabs.js",
+		"WebComponents.js",
 		"DesktopManager.js",
 		"Settings.js",
 		"ProvisionedApps.js",
 		"Console.js",
 		"FileSystem.js",
 		"NewtonVirus.js",
-		"ScrollTabs/ScrollTabs.js",     // TabScroller, resolved from the repo root
-		"WebComponents.js",
 		"index.js"             // boot, last
 	],
 	"mobile.dist.js": [
