@@ -44,7 +44,6 @@ var isLocal = location.protocol === "file:" || location.hostname === "localhost"
 		"OTransform" in style
 	);
 })();
-if (supportsPointer) console.log("Supports pointer events!");
 
 
 /** @type {"webkitTransitionEnd" | "transitionend"} */
@@ -1086,10 +1085,10 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			node = node.parentElement;
 		}
 		if (isInteractive) {
-			try { dialog.focus(); } catch (ex) { console.warn(ex); }
+			try { dialog.focus(); } catch (ex) {}
 			return dialog;
 		}
-	} catch (ex) {  console.warn(ex);  }
+	} catch (ex) {}
 
 	cancelDomEvent(event);
 
@@ -1107,9 +1106,8 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	} else dialog.clearExposéVisual();
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.warn(ex); }
+		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
 	}
-	if (flags.verboseLogs) console.log("Activating window", dialog);
 	this.activeDialog = dialog;
 	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
 	this.enableDialogDrag();
