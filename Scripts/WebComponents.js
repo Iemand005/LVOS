@@ -106,7 +106,6 @@ class OdometerTime extends OdometerDisplay {
 	get dateTime() { return this.getAttribute("datetime") || ""; }
 	set dateTime(value) { this.setAttribute("datetime", value); }
 
-	/** value wins if present; otherwise fall back to datetime */
 	usingValue = () => this.hasAttribute("value");
 
 	currentGroupCount = () => this.usingValue() && this.getAttribute("value")?.split(":").length || 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
