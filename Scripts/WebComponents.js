@@ -179,7 +179,7 @@ const customs = awawa = {
 
 Object.keys(customs).forEach(name => {
 	const custom = awawa[name];
-	customElements.define(name, awawa?[name].constructor, { extends: name[2] })
+	if (IO) customElements.define(name, awawa[name].constructor, { extends: name[2] })
 });
 
 
