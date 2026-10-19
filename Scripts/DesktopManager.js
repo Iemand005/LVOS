@@ -103,6 +103,7 @@ var onLoad = function () {
         var json = dt.getData("application/json");
         var plain = dt.getData("text/plain");
         var uriList = dt.getData("text/uri-list") || "";
+        var html = dt.getData("text/html") || "";
 
         var droppedUrl = "";
 
