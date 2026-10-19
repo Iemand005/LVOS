@@ -112,7 +112,7 @@ var onLoad = function () {
         // doc.appendChild()
         var parser = new DOMParser()
         var newDoc = parser.parseFromString(html,   "text/html");
-        console.log("got da json", newDoc.body.textContent);
+        console.log("got da json", JSON.parse(newDoc.body.textContent));
 
         var droppedUrl = "";
 
