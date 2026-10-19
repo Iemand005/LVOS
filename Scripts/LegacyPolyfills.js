@@ -542,3 +542,37 @@ if (typeof Array.from != "function") {
 // if (typeof module != "undefined" && module.)
 if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element;
 if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {};
+
+// IE / HTA settings storage. Settings.js falls back to this when localStorage is missing.
+var STORAGE_FILE = "app_storage.json";
+
+function ActiveXStorage() {
+    if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
+    this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
+}
+
+/** @param {string} key @param {*} value */
+ActiveXStorage.prototype.setItem = function (key, value) {
+    var data = {};
+    if (this.fso.FileExists(STORAGE_FILE)) try {
+        var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
+        data = JSON.parse(readFile.ReadAll());
+        readFile.Close();
+    } catch (e) { data = {}; }
+    data[key] = value;
+    var writeFile = this.fso.OpenTextFile(STORAGE_FILE, 2, true);
+    writeFile.Write(JSON.stringify(data));
+    writeFile.Close();
+};
+
+ActiveXStorage.prototype.getItem = function (key) {
+    if (!this.fso.FileExists(STORAGE_FILE)) return null;
+    try {
+        var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
+        var data = JSON.parse(readFile.ReadAll());
+        readFile.Close();
+        return data[key] !== undefined ? data[key] : null;
+    } catch (e) {
+        return null;
+    }
+};

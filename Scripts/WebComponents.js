@@ -160,7 +160,9 @@ class OdometerTime extends OdometerDisplay {
 }
 
 /** @type { CustomElementMap } */
-const customElems = {
+let customElems;
+/** @constant */
+const customs = customElems = {
 	"window-div": { constructor: WindowElement, extends: "div" },
 	"odometer-track": { constructor: OdometerDigit, extends: "span" },
 	"odometer-display": { constructor: OdometerDisplay, extends: "time" },

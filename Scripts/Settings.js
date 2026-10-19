@@ -3,10 +3,6 @@
 
 'use strict';
 
-var STORAGE_FILE = "app_storage.json";
-
-// var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
 /**
  * @param {string} text
  * @returns {string}
@@ -17,8 +13,6 @@ function formatCamelCase(text) {
     return result.charAt(0).toUpperCase() + result.slice(1);
 }
 
-
-var supportsActiveX = typeof ActiveXObject != "undefined";
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
 	this.storage = typeof localStorage != "undefined" && localStorage || (typeof ActiveXStorage != "undefined" && new ActiveXStorage());
