@@ -107,7 +107,11 @@ var onLoad = function () {
 
         console.log("url shit", html);
 
-        var doc = new Document(html);
+        var doc = new Document;
+
+        // doc.appendChild()
+        var parser = new DOMParser()
+        parser.parseFromString(html,   "text/html");
 
         var droppedUrl = "";
 
