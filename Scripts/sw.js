@@ -21,7 +21,6 @@ const precacheUrls = [
 	'./Scripts/Settings.js',
 	'./Scripts/DesktopManager.js',
 	'./Scripts/ProvisionedApps.js',
-	'./Scripts/Reflector.js',
 	'./Scripts/FileSystem.js',
 	'./Scripts/Console.js',
 	'./Scripts/physics.js',
