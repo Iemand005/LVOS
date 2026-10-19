@@ -2500,6 +2500,14 @@ Dialog.prototype.initWithObject = function(object) {
 				app: self.application
 			}
 
+			// Remember where inside the window the pointer grabbed it, so a drop can put
+			// the window back under the cursor exactly where the drag preview showed it.
+			var rect = getRect(self.target);
+			if (rect) dragState.offset = {
+				x: event.clientX - (rect.left + rect.width / 2),
+				y: event.clientY - (rect.top + rect.height / 2)
+			};
+
 			event.dataTransfer.setData("application/json", JSON.stringify(dragState));
 		});
 	}

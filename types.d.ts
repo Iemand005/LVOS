@@ -43,7 +43,8 @@ interface DialogState {
 interface DialogDropState {
 	state: DialogState;
 	app: Application;
-	// and i might then do the mouse coors and stuff here? for a clean adjsuted drop! and maybe send the applicaion obj yeah!
+	/** Pointer position relative to the window centre when the drag started, in pixels. */
+	offset?: Coord;
 }
 
 interface Coord {
