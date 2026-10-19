@@ -233,7 +233,10 @@ self.addEventListener('fetch', function (event) {
 function readGroup(files) {
 	const parts = [];
 	for (const file of files) {
-		const full = join(SCRIPTS, file);
+		// Bundle entries are relative to Scripts/ by default, but may also point at a
+		// repo-root file (e.g. "ScrollTabs/ScrollTabs.js").
+		const underScripts = join(SCRIPTS, file);
+		const full = existsSync(underScripts) ? underScripts : join(ROOT, file);
 		if (!existsSync(full)) {
 			console.error("Missing source file: " + file);
 			process.exitCode = 1;
