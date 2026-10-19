@@ -135,16 +135,14 @@ var onLoad = function () {
         /** @type {DialogDropState | null} */
         var data = null;
 
-        if (json) {
-            try {
-                var parser = new DOMParser()
-                var newDoc = parser.parseFromString(html,   "text/html");
-                data = JSON.parse(newDoc.body.textContent)
-                console.log("got da json", data);
-            } catch (exception) {
-                data = null;
-            }
-        }
+		try {
+			var parser = new DOMParser()
+			var newDoc = parser.parseFromString(html,   "text/html");
+			data = JSON.parse(newDoc.body.textContent)
+			console.log("got da json", data);
+		} catch (exception) {
+			data = null;
+		}
 
         if (data && data.app && window.windowManager) {
             window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY, data.offset, data.state);
