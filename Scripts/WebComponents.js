@@ -208,8 +208,8 @@ class Modern {
 
 			pipWindow.addEventListener("pagehide", () => {
 				if (originalParent)
-					if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
-					else originalParent.appendChild(el);
+					originalNextSibling ? originalParent.insertBefore(el, originalNextSibling)
+					: originalParent.appendChild(el);
 			}, { once: true });
 
 			callback(pipWindow);
