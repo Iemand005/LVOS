@@ -166,6 +166,7 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
+/** @type { {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }} | null } */
 let awawa = null;
 
 /** @constant */
