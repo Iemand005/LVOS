@@ -193,9 +193,7 @@ class Modern {
 		if (typeof window.documentPictureInPicture === "undefined")
 			return console.warn("Document Picture-in-Picture not supported in this browser.");
 
-		var existing = window.documentPictureInPicture.window;
-		if (existing)
-			existing.close();
+		window.documentPictureInPicture.window?.close();
 
 		var rect = el.getBoundingClientRect();
 		var width = Math.round(rect.width) || 400;
