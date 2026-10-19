@@ -1,6 +1,7 @@
-  //    Simple replacements for missing prototypes in Internet Explorer 11 due to it still using ES5. I tried my best to make my own prototypes to fill the missing functions so I can at least use some modern functions.
- //     Lasse Lauwerys © 2023
-//      23/12/2023
+//    Simple replacements for missing prototypes in Internet Explorer 11 due to it still using ES5. I tried my best to make my own prototypes to fill the missing functions so I can at least use some modern functions.
+//    Loaded through `nomodule` (or directly from a legacy page), so modern browsers never download or execute any of it.
+//    Lasse Lauwerys © 2023
+//    23/12/2023
 
 'use strict';
 

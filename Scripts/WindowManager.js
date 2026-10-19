@@ -369,9 +369,6 @@ function fromPixels(text){
 
 /** @param {*} exception */
 function handleStorageException(exception){
-	console.error(exception);
-	console.warn("A problem occurred, window state saving has been disabled for this session! The stored window state will be reset in an attempt to recover from this issue.");
-	console.log("If you wish to save the window state before reset, copy this and put it somewhere else:", localStorage.windowState);
 	localStorage.windowState = null;
 	windowManager.canSave = false;
 }
@@ -379,7 +376,7 @@ function handleStorageException(exception){
 
 function getDialogTemplate(){
 	var template = document.querySelector("template") || document.getElementById("window-template");
-	if (!template ) return void console.warn("Couldn't find template!");
+	if (!template) return;
 	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
 	return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");

@@ -17,7 +17,7 @@ const precacheUrls = [
 	'./Styles/Mica.css',
 	'./Scripts/Launchpad.js',
 	'./Scripts/WindowManager.js',
-	'./Scripts/CustomPrototypes.js',
+	'./Scripts/LegacyPolyfills.js',
 	'./Scripts/Settings.js',
 	'./Scripts/DesktopManager.js',
 	'./Scripts/ProvisionedApps.js',

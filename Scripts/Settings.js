@@ -296,8 +296,6 @@ function loadSettings() {
 	restoreWallpaperSetting();
 	setColor(settings.get("color"));
 	setAccentColor(settings.get("accentColor"));
-	// getBorderSize(settings.get("borderSize"));
-	updateBlurState();
 }
 
 /** Show the "Select image" button only while the image option is active. */
@@ -419,18 +417,6 @@ function loadThemeSetting() {
 		document.body.classList.toggle("squircles", squircles);
 		if (elements.squircles) elements.squircles.checked = squircles;
 	}
-}
-
-function updateBlurState() {
-	// var a = settings.get("blur");
-	// toggleBlur(JSON.parse(a));
-}
-
-/** @param {boolean} enabled */
-function toggleBlur(enabled){ // Does not work on Chrome!
-	if (enabled == null) document.body.classList.toggle("blur");
-	else document.body.classList.toggle("blur", enabled);
-	// settings.set("blur", enabled);
 }
 
 /** @type {{[key:string]: HTMLElement | null}} */

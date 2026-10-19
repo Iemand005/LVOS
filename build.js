@@ -55,7 +55,7 @@ const PAGES = {
  */
 const BUNDLES = {
 	"desktop.dist.js": [
-		"CustomPrototypes.js", // polyfills first
+		"CustomPrototypes.js", // shared prototypes + "use strict" prologue
 		"physics.js",          // Vector
 		"youtube.js",          // YouTubeParser
 		"Messenger.js",        // LVMessenger
@@ -109,12 +109,14 @@ function copyAssets(dist) {
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
 
-	// Ensure WebGraphics, WebAudioVisualizer, WebAura, WebMedia and ScrollTabs are present in dist
+	// Ensure WebGraphics, WebAudioVisualizer, WebAura, WebMedia, ScrollTabs and the
+	// legacy polyfills are present in dist.
 	const extraDirs = [
 		{ from: "Scripts/WebGraphics", to: "Scripts/WebGraphics" },
 		{ from: "Scripts/WebAudioVisualizer", to: "Scripts/WebAudioVisualizer" },
 		{ from: "Scripts/WebAura", to: "Scripts/WebAura" },
 		{ from: "Scripts/WebMedia", to: "Scripts/WebMedia" },
+		{ from: "Scripts/LegacyPolyfills.js", to: "Scripts/LegacyPolyfills.js" },
 		{ from: "ScrollTabs", to: "ScrollTabs" }
 	];
 	for (const d of extraDirs) {
@@ -135,13 +137,15 @@ function writePages(dist) {
 			continue;
 		}
 
-		// Replace every <script> tag (external or inline) with a single fixed
-		// deferred bundle tag pointing at the production bundle.
+		// Replace every <script> tag (external or inline) with the production bundle.
+		// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
+		// without module support download them; modern Chrome ignores the tag entirely.
 		const src = readFileSync(srcPath, "utf8");
 		const out = src
 			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
 			.replace(
 				/<\/head>/i,
+				'<script nomodule src="./Scripts/LegacyPolyfills.js" defer></script>\n' +
 				'<script src="./' + config.script + '" defer></script>\n</head>'
 			);
 		writeFileSync(join(dist, page), out);
