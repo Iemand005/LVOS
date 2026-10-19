@@ -113,7 +113,7 @@ var onLoad = function () {
 
         if (!data || !data.app || !window.windowManager) return;
 
-        window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY);
+        window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY, data.offset);
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {

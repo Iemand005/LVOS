@@ -926,13 +926,15 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 };
 
 /**
- * Opens the application carried by a drop as a window and centres it under the
- * pointer, so it lands where it was let go rather than at its saved position.
+ * Opens the application carried by a drop as a window and places it under the pointer
+ * using the grab offset from the drag, so it lands exactly where the preview showed it
+ * instead of at its saved position.
  * @param {Application} application
- * @param {number} x
- * @param {number} y
+ * @param {number} x Pointer position when the drag was dropped, in pixels.
+ * @param {number} y Pointer position when the drag was dropped, in pixels.
+ * @param {Coord} [offset] Pointer position relative to the window centre when the drag started.
  */
-WindowManager.prototype.dropApplication = function (application, x, y) {
+WindowManager.prototype.dropApplication = function (application, x, y, offset) {
 	if (!application || !application.id) return null;
 
 	var dialog = this.windows[application.id];
@@ -944,7 +946,14 @@ WindowManager.prototype.dropApplication = function (application, x, y) {
 
 	dialog.launch();
 	dialog.setZ();
-	if (typeof x === "number" && typeof y === "number") dialog.moveToCenter(x, y);
+
+	if (typeof x === "number" && typeof y === "number") {
+		// Cancel out the grab offset so the point of the window the pointer held stays
+		// under the pointer, which is where the drag preview left it.
+		var grabX = offset ? offset.x : 0;
+		var grabY = offset ? offset.y : 0;
+		dialog.moveToCenter(x - grabX, y - grabY);
+	}
 	return dialog;
 };
 
