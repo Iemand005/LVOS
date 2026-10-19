@@ -435,7 +435,6 @@ function toggleBlur(enabled){ // Does not work on Chrome!
 
 /** @type {{[key:string]: HTMLElement | null}} */
 var elements = {
-	desktop: null,
 	charms: null,
 	color: null,
 	accent: null,
@@ -487,7 +486,6 @@ function installAppFromUrl(useProxy) {
 }
 
 function loadElements() {
-	elements.desktop = document.getElementById("desktop");
 	elements.charms = document.getElementById("charms");
 	elements.color = document.getElementById("color");
 	elements.accent = document.getElementById("accent");
