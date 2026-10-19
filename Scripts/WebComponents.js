@@ -207,9 +207,9 @@ class Modern {
 			pipWindow.document.body.appendChild(el);
 
 			pipWindow.addEventListener("pagehide", () => {
-				if (!originalParent) return;
-				if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
-				else originalParent.appendChild(el);
+				if (originalParent)
+					if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
+					else originalParent.appendChild(el);
 			}, { once: true });
 
 			callback(pipWindow);
