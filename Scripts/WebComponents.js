@@ -57,10 +57,8 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.innerHTML = "";
 		this.tracks.length = 0;
 		const height = this.clientHeight;
-		for (let i = 0; i < digits; i++) {
-			const digit = this.addDigit();
-			if (height > 0 && digit) (digit.lineHeight = height)
-		}
+		for (let i = 0; i < digits; i++)
+			if (height > 0) (this.addDigit().lineHeight = height)
 	}
 
 	addDigit() {
