@@ -162,10 +162,10 @@ class OdometerTime extends OdometerDisplay {
 }
 
 /** @type { CustomElementMap } */
-let awawa;
+let customElems;
 
 /** @constant */
-const customs = awawa = {
+const customs = customElems = {
 	"window-div": { constructor: WindowElement, extends: "div" },
 	"odometer-track": { constructor: OdometerDigit, extends: "span" },
 	"odometer-display": { constructor: OdometerDisplay, extends: "time" },
@@ -173,7 +173,7 @@ const customs = awawa = {
 };
 
 Object.keys(customs).forEach(name => {
-	const custom = awawa[name];
+	const custom = customElems[name];
 	if (custom) customElements.define(name, custom.constructor, { extends: custom.extends })
 });
 
