@@ -68,7 +68,7 @@ class OdometerDisplay extends HTMLTimeElement {
 		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
 		if (track instanceof OdometerDigit) this.tracks.push(track);
 		this.appendChild(track);
-		return track;
+		return /** @type {OdometerDigit} */(track);
 	}
 	/**
 	 * @param {number} value
