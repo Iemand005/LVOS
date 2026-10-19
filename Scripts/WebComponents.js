@@ -127,12 +127,7 @@ class OdometerTime extends OdometerDisplay {
 	 */
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (oldValue === newValue) return;
-
-		if (name === "value") {
-			this.update();
-			return;
-		}
-
+		if (name === "value") return this.update();
 		if (name === "datetime" && !this.usingValue()) {
 			if (this.tracks.length !== 6) this.buildTracks(3); // HH:MM:SS → 6 digit tracks
 			this.update();
