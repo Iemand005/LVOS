@@ -965,7 +965,18 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	if (dialog.target) {
 		try {
 			dialog.resize();
-			dialog.update();
+			if (typeof dialog.update === "function") dialog.update();
+			if (typeof dialog.syncGeometry === "function") dialog.syncGeometry();
+			var rect = getRect(dialog.target);
+			if (rect) {
+				var bw = rect.width, bh = rect.height;
+				if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
+					dialog._width = bw;
+					dialog._height = bh;
+					if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
+				}
+			}
+			dialog.resize();
 		} catch (exception) {
 			/* ignore */
 		}
