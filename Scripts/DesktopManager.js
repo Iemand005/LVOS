@@ -105,6 +105,8 @@ var onLoad = function () {
         var uriList = dt.getData("text/uri-list") || "";
         var html = dt.getData("text/html") || "";
 
+        console.log("url shit", html);
+
         var droppedUrl = "";
 
         if (uriList) {
