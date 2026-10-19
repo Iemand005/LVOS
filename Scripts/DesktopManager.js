@@ -329,7 +329,7 @@ var reflecitons = false;
 
 var dock = document.getElementById("dock");
 var reflectionr = document.getElementById("reflection");
-var reflector = reflectionr ? new Reflector(reflectionr) : null;
+var reflector = null;
 var applistItems = document.getElementById("dockapplist");
 
 /** @param {boolean} force  */
