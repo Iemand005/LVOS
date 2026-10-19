@@ -175,6 +175,11 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
+/** @type [][] */
+const customs = {
+	"window-div"
+}
+
 customElements.define("window-div", WindowElement, {
 	extends: "div"
 });
