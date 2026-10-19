@@ -105,15 +105,6 @@ var onLoad = function () {
         var uriList = dt.getData("text/uri-list") || "";
         var html = dt.getData("text/html") || "";
 
-        console.log("url shit", html);
-
-        var doc = new Document;
-
-        // doc.appendChild()
-        var parser = new DOMParser()
-        var newDoc = parser.parseFromString(html,   "text/html");
-        console.log("got da json", JSON.parse(newDoc.body.textContent));
-
         var droppedUrl = "";
 
         if (uriList) {
@@ -135,14 +126,29 @@ var onLoad = function () {
         /** @type {DialogDropState | null} */
         var data = null;
 
-		try {
-			var parser = new DOMParser()
-			var newDoc = parser.parseFromString(html,   "text/html");
-			data = JSON.parse(newDoc.body.textContent)
-			console.log("got da json", data);
-		} catch (exception) {
-			data = null;
-		}
+        // If text/html carries a hidden JSON blob, prefer it because text/plain may be overridden.
+        if (html) {
+            try {
+                var parser = new DOMParser();
+                var newDoc = parser.parseFromString(html, "text/html");
+                var text = newDoc.body && newDoc.body.textContent ? newDoc.body.textContent : html;
+                var trimmed = text.trim();
+                if (trimmed) {
+                    data = JSON.parse(trimmed);
+                    if (data) json = trimmed;
+                }
+            } catch (exception) {
+                data = null;
+            }
+        }
+
+        if (!data && json) {
+            try {
+                data = JSON.parse(json);
+            } catch (exception) {
+                data = null;
+            }
+        }
 
         if (data && data.app && window.windowManager) {
             window.windowManager.dropApplication(data.app, ev.clientX, ev.clientY, data.offset, data.state);
