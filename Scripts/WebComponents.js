@@ -175,10 +175,10 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
-/** @type [][] */
-const customs = {
-	"window-div"
-}
+/** @type {[string, CustomElementConstructor, string][]} */
+const customs = [
+	["window-div", WindowElement, "div"]
+]
 
 customElements.define("window-div", WindowElement, {
 	extends: "div"
