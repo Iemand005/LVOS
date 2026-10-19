@@ -328,18 +328,7 @@ if (docontexthook) document.addEventListener("contextmenu", function(e) {
 var reflecitons = false;
 
 var dock = document.getElementById("dock");
-var reflectionr = document.getElementById("reflection");
-var reflector = null;
 var applistItems = document.getElementById("dockapplist");
-
-/** @param {boolean} force  */
-function toggleReflections(force) {
-    if (!reflector) return;
-    if(force == null) reflecitons = !reflecitons;
-    else reflecitons = Boolean(force);
-    if(reflecitons) windowManager.forEachWindow(function(dialog) { if (dialog.target && reflector) reflector.reflect(dialog.target); });
-    else if (typeof reflector.observer != "undefined") reflector.observer.disconnect();
-}
 
 window.addEventListener("keydown", function(event) {
   switch (event.key) {

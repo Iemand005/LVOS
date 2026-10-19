@@ -54,7 +54,7 @@
 		"**/node_modules": true,
 		"**/bower_components": true,
 		"**/*.code-search": true,
-		"**/Dist": true,
+		"Dist": true,
 	},
 	// liveserve
 	// "liveServer.settings.port": 
