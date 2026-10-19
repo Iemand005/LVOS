@@ -188,10 +188,7 @@ customs.forEach(c => customElements.define(c[0], c[1], { extends: c[2] }));
 
 class Modern {
 
-	/**
-	 * @param {HTMLElement} el
-	 * @param {(pipWindow:Window)=>void} callback
-	 */
+	/** @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback */
 	static toggleElementPip(el, callback) {
 		if (typeof window.documentPictureInPicture === "undefined") {
 			console.warn("Document Picture-in-Picture not supported in this browser.");
