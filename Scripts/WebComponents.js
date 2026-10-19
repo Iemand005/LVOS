@@ -3,7 +3,7 @@ class WindowElement extends HTMLDivElement {
 
 	constructor() {
 		super();
-		/** @type {Dialog?} */
+		/** @type {Dialog | null} */
 		this.dialog = null;
 	}
 
