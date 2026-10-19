@@ -3839,63 +3839,51 @@ Dialog.prototype.updateHeight = function () {
 	else this.target.style.bottom = toPixels(this.bottom);
 };
 /**
+ * @param {"width"|"height"} axis
+ * @param {number} size
+ * @param {boolean} [update]
+ * @param {boolean} [animate]
+ */
+Dialog.prototype._setSize = function (axis, size, update, animate) {
+	if (typeof size !== "number" || axis === "height" && !this.target) return;
+	var isWidth = axis === "width";
+	var bounds = WindowManager.windowBounds;
+	var far = isWidth ? bounds.right : bounds.bottom;
+	var near = isWidth ? bounds.left : bounds.top;
+	var pos = isWidth ? this.x : this.y;
+	if (far !== Infinity) {
+		var overflow = pos + size - far;
+		if (overflow > 0) {
+			var newPos = pos - overflow;
+			if (near !== undefined && newPos < near) newPos = near;
+			if (isWidth) this.move(newPos); else this.move(this.x, newPos);
+		}
+		size = Math.min(size, far - (isWidth ? this.x : this.y));
+	}
+	if (isWidth) {
+		this._width = Math.max(Math.min(size, this.maxWidth), this.minWidth);
+		this._isMinWidth = this._width === this.minWidth;
+	} else {
+		this._height = Math.max(Math.min(size, this.maxHeight), this.minHeight);
+		this._isMinHeight = this._height === this.minHeight;
+	}
+	if (update !== false) {
+		if (animate) this.animate(isWidth ? this.updateWidth : this.updateHeight);
+		else if (isWidth) this.updateWidth(); else this.updateHeight();
+	}
+};
+/**
  * @param {number} width
  * @param {boolean} [update]
  * @param {boolean} [animate]
  */
-Dialog.prototype.setWidth = function (width, update, animate) {
-	if (typeof width !== "number") return;
-
-	var bounds = WindowManager.windowBounds;
-
-	if (bounds.right !== Infinity) {
-		var overflow = this.x + width - bounds.right;
-		if (overflow > 0) {
-			var newX = this.x - overflow;
-			if (bounds.left !== undefined && newX < bounds.left) newX = bounds.left;
-			this.move(newX);
-		}
-	}
-
-	if (bounds.right !== Infinity) width = Math.min(width, bounds.right - this.x);
-	this._width = Math.max(Math.min(width, this.maxWidth), this.minWidth);
-	this._isMinWidth = this._width === this.minWidth;
-
-	if (update !== false) {
-		if (animate) this.animate(this.updateWidth);
-		else this.updateWidth();
-	}
-};
+Dialog.prototype.setWidth = function (width, update, animate) { this._setSize("width", width, update, animate); };
 /**
  * @param {number} height
  * @param {boolean} [update]
  * @param {boolean} [animate]
  */
-Dialog.prototype.setHeight = function (height, update, animate) {
-	if (typeof height !== "number" || !this.target) return;
-
-	var bounds = WindowManager.windowBounds;
-
-	if (bounds.bottom !== Infinity) {
-		var overflow = this.y + height - bounds.bottom;
-		if (overflow > 0) {
-			var newY = this.y - overflow;
-			if (bounds.top !== undefined && newY < bounds.top) newY = bounds.top;
-			this.move(this.x, newY);
-		}
-	}
-
-	var finalHeight = height;
-	if (bounds.bottom !== Infinity) finalHeight = Math.min(finalHeight, bounds.bottom - this.y);
-
-	this._height = Math.max(Math.min(finalHeight, this.maxHeight), this.minHeight);
-	this._isMinHeight = this._height === this.minHeight;
-
-	if (update !== false) {
-		if (animate) this.animate(this.updateHeight);
-		else this.updateHeight();
-	}
-};
+Dialog.prototype.setHeight = function (height, update, animate) { this._setSize("height", height, update, animate); };
 
 /**
  * @param {number} [width]
@@ -3931,6 +3919,16 @@ Dialog.prototype.resize = function (width, height, direction) {
  * @param {number} height
  * @param {ResizeDirection} [direction]
  */
+Dialog.prototype._commitResize = function (newW, newH, newX, newY, oldX, oldY, minW, minH) {
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === minW;
+	this._isMinHeight = newH === minH;
+	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
+};
+
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
@@ -3977,14 +3975,7 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 		// bottom-right, bottom, right (and default): keep the top-left edge fixed.
 	}
 
-	this._width = newW;
-	this._height = newH;
-	this._isMinWidth = newW === minW;
-	this._isMinHeight = newH === minH;
-
-	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
-	this.updateWidth();
-	this.updateHeight();
+	this._commitResize(newW, newH, newX, newY, oldX, oldY, minW, minH);
 };
 
 /**
