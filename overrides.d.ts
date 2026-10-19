@@ -95,6 +95,10 @@ declare global {
 		createElement<K extends CustomTag, I extends CustomElementName<K>>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | InstanceType<ClassOf<I>>;
 	}
 
+	interface Element {
+		setAttribute(qualifiedName: "is", value: CustomElementNames): void;
+	}
+
 	interface Navigator {
 		getUserMedia?(
 			constraints: MediaStreamConstraints,
