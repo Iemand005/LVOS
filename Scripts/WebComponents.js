@@ -111,9 +111,8 @@ class OdometerTime extends OdometerDisplay {
 		return this.hasAttribute("value");
 	}
 
-	currentGroupCount() {
-		return this.usingValue() && this.getAttribute("value")?.split(":").length || 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
-	}
+	currentGroupCount = () => this.usingValue() && this.getAttribute("value")?.split(":").length || 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
+
 	/** @param {number} groups */
 	buildTracks(groups) {
 		this.textContent = "";
