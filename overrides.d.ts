@@ -44,6 +44,8 @@ type TagOf<N extends CustomElementNames> = CustomElementsByIds[N]["extends"];
 
 type CustomElementName<T extends CustomTag> = { [K in CustomElementNames]: CustomElementsByIds[K]["extends"] extends T ? K : never }[CustomElementNames];
 
+type a = CustomElementName<"time">
+
 declare global {
 
 
