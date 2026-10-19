@@ -522,8 +522,6 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 				if (event.propertyName !== onTransitionEnd) return;
 			} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
 
-			console.log("Aborting animation over " + event.propertyName + ". Took: ", event.elapsedTime, "seconds. Reported by: ", event.target);
-
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
 			clearTimeout(state.timer);
 			callEnd();
@@ -659,7 +657,6 @@ function WindowManager() {
 		var data = ev.data;
 		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return; }
 		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
-		if (flags.verboseLogs) console.log("Got a broadcast from another tab!", data);
 		windowManager.handleBroadcast(data.type, data.data, data.id);
 	};
 
@@ -705,9 +702,7 @@ function WindowManager() {
 					windowManager.handleWindowDrag(pending.clientX, pending.clientY, touch);
 				});
 			} else windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
-		} catch (ex) {
-			console.error(ex);
-		}
+		} catch (ex) {}
 	};
 
 	this.windowSnap = new WindowSnap;
@@ -734,9 +729,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 			if (string === null) return null;
 
 			this._windowStates = JSON.parse(string);
-		} catch (ex) {
-			if (ex instanceof Error) console.error(ex.message);
-		}
+		} catch (ex) {}
 		return this._windowStates;
 	}
 });
@@ -797,31 +790,21 @@ WindowManager.prototype.saveState = function() {
 };
 
 /** @param {Dialog} [dialog] */
-WindowManager.prototype.loadState = function(dialog) { // TOaddEventListenerDO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
-	console.log("Loading window state.");
-	if (!this.canSave) {
-		console.log("Storage access is disabled for this session!");
-		return;
-	}
+WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
+	if (!this.canSave) return;
 	try {
 		if (!localStorage) return;
 		var windowStates = this.windowStates;
-		if (!windowStates) {
-			this.loaded = true;
-			return;
-		}
 		this.loaded = true;
+		if (!windowStates) return;
 		if (dialog && dialog.id) {
 			dialog.loadState(windowStates[dialog.id]);
 			this.updateTopZ(dialog.z);
 		} else {
-			var fails = [];
 			for (var id in windowStates) try {
 				var window = this.windows[id];
-				if (window && windowStates[id])
-					window.loadState(windowStates[id]);
-			} catch (ex) { fails.push(ex); }
-			fails.forEach(function (fail) { console.error("Failed to load a window.", fail); });
+				if (window && windowStates[id]) window.loadState(windowStates[id]);
+			} catch (ex) {}
 			this.updateTopZ();
 		}
 	} catch (exception) {
@@ -906,7 +889,6 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
 		} catch (exception) {
-			if (exception instanceof Error) console.error(exception.message);
 			return [];
 		}
 	}
