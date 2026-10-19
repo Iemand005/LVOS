@@ -32,7 +32,6 @@ interface CustomElementsByIs {
 	}
 }
 
-type CustomElementMap = {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }};
 
 type CustomElementsByIds = typeof customs;
 
@@ -48,6 +47,7 @@ type CustomElementName<T extends CustomTag> = { [K in CustomElementNames]: Custo
 
 declare global {
 
+	type CustomElementMap = {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }};
 
 	
 	interface Window {
