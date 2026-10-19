@@ -175,7 +175,6 @@ const customs = awawa = {
 	"odometer-track": { constructor: OdometerDigit, extends: "span" },
 	"odometer-display": { constructor: OdometerDisplay, extends: "time" },
 	"odometer-time": { constructor: OdometerTime, extends: "time" },
-	"": { co}
 };
 
 Object.keys(customs).forEach(name => {

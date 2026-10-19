@@ -32,12 +32,13 @@ interface CustomElementsByIs {
 	}
 }
 
+type CustomElementsByIds = typeof customs;
 
 declare global {
-	
-	type CustomElementsByIds = typeof customs;
 
-	type CustomByName<N extends CustomName> = Extract<typeof customs[number], readonly [N, unknown, unknown]>;
+	type CustomElementNames = typeof CustomElementsByIds;
+
+	type CustomByName<N extends keyof CustomElementsByIds> = CustomElementsByIds[N];
 
 	type ClassOf<N extends CustomName> = CustomByName<N>[1];
 	type TagOf<N extends CustomName> = CustomByName<N>[2];
