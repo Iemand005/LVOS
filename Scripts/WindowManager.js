@@ -2525,6 +2525,15 @@ Dialog.prototype.initWithObject = function(object) {
 			var data = JSON.stringify(dragState);
 			event.dataTransfer.setData("application/json", data);
 			event.dataTransfer.setData("text/plain", data);
+			event.dataTransfer.setData(
+				"text/uri-list",
+				"https://example.com/items/123"
+			);
+
+			event.dataTransfer.setData(
+				"text/html",
+				'<a href="https://example.com/items/123">Hello</a>'
+			);
 		});
 	}
 
