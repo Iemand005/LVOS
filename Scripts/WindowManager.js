@@ -133,11 +133,6 @@ function getSiteName(url) {
 }
 
 
-/** @param {Element} element */
-function isDialog(element) {
-	return element && element.classList && element.classList.contains("window");
-}
-
 /**
  * @param {Node} object
  * @returns {object is HTMLElement}
@@ -287,9 +282,7 @@ function messageReceived(type, data, source){
 					}
 					if (!overlay) return;
 					overlay.ontransitionend = null;
-					overlay.requestFullscreen().then(function() {
-						console.log("Ok I did full screen boy");
-					});
+					overlay.requestFullscreen().catch(function() {});
 					if (dialog.body) overlay.appendChild(dialog.body);
 					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
 				};
@@ -308,7 +301,6 @@ function messageReceived(type, data, source){
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
 		}
-		console.log("Received message " + type);
 	}
 }
 
@@ -779,7 +771,6 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 WindowManager.prototype.saveState = function() {
 	if (!this.loaded) return;
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
-	if (flags.verboseLogs) console.log("Saving window state.");
 	try {
 		if (this.canSave && typeof localStorage !== "undefined")
 			localStorage.setItem("windowState", JSON.stringify(this.state));
@@ -2013,9 +2004,6 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	if (dialog) this.element.style.zIndex = dialog.z.toString();
 
 	animateElement(this.element, function() {
-
-		console.log("snapping", type);
-
 		switch(type) {
 			case "maximize": this.setInset(WindowSnap.margin); break;
 			case "left":
@@ -2167,7 +2155,6 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-	if (flags.verboseLogs) console.log(enable ? "Starting drag" : "Ending drag");
 
 	if (!flags.useDragOverlay || !this._overlay) {
 		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
@@ -2430,7 +2417,6 @@ Dialog.prototype.initWithObject = function(object) {
 
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
-			if (!isDialog(object)) console.warn("This is not a dialog element");
 			this.target = object;
 			if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
 			this.close();
@@ -2499,7 +2485,6 @@ Dialog.prototype.initWithObject = function(object) {
 		if (body) body.addEventListener("load", function () { try {
 			self.verifyEjectCapability();
 		} catch (exception) {
-			console.warn("Failed to verify eject capability" + exception);
 			if (buttons[0]) buttons[0].style.display = "none";
 		}}, false);
 
@@ -3249,12 +3234,10 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 
 	var self = this;
 	this._appIcon.onload = function () {
-		console.log("App icon loaded!!");
 		if (self._appIcon) self._appIcon.className = "loaded";
 	};
 
 	this._appIcon.onerror = function (e) {
-		console.warn("App icon error!", e);
 		if (self._appIcon) self._appIcon.className = "";
 		if (onError) onError();
 	};
@@ -4301,18 +4284,13 @@ Dialog.prototype.createPopOut = function() {
 			var x = outerX - window.screenX,
 				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
 
-			console.log("pos:", outerX, outerY);
 			self.moveBody(x, y);
 			prevRect.x = outerX;
 			prevRect.y = outerY;
 		}
 
 		if (width !== prevRect.width || height !== prevRect.height) {
-
 			self.resizeBody(width, height);
-
-			console.log("size:", width, width);
-
 			prevRect.width = width;
 			prevRect.height = height;
 		}
@@ -4349,7 +4327,7 @@ Dialog.prototype.updateScale = function(useScale) {
 		target.style.bottom = "";
 		this.toggleMinSizeConstraints(this.maximized);
 	} else {
-		if (this.useTransform) return console.warn("Cannot disable scale if using transform");
+		if (this.useTransform) return;
 		target.style.right = toPixels(this.right);
 		target.style.bottom = toPixels(this.bottom);
 	}
@@ -4368,7 +4346,6 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 /** @returns {boolean} */
 Dialog.prototype.injectMica = function() {
 	try {
-		if (!this.useTransform) console.warn("Dude you still gotta fix the mica here for oh right but can you possible even do that??");
 		if (!this.target) return false;
 		var wallpaper = document.getElementById("wallpaper");
 		if (!wallpaper) return false;
@@ -4457,19 +4434,15 @@ Dialog.prototype.loadState = function(state) {
 	if ("maximized" in state) this.toggleMaximized(state.maximized === true);
 };
 
-Dialog.prototype.exportDialogBodyToMetro = function() {
-
-};
+Dialog.prototype.exportDialogBodyToMetro = function() {};
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
-	console.log("Element ID to pull out of my guts: " + id);
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
 /** @param {string} id */
 Dialog.prototype.moveElementIntoPipById = function(id) {
 	var targetElement = this.getElementById(id);
-	console.log("Ripped out element:", targetElement);
 	if (targetElement && Modern) Modern.toggleElementPip(targetElement, function (window) {
 		window.onresize = function() {
 			if (!(targetElement instanceof HTMLCanvasElement)) return;
@@ -4542,17 +4515,9 @@ DocumentCrawler.prototype.getDesktop = function () { return document.getElementB
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager.saveState(); }, false);
-window.addEventListener("dragover", function (e) { 
-	console.log(e)
-	cancelDomEvent(e);
- }, false);
+window.addEventListener("dragover", cancelDomEvent, false);
 window.addEventListener("drop", function(e) {
-	console.log(e)
 	e.preventDefault();
-	if (!e.dataTransfer) return;
-	var files = e.dataTransfer.files;
-	if (files.length > 0)
-		console.log("File dropped anywhere in window:", files[0].name);
 }, false);
 
 //#endregion

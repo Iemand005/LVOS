@@ -20,55 +20,8 @@ function formatCamelCase(text) {
 
 var supportsActiveX = typeof ActiveXObject != "undefined";
 
-function ActiveXStorage() {
-	if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
-	this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
-}
-/**
- * @param {string} key
- * @param {*} value
- */
-ActiveXStorage.prototype.setItem = function(key, value) {
-	var data = {};
-	
-	if (this.fso.FileExists(STORAGE_FILE)) {
-		try {
-			var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
-			data = JSON.parse(readFile.ReadAll());
-			readFile.Close();
-		} catch(e) { data = {}; }
-	}
-	
-	data[key] = value;
-	
-	var writeFile = this.fso.OpenTextFile(STORAGE_FILE, 2, true);
-	writeFile.Write(JSON.stringify(data));
-	writeFile.Close();
-};
-	
-ActiveXStorage.prototype.getItem = function(key) {
-	if (!this.fso.FileExists(STORAGE_FILE)) return null;
-	
-	try {
-		var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
-		var data = JSON.parse(readFile.ReadAll());
-		readFile.Close();
-		return data[key] !== undefined ? data[key] : null;
-	} catch(e) {
-		return null;
-	}
-};
-
-// if (!window.localStorage) {
-	// var activeStorage = new ActiveXStorage();
-
-	// window.localStorage = activeStorage;
-	
-	// activeStorage.setItem("hi", 69);
-// }
-
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-	this.storage = typeof localStorage != "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
+	this.storage = typeof localStorage != "undefined" && localStorage || (typeof ActiveXStorage != "undefined" && new ActiveXStorage());
 }
 
 SettingsHandler.prototype.get = function (key) {
