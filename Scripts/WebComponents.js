@@ -175,7 +175,7 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
-/** @type {[string, CustomElementConstructor, string][]} */
+/** @type {[string, CustomElementConstructor, keyof HTMLElementTagNameMap][]} */
 const customs = [
 	["window-div", WindowElement, "div"]
 ]
