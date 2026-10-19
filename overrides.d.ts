@@ -38,13 +38,11 @@ declare global {
 
 	type CustomElementNames = keyof CustomElementsByIds;
 
-	type CustomByName<N extends CustomElementNames> = CustomElementsByIds[N];
+	type CustomClass = (typeof customs)[CustomElementNames]["constructor"];
+	type CustomTag = (typeof customs)[CustomElementNames]["extends"];
 
-	type ClassOf<N extends CustomName> = CustomByName<N>[1];
-	type TagOf<N extends CustomName> = CustomByName<N>[2];
-
-	type WindowClass = ClassOf<"window-div">;
-	type WindowTag = TagOf<"window-div">;
+	type ClassOf<N extends CustomName> = (typeof customs)[N]["constructor"];
+	type TagOf<N extends CustomName> = (typeof customs)[N]["extends"];
 
 	
 	interface Window {
