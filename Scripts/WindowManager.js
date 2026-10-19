@@ -4233,12 +4233,11 @@ Dialog.prototype.openUrl = function(url) {
 	let index = 0;
 
 	function tryNext() {
-		var url = fallbackUrls[index++];
-		if (!url) {
-			tryNext();
-			return;
-		}
-		if (index >= fallbackUrls.length || !frame) return;
+		// Skip over missing entries (e.g. an app with no distSrc/altUrls) and stop at
+		// the end. The old code recursed on an undefined url, which re-entered forever.
+		var url;
+		while (index < fallbackUrls.length && !(url = fallbackUrls[index++]));
+		if (!url || !frame) return;
 
 		frame.src = url;
 		self._src = url;

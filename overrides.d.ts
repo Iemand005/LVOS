@@ -36,13 +36,8 @@ interface CustomElementsByIs {
 type CustomElementsByIds = typeof customs;
 
 type CustomElementNames = keyof CustomElementsByIds;
-
-type CustomClass = CustomElementsByIds[CustomElementNames]["constructor"];
 type CustomTag = CustomElementsByIds[CustomElementNames]["extends"];
-
 type ClassOf<N extends CustomElementNames> = CustomElementsByIds[N]["constructor"];
-type TagOf<N extends CustomElementNames> = CustomElementsByIds[N]["extends"];
-
 type CustomElementName<T extends CustomTag> = { [K in CustomElementNames]: CustomElementsByIds[K]["extends"] extends T ? K : never }[CustomElementNames];
 
 declare global {
