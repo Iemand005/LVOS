@@ -166,8 +166,8 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
-/** @type { {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }} | null } */
-let awawa = null;
+/** @type { {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }} } */
+let awawa;
 
 /** @constant */
 const customs = awawa = {
@@ -177,7 +177,10 @@ const customs = awawa = {
 	"odometer-time": { constructor: OdometerTime, extends: "time" },
 };
 
-Object.keys(customs).forEach(c => customElements.define(c, customs[c].constructor, { extends: c[2] }));
+Object.keys(customs).forEach(name => {
+	const custom = awawa[name];
+	customElements.define(name, awawa?[name].constructor, { extends: name[2] })
+});
 
 
 class Modern {
