@@ -220,27 +220,8 @@ iframe {
 	background: linear-gradient(0deg, #b2b2b2, #737373);
 }
 
-#reflection {
-	transform: scaleY(-1) rotateX(45deg);
-	transform-origin: top;
-	-webkit-transform: scaleY(-1) rotateX(45deg);
-	-webkit-transform-origin: top;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	opacity: 0.4;
-}
-
-body.blur #reflection {
-	filter: blur(2px);
-}
-
 body:not(.blur) .window > article {
 	backdrop-filter: none;
-}
-
-#reflection > * {
-	opacity: 0.3;
 }
 
 #desktop {
@@ -605,7 +586,7 @@ aside#metroapplist > button {
 }
 
 #dockapplist {
-	/* ToDo: Implement moving apps in and out the dock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
+	/* ToDo: Implement moving apps in and out the cock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
 	position: absolute;
 	display: flex;
 	justify-content: center;

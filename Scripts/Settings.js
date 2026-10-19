@@ -515,11 +515,6 @@ function loadElements() {
 
 	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
-	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
-	// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
-	// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
-	// elements.resetAccent.onclick = setAccentColor.bind(this, "");
 	if (elements.border) elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 	if (elements.accent) elements.accent.oninput = elements.accent.onchange = function () { setAccentColor(this.value); };
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
@@ -549,11 +544,6 @@ addEventListener("load", function() {
 }, false);
 
 var metroAppList = document.getElementById("metroapplist");
-// var blurToggle = document.getElementById("blurtoggle");
-// var reflectionToggle = document.getElementById("reflectiontoggle");
-
-
-
 
 /**
  * @param {*} object 

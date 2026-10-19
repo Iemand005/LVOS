@@ -22,7 +22,6 @@ function init() {
 		});
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.initializeDialogs();
-		toggleReflections(false);
 
 		LVMessenger.receive(messageReceived);
 	}

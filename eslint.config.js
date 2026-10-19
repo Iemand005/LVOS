@@ -22,7 +22,6 @@ export default defineConfig(
 				lerp: "writable",
 				windowManager: "readonly",
 				appRegistry: "readonly",
-				toggleReflections: "writable",
 				setTheme: "writable",
 				WindowManager: "readonly",
 				DesktopManager: "readonly",
