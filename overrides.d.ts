@@ -41,8 +41,8 @@ declare global {
 	type CustomClass = CustomElementsByIds[CustomElementNames]["constructor"];
 	type CustomTag = CustomElementsByIds[CustomElementNames]["extends"];
 
-	type ClassOf<N extends CustomName> = CustomElementsByIds[N]["constructor"];
-	type TagOf<N extends CustomName> = CustomElementsByIds[N]["extends"];
+	type ClassOf<N extends CustomElementNames> = CustomElementsByIds[N]["constructor"];
+	type TagOf<N extends CustomElementNames> = CustomElementsByIds[N]["extends"];
 
 	
 	interface Window {
@@ -87,7 +87,7 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<K extends CustomTag, I extends keyof CustomElementsByIs[K]>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
+		createElement<K extends CustomTag, I extends CustomElementNames>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
 	}
 
 	interface Navigator {
