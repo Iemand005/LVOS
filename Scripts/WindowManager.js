@@ -857,7 +857,35 @@ WindowManager.prototype.loadApp = function(app) {
 		dialog.mica = this.isMicaEnabled || false;
 		this._windows[app.id] = dialog;
 		if (!(app instanceof HTMLElement)) appManager.addApp(app);
-	} catch(ex) { console.warn("App load failed", ex); }
+		return dialog;
+	} catch(ex) { console.warn("App load failed", ex); return null; }
+};
+
+/**
+ * Creates an additional window for an app that allows multiple instances, registered
+ * under a unique id so every instance keeps its own geometry and state. The app object
+ * is cloned and is not added to the app registry again.
+ * @param {Application} application
+ * @returns {Dialog | null}
+ */
+WindowManager.prototype.spawnApp = function(application) {
+	if (!application || !application.id) return null;
+
+	// Find a free instance id: "app", then "app#2", "app#3", ...
+	var id = application.id, n = 1;
+	while (this._windows[id]) id = application.id + "#" + (++n);
+
+	/** @type {Application} */
+	var instance = {};
+	for (var key in application) if (application.hasOwnProperty(key)) instance[key] = application[key];
+	instance.id = id;
+
+	try {
+		var dialog = new Dialog(instance);
+		dialog.mica = this.isMicaEnabled || false;
+		this._windows[id] = dialog;
+		return dialog;
+	} catch(ex) { console.warn("App spawn failed", ex); return null; }
 };
 /**
  * @param {string} url
@@ -938,10 +966,16 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 WindowManager.prototype.dropApplication = function (application, x, y, offset, state) {
 	if (!application || !application.id) return null;
 
-	var dialog = this.windows[application.id];
-	if (!dialog) {
-		this.loadApp(application);
+	var dialog;
+	if (application.multiple) {
+		// Drop of a multi-instance app always opens another window instead of reusing.
+		dialog = this.spawnApp(application);
+	} else {
 		dialog = this.windows[application.id];
+		if (!dialog) {
+			this.loadApp(application);
+			dialog = this.windows[application.id];
+		}
 	}
 	if (!dialog) return null;
 
@@ -3358,7 +3392,18 @@ Dialog.prototype.createOpenButton = function () {
 	var openButton = document.createElement("button");
 	this.buttons.unshift(openButton);
 	openButton.appendChild(document.createTextNode(this.title || "?"));
-	openButton.onclick = this.launch.bind(this);
+
+	var application = this.application;
+	if (application && application.multiple) {
+		// Multi-instance apps open a fresh window from their button instead of
+		// re-focusing the single registered one.
+		openButton.onclick = function () {
+			var instance = windowManager.spawnApp(application);
+			if (instance) instance.launch();
+		};
+	} else {
+		openButton.onclick = this.launch.bind(this);
+	}
 	return openButton;
 };
 /**

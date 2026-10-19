@@ -34,6 +34,9 @@ Guidance for agents working in this repository (LVOS / VulpOS).
 
 ## Notes
 
+- Multi-instance apps: set `multiple: true` on an app in `ProvisionedApps.js`.
+  Icon clicks and drops then spawn extra windows (`WindowManager.spawnApp`) with
+  unique ids (`app#2`, `app#3`, ...); plain apps keep reusing their one window.
 - Windows / PowerShell: `head`, `tail`, `grep`, `sed`, `wc` are not available as
   commands. Use `rg`, `Get-Content`, `Select-Object`, and the dedicated file tools.
 - Desktop source order matters: `Reflector.js` must precede `DesktopManager.js`
