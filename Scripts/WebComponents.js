@@ -190,10 +190,8 @@ class Modern {
 
 	/** @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback */
 	static toggleElementPip(el, callback) {
-		if (typeof window.documentPictureInPicture === "undefined") {
-			console.warn("Document Picture-in-Picture not supported in this browser.");
-			return;
-		}
+		if (typeof window.documentPictureInPicture === "undefined")
+			return console.warn("Document Picture-in-Picture not supported in this browser.");
 
 		var existing = window.documentPictureInPicture.window;
 		if (existing)
