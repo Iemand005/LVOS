@@ -99,7 +99,7 @@ var onLoad = function () {
         console.log("Kronkel")
 
         
-        var json = ev.dataTransfer.getData("application/json");
+        var json = ev.dataTransfer.getData("application/json") || ev.dataTransfer.getData("text/plain");
         if (!json) return;
 
         /** @type {DialogDropState} */

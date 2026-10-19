@@ -2517,7 +2517,9 @@ Dialog.prototype.initWithObject = function(object) {
 				y: event.clientY - (rect.top + rect.height / 2)
 			};
 
-			event.dataTransfer.setData("application/json", JSON.stringify(dragState));
+			var data = JSON.stringify(dragState);
+			event.dataTransfer.setData("application/json", data);
+			event.dataTransfer.setData("text/plain", data);
 		});
 	}
 
