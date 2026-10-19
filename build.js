@@ -99,7 +99,7 @@ function resolveDist() {
 }
 
 function copyAssets(dist) {
-	for (const asset of ASSETS) {
+		for (const asset of ASSETS) {
 		const src = join(ROOT, asset.from);
 		const dest = join(dist, asset.to);
 		if (!existsSync(src)) {
@@ -108,6 +108,23 @@ function copyAssets(dist) {
 		}
 		cpSync(src, dest, { recursive: true });
 		console.log("[copy] " + asset.from + " -> " + dest);
+	}
+
+	// Ensure WebGraphics, WebAudioVisualizer, WebAura, WebMedia and ScrollTabs are present in dist
+	const extraDirs = [
+		{ from: "Scripts/WebGraphics", to: "Scripts/WebGraphics" },
+		{ from: "Scripts/WebAudioVisualizer", to: "Scripts/WebAudioVisualizer" },
+		{ from: "Scripts/WebAura", to: "Scripts/WebAura" },
+		{ from: "Scripts/WebMedia", to: "Scripts/WebMedia" },
+		{ from: "ScrollTabs", to: "ScrollTabs" }
+	];
+	for (const d of extraDirs) {
+		const src = join(ROOT, d.from);
+		const dest = join(dist, d.to);
+		if (existsSync(src)) {
+			cpSync(src, dest, { recursive: true });
+			console.log("[copy] " + d.from + " -> " + dest);
+		}
 	}
 }
 
