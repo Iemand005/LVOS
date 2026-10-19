@@ -189,9 +189,7 @@ class OdometerTime extends OdometerDisplay {
 			];
 		}
 
-		this.tracks.forEach((track, i) => {
-			if (digits[i] !== undefined) track.value = digits[i];
-		});
+		this.tracks.forEach((track, i) => (digits[i] !== undefined) && (track.value = digits[i]));
 	}
 }
 
