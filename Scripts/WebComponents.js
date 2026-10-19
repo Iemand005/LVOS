@@ -171,9 +171,8 @@ const customs = customElems = {
 	"odometer-time": { constructor: OdometerTime, extends: "time" },
 };
 
-Object.keys(customs).forEach(name => {
-	const custom = customElems[name];
-	if (custom) customElements.define(name, custom.constructor, { extends: custom.extends })
+Object.entries(customElems).forEach(([name, custom]) => {
+	if (custom) customElements.define(name, custom.constructor, { extends: custom.extends });
 });
 
 
