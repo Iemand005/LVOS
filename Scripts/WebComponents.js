@@ -18,17 +18,15 @@ class WindowElement extends HTMLDivElement {
 
 		this.style.viewTransitionName = "window-fullscreen";
 
-		const self = this;
-
 		if (document.startViewTransition) {
-			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
+			var transition = document.startViewTransition(() => this.classList.toggle("maximized", enable));
 
 			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
 			const dialog = this.dialog;
 			if (dialog) transition.finished.finally(() => {
 				if (dialog.maximizeAnimations <= 1)
-					self.style.viewTransitionName = "";
+					this.style.viewTransitionName = "";
 				dialog.maximizeAnimations--;
 			});
 		} else this.classList.toggle("maximized", enable);
