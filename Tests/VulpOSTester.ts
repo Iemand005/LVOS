@@ -139,6 +139,16 @@ export class VulpOSTester {
 		});
 	}
 
+	/**
+	 * The fixture turns animations off after load, so a test that needs the real
+	 * transitions on asks for them here instead of reaching into `window.flags`.
+	 */
+	async setAnimations(enabled: boolean) {
+		await this.page.evaluate((enabled) => {
+			window.flags.useAnimations = enabled;
+		}, enabled);
+	}
+
 	/** The geometry the snap code stores, which the CSS layer deliberately leaves alone. */
 	async state(window: DialogHandle) {
 		return window.evaluate(window => ({
@@ -290,11 +300,10 @@ export const test = base.extend<{ vulpOS: VulpOSTester }>({
 
 		await page.goto('http://localhost:3621/');
 
-		await page.evaluate(() => {
-			window.flags.useAnimations = false;
-		});
+		const vulpOS = new VulpOSTester(page);
+		await vulpOS.setAnimations(false);
 
-		await use(new VulpOSTester(page));
+		await use(vulpOS);
 	},
 });
 
