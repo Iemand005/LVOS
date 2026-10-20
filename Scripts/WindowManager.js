@@ -4513,7 +4513,6 @@ function DocumentCrawler(customDocument){
 	this.document = customDocument || document;
 }
 
-DocumentCrawler.prototype.getMetro = function () { return this.document.getElementById("metrobody"); };
 DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
 DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
