@@ -30,10 +30,14 @@ body {
 	margin: 0;
 	touch-action: auto;
 	overscroll-behavior: none;
+
+	overflow: hidden;
 }
 
 body.exposé {
 	min-height: 200vh;
+
+	overflow-y: scroll;
 
 	view-timeline-name: --page-scroll;
 	view-timeline-axis: y;
