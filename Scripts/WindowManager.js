@@ -2634,10 +2634,7 @@ Dialog.prototype.dropIntoDesktop = function(i) {
 	// Where the window currently looks like it is: the rendered content rect.
 	if (this.content) {
 		var rendered = this.content.getBoundingClientRect();
-		if (rendered.width) {
-			visualLeft = rendered.left;
-			visualTop = rendered.top;
-		}
+		if (rendered.width) visualLeft = rendered.left, visualTop = rendered.top;
 	}
 	this.moveToDesktop(i);
 	this.clearExposéVisual();
@@ -2647,10 +2644,7 @@ Dialog.prototype.dropIntoDesktop = function(i) {
 	if (!placed.width) return;
 	var desktopScale = placed.width / unscaledWidth;
 	if (!desktopScale) return;
-	this.move(
-		this.x + (visualLeft - placed.left) / desktopScale,
-		this.y + (visualTop - placed.top) / desktopScale
-	);
+	this.move(this.x + (visualLeft - placed.left) / desktopScale, this.y + (visualTop - placed.top) / desktopScale);
 };
 
 /** Reinsert the window into the desktop it was dragged from and animate it back to its pre-drag position there. */
