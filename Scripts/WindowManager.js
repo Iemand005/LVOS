@@ -961,9 +961,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 				}
 			}
 			dialog.resize();
-		} catch (exception) {
-			/* ignore */
-		}
+		} catch (exception) { /* ignore */ }
 	}
 	return dialog;
 };
