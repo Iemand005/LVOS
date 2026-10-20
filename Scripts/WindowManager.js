@@ -4482,14 +4482,6 @@ DragAction.prototype.set = function (direction) {
 
 //#region DocumentCrawler
 
-/**
- * @param {HTMLDocument} [customDocument]
- * @class
- */
-function DocumentCrawler(customDocument){
-	this.document = customDocument || document;
-}
-
 function getOverlay() { return document.getElementById("overlay"); };
 
 //#endregion
@@ -4514,7 +4506,6 @@ window.addEventListener("drop", function(e) {
 var windowManager = new WindowManager;
 windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
-var bodyCrawler = new DocumentCrawler;
 
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = {};
