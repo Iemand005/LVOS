@@ -160,21 +160,8 @@ function getWindowChromeHeight(window) {
  * @param {number} [scaleY]
  * @param {number} [rotation]
  */
-function transformElementOld(element, x, y, skew, scaleX, scaleY, rotation) {
-	var transform = "translate(" + Math.floor(x) + "px," + Math.floor(y) + "px)";
-	if (skew) transform += " skewX(" + skew + "deg)";
-	if (scaleX === 1) scaleX = undefined;
-	if (scaleY === 1) scaleY = undefined;
-	if (scaleX && scaleY) transform += "scale(" + scaleX + "," + scaleY + ")";
-	else {
-		if (scaleX) transform += "scaleX(" + scaleX + ")";
-		if (scaleY) transform += "scaleY(" + scaleY + ")";
-	}
-	if (rotation) transform += "rotate(" + rotation + "deg)";
-
-	else {
-		element.style.transform = transform;
-	}
+function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
+	transformElement(element, { x: x, y: y });
 }
 
 /** @param {HTMLElement} element @param {Transform} t */
@@ -3627,7 +3614,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		// the transform pins to the origin, so let updateTransform write that too.
 		this.updateTransform();
 		if (!content) return;
-		transformElementOld(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
 		content.style.height = "";
 		this.maximizeAnimations--;
@@ -3678,7 +3664,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 
-			transformElementOld(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 		});
 	}, timeOffsetMs);
 	}, 1000);
@@ -3771,7 +3757,7 @@ Dialog.prototype.updatePosition = function() {
 		if (!wallpaperP) return;
 		var wallpaperImage = wallpaperP.children[0];
 		if (!(isElement(backdrop)) || !wallpaperImage) return;
-		transformElementOld(backdrop, -this.x, -this.y);
+		translateElement(backdrop, -this.x, -this.y);
 
 		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
 		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
