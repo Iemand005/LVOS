@@ -677,7 +677,7 @@ function getScreenShooter() {
 }
 
 
-var picker = typeof window.ElementPicker !== undefined ? new ElementPicker({
+var picker = "ElementPicker" in window ? new ElementPicker({
 	onSelect: function (el) {
 		var shooter = getScreenShooter();
 		if (shooter) shooter.screenshotElement(el);
