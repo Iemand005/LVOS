@@ -2641,7 +2641,7 @@ Dialog.prototype.dropIntoDesktop = function(i) {
 	}
 	this.moveToDesktop(i);
 	this.clearExposéVisual();
-	if (visualLeft === null || !this.target || !unscaledWidth) return;
+	if (visualLeft === null || visualTop === null || !this.target || !unscaledWidth) return;
 	// Map the visual drop position back through the new desktop's preview scale.
 	var placed = this.target.getBoundingClientRect();
 	if (!placed.width) return;
