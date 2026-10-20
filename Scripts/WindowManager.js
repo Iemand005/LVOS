@@ -4534,6 +4534,7 @@ window.addEventListener("drop", function(e) {
 //#endregion
 
 //#region Global Variables
+
 var windowManager = new WindowManager;
 windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
@@ -4554,17 +4555,3 @@ window.__LVMessenger = {};
  *  /  Pale Moon 34
  * /  Safari 5+ (Windows and Mac OS X)
 \*/
-
-
-/**
- * @template T
- * @param {T} type
- * @returns {T}
- */
-function genericTyped(type) {
-	return type;
-}
-
-const hey = genericTyped(document.createElement("button"))
-
-const meow = document.createElement("applet");
