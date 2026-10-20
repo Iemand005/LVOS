@@ -181,7 +181,6 @@ function transformElement(element, t) {
 	if (t.rotateY) transform += "rotateY(" + toDegrees(t.rotateY) + ")";
 	if (t.rotateZ) transform += "rotateZ(" + toDegrees(t.rotateZ) + ")";
 
-	
 	element.style.transform = transform;
 }
 
@@ -203,16 +202,6 @@ function insetElement(element, top, left, right, bottom) {
 		if (typeof right !== "undefined") element.style.right = toPixels(right);
 		if (typeof bottom !== "undefined") element.style.bottom = toPixels(bottom);
 	}
-}
-
-/**
- * @param {HTMLElement} element
- * @param {number} skew
- */
-function skewElement(element, skew) {
-	var transform = " skewX(" + toDegrees(skew) + ")";
-	element.style.transform = transform;
-	element.style.webkitTransform = transform;
 }
 
 /**
@@ -2198,12 +2187,14 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 
 /** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
-	if (animate) animateElement(this.target, function() {
-		transformElement(this.target, this._transform);
-	}, "transform", function() {
+	var self = this;
+	var transofmfunc = function() {
+		transformElement(self.target, self._transform);
+	};
+	if (animate) animateElement(this.target, transofmfunc, "transform", function() {
 
 	}, this, 1000);
-	else transformElement(this.target, this._transform);
+	else transofmfunc();
 }
 
 /**
