@@ -951,7 +951,6 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		try {
 			dialog.resize();
 			if (typeof dialog.update === "function") dialog.update();
-			if (typeof dialog.syncGeometry === "function") dialog.syncGeometry();
 			var rect = getRect(dialog.target);
 			if (rect) {
 				var bw = rect.width, bh = rect.height;
