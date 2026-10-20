@@ -3539,10 +3539,10 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 	this._snappingOutState = /** @type {any} */ (target)._animationState;
 };
 
-/** @param {boolean} enable */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleMaximized = function (enable) {
 
-	if (enable == null) enable = !this.maximized;
+	if (typeof enable !== "boolean") enable = !this.maximized;
 	if (this.maximized === enable) return;
 	if (!this.target) return;
 
