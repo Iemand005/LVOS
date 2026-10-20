@@ -535,6 +535,9 @@ if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement
 // IE / HTA settings storage. Settings.js falls back to this when localStorage is missing.
 var STORAGE_FILE = "app_storage.json";
 
+(function() {
+	try {
+
 function ActiveXStorage() {
     if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
     this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
@@ -565,6 +568,10 @@ ActiveXStorage.prototype.getItem = function (key) {
         return null;
     }
 };
+
+	} catch(ex) {console.log("ActiveX" , ex)}
+
+})();
 
 (function() {
 	if (typeof window.CSS !== "undefined") return;
