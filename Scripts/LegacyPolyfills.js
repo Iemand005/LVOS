@@ -575,3 +575,12 @@ ActiveXStorage.prototype.getItem = function (key) {
 
 	CSS.prototype.supports = function() { return false; }
 })
+
+(function() {
+	if (typeof window.BroadcastChannel !== "undefined") return;
+
+	function BroadcastChannel() {
+
+	}
+
+})
