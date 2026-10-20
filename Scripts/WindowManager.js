@@ -1120,6 +1120,10 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
  * @param {boolean} [isTouch]
  */
 WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
+	// A frame must never outlive the gesture it belongs to: once the drag is over, a
+	// leftover drag event would run with dragAction reset to a plain move and jump the
+	// window to grab-position + cursor delta instead of keeping the resize.
+	if (!this.isDragging) return;
 	var dialog = this.activeDialog;
 	if (!dialog || !dialog.clickOffset) return;
 
@@ -1669,6 +1673,20 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.isDragging) return;
 	// if (flipped) return;
+	// The release can outrun the throttled drag frame: the last pointermove of the gesture
+	// is still sitting in _pendingDragEvent waiting for its rAF, and that callback runs
+	// after this function has already reset dragAction to a plain move — it would then
+	// apply the whole cursor delta as a move and teleport the window. Drain the pending
+	// frame synchronously, while the gesture direction is still the one the user was
+	// resizing with, so the release point is applied as the resize it belongs to. The
+	// scheduled rAF finds a null pending event and does nothing.
+	if (this._pendingDragEvent && this.activeDialog) {
+		var pending = this._pendingDragEvent;
+		this._pendingDragEvent = null;
+		this.ticking = false;
+		var pendingTouch = "pointerType" in pending && pending.pointerType === "touch";
+		this.handleWindowDrag(pending.clientX, pending.clientY, pendingTouch);
+	}
 	// Read before set() below resets it to a plain move: the drop has to decide the same
 	// zone the preview did, and the preview saw the direction the gesture started with.
 	var dragDirection = this.dragAction.direction;
