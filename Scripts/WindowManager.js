@@ -992,8 +992,9 @@ WindowManager.prototype.toggleMica = function(enabled) {
 	this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
 
+/** @type {Bounds} */
 WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
-
+/** @type {Bounds} */
 WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
 WindowManager.recalculateWindowBounds = function() {
