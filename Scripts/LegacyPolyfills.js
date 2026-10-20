@@ -301,7 +301,7 @@ if (typeof Array.from != "function") {
 }());
 
 (function () {
-  if (typeof window.Promise == 'function')
+  if (typeof window.Promise === 'function')
     return;
 
   var PENDING = 0;
@@ -565,3 +565,13 @@ ActiveXStorage.prototype.getItem = function (key) {
         return null;
     }
 };
+
+(function() {
+	if (typeof window.CSS !== "undefined") return;
+
+	function CSS() {
+
+	}
+
+	CSS.prototype.supports = function() { return false; }
+})
