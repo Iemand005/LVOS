@@ -303,7 +303,7 @@ function swapMetroBody() {
 
 /** @param {boolean} enable */
 function flip(enable){
-	var desktop = bodyCrawler.getDesktop();
+	var desktop = document.getElementById("desktop");;
 	if (!desktop) return;
 	desktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
 	flipHandler(desktop.classList.toggle("flipped", enable));
@@ -351,21 +351,20 @@ function fromPixels(text){
 }
 
 /** @param {*} exception */
-function handleStorageException(exception){
+function handleStorageException(exception) {
 	localStorage.windowState = null;
 	windowManager.canSave = false;
 }
 
-
-function getDialogTemplate(){
+function getDialogTemplate() {
 	var template = document.querySelector("template") || document.getElementById("window-template");
 	if (!template) return;
 	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-	return content.children ? content.children[0] : content.getElementsByClassName("window")[0];//document.querySelector("template");
+	return content.children[0];
 }
 
-function createDialog() {
+function createDialogElement() {
 	var container = bodyCrawler.getDialogsContainer();
 	var template = getDialogTemplate();
 	if (!template) return null;
@@ -2437,7 +2436,7 @@ Dialog.prototype.initWithObject = function(object) {
 				var doc = this.contentDocument;
 				if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 			} else {
-				this.target = createDialog();
+				this.target = createDialogElement();
 				this.openUrl(object.src);
 			}
 			if (this.windowTarget) this.windowTarget.dialog = this;
@@ -4516,7 +4515,6 @@ function DocumentCrawler(customDocument){
 DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
 DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
-DocumentCrawler.prototype.getDesktop = function () { return document.getElementById("desktop"); };
 
 //#endregion
 
