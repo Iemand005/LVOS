@@ -97,7 +97,6 @@ var flags = {
 	_useMica: false,
 	get useMica() { return this._useMica; },
 	set useMica(value) {
-		if (!windowManager) return;
 		windowManager.toggleMica(value);
 		this._useMica = value;
 	},
