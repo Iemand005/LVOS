@@ -155,12 +155,8 @@ function getWindowChromeHeight(window) {
  * @param {HTMLElement} element
  * @param {number} x
  * @param {number} y
- * @param {number} [skew]
- * @param {number} [scaleX]
- * @param {number} [scaleY]
- * @param {number} [rotation]
  */
-function translateElement(element, x, y, skew, scaleX, scaleY, rotation) {
+function translateElement(element, x, y) {
 	transformElement(element, { x: x, y: y });
 }
 
