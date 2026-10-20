@@ -12,6 +12,7 @@
  * Usage:
  *   node build.js            -> write minified bundles into the dist folder
  *   node build.js --no-minify-> write unminified (readable) bundles
+ *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
  *   node build.js --help     -> show this message
  *
  * The dist folder defaults to the sibling "LVOS-dist" repo if it exists,
@@ -22,6 +23,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
+import ts from "typescript";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = join(ROOT, "Scripts");
