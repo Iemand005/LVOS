@@ -210,10 +210,10 @@ function createDesktop() {
     var windowSection = document.createElement("section");
     windowSection.className = "window-section";
 
-    var wallpaper = document.getElementById("wallpaper")?.cloneNode(true);
+    var wallpaper = document.getElementById("wallpaper").cloneNode(true);
     windowSection.appendChild(wallpaper);
 
-    var dockArea = document.getElementById("dock-area")?.cloneNode(true);
+    var dockArea = document.getElementById("dock-area").cloneNode(true);
     windowSection.appendChild(dockArea);
 
     return windowSection;
