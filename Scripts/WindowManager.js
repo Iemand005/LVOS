@@ -3749,6 +3749,9 @@ Dialog.prototype.updatePosition = function() {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
+}
+Dialog.prototype.updateMicaPosition = function() {
+
 	if (!flags.useMica) return;
 	var micaElement = this.micaElement;
 	if (micaElement) try {
