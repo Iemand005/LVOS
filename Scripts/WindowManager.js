@@ -246,7 +246,7 @@ function messageReceived(type, data, source){
 		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
 			case "launchOverlay":
-				var overlay = bodyCrawler.getOverlay();
+				var overlay = getOverlay();
 				if (!overlay) break;
 
 				overlay.ontransitionend = function () {
@@ -266,7 +266,7 @@ function messageReceived(type, data, source){
 				overlay.classList.toggle("open");
 				break;
 			case "readyToLaunchOverlay":
-				var overlay1 = bodyCrawler.getOverlay();
+				var overlay1 = getOverlay();
 				if (!overlay1) break;
 				if (dialog.body) overlay1.appendChild(dialog.body);
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
@@ -4490,7 +4490,7 @@ function DocumentCrawler(customDocument){
 	this.document = customDocument || document;
 }
 
-DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
+function getOverlay() { return document.getElementById("overlay"); };
 
 //#endregion
 
