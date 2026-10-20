@@ -44,7 +44,19 @@ const ASSETS = [
  * this page is derived from (used only for reference, not parsing).
  */
 const PAGES = {
-	"index.html": { source: "index.html", script: "desktop.dist.js" },
+	"index.html": {
+		source: "index.html",
+		script: "desktop.dist.js",
+		// Optional feature scripts loaded separately (deferred) instead of being
+		// bundled. WebGraphics is only needed for the screenshot tool, so it stays
+		// out of the main bundle and its 3D/GLSL code is never parsed on boot.
+		extras: [
+			"Scripts/WebGraphics/Graphics.js",
+			"Scripts/WebGraphics/Graphics3D.js",
+			"Scripts/WebGraphics/HTMLInCanvas.js",
+			"Scripts/WebGraphics/ScreenShooter.js"
+		]
+	},
 	"mobile.html": { source: "mobile.html", script: "mobile.dist.js" }
 };
 
@@ -63,10 +75,6 @@ const BUNDLES = {
 		"AppRegistry.js",      // appRegistry
 		"WindowManager.js",
 		"ElementPicker.js",
-		"WebGraphics/Graphics.js",
-		"WebGraphics/Graphics3D.js",
-		"WebGraphics/HTMLInCanvas.js",
-		"WebGraphics/ScreenShooter.js",
 		"ScrollTabs/ScrollTabs.js",
 		"WebComponents.js",
 		"DesktopManager.js",
@@ -141,12 +149,16 @@ function writePages(dist) {
 		// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
 		// without module support download them; modern Chrome ignores the tag entirely.
 		const src = readFileSync(srcPath, "utf8");
+		const extras = (config.extras || [])
+			.map((extra) => '<script src="./' + extra + '" defer></script>\n')
+			.join("");
 		const out = src
 			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
 			.replace(
 				/<\/head>/i,
 				'<script nomodule src="./Scripts/LegacyPolyfills.js" defer></script>\n' +
-				'<script src="./' + config.script + '" defer></script>\n</head>'
+				'<script src="./' + config.script + '" defer></script>\n' +
+				extras + '</head>'
 			);
 		writeFileSync(join(dist, page), out);
 		console.log("[page] " + page + " -> scripts replaced with " + config.script);
