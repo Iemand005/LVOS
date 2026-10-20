@@ -3620,7 +3620,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.pointerEvents = "";
 
 
-		this.setScale(1, 1);
+		// Animated: no. The class animation owns this transition; a Transformable
+		// animation from setScale would supersede it and swallow its onEnd.
+		this.setScale(1, 1, undefined, true);
+		// setScale wrote the reset scale but kept the stale translate; while maximizing
+		// the transform pins to the origin, so let updateTransform write that too.
+		this.updateTransform();
 		if (!content) return;
 		transformElementOld(content, 0, 0, 0, 1, 1);
 		content.style.width = "";
@@ -3656,7 +3661,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = 1 / scaleY;
 		}
 
-		this.setScale(scaleX, scaleY);
+		// Same element, same transition: animating here would start a Transformable
+		// animation that supersedes the class animation and drops its onEnd. The write
+		// still plays the transition because "animating" is on the element.
+		this.setScale(scaleX, scaleY, undefined, true);
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
 		var targetHeight = enabled ? height : self.height;

@@ -29,7 +29,9 @@ test('maximize lands with transform movement (compositor path)', async ({ vulpOS
 		animations: dialog.maximizeAnimations,
 	}));
 	expect(maximized.maximizedClass).toBe(true);
-	expect(maximized.scaledMaxClass).toBe(false);
+	// The scaled-max class stays while maximized: it keeps the !important transform
+	// reset away so the inline scale stays authoritative.
+	expect(maximized.scaledMaxClass).toBe(true);
 	expect(maximized.animatingClass).toBe(false);
 	expect(maximized.pointerEvents).toBe('');
 	expect(maximized.animations).toBe(0);
