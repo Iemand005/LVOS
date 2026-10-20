@@ -1017,7 +1017,7 @@ WindowManager.prototype.initializeDialogs = function() {
 	window.addEventListener(event, stop, false);
 
 	this.dragAction.set(0);
-	var dialogs = bodyCrawler.getAllDialogs();
+	var dialogs = document.getElementsByClassName("window");;
 	Array.from(dialogs).forEach(function (dialog) {
 		if (isElement(dialog))
 			self.loadApp(dialog);
@@ -4490,8 +4490,7 @@ function DocumentCrawler(customDocument){
 	this.document = customDocument || document;
 }
 
-DocumentCrawler.prototype.getAllDialogs = function () { return this.document.getElementsByClassName("window"); };
-DocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
+remDocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 
 //#endregion
