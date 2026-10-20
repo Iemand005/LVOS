@@ -19,8 +19,6 @@ window.addEventListener("load", function(e){
 	window.addEventListener('popstate', function (event) {
 		
 		window.history.pushState(null, "", window.location.href);
-		
-		console.log("I gotta handle backnav!");
 
 		goBack();
 	});

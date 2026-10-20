@@ -6,13 +6,25 @@
 'use strict';
 
 /**
+ * Array-like iteration shared by every object. The length is read once so a callback
+ * that mutates the collection cannot extend the loop, and a missing `length` is
+ * treated as an empty collection instead of `undefined`.
  * @template T
- * @param {(value: T, key: number, array: T[]) => void} callbackfn 
- * @param {any} thisArg
+ * @this {{length?: number, [key: number]: T}}
+ * @param {(this: any, value: T, key: number, array: any) => void} callbackfn
+ * @param {any} [thisArg]
+ * @returns {void}
  */
 function forEachIndexed(callbackfn, thisArg) {
-    for (var i = 0; i < this.length; ++i) callbackfn.call(thisArg, this[i], i, this);
+	if (typeof callbackfn !== "function") throw new TypeError(callbackfn + " is not a function");
+	var length = this == null || typeof this.length !== "number" ? 0 : this.length >>> 0;
+	for (var i = 0; i < length; ++i) callbackfn.call(thisArg, this[i], i, this);
 }
 
-// Non-enumerable, so we do not mess up for-in loops that do not check hasOwnProperty().
-Object.defineProperty(Object.prototype, 'forEach', { value: forEachIndexed });
+// Non-enumerable and configurable: it must not show up in for-in loops, but another
+// implementation is still allowed to replace it.
+if (!Object.prototype.hasOwnProperty("forEach")) Object.defineProperty(Object.prototype, "forEach", {
+	value: forEachIndexed,
+	writable: true,
+	configurable: true
+});
