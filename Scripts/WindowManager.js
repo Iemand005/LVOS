@@ -4410,7 +4410,6 @@ Dialog.prototype.getState = function() {
  * @param {Partial<DialogState>} state
  */
 Dialog.prototype.loadState = function(state) {
-	if (!state) return;
 	if ("open" in state) {
 		if (state.open) this.launch();
 		else if (this.target) this.toggleOpen(false);
