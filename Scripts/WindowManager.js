@@ -1201,7 +1201,9 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	var k = 1;
 	if (index >= 0) {
 		// The hovered desktop's own preview scale (offsetWidth ignores transforms).
-		var desktopTarget = desktopManager.desktops[index].target;
+		var desktop = desktopManager.desktops[index];
+		if (!desktop return;)
+		var desktopTarget = desktop.target;
 		var area = desktopTarget.getBoundingClientRect();
 		if (area.width && desktopTarget.offsetWidth) k = area.width / desktopTarget.offsetWidth;
 	}
@@ -1474,7 +1476,7 @@ WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
 		// off the box it is drawn at: in the left half of the area it stays left, and the
 		// gap has to go on the other side to keep it there.
 		var rect = dialog.target.getBoundingClientRect();
-		var origin = section ? section.getBoundingClientRect() : rect;
+		var origin = section.getBoundingClientRect();
 		side = rect.left - origin.left <= origin.width / 2 ? "left" : "right";
 	}
 
@@ -1563,7 +1565,6 @@ WindowManager.prototype.getSnapSpacer = function (section) {
  * @param {HTMLElement} section
  */
 WindowManager.prototype.reflowSnapGroup = function (section) {
-	if (!section) return;
 	var group = this.getSnapGroup(section);
 	var tiles = /** @type {WindowTile[]} */ (group.windows);
 
