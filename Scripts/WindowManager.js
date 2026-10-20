@@ -527,7 +527,7 @@ function WindowManager() {
 	this._isWindowUpdatesEnabled = false;
 
 	this.isDragging = false;
-	/** @const */
+	/** @constant */
 	this.dragAction = new DragAction;
 
 	/**
