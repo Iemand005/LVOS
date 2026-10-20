@@ -581,6 +581,8 @@ ActiveXStorage.prototype.getItem = function (key) {
 	}
 
 	CSS.prototype.supports = function() { return false; }
+
+	window.CSS = CSS;
 })();
 
 (function() {
@@ -589,5 +591,7 @@ ActiveXStorage.prototype.getItem = function (key) {
 	function BroadcastChannel() {
 
 	}
+
+	window.BroadcastChannel = BroadcastChannel;
 
 })();
