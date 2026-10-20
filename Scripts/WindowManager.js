@@ -1005,9 +1005,6 @@ WindowManager.recalculateWindowBounds = function() {
 	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
 };
 
-window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
-window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
-
 Object.defineProperty(WindowManager, "windowBounds", {
 	get: function () { return WindowManager._windowBounds; }
 });
@@ -4514,6 +4511,9 @@ DocumentCrawler.prototype.getOverlay = function () { return document.getElementB
 
 
 //#region Event Listeners
+
+window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
+window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager.saveState(); }, false);
