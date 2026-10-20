@@ -2013,8 +2013,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	}, function(name) {
 		return name === "inset";
 	}, function() {
-		// this.hidden = true;
-	}, this, );
+	}, this);
 }
 
 /**
