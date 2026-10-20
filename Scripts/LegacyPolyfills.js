@@ -37,18 +37,7 @@ if(typeof MutationObserver == "undefined") window.MutationObserver = function(ca
     this.takeRecords = function() { return []; };
 };
 
-function CompatibilityChecker(){
-    this.checkClasses = function(){
-        try { eval("class c{}"); } catch(e) { return false; }
-        return true;
-    };
-}
-
 if (!Object.hasOwn) Object.hasOwn = function(o, v) { return o.hasOwnProperty(v); };
-
-function forEachIn(callback) { // hasOwnProperty has been deprecated and replaced with Object.hasOwn().
-    for (var i in this) if (Object.hasOwn(this, i)) callback(this[i], i, this); // TODO: wrap in function because the var will nbe last of ieteration in the end
-}
 
 /**
  * @template T

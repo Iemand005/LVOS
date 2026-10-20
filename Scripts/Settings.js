@@ -56,9 +56,6 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
 		var flag = flags[flagId];
-		/** @type {HTMLElement | null} */
-		var settingElement = document.createElement("label");
-
 		var flagValue = flags[flagId];
 
 		switch (typeof flag) {
@@ -88,8 +85,6 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
 				break;
 		}
-		if (!settingElement) return;
-		flagsElement.appendChild(settingElement);
 	}
 	var settingsElement = document.getElementById("settings");
 	if (settingsElement) settingsElement.appendChild(flagsElement);
@@ -172,18 +167,6 @@ function toggleColorDebug(enabled) {
 function toggleSquircles(enabled) {
 	document.body.classList.toggle("squircles", enabled);
 	settings.set("squircles", enabled);
-}
-
-function toggleCharmsEvent(ev) {
-	// if (!document.elementFromPoint) return;
-	// var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-	// if (!isCharmsOpen() || clickedElement === charmsButton) return;
-	//
-	// if(!(clickedElement === elements.charms || elements.charms.contains(clickedElement))) {
-	// 	//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
-	// //else
-	// 	toggleCharms(false);
-	// }
 }
 
 /** @param {number} size */
@@ -368,13 +351,9 @@ function loadThemeSetting() {
 
 /** @type {{[key:string]: HTMLElement | null}} */
 var elements = {
-	charms: null,
 	color: null,
 	accent: null,
-	resetColor: null,
-	resetAccent: null,
 	border: null,
-	dockAppList: null,
 	theme: null,
 	colorDebug: null,
 	squircles: null,
@@ -419,13 +398,9 @@ function installAppFromUrl(useProxy) {
 }
 
 function loadElements() {
-	elements.charms = document.getElementById("charms");
 	elements.color = document.getElementById("color");
 	elements.accent = document.getElementById("accent");
-	elements.resetColor = document.getElementById("resetaccent");
-	elements.resetAccent = document.getElementById("resetaccent");
 	elements.border = document.getElementById("border");
-	elements.dockAppList = document.getElementById("dockapplist");
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
 	elements.squircles = document.getElementById("squircles");
@@ -441,8 +416,6 @@ function loadElements() {
 	var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
 	
 	charmsButton.textContent = "Settings";
-
-	window.addEventListener("mousedown", toggleCharmsEvent, false);
 
 	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
@@ -473,8 +446,6 @@ addEventListener("load", function() {
 	loadElements();
 	loadSettings();
 }, false);
-
-var metroAppList = document.getElementById("metroapplist");
 
 /**
  * @param {*} object 

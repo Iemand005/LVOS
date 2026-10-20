@@ -4444,9 +4444,9 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 };
 
 Dialog.prototype.screenshot = function() {
-	var target = this.target;
-	if (!target) return;
-	if (screenShooter) screenShooter.screenshotElement(target);
+	if (!this.target) return;
+	var shooter = getScreenShooter();
+	if (shooter) shooter.screenshotElement(this.target);
 }
 
 //#endregion

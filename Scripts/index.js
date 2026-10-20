@@ -1,7 +1,3 @@
-var reflecitons = false;
-
-// var isBlink = "chrome" in window;
-
 /** @type {Launchpad?} */
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 

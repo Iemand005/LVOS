@@ -5,14 +5,7 @@
  */
 "use strict";
 
-var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit != "undefined");
-
-function vibrate() {
-	navigator.vibrate(500);
-}
-
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
-var scrollTabs = null;
 
 var onLoad = function () {
 
@@ -238,19 +231,10 @@ Desktop.prototype.insertWindow = function(dialog) {
     dialog.setParentElement(this.target)
 };
 
-function addDesktop() {
-
-}
-
 window.addEventListener("load", onLoad, false);
 
 function ContextMenu() {
     this.element = document.getElementById("context-menu");
-}
-/** @param {boolean} force */
-ContextMenu.prototype.toggleOpen = function(force) {
-    if (!this.element) return;
-    this.element.classList.toggle("open", force);
 }
 /**
  * @param {number} x
@@ -272,14 +256,10 @@ ContextMenu.prototype.close = function() {
 var contextMenu = new ContextMenu;
 
 
-var docontexthook = true;
-if (docontexthook) document.addEventListener("contextmenu", function(e) {
+document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
-
     contextMenu.open(e.clientX, e.clientY);
 }, false);
-
-var reflecitons = false;
 
 var dock = document.getElementById("dock");
 
@@ -687,12 +667,20 @@ if (wallpaper) {
 	wallpaper.ondrop = function(ev) { ev.preventDefault(); };
 }
 
-var screenShooter = new ScreenShooter;
+// WebGraphics is loaded separately (deferred) and may be absent on some pages, so the
+// screenshot helper is created on first use instead of at boot.
+var screenShooter = null;
+function getScreenShooter() {
+	if (screenShooter) return screenShooter;
+	if (typeof ScreenShooter == "undefined") return null;
+	return screenShooter = new ScreenShooter;
+}
 
 
 var picker = new ElementPicker({
 	onSelect: function (el) {
-        window.screenShooter.screenshotElement(el);
+		var shooter = getScreenShooter();
+		if (shooter) shooter.screenshotElement(el);
 	},
     onMove: function(el) {
         if (el.nodeName === "ARTICLE") {
