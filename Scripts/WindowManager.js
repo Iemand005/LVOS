@@ -4498,8 +4498,7 @@ window.addEventListener("drop", function(e) {
 
 //#region Global Variables
 
-var windowManager = new WindowManager;
-windowManager = windowManager;
+window.windowManager = new WindowManager;
 windowManager.isWindowUpdatesEnabled = true;
 
 window.__LVMessengerReceive = messageReceived;
