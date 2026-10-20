@@ -1677,7 +1677,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	if (this.isTouchDrag) this.activeDialog.setDragScale(1, 1);
 
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
-	if (snap) {
+	if (snap && dragDirection) {
 
 		var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
 		if (snapZone) this.snapDialog(this.activeDialog, snapZone);
@@ -1851,7 +1851,6 @@ WindowSnap.prototype.init = function() {
  * @param {Dialog} dialog
  */
 WindowSnap.prototype.attachTo = function(dialog) {
-	if (!windowManager) return;
 	var section = windowManager.getSnapContainer(dialog);
 	if (!section) return;
 	this._section = section;
@@ -1863,7 +1862,7 @@ WindowSnap.prototype.attachTo = function(dialog) {
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
 
-	if (dialog) this.attachTo(dialog);
+	this.attachTo(dialog);
 
 	this.hidden = !outset;
 	if (!preserveSnapped) this._snapped = "";
