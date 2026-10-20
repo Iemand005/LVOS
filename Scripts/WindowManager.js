@@ -3643,7 +3643,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 
-			translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+				// TODO: what's going on here? the resize should be CSS ONLY no javascript animation frames!!!! angry!
+			// translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
 		});
 	}, timeOffsetMs);
 	}, 1000);
