@@ -3247,9 +3247,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 /** @param {number} skew */
 Dialog.prototype.setSkew = function(skew) {
 	this._skew = skew;
-	if (this.useTransform)
-			this.updateTransform();
-	else if (this.target) skewElement(this.target, skew);
+	if (this.useTransform) this.updateTransform();
 };
 /**
  * @param {number} [scaleX]
