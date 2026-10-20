@@ -2183,18 +2183,16 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 	set: function(value) {
 		var parent = this.target.parentElement;
 		if (parent) parent.style.perspective = toPixels(this._perspective = value); }
-})
+});
+
+Transformable.prototype.applyTransform = function() {
+	transformElement(this.target, this._transform);
+};
 
 /** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
-	var self = this;
-	var transofmfunc = function() {
-		transformElement(self.target, self._transform);
-	};
-	if (animate) animateElement(this.target, transofmfunc, "transform", function() {
-
-	}, this, 1000);
-	else transofmfunc();
+	if (animate) animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
+	else this.applyTransform();
 }
 
 /**
