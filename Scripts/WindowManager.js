@@ -230,6 +230,8 @@ function getRect(element, index) {
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 }
 
+function getOverlay() { return document.getElementById("overlay"); }
+
 /**
  * @param {MessageType} type
  * @param {any} data
@@ -4479,13 +4481,6 @@ DragAction.prototype.set = function (direction) {
 };
 
 //#endregion
-
-//#region DocumentCrawler
-
-function getOverlay() { return document.getElementById("overlay"); };
-
-//#endregion
-
 
 //#region Event Listeners
 
