@@ -47,7 +47,12 @@ var isLocal = location.protocol === "file:" || location.hostname === "localhost"
 
 
 /** @type {"webkitTransitionEnd" | "transitionend"} */
-var transitionEndEvent = ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
+// Prefer the unprefixed event wherever the unprefixed style property exists: modern
+// Chrome still exposes "webkitTransition" in the style object but only ever dispatches
+// "transitionend", so testing the prefixed property alone picks an event name that
+// never fires and every animated toggle hangs waiting for its end.
+var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" :
+	("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 
 if (isIE) useTransform = true;
@@ -3604,7 +3609,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		self.maximizeAnimations--;
-	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
+	}, 1000) : this.toggleClassAnimated("scaled-max", enable, function(name) {
 		return name === "transform";
 	}, function onEnd(enabled) {
 		if (self._animationProps._fsTimeout) clearTimeout(self._animationProps._fsTimeout);
@@ -3664,10 +3669,10 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				content.style.height = toPixels(targetHeight);
 				void content.offsetWidth;
 
-				transformElementOld(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-			});
-		}, timeOffsetMs);
-	});
+			transformElementOld(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
+		});
+	}, timeOffsetMs);
+	}, 1000);
 	else {
 		var startPos = self.position;
 		var startSize = self.size;
