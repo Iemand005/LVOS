@@ -31,6 +31,10 @@ Guidance for agents working in this repository (LVOS / VulpOS).
 - The `Scripts/WebGraphics`, `Scripts/WebAudioVisualizer`, `Scripts/WebAura`,
   `Scripts/WebMedia` and `ScrollTabs` folders are still copied into `Dist/`
   because the application iframes load them directly.
+- The build merges adjacent `Object.defineProperty(obj, key, attrs)` calls that
+  share a target into one `Object.defineProperties` call using the TypeScript
+  compiler API. Source files keep the individual calls; pass
+  `--no-merge-props` to disable the rewrite.
 
 ## Notes
 

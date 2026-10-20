@@ -247,8 +247,108 @@ self.addEventListener('fetch', function (event) {
 	console.log("[copy] sw.js -> dist (generated for bundles)");
 }
 
-function readGroup(files) {
+/**
+ * Merge adjacent `Object.defineProperty(target, key, attrs)` expression
+ * statements that share the same target into a single
+ * `Object.defineProperties(target, { [key]: attrs, ... })` call.
+ *
+ * The source files keep their individual calls (readable + TypeScript sees the
+ * real property descriptors); this only rewrites the temporary bundle input.
+ * Only consecutive statements and side-effect-free targets (identifiers or
+ * property accesses such as `Dialog.prototype`) are merged, so evaluation order
+ * relative to surrounding code is unchanged. Duplicate keys stop a run so the
+ * last-write-wins semantics of separate calls are preserved.
+ *
+ * @param {string} source
+ * @param {string} fileName
+ * @returns {{ code: string, calls: number, groups: number }}
+ */
+function mergeDefineProperties(source, fileName) {
+	const file = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+	/** @type {{ start: number, end: number, text: string }[]} */
+	const edits = [];
+	let calls = 0;
+
+	/** @param {ts.Node} node */
+	const isSimpleTarget = (node) => ts.isIdentifier(node) || ts.isPropertyAccessExpression(node);
+
+	/**
+	 * @param {ts.Statement} statement
+	 * @returns {{ target: string, key: string, attributes: string } | null}
+	 */
+	const asDefineCall = (statement) => {
+		if (!ts.isExpressionStatement(statement)) return null;
+		const call = statement.expression;
+		if (!ts.isCallExpression(call) || call.arguments.length !== 3) return null;
+		const callee = call.expression;
+		if (!ts.isPropertyAccessExpression(callee)) return null;
+		if (!ts.isIdentifier(callee.expression) || callee.expression.text !== "Object") return null;
+		if (callee.name.text !== "defineProperty") return null;
+		const [target, key, attributes] = call.arguments;
+		if (!isSimpleTarget(target) || ts.isSpreadElement(key) || ts.isSpreadElement(attributes)) return null;
+		return {
+			target: target.getText(file),
+			key: key.getText(file),
+			attributes: attributes.getText(file)
+		};
+	};
+
+	/**
+	 * @param {ts.NodeArray<ts.Statement>} statements
+	 */
+	const processStatements = (statements) => {
+		for (let i = 0; i < statements.length; i++) {
+			const first = asDefineCall(statements[i]);
+			if (!first) continue;
+
+			const keys = new Set([first.key]);
+			const group = [first];
+			let j = i + 1;
+			for (; j < statements.length; j++) {
+				const next = asDefineCall(statements[j]);
+				if (!next || next.target !== first.target || keys.has(next.key)) break;
+				keys.add(next.key);
+				group.push(next);
+			}
+
+			if (group.length > 1) {
+				const start = statements[i].getStart(file);
+				const lineStart = source.lastIndexOf("\n", start - 1) + 1;
+				const indent = source.slice(lineStart, start).match(/^[ \t]*/)[0];
+				let text = "Object.defineProperties(" + first.target + ", {\n";
+				for (const item of group) {
+					text += indent + "\t[" + item.key + "]: " + item.attributes + ",\n";
+				}
+				text += indent + "});";
+				edits.push({ start, end: statements[j - 1].getEnd(), text });
+				calls += group.length;
+			}
+			i = j - 1;
+		}
+	};
+
+	/** @param {ts.Node} node */
+	const walk = (node) => {
+		if (ts.isSourceFile(node) || ts.isBlock(node) || ts.isModuleBlock(node) ||
+			ts.isCaseClause(node) || ts.isDefaultClause(node)) {
+			processStatements(node.statements);
+		}
+		ts.forEachChild(node, walk);
+	};
+	walk(file);
+
+	edits.sort((a, b) => b.start - a.start);
+	let code = source;
+	for (const edit of edits) {
+		code = code.slice(0, edit.start) + edit.text + code.slice(edit.end);
+	}
+	return { code, calls, groups: edits.length };
+}
+
+function readGroup(files, mergeProps) {
 	const parts = [];
+	let calls = 0;
+	let groups = 0;
 	for (const file of files) {
 		// Bundle entries are relative to Scripts/ by default, but may also point at a
 		// repo-root file (e.g. "ScrollTabs/ScrollTabs.js").
@@ -259,22 +359,29 @@ function readGroup(files) {
 			process.exitCode = 1;
 			continue;
 		}
-		const src = readFileSync(full, "utf8");
+		let src = readFileSync(full, "utf8");
+		if (mergeProps) {
+			const merged = mergeDefineProperties(src, file);
+			src = merged.code;
+			calls += merged.calls;
+			groups += merged.groups;
+		}
 		parts.push("// ===== " + file + " =====\n" + src);
 	}
-	return parts.join("\n\n");
+	return { code: parts.join("\n\n"), calls, groups };
 }
 
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
+	const mergeProps = !process.argv.includes("--no-merge-props");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
 	if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
 
 	for (const [outfile, files] of Object.entries(BUNDLES)) {
-		const input = readGroup(files);
-		const result = await esbuild.transform(input, {
+		const group = readGroup(files, mergeProps);
+		const result = await esbuild.transform(group.code, {
 			minify: !noMinify,
 			target: "esnext",
 			legalComments: "none"
@@ -283,11 +390,15 @@ async function build() {
 		const outPath = join(dist, outfile);
 		writeFileSync(outPath, result.code);
 		const bytes = Buffer.byteLength(result.code);
+		const merged = mergeProps && group.groups
+			? " [" + group.calls + " defineProperty -> " + group.groups + " defineProperties]"
+			: "";
 		console.log(
 			(noMinify ? "[dev ] " : "[dist] ") +
 			outfile.padEnd(20) +
 			" -> " +
-			(bytes / 1024).toFixed(1) + " KB (" + files.length + " files)"
+			(bytes / 1024).toFixed(1) + " KB (" + files.length + " files)" +
+			merged
 		);
 	}
 
@@ -299,7 +410,7 @@ async function build() {
 }
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log("LVOS build script.\n\nOptions:\n  --no-minify   emit readable (unminified) bundles\n  --help        show this help");
+	console.log("LVOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --help            show this help");
 } else {
 	build().catch(function (err) {
 		console.error(err);
