@@ -4487,7 +4487,7 @@ window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
 window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-window.addEventListener("unload", function() { windowManager.saveState(); }, false);
+window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
 window.addEventListener("dragover", cancelDomEvent, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
@@ -4497,7 +4497,8 @@ window.addEventListener("drop", function(e) {
 
 //#region Global Variables
 
-window.windowManager = new WindowManager;
+var windowManager = new WindowManager;
+window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
 
 window.__LVMessengerReceive = messageReceived;
