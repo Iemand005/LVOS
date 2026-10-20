@@ -1062,8 +1062,10 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			// Remember the desktop and position to fly back to on a miss-drop.
 			var section = dialog.target && dialog.target.closest ? dialog.target.closest("#window-section, .window-section") : null;
 			var origin = -1;
-			if (section) for (var i = 0; i < window.desktopManager.desktops.length; i++)
-				if (window.desktopManager.desktops[i].target === section) { origin = i; break; }
+			if (section) for (var i = 0; i < window.desktopManager.desktops.length; i++) {
+				var desktop = window.desktopManager.desktops[i];
+				if (desktop && desktop.target === section) { origin = i; break; }
+			}
 			dialog._exposeOrigin = origin >= 0 ? { index: origin, x: dialog.x, y: dialog.y } : null;
 			dialog.detachToRootKeepingVisual(root);
 		}
@@ -1130,7 +1132,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		var gestureDirection = this.dragAction.direction;
 		if (gestureDirection === 0) {
 			if (difference.y > this.heightSnapReleaseThreshold) dialog.toggleHeightSnapped(false);
-		} else if (this.isVerticalResizeDirection(gestureDirection)) {
+		} else if (gestureDirection && this.isVerticalResizeDirection(gestureDirection)) {
 			this.leaveHeightSnappedByResize(dialog);
 		}
 	}
@@ -1202,7 +1204,7 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	if (index >= 0) {
 		// The hovered desktop's own preview scale (offsetWidth ignores transforms).
 		var desktop = desktopManager.desktops[index];
-		if (!desktop return;)
+		if (!desktop) return;
 		var desktopTarget = desktop.target;
 		var area = desktopTarget.getBoundingClientRect();
 		if (area.width && desktopTarget.offsetWidth) k = area.width / desktopTarget.offsetWidth;
