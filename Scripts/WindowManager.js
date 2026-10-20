@@ -3766,6 +3766,25 @@ Dialog.prototype.updatePosition = function() {
 		backdrop.style.height = toPixels(wallpaperHeight);
 	} catch(ex) { console.warn(ex); }
 };
+
+Dialog.prototype.updateMicaPosition = function() {
+	if (!this.target || !flags.useMica) return;
+	var micaElement = this.micaElement;
+	if (micaElement) try {
+		var backdrop = micaElement.firstChild;
+		var wallpaperP = document.getElementById("wallpaper");
+		if (!wallpaperP) return;
+		var wallpaperImage = wallpaperP.children[0];
+		if (!(isElement(backdrop)) || !wallpaperImage) return;
+		translateElement(backdrop, -this.x, -this.y);
+
+		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
+		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
+
+		backdrop.style.width = toPixels(wallpaperWidth);
+		backdrop.style.height = toPixels(wallpaperHeight);
+	} catch(ex) { console.warn(ex); }
+};
 /**
  * Broadcasts this window's state change to other tabs through the window manager.
  * When a partial is given, exactly those changed fields are sent (a move emits only
