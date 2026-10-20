@@ -31,7 +31,12 @@
 		"statusBar.debuggingBackground": "#9B4207",
 		"statusBar.debuggingForeground": "#FFF8F4",
 		"statusBar.noFolderBackground": "#9B4207",
-		"statusBar.noFolderForeground": "#FFF8F4"
+		"statusBar.noFolderForeground": "#FFF8F4",
+		"button.background": "#ff0000",
+		"button.foreground": "#ffffff",
+		"button.hoverBackground": "#cc0000",
+		"button.secondaryBackground": "#333333",
+		"button.secondaryForeground": "#ffffff"
 	},
 	"workbench.browser.autoReloadOnFileChange": true,
 	"workbench.browser.showInTitleBar": true,
