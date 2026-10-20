@@ -3617,6 +3617,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		if (!target) return;
 
 		target.classList.toggle("maximized", enabled);
+		target.style.pointerEvents = "";
 
 
 		this.setScale(1, 1);
