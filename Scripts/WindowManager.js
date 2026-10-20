@@ -2398,7 +2398,6 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
-	if (!object) return;
 
 	if (object instanceof Dialog) {
 		if (object.target) return;
