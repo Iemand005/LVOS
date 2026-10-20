@@ -18,7 +18,7 @@
 		"lerp"
 	],
 	"workbench.colorCustomizations": {
-		"activityBar.background": "#ca5406",
+		"activityBar.background": "#1d1d1d",
 		"activityBar.foreground": "#f7f6f6",
 		"activityBar.activeBackground": "#a14000",
 		"activityBar.inactiveForeground": "#bfbfbf",
