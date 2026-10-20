@@ -350,7 +350,7 @@ function getDialogTemplate() {
 }
 
 function createDialogElement() {
-	var container = bodyCrawler.getDialogsContainer();
+	var container = document.getElementById("window-section");
 	var template = getDialogTemplate();
 	if (!template) return null;
 	var clone = template.cloneNode(true);
@@ -4490,7 +4490,6 @@ function DocumentCrawler(customDocument){
 	this.document = customDocument || document;
 }
 
-remDocumentCrawler.prototype.getDialogsContainer = function () { return this.document.getElementById("window-section"); };
 DocumentCrawler.prototype.getOverlay = function () { return document.getElementById("overlay"); };
 
 //#endregion
