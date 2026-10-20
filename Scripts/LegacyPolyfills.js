@@ -39,6 +39,17 @@ if(typeof MutationObserver == "undefined") window.MutationObserver = function(ca
 
 if (!Object.hasOwn) Object.hasOwn = function(o, v) { return o.hasOwnProperty(v); };
 
+if (typeof Object.assign != "function") Object.assign = function (target) {
+    if (target == null) throw new TypeError("Cannot convert undefined or null to object");
+    var to = Object(target);
+    for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        if (source == null) continue;
+        for (var key in source) if (Object.prototype.hasOwnProperty.call(source, key)) to[key] = source[key];
+    }
+    return to;
+};
+
 /**
  * @template T
  * @param {(value: T, key: number, array: T[]) => void} callbackfn 
@@ -127,7 +138,8 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
 
 // if (!Console.prototype.log)
 if (typeof console == "undefined") {
-    console = {
+    // Assign through `window`: a bare `console = ...` is a ReferenceError in strict mode.
+    window.console = {
         log: function(message) {
             // alert(message);
         },
@@ -582,15 +594,73 @@ ActiveXStorage.prototype.getItem = function (key) {
 
 	CSS.prototype.supports = function() { return false; }
 
+	// ScrollTabs.js calls the *static* CSS.supports(...), not an instance method.
+	CSS.supports = function() { return false; };
+
 	window.CSS = CSS;
 })();
 
 (function() {
 	if (typeof window.BroadcastChannel !== "undefined") return;
 
-	function BroadcastChannel() {
+	var instances = [];
+	var originId = String(new Date().getTime()) + String(Math.random()).slice(2);
+	var counter = 0;
+	var KEY_PREFIX = "__lvbc__";
 
+	function clone(value) {
+		if (value === null || typeof value !== "object") return value;
+		try { return JSON.parse(JSON.stringify(value)); } catch (ex) { return null; }
 	}
+
+	function deliver(channel, data) {
+		if (channel.closed || typeof channel.onmessage !== "function") return;
+		channel.onmessage({ type: "message", data: clone(data), target: channel });
+	}
+
+	/** @param {string} name */
+	function BroadcastChannel(name) {
+		this.name = String(name);
+		this.onmessage = null;
+		this.closed = false;
+		this._key = KEY_PREFIX + this.name;
+		this._id = originId + ":" + (++counter);
+		instances.push(this);
+	}
+
+	BroadcastChannel.prototype.postMessage = function (message) {
+		if (this.closed) return;
+		var i, other;
+		// Same document: hand the message straight to the other channels on this name.
+		for (i = 0; i < instances.length; i++) {
+			other = instances[i];
+			if (other !== this && !other.closed && other.name === this.name) deliver(other, message);
+		}
+		// Other tabs/windows of the same origin: IE11 has no BroadcastChannel but it
+		// does fire `storage` events in every document except the one that wrote.
+		try {
+			if (window.localStorage) window.localStorage.setItem(this._key, JSON.stringify({ id: this._id, data: message }));
+		} catch (ex) {}
+	};
+
+	BroadcastChannel.prototype.close = function () {
+		this.closed = true;
+		var index = instances.indexOf(this);
+		if (index > -1) instances.splice(index, 1);
+	};
+
+	function onStorageEvent(ev) {
+		if (!ev || !ev.key || ev.key.indexOf(KEY_PREFIX) !== 0 || ev.newValue == null) return;
+		var name = ev.key.slice(KEY_PREFIX.length);
+		var payload;
+		try { payload = JSON.parse(ev.newValue); } catch (ex) { return; }
+		if (!payload || payload.id === originId) return;
+		for (var i = 0; i < instances.length; i++)
+			if (!instances[i].closed && instances[i].name === name) deliver(instances[i], payload.data);
+	}
+
+	if (window.addEventListener) window.addEventListener("storage", onStorageEvent, false);
+	else if (window.attachEvent) window.attachEvent("onstorage", onStorageEvent);
 
 	window.BroadcastChannel = BroadcastChannel;
 

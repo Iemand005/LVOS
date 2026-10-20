@@ -31,7 +31,7 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<meta name="apple-mobile-web-app-title" content="VulpOS" />
 
-	<script nomodule src="./Scripts/LegacyPolyfills.js" defer></script>
+	<script nomodule src="./Scripts/LegacyPolyfills.js"></script> <!-- No `defer`: IE11 runs deferred scripts *after* every blocking script below, so the polyfills have to execute first. -->
 	<script src="./Scripts/Launchpad.js"></script>
 	<script src="./Scripts/AppRegistry.js" async></script>
 	<script src="Scripts/WindowManager.js"></script>

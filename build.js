@@ -158,7 +158,7 @@ function writePages(dist) {
 			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
 			.replace(
 				/<\/head>/i,
-				'<script nomodule src="./Scripts/LegacyPolyfills.js" defer></script>\n' +
+				'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
 				'<script src="./' + config.script + '" defer></script>\n' +
 				extras + '</head>'
 			);
