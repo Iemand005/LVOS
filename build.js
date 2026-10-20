@@ -273,8 +273,24 @@ function mergeDefineProperties(source, fileName) {
 	const isSimpleTarget = (node) => ts.isIdentifier(node) || ts.isPropertyAccessExpression(node);
 
 	/**
+	 * Property keys can be written bare (`isOpen:`) or quoted (`"is-open":`) when
+	 * they are literals; only dynamic keys need the computed `[...]` form.
+	 * `__proto__` stays computed because a plain `__proto__:` key would change the
+	 * object's prototype instead of creating a property.
+	 *
+	 * @param {ts.Expression} key
+	 */
+	const formatKey = (key) => {
+		if (ts.isStringLiteral(key) && key.text !== "__proto__") {
+			return ts.isIdentifierText(key.text, ts.ScriptTarget.Latest) ? key.text : key.getText(file);
+		}
+		if (ts.isNumericLiteral(key)) return key.getText(file);
+		return "[" + key.getText(file) + "]";
+	};
+
+	/**
 	 * @param {ts.Statement} statement
-	 * @returns {{ target: string, key: string, attributes: string } | null}
+	 * @returns {{ target: string, key: string, label: string, attributes: string } | null}
 	 */
 	const asDefineCall = (statement) => {
 		if (!ts.isExpressionStatement(statement)) return null;
@@ -289,6 +305,7 @@ function mergeDefineProperties(source, fileName) {
 		return {
 			target: target.getText(file),
 			key: key.getText(file),
+			label: formatKey(key),
 			attributes: attributes.getText(file)
 		};
 	};
@@ -317,7 +334,7 @@ function mergeDefineProperties(source, fileName) {
 				const indent = source.slice(lineStart, start).match(/^[ \t]*/)[0];
 				let text = "Object.defineProperties(" + first.target + ", {\n";
 				for (const item of group) {
-					text += indent + "\t[" + item.key + "]: " + item.attributes + ",\n";
+					text += indent + "\t" + item.label + ": " + item.attributes + ",\n";
 				}
 				text += indent + "});";
 				edits.push({ start, end: statements[j - 1].getEnd(), text });
