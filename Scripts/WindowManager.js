@@ -2973,7 +2973,7 @@ Object.defineProperty(Dialog.prototype, "left", {
 		this._x = left / window.innerWidth;
 		if (this.useTransform) {
 			if (this.target) this.target.style.width = toPixels(width);
-			if (this.useTransform) this.updateTransform();
+			this.updateTransform();
 		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
 	}
