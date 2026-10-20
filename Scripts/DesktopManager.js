@@ -320,7 +320,7 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
-    this.scrollTabs = new TabScroller(document.querySelector("main"));
+    this.scrollTabs = "TabScroller" in window ? new TabScroller(document.querySelector("main")) : null;
 
     // this.scrollTabs.addTab(document.getElementById("desktop"));
     this.addDesktop("Main", document.getElementById("window-section") || undefined);
