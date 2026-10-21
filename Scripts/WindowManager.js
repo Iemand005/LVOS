@@ -780,7 +780,6 @@ WindowManager.prototype.synchronizeStates = function () {
 WindowManager.prototype.loadApp = function(app) {
 	try {
 		var dialog = new Dialog(app);
-		// dialog.mica = this.isMicaEnabled || false;
 		this._windows[app.id] = dialog;
 		if (!(app instanceof HTMLElement)) appManager.addApp(app);
 		return dialog;
@@ -1783,9 +1782,98 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
-/** @param {Extension} ext */
+/**
+ * Registers an extension with the window manager.
+ *
+ * An extension is a plain object with optional hooks. The window manager calls the
+ * hooks it knows about at the moments they describe; a hook the extension does not
+ * implement is simply never called, so an extension only has to provide what it
+ * actually needs.
+ *
+ * Registering an extension that is enabled also enables it, so an extension that
+ * has to set something up when it is switched on does not have to do that itself
+ * right after registering.
+ *
+ * @param {Extension} ext
+ * @returns {Extension | null} The registered extension, or null when it is not one.
+ */
 WindowManager.prototype.registerExtension = function(ext) {
+	if (!ext || typeof ext !== "object") return null;
+	if (typeof ext.enabled !== "boolean") ext.enabled = true;
+
+	// An extension with the same id replaces the old one, so a script that is loaded
+	// twice does not end up being called twice.
+	if (ext.id) {
+		var existing = this.getExtension(ext.id);
+		if (existing) this.extensions.splice(this.extensions.indexOf(existing), 1);
+	}
+
 	this.extensions.push(ext);
+
+	if (ext.enabled) this.notifyExtension(ext, "onEnable");
+	return ext;
+};
+
+/**
+ * The registered extension with the given id, or null when there is none.
+ * @param {string} id
+ * @returns {Extension | null}
+ */
+WindowManager.prototype.getExtension = function(id) {
+	for (var i = 0; i < this.extensions.length; i++) {
+		var ext = this.extensions[i];
+		if (ext && ext.id === id) return ext;
+	}
+	return null;
+};
+
+/**
+ * Switches an extension on or off. The extension's own onEnable and onDisable hooks
+ * do the work; the window manager only keeps track of the state and calls them.
+ * @param {Extension} ext
+ * @param {boolean} enabled
+ * @returns {boolean} The state the extension is in now.
+ */
+WindowManager.prototype.setExtensionEnabled = function(ext, enabled) {
+	if (!ext || typeof ext !== "object") return false;
+	var value = !!enabled;
+	if (!!ext.enabled === value) return value;
+	ext.enabled = value;
+	this.notifyExtension(ext, value ? "onEnable" : "onDisable");
+	return value;
+};
+
+/**
+ * Calls a hook of a single extension, if it has one. A hook that throws is reported
+ * and swallowed: a broken extension must not take the window manager down with it.
+ * @param {Extension} ext
+ * @param {string} hook
+ * @param {Dialog} [dialog]
+ */
+WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
+	if (!ext || typeof ext !== "object") return;
+	var callback = ext[hook];
+	if (typeof callback !== "function") return;
+	try {
+		callback.call(ext, dialog);
+	} catch (ex) {
+		console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex);
+	}
+};
+
+/**
+ * Calls a hook on every enabled extension that implements it. A hook that throws is
+ * reported and skipped, so one broken extension cannot stop the others from being
+ * called, nor the window manager from doing its job.
+ * @param {string} hook
+ * @param {Dialog} [dialog]
+ */
+WindowManager.prototype.notifyExtensions = function(hook, dialog) {
+	for (var i = 0; i < this.extensions.length; i++) {
+		var ext = this.extensions[i];
+		if (!ext || !ext.enabled) continue;
+		this.notifyExtension(ext, hook, dialog);
+	}
 };
 
 /**
