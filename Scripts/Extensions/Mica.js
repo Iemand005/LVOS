@@ -12,7 +12,7 @@ function getMicaElement(dialog) {
 	} catch(ex) { if (ex instanceof Error) console.log(ex.message); }
 }
 
-
+`1`11`1`1
 /** @param {Dialog} dialog @returns {boolean} */
 function injectMica(dialog) {
 	try {
