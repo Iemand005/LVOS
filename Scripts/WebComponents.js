@@ -68,13 +68,11 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.appendChild(track);
 		return /** @type {OdometerDigit} */(track);
 	}
-	/**
-	 * @param {number} value
-	 * @param {number} pos
-	 */
-	getDigit(value, pos) {
-		return Math.floor(value / Math.pow(10, pos)) % 10;
-	}
+
+	/** @typedef {(value: number, pos: number) => number} DigitGetter */
+	/** @type {DigitGetter} */
+	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
+
 	/** @param {number} value */
 	set value(value) {
 		this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i));
@@ -159,7 +157,7 @@ class OdometerTime extends OdometerDisplay {
 	}
 }
 
-/** @type { CustomElementMap } */
+/** @type {CustomElementMap} */
 let customElems;
 /** @constant */
 const customs = customElems = {
@@ -196,5 +194,4 @@ class Modern {
 			callback(pipWindow);
 		});
 	};
-
 }
