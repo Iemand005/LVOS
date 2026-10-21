@@ -267,7 +267,7 @@ function messageReceived(type, data, source){
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
 				break;
 			case "pip":
-				dialog.moveElementIntoPipById(data.id);
+				dialog.moveElementIntoPipById(data.id, data.stylesheet);
 				break;
 			case "visualizers":
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
@@ -4467,8 +4467,8 @@ Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
-/** @param {string} id */
-Dialog.prototype.moveElementIntoPipById = function(id) {
+/** @param {string} id @param {string} [stylesheet] */
+Dialog.prototype.moveElementIntoPipById = function(id, stylesheet) {
 	var targetElement = this.getElementById(id);
 	if (targetElement && Modern) Modern.toggleElementPip(targetElement, function (window) {
 		window.onresize = function() {
@@ -4476,7 +4476,7 @@ Dialog.prototype.moveElementIntoPipById = function(id) {
 			targetElement.width = targetElement.clientWidth;
 			targetElement.height = targetElement.clientHeight;
 		};
-	});
+	}, stylesheet);
 };
 
 Dialog.prototype.screenshot = function() {

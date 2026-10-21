@@ -16,6 +16,7 @@ body {
 	overflow: hidden;
 	position: relative;
 	background: #000;
+	-webkit-text-size-adjust: none;
 }
 
 /* The element the window holds: the visualizer, the canvas, the game. */

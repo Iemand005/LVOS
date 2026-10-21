@@ -140,8 +140,11 @@ const customs = customElems = {
 Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, c));
 
 class Modern {
-	/** @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback */
-	static toggleElementPip(el, callback) {
+	/**
+	 * @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback
+	 * @param {string|string[]} [stylesheets] The stylesheets the pip window should use
+	 */
+	static toggleElementPip(el, callback, stylesheets) {
 		const pip = window.documentPictureInPicture;
 		if (!pip) return console.warn("Document Picture-in-Picture not supported in this browser.");
 		pip.window?.close();
@@ -149,7 +152,9 @@ class Modern {
 		const rect = el.getBoundingClientRect();
 		pip.requestWindow({ width: Math.round(rect.width) || 400, height: Math.round(rect.height) || 300 }).then(pipWindow => {
 			const parent = el.parentNode, sibling = el.nextSibling;
-			pipWindow.document.body.style.margin = "0";
+			Modern.loadStylesheets(pipWindow, ["./Styles/pip.css", stylesheets].flat().filter(Boolean)).then(() => {
+				pipWindow.dispatchEvent(new Event("resize"));
+			});
 			pipWindow.document.body.appendChild(el);
 			pipWindow.addEventListener("pagehide", () => {
 				if (!parent) return;
@@ -157,5 +162,22 @@ class Modern {
 			}, { once: true });
 			callback(pipWindow);
 		});
+	}
+
+	/**
+	 * Loads stylesheets into a picture-in-picture window. The window is a document
+	 * of its own, so it needs the styles it should have.
+	 * @param {Window} pipWindow @param {string[]} stylesheets
+	 */
+	static loadStylesheets(pipWindow, stylesheets) {
+		const head = pipWindow.document.head || pipWindow.document.documentElement;
+		return Promise.all(stylesheets.map(stylesheet => new Promise(resolve => {
+			const link = pipWindow.document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = new URL(stylesheet, document.baseURI).href;
+			link.addEventListener("load", resolve);
+			link.addEventListener("error", resolve);
+			head.appendChild(link);
+		})));
 	}
 }
