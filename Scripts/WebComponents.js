@@ -161,10 +161,7 @@ class Modern {
 				pipWindow.dispatchEvent(new Event("resize"));
 			});
 			pipWindow.document.body.appendChild(el);
-			pipWindow.addEventListener("pagehide", () => {
-				if (!parent) return;
-				sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el);
-			}, { once: true });
+			pipWindow.addEventListener("pagehide", () => parent && (sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el)), { once: true });
 			callback(pipWindow);
 		});
 	}
