@@ -63,7 +63,7 @@ async function samplePixels(page: Page, buffer: Buffer, points: { x: number; y: 
 		context.drawImage(image, 0, 0);
 		return points.map(point => {
 			const data = context.getImageData(point.x, point.y, 1, 1).data;
-			return { r: data[0], g: data[1], b: data[2] };
+			return { r: data[0] ?? 0, g: data[1] ?? 0, b: data[2] ?? 0 };
 		});
 	}, { dataUrl, points });
 }
@@ -238,7 +238,8 @@ test('the material of a Mica window is a copy of the wallpaper', async ({ vulpOS
 	}
 
 	for (let i = 0; i < points.length; i++) {
-		expect(colourDistance(withWallpaper[i], withoutWallpaper[i]), 'the window should keep its material without the desktop wallpaper').toBeLessThan(60);
-		expect(colourDistance(withWallpaper[i], withoutMica[i]), 'the material should be gone without the extension').toBeGreaterThan(60);
+		const withWallpaperColour = withWallpaper[i]!;
+		expect(colourDistance(withWallpaperColour, withoutWallpaper[i]!), 'the window should keep its material without the desktop wallpaper').toBeLessThan(60);
+		expect(colourDistance(withWallpaperColour, withoutMica[i]!), 'the material should be gone without the extension').toBeGreaterThan(60);
 	}
 });
