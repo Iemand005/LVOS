@@ -3800,7 +3800,8 @@ Dialog.prototype.updatePosition = function() {
 	}
 
 	this.updateMicaPosition();
-}
+};
+
 Dialog.prototype.updateMicaPosition = function() {
 	if (!flags.useMica) return;
 	var micaElement = this.micaElement;
