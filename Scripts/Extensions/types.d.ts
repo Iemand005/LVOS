@@ -1,5 +1,5 @@
 type DialogEvent = { dialog: Dialog };
 
 interface Extension {
-	onWindowMove();
+	onWindowMove(dialog: Dialog);
 }
