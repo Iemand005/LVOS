@@ -177,7 +177,8 @@ window.windowManager.registerExtension(micaExtension);
  * an own property of the flags, so the settings panel shows a checkbox for it and
  * remembers its state.
  */
-if (typeof flags !== "undefined") Object.defineProperty(flags, "useMica", {
+// if (typeof flags !== "undefined")
+	Object.defineProperty(flags, "useMica", {
 	enumerable: true,
 	configurable: true,
 	get: function() { return micaExtension.enabled === true; },
