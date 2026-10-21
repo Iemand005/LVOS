@@ -79,3 +79,34 @@ test('maximize lands via view transitions (default path)', async ({ vulpOS }) =>
 	expect(Math.abs(restoredRect.x - before.x)).toBeLessThan(2);
 	expect(Math.abs(restoredRect.y - before.y)).toBeLessThan(2);
 });
+
+/** Standard animated class path when compositorResize is explicitly disabled. */
+test('maximize lands via standard class animation when compositor resize is disabled', async ({ vulpOS }) => {
+	const cube = await vulpOS.openCube();
+	await vulpOS.setAnimations(true);
+	await cube.evaluate((dialog: any) => {
+		(globalThis as any).flags.useTransform = true;
+		(globalThis as any).flags.useViewTransitionMaximize = false;
+		(globalThis as any).flags.compositorResize = false;
+	});
+
+	const before = await vulpOS.state(cube);
+	const beforeRect = await vulpOS.measure(cube);
+
+	await cube.evaluate((dialog: any) => dialog.maximize());
+	await expect.poll(() => cube.evaluate((d: any) => d.maximized && !d.target.classList.contains('animating')), { timeout: 4000 }).toBe(true);
+
+	const maxRect = await vulpOS.measure(cube);
+	expect(Math.abs(maxRect.x - maxRect.sectionX)).toBeLessThan(2);
+	expect(Math.abs(maxRect.y - maxRect.sectionY)).toBeLessThan(2);
+	expect(Math.abs(maxRect.width - maxRect.sectionWidth)).toBeLessThan(2);
+	expect(Math.abs(maxRect.height - maxRect.sectionHeight)).toBeLessThan(2);
+
+	await cube.evaluate((dialog: any) => dialog.toggleMaximized(false));
+	await expect.poll(() => cube.evaluate((d: any) => !d.maximized && !d.target.classList.contains('animating')), { timeout: 4000 }).toBe(true);
+
+	const restoredRect = await vulpOS.measure(cube);
+	expect(Math.abs(restoredRect.width - beforeRect.width)).toBeLessThan(2);
+	expect(Math.abs(restoredRect.x - before.x)).toBeLessThan(2);
+	expect(Math.abs(restoredRect.y - before.y)).toBeLessThan(2);
+});

@@ -3553,6 +3553,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (enable && this.heightSnapped) this.toggleHeightSnapped(false);
 
 	var self = this;
+	var target = this.target;
 	var content = this.content;
 
 	this.setZ();
@@ -3561,102 +3562,26 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.broadcastState({ maximized: enable === true });
 
 	this.maximizeAnimations++;
-	if (flags.useViewTransitionMaximize && this.windowTarget)
+
+	// View Transitions path (Chrome 111+)
+	if (flags.useViewTransitionMaximize && this.windowTarget) {
 		return this.windowTarget.toggleMaximizedVT(enable);
+	}
 
-	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
-		return name === "transform" || name === "width";
-	}, undefined, function(isMaximized) {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-		self.maximizeAnimations--;
-	}, 1000) : this.toggleClassAnimated("scaled-max", enable, function(name) {
-		return name === "transform";
-	}, function onEnd(enabled) {
-		if (self._animationProps._fsTimeout) clearTimeout(self._animationProps._fsTimeout);
-		var target = this.target;
-		if (!target) return;
-
-		target.classList.toggle("maximized", enabled);
-		target.style.pointerEvents = "";
-
-
-		// Animated: no. The class animation owns this transition; a Transformable
-		// animation from setScale would supersede it and swallow its onEnd.
-		this.setScale(1, 1, undefined, true);
-		// setScale wrote the reset scale but kept the stale translate; while maximizing
-		// the transform pins to the origin, so let updateTransform write that too.
-		this.updateTransform();
-		if (!content) return;
-		content.style.width = "";
-		content.style.height = "";
-		this.maximizeAnimations--;
-
-	}, function onToggled(enabled) {
-		var timeOffsetMs = 50;
-		var totalDuration = 280; //Can I uh get this from uh the css somehow
-		var invertDurationOnShrink = false;
-
-		var target = this.target;
-		if (!target) return;
-
-		this._maximizing = enabled;
-
-		var startWidth = this.width;
-		var startHeight = this.height;
-
-		var windowSection = windowManager.getSnapContainer(this);
-		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
-
-		var scaleX = window.innerWidth / startWidth;
-		var scaleY = height / startHeight;
-
-		target.style.transformOrigin = enabled ? "top left" : "";
-		target.style.pointerEvents = "none";
-
-		if (!enabled) {
-			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
-
-			scaleX = 1 / scaleX;
-			scaleY = 1 / scaleY;
-		}
-
-		// Same element, same transition: animating here would start a Transformable
-		// animation that supersedes the class animation and drops its onEnd. The write
-		// still plays the transition because "animating" is on the element.
-		this.setScale(scaleX, scaleY, undefined, true);
-
-		var targetWidth = enabled ? window.innerWidth : self.width;
-		var targetHeight = enabled ? height : self.height;
-
-
-
-		self._animationProps._fsTimeout = setTimeout(function() {
-			requestAnimationFrame(function() {
-				if (!content) return;
-				content.style.width = toPixels(targetWidth);
-				content.style.height = toPixels(targetHeight);
-				void content.offsetWidth;
-
-				// TODO: what's going on here? the resize should be CSS ONLY no javascript animation frames!!!! angry!
-			// translateElement(content, 0, 0, 0, 1 / scaleX, 1 / scaleY);
-		});
-	}, timeOffsetMs);
-	}, 1000);
-	else {
+	// Fallback path for legacy browsers without CSS transitions (e.g. IE9)
+	if (!supportsTransitions) {
 		var startPos = self.position;
 		var startSize = self.size;
-		var target = self.target;
-		if (!target) return;
 		enable = !target.classList.contains("maximized");
-		var toggleMaximized = function() {
+		var toggleMaximizedFallback = function () {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
 			if (self.target) self.target.classList.toggle("maximized", enable);
 		};
-		if (!enable) toggleMaximized();
-		Anim.animate(300, function(t) {
+		if (!enable) toggleMaximizedFallback();
+		Anim.animate(300, function (t) {
 			var ease = Anim.easeSharpCenterStrong;
 			if (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
@@ -3669,8 +3594,160 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
 				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
 			}
-		}, function() {
-			if (enable) toggleMaximized();
+		}, function () {
+			if (enable) toggleMaximizedFallback();
+			self.maximizeAnimations--;
+		});
+		return;
+	}
+
+	// Standard class-animated path (when compositor resize is disabled)
+	if (!flags.compositorResize || !this.useTransform) {
+		this.toggleClassAnimated("maximized", enable, function (name) {
+			return name === "transform" || name === "width";
+		}, undefined, function (isMaximized) {
+			if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+			self.maximizeAnimations--;
+		}, 1000);
+		return;
+	}
+
+	// Compositor-accelerated resize path:
+	// A scale transform applied with CSS that transitions both translation and scale
+	// on the compositor thread. When maximizing, it eases from the window's floating
+	// position/size to the snap container. When unmaximizing/restoring, the animation
+	// switches around and downscales the element rather than upscaling (FLIP-style),
+	// easing from full screen to the floating frame before releasing the maximized class.
+	if (!flags.useAnimations) {
+		target.classList.toggle("maximized", enable);
+		target.classList.toggle("scaled-max", enable);
+		target.style.pointerEvents = "";
+		this._maximizing = enable;
+		this.setScale(1, 1, undefined, true);
+		this.updateTransform();
+		if (this.useTransform && target) this.toggleMinSizeConstraints(enable);
+		this.maximizeAnimations--;
+		return;
+	}
+
+	if (this._compositorMaxState) {
+		this._compositorMaxState.cancel();
+		this._compositorMaxState = null;
+	}
+
+	var windowSection = windowManager ? windowManager.getSnapContainer(this) : null;
+	var endWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
+	var endHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
+	var startWidth = this.width || target.offsetWidth || 300;
+	var startHeight = this.height || target.offsetHeight || 200;
+	var startX = this.x;
+	var startY = this.y;
+
+	var scaleX = startWidth > 0 ? endWidth / startWidth : 1;
+	var scaleY = startHeight > 0 ? endHeight / startHeight : 1;
+
+	var isSlow = document.body && document.body.classList.contains("slow-animations");
+	var duration = isSlow ? 3000 : 280;
+
+	var toTransform = function (x, y, sx, sy) {
+		return "translate(" + toPixels(x) + "," + toPixels(y) + ") scale(" + sx + "," + sy + ")";
+	};
+
+	var state = {
+		active: true,
+		raf: 0,
+		timer: 0,
+		endHandler: null,
+		cancel: function () {
+			if (!this.active) return;
+			this.active = false;
+			if (this.raf) cancelAnimationFrame(this.raf);
+			if (this.timer) clearTimeout(this.timer);
+			if (this.endHandler) target.removeEventListener("transitionend", this.endHandler, false);
+			target.style.removeProperty("transition");
+			target.style.transformOrigin = "";
+			target.style.pointerEvents = "";
+			target.classList.remove("animating");
+			if (content) {
+				content.style.width = "";
+				content.style.height = "";
+			}
+			self.maximizeAnimations--;
+		}
+	};
+	this._compositorMaxState = state;
+
+	var finishCompositorMaximize = function () {
+		if (!state.active) return;
+		state.active = false;
+		if (state.timer) clearTimeout(state.timer);
+		if (state.endHandler) target.removeEventListener("transitionend", state.endHandler, false);
+		self._compositorMaxState = null;
+
+		target.classList.remove("animating");
+		target.style.removeProperty("transition");
+		target.style.transformOrigin = "";
+		target.style.pointerEvents = "";
+		if (content) {
+			content.style.width = "";
+			content.style.height = "";
+		}
+
+		if (enable) {
+			target.classList.add("maximized", "scaled-max");
+			self._maximizing = true;
+		} else {
+			target.classList.remove("maximized", "scaled-max");
+			self._maximizing = false;
+		}
+
+		self.setScale(1, 1, undefined, true);
+		self.updateTransform();
+		if (self.useTransform && target) self.toggleMinSizeConstraints(enable);
+		self.maximizeAnimations--;
+	};
+
+	state.endHandler = function (e) {
+		if (e.target === target && (e.propertyName === "transform" || !e.propertyName)) {
+			finishCompositorMaximize();
+		}
+	};
+	target.addEventListener("transitionend", state.endHandler, false);
+	state.timer = setTimeout(finishCompositorMaximize, duration + 100);
+
+	target.style.transformOrigin = "top left";
+	target.style.pointerEvents = "none";
+
+	if (enable) {
+		// Maximizing:
+		// Starts unmaximized at floating frame, scales up and translates to snap container.
+		target.classList.add("scaled-max");
+		target.classList.remove("maximized");
+		target.style.setProperty("transition", "none", "important");
+		target.style.transform = toTransform(startX, startY, 1, 1);
+		void target.offsetWidth;
+
+		state.raf = requestAnimationFrame(function () {
+			state.raf = 0;
+			if (!state.active) return;
+			target.classList.add("animating");
+			target.style.removeProperty("transition");
+			target.style.transform = toTransform(0, 0, scaleX, scaleY);
+		});
+	} else {
+		// Restoring (unmaximizing):
+		// Starts maximized at full screen, downscales and translates toward floating frame.
+		target.classList.add("maximized", "scaled-max");
+		target.style.setProperty("transition", "none", "important");
+		target.style.transform = toTransform(0, 0, 1, 1);
+		void target.offsetWidth;
+
+		state.raf = requestAnimationFrame(function () {
+			state.raf = 0;
+			if (!state.active) return;
+			target.classList.add("animating");
+			target.style.removeProperty("transition");
+			target.style.transform = toTransform(startX, startY, 1 / scaleX, 1 / scaleY);
 		});
 	}
 };
