@@ -12,7 +12,7 @@ var dockAppList = document.getElementById("dockapplist");
  * @param {string} title
  * @param {string} id
  * @param {string} src
- * @param {Partial<Application>} [options]
+ * @param {NonNullable<Application>} [options]
  * @returns {Application}
  */
 function provisionedApp(title, id, src, options) {
@@ -21,7 +21,7 @@ function provisionedApp(title, id, src, options) {
 
 /** @type {Application[]} */
 var applications = [
-	provisionedApp("Settings App", "settings", "./Applications/Settings/settings.html"),
+	provisionedApp("Settings App", "settings", "./Applications/Settings/settings.html", { }),
 	provisionedApp("Frosted Colors", "colors", "Applications/FrostedColours/index.html", { distSrc: "https://iemand005.github.io/FrostedColours", wallpaper: true }),
 	provisionedApp("Calculator", "calculator", "./Applications/Calculator/calculator.html", { minWidth: 180, minHeight: 240 }),
 	provisionedApp("Color Tool", "colortool", "./Applications/ColorTool/colors.html", { minWidth: 180, minHeight: 240 }),
