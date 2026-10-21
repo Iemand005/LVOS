@@ -134,9 +134,7 @@ class OdometerTime extends OdometerDisplay {
 			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
 			digits = [];
 			parts.forEach((part, i) => {
-				const width = (i === 0 && parts.length === 4) ? 3 : 2;
-				const str = String(part).padStart(width, "0");
-				for (const ch of str) digits.push(parseInt(ch, 10));
+				for (const ch of String(part).padStart((i === 0 && parts.length === 4) ? 3 : 2, "0")) digits.push(parseInt(ch, 10));
 			});
 		} else {
 			const date = new Date(this.dateTime), hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();
@@ -165,7 +163,6 @@ const customs = customElems = {
 Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, c));
 
 class Modern {
-
 	/** @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback */
 	static toggleElementPip(el, callback) {
 		if (typeof window.documentPictureInPicture === "undefined")
