@@ -21,6 +21,7 @@ function provisionedApp(title, id, src, extra) {
 
 /** @type {Application[]} */
 var applications = [
+	provisionedApp("Settings App", "settings", "./Applications/Settings/settings.html", { distSrc: "https://iemand005.github.io/FrostedColours", wallpaper: true }),
 	provisionedApp("Frosted Colors", "colors", "Applications/FrostedColours/index.html", { distSrc: "https://iemand005.github.io/FrostedColours", wallpaper: true }),
 	provisionedApp("Calculator", "calculator", "./Applications/Calculator/calculator.html", { minWidth: 180, minHeight: 240 }),
 	provisionedApp("Color Tool", "colortool", "./Applications/ColorTool/colors.html", { minWidth: 180, minHeight: 240 }),
