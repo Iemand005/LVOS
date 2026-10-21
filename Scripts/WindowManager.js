@@ -683,6 +683,9 @@ function WindowManager() {
 	 */
 	this.snapGroups = new Map();
 
+	/** @type {Extension[]} */
+	this.extensions = [];
+
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
@@ -2384,9 +2387,6 @@ function Dialog(object, create) {
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
-
-	/** @type {Extension[]} */
-	this.extensions = [];
 }
 
 
