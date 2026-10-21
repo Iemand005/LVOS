@@ -148,7 +148,14 @@ var micaExtension = {
 	name: "Mica",
 	enabled: true,
 
-	flags
+	flags: {
+		useMica: {
+			enumerable: true,
+			configurable: true,
+			get: function() { return micaExtension.enabled === true; },
+			set: function(value) { window.windowManager.setExtensionEnabled(micaExtension, !!value); }
+		}
+	},
 
 	onWindowLaunch: function(dialog) {
 		injectMica(dialog);
@@ -180,12 +187,7 @@ window.windowManager.registerExtension(micaExtension);
  * remembers its state.
  */
 // if (typeof flags !== "undefined")
-	Object.defineProperty(flags, "useMica", {
-	enumerable: true,
-	configurable: true,
-	get: function() { return micaExtension.enabled === true; },
-	set: function(value) { window.windowManager.setExtensionEnabled(micaExtension, !!value); }
-});
+	Object.defineProperty(flags, "useMica", );
 
 Object.defineProperties(flags, {
 	useMica: {
