@@ -2810,9 +2810,9 @@ Object.defineProperty(Dialog.prototype, "contentWindow", {
 Object.defineProperty(Dialog.prototype, "mica", {
 	get: function() { return this._mica; },
 	set: function(mica) {
-		if (mica) this._mica = this.injectMica();
-		else this._mica = this.removeMica();
-			this.move();
+		// if (mica) this._mica = this.injectMica();
+		// else this._mica = this.removeMica();
+		// 	this.move();
 	}
 });
 
