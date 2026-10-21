@@ -157,13 +157,9 @@ var micaExtension = {
 		}
 	},
 
-	onWindowLaunch: function(dialog) {
-		injectMica(dialog);
-	},
+	onWindowLaunch: injectMica,
 
-	onWindowMove: function(dialog) {
-		updateMicaPosition(dialog);
-	},
+	onWindowMove: updateMicaPosition,
 
 	onEnable: function() {
 		window.windowManager.forEachWindow(injectMica);
