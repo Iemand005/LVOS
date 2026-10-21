@@ -52,8 +52,17 @@
   border: none;
 }
 
+/* The Mica extension puts this class on the windows that carry a backdrop. */
+.mica-window article {
+  border: none;
+}
+
+.mica-window article > * {
+  border: none;
+}
+
 .mica.glass .backdrop-filter,
-.glass .mica .backdrop-filter {
+.glass .mica-window .backdrop-filter {
   position: absolute;
   inset: -20px;
 
@@ -62,7 +71,7 @@
 }
 
 .mica.glass .backdrop-filter > *,
-.glass .mica .backdrop-filter > * {
+.glass .mica-window .backdrop-filter > * {
   position: absolute;
   inset: 20px;
 }

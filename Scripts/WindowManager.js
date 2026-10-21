@@ -1846,7 +1846,7 @@ WindowManager.prototype.setExtensionEnabled = function(ext, enabled) {
  * Calls a hook of a single extension, if it has one. A hook that throws is reported
  * and swallowed: a broken extension must not take the window manager down with it.
  * @param {Extension} ext
- * @param {string} hook
+ * @param {ExtensionHook} hook
  * @param {Dialog} [dialog]
  */
 WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
@@ -1864,7 +1864,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
  * Calls a hook on every enabled extension that implements it. A hook that throws is
  * reported and skipped, so one broken extension cannot stop the others from being
  * called, nor the window manager from doing its job.
- * @param {string} hook
+ * @param {ExtensionHook} hook
  * @param {Dialog} [dialog]
  */
 WindowManager.prototype.notifyExtensions = function(hook, dialog) {
@@ -4306,10 +4306,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
 	if (!this.isOpen) this.initWithObject(this);
-	// if (this.mica) this.injectMica();
-	windowManager.extensions.forEach(function(extension) {
-		extension.onWindowLaunch(this);
-	});
+	windowManager.notifyExtensions("onWindowLaunch", this);
 
 	this.open();
 };
@@ -4423,15 +4420,6 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     if (!this.target) return;
     this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
     this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
-};
-
-Dialog.prototype.removeMica = function() {
-	if (!this.target) return false;
-	this.target.classList.remove("mica");
-	var clip = this.micaElement;
-	if (!clip) return false;
-	while (clip.firstChild) clip.firstChild.remove();
-	return false;
 };
 
 /** @param {boolean} [enable] */

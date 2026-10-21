@@ -118,7 +118,7 @@ interface WindowManager {
     _windows: DialogMap;
 	windows: DialogMap;
 	installedApps: Application[];
-	isMicaEnabled: boolean;
+	extensions: Extension[];
 }
 
 interface Dialog {
@@ -146,7 +146,6 @@ interface Dialog {
 
 	maximized: boolean;
 	killable: boolean;
-	mica: boolean
 	isOpen: boolean;
 
 	// The box a tiled window is drawn at, in window-area coordinates, recorded so a
@@ -161,7 +160,6 @@ interface Dialog {
 	content: HTMLElement?;
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
-	micaElement: HTMLElement?;
 
 	position: Vector;
 

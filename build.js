@@ -76,6 +76,7 @@ const BUNDLES = {
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
 		"WindowManager.js",
+		"Extensions/Mica.js",     // the extensions register themselves with the window manager
 		"ElementPicker.js",
 		"ScrollTabs/ScrollTabs.js",
 		"WebComponents.js",
