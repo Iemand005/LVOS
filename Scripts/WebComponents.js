@@ -7,11 +7,10 @@ class WindowElement extends HTMLDivElement {
 		this.dialog = null;
 	}
 
-	connectedCallback() { console.log("I connected balls"); }
 	/** @param {boolean} [enable] Enable maximization */
-	toggleMaximizedVT(enable) {		
+	toggleMaximizedVT(enable) {
 		this.style.viewTransitionName = "window-fullscreen";
-		
+
 		if (document.activeViewTransition) document.activeViewTransition.skipTransition();
 		if ("startViewTransition" in document) {
 			var transition = document.startViewTransition(() => this.classList.toggle("maximized", enable));
@@ -57,8 +56,7 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.innerHTML = "";
 		this.tracks.length = 0;
 		const height = this.clientHeight;
-		for (let i = 0; i < digits; i++)
-			if (height > 0) (this.addDigit().lineHeight = height)
+		for (let i = 0; i < digits; i++) if (height > 0) (this.addDigit().lineHeight = height);
 	}
 
 	addDigit() {
@@ -69,7 +67,6 @@ class OdometerDisplay extends HTMLTimeElement {
 		return /** @type {OdometerDigit} */(track);
 	}
 
-	/** @typedef {(value: number, pos: number) => number} DigitGetter */
 	/** @type {DigitGetter} */
 	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
 
