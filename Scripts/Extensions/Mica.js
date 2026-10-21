@@ -56,7 +56,7 @@ function injectMica(dialog) {
 		var wallpaper = document.getElementById("wallpaper");
 		if (!wallpaper) return false;
 		var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
-		var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
+		var blurredSrc = wallpaper.getAttribute("data-blurred-src");
 		var preBlurredImage = blurredSrc !== null;
 		var clip = getMicaElement(dialog);
 		if (!clip) return false;

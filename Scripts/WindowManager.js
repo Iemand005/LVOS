@@ -159,7 +159,7 @@ function transformElement(element, t) {
 
 	if (t.x && t.y) transform += "translate(" + toPixels(t.x) + "," + toPixels(t.y) + ")";
 	else if (t.x) transform += "translateX(" + toPixels(t.x) + ")";
-	else if (t.y) transform += "translatey(" + toPixels(t.y) + ")";
+	else if (t.y) transform += "translateY(" + toPixels(t.y) + ")";
 
 	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
 	if (t.skewX) transform += " skewX(" + toDegrees(t.skewX) + ")";
