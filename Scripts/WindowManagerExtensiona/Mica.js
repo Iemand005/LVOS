@@ -3,6 +3,8 @@
 
 var micaExtension = {
 	onWindowMove: function() {
-		
+
 	}
 };
+
+window.windowManager.registerExtension(micaExtension);
