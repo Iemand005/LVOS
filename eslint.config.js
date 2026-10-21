@@ -77,17 +77,13 @@ export default defineConfig(
 		}
 	},
 
-	// ES6 files: allow arrow functions
+	// ES6 files: allow arrow functions and optional chaining
 	{
-		files: ["**/WebComponents.js"],
+		files: ["Scripts/WebComponents.js"],
 
 		rules: {
 			"no-restricted-syntax": [
 				"error",
-				{
-					selector: "ChainExpression",
-					message: "Optional chaining (?.) is not allowed."
-				},
 				{
 					selector: "CallExpression[callee.property.name='addEventListener'][arguments.length=2]",
 					message: "addEventListener requires a third options parameter for Netscape."

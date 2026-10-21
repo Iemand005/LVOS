@@ -11,28 +11,30 @@ class WindowElement extends HTMLDivElement {
 	toggleMaximizedVT(enable) {
 		this.style.viewTransitionName = "window-fullscreen";
 
-		if (document.activeViewTransition) document.activeViewTransition.skipTransition();
-		if ("startViewTransition" in document) {
-			var transition = document.startViewTransition(() => this.classList.toggle("maximized", enable));
+		document.activeViewTransition?.skipTransition();
 
-			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
+		const toggle = () => this.classList.toggle("maximized", enable);
 
-			const dialog = this.dialog;
-			if (dialog) transition.finished.finally(() => {
-				if (dialog.maximizeAnimations <= 1)
-					this.style.viewTransitionName = "";
-				dialog.maximizeAnimations--;
-			});
-		} else this.classList.toggle("maximized", enable);
+		if (!("startViewTransition" in document)) return toggle();
+
+		var transition = document.startViewTransition(toggle);
+
+		transition.ready.catch(ev => console.warn("transition interrupted:", ev));
+
+		const dialog = this.dialog;
+		if (dialog) transition.finished.finally(() => {
+			if (dialog.maximizeAnimations <= 1)
+				this.style.viewTransitionName = "";
+			dialog.maximizeAnimations--;
+		});
 	}
 }
 
 class OdometerDigit extends HTMLSpanElement {
-	constructor()  { super(); this.lineHeight = 40, this._value = 0; }
+	constructor() { super(); this.lineHeight = 40; }
 	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
-	get value() { return this._value;}
 }
 
 class OdometerDisplay extends HTMLTimeElement {
@@ -43,20 +45,25 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
-
+		this.setAttribute("is", "odometer-display");
 		this.textContent = "";
-
 		this.style.display = "flex";
 		this.style.overflow = "hidden";
 	}
 
-	/** @param {number} digits */
-	init(digits) {
-		this.innerHTML = "";
+	/** Takes the tracks and the colons between them away. */
+	clearTracks() {
+		this.textContent = "";
 		this.tracks.length = 0;
+	}
+
+	/** @param {number} count Number of digit tracks */
+	addTracks(count) {
 		const height = this.clientHeight;
-		for (let i = 0; i < digits; i++) if (height > 0) (this.addDigit().lineHeight = height);
+		for (let i = 0; i < count; i++) {
+			const track = this.addDigit();
+			if (height > 0) track.lineHeight = height;
+		}
 	}
 
 	addDigit() {
@@ -67,8 +74,14 @@ class OdometerDisplay extends HTMLTimeElement {
 		return /** @type {OdometerDigit} */(track);
 	}
 
-	/** @type {DigitGetter} */
-	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
+	/** @param {number} digits Number of digits */
+	init(digits) {
+		this.clearTracks();
+		this.addTracks(digits);
+	}
+
+	/** @param {number} value @param {number} pos */
+	getDigit(value, pos) { return Math.floor(value / Math.pow(10, pos)) % 10; }
 
 	/** @param {number} value */
 	set value(value) { this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i)); }
@@ -90,25 +103,20 @@ class OdometerTime extends OdometerDisplay {
 		this.style.overflow = "hidden";
 	}
 
-	get dateTime() { return this.getAttribute("datetime") || ""; }
-	set dateTime(value) { this.setAttribute("datetime", value); }
+	/** Whether the digits come from the value attribute instead of the date. */
+	usingValue() { return this.hasAttribute("value"); }
 
-	usingValue = () => this.hasAttribute("value");
-	currentGroupCount = () => this.usingValue() && this.getAttribute("value")?.split(":").length || 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
+	/** The number of groups of digits: the groups of the value, or HH:MM:SS. */
+	currentGroupCount() { return this.usingValue() && this.getAttribute("value")?.split(":").length || 3; }
 
-	/** @param {number} groups */
+	/** @param {number} groups Number of groups of digits */
 	buildTracks(groups) {
-		this.textContent = "";
-		this.tracks.length = 0;
+		this.clearTracks();
 
 		for (let i = 0; i < groups; i++) {
-			const digitsInGroup = (i === 0 && groups === 4) ? 3 : 2; // days group gets 3 digits
-			for (let j = 0; j < digitsInGroup; j++) this.addDigit();
+			this.addTracks(i === 0 && groups === 4 ? 3 : 2); // the days group gets 3 digits
 			if (i < groups - 1) this.append(":");
 		}
-
-		const height = this.clientHeight;
-		if (height > 0) this.tracks.forEach(track => { track.lineHeight = height; });
 	}
 
 	/**
@@ -126,22 +134,18 @@ class OdometerTime extends OdometerDisplay {
 	}
 
 	update() {
-		/** @type {number[]} */
-		let digits = [];
+		const date = new Date(this.dateTime);
+		const time = [date.getHours(), date.getMinutes(), date.getSeconds()]
+			.map(part => String(part || 0).padStart(2, "0")).join(":");
 
-		if (this.usingValue()) {
-			const value = this.getAttribute("value") || "00:00:00";
-			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
-			parts.forEach((part, i) => {
-				for (const ch of String(part).padStart((i === 0 && parts.length === 4) ? 3 : 2, "0")) digits.push(parseInt(ch, 10));
-			});
-		} else {
-			const date = new Date(this.dateTime), hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();
+		const value = this.usingValue() ? (this.getAttribute("value") || "00:00:00") : time;
+		const parts = value.split(":").map(part => parseInt(part, 10) || 0);
 
-			digits = [Math.floor(hours / 10), hours % 10, Math.floor(minutes / 10), minutes % 10, Math.floor(seconds / 10), seconds % 10];
-		}
+		const digits = parts.flatMap((part, i) =>
+			[...String(part).padStart(i === 0 && parts.length === 4 ? 3 : 2, "0")].map(ch => parseInt(ch, 10))
+		);
 
-		this.tracks.forEach((track, i) => digits[i] !== undefined && (track.value = digits[i]));
+		this.tracks.forEach((track, i) => { if (digits[i] !== undefined) track.value = digits[i]; });
 	}
 }
 
@@ -160,25 +164,28 @@ Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c
 class Modern {
 	/** @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback */
 	static toggleElementPip(el, callback) {
-		if (typeof window.documentPictureInPicture === "undefined")
-			return console.warn("Document Picture-in-Picture not supported in this browser.");
+		const pip = window.documentPictureInPicture;
+		if (!pip) return console.warn("Document Picture-in-Picture not supported in this browser.");
 
-		window.documentPictureInPicture.window?.close();
+		pip.window?.close();
 
-		var rect = el.getBoundingClientRect();
-		var width = Math.round(rect.width) || 400;
-		var height = Math.round(rect.height) || 300;
+		const rect = el.getBoundingClientRect();
 
-		window.documentPictureInPicture.requestWindow({ width, height }).then(pipWindow => {
-			var originalParent = el.parentNode;
-			var originalNextSibling = el.nextSibling;
+		pip.requestWindow({
+			width: Math.round(rect.width) || 400,
+			height: Math.round(rect.height) || 300
+		}).then(pipWindow => {
+			const parent = el.parentNode, sibling = el.nextSibling;
 
 			pipWindow.document.body.style.margin = "0";
 			pipWindow.document.body.appendChild(el);
 
-			pipWindow.addEventListener("pagehide", () => originalParent && (originalNextSibling ? originalParent.insertBefore(el, originalNextSibling) : originalParent.appendChild(el)), { once: true });
+			pipWindow.addEventListener("pagehide", () => {
+				if (!parent) return;
+				sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el);
+			}, { once: true });
 
 			callback(pipWindow);
 		});
-	};
+	}
 }
