@@ -13,6 +13,9 @@ function getMicaElement(dialog) {
 }
 
 window.windowManager.registerExtension({
+	onWindowLaunch: function(dialog) {
+
+	},
 	onWindowMove: function(dialog) {
 		if (!flags.useMica) return;
 		var micaElement = getMicaElement(dialog);
