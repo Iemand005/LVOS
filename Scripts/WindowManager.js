@@ -4397,48 +4397,6 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
 
-/** @returns {boolean} */
-Dialog.prototype.injectMica = function() {
-	try {
-		if (!this.target) return false;
-		var wallpaper = document.getElementById("wallpaper");
-		if (!wallpaper) return false;
-		// var newWallpaper = wallpaper.cloneNode(true);
-		var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
-		var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
-		var preBlurredImage = blurredSrc !== null;
-		var clip = this.micaElement;
-		if (!clip) return false;
-		while (clip.firstChild) clip.removeChild(clip.firstChild);
-
-
-		var micaWallpaper = null;
-		if (isElement(wallpaper.children[0])) {
-			micaWallpaper = wallpaper.children[0].cloneNode(true);
-			if (!(isElement(micaWallpaper))) return false;
-			if (supportsObjectFit) {
-				micaWallpaper.removeAttribute("style");
-				micaWallpaper.className = "mica-backdrop";
-				if (preBlurredImage &&  micaWallpaper instanceof HTMLIFrameElement && blurredSrc)
-					micaWallpaper.src = blurredSrc;
-			} else {
-				micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
-				micaWallpaper.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
-			}
-		} else {
-			micaWallpaper = document.createElement("img");
-			micaWallpaper.className = "mica-backdrop legacy-wallpaper-image";
-			micaWallpaper.style.backgroundImage = "url('" + (blurredSrc || wallpaperSrc).replace(/'/g, "\\'") + "')";
-		}
-
-		clip.appendChild(micaWallpaper);
-		this.target.classList.add("mica");
-
-		return true;
-	} catch(ex) { console.warn(ex); }
-	return false;
-};
-
 Dialog.prototype.removeMica = function() {
 	if (!this.target) return false;
 	this.target.classList.remove("mica");
