@@ -161,7 +161,7 @@ const customs = customElems = {
 	"window-div": { constructor: WindowElement, extends: "div" },
 	"odometer-track": { constructor: OdometerDigit, extends: "span" },
 	"odometer-display": { constructor: OdometerDisplay, extends: "time" },
-	"odometer-time": { constructor: OdometerTime, extends: "time" },
+	"odometer-time": { constructor: OdometerTime, extends: "time" }
 };
 
 Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, c));
