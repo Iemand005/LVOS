@@ -80,8 +80,8 @@ class OdometerDisplay extends HTMLTimeElement {
 		this.addTracks(digits);
 	}
 
-	/** @param {number} value @param {number} pos */
-	getDigit(value, pos) { return Math.floor(value / Math.pow(10, pos)) % 10; }
+	/** @type {DigitGetter} */
+	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
 
 	/** @param {number} value */
 	set value(value) { this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i)); }
