@@ -28,9 +28,16 @@ Guidance for agents working in this repository (LVOS / VulpOS).
   `BUNDLES` map and its comments. Anything referenced by `index.html`'s
   `<script>` tags (ScrollTabs, ScreenShooter, ...) must be listed there so the
   desktop page loads only the one bundle.
+- **Extensions are never baked into a bundle.** `Scripts/Extensions/*.js` is
+  copied into `Dist/Scripts/Extensions/` and the built page loads the scripts
+  it asks for as separate deferred scripts (the build reads those `<script>`
+  tags out of the source page). A bundle must never contain an extension
+  implementation; the bundle only holds the extension *framework*.
 - The `Scripts/WebGraphics`, `Scripts/WebAudioVisualizer`, `Scripts/WebAura`,
   `Scripts/WebMedia` and `ScrollTabs` folders are still copied into `Dist/`
   because the application iframes load them directly.
+- `.d.ts` files are removed from `Dist/` after the build: the type declarations
+  are only needed to type check the sources, not in a browser.
 - The build merges adjacent `Object.defineProperty(obj, key, attrs)` calls that
   share a target into one `Object.defineProperties` call using the TypeScript
   compiler API. Source files keep the individual calls; pass
