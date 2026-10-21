@@ -71,9 +71,7 @@ class OdometerDisplay extends HTMLTimeElement {
 	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
 
 	/** @param {number} value */
-	set value(value) {
-		this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i));
-	}
+	set value(value) { this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i)); }
 }
 
 class OdometerTime extends OdometerDisplay {
