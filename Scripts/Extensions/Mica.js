@@ -166,15 +166,11 @@ var micaExtension = {
 	},
 
 	onEnable: function() {
-		window.windowManager.forEachWindow(function(dialog) {
-			injectMica(dialog);
-		});
+		window.windowManager.forEachWindow(injectMica);
 	},
 
 	onDisable: function() {
-		window.windowManager.forEachWindow(function(dialog) {
-			removeMica(dialog);
-		});
+		window.windowManager.forEachWindow(removeMica);
 	}
 };
 
