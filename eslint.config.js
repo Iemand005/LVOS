@@ -27,6 +27,7 @@ export default defineConfig(
 				DesktopManager: "readonly",
 				Dialog: "readonly",
 				Modern: "readonly",
+				flags: "readonly"
 			}
 		},
 

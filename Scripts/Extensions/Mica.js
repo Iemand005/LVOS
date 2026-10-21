@@ -15,5 +15,21 @@ function getMicaElement(dialog) {
 window.windowManager.registerExtension({
 	onWindowMove: function(dialog) {
 		var micaElement = getMicaElement(dialog);
+		if (!flags.useMica) return;
+		var micaElement = this.micaElement;
+		if (micaElement) try {
+			var backdrop = micaElement.firstChild;
+			var wallpaperP = document.getElementById("wallpaper");
+			if (!wallpaperP) return;
+			var wallpaperImage = wallpaperP.children[0];
+			if (!(isElement(backdrop)) || !wallpaperImage) return;
+			translateElement(backdrop, -this.x, -this.y);
+
+			var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
+			var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
+
+			backdrop.style.width = toPixels(wallpaperWidth);
+			backdrop.style.height = toPixels(wallpaperHeight);
+		} catch(ex) { console.warn(ex); }
 	}
 });
