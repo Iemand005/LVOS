@@ -156,9 +156,7 @@ class Modern {
 			const sheets = ["./Styles/pip.css"];
 			if (stylesheets) sheets.push(...(Array.isArray(stylesheets) ? stylesheets : [stylesheets]));
 
-			Modern.loadStylesheets(pipWindow, sheets).then(() => {
-				pipWindow.dispatchEvent(new Event("resize"));
-			});
+			Modern.loadStylesheets(pipWindow, sheets).then(() => pipWindow.dispatchEvent(new Event("resize")));
 			pipWindow.document.body.appendChild(el);
 			pipWindow.addEventListener("pagehide", () => parent && (sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el)), { once: true });
 			callback(pipWindow);
