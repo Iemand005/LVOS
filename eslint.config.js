@@ -21,7 +21,7 @@ export default defineConfig(
 				ClickOffset: "writable",
 				lerp: "writable",
 				windowManager: "readonly",
-				appRegistry: "readonly",
+				appManager: "readonly",
 				setTheme: "writable",
 				WindowManager: "readonly",
 				DesktopManager: "readonly",
