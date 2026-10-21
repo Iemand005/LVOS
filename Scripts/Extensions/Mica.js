@@ -22,7 +22,7 @@ window.windowManager.registerExtension({
 			if (!wallpaperP) return;
 			var wallpaperImage = wallpaperP.children[0];
 			if (!(isElement(backdrop)) || !wallpaperImage) return;
-			translateElement(backdrop, -this.x, -this.y);
+			translateElement(backdrop, -dialog.x, -dialog.y);
 
 			var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaperP.clientWidth;
 			var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaperP.clientHeight;
