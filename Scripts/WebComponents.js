@@ -29,7 +29,6 @@ class WindowElement extends HTMLDivElement {
 
 class OdometerDigit extends HTMLSpanElement {
 	constructor() { super(); this.lineHeight = 40; }
-	connectedCallback() { this.setAttribute("is", "odometer-track"); }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
 }
@@ -42,7 +41,6 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-display");
 		this.textContent = "";
 		this.style.display = "flex";
 		this.style.overflow = "hidden";
@@ -59,8 +57,13 @@ class OdometerDisplay extends HTMLTimeElement {
 		const height = this.clientHeight;
 		groups.forEach((digits, group) => {
 			for (let i = 0; i < digits; i++) {
-				const track = this.addDigit();
-				if (height > 0) track.lineHeight = height;
+				const track = document.createElement("span", { is: "odometer-track" });
+				track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+				if (track instanceof OdometerDigit) {
+					if (height > 0) track.lineHeight = height;
+					this.tracks.push(track);
+				}
+				this.appendChild(track);
 			}
 			if (group < groups.length - 1) this.append(":");
 		});
@@ -68,14 +71,6 @@ class OdometerDisplay extends HTMLTimeElement {
 
 	/** @param {number} digits Number of digits */
 	init(digits) { this.buildTracks([digits]); }
-
-	addDigit() {
-		const track = document.createElement("span", { is: "odometer-track" });
-		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-		if (track instanceof OdometerDigit) this.tracks.push(track);
-		this.appendChild(track);
-		return /** @type {OdometerDigit} */(track);
-	}
 
 	/** @type {DigitGetter} */
 	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
@@ -89,7 +84,6 @@ class OdometerTime extends OdometerDisplay {
 	static get observedAttributes() { return ["datetime", "value"]; }
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
 		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim())
 			this.setAttribute("value", this.textContent.trim());
 		this.buildTracks(this.groupSizes());
@@ -153,19 +147,14 @@ class Modern {
 		pip.window?.close();
 
 		const rect = el.getBoundingClientRect();
-		pip.requestWindow({
-			width: Math.round(rect.width) || 400,
-			height: Math.round(rect.height) || 300
-		}).then(pipWindow => {
+		pip.requestWindow({ width: Math.round(rect.width) || 400, height: Math.round(rect.height) || 300 }).then(pipWindow => {
 			const parent = el.parentNode, sibling = el.nextSibling;
 			pipWindow.document.body.style.margin = "0";
 			pipWindow.document.body.appendChild(el);
-
 			pipWindow.addEventListener("pagehide", () => {
 				if (!parent) return;
 				sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el);
 			}, { once: true });
-
 			callback(pipWindow);
 		});
 	}
