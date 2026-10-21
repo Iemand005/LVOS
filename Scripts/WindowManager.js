@@ -3783,7 +3783,7 @@ Dialog.prototype.messageFrame = function (type, message) {
  */
 Dialog.prototype.updateTransform = function (animate) {
 	if (!(this.useTransform && this.transform)) return;
-	
+
 	if (this._maximizing) this.transform.move(0, 0, animate);
 	else this.transform.move(this.x, this.y, animate);
 };
@@ -3804,7 +3804,7 @@ Dialog.prototype.updatePosition = function() {
 
 	this.extensions.forEach(function(ext) {
 		ext.onWindowMove();
-	})
+	});
 	this.updateMicaPosition();
 };
 
