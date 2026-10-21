@@ -717,18 +717,6 @@ Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
 	}
 });
 
-Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
-	get: function () {
-		return this._isMicaEnabled;
-	},
-	set: function (value) {
-		if (typeof value !== "boolean") return;
-		document.body.classList.toggle("mica", value);
-		// windowManager.forEachWindow(function(window) { window.mica = value; });
-		this._isMicaEnabled = value;
-	}
-});
-
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 	 /**
      * @this {WindowManager}
@@ -971,11 +959,6 @@ WindowManager.prototype.injectApplications = function() {
 	for (var i = 0; i < arguments.length; i++)
 		arguments[i].forEach(windowManager.loadApp, windowManager);
 	windowManager.loadState();
-};
-
-/** @param {boolean} [enabled] */
-WindowManager.prototype.toggleMica = function(enabled) {
-	this.isMicaEnabled = typeof enabled === "undefined" ? enabled : !this.isMicaEnabled;
 };
 
 /** @type {Bounds} */
