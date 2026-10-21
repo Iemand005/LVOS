@@ -209,3 +209,5 @@ interface Transform {
 type TransitionEndCallback = ((name:string)=>boolean) | string;
 
 type CustomElementList = [string, CustomElementConstructor, keyof HTMLElementTagNameMap][];
+
+type DigitGetter = (value: number, pos: number) => number;
