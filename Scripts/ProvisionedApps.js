@@ -12,7 +12,7 @@ var dockAppList = document.getElementById("dockapplist");
  * @param {string} title
  * @param {string} id
  * @param {string} src
- * @param {Omit<Application, { title: string}>} [options]
+ * @param {Exclude<Application, { title: string, url: string, id: string}>} [options]
  * @returns {Application}
  */
 function provisionedApp(title, id, src, options) {
