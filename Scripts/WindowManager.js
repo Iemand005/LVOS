@@ -807,7 +807,6 @@ WindowManager.prototype.spawnApp = function(application) {
 
 	try {
 		var dialog = new Dialog(instance);
-		// dialog.mica = this.isMicaEnabled || false;
 		this._windows[id] = dialog;
 		return dialog;
 	} catch(ex) { console.warn("App spawn failed", ex); return null; }
@@ -2359,7 +2358,6 @@ function Dialog(object, create) {
 	this._aspectRatioEnabled = false;
 	this._constrainAspectRatioInner = false;
 	this._constrainAspectRatioLine = false;
-	this._mica = flags.useMica;
 
 	this._useTransform = useTransform;
 	this._useScale = useScale;
