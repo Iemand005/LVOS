@@ -55,6 +55,28 @@ test('dist bundle boots with all index.html-only scripts available', async ({ pa
 	expect(fatal, 'bundle threw for a script that should be embedded:\n' + fatal.join('\n')).toEqual([]);
 });
 
+/**
+ * The extensions are part of the bundle as well, so the built page has the same
+ * Mica the development page has.
+ */
+test('dist bundle registers the extensions with the window manager', async ({ page }) => {
+	const pageErrors: string[] = [];
+	page.on('pageerror', (exception) => pageErrors.push(exception.message));
+
+	await page.goto(pathToFileURL(resolve('Dist/index.html')).href);
+
+	await page.waitForFunction(() => Boolean((window as any).windowManager), null, { timeout: 15000 })
+		.catch(() => {});
+
+	const extensions = await page.evaluate(() => {
+		const wm = (window as any).windowManager;
+		return wm.extensions.map((extension: any) => ({ id: extension.id, enabled: extension.enabled }));
+	});
+
+	expect(extensions.some((extension: any) => extension.id === 'mica'), 'the Mica extension is missing from the bundle').toBe(true);
+	expect(pageErrors, 'bundle threw:\n' + pageErrors.join('\n')).toEqual([]);
+});
+
 test('mobile bundle boots without errors', async ({ page }) => {
 	const pageErrors: string[] = [];
 	page.on('pageerror', (exception) => pageErrors.push(exception.message));
