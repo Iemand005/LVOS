@@ -46,6 +46,33 @@ async function setMicaEnabled(page: Page, enabled: boolean) {
 	}, enabled);
 }
 
+/**
+ * The colour of the pixels of a screenshot, by drawing it on a canvas. The
+ * points are in pixels of the screenshot.
+ */
+async function samplePixels(page: Page, buffer: Buffer, points: { x: number; y: number }[]) {
+	const dataUrl = 'data:image/png;base64,' + buffer.toString('base64');
+	return page.evaluate(async ({ dataUrl, points }) => {
+		const image = new Image();
+		image.src = dataUrl;
+		await image.decode();
+		const canvas = document.createElement('canvas');
+		canvas.width = image.width;
+		canvas.height = image.height;
+		const context = canvas.getContext('2d')!;
+		context.drawImage(image, 0, 0);
+		return points.map(point => {
+			const data = context.getImageData(point.x, point.y, 1, 1).data;
+			return { r: data[0], g: data[1], b: data[2] };
+		});
+	}, { dataUrl, points });
+}
+
+/** How far apart two colours are. */
+function colourDistance(a: { r: number; g: number; b: number }, b: { r: number; g: number; b: number }) {
+	return Math.abs(a.r - b.r) + Math.abs(a.g - b.g) + Math.abs(a.b - b.b);
+}
+
 test('the Mica extension registers itself with the window manager', async ({ vulpOS }) => {
 	const state = await micaState(vulpOS.page);
 
@@ -158,4 +185,60 @@ test('an extension that throws is reported and does not take the window manager 
 	const mica = await micaOfWindow(cube);
 	expect(mica.hasBackdrop, 'Mica should still be doing its work').toBe(true);
 	expect(warnings.some(text => text.includes('this extension is broken')), 'the failure should be reported').toBe(true);
+});
+
+test('the material of a Mica window is a copy of the wallpaper', async ({ vulpOS }) => {
+	// A wallpaper of a colour of its own, so the material can be told apart from
+	// anything else on the screen.
+	await vulpOS.page.evaluate(() => {
+		(window as any).setThemeOption('mica');
+
+		const wallpaper = document.getElementById('wallpaper')!;
+		while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
+		const image = document.createElement('img');
+		const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" preserveAspectRatio="none">' +
+			'<rect width="100" height="100" fill="rgb(20, 200, 120)"/></svg>';
+		image.src = 'data:image/svg+xml;base64,' + btoa(svg);
+		wallpaper.appendChild(image);
+	});
+
+	const cube = await vulpOS.openCube();
+	await cube.evaluate((dialog: any) => dialog.move(260, 180));
+	await vulpOS.page.waitForTimeout(500);
+
+	const rect = await cube.evaluate((dialog: any) => {
+		const box = dialog.target.getBoundingClientRect();
+		return { x: box.x, y: box.y, width: box.width, height: box.height };
+	});
+
+	// The title bar of the window, where the material shows through the
+	// transparent content of the window.
+	const points = [];
+	for (let i = 0; i < 8; i++) {
+		points.push({ x: Math.round(rect.x + 8 + (rect.width - 16) * (i / 7)), y: Math.round(rect.y + 4) });
+	}
+
+	const withWallpaper = await samplePixels(vulpOS.page, await vulpOS.page.screenshot(), points);
+
+	// The desktop wallpaper out of the way: the window keeps its own material.
+	await vulpOS.page.evaluate(() => {
+		(document.getElementById('wallpaper') as HTMLElement).style.display = 'none';
+	});
+	await vulpOS.page.waitForTimeout(200);
+	const withoutWallpaper = await samplePixels(vulpOS.page, await vulpOS.page.screenshot(), points);
+
+	// And with the extension switched off the material is gone.
+	await setMicaEnabled(vulpOS.page, false);
+	await vulpOS.page.waitForTimeout(200);
+	const withoutMica = await samplePixels(vulpOS.page, await vulpOS.page.screenshot(), points);
+
+	for (const colour of withWallpaper) {
+		expect(colour.g, 'the material should be the colour of the wallpaper').toBeGreaterThan(colour.r);
+		expect(colour.g, 'the material should be the colour of the wallpaper').toBeGreaterThan(colour.b);
+	}
+
+	for (let i = 0; i < points.length; i++) {
+		expect(colourDistance(withWallpaper[i], withoutWallpaper[i]), 'the window should keep its material without the desktop wallpaper').toBeLessThan(60);
+		expect(colourDistance(withWallpaper[i], withoutMica[i]), 'the material should be gone without the extension').toBeGreaterThan(60);
+	}
 });

@@ -61,6 +61,22 @@
   border: none;
 }
 
+/* The Mica theme paints the window content transparent, so the material the
+   Mica extension puts in the window shows through. The color alone is not
+   enough: the themes that paint a gradient there use a background image, and
+   that image has to go as well. */
+.mica .window > content,
+.mica .window > .content {
+  background: none !important;
+}
+
+/* The modern theme does its blurring on the content instead of on a backdrop
+   of its own, so it hides the backdrop clip. A Mica window needs the clip:
+   that is where the material lives. */
+.modern .mica-window .backdrop-clip {
+  display: block;
+}
+
 /* The backdrop the Mica extension puts in the window: a copy of the wallpaper,
    as big as the wallpaper. The extension lines it up with the wallpaper and
    moves it when the window moves, so here it only has to be put in the corner
