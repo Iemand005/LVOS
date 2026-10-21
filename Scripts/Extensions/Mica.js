@@ -13,17 +13,17 @@ function getMicaElement(dialog) {
 }
 
 
-/** @returns {boolean} */
-function injectMica() {
+/** @param {Dialog} dialog @returns {boolean} */
+function injectMica(dialog) {
 	try {
-		if (!this.target) return false;
+		if (!dialog.target) return false;
 		var wallpaper = document.getElementById("wallpaper");
 		if (!wallpaper) return false;
 		// var newWallpaper = wallpaper.cloneNode(true);
 		var wallpaperSrc = wallpaper.getAttribute("data-wallpaper-src") || "";
 		var blurredSrc = wallpaper.getAttribute("data-blurred-src") || "";
 		var preBlurredImage = blurredSrc !== null;
-		var clip = this.micaElement;
+		var clip = dialog.micaElement;
 		if (!clip) return false;
 		while (clip.firstChild) clip.removeChild(clip.firstChild);
 
@@ -48,7 +48,7 @@ function injectMica() {
 		}
 
 		clip.appendChild(micaWallpaper);
-		this.target.classList.add("mica");
+		dialog.target.classList.add("mica");
 
 		return true;
 	} catch(ex) { console.warn(ex); }
