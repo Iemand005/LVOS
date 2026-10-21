@@ -158,7 +158,6 @@ var micaExtension = {
 	},
 
 	onWindowLaunch: injectMica,
-
 	onWindowMove: updateMicaPosition,
 
 	onEnable: function() {
