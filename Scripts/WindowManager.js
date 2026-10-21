@@ -94,12 +94,6 @@ var flags = {
 		document.body.classList.toggle("preserve-aspect", !!value);
 		this._preserveMaximizeAspect = value;
 	},
-	_useMica: false,
-	get useMica() { return this._useMica; },
-	set useMica(value) {
-		windowManager.toggleMica(value);
-		this._useMica = value;
-	},
 	windowReaper: false,
 	verboseLogs: false
 };
@@ -523,7 +517,6 @@ function WindowManager() {
 	this._windowStates = null;
 
 	this._isBlurEnabled = true;
-	this._isMicaEnabled = false;
 	this._isWindowUpdatesEnabled = false;
 
 	this.isDragging = false;
