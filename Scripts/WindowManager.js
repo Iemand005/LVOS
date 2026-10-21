@@ -731,7 +731,7 @@ Object.defineProperty(WindowManager.prototype, "isMicaEnabled", {
 	set: function (value) {
 		if (typeof value !== "boolean") return;
 		document.body.classList.toggle("mica", value);
-		windowManager.forEachWindow(function(window) { window.mica = value; });
+		// windowManager.forEachWindow(function(window) { window.mica = value; });
 		this._isMicaEnabled = value;
 	}
 });
@@ -799,7 +799,7 @@ WindowManager.prototype.synchronizeStates = function () {
 WindowManager.prototype.loadApp = function(app) {
 	try {
 		var dialog = new Dialog(app);
-		dialog.mica = this.isMicaEnabled || false;
+		// dialog.mica = this.isMicaEnabled || false;
 		this._windows[app.id] = dialog;
 		if (!(app instanceof HTMLElement)) appManager.addApp(app);
 		return dialog;
@@ -827,7 +827,7 @@ WindowManager.prototype.spawnApp = function(application) {
 
 	try {
 		var dialog = new Dialog(instance);
-		dialog.mica = this.isMicaEnabled || false;
+		// dialog.mica = this.isMicaEnabled || false;
 		this._windows[id] = dialog;
 		return dialog;
 	} catch(ex) { console.warn("App spawn failed", ex); return null; }
@@ -4281,7 +4281,10 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
 	if (!this.isOpen) this.initWithObject(this);
-	if (this.mica) this.injectMica();
+	// if (this.mica) this.injectMica();
+	windowManager.extensions.forEach(function(extension) {
+		extension.onWindowLaunch(this);
+	})
 
 	this.open();
 };
