@@ -2380,7 +2380,7 @@ function Dialog(object, create) {
 		return true;
 	};
 
-	/** @type { Extension[]} */
+	/** @type {Extension[]} */
 	this.extensions = [];
 }
 
@@ -3802,7 +3802,9 @@ Dialog.prototype.updatePosition = function() {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
-	this.extensions
+	this.extensions.forEach(function(ext) {
+		ext.onWindowMove();
+	})
 	this.updateMicaPosition();
 };
 
