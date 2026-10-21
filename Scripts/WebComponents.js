@@ -138,11 +138,7 @@ class OdometerTime extends OdometerDisplay {
 		} else {
 			const date = new Date(this.dateTime), hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();
 
-			digits = [
-				Math.floor(hours / 10), hours % 10,
-				Math.floor(minutes / 10), minutes % 10,
-				Math.floor(seconds / 10), seconds % 10
-			];
+			digits = [Math.floor(hours / 10), hours % 10, Math.floor(minutes / 10), minutes % 10, Math.floor(seconds / 10), seconds % 10];
 		}
 
 		this.tracks.forEach((track, i) => digits[i] !== undefined && (track.value = digits[i]));
