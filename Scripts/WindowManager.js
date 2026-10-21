@@ -2379,6 +2379,9 @@ function Dialog(object, create) {
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
+
+	/** @type { Extension[]} */
+	this.extensions = [];
 }
 
 
@@ -3799,6 +3802,7 @@ Dialog.prototype.updatePosition = function() {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
+	this.extensions
 	this.updateMicaPosition();
 };
 
