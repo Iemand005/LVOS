@@ -87,6 +87,10 @@ function injectMica(dialog) {
 		clip.appendChild(micaWallpaper);
 		dialog.target.classList.add(MICA_WINDOW_CLASS);
 
+		// The backdrop is put in place right away, so it is already lined up with the
+		// wallpaper before the window is moved for the first time.
+		updateMicaPosition(dialog);
+
 		return true;
 	} catch (ex) { console.warn(ex); }
 	return false;
