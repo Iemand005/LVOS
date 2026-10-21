@@ -141,8 +141,10 @@ Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c
 
 class Modern {
 	/**
-	 * @param {HTMLElement} el @param {(pipWindow: Window)=>void} callback
-	 * @param {string|string[]} [stylesheets] The stylesheets the pip window should use
+	 * Moves an element into a picture-in-picture window, and back when it closes.
+	 * @param {HTMLElement} el The element to move
+	 * @param {(pipWindow: Window)=>void} callback Called when the window is open
+	 * @param {string|string[]} [stylesheets] The stylesheets the window should use
 	 */
 	static toggleElementPip(el, callback, stylesheets) {
 		const pip = window.documentPictureInPicture;
@@ -152,7 +154,10 @@ class Modern {
 		const rect = el.getBoundingClientRect();
 		pip.requestWindow({ width: Math.round(rect.width) || 400, height: Math.round(rect.height) || 300 }).then(pipWindow => {
 			const parent = el.parentNode, sibling = el.nextSibling;
-			Modern.loadStylesheets(pipWindow, ["./Styles/pip.css", stylesheets].flat().filter(Boolean)).then(() => {
+			const sheets = ["./Styles/pip.css"];
+			if (stylesheets) sheets.push(...(Array.isArray(stylesheets) ? stylesheets : [stylesheets]));
+
+			Modern.loadStylesheets(pipWindow, sheets).then(() => {
 				pipWindow.dispatchEvent(new Event("resize"));
 			});
 			pipWindow.document.body.appendChild(el);
@@ -167,7 +172,8 @@ class Modern {
 	/**
 	 * Loads stylesheets into a picture-in-picture window. The window is a document
 	 * of its own, so it needs the styles it should have.
-	 * @param {Window} pipWindow @param {string[]} stylesheets
+	 * @param {Window} pipWindow The window to load the stylesheets into
+	 * @param {string[]} stylesheets The stylesheets to load
 	 */
 	static loadStylesheets(pipWindow, stylesheets) {
 		const head = pipWindow.document.head || pipWindow.document.documentElement;
@@ -175,8 +181,8 @@ class Modern {
 			const link = pipWindow.document.createElement("link");
 			link.rel = "stylesheet";
 			link.href = new URL(stylesheet, document.baseURI).href;
-			link.addEventListener("load", resolve);
-			link.addEventListener("error", resolve);
+			link.addEventListener("load", resolve, { once: true });
+			link.addEventListener("error", resolve, { once: true });
 			head.appendChild(link);
 		})));
 	}

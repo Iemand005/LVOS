@@ -4467,7 +4467,11 @@ Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
-/** @param {string} id @param {string} [stylesheet] */
+/**
+ * Moves an element of the window into a picture-in-picture window.
+ * @param {string} id The id of the element
+ * @param {string} [stylesheet] The stylesheet the pip window should use
+ */
 Dialog.prototype.moveElementIntoPipById = function(id, stylesheet) {
 	var targetElement = this.getElementById(id);
 	if (targetElement && Modern) Modern.toggleElementPip(targetElement, function (window) {
