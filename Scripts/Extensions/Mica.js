@@ -148,6 +148,8 @@ var micaExtension = {
 	name: "Mica",
 	enabled: true,
 
+	flags
+
 	onWindowLaunch: function(dialog) {
 		injectMica(dialog);
 	},

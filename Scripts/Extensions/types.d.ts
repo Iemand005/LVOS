@@ -17,8 +17,8 @@ interface Extension {
 	name?: string;
 	/** Whether the extension is switched on. Extensions are switched on when they are registered. */
 	enabled?: boolean;
-	/** FLags defined by the extension */
-	flags: PropertyDescriptorMap & ThisType<any>;
+	/** Flags defined by the extension */
+	flags?: PropertyDescriptorMap & ThisType<any>;
 	/** Called when a window is launched. */
 	onWindowLaunch?(dialog: Dialog): void;
 	/** Called when a window is moved. */
