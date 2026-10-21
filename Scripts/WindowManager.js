@@ -3807,8 +3807,8 @@ Dialog.prototype.updatePosition = function() {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
-	this.extensions.forEach(function(ext) {
-		ext.onWindowMove();
+	window.windowManager.extensions.forEach(function(ext) {
+		ext.onWindowMove(this);
 	});
 	this.updateMicaPosition();
 };
