@@ -184,3 +184,9 @@ window.windowManager.registerExtension(micaExtension);
 	get: function() { return micaExtension.enabled === true; },
 	set: function(value) { window.windowManager.setExtensionEnabled(micaExtension, !!value); }
 });
+
+Object.defineProperties(flags, {
+	useMica: {
+		g
+	}
+})
