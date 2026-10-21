@@ -1739,13 +1739,13 @@ WindowManager.prototype.getWindowById = function(id) {
  */
 WindowManager.prototype.broadcast = function(type, data, id) {
 	LVMessenger.broadcast(this.channel, type, data, id);
-}
+};
 
 /** Share the current theme with the other running OS instances. */
 WindowManager.prototype.broadcastTheme = function() {
 	if (!document.hasFocus()) return; // only the active tab drives theme sync
 	this.broadcast("theme", { className: document.body.className });
-}
+};
 
 /**
  * @param {MessageType} type
@@ -4470,7 +4470,7 @@ Dialog.prototype.screenshot = function() {
 	if (!this.target) return;
 	var shooter = getScreenShooter();
 	if (shooter) shooter.screenshotElement(this.target);
-}
+};
 
 //#endregion
 
