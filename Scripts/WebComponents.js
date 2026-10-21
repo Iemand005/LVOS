@@ -127,12 +127,11 @@ class OdometerTime extends OdometerDisplay {
 
 	update() {
 		/** @type {number[]} */
-		let digits;
+		let digits = [];
 
 		if (this.usingValue()) {
 			const value = this.getAttribute("value") || "00:00:00";
 			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
-			digits = [];
 			parts.forEach((part, i) => {
 				for (const ch of String(part).padStart((i === 0 && parts.length === 4) ? 3 : 2, "0")) digits.push(parseInt(ch, 10));
 			});
