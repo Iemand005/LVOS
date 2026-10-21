@@ -4,8 +4,8 @@
 /** @param {Dialog} dialog */
 function getMicaElement(dialog) {
 	try { // TODO: cache the element so it doesn't have to be re-fetched each time! add _micaElement to the dialog thing as an optional prop
-		if (!this.target) return;
-		var clipElem = this.target.getElementsByClassName("backdrop-filter");
+		if (!dialog.target) return;
+		var clipElem = dialog.target.getElementsByClassName("backdrop-filter");
 		if (!clipElem.length) return;
 		var clip = clipElem[0];
 		if (isElement(clip)) return clip;
