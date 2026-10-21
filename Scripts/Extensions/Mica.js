@@ -179,18 +179,3 @@ var micaExtension = {
 };
 
 window.windowManager.registerExtension(micaExtension);
-
-/**
- * Mica is switched on and off with the "Use Mica" setting, so the setting follows
- * the extension instead of the extension having to poll the setting. The setting is
- * an own property of the flags, so the settings panel shows a checkbox for it and
- * remembers its state.
- */
-// if (typeof flags !== "undefined")
-	Object.defineProperty(flags, "useMica", );
-
-Object.defineProperties(flags, {
-	useMica: {
-		g
-	}
-})

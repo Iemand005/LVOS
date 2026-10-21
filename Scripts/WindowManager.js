@@ -1810,6 +1810,9 @@ WindowManager.prototype.registerExtension = function(ext) {
 	this.extensions.push(ext);
 
 	if (ext.enabled) this.notifyExtension(ext, "onEnable");
+
+	if (ext.flags) Object.defineProperties(flags, ext.flags);
+
 	return ext;
 };
 
