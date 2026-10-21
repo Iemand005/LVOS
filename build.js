@@ -19,7 +19,7 @@
  * otherwise a local "./dist" folder.
  */
 
-import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync, readdirSync, rmSync } from "fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
@@ -115,15 +115,24 @@ function resolveDist() {
 	return join(ROOT, "dist");
 }
 
+/**
+ * The type declarations are only needed to type check the sources. A browser
+ * has no use for them, so they are never copied into the dist folder.
+ *
+ * @param {string} src
+ */
+function isNotTypeDeclaration(src) {
+	return !src.endsWith(".d.ts");
+}
 function copyAssets(dist) {
-		for (const asset of ASSETS) {
+	for (const asset of ASSETS) {
 		const src = join(ROOT, asset.from);
 		const dest = join(dist, asset.to);
 		if (!existsSync(src)) {
 			console.warn("Asset not found, skipping: " + asset.from);
 			continue;
 		}
-		cpSync(src, dest, { recursive: true });
+		cpSync(src, dest, { recursive: true, filter: isNotTypeDeclaration });
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
 
@@ -142,32 +151,10 @@ function copyAssets(dist) {
 		const src = join(ROOT, d.from);
 		const dest = join(dist, d.to);
 		if (existsSync(src)) {
-			cpSync(src, dest, { recursive: true });
+			cpSync(src, dest, { recursive: true, filter: isNotTypeDeclaration });
 			console.log("[copy] " + d.from + " -> " + dest);
 		}
 	}
-}
-
-/**
- * The type declarations are only needed to type check the sources. The dist
- * folder runs in a browser, where a .d.ts file is dead weight, so they are
- * removed from it.
- */
-function removeTypeDeclarations(dist) {
-	let removed = 0;
-	const walk = (folder) => {
-		for (const entry of readdirSync(folder, { withFileTypes: true })) {
-			const path = join(folder, entry.name);
-			if (entry.isDirectory()) {
-				walk(path);
-			} else if (entry.name.endsWith(".d.ts")) {
-				rmSync(path);
-				removed++;
-			}
-		}
-	};
-	walk(dist);
-	if (removed) console.log("[clean] removed " + removed + " .d.ts files from the dist folder");
 }
 
 function writePages(dist) {
@@ -467,7 +454,6 @@ async function build() {
 	}
 
 	copyAssets(dist);
-	removeTypeDeclarations(dist);
 	writePages(dist);
 	writeServiceWorker(dist);
 
