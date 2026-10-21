@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { pathToFileURL } from 'url';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 
 test.use({ headless: true, channel: 'chrome' });
 
@@ -56,10 +57,27 @@ test('dist bundle boots with all index.html-only scripts available', async ({ pa
 });
 
 /**
- * The extensions are part of the bundle as well, so the built page has the same
- * Mica the development page has.
+ * The extensions are never baked into a bundle. The dist folder holds them as
+ * files of their own that the page loads (deferred), so an extension can be
+ * added, changed or left out without rebuilding the bundle.
  */
-test('dist bundle registers the extensions with the window manager', async ({ page }) => {
+test('the dist loads the extensions as separate deferred scripts', async ({ page }) => {
+	const bundle = readFileSync(resolve('Dist/desktop.dist.js'), 'utf8');
+	const pageHtml = readFileSync(resolve('Dist/index.html'), 'utf8');
+
+	// The extension is shipped as a file of its own.
+	expect(existsSync(resolve('Dist/Scripts/Extensions/Mica.js')), 'the Mica extension is missing from the dist folder').toBe(true);
+
+	// And the page loads it separately, deferred, after the bundle.
+	expect(pageHtml, 'the page should load the extension as a deferred script').toContain(
+		'<script src="./Scripts/Extensions/Mica.js" defer></script>'
+	);
+
+	// The bundle holds the framework, not the extension.
+	expect(bundle, 'the bundle must not hold an extension implementation').not.toContain('MICA_WINDOW_CLASS');
+	expect(bundle, 'the bundle must not hold an extension implementation').not.toContain('registerExtension(micaExtension');
+
+	// The extension registers itself with the window manager when it loads.
 	const pageErrors: string[] = [];
 	page.on('pageerror', (exception) => pageErrors.push(exception.message));
 
@@ -73,8 +91,34 @@ test('dist bundle registers the extensions with the window manager', async ({ pa
 		return wm.extensions.map((extension: any) => ({ id: extension.id, enabled: extension.enabled }));
 	});
 
-	expect(extensions.some((extension: any) => extension.id === 'mica'), 'the Mica extension is missing from the bundle').toBe(true);
-	expect(pageErrors, 'bundle threw:\n' + pageErrors.join('\n')).toEqual([]);
+	expect(extensions.some((extension: any) => extension.id === 'mica'), 'the Mica extension did not register itself').toBe(true);
+	expect(pageErrors, 'the page threw:\n' + pageErrors.join('\n')).toEqual([]);
+});
+
+/**
+ * The type declarations are only needed to type check the sources. The dist
+ * folder runs in a browser, so it should not carry them.
+ */
+test('the dist folder holds no type declarations', () => {
+	/** @param {string} folder */
+	const typeDeclarations = (folder: string): string[] => {
+		if (!existsSync(folder)) return [];
+		const found: string[] = [];
+		for (const entry of readdirSync(folder, { withFileTypes: true })) {
+			const path = join(folder, entry.name);
+			if (entry.isDirectory()) {
+				found.push(...typeDeclarations(path));
+			} else if (entry.name.endsWith('.d.ts')) {
+				found.push(path);
+			}
+		}
+		return found;
+	};
+
+	const found = typeDeclarations(resolve('Dist/Scripts'))
+		.concat(typeDeclarations(resolve('Dist/Styles')));
+
+	expect(found, 'the dist folder holds type declarations:\n' + found.join('\n')).toEqual([]);
 });
 
 test('mobile bundle boots without errors', async ({ page }) => {

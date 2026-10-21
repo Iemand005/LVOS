@@ -19,7 +19,7 @@
  * otherwise a local "./dist" folder.
  */
 
-import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync, readdirSync, rmSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
@@ -148,6 +148,28 @@ function copyAssets(dist) {
 	}
 }
 
+/**
+ * The type declarations are only needed to type check the sources. The dist
+ * folder runs in a browser, where a .d.ts file is dead weight, so they are
+ * removed from it.
+ */
+function removeTypeDeclarations(dist) {
+	let removed = 0;
+	const walk = (folder) => {
+		for (const entry of readdirSync(folder, { withFileTypes: true })) {
+			const path = join(folder, entry.name);
+			if (entry.isDirectory()) {
+				walk(path);
+			} else if (entry.name.endsWith(".d.ts")) {
+				rmSync(path);
+				removed++;
+			}
+		}
+	};
+	walk(dist);
+	if (removed) console.log("[clean] removed " + removed + " .d.ts files from the dist folder");
+}
+
 function writePages(dist) {
 	for (const [page, config] of Object.entries(PAGES)) {
 		const srcPath = join(ROOT, config.source);
@@ -160,7 +182,23 @@ function writePages(dist) {
 		// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
 		// without module support download them; modern Chrome ignores the tag entirely.
 		const src = readFileSync(srcPath, "utf8");
+
+		// Extensions are never bundled: the dist folder must not contain an
+		// extension implementation baked into a bundle. The scripts the page asks
+		// for are copied into the dist folder as they are and loaded separately
+		// (deferred) instead, so the extension is a file that can be added, changed
+		// or left out without rebuilding the bundle.
+		const extensionScripts = [];
+		const extensionPattern = new RegExp(
+			'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
+			"gi"
+		);
+		for (const match of src.matchAll(extensionPattern)) {
+			extensionScripts.push(match[1].replace(/^\.\//, ""));
+		}
+
 		const extras = (config.extras || [])
+			.concat(extensionScripts)
 			.map((extra) => '<script src="./' + extra + '" defer></script>\n')
 			.join("");
 		const out = src
@@ -429,6 +467,7 @@ async function build() {
 	}
 
 	copyAssets(dist);
+	removeTypeDeclarations(dist);
 	writePages(dist);
 	writeServiceWorker(dist);
 
