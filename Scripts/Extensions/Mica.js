@@ -14,9 +14,8 @@ function getMicaElement(dialog) {
 
 window.windowManager.registerExtension({
 	onWindowMove: function(dialog) {
-		var micaElement = getMicaElement(dialog);
 		if (!flags.useMica) return;
-		var micaElement = this.micaElement;
+		var micaElement = getMicaElement(dialog);
 		if (micaElement) try {
 			var backdrop = micaElement.firstChild;
 			var wallpaperP = document.getElementById("wallpaper");
