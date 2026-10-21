@@ -2869,16 +2869,6 @@ Object.defineProperty(Dialog.prototype, "contentWindow", {
 	}
 });
 
-Object.defineProperty(Dialog.prototype, "mica", {
-	get: function() { return this._mica; },
-	set: function(mica) {
-		// if (mica) this._mica = this.injectMica();
-		// else this._mica = this.removeMica();
-		// 	this.move();
-	}
-});
-
-
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () {
 		return this._x * window.innerWidth; // TODO: get ehe window bounds calculated on resize evt
@@ -3205,31 +3195,6 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 
 Object.defineProperty(Dialog.prototype, "popup", {
 	get: function() { return this._popupWindow; }
-});
-
-Object.defineProperty(Dialog.prototype, "micaElement", {
-	get: function() {
-		try { // TODO: cache the element so it doesn't have to be re-fetched each time! add _micaElement to the dialog thing as an optional prop
-			if (!this.target) return null;
-			var clipElem = this.target.getElementsByClassName("backdrop-filter");
-			if (!clipElem.length) return null;
-			var clip = clipElem[0];
-			if (isElement(clip)) return clip;
-		} catch(ex) { if (ex instanceof Error) console.log(ex.message); }
-		return null;
-	}
-});
-
-Object.defineProperty(Dialog.prototype, "micaBackdrop", {
-	get: function() {
-		try {
-			var micaElement = this.micaElement;
-			if (!micaElement) return null;
-			var backdrop = micaElement.children[0];
-			if (isElement(backdrop)) return backdrop;
-		} catch(ex) { if (ex instanceof Error) console.log(ex.message); }
-		return null;
-	}
 });
 
 Object.defineProperty(Dialog.prototype, "skew", {
@@ -3869,9 +3834,7 @@ Dialog.prototype.updatePosition = function() {
 		this.scaleY = 1 - deltaY * intensity / 100;
 	}
 
-	window.windowManager.extensions.forEach(function(ext) {
-		ext.onWindowMove(this);
-	});
+	windowManager.notifyExtensions("onWindowMove", this);
 };
 
 /**
