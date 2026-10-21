@@ -98,8 +98,7 @@ class OdometerTime extends OdometerDisplay {
 	groups() {
 		if (!this.usingValue()) {
 			const date = new Date(this.dateTime);
-			return [date.getHours(), date.getMinutes(), date.getSeconds()]
-				.map(part => String(part || 0).padStart(2, "0"));
+			return [date.getHours(), date.getMinutes(), date.getSeconds()].map(part => String(part || 0).padStart(2, "0"));
 		}
 		const parts = (this.getAttribute("value") || "00:00:00").split(":");
 		return parts.map((part, i) => String(parseInt(part, 10) || 0).padStart(i === 0 && parts.length === 4 ? 3 : 2, "0"));
