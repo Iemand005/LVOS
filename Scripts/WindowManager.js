@@ -100,7 +100,6 @@ var flags = {
 	get enableExtensions() { return this._enableExtensions; },
 	set enableExtensions(value) {
 		window.windowManager.extensions.forEach(function(ext) {
-			// ext.enabled = false;
 			window.windowManager.setExtensionEnabled(ext, value);
 		});
 	}
