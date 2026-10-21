@@ -1806,7 +1806,7 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 
 /** @param {Extension} ext */
 WindowManager.prototype.registerExtension = function(ext) {
-
+	this.extensions
 };
 
 /**
