@@ -55,9 +55,7 @@ function injectMica(dialog) {
 };
 
 window.windowManager.registerExtension({
-	onWindowLaunch: function(dialog) {
-		injectMica(dialog);
-	},
+	onWindowLaunch: injectMica,
 	onWindowMove: function(dialog) {
 		if (!flags.useMica) return;
 		var micaElement = getMicaElement(dialog);
