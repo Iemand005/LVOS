@@ -63,6 +63,14 @@ const PAGES = {
 };
 
 /**
+ * The folder the extensions live in. Extensions are never bundled: the window
+ * manager loads them by name, so an extension can be added, changed or left out
+ * without rebuilding the bundle. The scripts of this folder are copied into the
+ * dist folder and loaded separately (deferred) by the pages that ask for them.
+ */
+const EXTENSIONS_FOLDER = "Scripts/Extensions";
+
+/**
  * Ordered source lists per bundle. Order is load-critical; do not reorder
  * without checking the dependency graph (e.g. Reflector must precede
  * DesktopManager, index.js must be last).
@@ -76,7 +84,6 @@ const BUNDLES = {
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
 		"WindowManager.js",
-		"Extensions/Mica.js",     // the extensions register themselves with the window manager
 		"ElementPicker.js",
 		"ScrollTabs/ScrollTabs.js",
 		"WebComponents.js",
@@ -120,15 +127,16 @@ function copyAssets(dist) {
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
 
-	// Ensure WebGraphics, WebAudioVisualizer, WebAura, WebMedia, ScrollTabs and the
-	// legacy polyfills are present in dist.
+	// Ensure WebGraphics, WebAudioVisualizer, WebAura, WebMedia, ScrollTabs, the
+	// legacy polyfills and the extensions are present in dist.
 	const extraDirs = [
 		{ from: "Scripts/WebGraphics", to: "Scripts/WebGraphics" },
 		{ from: "Scripts/WebAudioVisualizer", to: "Scripts/WebAudioVisualizer" },
 		{ from: "Scripts/WebAura", to: "Scripts/WebAura" },
 		{ from: "Scripts/WebMedia", to: "Scripts/WebMedia" },
 		{ from: "Scripts/LegacyPolyfills.js", to: "Scripts/LegacyPolyfills.js" },
-		{ from: "ScrollTabs", to: "ScrollTabs" }
+		{ from: "ScrollTabs", to: "ScrollTabs" },
+		{ from: EXTENSIONS_FOLDER, to: EXTENSIONS_FOLDER }
 	];
 	for (const d of extraDirs) {
 		const src = join(ROOT, d.from);
