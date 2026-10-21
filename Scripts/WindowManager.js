@@ -4284,7 +4284,7 @@ Dialog.prototype.launch = function() {
 	// if (this.mica) this.injectMica();
 	windowManager.extensions.forEach(function(extension) {
 		extension.onWindowLaunch(this);
-	})
+	});
 
 	this.open();
 };
