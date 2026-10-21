@@ -3564,9 +3564,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.maximizeAnimations++;
 
 	// View Transitions path (Chrome 111+)
-	if (flags.useViewTransitionMaximize && this.windowTarget) {
+	if (flags.useViewTransitionMaximize && this.windowTarget)
 		return this.windowTarget.toggleMaximizedVT(enable);
-	}
 
 	// Fallback path for legacy browsers without CSS transitions (e.g. IE9)
 	if (!supportsTransitions) {
