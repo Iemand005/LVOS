@@ -1804,6 +1804,11 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	return foundDialog;
 };
 
+/** @param {Extension} ext */
+WindowManager.prototype.registerExtension = function(ext) {
+
+};
+
 /**
  * Gap the snap indicator keeps from every edge of the area it covers, so it reads as
  * floating over the desktop rather than filling it. Shared by the maximize and side
