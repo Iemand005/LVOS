@@ -135,4 +135,8 @@ declare global {
 	interface CSSStyleDeclaration {
 		inset?: string;
 	}
+
+	interface CSSStyleProperties {
+		msTransform?: string;
+	}
 }
