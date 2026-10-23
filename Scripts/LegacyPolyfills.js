@@ -665,3 +665,18 @@ ActiveXStorage.prototype.getItem = function (key) {
 	window.BroadcastChannel = BroadcastChannel;
 
 })();
+
+(function() {
+	if (typeof window.Map !== "undefined") return;
+
+	function Map() {
+		this.object = {};
+	}
+
+	Map.prototype.supports = function() { return false; }
+
+	// ScrollTabs.js calls the *static* CSS.supports(...), not an instance method.
+	Map.supports = function() { return false; };
+
+	window.Map = Map;
+})();
