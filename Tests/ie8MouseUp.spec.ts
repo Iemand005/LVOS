@@ -23,16 +23,27 @@ test('indexIE8 windows initialize and release the pointer', async ({ page }) => 
 		const target = document.getElementById('console');
 		if (!target) return { loadedWindows, dragged: false, released: true, error: 'no console' };
 
-		const fire = (type: string) => {
-			const event = new Event(type, { bubbles: true, cancelable: true });
-			Object.defineProperty(event, 'clientX', { value: 120 });
-			Object.defineProperty(event, 'clientY', { value: 40 });
-			target.dispatchEvent(event);
-		};
+		const supportsPointer = typeof window !== 'undefined' && ("PointerEvent" in window || "MSPointerEvent" in window);
+		const downType = supportsPointer ? "pointerdown" : "mousedown";
+		const upType = supportsPointer ? "pointerup" : "mouseup";
 
-		fire('pointerdown');
+		let event;
+		if (supportsPointer && typeof PointerEvent !== 'undefined') {
+			event = new PointerEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
+		} else {
+			event = new MouseEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+		}
+		target.dispatchEvent(event);
 		const dragged = manager.isDragging;
-		window.dispatchEvent(new Event('pointerup', { bubbles: true }));
+		
+		let upEvent;
+		if (supportsPointer && typeof PointerEvent !== 'undefined') {
+			upEvent = new PointerEvent(upType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
+		} else {
+			upEvent = new MouseEvent(upType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+		}
+		window.dispatchEvent(upEvent);
+		document.dispatchEvent(upEvent);
 		const released = !manager.isDragging;
 
 		return { loadedWindows, dragged, released };
