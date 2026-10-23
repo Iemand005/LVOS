@@ -4539,7 +4539,7 @@ window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
 window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
-window.addEventListener("unload", function() { window.windowManager.saveState(); }, false);
+window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
 window.addEventListener("dragover", cancelDomEvent, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
