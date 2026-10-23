@@ -678,3 +678,5 @@ ActiveXStorage.prototype.getItem = function (key) {
 
 	window.Map = Map;
 })();
+
+if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function(){};
