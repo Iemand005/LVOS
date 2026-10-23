@@ -3,18 +3,22 @@ var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function init() {
 	var launchpadElement = document.getElementById("launchpad");
-	if (!launchpad || !launchpadElement) return;
 
-	launchpad.init(launchpadElement);
+	if (launchpad && launchpadElement) {
+		launchpad.init(launchpadElement);
 
-	if (typeof appManager !== "undefined") {
-		appManager.forEachApp(launchpad.addApp.bind(launchpad));
-		// launchpad.open();
-		appManager.reloadWallpaper();
+		if (typeof appManager !== "undefined") {
+			appManager.forEachApp(launchpad.addApp.bind(launchpad));
+			// launchpad.open();
+			appManager.reloadWallpaper();
+		}
 	}
+	// The window manager must be initialized even on pages without a launchpad:
+	// initializeDialogs() registers the document/window pointerup listener that ends
+	// a drag, so skipping it leaves every window stuck to the cursor.
 	if (typeof windowManager !== "undefined" && "windowManager" in window) {
-		windowManager.forEachWindow(function(dialog) {
-			if (launchpad && dialog.application) launchpad.addApp(dialog);
+		if (launchpad) windowManager.forEachWindow(function(dialog) {
+			if (dialog.application) launchpad.addApp(dialog);
 		});
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.initializeDialogs();
