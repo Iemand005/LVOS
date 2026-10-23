@@ -40,6 +40,7 @@ export default defineConfig(
 			...jsdoc.configs["flat/recommended"].rules,
 			"comma-dangle": ["error", "never"],
 			"no-var": "off",
+			// ODO: pls block let at least
 			"no-sequences": "off",
 			"comma-spacing": "warn",
 			"no-trailing-spaces": "warn",
