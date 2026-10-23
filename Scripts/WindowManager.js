@@ -181,7 +181,8 @@ function transformElement(element, t) {
 	if (t.rotateY) transform += "rotateY(" + toDegrees(t.rotateY) + ")";
 	if (t.rotateZ) transform += "rotateZ(" + toDegrees(t.rotateZ) + ")";
 
-	element.style.transform = transform;
+	if (element.style.msTransform) element.style.msTransform = transform;
+	else element.style.transform = transform;
 }
 
 /**
