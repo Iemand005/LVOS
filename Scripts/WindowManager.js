@@ -4275,7 +4275,7 @@ Dialog.prototype.openUrl = function(url) {
 	if (!frame) return;
 
 	var self = this;
-	let timeout = -1;
+	var timeout = -1;
 
 	frame.onload = function() {
 		clearTimeout(timeout);
@@ -4290,7 +4290,7 @@ Dialog.prototype.openUrl = function(url) {
 
 	var fallbackUrls = baseUrls.concat(this.application.altUrls);
 
-	let index = 0;
+	var index = 0;
 
 	function tryNext() {
 		// Skip over missing entries (e.g. an app with no distSrc/altUrls) and stop at
