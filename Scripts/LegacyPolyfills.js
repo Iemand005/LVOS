@@ -673,10 +673,8 @@ ActiveXStorage.prototype.getItem = function (key) {
 		this.object = {};
 	}
 
-	Map.prototype.supports = function() { return false; }
-
-	// ScrollTabs.js calls the *static* CSS.supports(...), not an instance method.
-	Map.supports = function() { return false; };
+	Map.prototype.get = function(key) { return this.object[key]; };
+	Map.prototype.set = function(key, value) { return this.object[key] = value; };
 
 	window.Map = Map;
 })();
