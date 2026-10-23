@@ -1,4 +1,4 @@
-/* AppRegistry - Lightweight app registry for LVOS Mobile.
+/* AppRegistry - Lightweight app registry for VulpOS and VulpOS Mobile.
    Provides app registration, iteration, and persistence
    without the full WindowManager/Dialog desktop scaffolding.
 
