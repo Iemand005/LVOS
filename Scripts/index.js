@@ -46,4 +46,11 @@ function init() {
 		window.__LVMessenger.accent = window.metaThemeColor;
 }
 
-window.addEventListener("DOMContentLoaded", init, false);
+function ready(fn) {
+	if (document.readyState === "complete" || document.readyState === "interactive") {
+		setTimeout(fn, 0);
+		return;
+	}
+	window.addEventListener("DOMContentLoaded", fn, false);
+}
+ready(init);

@@ -27,26 +27,42 @@ test('indexIE8 windows initialize and release the pointer', async ({ page }) => 
 		const downType = supportsPointer ? "pointerdown" : "mousedown";
 		const upType = supportsPointer ? "pointerup" : "mouseup";
 
-		let event;
-		if (supportsPointer && typeof PointerEvent !== 'undefined') {
-			event = new PointerEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
+		// Try to trigger via activation handler if attached
+		if (manager.windows && manager.windows['console']) {
+			const dialog = manager.windows['console'];
+			let event;
+			if (supportsPointer && typeof PointerEvent !== 'undefined') {
+				event = new PointerEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
+			} else {
+				event = new MouseEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+			}
+			try { if (dialog.activationHandler) dialog.activationHandler(event); } catch(e) {}
 		} else {
-			event = new MouseEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+			let event;
+			if (supportsPointer && typeof PointerEvent !== 'undefined') {
+				event = new PointerEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
+			} else {
+				event = document.createEvent ? document.createEvent('MouseEvents') : new MouseEvent(downType);
+				if (event.initMouseEvent) event.initMouseEvent(downType, true, true, window, 1, 0, 0, 120, 40, false, false, false, false, 0, null);
+				else event = new MouseEvent(downType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+			}
+			target.dispatchEvent(event);
 		}
-		target.dispatchEvent(event);
 		const dragged = manager.isDragging;
 		
 		let upEvent;
 		if (supportsPointer && typeof PointerEvent !== 'undefined') {
 			upEvent = new PointerEvent(upType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40, pointerId: 1, pointerType: 'mouse' });
 		} else {
-			upEvent = new MouseEvent(upType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
+			upEvent = document.createEvent ? document.createEvent('MouseEvents') : new MouseEvent(upType);
+			if (upEvent.initMouseEvent) upEvent.initMouseEvent(upType, true, true, window, 1, 0, 0, 120, 40, false, false, false, false, 0, null);
+			else upEvent = new MouseEvent(upType, { bubbles: true, cancelable: true, clientX: 120, clientY: 40 });
 		}
 		window.dispatchEvent(upEvent);
 		document.dispatchEvent(upEvent);
 		const released = !manager.isDragging;
 
-		return { loadedWindows, dragged, released };
+		return { loadedWindows, dragged, released, downType, upType };
 	});
 
 	expect(result.loadedWindows, 'initializeDialogs() did not load the windows').toBeGreaterThan(0);

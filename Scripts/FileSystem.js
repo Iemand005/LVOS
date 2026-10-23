@@ -27,7 +27,7 @@ function probeAllStorage() {
   };
 }
 
-console.log("Detected Browser Capabilities:", probeAllStorage());
+// console.log("Detected Browser Capabilities:", probeAllStorage());
 
 
 function OmniFS() {

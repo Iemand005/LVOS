@@ -999,20 +999,30 @@ WindowManager.prototype.initializeDialogs = function() {
 	var self = this;
 	var stop = function() { self.disableDialogDrag(); };
 	var event = supportsPointer ? "pointerup" : "mouseup";
-	document.addEventListener(event, stop, false);
-	window.addEventListener(event, stop, false);
+	if (typeof document !== "undefined") document.addEventListener(event, stop, false);
+	if (typeof window !== "undefined") window.addEventListener(event, stop, false);
+	if (!supportsPointer && typeof document !== "undefined") {
+		document.addEventListener("mouseup", stop, false);
+	}
+	if (!supportsPointer && typeof window !== "undefined") {
+		window.addEventListener("mouseup", stop, false);
+	}
 
 	this.dragAction.set(0);
-	var dialogs = document.getElementsByClassName("window");;
-	Array.from(dialogs).forEach(function (dialog) {
-		if (isElement(dialog))
-			self.loadApp(dialog);
-
-	});
+	if (typeof document !== "undefined") {
+		var dialogs = document.getElementsByClassName("window");
+		if (dialogs) {
+			for (var i = 0; i < dialogs.length; i++) {
+				var dialog = dialogs[i];
+				if (isElement(dialog))
+					self.loadApp(dialog);
+			}
+		}
+	}
 	this.loadState();
 
 	// document.body.document.body.appendChild(this.windowSnap);
-	this.windowSnap.init();
+	if (this.windowSnap && typeof this.windowSnap.init === "function") this.windowSnap.init();
 };
 
 /**
