@@ -195,7 +195,7 @@ AppManager.prototype.setWallpaper = function(id) {
  * @param {(url: string | null)=>void} [onLoad]
  */
 AppManager.prototype.openAppInIFrame = function(id, frame, onLoad) {
-	let timeout = -1;
+	var timeout = -1;
 	/** @type {string | null} */
 	var src = null;
 
@@ -213,7 +213,7 @@ AppManager.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
 	var fallbackUrls = baseUrls.concat(application.altUrls);
 
-	let index = 0;
+	var index = 0;
 
 	function tryNext() {
 		var url = fallbackUrls[index++];
