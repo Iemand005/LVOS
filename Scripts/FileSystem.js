@@ -76,7 +76,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
 		  };
           fileWriter.onerror = reject;
           
-          const blob = new Blob([textData], { type: 'text/plain' });
+          var blob = new Blob([textData], { type: 'text/plain' });
           fileWriter.write(blob);
           
         }, reject);
