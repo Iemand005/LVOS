@@ -146,7 +146,7 @@ function removeMica(dialog) {
 var micaExtension = {
 	id: "mica",
 	name: "Mica",
-	enabled: true,
+	enabled: false,
 
 	flags: {
 		useMica: {
