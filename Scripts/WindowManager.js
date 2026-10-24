@@ -2168,7 +2168,6 @@ window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 
 /** @type {number} */
-ClickOffset._overlay.style.display = "block";
 ClickOffset.dragStopTimer = 0;
 
 /** @param {MouseEvent} ev */
