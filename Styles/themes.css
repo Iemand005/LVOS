@@ -563,13 +563,14 @@ button {
 	pointer-events: none;
 }
 
-.modern h1 {
-	color: white;
+.modern h1,
+.modern .window content,
+.modern button {
+	color: black;
 }
 
 .modern .window content,
 .modern button {
-	color: black;
 	background-color: #dddddd;
 	/* background: linear-gradient(358deg, #161616, #333232); */
 	border: 0px solid black !important;
