@@ -19,23 +19,12 @@
 			border: 1px solid #225588;
 			cursor: pointer;
 
-			/* 1. FIX: Dwing layout en stacking af */
-			position: relative;
-			z-index: 1; /* Zorgt dat de tekst vòòr de PIE-gradient blijft */
-			zoom: 1;    /* Activeert hasLayout */
-
 			border-radius: 8px;
 
-			/* 2. FIX: IE9 gooit 'linear-gradient' weg, dus we moeten een egale kleur 
-			als basis opgeven, maar we maken de normale background transparant voor IE 
-			zodat de PIE-laag erdoorheen kan schijnen */
-			background-color: transparent !important; 
 			
 			/* 3. CRUCIALAVOOR IE9 EMULATIE: Gebruik de specifieke PIE prefix */
 			-pie-background: linear-gradient(#4488dd, #1144aa);
 			
-			/* Moderne browsers (wordt genegeerd door IE9) */
-			background: linear-gradient(to bottom, #4488dd, #1144aa);
 
 			/* behavior: url(https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE.htc); */
 			/* behavior: url(file:///C:/Users/Lasse/Documents/Projects/PIE/build/PIE.htc); */
