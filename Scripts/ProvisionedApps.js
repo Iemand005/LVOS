@@ -119,6 +119,11 @@ function initApps() {
 
 /**
  * Finalize the app installation and refresh everything that depends on the app
+ * 
+ * 
+ * 
+ * 
+ * 
  * registry. AppRegistry.js is loaded async, so the apps may not have made it
  * into the registry when the deferred scripts (Settings) first ran; calling
  * this once everything is in place repopulates dependents like the wallpaper
