@@ -315,37 +315,16 @@ article, .article {
 }
 
 /* IE9 fallback: flex not supported, keep buttons on same line */
-@supports not (display: flex) {
-	.windows .window header,
-	.windows .window .header,
-	.windows-10 .window header,
-	.windows-10 .window .header,
-	.windows-11 .window header,
-	.windows-11 .window .header {
-		display: block;
-		white-space: nowrap;
-		position: relative;
+@supports not (flex-direction: column) {
+	.window header {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
 	}
-	.windows .window header h1,
-	.windows .window .header h1 {
-		display: inline-block;
-		vertical-align: middle;
-		width: auto;
-		max-width: calc(100% - 90px);
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	.windows .window header section,
-	.windows .window .header section {
-		display: inline-block;
-		vertical-align: middle;
-		position: absolute;
-		right: 0;
-		top: 0;
-	}
-	.windows .window header button,
-	.windows .window .header button {
-		display: inline-block;
+	.window header h1 {
+		line-height: 300px; /* Match header height! */
+		display: table-cell;
+		width: 100%;
 	}
 }
 
