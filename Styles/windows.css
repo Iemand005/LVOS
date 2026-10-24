@@ -488,14 +488,16 @@ article > *,
 	overflow: auto;
 }
 
-/* HTML4/table windows (indexIE8.html). A table is not a flex container, and a
-   body cell that is 100% of the table height would push the header height on top
-   of it. Let the table fill the window and let the body row take the remainder. */
+/* HTML4/table windows (indexIE8.html). */
 .window > table.content {
 	display: table;
 	table-layout: fixed;
 	border-collapse: collapse;
 	width: 100%;
+	height: 100%;
+}
+
+.window > table.content > tbody {
 	height: 100%;
 }
 
@@ -505,25 +507,17 @@ article > *,
 }
 
 .window > table.content > tbody > tr > td.article {
-	height: auto;
+	height: 100%;
 	padding: 0;
 	position: relative;
 }
 
-/* IE9 cannot make an iframe fill a td with height:auto; put it absolutely
-   inside the relatively positioned body cell. */
-.window > table.content > tbody > tr > td.article {
-	position: relative;
-	height: 100%;
-	overflow: hidden;
-}
-
 .window > table.content > tbody > tr > td.article iframe {
-	position: absolute !important;
-	left: 0 !important;
-	top: 0 !important;
-	width: 100% !important;
-	height: 100% !important;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
 	display: block;
 	border: 0;
 	margin: 0;
