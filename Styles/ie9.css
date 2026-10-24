@@ -3,7 +3,6 @@
 	line-height: 30px; /* Match header height! */
 }
 .window-buttons {
-	display: table-cell;
 	position: absolute;
 	top: 0;
 	right: 0;
