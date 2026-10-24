@@ -310,7 +310,7 @@ article, .article {
 
 @supports (display: flex) {
 	article, .article {
-		position: relative;
+		position: unset;
 	}
 }
 
