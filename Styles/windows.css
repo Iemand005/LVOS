@@ -308,6 +308,10 @@ article, .article {
 	left: 0;
 }
 
+.window header h1 {
+	line-height: 30px; /* Match header height! */
+}
+
 .window > div {
 	position: absolute;
 	pointer-events: auto;
