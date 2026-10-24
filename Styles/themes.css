@@ -571,9 +571,8 @@ button {
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
 	background: linear-gradient(to bottom, #eeeeee, #cccccc);
-	-pie-background: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent) 0 0 / 50px #0ae;
+	-pie-background: linear-gradient(358deg, #161616, #333232);
 	behavior: url(/Scripts/PIE/PIE.htc);
-	-ms-behavior: url(/Scripts/PIE/PIE.htc);
 }
 
 .modern button:active {
