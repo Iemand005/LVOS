@@ -64,7 +64,7 @@ var flags = {
 	aeroSnap: true,
 	updateRateLimit: true,
 	useDragOverlay: true,
-	broadcastWindowMoves: true,
+	broadcastWindowMoves: !document.documentMode,
 	_useTransform: useTransform,
 	useAnimations: true,
 	get useTransform() { return this._useTransform; },
