@@ -320,6 +320,10 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
+
+	// var oh flag maybe
+	var multiDesktop = "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
+
     this.scrollTabs = "TabScroller" in window ? new TabScroller(document.querySelector("main")) : null;
 
     // this.scrollTabs.addTab(document.getElementById("desktop"));
