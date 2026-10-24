@@ -139,4 +139,8 @@ declare global {
 	interface CSSStyleProperties {
 		msTransform?: string;
 	}
+
+	interface ChildNode {
+		remove()?: void;
+	}
 }
