@@ -45,14 +45,29 @@
     <!-- De doelknop -->
     <button class="pie-button" id="myButton">IE-Veilige Knop</button>
 
+	<div id="debug" style="margin-top:20px; padding:10px; background:#fff; border:1px solid #ccc; font-family:monospace;">
+        Foutopsporing laden...
+    </div>
+
     <!-- Script om PIE te activeren zodra de pagina geladen is -->
     <script type="text/javascript">
         window.onload = function() {
-            // Controleer of PIE aanwezig is (dit is alleen waar in IE < 10)
+            var dbg = document.getElementById('debug');
+            
+            // Controleer of de emulatiemodus actief is
+            dbg.innerHTML = "Actieve IE Document Mode: IE" + (document.documentMode || "Modern") + "<br>";
+            
             if (window.PIE) {
-                var button = document.getElementById('myButton');
-                // Koppel PIE aan de knop om de gradient en border-radius te berekenen
-                PIE.attach(button);
+                dbg.innerHTML += "Status: PIE.js gedetecteerd!<br>";
+                try {
+                    var el = document.getElementById('myButton');
+                    PIE.attach(el);
+                    dbg.innerHTML += "Status: PIE.attach() succesvol gekoppeld.";
+                } catch(e) {
+                    dbg.innerHTML += "Crash: " + e.message;
+                }
+            } else {
+                dbg.innerHTML += "<span style='color:red;'>Status: window.PIE is undefined. Controleer of PIE.js wel in dezelfde map staat als dit bestand op je server!</span>";
             }
         };
     </script>
