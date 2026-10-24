@@ -330,7 +330,7 @@ DesktopManager.prototype.init = function() {
     this.addDesktop("Main", document.getElementById("window-section") || undefined);
     this.addDesktop();
     this.addDesktop();
-}
+};
 
 /** @param {string} [name] @param {HTMLElement} [desktopElement] */
 DesktopManager.prototype.addDesktop = function(name, desktopElement) {
