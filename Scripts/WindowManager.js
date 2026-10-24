@@ -2159,9 +2159,7 @@ ClickOffset._overlay.className = "drag-overlay";
 ClickOffset._overlay.style.display = "block";
 /** @param {MouseEvent} [ev] */
 ClickOffset.disableOverlay = function (ev) {
-	if (ev) {
-		if ((ev.buttons || ev.which || ev.button) || (window.windowManager && window.windowManager.isDragging)) return;
-	}
+	if (ev && ((ev.buttons || ev.which || ev.button) || (window.windowManager && window.windowManager.isDragging))) return;
 	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
 	else if (ClickOffset._overlay.parentNode) ClickOffset._overlay.parentNode.removeChild(ClickOffset._overlay);
 };
