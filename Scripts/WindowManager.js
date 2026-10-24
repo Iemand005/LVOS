@@ -2156,6 +2156,7 @@ function ClickOffset() {
 
 ClickOffset._overlay = document.createElement("div");
 ClickOffset._overlay.className = "drag-overlay";
+ClickOffset._overlay.style.display = "block";
 /** @param {MouseEvent} [ev] */
 ClickOffset.disableOverlay = function (ev) {
 	if (ev && ev.buttons) return;
@@ -2167,13 +2168,13 @@ window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
 window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
 
 /** @type {number} */
+ClickOffset._overlay.style.display = "block";
 ClickOffset.dragStopTimer = 0;
 
 /** @param {MouseEvent} ev */
 ClickOffset.handleMouseDrag = function (ev) {
 	ClickOffset.disableOverlay(ev);
 
-	ClickOffset._overlay.style.display = "block";
 
 	clearTimeout(ClickOffset.dragStopTimer);
 
