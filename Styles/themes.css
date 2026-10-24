@@ -563,11 +563,14 @@ button {
 	pointer-events: none;
 }
 
+.modern h1 {
+	color: white;
+}
 
 .modern .window content,
 .modern button {
 	color: white;
-	/* background-color: #202020; */
+	background-color: #202020;
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
 	background: linear-gradient(to bottom, #eeeeee, #cccccc);
