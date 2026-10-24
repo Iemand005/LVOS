@@ -62,7 +62,9 @@ var forEachIndexed = function(callbackfn, thisArg) {
 
 // Deze is niet volledig, ik moet nog de thisArguments toevoegen, wat ook afhangt van de stricte modus. Ik gebruik hier wel hasOwnProperty om te verifiëren dat we geen sleutels binnen krijgen die niet in ons object bestaan (gebeurt normaal niet).
 if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
-if (!NodeList.prototype.forEach) NodeList.prototype.forEach = forEachIndexed;
+// IE9 does not expose a global NodeList constructor, so only patch it when it exists.
+var nodeListPrototype = typeof NodeList != "undefined" ? NodeList.prototype : null;
+if (nodeListPrototype && !nodeListPrototype.forEach) nodeListPrototype.forEach = forEachIndexed;
 
 if (!Object.defineProperty) {
     Object.defineProperty = function(o, key, attributes) {
@@ -201,11 +203,19 @@ if (typeof HTMLElement != 'undefined' && !("classList" in document.documentEleme
 }
 
 //Object.prototype.forEach = forEach; //Geeft problemen met normale lussen die geen hasOwnProperty bevatten.
-Object.defineProperty(Object.prototype, 'forEach', { value:  forEachIndexed}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
+try {
+    Object.defineProperty(Object.prototype, 'forEach', { value:  forEachIndexed}); // Not enumerable, so we don't mess up forin loops that don't check hasOwnProperty();
+} catch (ex) {
+    // IE9 refuses defineProperty on Object.prototype; fall back to a plain assignment.
+    Object.prototype.forEach = forEachIndexed;
+}
 
 //HTMLCollection.prototype.forEach = forForEach;
 
-if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
+if (!Array.prototype.find) {
+    Array.prototype.find = find;
+    if (nodeListPrototype) nodeListPrototype.find = find;
+}
 
 var find = function(callback) {
     for (var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
