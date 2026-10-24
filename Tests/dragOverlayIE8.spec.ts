@@ -11,6 +11,12 @@ import { resolve } from 'path';
 test.use({ headless: true, channel: 'chrome' });
 
 test('indexIE8 keeps the drag overlay while dragging without MouseEvent.buttons', async ({ page }) => {
+	// Make the page take the legacy (IE9) code path: no pointer events at all.
+	await page.addInitScript(() => {
+		try { delete (window as any).PointerEvent; } catch {}
+		try { delete (window as any).MSPointerEvent; } catch {}
+	});
+
 	await page.goto(pathToFileURL(resolve('indexIE8.html')).href);
 
 	await page.waitForFunction(() =>
