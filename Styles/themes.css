@@ -569,8 +569,8 @@ button {
 	color: black;
 }
 
-.modern black {
-	stroke: black;
+.modern svg {
+	fill: black;
 }
 
 .modern .window content,
