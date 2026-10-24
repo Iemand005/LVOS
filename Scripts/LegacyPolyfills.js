@@ -55,9 +55,9 @@ if (typeof Object.assign != "function") Object.assign = function (target) {
  * @param {(value: T, key: number, array: T[]) => void} callbackfn 
  * @param {any} thisArg
  */
-function forEachIndexed(callbackfn, thisArg) {
+var forEachIndexed = function(callbackfn, thisArg) {
     for (var i = 0; i < this.length; ++i) callbackfn.call(thisArg, this[i], i, this);
-}
+};
 
 
 // Deze is niet volledig, ik moet nog de thisArguments toevoegen, wat ook afhangt van de stricte modus. Ik gebruik hier wel hasOwnProperty om te verifiëren dat we geen sleutels binnen krijgen die niet in ons object bestaan (gebeurt normaal niet).
@@ -90,7 +90,7 @@ if (!document.querySelector) document.querySelector = function(selector) {
     return document.querySelectorAll(selector)[0];
 }
 
-function getElementsByClassName() {
+var getElementsByClassName = function() {
     return function(className) {
         var results = [];
         var all = this.getElementsByTagName('*');
@@ -100,7 +100,7 @@ function getElementsByClassName() {
         }
         return results;
     };
-}
+};
 
   if (typeof document != 'undefined' && !document.getElementsByClassName) {
     document.getElementsByClassName = getElementsByClassName();
@@ -207,9 +207,9 @@ Object.defineProperty(Object.prototype, 'forEach', { value:  forEachIndexed}); /
 
 if (!Array.prototype.find) NodeList.prototype.find = Array.prototype.find = find;
 
-function find(callback) {
+var find = function(callback) {
     for (var index in this) if (this.hasOwnProperty(index) && callback(this[index], index, this)) return this[index];
-}
+};
 
 if (typeof Document != 'undefined' && Document.prototype && !Document.prototype.elementsFromPoint) {
     Document.prototype.elementsFromPoint = Document.prototype.msElementsFromPoint || function(x, y) {
@@ -320,7 +320,7 @@ if (typeof Array.from != "function") {
   var FULFILLED = 1;
   var REJECTED = 2;
 
-  function ES3Promise(executor) {
+  var ES3Promise = function(executor) {
     if (typeof executor != 'function') {
       throw new TypeError('Promise resolver is geen functie');
     }
@@ -330,7 +330,7 @@ if (typeof Array.from != "function") {
     self._value = undefined;
     self._deferreds = [];
 
-    function resolve(newValue) {
+    var resolve = function(newValue) {
       try {
         if (newValue && (typeof newValue == 'object' || typeof newValue == 'function')) {
           var then = newValue.then;
@@ -347,14 +347,14 @@ if (typeof Array.from != "function") {
       } catch (e) {
         reject(e);
       }
-    }
+    };
 
-    function reject(reason) {
+    var reject = function(reason) {
       if (self._state !== PENDING) return;
       self._state = REJECTED;
       self._value = reason;
       self._handleDeferreds();
-    }
+    };
 
     try {
       executor(resolve, reject);
@@ -427,7 +427,7 @@ if (typeof Array.from != "function") {
 
     if (window.addEventListener) return;
 
-    function patch(target) {
+    var patch = function(target) {
         if (!target) return;
 
         if (!target._ieListeners) {
@@ -506,7 +506,7 @@ if (typeof Array.from != "function") {
         return; // already supported
     }
 
-    function getRect(el) {
+    var getRect = function(el) {
         var x = 0;
         var y = 0;
         var w = el.offsetWidth || 0;
@@ -532,7 +532,7 @@ if (typeof Array.from != "function") {
             width: w,
             height: h
         };
-    }
+    };
 
     Element.prototype.getBoundingClientRect = function () {
         return getRect(this);
@@ -550,10 +550,10 @@ var STORAGE_FILE = "app_storage.json";
 (function() {
 	try {
 
-function ActiveXStorage() {
+var ActiveXStorage = function() {
     if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
     this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
-}
+};
 
 /** @param {string} key @param {*} value */
 ActiveXStorage.prototype.setItem = function (key, value) {
@@ -588,11 +588,11 @@ ActiveXStorage.prototype.getItem = function (key) {
 (function() {
 	if (typeof window.CSS !== "undefined") return;
 
-	function CSS() {
+	var CSS = function() {
 
-	}
+	};
 
-	CSS.prototype.supports = function() { return false; }
+	CSS.prototype.supports = function() { return false; };
 
 	// ScrollTabs.js calls the *static* CSS.supports(...), not an instance method.
 	CSS.supports = function() { return false; };
@@ -608,18 +608,18 @@ ActiveXStorage.prototype.getItem = function (key) {
 	var counter = 0;
 	var KEY_PREFIX = "__lvbc__";
 
-	function clone(value) {
+	var clone = function(value) {
 		if (value === null || typeof value !== "object") return value;
 		try { return JSON.parse(JSON.stringify(value)); } catch (ex) { return null; }
-	}
+	};
 
-	function deliver(channel, data) {
+	var deliver = function(channel, data) {
 		if (channel.closed || typeof channel.onmessage !== "function") return;
 		channel.onmessage({ type: "message", data: clone(data), target: channel });
-	}
+	};
 
 	/** @param {string} name */
-	function BroadcastChannel(name) {
+	var BroadcastChannel = function(name) {
 		this.name = String(name);
 		this.onmessage = null;
 		this.closed = false;
@@ -649,7 +649,7 @@ ActiveXStorage.prototype.getItem = function (key) {
 		if (index > -1) instances.splice(index, 1);
 	};
 
-	function onStorageEvent(ev) {
+	var onStorageEvent = function(ev) {
 		if (!ev || !ev.key || ev.key.indexOf(KEY_PREFIX) !== 0 || ev.newValue == null) return;
 		var name = ev.key.slice(KEY_PREFIX.length);
 		var payload;
@@ -669,9 +669,9 @@ ActiveXStorage.prototype.getItem = function (key) {
 (function() {
 	if (typeof window.Map !== "undefined") return;
 
-	function Map() {
+	var Map = function() {
 		this.object = {};
-	}
+	};
 
 	Map.prototype.get = function(key) { return this.object[key]; };
 	Map.prototype.set = function(key, value) { return this.object[key] = value; };
