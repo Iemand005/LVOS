@@ -309,7 +309,9 @@ article, .article {
 }
 
 @supports (display: flex) {
-	position: relative;	
+	article, .article {
+		position: relative;
+	}
 }
 
 .window header h1 {
