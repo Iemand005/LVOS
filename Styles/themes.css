@@ -569,12 +569,12 @@ button {
 
 .modern .window content,
 .modern button {
-	color: white;
-	background-color: #202020;
-	background: linear-gradient(358deg, #161616, #333232);
+	color: black;
+	background-color: #dddddd;
+	/* background: linear-gradient(358deg, #161616, #333232); */
 	border: 0px solid black !important;
 	background: linear-gradient(to bottom, #eeeeee, #cccccc);
-	-pie-background: linear-gradient(358deg, #161616, #333232);
+	/* -pie-background: linear-gradient(358deg, #161616, #333232); */
 	/* behavior: url(/Scripts/PIE/PIE.htc); */
 }
 
