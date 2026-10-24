@@ -569,6 +569,10 @@ button {
 	color: black;
 }
 
+.modern black {
+	stroke: black;
+}
+
 .modern .window content,
 .modern button {
 	background-color: #dddddd;
