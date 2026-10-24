@@ -141,6 +141,6 @@ declare global {
 	}
 
 	interface ChildNode {
-		remove()?: void;
+		remove?(): void;
 	}
 }
