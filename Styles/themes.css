@@ -564,9 +564,9 @@ button {
 .modern button {
 	color: white;
 	/* background-color: #202020; */
-	behavior: url(https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE.htc);
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
+	behavior: url(file:///C:/Users\Lasse\Documents\Projects\PIE\build\PIE.htc);
 }
 
 .modern button:active {
