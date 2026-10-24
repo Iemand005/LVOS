@@ -63,6 +63,10 @@ html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;
 }
 
+body {
+	behavior: url(http://css3pie.com/pie/PIE.htc);
+}
+
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
