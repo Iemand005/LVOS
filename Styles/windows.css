@@ -326,6 +326,9 @@ article, .article {
 		display: table-cell;
 		width: 100%;
 	}
+	.window-buttons {
+		display: table-cell;
+	}
 }
 
 .window header h1 {
