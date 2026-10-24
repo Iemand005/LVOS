@@ -28,7 +28,13 @@ test('indexIE8 keeps the drag overlay while dragging without MouseEvent.buttons'
 		const dialog = manager.windows['console'];
 		if (!dialog) return { error: 'no console dialog' };
 
-		const overlay = () => document.body.querySelector('.drag-overlay');
+		const overlay = () => {
+			for (let i = 0; i < document.body.children.length; i++) {
+				const child = document.body.children[i];
+				if (child.className === 'drag-overlay' || child.className.split(' ').indexOf('drag-overlay') !== -1) return child;
+			}
+			return null;
+		};
 
 		const event = document.createEvent('MouseEvents');
 		event.initMouseEvent('mousedown', true, true, window, 1, 0, 0, 120, 40, false, false, false, false, 0, null);
