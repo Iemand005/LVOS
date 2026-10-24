@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CSS3 PIE Gradient Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+
+        /* De knop styling */
+        .pie-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: bold;
+            border: 1px solid #225588;
+            cursor: pointer;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+
+            /* 1. Moderne Gradients & Ronde Hoeken */
+            border-radius: 8px;
+            background: #4488dd; /* Fallback voor antieke browsers zonder JS/PIE */
+            background: linear-gradient(to bottom, #4488dd, #1144aa);
+
+            /* 2. IE-Specifieke fixes vereist voor PIE layout engine */
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+
+    <!-- Laad PIE.js ALLEEN in Internet Explorer 9 en lager -->
+    <!--[if lt IE 10]>
+    <script type="text/javascript" src="PIE.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <h1>CSS3 PIE Gradient Succes!</h1>
+    <p>In moderne browsers zie je een CSS3 linear-gradient. In IE8 of IE9 zorgt PIE.js voor de magische rendering.</p>
+
+    <!-- De doelknop -->
+    <button class="pie-button" id="myButton">IE-Veilige Knop</button>
+
+    <!-- Script om PIE te activeren zodra de pagina geladen is -->
+    <script type="text/javascript">
+        window.onload = function() {
+            // Controleer of PIE aanwezig is (dit is alleen waar in IE < 10)
+            if (window.PIE) {
+                var button = document.getElementById('myButton');
+                // Koppel PIE aan de knop om de gradient en border-radius te berekenen
+                PIE.attach(button);
+            }
+        };
+    </script>
+
+</body>
+</html>
