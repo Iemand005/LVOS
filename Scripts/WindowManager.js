@@ -2160,12 +2160,7 @@ ClickOffset._overlay.style.display = "block";
 /** @param {MouseEvent} [ev] */
 ClickOffset.disableOverlay = function (ev) {
 	if (ev) {
-		// Keep the overlay for as long as the button is held. IE9 has no
-		// MouseEvent.buttons, so fall back to the old button state properties.
-		if (ev.buttons || ev.which || ev.button) return;
-		// IE9 can report none of them on mouseout during a drag; the drag itself
-		// still owns the overlay until disableDialogDrag releases it.
-		if (window.windowManager && window.windowManager.isDragging) return;
+		if ((ev.buttons || ev.which || ev.button) || (window.windowManager && window.windowManager.isDragging)) return;
 	}
 	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
 	else if (ClickOffset._overlay.parentNode) ClickOffset._overlay.parentNode.removeChild(ClickOffset._overlay);
