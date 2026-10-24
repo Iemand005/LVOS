@@ -509,13 +509,9 @@ article > *,
 .window > table.content > tbody > tr > td.article {
 	height: 100%;
 	padding: 0;
-	position: relative;
 }
 
-.window > table.content > tbody > tr > td.article iframe {
-	position: absolute;
-	left: 0;
-	top: 0;
+.window > table.content > tbody > tr > td.article > iframe {
 	width: 100%;
 	height: 100%;
 	display: block;
