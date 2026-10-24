@@ -64,7 +64,7 @@ html:has(body.slow-animations)::view-transition-group(*) {
 }
 
 body {
-	behavior: url(http://css3pie.com/pie/PIE.htc);
+	/* behavior: url(http://css3pie.com/pie/PIE.htc); */
 }
 
 .window {
