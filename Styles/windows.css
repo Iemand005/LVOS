@@ -488,6 +488,25 @@ article > *,
 	overflow: auto;
 }
 
+/* HTML4/table windows (indexIE8.html). A table is not a flex container, and a
+   body cell that is 100% of the table height would push the header height on top
+   of it. Let the table fill the window and let the body row take the remainder. */
+.window > table.content {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+	height: 100%;
+}
+
+.window > table.content > tbody > tr > td.header {
+	height: 1px;
+}
+
+.window > table.content > tbody > tr > td.article {
+	height: auto;
+}
+
 .drag-overlay {
 	position: absolute;
 	top: 0;
