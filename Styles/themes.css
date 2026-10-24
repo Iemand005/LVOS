@@ -573,7 +573,7 @@ button {
 	background: linear-gradient(to bottom, #eeeeee, #cccccc);
 	-pie-background: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent) 0 0 / 50px #0ae;
 	behavior: url(/Scripts/PIE/PIE.htc);
-	-ms-behavior: url(http://css3pie.com/pie/PIE.htc);
+	-ms-behavior: url(/Scripts/PIE/PIE.htc);
 }
 
 .modern button:active {
