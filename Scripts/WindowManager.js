@@ -2150,7 +2150,7 @@ function ClickOffset() {
 	this.lastPosition = new Vector;
 	this.difference = new Vector;
 
-	/** @type {((ev:PointerEvent|MouseEvent)=>void) | null} */
+	/** @type {DragHandler | null} */
 	this.dragHandler = null;
 }
 
