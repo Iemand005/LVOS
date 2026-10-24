@@ -54,3 +54,10 @@ function ready(fn) {
 	window.addEventListener("DOMContentLoaded", fn, false);
 }
 ready(init);
+
+
+if (document.documentMode === 9) {
+    var script = document.createElement("script");
+    script.src = "./Scripts/Animation.js";
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
