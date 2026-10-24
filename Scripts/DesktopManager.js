@@ -324,7 +324,7 @@ DesktopManager.prototype.init = function() {
 	// var oh flag maybe
 	var multiDesktop = "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
 
-    this.scrollTabs = "TabScroller" in window ? new TabScroller(document.querySelector("main")) : null;
+    this.scrollTabs = multiDesktop ? new TabScroller(document.querySelector("main")) : null;
 
     // this.scrollTabs.addTab(document.getElementById("desktop"));
     this.addDesktop("Main", document.getElementById("window-section") || undefined);
