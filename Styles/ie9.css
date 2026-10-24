@@ -1,0 +1,13 @@
+.window header {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+.window header h1 {
+	line-height: 300px; /* Match header height! */
+	display: table-cell;
+	width: 100%;
+}
+.window-buttons {
+	display: table-cell;
+}

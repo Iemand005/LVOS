@@ -314,22 +314,6 @@ article, .article {
 	}
 }
 
-/* IE9 fallback: flex not supported, keep buttons on same line */
-@supports not (flex-direction: column) {
-	.window header {
-		display: table;
-		width: 100%;
-		table-layout: fixed;
-	}
-	.window header h1 {
-		line-height: 300px; /* Match header height! */
-		display: table-cell;
-		width: 100%;
-	}
-	.window-buttons {
-		display: table-cell;
-	}
-}
 
 .window header h1 {
 	line-height: 30px; /* Match header height! */
