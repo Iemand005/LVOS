@@ -512,7 +512,12 @@ article > *,
 
 /* IE9 cannot make an iframe fill a td with height:auto; put it absolutely
    inside the relatively positioned body cell. */
-.window > table.content > tbody > tr > td.article > iframe {
+.window > table.content > tbody > tr > td.article {
+	position: relative;
+	height: 100%;
+}
+
+.window > table.content > tbody > tr > td.article iframe {
 	position: absolute;
 	left: 0;
 	top: 0;
