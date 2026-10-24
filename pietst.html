@@ -10,30 +10,49 @@
             background-color: #f0f0f0;
         }
 
-        /* De knop styling */
         .pie-button {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 16px;
-            color: #ffffff;
-            font-weight: bold;
-            border: 1px solid #225588;
-            cursor: pointer;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+			display: inline-block;
+			padding: 15px 30px;
+			font-size: 16px;
+			color: #ffffff;
+			font-weight: bold;
+			border: 1px solid #225588;
+			cursor: pointer;
 
-            /* 1. Moderne Gradients & Ronde Hoeken */
-            border-radius: 8px;
-            background: #4488dd; /* Fallback voor antieke browsers zonder JS/PIE */
-            background: linear-gradient(to bottom, #4488dd, #1144aa);
+			/* 1. FIX: Dwing layout en stacking af */
+			position: relative;
+			z-index: 1; /* Zorgt dat de tekst vòòr de PIE-gradient blijft */
+			zoom: 1;    /* Activeert hasLayout */
 
-            /* 2. IE-Specifieke fixes vereist voor PIE layout engine */
-            position: relative;
-            z-index: 1;
-        }
+			border-radius: 8px;
+
+			/* 2. FIX: IE9 gooit 'linear-gradient' weg, dus we moeten een egale kleur 
+			als basis opgeven, maar we maken de normale background transparant voor IE 
+			zodat de PIE-laag erdoorheen kan schijnen */
+			background-color: transparent !important; 
+			
+			/* 3. CRUCIALAVOOR IE9 EMULATIE: Gebruik de specifieke PIE prefix */
+			-pie-background: linear-gradient(#4488dd, #1144aa);
+			
+			/* Moderne browsers (wordt genegeerd door IE9) */
+			background: linear-gradient(to bottom, #4488dd, #1144aa);
+
+			behavior: url(https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE.htc);
+		}
+
+		/* 4. FIX: Soms tekent PIE de achtergrond met een z-index die buiten de knop valt. 
+		Met deze CSS-selector pakken we het door PIE gegenereerde canvas aan */
+		css3-container {
+			position: absolute;
+			z-index: -1 !important; /* Dwing de gradient achter de knoptekst */
+			top: 0;
+			left: 0;
+		}
+
     </style>
 
     <!-- Laad PIE.js ALLEEN in Internet Explorer 9 en lager -->
-    <!--[if lt IE 10]>
+    <!--[if lt IE 8]>
     <script type="text/javascript" src="https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE_IE9.js"></script>
     <![endif]-->
 </head>
@@ -51,25 +70,25 @@
 
     <!-- Script om PIE te activeren zodra de pagina geladen is -->
     <script type="text/javascript">
-        window.onload = function() {
-            var dbg = document.getElementById('debug');
+        // window.onload = function() {
+        //     var dbg = document.getElementById('debug');
             
-            // Controleer of de emulatiemodus actief is
-            dbg.innerHTML = "Actieve IE Document Mode: IE" + (document.documentMode || "Modern") + "<br>";
+        //     // Controleer of de emulatiemodus actief is
+        //     dbg.innerHTML = "Actieve IE Document Mode: IE" + (document.documentMode || "Modern") + "<br>";
             
-            if (window.PIE) {
-                dbg.innerHTML += "Status: PIE.js gedetecteerd!<br>";
-                try {
-                    var el = document.getElementById('myButton');
-                    PIE.attach(el);
-                    dbg.innerHTML += "Status: PIE.attach() succesvol gekoppeld.";
-                } catch(e) {
-                    dbg.innerHTML += "Crash: " + e.message;
-                }
-            } else {
-                dbg.innerHTML += "<span style='color:red;'>Status: window.PIE is undefined. Controleer of PIE.js wel in dezelfde map staat als dit bestand op je server!</span>";
-            }
-        };
+        //     if (window.PIE) {
+        //         dbg.innerHTML += "Status: PIE.js gedetecteerd!<br>";
+        //         try {
+        //             var el = document.getElementById('myButton');
+        //             PIE.attach(el);
+        //             dbg.innerHTML += "Status: PIE.attach() succesvol gekoppeld.";
+        //         } catch(e) {
+        //             dbg.innerHTML += "Crash: " + e.message;
+        //         }
+        //     } else {
+        //         dbg.innerHTML += "<span style='color:red;'>Status: window.PIE is undefined. Controleer of PIE.js wel in dezelfde map staat als dit bestand op je server!</span>";
+        //     }
+        // };
     </script>
 
 </body>
