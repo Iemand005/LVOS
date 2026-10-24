@@ -3,10 +3,6 @@
 
 'use strict';
 
-var STORAGE_FILE = "app_storage.json";
-
-// var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
 /**
  * @param {string} text
  * @returns {string}
@@ -18,57 +14,8 @@ function formatCamelCase(text) {
 }
 
 
-var supportsActiveX = typeof ActiveXObject != "undefined";
-
-function ActiveXStorage() {
-	if (!window.ActiveXObject) throw new Error("ActiveX not supported!");
-	this.fso = new window.ActiveXObject("Scripting.FileSystemObject");
-}
-/**
- * @param {string} key
- * @param {*} value
- */
-ActiveXStorage.prototype.setItem = function(key, value) {
-	var data = {};
-	
-	if (this.fso.FileExists(STORAGE_FILE)) {
-		try {
-			var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
-			data = JSON.parse(readFile.ReadAll());
-			readFile.Close();
-		} catch(e) { data = {}; }
-	}
-	
-	data[key] = value;
-	
-	var writeFile = this.fso.OpenTextFile(STORAGE_FILE, 2, true);
-	writeFile.Write(JSON.stringify(data));
-	writeFile.Close();
-};
-	
-ActiveXStorage.prototype.getItem = function(key) {
-	if (!this.fso.FileExists(STORAGE_FILE)) return null;
-	
-	try {
-		var readFile = this.fso.OpenTextFile(STORAGE_FILE, 1);
-		var data = JSON.parse(readFile.ReadAll());
-		readFile.Close();
-		return data[key] !== undefined ? data[key] : null;
-	} catch(e) {
-		return null;
-	}
-};
-
-// if (!window.localStorage) {
-	// var activeStorage = new ActiveXStorage();
-
-	// window.localStorage = activeStorage;
-	
-	// activeStorage.setItem("hi", 69);
-// }
-
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-	this.storage = typeof localStorage != "undefined" && localStorage || supportsActiveX && new ActiveXStorage();
+	this.storage = typeof localStorage != "undefined" && localStorage || (typeof ActiveXStorage != "undefined" && new ActiveXStorage());
 }
 
 SettingsHandler.prototype.get = function (key) {
@@ -109,9 +56,6 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
 		var flag = flags[flagId];
-		/** @type {HTMLElement | null} */
-		var settingElement = document.createElement("label");
-
 		var flagValue = flags[flagId];
 
 		switch (typeof flag) {
@@ -141,8 +85,6 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
 				break;
 		}
-		if (!settingElement) return;
-		flagsElement.appendChild(settingElement);
 	}
 	var settingsElement = document.getElementById("settings");
 	if (settingsElement) settingsElement.appendChild(flagsElement);
@@ -227,18 +169,6 @@ function toggleSquircles(enabled) {
 	settings.set("squircles", enabled);
 }
 
-function toggleCharmsEvent(ev) {
-	// if (!document.elementFromPoint) return;
-	// var clickedElement = document.elementFromPoint(ev.clientX, ev.clientY);
-	// if (!isCharmsOpen() || clickedElement === charmsButton) return;
-	//
-	// if(!(clickedElement === elements.charms || elements.charms.contains(clickedElement))) {
-	// 	//if(clickedElement == charmsButton || clickedElement == charmsbutton2) toggleCharms();
-	// //else
-	// 	toggleCharms(false);
-	// }
-}
-
 /** @param {number} size */
 function setBorderSize(size) {
 	settings.set("borderSize", size);
@@ -296,8 +226,6 @@ function loadSettings() {
 	restoreWallpaperSetting();
 	setColor(settings.get("color"));
 	setAccentColor(settings.get("accentColor"));
-	// getBorderSize(settings.get("borderSize"));
-	updateBlurState();
 }
 
 /** Show the "Select image" button only while the image option is active. */
@@ -421,28 +349,11 @@ function loadThemeSetting() {
 	}
 }
 
-function updateBlurState() {
-	// var a = settings.get("blur");
-	// toggleBlur(JSON.parse(a));
-}
-
-/** @param {boolean} enabled */
-function toggleBlur(enabled){ // Does not work on Chrome!
-	if (enabled == null) document.body.classList.toggle("blur");
-	else document.body.classList.toggle("blur", enabled);
-	// settings.set("blur", enabled);
-}
-
 /** @type {{[key:string]: HTMLElement | null}} */
 var elements = {
-	desktop: null,
-	charms: null,
 	color: null,
 	accent: null,
-	resetColor: null,
-	resetAccent: null,
 	border: null,
-	dockAppList: null,
 	theme: null,
 	colorDebug: null,
 	squircles: null,
@@ -487,14 +398,9 @@ function installAppFromUrl(useProxy) {
 }
 
 function loadElements() {
-	elements.desktop = document.getElementById("desktop");
-	elements.charms = document.getElementById("charms");
 	elements.color = document.getElementById("color");
 	elements.accent = document.getElementById("accent");
-	elements.resetColor = document.getElementById("resetaccent");
-	elements.resetAccent = document.getElementById("resetaccent");
 	elements.border = document.getElementById("border");
-	elements.dockAppList = document.getElementById("dockapplist");
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
 	elements.squircles = document.getElementById("squircles");
@@ -511,15 +417,8 @@ function loadElements() {
 	
 	charmsButton.textContent = "Settings";
 
-	window.addEventListener("mousedown", toggleCharmsEvent, false);
-
 	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
 
-	// // bodyCrawler.settings ? bodyCrawler.settings.onsubmit = function (ev) { ev.preventDefault(); };
-	// // bodyCrawler.getth.onchange = function () { setThemeOld(this.selectedIndex); };
-	// reflectionToggle.onchange = function (ev) { toggleReflections(ev.target.checked); }
-	// blurToggle.onchange = function (ev) { toggleBlur(ev.target.checked); }
-	// elements.resetAccent.onclick = setAccentColor.bind(this, "");
 	if (elements.border) elements.border.oninput = elements.border.onchange = function () { setBorderSize(this.value); };
 	if (elements.accent) elements.accent.oninput = elements.accent.onchange = function () { setAccentColor(this.value); };
 	if (elements.color) elements.color.oninput = elements.color.onchange = function () { setColor(this.value); };
@@ -547,13 +446,6 @@ addEventListener("load", function() {
 	loadElements();
 	loadSettings();
 }, false);
-
-var metroAppList = document.getElementById("metroapplist");
-// var blurToggle = document.getElementById("blurtoggle");
-// var reflectionToggle = document.getElementById("reflectiontoggle");
-
-
-
 
 /**
  * @param {*} object 

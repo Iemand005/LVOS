@@ -295,6 +295,30 @@ article, .article {
 	flex-direction: column;
 }
 
+/* IE9 compatible version */
+article, .article {
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	position: absolute;
+	top: 30px; /* Match heade height! */
+	left: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+@supports (display: flex) {
+	article, .article {
+		position: unset;
+	}
+}
+
+
+.window header h1 {
+	line-height: 30px; /* Match header height! */
+}
+
 .window > div {
 	position: absolute;
 	pointer-events: auto;
@@ -397,6 +421,9 @@ content.animating,
 	border: none !important;
 	border-radius: 0 !important;
 	z-index: 9999 !important;
+
+	width: 100% !important;
+	height: 100% !important;
 }
 
 body:not(.compositor-animations) .window.maximized:not(.scaled-max) {
@@ -483,6 +510,38 @@ article > *,
 	width: 100%;
 	height: 100%;
 	overflow: auto;
+}
+
+/* HTML4/table windows (indexIE8.html). */
+.window > table.content {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+	height: 100%;
+}
+
+.window > table.content > tbody {
+	height: 100%;
+}
+
+/* .window > table.content > tbody > tr > td.header {
+	height: 1px;
+	padding: 0;
+} */
+
+.window > table.content > tbody > tr > td.article {
+	height: 100%;
+	padding: 0;
+}
+
+.window > table.content > tbody > tr > td.article > iframe {
+	width: 100%;
+	height: 100%;
+	display: block;
+	border: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .drag-overlay {

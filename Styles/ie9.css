@@ -1,0 +1,13 @@
+
+.window header h1 {
+	line-height: 30px; /* Match header height! */
+}
+.window-buttons {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+body {
+	overflow: hidden;
+}

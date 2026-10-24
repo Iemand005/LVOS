@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>LVOS</title>
+    <title>VulpOS</title>
     <link rel="stylesheet" href="./Styles/windows.css">
     <link rel="stylesheet" href="./Styles/ProvisionedApps.css">
     <link rel="stylesheet" href="./Styles/desktop.css">
@@ -28,21 +28,27 @@
 
 
     <script src="./Scripts/physics.js" defer></script>
+    <script src="./Scripts/Animation.js" defer></script>
     <script src="./Scripts/Messenger.js" defer></script>
-    <script src="./Scripts/CustomPrototypes.js" defer></script>
+    <script src="./Scripts/LegacyPolyfills.js" defer></script>
     <script src="./Scripts/Console.js" defer></script>
-    <script src="./Scripts/Reflector.js" defer></script>
     <script src="./Scripts/DesktopManager.js" defer></script>
     <script src="./Scripts/AppRegistry.js"></script>
     <script src="./Scripts/WindowManager.js" defer></script>
     <script src="./Scripts/Settings.js" defer></script>
     <script src="./Scripts/ProvisionedApps.js" defer></script>
     <script src="./Scripts/FileSystem.js" defer></script>
-    <script src="./Scripts/Animation.js" defer></script>
     <script src="./Scripts/index.js" defer></script>
+    <script>
+		if (typeof windowManager !== "undefined") {
+			window.addEventListener("load", function() {
+				if (typeof windowManager.initializeDialogs === "function") windowManager.initializeDialogs();
+			}, false);
+		}
+	</script>
 
     <!-- Discord embed info -->
-    <meta property="og:site_name" content="LVOS" />
+    <meta property="og:site_name" content="VulpOS" />
     <meta property="og:title" content="Virtual Operating System" />
     <meta property="og:description" content="Little Web OS with a couple apps to play around on." />
     <!-- <meta property="og:image" content="https://yourwebsite.com" /> -->

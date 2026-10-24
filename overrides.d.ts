@@ -32,7 +32,19 @@ interface CustomElementsByIs {
 	}
 }
 
+
+type CustomElementsByIds = typeof customs;
+
+type CustomElementNames = keyof CustomElementsByIds;
+type CustomTag = CustomElementsByIds[CustomElementNames]["extends"];
+type ClassOf<N extends CustomElementNames> = CustomElementsByIds[N]["constructor"];
+type CustomElementName<T extends CustomTag> = { [K in CustomElementNames]: CustomElementsByIds[K]["extends"] extends T ? K : never }[CustomElementNames];
+
 declare global {
+
+	type CustomElementMap = {[name: string]: { constructor: CustomElementConstructor, extends: keyof HTMLElementTagNameMap }};
+
+	
 	interface Window {
 		MSInputMethodContext: unknown | undefined;
 		documentMode:  | undefined;
@@ -75,7 +87,11 @@ declare global {
 	interface Document {
 		documentMode?: number;
 
-		createElement<K extends keyof CustomElementsByIs & keyof HTMLElementTagNameMap, I extends keyof CustomElementsByIs[K]>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | CustomElementsByIs[K][I];
+		createElement<K extends CustomTag, I extends CustomElementName<K>>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | InstanceType<ClassOf<I>>;
+	}
+
+	interface Element {
+		setAttribute(qualifiedName: "is", value: CustomElementNames): void;
 	}
 
 	interface Navigator {
@@ -118,5 +134,13 @@ declare global {
 
 	interface CSSStyleDeclaration {
 		inset?: string;
+	}
+
+	interface CSSStyleProperties {
+		msTransform?: string;
+	}
+
+	interface ChildNode {
+		remove?(): void;
 	}
 }

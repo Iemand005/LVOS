@@ -1,8 +1,12 @@
 # VulpOS
 
+![image](icon-192.png)
+
 VulpOS is a web-based operating system and desktop environment built entirely with web technologies.
 
 It runs as a desktop inside the browser, with its own window manager, applications, games, system UI and mobile interface. It is designed to be lightweight and fast while still taking advantage of modern browser features when they are available.
+
+This project is the ultimate example of what you can do when taking progressive enhancement seriously.
 
 One of the unusual parts of VulpOS is its browser support. The project is designed to work across several generations of the web, with versions targeting modern browsers as well as Internet Explorer, Netscape and Opera Presto.
 

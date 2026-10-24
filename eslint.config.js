@@ -21,13 +21,13 @@ export default defineConfig(
 				ClickOffset: "writable",
 				lerp: "writable",
 				windowManager: "readonly",
-				appRegistry: "readonly",
-				toggleReflections: "writable",
+				appManager: "readonly",
 				setTheme: "writable",
 				WindowManager: "readonly",
 				DesktopManager: "readonly",
 				Dialog: "readonly",
 				Modern: "readonly",
+				flags: "readonly"
 			}
 		},
 
@@ -40,6 +40,7 @@ export default defineConfig(
 			...jsdoc.configs["flat/recommended"].rules,
 			"comma-dangle": ["error", "never"],
 			"no-var": "off",
+			// ODO: pls block let at least
 			"no-sequences": "off",
 			"comma-spacing": "warn",
 			"no-trailing-spaces": "warn",
@@ -55,9 +56,9 @@ export default defineConfig(
 			"jsdoc/require-returns": "off",
 			"jsdoc/no-undefined-types": "off",
 
-			"@typescript-eslint/no-unused-vars": ["error", { 
-				"properties": "all" 
-			}],
+			// "@typescript-eslint/no-unused-vars": ["error", { 
+			// 	"properties": "all" 
+			// }],
 
 			"no-restricted-syntax": [
 				"error",
@@ -77,17 +78,13 @@ export default defineConfig(
 		}
 	},
 
-	// ES6 files: allow arrow functions
+	// ES6 files: allow arrow functions and optional chaining
 	{
-		files: ["**/WebComponents.js"],
+		files: ["Scripts/WebComponents.js"],
 
 		rules: {
 			"no-restricted-syntax": [
 				"error",
-				{
-					selector: "ChainExpression",
-					message: "Optional chaining (?.) is not allowed."
-				},
 				{
 					selector: "CallExpression[callee.property.name='addEventListener'][arguments.length=2]",
 					message: "addEventListener requires a third options parameter for Netscape."

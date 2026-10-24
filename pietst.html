@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CSS3 PIE Gradient Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+
+        .pie-button {
+			display: inline-block;
+			padding: 15px 30px;
+			font-size: 16px;
+			color: #ffffff;
+			font-weight: bold;
+			border: 1px solid #225588;
+			cursor: pointer;
+
+			border-radius: 8px;
+
+			
+			/* 3. CRUCIALAVOOR IE9 EMULATIE: Gebruik de specifieke PIE prefix */
+			-pie-background: linear-gradient(#4488dd, #1144aa);
+			
+
+			/* behavior: url(https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE.htc); */
+			/* behavior: url(file:///C:/Users/Lasse/Documents/Projects/PIE/build/PIE.htc); */
+		}
+
+
+    </style>
+
+    <!-- Laad PIE.js ALLEEN in Internet Explorer 9 en lager -->
+    <!--[if lt IE 10]>
+    <script type="text/javascript" src="https://iemand005.github.io/PIE/files/builds/2.0beta2-SNAPSHOT/PIE_IE9.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <h1>CSS3 PIE Gradient Succes!</h1>
+    <p>In moderne browsers zie je een CSS3 linear-gradient. In IE8 of IE9 zorgt PIE.js voor de magische rendering.</p>
+
+    <!-- De doelknop -->
+    <button class="pie-button" id="myButton">IE-Veilige Knop</button>
+
+	<div id="debug" style="margin-top:20px; padding:10px; background:#fff; border:1px solid #ccc; font-family:monospace;">
+        Foutopsporing laden...
+    </div>
+
+    <!-- Script om PIE te activeren zodra de pagina geladen is -->
+    <script type="text/javascript">
+        window.onload = function() {
+            var dbg = document.getElementById('debug');
+            
+            // Controleer of de emulatiemodus actief is
+            dbg.innerHTML = "Actieve IE Document Mode: IE" + (document.documentMode || "Modern") + "<br>";
+            
+            if (window.PIE) {
+                dbg.innerHTML += "Status: PIE.js gedetecteerd!<br>";
+                try {
+                    var el = document.getElementById('myButton');
+                    PIE.attach(el);
+                    dbg.innerHTML += "Status: PIE.attach() succesvol gekoppeld.";
+                } catch(e) {
+                    dbg.innerHTML += "Crash: " + e.message;
+                }
+            } else {
+                dbg.innerHTML += "<span style='color:red;'>Status: window.PIE is undefined. Controleer of PIE.js wel in dezelfde map staat als dit bestand op je server!</span>";
+            }
+        };
+    </script>
+
+</body>
+</html>

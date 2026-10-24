@@ -27,6 +27,8 @@ interface Application {
 	borderless?: boolean;
 	launch?: boolean;
 	exists?: boolean;
+	/** When true, opening the app spawns an extra window instance instead of reusing the open one. */
+	multiple?: boolean;
 }
 
 interface DialogState {
@@ -116,7 +118,7 @@ interface WindowManager {
     _windows: DialogMap;
 	windows: DialogMap;
 	installedApps: Application[];
-	isMicaEnabled: boolean;
+	extensions: Extension[];
 }
 
 interface Dialog {
@@ -144,7 +146,6 @@ interface Dialog {
 
 	maximized: boolean;
 	killable: boolean;
-	mica: boolean
 	isOpen: boolean;
 
 	// The box a tiled window is drawn at, in window-area coordinates, recorded so a
@@ -159,7 +160,6 @@ interface Dialog {
 	content: HTMLElement?;
 	frame: HTMLIFrameElement?;
 	titleBar: HTMLElement?;
-	micaElement: HTMLElement?;
 
 	position: Vector;
 
@@ -207,3 +207,9 @@ interface Transform {
 }
 
 type TransitionEndCallback = ((name:string)=>boolean) | string;
+
+type CustomElementList = [string, CustomElementConstructor, keyof HTMLElementTagNameMap][];
+
+type DigitGetter = (value: number, pos: number) => number;
+
+type DragHandler = (ev: PointerEvent | MouseEvent) => void;

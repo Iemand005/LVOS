@@ -702,29 +702,12 @@ function openCanvasPip() {
 		let head = doc.head;
 		if (!head) { head = doc.createElement('head'); html.appendChild(head); }
 
-		const styleEl = doc.createElement('style');
-		styleEl.textContent =
-			'html{-webkit-text-size-adjust:none}' +
-			'html,body{width:100%!important;height:100%!important;' +
-			'margin:0!important;padding:0!important;overflow:hidden!important;' +
-			'position:relative!important;background:#000!important}';
-		head.appendChild(styleEl);
-
-		html.style.width = '100%';
-		html.style.height = '100%';
-		body.style.width = '100%';
-		body.style.height = '100%';
-		body.style.margin = '0';
-		body.style.padding = '0';
-		body.style.overflow = 'hidden';
-		body.style.position = 'relative';
-		body.style.background = '#000';
-
-		visualiser.style.position = 'absolute';
-		visualiser.style.top = '0';
-		visualiser.style.left = '0';
-		visualiser.style.width = '100%';
-		visualiser.style.height = '100%';
+		// The pip window is a document of its own: it needs the styles it should have.
+		const link = doc.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = new URL('../../Styles/pip.css', document.baseURI).href;
+		link.addEventListener('load', fitCanvas);
+		head.appendChild(link);
 
 		function fitCanvas() {
 			if (!(visualiser instanceof HTMLCanvasElement)) return;
@@ -732,10 +715,10 @@ function openCanvasPip() {
 			visualiser.width = Math.round(body.clientWidth * dpr);
 			visualiser.height = Math.round(body.clientHeight * dpr);
 		}
-		fitCanvas();
-		pipWindow.addEventListener('resize', fitCanvas);
 
 		body.appendChild(visualiser);
+		fitCanvas();
+		pipWindow.addEventListener('resize', fitCanvas);
 
 		pipWindow.addEventListener('pagehide', function() {
 			pipWindow.removeEventListener('resize', fitCanvas);

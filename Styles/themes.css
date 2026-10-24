@@ -63,6 +63,10 @@ html:has(body.slow-animations)::view-transition-group(*) {
 	animation-duration: 3s;
 }
 
+body {
+	/* behavior: url(http://css3pie.com/pie/PIE.htc); */
+}
+
 .window {
 	--window-outer-radius: var(--window-radius);
 	border-radius: var(--window-outer-radius);
@@ -559,12 +563,19 @@ button {
 	pointer-events: none;
 }
 
+.modern h1 {
+	color: white;
+}
 
 .modern .window content,
 .modern button {
 	color: white;
+	background-color: #202020;
 	background: linear-gradient(358deg, #161616, #333232);
 	border: 0px solid black !important;
+	background: linear-gradient(to bottom, #eeeeee, #cccccc);
+	-pie-background: linear-gradient(358deg, #161616, #333232);
+	/* behavior: url(/Scripts/PIE/PIE.htc); */
 }
 
 .modern button:active {

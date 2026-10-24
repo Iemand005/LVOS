@@ -105,9 +105,7 @@ test('tiles a window dragged to the side with touch, even while animations run',
 	// animations on, that restore runs its own animation on the window element, which
 	// cancels the pending class application — the indicator offers the snap and the
 	// window then stays floating. Reproducing that needs the transitions on.
-	await vulpOS.page.evaluate(() => {
-		window.flags.useAnimations = true;
-	});
+	await vulpOS.setAnimations(true);
 
 	const titleBar = await vulpOS.titleBarPoint(window);
 	await vulpOS.touchDrag(titleBar, { x: 2, y: 400 });
@@ -158,9 +156,7 @@ test('eases the indicator in from behind the window, not from where it was last 
 	// The indicator is one shared element that spends most of its life hidden at the
 	// last window it dropped behind. Coming back up it must ease in from behind the
 	// window the offer is about, not fly in from the window it was parked at.
-	await vulpOS.page.evaluate(() => {
-		window.flags.useAnimations = true;
-	});
+	await vulpOS.setAnimations(true);
 
 	const from = await dialog.evaluate(async (d: any) => {
 		const snap = window.windowManager.windowSnap;

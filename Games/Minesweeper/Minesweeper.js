@@ -193,7 +193,7 @@ function sendDesiredSize(){
 }
 
 LVMessenger.onHostBeingLVOS(function () {
-	console.log("My host is LVOS!!");
+	console.log("My host is VulpOS!!");
 });
 
 /** @param {MouseEvent} ev */

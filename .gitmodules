@@ -49,3 +49,6 @@
 [submodule "ScrollTabs"]
 	path = ScrollTabs
 	url = https://github.com/Iemand005/ScrollTabs
+[submodule "Scripts/PIE"]
+	path = Scripts/PIE
+	url = https://github.com/Iemand005/PIE-dist

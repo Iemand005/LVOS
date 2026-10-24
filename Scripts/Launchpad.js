@@ -125,17 +125,12 @@ Launchpad.prototype._createMobileButton = function(app) {
 /** @param {Dialog | Application} app */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
+	var openButton;
 
-	// /**@type {isMobile is Dialog} */
-	// var isMobile = this._isMobile
-	
 	if ("createOpenButton" in app) {
-		var openButton = app.createOpenButton();
-		appElement.appendChild(openButton);
+		openButton = app.createOpenButton();
 	} else {
-		var openButton = this._createMobileButton(app);
-		appElement.appendChild(openButton);
-
+		openButton = this._createMobileButton(app);
 		openButton.onclick = function() {
 			mobileFrameManager.open(app);
 		};
@@ -145,6 +140,7 @@ Launchpad.prototype.addApp = function(app) {
 		appElement.appendChild(appLabel);
 	}
 
+	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
 };
 

@@ -27,7 +27,7 @@ function probeAllStorage() {
   };
 }
 
-console.log("Detected Browser Capabilities:", probeAllStorage());
+// console.log("Detected Browser Capabilities:", probeAllStorage());
 
 
 function OmniFS() {
@@ -76,7 +76,7 @@ OmniFS.prototype.writeToChromeLegacyFS = function (fileName, textData) {
 		  };
           fileWriter.onerror = reject;
           
-          const blob = new Blob([textData], { type: 'text/plain' });
+          var blob = new Blob([textData], { type: 'text/plain' });
           fileWriter.write(blob);
           
         }, reject);
