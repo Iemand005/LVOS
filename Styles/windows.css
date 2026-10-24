@@ -308,6 +308,10 @@ article, .article {
 	left: 0;
 }
 
+@supports (display: flex) {
+	position: relative;	
+}
+
 .window header h1 {
 	line-height: 30px; /* Match header height! */
 }
