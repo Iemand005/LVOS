@@ -308,15 +308,31 @@ article, .article {
 	left: 0;
 }
 
+.window header h1 {
+	line-height: 30px; /* Match header height! */
+}
+.window-buttons {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+body {
+	overflow: hidden !important;
+}
+
 @supports (display: flex) {
 	article, .article {
 		position: unset;
 	}
 }
 
-
-.window header h1 {
-	line-height: 30px; /* Match header height! */
+@supports (flex-direction: column) {
+	.window-buttons {
+		position: unset;
+		top: unset;
+		right: unset;
+	}
 }
 
 .window > div {
