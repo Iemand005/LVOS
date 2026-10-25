@@ -4335,7 +4335,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
-	// if (!this.isOpen) this.initWithObject(this);
+	if (!this.isOpen) this.insertIntoDOM();
 	windowManager.notifyExtensions("onWindowLaunch", this);
 
 	this.open();
