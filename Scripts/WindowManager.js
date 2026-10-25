@@ -3938,10 +3938,11 @@ Dialog.prototype.move = function (x, y, update, animate) {
  * Move the dialog so its center point lands at the provided coordinates. I  ggotta renname thifunc
  * @param {number} centerX
  * @param {number} centerY
+ * @param {boolean} [animate]
  */
-Dialog.prototype.moveToCenter = function(centerX, centerY) {
+Dialog.prototype.moveToCenter = function(centerX, centerY, animate) {
 	if (typeof centerX !== "number" || typeof centerY !== "number") return;
-	this.move(centerX - this.width / 2, centerY - this.height / 2);
+	this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
 };
 
 /** @param {number} [z] */
