@@ -2593,7 +2593,6 @@ function Dialog(object) {
 			return;
 		}
 
-		self.target.classList.add("hidden");
 
 		/** @type {DialogDropState} */
 		var dragState = {
@@ -2628,6 +2627,9 @@ function Dialog(object) {
 		}
 
 		transfer.effectAllowed = "copyMove";
+
+		self.target.classList.add("hidden");
+
 
 	}, false);
 

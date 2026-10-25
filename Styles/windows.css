@@ -69,6 +69,8 @@ body {
 	/* transform-style: preserve-3d; */
 	contain: size layout;
 	will-change: transform;
+
+	transition: opacity 1s linear;
 }
 
 .window.flipped {
