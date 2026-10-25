@@ -14,7 +14,7 @@ function init() {
 
 		LVMessenger.receive(messageReceived);
 	}
-	return;
+	// return;
 	var launchpadElement = document.getElementById("launchpad");
 
 	if (launchpad && launchpadElement) {
