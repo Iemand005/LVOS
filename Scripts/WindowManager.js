@@ -2493,9 +2493,9 @@ Dialog.prototype.initWithObject = function(object) {
 		if (object.target) return;
 		else if (object.application) object = object.application;
 	}
-	
-	return;
 
+	// return;
+	
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
 			this.target = object;
@@ -2510,7 +2510,7 @@ Dialog.prototype.initWithObject = function(object) {
 				if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 			} else {
 				this.target = createDialogElement();
-				this.openUrl(object.src);
+				// this.openUrl(object.src);
 			}
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
@@ -2532,6 +2532,7 @@ Dialog.prototype.initWithObject = function(object) {
 			});
 		}
 	}
+
 
 	this.setMinSize(180, 250);
 
