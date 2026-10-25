@@ -142,7 +142,7 @@ function getSiteName(url) {
  * @param {Node} object
  * @returns {object is HTMLElement}
  */
-function isElement(object) { return object && "nodeType" in object; }
+Helpers.isElement = function(object) { return object && "nodeType" in object; }
 
 
 /** @param {Window} window */

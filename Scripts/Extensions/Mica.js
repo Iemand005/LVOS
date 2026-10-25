@@ -104,7 +104,6 @@ function injectMica(dialog) {
  */
 function updateMicaPosition(dialog) {
 	try {
-		if (!dialog) return;
 		var backdrop = getMicaBackdrop(dialog);
 		if (!backdrop) return;
 		var wallpaper = document.getElementById("wallpaper");
@@ -129,7 +128,6 @@ function updateMicaPosition(dialog) {
  */
 function removeMica(dialog) {
 	try {
-		if (!dialog || !dialog.target) return false;
 		dialog.target.classList.remove(MICA_WINDOW_CLASS);
 		var clip = getMicaElement(dialog);
 		if (!clip) return false;
