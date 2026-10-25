@@ -2376,6 +2376,7 @@ function Dialog(object) {
 	this._constrainAspectRatioInner = false;
 	this._constrainAspectRatioLine = false;
 
+	/** @type {boolean} */
 	this._useTransform = useTransform;
 	this._useScale = useScale;
 
@@ -3690,7 +3691,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this._maximizing = enable;
 		this.setScale(1, 1, undefined, true);
 		this.updateTransform();
-		if (this.useTransform && target) this.toggleMinSizeConstraints(enable);
+		if (this.useTransform) this.toggleMinSizeConstraints(enable);
 		this.maximizeAnimations--;
 		return;
 	}
