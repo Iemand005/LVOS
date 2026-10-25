@@ -2502,16 +2502,18 @@ Dialog.prototype.initWithObject = function(object) {
 			if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
 			this.close();
 		} else {
-			this.application = object;
 
+			this.application = object;
+			
 			if (object.exists) {
 				this.target = document.getElementById(object.id);
 				var doc = this.contentDocument;
-				if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
+				// if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 			} else {
-				this.target = createDialogElement();
+				// this.target = createDialogElement();
 				// this.openUrl(object.src);
 			}
+			return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
