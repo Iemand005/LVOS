@@ -2634,7 +2634,7 @@ function Dialog(object) {
 
 		transfer.effectAllowed = "copyMove";
 
-		// self.target.classList.add("hidden");
+		self.target.classList.add("hidden");
 
 
 	}, false);
