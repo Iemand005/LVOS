@@ -2712,7 +2712,7 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 
 /** Remove the exposé inverse transform left on the content element, if any. */
 Dialog.prototype.clearExposéVisual = function() {
-	/** @type {boolen | null} */
+	/** @type {boolean | null} */
 	this._exposeOrigin = null;
 	if (typeof this._exposeVisualScale !== "number") return;
 	var content = this.content;
