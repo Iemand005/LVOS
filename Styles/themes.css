@@ -203,11 +203,16 @@ body {
 
 .windows .window header button:nth-child(3):hover {
 	background-color: #e81123;
-	color: white;
 }
 
 .windows .window header button:nth-child(3):active {
 	background-color: #c50f1f;
+}
+
+.windows .window header button:nth-child(3):hover,
+.windows .window header button:nth-child(3):active {
+	color: white;
+	fill: white;
 }
 
 .windows .window content,
