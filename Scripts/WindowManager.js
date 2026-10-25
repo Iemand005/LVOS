@@ -362,7 +362,7 @@ function createDialogElement() {
 		var dialogElement = container.appendChild(removeComments(clone));
 		if (isElement(dialogElement)) return dialogElement;
 	}
-	return null;
+	throw new Error("Failed to find container or clone element");
 }
 
 /** @param {Element} element */
