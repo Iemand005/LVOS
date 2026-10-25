@@ -2412,8 +2412,8 @@ function Dialog(object) {
 
 	if (!object) return;
 
-	// /** @type {HTMLElement} */
-	// this.target;
+	/** @type {HTMLElement} */
+	this.target;
 	var id = object.id;
 
 	/** @type {Application | null} */
@@ -2636,7 +2636,7 @@ function Dialog(object) {
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
 		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
-	
+
 	// if (this.application && this.application.launch) this.launch();
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
