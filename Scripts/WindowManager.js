@@ -1961,7 +1961,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 
 	this.hidden = !outset;
 	if (!preserveSnapped) this._snapped = "";
-	
+
 	if (!direction) outset = 0;
 
 	var sides = [
@@ -1975,7 +1975,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		{ top: false, right: true, bottom: true, left: false },
 		{ top: false, right: false, bottom: true, left: true }
 	];
-	
+
 	var s = sides[direction || 0] || sides[0];
 	if (!s) return;
 	var top = dialog.top - (s.top ? outset : 0);
@@ -2060,7 +2060,7 @@ WindowSnap.prototype.setHeightInset = function(dialog) {
  *   indicator frames and the others only need for their z-order.
  */
 WindowSnap.prototype.snap = function(type, dialog) {
-	
+
 	// this.element.style.transitionDuration = "300ms";
 	if (type === this._snapped) return;
 	this._snapped = type;
@@ -2081,7 +2081,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 		this.moveToDialog(dialog, 0, undefined, true, false, true);
 		void this.element.offsetWidth;
 	}
-	
+
 	this.hidden = false;
 	// Over the window it is previewing. Without this the indicator keeps whatever
 	// z-order the last window it was hidden behind left, and for a window below that
@@ -2464,14 +2464,14 @@ function Dialog(object) {
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
-	
+
 	if (object instanceof Dialog) {
 		if (object.application) object = object.application;
 	}
 
 	/** @type {HTMLElement} */
 	this.target;
-	
+
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
 			this.target = object;
@@ -2480,7 +2480,7 @@ function Dialog(object) {
 		} else {
 
 			this.application = object;
-			
+
 			this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
 			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
@@ -2507,7 +2507,7 @@ function Dialog(object) {
 
 	this.setMinSize(180, 250);
 
-	
+
 
 	this.toggleCloseButton(true);
 	this.toggleFullButton(true);
@@ -2631,9 +2631,9 @@ function Dialog(object) {
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 
-	
+
 	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
-	
+
 	this.originalBody = this.body;
 
 	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
