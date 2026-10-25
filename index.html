@@ -54,6 +54,13 @@
 	<script src="./Scripts/NewtonVirus.js" defer></script>
 	<script src="ScrollTabs/ScrollTabs.js"></script>
 	<script type="module" src="./Scripts/WebComponents.js"></script>
+	<script>
+		if (typeof windowManager !== "undefined") {
+			window.addEventListener("load", function() {
+				if (typeof windowManager.initializeDialogs === "function") windowManager.initializeDialogs();
+			}, false);
+		}
+	</script>
 
 	<!-- Open Graph / Social embed info (Discord, Facebook, WhatsApp...) -->
 	<meta property="og:type" content="website" />
