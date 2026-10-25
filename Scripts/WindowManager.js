@@ -2412,8 +2412,8 @@ function Dialog(object) {
 
 	if (!object) return;
 
-	/** @type {HTMLElement | null} */
-	this.target = null;
+	// /** @type {HTMLElement} */
+	// this.target;
 	var id = object.id;
 
 	/** @type {Application | null} */
@@ -2471,8 +2471,6 @@ function Dialog(object) {
 		if (object.target) return;
 		else if (object.application) object = object.application;
 	}
-
-	// return;
 	
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
