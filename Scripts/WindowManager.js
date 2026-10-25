@@ -359,7 +359,7 @@ function createDialogElement() {
 	var clone = template.cloneNode(true);
 	if (container && clone instanceof Element) {
 		/** @type {Element | WindowElement} */
-		var dialogElement = container.appendChild(removeComments(clone));
+		var dialogElement = removeComments(clone);
 		if (isElement(dialogElement)) return dialogElement;
 	}
 	throw new Error("Failed to find container or clone element");
