@@ -352,13 +352,13 @@ function getDialogTemplate() {
 	return content.children[0];
 }
 
-/** @returns {Element | WindowElement} */
+/** @returns {HTMLElement | WindowElement} */
 function createDialogElement() {
 	// var container = document.getElementById("window-section");
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
 	var clone = removeComments(template.cloneNode(true));
-	if (!(clone instanceof Element)) throw new Error("Cloned dialog is not an element");
+	if (!(clone instanceof HTMLElement)) throw new Error("Cloned dialog is not an element");
 	return clone;
 }
 
