@@ -323,7 +323,7 @@ Helpers.stringifyDialogProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
 };
 
-function getViewBoxPosition() {
+Helpers.getViewBoxPosition = function() {
 	return { x: window.screenLeft, y: window.screenTop };
 }
 
