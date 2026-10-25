@@ -911,6 +911,10 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	}
 	if (!dialog) return null;
 
+	// Apply the dragged state first so the window keeps its size (and other state)
+	// from when it was dragged, then position it under the cursor.
+	dialog.loadState(state || {});
+	
 	if (typeof x === "number" && typeof y === "number") {
 		// Cancel out the grab offset so the point of the window the pointer held stays
 		// under the pointer, which is where the drag preview left it.
@@ -918,9 +922,6 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		var grabY = offset ? offset.y : 0;
 		dialog.moveCenterTo(x - grabX, y - grabY, false);
 	}
-	// Apply the dragged state first so the window keeps its size (and other state)
-	// from when it was dragged, then position it under the cursor.
-	dialog.loadState(state || {});
 
 	dialog.launch();
 	dialog.setZ();
