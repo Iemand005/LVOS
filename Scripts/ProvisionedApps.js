@@ -5,6 +5,8 @@
 
 "use strict";
 
+alert("Injecting ur mom")
+
 var dockAppList = document.getElementById("dockapplist");
 
 /**
