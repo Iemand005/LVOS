@@ -2500,9 +2500,9 @@ function Dialog(object) {
 		} else {
 
 			if (object.exists) {
-				var target = document.getElementById(object.id);
-				if (target && this.application) {
-					this.target = target;
+				var t = document.getElementById(object.id);
+				if (t && this.application) {
+					this.target = t;
 					var doc = this.contentDocument;
 					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 				}
