@@ -2511,7 +2511,6 @@ function Dialog(object) {
 				this.openUrl(object.src);
 			}
 
-			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
