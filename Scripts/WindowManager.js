@@ -703,7 +703,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 			if (string === null) return null;
 
 			this._windowStates = JSON.parse(string);
-		} catch (ex) {}
+		} catch (ex) { console.log(ex); }
 		return this._windowStates;
 	}
 });
@@ -762,7 +762,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			for (var id in windowStates) try {
 				var window = this.windows[id];
 				if (window && windowStates[id]) window.loadState(windowStates[id]);
-			} catch (ex) {}
+			} catch (ex) { console.log(ex); }
 			this.updateTopZ();
 		}
 	} catch (exception) {
