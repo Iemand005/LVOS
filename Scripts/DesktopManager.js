@@ -59,24 +59,24 @@ var onLoad = function () {
 		appButtons.appendChild(clock);
 	}
 
-	document.body.ondragover = window.ondragover = function(ev) { 
-		ev.preventDefault(); 
+	document.body.ondragover = window.ondragover = function(ev) {
+		ev.preventDefault();
 		ev.stopPropagation();
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
 	};
 
-    document.body.ondrop = function(ev) { 
-		ev.preventDefault(); 
+    document.body.ondrop = function(ev) {
+		ev.preventDefault();
 		ev.stopPropagation();
 		setDesktopDragOpacity("");
 		if (!ev.dataTransfer) return;
-        
+
         ev.dataTransfer.dropEffect = "copy";
 
-        
+
         var dt = ev.dataTransfer;
         if (!dt) return;
-        
+
         dt.dropEffect = "copy";
 
         var json = "";
@@ -178,21 +178,21 @@ var onLoad = function () {
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 
 			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
-			
+
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
 		};
-		
+
 		// if (supportsPointer)
         tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
 			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
-			
+
 			selector.style.width = toPixels(Math.abs(width));
 			selector.style.height = toPixels(Math.abs(height));
-			
+
 			// translateElement(selector, ev.clientX, ev.clientY);
 			selector.className = "selector";
 			if (tingeling) tingeling.appendChild(selector);
@@ -278,7 +278,7 @@ window.addEventListener("keydown", function(event) {
   switch (event.key) {
     case "F11":
       event.preventDefault();
-      
+
       void document.documentElement.requestFullscreen();
       break;
     case "F10":
@@ -405,7 +405,7 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
         // wallpaper.setAttribute("data-wallpaper-src", url);
         if (typeof blurredUrl == "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
         else wallpaper.removeAttribute("data-blurred-src");
-    
+
         wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
         wallpaper.style.backgroundImage = "";
         wallpaper.appendChild(self.wallpaperImage);
@@ -533,28 +533,28 @@ function initWallpaperDB(onSuccess, onFailure) {
         if (onFailure) onFailure(new Error("IndexedDB not available for file:// scheme"));
         return;
     }
-    
+
     if (typeof indexedDB === "undefined") {
         if (onFailure) onFailure(new Error("IndexedDB not supported"));
         return;
     }
-    
+
     if (wallpaperDB) {
         onSuccess(wallpaperDB);
         return;
     }
-    
+
     var request = indexedDB.open("LVOSWallpaperDB", 1);
-    
+
     request.onerror = function() {
         if (onFailure) onFailure(request.error);
     };
-    
+
     request.onsuccess = function() {
         wallpaperDB = request.result;
         onSuccess(wallpaperDB);
     };
-    
+
     request.onupgradeneeded = function(event) {
         if (!event.target) return;
         var db = event.target.result;
@@ -583,7 +583,7 @@ function localStorageFabblack(dataUrl) {
  */
 function saveWallpaperToCache(blob, dataUrl) {
     if (!(blob instanceof Blob)) return;
-    
+
     initWallpaperDB(function (db) {
         var transaction = db.transaction(["wallpapers"], "readwrite");
         var store = transaction.objectStore("wallpapers");
@@ -609,7 +609,7 @@ function loadWallpaperFromCache() {
     initWallpaperDB(function(db) {
         var store = db.transaction(["wallpapers"], "readonly").objectStore("wallpapers");
         var request = store.get("current");
-        
+
         request.onsuccess = function() {
             var result = request.result;
             if (result && result.blob && window.desktopManager && !hasRegisteredWallpaperSelection()) {
@@ -618,7 +618,7 @@ function loadWallpaperFromCache() {
                 loadWallpaperFromLocalStorage();
             }
         };
-        
+
         request.onerror = loadWallpaperFromLocalStorage;
     }, loadWallpaperFromLocalStorage);
 }
@@ -647,15 +647,15 @@ function handleWallpaperDrop(ev) {
 	ev.stopPropagation();
     setDesktopDragOpacity("");
 
-    
+
     if (!ev.dataTransfer || !ev.dataTransfer.files) return;
-    
+
     var files = ev.dataTransfer.files;
     for (var i = 0; i < files.length; i++) {
         var file = files[i];
         // Only process image files
         if (!file.type.match(/^image\//)) continue;
-        
+
         var reader = new FileReader();
         reader.onload = function(e) {
             if (!e.target) return;
