@@ -172,17 +172,17 @@ function transformElement(element, t) {
 	else if (t.y) transform += "translateY(" + Helpers.toPixels(t.y) + ")";
 
 	// var transform = "translate(" + Helpers.toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
-	if (t.skewX) transform += " skewX(" + toDegrees(t.skewX) + ")";
+	if (t.skewX) transform += " skewX(" + Helpers.toDegrees(t.skewX) + ")";
 	if (t.scaleX === 1) t.scaleX = undefined;
 	if (t.scaleY === 1) t.scaleY = undefined;
 	if (t.scaleX && t.scaleY) transform += "scale(" + t.scaleX + "," + t.scaleY + ")";
 	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
 	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
 
-	if (t.rotate) transform += "rotate(" + toDegrees(t.rotate) + ")";
-	if (t.rotateX) transform += "rotateX(" + toDegrees(t.rotateX) + ")";
-	if (t.rotateY) transform += "rotateY(" + toDegrees(t.rotateY) + ")";
-	if (t.rotateZ) transform += "rotateZ(" + toDegrees(t.rotateZ) + ")";
+	if (t.rotate) transform += "rotate(" + Helpers.toDegrees(t.rotate) + ")";
+	if (t.rotateX) transform += "rotateX(" + Helpers.toDegrees(t.rotateX) + ")";
+	if (t.rotateY) transform += "rotateY(" + Helpers.toDegrees(t.rotateY) + ")";
+	if (t.rotateZ) transform += "rotateZ(" + Helpers.toDegrees(t.rotateZ) + ")";
 
 	if ("msTransform" in element.style) element.style.msTransform = transform;
 	else element.style.transform = transform;
