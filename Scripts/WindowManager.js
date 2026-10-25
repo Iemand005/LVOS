@@ -2593,6 +2593,8 @@ function Dialog(object) {
 			return;
 		}
 
+		self.target.classList.add("hidden");
+
 		/** @type {DialogDropState} */
 		var dragState = {
 			state: self.getState(),
