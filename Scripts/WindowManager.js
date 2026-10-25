@@ -761,8 +761,8 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			this.updateTopZ(dialog.z);
 		} else {
 			for (var id in windowStates) try {
-				var window = this.windows[id];
-				if (window && windowStates[id]) window.loadState(windowStates[id]);
+				var dlg = this.windows[id];
+				if (dlg && windowStates[id]) dlg.loadState(windowStates[id]);
 			} catch (ex) { console.log(ex); }
 			this.updateTopZ();
 		}
