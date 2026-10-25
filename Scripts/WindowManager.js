@@ -2623,6 +2623,8 @@ Dialog.prototype.initWithObject = function(object) {
 				if (self.src) transfer.setData("URL", self.src);
 			}
 
+			transfer.effectAllowed = "copyMove";
+
 		}, false);
 	}
 
