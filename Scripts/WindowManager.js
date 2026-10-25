@@ -316,10 +316,10 @@ var windowButtons = {
 };
 
 var Helpers = {
-/** @param {WindowProperties} properties */
-stringifyDialogProperties: function(properties){
-	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
-}
+	/** @param {WindowProperties} properties */
+	stringifyDialogProperties: function(properties){
+		return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
+	}
 };
 
 function getViewBoxPosition() {
@@ -4363,7 +4363,7 @@ Dialog.prototype.createPopOut = function() {
 	var titleBarHeight = titleBar && titleBar.getBoundingClientRect().height || 0;
 	var viewBoxPosition = getViewBoxPosition();
 
-	this._popupWindow = window.open(this.href, this.title || "LVOS", stringifyDialogProperties({
+	this._popupWindow = window.open(this.href, this.title || "LVOS", Helpers.stringifyDialogProperties({
 		scrollbars: true,
 		resizable: true,
 		status: false,
