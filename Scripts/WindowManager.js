@@ -1926,7 +1926,7 @@ function WindowSnap() {
 Object.defineProperty(WindowSnap.prototype, "hidden", {
 	get: function() { return this.element.classList.contains("hidden"); },
 	set: function(enable) { if (enable) this.element.classList.add("hidden"); else this.element.classList.remove("hidden"); }
-})
+});
 
 WindowSnap.prototype.init = function() {
 	var snapParent = (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section") || document.getElementById("desktop") || document.body;
@@ -1995,7 +1995,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 		return name === "inset";
 	}, undefined, this, 200);
 	else this.applyInsetStyle(top, left, right, bottom);
-}
+};
 
 /**
  * @param {number} top
@@ -2027,7 +2027,7 @@ WindowSnap.prototype.setHalfInset = function(side) {
 	var half = Math.round(this.areaWidth() / 2);
 	var inset = WindowSnap.margin;
 	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
-}
+};
 
 /**
  * Frames the window at the full height of the area, held off the top and bottom by the
