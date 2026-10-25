@@ -3277,7 +3277,6 @@ Dialog.prototype.getMiniIconUrl = function() {
  * @param {()=>void} [onError]
  */
 Dialog.prototype.setIcon = function(iconUrl, onError) {
-	if (!this.target) return;
 	if (!iconUrl) {
 		if (onError) onError();
 		return;
@@ -3615,7 +3614,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (typeof enable !== "boolean") enable = !this.maximized;
 	if (this.maximized === enable) return;
-	if (!this.target) return;
 
 	// Maximized and tiled both claim the whole area, so they cannot overlap. Full-height
 	// snap claims the vertical half of it, and the grab point for maximizing is recorded
@@ -3857,7 +3855,6 @@ Dialog.prototype.updateTransform = function (animate) {
 };
 
 Dialog.prototype.updatePosition = function() {
-	if (!this.target) return;
 	if (this.useTransform) this.updateTransform();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
 
@@ -3953,12 +3950,10 @@ Dialog.prototype.setZ = function(z) {
 	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
 Dialog.prototype.updateWidth = function () {
-	if (!this.target) return;
 	if (this.useTransform) this.target.style.width = toPixels(this._width);
 	else this.target.style.right = toPixels(this.right);
 };
 Dialog.prototype.updateHeight = function () {
-	if (!this.target) return;
 	if (this.useTransform) this.target.style.height = toPixels(this._height);
 	else this.target.style.bottom = toPixels(this.bottom);
 };
@@ -4453,7 +4448,6 @@ Dialog.prototype.updateScale = function(useScale) {
 
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
-    if (!this.target) return;
     this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
     this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
 };
@@ -4524,7 +4518,6 @@ Dialog.prototype.moveElementIntoPipById = function(id, stylesheet) {
 };
 
 Dialog.prototype.screenshot = function() {
-	if (!this.target) return;
 	var shooter = getScreenShooter();
 	if (shooter) shooter.screenshotElement(this.target);
 };
