@@ -4501,7 +4501,7 @@ Dialog.prototype.loadState = function(state) {
 	}
 	if ("title" in state) this.title = state.title;
 	if ("x" in state || "y" in state)
-		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y);
+		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y, true, false);
 	if ("z" in state && typeof state.z === "number") this.setZ(state.z);
 	if ("width" in state || "height" in state)
 		this.resize("width" in state ? state.width : this.width, "height" in state ? state.height : this.height);
