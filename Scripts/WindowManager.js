@@ -160,7 +160,10 @@ function translateElement(element, x, y) {
 	transformElement(element, { x: x, y: y });
 }
 
-/** @param {HTMLElement} element @param {Transform} t */
+/**
+ * @param {HTMLElement} element
+ * @param {Transform} t
+ con*/
 function transformElement(element, t) {
 	var transform = "";
 
