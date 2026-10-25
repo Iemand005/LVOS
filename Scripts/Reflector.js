@@ -18,7 +18,7 @@ function Reflector(element) {
 Reflector.prototype.reflect = function (target) {
     try {
         var reflection = target.cloneNode(true);
-	if (!isElement(reflection)) return null;
+	if (!Helpers.isElement(reflection)) return null;
 	var refElement = reflection;
         refElement.id += "reflection";
         this.clones.push(refElement);

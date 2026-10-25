@@ -370,7 +370,7 @@ function createDialogElement() {
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
 	element.childNodes.forEach(function (child) {
 		if (child.nodeName === "#comment") element.removeChild(child);
-		else if (isElement(child)) removeComments(child);
+		else if (Helpers.isElement(child)) removeComments(child);
 	});
 	return element;
 }
@@ -1011,7 +1011,7 @@ WindowManager.prototype.initializeDialogs = function() {
 		var dialogs = document.getElementsByClassName("window");
 		for (var i = 0; i < dialogs.length; i++) {
 			var dialog = dialogs[i];
-			if (isElement(dialog))
+			if (Helpers.isElement(dialog))
 				self.loadApp(dialog);
 		}
 	}
@@ -1032,7 +1032,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	try {
 		var node = event && (event.target || event.srcElement);
 		var isInteractive = false;
-		while (node && isElement(node) && node.nodeType === 1) {
+		while (node && Helpers.isElement(node) && node.nodeType === 1) {
 			var tn = (node.tagName || "").toLowerCase();
 			if (tn === "input" || tn === "textarea" || tn === "select" || tn === "button" || tn === "a" || tn === "label" || tn === "output") { isInteractive = true; break; }
 			if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
@@ -2414,7 +2414,7 @@ function Dialog(object) {
 
 	/** @type {Application | null} */
 	this.application = null;
-	if (!isElement(object))
+	if (!Helpers.isElement(object))
 		this.application = object;
 
 	if (!id) id = object.title;
@@ -2478,7 +2478,7 @@ function Dialog(object) {
 	this.scroll = false;
 
 	if (!(object instanceof Dialog)) {
-		if (isElement(object)) {
+		if (Helpers.isElement(object)) {
 			this.target = object;
 			if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
 			this.close();
@@ -2629,7 +2629,7 @@ function Dialog(object) {
 	this.updateScale(this.useScale);
 	this.update();
 
-	if (!isElement(object))
+	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
 		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
@@ -2655,7 +2655,7 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var elements = target.getElementsByTagName(name);
 	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
 	var element = elements.length ? elements[0] : null;
-	if (isElement(element)) return element;
+	if (Helpers.isElement(element)) return element;
 	return null;
 };
 
@@ -2788,7 +2788,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var sizerId = "sizer-" + id;
 
 		var sizer = self.getElementByTagOrClassName(sizerId);
-		if (!sizer || !(isElement(sizer))) sizer = document.createElement("div");
+		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
 		sizer.draggable = false;
 		sizer.id = id.toString();
 		sizer.classList.add(sizerId);
@@ -2812,7 +2812,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			var touchSizerId = "touch-sizer-" + id;
 
 			var touchSizer = self.getElementByTagOrClassName(touchSizerId);
-			if (!touchSizer || !isElement(touchSizer)) touchSizer = document.createElement("div");
+			if (!touchSizer || !Helpers.isElement(touchSizer)) touchSizer = document.createElement("div");
 
 			touchSizer.draggable = false;
 			touchSizer.id = "touch-" + id;
@@ -3937,7 +3937,7 @@ Dialog.prototype.setZ = function(z) {
 	if (typeof z === "undefined") {
 		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
 	} else this._z = z;
-	if (isElement(this.target))
+	if (Helpers.isElement(this.target))
 		this.target.style.zIndex = String(this._z);
 	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
