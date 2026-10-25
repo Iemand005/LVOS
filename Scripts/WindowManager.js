@@ -3389,6 +3389,7 @@ Dialog.prototype.createOpenButton = function () {
 		// Multi-instance apps open a fresh window from their button instead of
 		// re-focusing the single registered one.
 		openButton.onclick = function () {
+			if (!application) reutnr;
 			var instance = windowManager.spawnApp(application);
 			if (instance) instance.launch();
 		};
