@@ -315,12 +315,10 @@ var windowButtons = {
 	close: 2
 };
 
-/** @class */
-var Helpers = {
-	/** @param {WindowProperties} properties */
-	stringifyDialogProperties: function(properties){
-		return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
-	}
+function Helpers() {}
+
+Helpers.stringifyDialogProperties = function(properties){
+	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
 };
 
 function getViewBoxPosition() {
