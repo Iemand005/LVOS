@@ -40,11 +40,6 @@
 	<script src="./Scripts/physics.js" defer></script>
 	<script src="./Scripts/youtube.js" defer></script>
 	<script src="./Scripts/Messenger.js" defer></script>
-	<script src="Scripts/ElementPicker.js"></script>
-	<script src="Scripts/WebGraphics/Graphics.js" defer></script>
-	<script src="Scripts/WebGraphics/Graphics3D.js" defer></script>
-	<script type="module" src="Scripts/WebGraphics/HTMLInCanvas.js" defer></script>
-	<script type="module" src="Scripts/WebGraphics/ScreenShooter.js" defer></script>
 	<script src="./Scripts/DesktopManager.js" defer></script>
 	<script src="./Scripts/Settings.js" defer></script>
 	<script src="./Scripts/ProvisionedApps.js"></script> <!-- The script order is very important here! -->
@@ -54,7 +49,20 @@
 	<script src="./Scripts/NewtonVirus.js" defer></script>
 	<script src="ScrollTabs/ScrollTabs.js"></script>
 	<script type="module" src="./Scripts/WebComponents.js"></script>
+
+	<!-- For screenshotting -->
+	<script src="Scripts/ElementPicker.js"></script>
+	<script src="Scripts/WebGraphics/Graphics.js" defer></script>
+	<script src="Scripts/WebGraphics/Graphics3D.js" defer></script>
+	<script type="module" src="Scripts/WebGraphics/HTMLInCanvas.js" defer></script>
+	<script type="module" src="Scripts/WebGraphics/ScreenShooter.js" defer></script>
+
+	<!-- -- -->
+
 	<script>
+		window.onerror = function() {
+			return true;
+		};
 		if (typeof windowManager !== "undefined") {
 			window.addEventListener("load", function() {
 				if (typeof windowManager.initializeDialogs === "function") windowManager.initializeDialogs();
