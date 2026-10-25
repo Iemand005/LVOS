@@ -436,7 +436,7 @@ function clearFlip(element) {
 }
 
 /**
- * @template {Record<string, unknown> | HTMLElement} [T=HTMLElement]
+ * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
  * @param {TransitionEndCallback} [onTransitionEnd]
