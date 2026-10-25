@@ -68,6 +68,7 @@ var onLoad = function () {
     document.body.ondrop = function(ev) { 
 		ev.preventDefault(); 
 		ev.stopPropagation();
+		setDesktopDragOpacity("");
 		if (!ev.dataTransfer) return;
         
         ev.dataTransfer.dropEffect = "copy";
@@ -508,6 +509,10 @@ window.ondrag = document.ondrag = function(ev){
 window.ondragleave = document.ondragleave = function(ev){
     ev = ev || window.event;
     if (!isFileDrag(ev)) return;
+    setDesktopDragOpacity("");
+};
+
+window.ondragend = document.ondragend = function(){
     setDesktopDragOpacity("");
 };
 

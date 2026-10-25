@@ -246,7 +246,7 @@
 	</p>
 	<div id="toolbar">
 		<label><input type="checkbox" id="globalSelect"> global document.onselectstart (like DesktopManager)</label>
-		<label><input type="checkbox" id="globalDrag"> global window.ondrag preventDefault (like DesktopManager)</label>
+		<label><input type="checkbox" id="globalDrag"> old window.ondrag preventDefault (reproduces the IE11 failure)</label>
 		<label><input type="checkbox" id="bodyNone"> body pointer-events: none (like DesktopManager)</label>
 		<label><input type="checkbox" id="globalLog"> log dragover/dragenter</label>
 		<button type="button" id="clearLog">Clear log</button>
