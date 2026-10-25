@@ -101,6 +101,7 @@ function dockApp(dialog) {
 }
 
 function initApps() {
+	alert("Injecting ur mom")
 	if (typeof windowManager !== "undefined") {
 		windowManager.injectApplications(applications);
 		windowManager.injectApplications(games);
