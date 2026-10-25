@@ -42,6 +42,7 @@ MobileFrameManager.prototype._showFrame = function(id) {
 	var keys = Object.keys(this._frames);
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
+		if (!key) conti
 		this._frames[key].style.display = key === id ? "block" : "none";
 	}
 	this._activeId = id;
