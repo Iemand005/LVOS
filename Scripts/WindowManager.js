@@ -1955,12 +1955,12 @@ WindowSnap.prototype.attachTo = function(dialog) {
 };
 
 /**
- * @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped]
- * @param {number} outset
- * @param {number} direction
- * @param {number} noAnimation
- * @param {number} isTouch
- * @param {number} preserveSnapped
+ * @param {Dialog} dialog
+ * @param {number} [outset]
+ * @param {number} [direction]
+ * @param {boolean} [noAnimation]
+ * @param {boolean} [isTouch]
+ * @param {boolean} [preserveSnapped]
  */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
