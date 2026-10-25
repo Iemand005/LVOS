@@ -3722,6 +3722,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		active: true,
 		raf: 0,
 		timer: 0,
+		/** @type {((e: any) => void) | null} */
 		endHandler: null,
 		cancel: function () {
 			if (!this.active) return;
@@ -4048,7 +4049,12 @@ Dialog.prototype._commitResize = function (newW, newH, newX, newY, oldX, oldY, m
 	this.updateWidth();
 	this.updateHeight();
 };
-
+/**
+ * Applies a resize that keeps the opposite edges of the given direction fixed.
+ * @param {number} width
+ * @param {number} height
+ * @param {ResizeDirection} [direction]
+ */
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
