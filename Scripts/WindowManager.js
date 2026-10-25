@@ -167,11 +167,11 @@ function translateElement(element, x, y) {
 function transformElement(element, t) {
 	var transform = "";
 
-	if (t.x && t.y) transform += "translate(" + toPixels(t.x) + "," + toPixels(t.y) + ")";
-	else if (t.x) transform += "translateX(" + toPixels(t.x) + ")";
-	else if (t.y) transform += "translateY(" + toPixels(t.y) + ")";
+	if (t.x && t.y) transform += "translate(" + Helpers.toPixels(t.x) + "," + Helpers.toPixels(t.y) + ")";
+	else if (t.x) transform += "translateX(" + Helpers.toPixels(t.x) + ")";
+	else if (t.y) transform += "translateY(" + Helpers.toPixels(t.y) + ")";
 
-	// var transform = "translate(" + toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
+	// var transform = "translate(" + Helpers.toPixels(transform.x) + "px," + Math.floor(transform.y) + "px)";
 	if (t.skewX) transform += " skewX(" + toDegrees(t.skewX) + ")";
 	if (t.scaleX === 1) t.scaleX = undefined;
 	if (t.scaleY === 1) t.scaleY = undefined;
@@ -197,14 +197,14 @@ function transformElement(element, t) {
  */
 function insetElement(element, top, left, right, bottom) {
 	if ("inset" in element.style)
-		if (typeof left === "undefined") element.style.inset = toPixels(top);
-	else element.style.inset = toPixels(top) + " " + toPixels(right || 0) + " " + toPixels(bottom || 0) + " " + toPixels(left);
+		if (typeof left === "undefined") element.style.inset = Helpers.toPixels(top);
+	else element.style.inset = Helpers.toPixels(top) + " " + Helpers.toPixels(right || 0) + " " + Helpers.toPixels(bottom || 0) + " " + Helpers.toPixels(left);
 	else {
 		if (typeof left === "undefined") left = top, right = top, bottom = top;
-		element.style.top = toPixels(top);
-		element.style.left = toPixels(left);
-		if (typeof right !== "undefined") element.style.right = toPixels(right);
-		if (typeof bottom !== "undefined") element.style.bottom = toPixels(bottom);
+		element.style.top = Helpers.toPixels(top);
+		element.style.left = Helpers.toPixels(left);
+		if (typeof right !== "undefined") element.style.right = Helpers.toPixels(right);
+		if (typeof bottom !== "undefined") element.style.bottom = Helpers.toPixels(bottom);
 	}
 }
 
@@ -403,7 +403,7 @@ function flipElement(element, onToggled, thisArg) {
 	var scaleY = last.height ? first.height / last.height : 1;
 
 	element.style.transformOrigin = "top left";
-	element.style.translate = toPixels(dx) + " " + toPixels(dy);
+	element.style.translate = Helpers.toPixels(dx) + " " + Helpers.toPixels(dy);
 	element.style.scale = scaleX + " " + scaleY;
 
 	// Commit the inverted frame as the transition's starting point.
@@ -1226,8 +1226,8 @@ WindowManager.prototype.updateExposéDragScale = function(dialog, x, y) {
 	var renderedScale = dialog._exposeVisualWidth ? rendered.width / dialog._exposeVisualWidth : k;
 	if (!renderedScale) return;
 	content.style.transform = "translate(" +
-		toPixels((x - grab.x * renderedScale - targetRect.left) / renderedScale) + "," +
-		toPixels((y - grab.y * renderedScale - targetRect.top) / renderedScale) + ")";
+		Helpers.toPixels((x - grab.x * renderedScale - targetRect.left) / renderedScale) + "," +
+		Helpers.toPixels((y - grab.y * renderedScale - targetRect.top) / renderedScale) + ")";
 };
 
 /**
@@ -2274,7 +2274,7 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 	get: function() { return this._perspective; },
 	set: function(value) {
 		var parent = this.target.parentElement;
-		if (parent) parent.style.perspective = toPixels(this._perspective = value); }
+		if (parent) parent.style.perspective = Helpers.toPixels(this._perspective = value); }
 });
 
 Transformable.prototype.applyTransform = function() {
@@ -2706,8 +2706,8 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	content.style.scale = String(scale);
 	var measured = content.getBoundingClientRect();
 	content.style.transform = "translate(" +
-		toPixels((before.left - measured.left) / scale) + "," +
-		toPixels((before.top - measured.top) / scale) + ")";
+		Helpers.toPixels((before.left - measured.left) / scale) + "," +
+		Helpers.toPixels((before.top - measured.top) / scale) + ")";
 
 	this._exposeVisualScale = scale;
 	this._exposeContentScale = scale;
@@ -3048,7 +3048,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 		this._height = height;
 		this._y = top / window.innerHeight;
 		if (this.useTransform) {
-			this.target.style.height = toPixels(height);
+			this.target.style.height = Helpers.toPixels(height);
 			this.updateTransform();
 		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
 		this._isMinHeight = height === this.minHeight;
@@ -3067,7 +3067,7 @@ Object.defineProperty(Dialog.prototype, "left", {
 		this._width = width;
 		this._x = left / window.innerWidth;
 		if (this.useTransform) {
-			this.target.style.width = toPixels(width);
+			this.target.style.width = Helpers.toPixels(width);
 			this.updateTransform();
 		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
@@ -3215,9 +3215,9 @@ Object.defineProperty(Dialog.prototype, "killable", {
 Object.defineProperty(Dialog.prototype, "borderSize", {
 	set: function (value) {
 		if (!this.content) return;
-		this.content.style.padding = toPixels(value);
-		this.content.style.border = toPixels(value);
-		this.content.style.borderRadius = toPixels(value);
+		this.content.style.padding = Helpers.toPixels(value);
+		this.content.style.border = Helpers.toPixels(value);
+		this.content.style.borderRadius = Helpers.toPixels(value);
 	},
 	get: function () { return this.content && fromPixels(this.content.style.padding); }
 });
@@ -3710,7 +3710,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var duration = isSlow ? 3000 : 280;
 
 	var toTransform = function (x, y, sx, sy) {
-		return "translate(" + toPixels(x) + "," + toPixels(y) + ") scale(" + sx + "," + sy + ")";
+		return "translate(" + Helpers.toPixels(x) + "," + Helpers.toPixels(y) + ") scale(" + sx + "," + sy + ")";
 	};
 
 	var state = {
@@ -3943,12 +3943,12 @@ Dialog.prototype.setZ = function(z) {
 	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
 Dialog.prototype.updateWidth = function () {
-	if (this.useTransform) this.target.style.width = toPixels(this._width);
-	else this.target.style.right = toPixels(this.right);
+	if (this.useTransform) this.target.style.width = Helpers.toPixels(this._width);
+	else this.target.style.right = Helpers.toPixels(this.right);
 };
 Dialog.prototype.updateHeight = function () {
-	if (this.useTransform) this.target.style.height = toPixels(this._height);
-	else this.target.style.bottom = toPixels(this.bottom);
+	if (this.useTransform) this.target.style.height = Helpers.toPixels(this._height);
+	else this.target.style.bottom = Helpers.toPixels(this.bottom);
 };
 /**
  * @param {"width"|"height"} axis
@@ -4438,8 +4438,8 @@ Dialog.prototype.updateScale = function(useScale) {
 		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		if (this.useTransform) return;
-		target.style.right = toPixels(this.right);
-		target.style.bottom = toPixels(this.bottom);
+		target.style.right = Helpers.toPixels(this.right);
+		target.style.bottom = Helpers.toPixels(this.bottom);
 	}
 	target.classList.toggle("use-scale", useScale);
 
@@ -4448,8 +4448,8 @@ Dialog.prototype.updateScale = function(useScale) {
 
 /** @param {boolean} [isMaximized] */
 Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
-    this.target.style.minWidth = isMaximized ? "100%" : toPixels(this.minWidth);
-    this.target.style.minHeight = isMaximized ? "100%" : toPixels(this.minHeight);
+    this.target.style.minWidth = isMaximized ? "100%" : Helpers.toPixels(this.minWidth);
+    this.target.style.minHeight = isMaximized ? "100%" : Helpers.toPixels(this.minHeight);
 };
 
 /** @param {boolean} [enable] */
