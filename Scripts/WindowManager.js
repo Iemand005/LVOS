@@ -2617,7 +2617,7 @@ Dialog.prototype.initWithObject = function(object) {
 				if (self.src) event.dataTransfer.setData("text/uri-list", self.src);
 				event.dataTransfer.setData("text/html", data);
 			} catch(ex) {
-				event.dataTransfer.setData("Text", "my-data");
+				event.dataTransfer.setData("Text", data);
 			}
 
 		}, false);
