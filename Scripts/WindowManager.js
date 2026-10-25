@@ -2481,14 +2481,7 @@ function Dialog(object) {
 
 			this.application = object;
 			
-			if (object.exists) {
-				this.target = document.getElementById(object.id);
-				var doc = this.contentDocument;
-				// if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
-			} else {
-				this.target = createDialogElement();
-				// this.openUrl(object.src);
-			}
+			this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
 			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
