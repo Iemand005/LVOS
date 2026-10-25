@@ -70,7 +70,7 @@ body {
 	contain: size layout;
 	will-change: transform;
 
-	transition: opacity 1s linear;
+	transition: opacity 100ms linear;
 }
 
 .window.flipped {

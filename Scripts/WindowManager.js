@@ -2611,9 +2611,9 @@ function Dialog(object) {
 		var data = JSON.stringify(dragState);
 		var transfer = event.dataTransfer;
 
-		if (rect && typeof transfer.setDragImage === "function") {
-			try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
-		}
+		// if (rect && typeof transfer.setDragImage === "function") {
+		// 	try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
+		// }
 
 		try {
 			transfer.setData("application/json", data);
