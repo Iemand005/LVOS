@@ -911,37 +911,43 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	}
 	if (!dialog) return null;
 
+	dialog.target.classList.remove("animating");
+
+	if (typeof x === "number" && typeof y === "number")
+		dialog.moveCenterTo(x - (offset ? offset.x : 0), y - (offset ? offset.y : 0), false);
+
+	void dialog.target.offsetLeft;
+
+	if (!state) state = {};
+
+	state.x = dialog.x;
+	state.y = dialog.y;
+
 	// Apply the dragged state first so the window keeps its size (and other state)
 	// from when it was dragged, then position it under the cursor.
 	dialog.loadState(state || {});
 
-	dialog.launch();
-	dialog.setZ();
 
-	if (typeof x === "number" && typeof y === "number") {
-		// Cancel out the grab offset so the point of the window the pointer held stays
-		// under the pointer, which is where the drag preview left it.
-		var grabX = offset ? offset.x : 0;
-		var grabY = offset ? offset.y : 0;
-		dialog.moveToCenter(x - grabX, y - grabY);
-	}
+	// dialog.launch();
+	// dialog.setZ();
+
 
 	// Force a layout pass so the window's rendered size matches the applied state,
 	// especially when restored from a hidden HTML JSON drop.
-	try {
-		dialog.resize();
-		if (typeof dialog.update === "function") dialog.update();
-		var rect = getRect(dialog.target);
-		if (rect) {
-			var bw = rect.width, bh = rect.height;
-			if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
-				dialog._width = bw;
-				dialog._height = bh;
-				if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
-			}
-		}
-		dialog.resize();
-	} catch (ex) { console.log(ex); }
+	// try {
+	// 	dialog.resize();
+	// 	if (typeof dialog.update === "function") dialog.update();
+	// 	var rect = getRect(dialog.target);
+	// 	if (rect) {
+	// 		var bw = rect.width, bh = rect.height;
+	// 		if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
+	// 			dialog._width = bw;
+	// 			dialog._height = bh;
+	// 			if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
+	// 		}
+	// 	}
+	// 	dialog.resize();
+	// } catch (ex) { console.log(ex); }
 
 	return dialog;
 };
@@ -2493,9 +2499,22 @@ function Dialog(object) {
 			this.close();
 		} else {
 
-			this.application = object;
+			// this.application = 	;
 
-			this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
+			// this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
+
+			if (object.exists) {
+				var target = document.getElementById(object.id);
+				if (target && this.application) {
+					this.target = target;
+					var doc = this.contentDocument;
+					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
+				}
+			} else {
+				this.target = createDialogElement();
+				this.openUrl(object.src);
+			}
+
 			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
@@ -2593,6 +2612,7 @@ function Dialog(object) {
 			return;
 		}
 
+
 		/** @type {DialogDropState} */
 		var dragState = {
 			state: self.getState(),
@@ -2610,9 +2630,9 @@ function Dialog(object) {
 		var data = JSON.stringify(dragState);
 		var transfer = event.dataTransfer;
 
-		if (rect && typeof transfer.setDragImage === "function") {
-			try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
-		}
+		// if (rect && typeof transfer.setDragImage === "function") {
+		// 	try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
+		// }
 
 		try {
 			transfer.setData("application/json", data);
@@ -2626,6 +2646,9 @@ function Dialog(object) {
 		}
 
 		transfer.effectAllowed = "copyMove";
+
+		self.target.classList.add("hidden");
+
 
 	}, false);
 
@@ -2642,7 +2665,7 @@ function Dialog(object) {
 	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
-		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
+		else this.moveCenterTo(window.innerWidth / 2, window.innerHeight / 2);
 
 	// if (this.application && this.application.launch) this.launch();
 
@@ -3934,10 +3957,11 @@ Dialog.prototype.move = function (x, y, update, animate) {
  * Move the dialog so its center point lands at the provided coordinates. I  ggotta renname thifunc
  * @param {number} centerX
  * @param {number} centerY
+ * @param {boolean} [animate]
  */
-Dialog.prototype.moveToCenter = function(centerX, centerY) {
+Dialog.prototype.moveCenterTo = function(centerX, centerY, animate) {
 	if (typeof centerX !== "number" || typeof centerY !== "number") return;
-	this.move(centerX - this.width / 2, centerY - this.height / 2);
+	this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
 };
 
 /** @param {number} [z] */
@@ -4348,6 +4372,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
 	if (!this.isOpen) this.insertIntoDOM();
+	this.target.classList.remove("hidden");
 	windowManager.notifyExtensions("onWindowLaunch", this);
 
 	this.open();
@@ -4493,7 +4518,7 @@ Dialog.prototype.loadState = function(state) {
 	}
 	if ("title" in state) this.title = state.title;
 	if ("x" in state || "y" in state)
-		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y);
+		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y, true, false);
 	if ("z" in state && typeof state.z === "number") this.setZ(state.z);
 	if ("width" in state || "height" in state)
 		this.resize("width" in state ? state.width : this.width, "height" in state ? state.height : this.height);
