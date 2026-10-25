@@ -3704,7 +3704,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this._compositorMaxState = null;
 	}
 
-	var windowSection = windowManager ? windowManager.getSnapContainer(this) : null;
+	var windowSection = windowManager.getSnapContainer(this);
 	var endWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
 	var endHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
 	var startWidth = this.width || target.offsetWidth || 300;
