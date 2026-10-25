@@ -2530,100 +2530,99 @@ function Dialog(object) {
 	};
 
 	var target = this.target;
-	if (target && this.activationHandler) {
-		var buttons = target.getElementsByTagName("button");
 
-		var createSizers = true;
+	var buttons = target.getElementsByTagName("button");
 
-		if(this.resizable && createSizers) this._createSizers();
+	var createSizers = true;
 
-		// target.addEventListener("dragstart", cancelDomEvent, false);
-		target.addEventListener("selectstart", function (event) {
-			if (event.ctrlKey || self._ctrlDrag) return;
-			cancelDomEvent(event);
-		}, false);
+	if(this.resizable && createSizers) this._createSizers();
 
-		var body = this.body;
-		if (body) body.addEventListener("load", function () { try {
-			self.verifyEjectCapability();
-		} catch (exception) {
-			if (buttons[0]) buttons[0].style.display = "none";
-		}}, false);
+	// target.addEventListener("dragstart", cancelDomEvent, false);
+	target.addEventListener("selectstart", function (event) {
+		if (event.ctrlKey || self._ctrlDrag) return;
+		cancelDomEvent(event);
+	}, false);
 
-		var header = this.titleBar;
-		if (header) target.addEventListener("dblclick", function (event) {
-			var rect = getRect(header);
-			if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
-			var node = event.target;
-			while (node && node !== header) {
-				if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
-				node = node.parentElement;
-			}
-			self.toggleMaximized();
-		}, false);
+	var body = this.body;
+	if (body) body.addEventListener("load", function () { try {
+		self.verifyEjectCapability();
+	} catch (exception) {
+		if (buttons[0]) buttons[0].style.display = "none";
+	}}, false);
+
+	var header = this.titleBar;
+	if (header) target.addEventListener("dblclick", function (event) {
+		var rect = getRect(header);
+		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+		var node = event.target;
+		while (node && node !== header) {
+			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
+			node = node.parentElement;
+		}
+		self.toggleMaximized();
+	}, false);
 
 
-		if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
-		else target.addEventListener("mousedown", this.activationHandler, false);
+	if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
+	else target.addEventListener("mousedown", this.activationHandler, false);
 
-		var ejectButton = buttons[windowButtons.eject];
-		if (ejectButton)
-			ejectButton.addEventListener("click", this.eject.bind(this), false);
+	var ejectButton = buttons[windowButtons.eject];
+	if (ejectButton)
+		ejectButton.addEventListener("click", this.eject.bind(this), false);
 
-		var closeButton = buttons[windowButtons.close];
-		if (closeButton)
-			closeButton.addEventListener("click", this.close.bind(this), false);
-		var fullscreenButton = buttons[windowButtons.full];
-		if (fullscreenButton)
-			fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+	var closeButton = buttons[windowButtons.close];
+	if (closeButton)
+		closeButton.addEventListener("click", this.close.bind(this), false);
+	var fullscreenButton = buttons[windowButtons.full];
+	if (fullscreenButton)
+		fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
 
-		this.toggleOpen(false);
+	this.toggleOpen(false);
 
-		target.addEventListener("dragstart", function (event) {
-			if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
-				event.preventDefault();
-				return;
-			}
+	target.addEventListener("dragstart", function (event) {
+		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
+			event.preventDefault();
+			return;
+		}
 
-			/** @type {DialogDropState} */
-			var dragState = {
-				state: self.getState(),
-				app: self.application
-			};
+		/** @type {DialogDropState} */
+		var dragState = {
+			state: self.getState(),
+			app: self.application
+		};
 
-			// Remember where inside the window the pointer grabbed it, so a drop can put
-			// the window back under the cursor exactly where the drag preview showed it.
-			var rect = getRect(self.target);
-			if (rect) dragState.offset = {
-				x: event.clientX - (rect.left + rect.width / 2),
-				y: event.clientY - (rect.top + rect.height / 2)
-			};
+		// Remember where inside the window the pointer grabbed it, so a drop can put
+		// the window back under the cursor exactly where the drag preview showed it.
+		var rect = getRect(self.target);
+		if (rect) dragState.offset = {
+			x: event.clientX - (rect.left + rect.width / 2),
+			y: event.clientY - (rect.top + rect.height / 2)
+		};
 
-			var data = JSON.stringify(dragState);
-			var transfer = event.dataTransfer;
+		var data = JSON.stringify(dragState);
+		var transfer = event.dataTransfer;
 
-			if (rect && typeof transfer.setDragImage === "function") {
-				try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) {}
-			}
+		if (rect && typeof transfer.setDragImage === "function") {
+			try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) {}
+		}
 
-			try {
-				transfer.setData("application/json", data);
-				transfer.setData("text/plain", self.src || self.title || self.id);
-				if (self.src) transfer.setData("text/uri-list", self.src);
-				transfer.setData("text/html", data);
-			} catch(ex) {
-				transfer.setData("Text", data);
-				if (self.src) transfer.setData("URL", self.src);
-			}
+		try {
+			transfer.setData("application/json", data);
+			transfer.setData("text/plain", self.src || self.title || self.id);
+			if (self.src) transfer.setData("text/uri-list", self.src);
+			transfer.setData("text/html", data);
+		} catch(ex) {
+			transfer.setData("Text", data);
+			if (self.src) transfer.setData("URL", self.src);
+		}
 
-			transfer.effectAllowed = "copyMove";
+		transfer.effectAllowed = "copyMove";
 
-		}, false);
+	}, false);
 
-		target.addEventListener("dragend", function () {
-			self._ctrlDrag = false;
-		}, false);
-	}
+	target.addEventListener("dragend", function () {
+		self._ctrlDrag = false;
+	}, false);
 
 	if (this.id) windowManager.windows[this.id] = this;
 
@@ -3632,7 +3631,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
-			if (self.target) self.target.classList.toggle("maximized", enable);
+			self.target.classList.toggle("maximized", enable);
 		};
 		if (!enable) toggleMaximizedFallback();
 		Anim.animate(300, function (t) {
