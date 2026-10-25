@@ -1372,22 +1372,19 @@ WindowManager.prototype.getSnapGroup = function (section) {
 	return group;
 };
 
-/**
- * Width of the window area snaps lay out against.
- * @param {HTMLElement | null} [section]
- */
+/** @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapWidth = function (section) {
 	var area = section || this.getSnapContainer();
 	return area ? area.clientWidth : window.innerWidth;
 };
 
-/** Height of the window area snaps lay out against. @param {HTMLElement | null} [section] */
+/**  @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapHeight = function (section) {
 	var area = section || this.getSnapContainer();
 	return area ? area.clientHeight : window.innerHeight;
 };
 
-/** @param {number} x @param {number} y */
+/** {@param {number} x} @param {number} y */
 WindowManager.prototype.setPointerPosition = function (x, y) {
 	this.pointerPosition.x = x;
 	this.pointerPosition.y = y;
