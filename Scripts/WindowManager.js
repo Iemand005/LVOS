@@ -2499,9 +2499,22 @@ function Dialog(object) {
 			this.close();
 		} else {
 
-			this.application = object;
+			// this.application = 	;
 
-			this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
+			// this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
+
+			if (object.exists) {
+				var target = document.getElementById(object.id);
+				if (target && this.application) {
+					this.target = target;
+					var doc = this.contentDocument;
+					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
+				}
+			} else {
+				this.target = createDialogElement();
+				this.openUrl(object.src);
+			}
+
 			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
