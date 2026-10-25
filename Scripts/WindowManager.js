@@ -2470,22 +2470,6 @@ function Dialog(object) {
 	this.initWithObject(object);
 }
 
-
-
-/**
- * @param {string} name
- * @param {Element} [parent]
- */
-Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
-	var target = parent || this.target;
-	if (!target) return null;
-	var elements = target.getElementsByTagName(name);
-	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
-	var element = elements.length ? elements[0] : null;
-	if (isElement(element)) return element;
-	return null;
-};
-
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
 
@@ -2665,6 +2649,20 @@ Dialog.prototype.initWithObject = function(object) {
 	// if (this.application && this.application.launch) this.launch();
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
+};
+
+/**
+ * @param {string} name
+ * @param {Element} [parent]
+ */
+Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
+	var target = parent || this.target;
+	if (!target) return null;
+	var elements = target.getElementsByTagName(name);
+	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
+	var element = elements.length ? elements[0] : null;
+	if (isElement(element)) return element;
+	return null;
 };
 
 /** @param {HTMLElement} element */
