@@ -2466,6 +2466,10 @@ function Dialog(object) {
 		return true;
 	};
 	
+	if (object instanceof Dialog) {
+		if (object.application) object = object.application;
+	}
+	
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
 			this.target = object;
@@ -2503,7 +2507,7 @@ function Dialog(object) {
 				self.setIcon(self.getIconUrl());
 			});
 		}
-	} else if (object.application) object = object.application;
+	}
 
 
 	this.setMinSize(180, 250);
