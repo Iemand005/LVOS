@@ -2413,7 +2413,6 @@ function Dialog(object) {
 	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null, _fsTokenAtStart: null };
 
 	if (!object) return;
-	if (!create) create = false;
 
 	/** @type {HTMLElement | null} */
 	this.target = null;
@@ -2447,7 +2446,7 @@ function Dialog(object) {
 
 	var metroAppList = document.getElementById("metroapplist");
 	if (metroAppList) metroAppList.appendChild(this.createOpenButton());
-	if (isElement(object)) this.initWithObject(object);
+	this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
 
@@ -2488,6 +2487,8 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 
 /** @param {HTMLElement | Application | Dialog} object */
 Dialog.prototype.initWithObject = function(object) {
+
+	return;
 
 	if (object instanceof Dialog) {
 		if (object.target) return;
@@ -2640,7 +2641,7 @@ Dialog.prototype.initWithObject = function(object) {
 			this.move(object.x, object.y);
 		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
 	
-	if (this.application && this.application.launch) this.launch();
+	// if (this.application && this.application.launch) this.launch();
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 };
