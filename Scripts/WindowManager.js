@@ -4497,7 +4497,10 @@ Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
-Dialog.prototype.insertIntoDOM() {}
+Dialog.prototype.insertIntoDOM = function() {
+	var container = document.getElementById("window-section");
+	if (container) container.appendChild(this.target);
+};
 /**
  * Moves an element of the window into a picture-in-picture window.
  * @param {string} id The id of the element
