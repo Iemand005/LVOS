@@ -2729,6 +2729,7 @@ Dialog.prototype.clearExposéVisual = function() {
 	this._exposeVisualScale = undefined;
 	this._exposeVisualWidth = undefined;
 	this._exposeContentScale = undefined;
+	/** @type {Coord} */
 	this._exposeGrab = null;
 };
 
