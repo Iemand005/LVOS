@@ -2600,7 +2600,7 @@ function Dialog(object) {
 		var transfer = event.dataTransfer;
 
 		if (rect && typeof transfer.setDragImage === "function") {
-			try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) {}
+			try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
 		}
 
 		try {
