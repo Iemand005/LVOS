@@ -1051,7 +1051,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 		var root = document.querySelector("main");
 		if (root) {
 			// Remember the desktop and position to fly back to on a miss-drop.
-			var section = dialog.target && dialog.target.closest ? dialog.target.closest("#window-section, .window-section") : null;
+			var section = dialog.target.closest("#window-section, .window-section");
 			var origin = -1;
 			if (section) for (var i = 0; i < window.desktopManager.desktops.length; i++) {
 				var desktop = window.desktopManager.desktops[i];
