@@ -2339,12 +2339,10 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
  * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} [object] This is a dialog element from the HTML structure, or an object that defines the properties of the window.
- * @param {boolean} [create]
- *
  * @constructor
  * @class
  */
-function Dialog(object, create) {
+function Dialog(object) {
 
 	/** @type {number} */
 	this._x = 0;
@@ -2449,7 +2447,7 @@ function Dialog(object, create) {
 
 	var metroAppList = document.getElementById("metroapplist");
 	if (metroAppList) metroAppList.appendChild(this.createOpenButton());
-	if (create || isElement(object)) this.initWithObject(object);
+	if (isElement(object)) this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
 
@@ -4335,7 +4333,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 
 Dialog.prototype.launch = function() {
 	// TODO: initstate cuz it might nt have to init again to open
-	if (!this.isOpen) this.initWithObject(this);
+	// if (!this.isOpen) this.initWithObject(this);
 	windowManager.notifyExtensions("onWindowLaunch", this);
 
 	this.open();
