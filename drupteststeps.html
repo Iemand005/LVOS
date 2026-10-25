@@ -163,6 +163,78 @@
 		-ms-user-select: none;
 		user-select: none;
 	}
+	.card {
+		pointer-events: auto;
+	}
+	.card .sizer {
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		z-index: 0;
+		pointer-events: auto;
+	}
+	.card .sizer-1 {
+		top: 0;
+		left: 0;
+		width: 100%;
+		cursor: n-resize;
+	}
+	.card .sizer-2 {
+		top: 0;
+		right: 0;
+		height: 100%;
+		cursor: e-resize;
+	}
+	.card .sizer-3 {
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		cursor: s-resize;
+	}
+	.card .sizer-4 {
+		top: 0;
+		left: 0;
+		height: 100%;
+		cursor: w-resize;
+	}
+	.card .sizer-5 {
+		top: 0;
+		left: 0;
+		cursor: nw-resize;
+	}
+	.card .sizer-6 {
+		top: 0;
+		right: 0;
+		cursor: ne-resize;
+	}
+	.card .sizer-7 {
+		bottom: 0;
+		right: 0;
+		cursor: se-resize;
+	}
+	.card .sizer-8 {
+		bottom: 0;
+		left: 0;
+		cursor: sw-resize;
+	}
+	.transformed {
+		position: relative;
+		height: 140px;
+		overflow: hidden;
+		background: #ececec;
+		-webkit-transform: translateZ(0);
+		transform: translateZ(0);
+	}
+	.transformed .card {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	#toolbar,
+	#toolbar *,
+	#drop {
+		pointer-events: auto;
+	}
 </style>
 </head>
 <body>
@@ -174,6 +246,8 @@
 	</p>
 	<div id="toolbar">
 		<label><input type="checkbox" id="globalSelect"> global document.onselectstart (like DesktopManager)</label>
+		<label><input type="checkbox" id="globalDrag"> global window.ondrag preventDefault (like DesktopManager)</label>
+		<label><input type="checkbox" id="bodyNone"> body pointer-events: none (like DesktopManager)</label>
 		<label><input type="checkbox" id="globalLog"> log dragover/dragenter</label>
 		<button type="button" id="clearLog">Clear log</button>
 	</div>
@@ -256,6 +330,25 @@
 				activation: "mousedown",
 				legacyData: true,
 				setDragImage: true
+			},
+			{
+				title: "11. + resize sizers",
+				hint: "15px resize handles cover the window edges like the real manager. Try the top 15px, then lower on the title bar.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown",
+				sizers: true
+			},
+			{
+				title: "12. + content tag and transform",
+				hint: "Uses a real <content> tag in a transformed, overflow-hidden container, like the desktop section.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown",
+				contentTag: true,
+				transformed: true
 			}
 		];
 
@@ -376,17 +469,35 @@
 				card.className = "card";
 				if (config.headerNone) card.className += " header-none";
 				if (config.noSelect) card.className += " no-select";
+				var openContent = config.contentTag ? '<content class="content">' : '<div class="content">';
+				var closeContent = config.contentTag ? '</content>' : '</div>';
 				card.innerHTML =
-					'<div class="content">' +
+					openContent +
 						'<header>' +
 							'<h1>Stage ' + (index + 1) + '</h1>' +
 							'<div class="buttons"><button type="button" tabindex="-1">x</button></div>' +
 						'</header>' +
 						'<article>Drag the title bar with Ctrl. Drop it on the dashed area.</article>' +
-					'</div>';
+					closeContent;
+				if (config.sizers) {
+					for (var sizerIndex = 1; sizerIndex <= 8; sizerIndex++) {
+						var sizer = document.createElement("div");
+						sizer.className = "sizer sizer-" + sizerIndex;
+						sizer.draggable = false;
+						card.appendChild(sizer);
+					}
+				}
 			}
 			card.setAttribute("draggable", "true");
-			stage.appendChild(card);
+
+			if (config.transformed) {
+				var host = document.createElement("div");
+				host.className = "transformed";
+				host.appendChild(card);
+				stage.appendChild(host);
+			} else {
+				stage.appendChild(card);
+			}
 
 			var status = document.createElement("div");
 			status.className = "status";
@@ -568,6 +679,31 @@
 			} else {
 				document.onselectstart = null;
 			}
+		};
+
+		document.getElementById("globalDrag").onclick = function () {
+			if (this.checked) {
+				window.ondrag = document.ondrag = function (event) {
+					event = event || window.event;
+					log("global drag prevented target=" + describe(event.target || event.srcElement));
+					cancel(event);
+					if (event.stopPropagation) event.stopPropagation();
+					return false;
+				};
+				window.ondragleave = document.ondragleave = function (event) {
+					event = event || window.event;
+					cancel(event);
+					if (event.stopPropagation) event.stopPropagation();
+					return false;
+				};
+			} else {
+				window.ondrag = document.ondrag = null;
+				window.ondragleave = document.ondragleave = null;
+			}
+		};
+
+		document.getElementById("bodyNone").onclick = function () {
+			document.body.style.pointerEvents = this.checked ? "none" : "";
 		};
 	}());
 	</script>
