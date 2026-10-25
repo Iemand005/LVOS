@@ -3203,9 +3203,7 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 
 Object.defineProperty(Dialog.prototype, "transform", {
 	/** @type {()=>Transformable | null} */
-	get: function() {
-		 return this._transform || (this._transform = new Transformable(this.target));
-	}
+	get: function() { return this._transform || (this._transform = new Transformable(this.target)); }
 });
 
 Object.defineProperty(Dialog.prototype, "killable", {
