@@ -139,7 +139,7 @@ function getSiteName(url) {
 
 
 /**
- * @param {Node | EventTarget | null} [object]
+ * @param {unknown} [object]
  * @returns {object is HTMLElement}
  */
 Helpers.isElement = function(object) { return object && "nodeType" in object || false; };
