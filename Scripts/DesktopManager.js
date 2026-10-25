@@ -239,7 +239,7 @@ function Desktop(name, desktopElement) {
 
 /** @param {Dialog} dialog */
 Desktop.prototype.insertWindow = function(dialog) {
-    dialog.setParentElement(this.target)
+    dialog.setParentElement(this.target);
 };
 
 window.addEventListener("load", onLoad, false);
@@ -257,12 +257,12 @@ ContextMenu.prototype.open = function(x, y) {
     this.element.style.left = toPixels(x);
     this.element.style.top = toPixels(y);
     this.element.classList.add("open");
-}
+};
 
 ContextMenu.prototype.close = function() {
     if (!this.element) return;
     this.element.classList.remove("open");
-}
+};
 
 var contextMenu = new ContextMenu;
 
@@ -312,7 +312,7 @@ function DesktopManager() {
 
 Object.defineProperty(DesktopManager.prototype, "isExposé", {
     get: function() { return Boolean(document.scrollingElement && document.scrollingElement.scrollTop); }
-})
+});
 
 /**
  * @param {number} x
@@ -403,7 +403,7 @@ DesktopManager.prototype.applyWallpaperImage = function(url, blurredUrl, onError
         if (!wallpaper || !self.wallpaperImage) return;
         while (wallpaper.firstChild) wallpaper.removeChild(wallpaper.firstChild);
         // wallpaper.setAttribute("data-wallpaper-src", url);
-        if (typeof blurredUrl == "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
+        if (typeof blurredUrl === "string") wallpaper.setAttribute("data-blurred-src", blurredUrl);
         else wallpaper.removeAttribute("data-blurred-src");
 
         wallpaper.classList.toggle("legacy-wallpaper", !supportsObjectFit);
@@ -456,7 +456,7 @@ DesktopManager.prototype.applyRegisteredWallpaper = function(id) {
 	this.clearWallpaperContent();
 	var frame = this.ensureWallpaperFrame();
 	if (!frame) return;
-	if (typeof appManager != "undefined" && typeof appManager.setWallpaper == "function")
+	if (typeof appManager !== "undefined" && typeof appManager.setWallpaper === "function")
 		appManager.setWallpaper(id);
 	else frame.src = "https://iemand005.github.io/FrostedColours/";
 };
@@ -464,7 +464,7 @@ DesktopManager.prototype.applyRegisteredWallpaper = function(id) {
 /** Restore the default registered wallpaper (the first one registered). */
 DesktopManager.prototype.restoreDefaultWallpaper = function() {
 	var defaultId = "colors";
-	if (typeof appManager != "undefined" && appManager._wallpaper)
+	if (typeof appManager !== "undefined" && appManager._wallpaper)
 		defaultId = appManager._wallpaper.id;
 	this.applyRegisteredWallpaper(defaultId);
 };
@@ -472,7 +472,7 @@ DesktopManager.prototype.restoreDefaultWallpaper = function() {
 /** Forget the user-picked wallpaper image so "None" persists across reloads. */
 DesktopManager.prototype.clearWallpaperCache = function() {
 	try {
-		if (typeof settings != "undefined" && settings.set) settings.set("wallpaperImage", null);
+		if (typeof settings !== "undefined" && settings.set) settings.set("wallpaperImage", null);
 	} catch (ex) {}
 	try { window.localStorage.removeItem("wallpaperImage"); } catch (ex) {}
 	initWallpaperDB(function(db) {
@@ -569,7 +569,7 @@ function initWallpaperDB(onSuccess, onFailure) {
 function localStorageFabblack(dataUrl) {
 	if (!dataUrl) return;
 	try {
-		if (typeof settings != "undefined" && settings.set) settings.set("wallpaperImage", dataUrl);
+		if (typeof settings !== "undefined" && settings.set) settings.set("wallpaperImage", dataUrl);
 		else throw new Error("Settings unavailable");
 	} catch (ex) {
 		try { window.localStorage.setItem("wallpaperImage", dataUrl); } catch (ex2) {}
@@ -597,9 +597,9 @@ function saveWallpaperToCache(blob, dataUrl) {
 
 /** @returns {boolean} True when the user chose a registered wallpaper, so cached images should not override it. */
 function hasRegisteredWallpaperSelection() {
-	if (typeof settings == "undefined" || !settings || typeof settings.get != "function") return false;
+	if (typeof settings === "undefined" || !settings || typeof settings.get !== "function") return false;
 	var selection = settings.get("wallpaper");
-	return typeof selection == "string" && selection.indexOf("registered:") === 0;
+	return typeof selection === "string" && selection.indexOf("registered:") === 0;
 }
 
 /**
@@ -631,7 +631,7 @@ function loadWallpaperFromLocalStorage() {
 	var key = "wallpaperImage";
 	var cachedWallpaper;
 	try {
-		cachedWallpaper = typeof settings != "undefined" ? settings.get(key) : window.localStorage.getItem(key);
+		cachedWallpaper = typeof settings !== "undefined" ? settings.get(key) : window.localStorage.getItem(key);
 	} catch (ex) {
 		try { cachedWallpaper = window.localStorage.getItem(key); } catch (ex2) {}
 	}
@@ -706,7 +706,7 @@ if (wallpaper) {
 var screenShooter = null;
 function getScreenShooter() {
 	if (screenShooter) return screenShooter;
-	if (typeof ScreenShooter == "undefined") return null;
+	if (typeof ScreenShooter === "undefined") return null;
 	return screenShooter = new ScreenShooter;
 }
 
