@@ -1873,7 +1873,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	var callback = ext[hook];
 	if (typeof callback !== "function") return;
 	try {
-		callback.call(ext, dialog);
+		if (dialog) callback.call(ext, dialog);
 	} catch (ex) {
 		console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex);
 	}
