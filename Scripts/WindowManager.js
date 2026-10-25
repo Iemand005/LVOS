@@ -3204,13 +3204,7 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 Object.defineProperty(Dialog.prototype, "transform", {
 	/** @type {()=>Transformable | null} */
 	get: function() {
-		if (this._transform) return this._transform;
-		var self = this;
-		(function () {})
-		var target = this.target;
-		if (!target) return null;
-		this._transform = new Transformable(target);
-		return this._transform;
+		 return this._transform || (this._transform = new Transformable(this.target));
 	}
 });
 
