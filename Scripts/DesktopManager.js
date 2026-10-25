@@ -179,8 +179,8 @@ var onLoad = function () {
 
 			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 
-			selector.style.width = toPixels(Math.abs(width));
-			selector.style.height = toPixels(Math.abs(height));
+			selector.style.width = Helpers.toPixels(Math.abs(width));
+			selector.style.height = Helpers.toPixels(Math.abs(height));
 		};
 
 		// if (supportsPointer)
@@ -190,8 +190,8 @@ var onLoad = function () {
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 			translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
 
-			selector.style.width = toPixels(Math.abs(width));
-			selector.style.height = toPixels(Math.abs(height));
+			selector.style.width = Helpers.toPixels(Math.abs(width));
+			selector.style.height = Helpers.toPixels(Math.abs(height));
 
 			// translateElement(selector, ev.clientX, ev.clientY);
 			selector.className = "selector";

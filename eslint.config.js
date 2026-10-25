@@ -29,7 +29,8 @@ export default defineConfig(
 				Modern: "readonly",
 				flags: "readonly",
 				getScreenShooter: "readonly",
-				launchpad: "readonly"
+				launchpad: "readonly",
+				Helpers: "readonly"
 			}
 		},
 

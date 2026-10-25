@@ -28,10 +28,10 @@ Reflector.prototype.reflect = function (target) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
 			var rect = target.getBoundingClientRect();
-			refElement.style.top = toPixels(rect.top - dock.offsetTop + (dock.offsetHeight*0));
-			refElement.style.left = toPixels((rect.left - dock.offsetLeft) + (dock.offsetWidth /2));
-			refElement.style.width = toPixels(rect.width);
-			refElement.style.height = toPixels(rect.height);
+			refElement.style.top = Helpers.toPixels(rect.top - dock.offsetTop + (dock.offsetHeight*0));
+			refElement.style.left = Helpers.toPixels((rect.left - dock.offsetLeft) + (dock.offsetWidth /2));
+			refElement.style.width = Helpers.toPixels(rect.width);
+			refElement.style.height = Helpers.toPixels(rect.height);
 			refElement.style.zIndex = mutation.target.style.zIndex;
                 }
             });
