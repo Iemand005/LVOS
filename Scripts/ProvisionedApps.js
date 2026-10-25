@@ -5,8 +5,6 @@
 
 "use strict";
 
-alert("Injecting ur mom")
-
 var dockAppList = document.getElementById("dockapplist");
 
 /**
@@ -141,5 +139,7 @@ function finishAppInstall() {
 }
 
 finishAppInstall();
+alert("Injecting ur mom")
+
 
 window.addEventListener("load", initApps, false);
