@@ -510,10 +510,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 
 //#region Window Manager
 
-/**
- * @constructor
- * @class WindowManager
- */
+/** @class */
 function WindowManager() {
 	/** @type {DialogMap} @const */
 	this._windows = {};
@@ -564,7 +561,8 @@ function WindowManager() {
 	 * With gaps on, a window snapped right sits flush against the right edge and a lone
 	 * window keeps its own width, leaving the rest of the desktop free. Turn this off
 	 * for a full tiling window manager: no gaps, and the last window absorbs the
-	 * leftover width so the group always fills the area. @type {boolean}
+	 * leftover width so the group always fills the area.
+	 * @type {boolean}
 	 */
 	this.snapInsertGaps = true;
 
@@ -617,11 +615,11 @@ function WindowManager() {
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
-	this.channel = BroadcastChannel && new BroadcastChannel('lvos');
+	this.channel = BroadcastChannel && new BroadcastChannel("lvos");
 
 	this.channel.onmessage = function(ev) {
 		var data = ev.data;
-		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return; }
+		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return console.warn(ex); }
 		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
 		windowManager.handleBroadcast(data.type, data.data, data.id);
 	};
@@ -668,7 +666,7 @@ function WindowManager() {
 					windowManager.handleWindowDrag(pending.clientX, pending.clientY, touch);
 				});
 			} else windowManager.handleWindowDrag(event.clientX, event.clientY, isTouch);
-		} catch (ex) {}
+		} catch (ex) { console.warn(ex); }
 	};
 
 	this.windowSnap = new WindowSnap;
