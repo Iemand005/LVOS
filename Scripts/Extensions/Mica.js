@@ -112,7 +112,7 @@ function updateMicaPosition(dialog) {
 		var wallpaperImage = wallpaper.children[0];
 		if (!wallpaperImage) return;
 
-		translateElement(backdrop, -dialog.x, -dialog.y);
+		Helpers.translateElement(backdrop, -dialog.x, -dialog.y);
 
 		var wallpaperWidth = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientWidth ? wallpaperImage.clientWidth : wallpaper.clientWidth;
 		var wallpaperHeight = wallpaperImage instanceof HTMLImageElement && wallpaperImage.clientHeight ? wallpaperImage.clientHeight : wallpaper.clientHeight;
