@@ -2510,7 +2510,7 @@ Dialog.prototype.initWithObject = function(object) {
 				this.target = createDialogElement();
 				// this.openUrl(object.src);
 			}
-			return;
+			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
@@ -4497,6 +4497,7 @@ Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
 	return doc && doc.getElementById(id);
 };
+Dialog.prototype.insertIntoDOM() {}
 /**
  * Moves an element of the window into a picture-in-picture window.
  * @param {string} id The id of the element
