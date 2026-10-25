@@ -923,7 +923,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		// under the pointer, which is where the drag preview left it.
 		var grabX = offset ? offset.x : 0;
 		var grabY = offset ? offset.y : 0;
-		dialog.moveToCenter(x - grabX, y - grabY);
+		dialog.moveCenterTo(x - grabX, y - grabY, false);
 	}
 
 	// Force a layout pass so the window's rendered size matches the applied state,
@@ -2646,7 +2646,7 @@ function Dialog(object) {
 	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
-		else this.moveToCenter(window.innerWidth / 2, window.innerHeight / 2);
+		else this.moveCenterTo(window.innerWidth / 2, window.innerHeight / 2);
 
 	// if (this.application && this.application.launch) this.launch();
 
@@ -3940,7 +3940,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
  * @param {number} centerY
  * @param {boolean} [animate]
  */
-Dialog.prototype.moveToCenter = function(centerX, centerY, animate) {
+Dialog.prototype.moveCenterTo = function(centerX, centerY, animate) {
 	if (typeof centerX !== "number" || typeof centerY !== "number") return;
 	this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
 };
