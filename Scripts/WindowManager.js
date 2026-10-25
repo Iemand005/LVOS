@@ -914,7 +914,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	// Apply the dragged state first so the window keeps its size (and other state)
 	// from when it was dragged, then position it under the cursor.
 	dialog.loadState(state || {});
-	
+
 	if (typeof x === "number" && typeof y === "number") {
 		// Cancel out the grab offset so the point of the window the pointer held stays
 		// under the pointer, which is where the drag preview left it.
@@ -923,26 +923,26 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		dialog.moveCenterTo(x - grabX, y - grabY, false);
 	}
 
-	dialog.launch();
-	dialog.setZ();
+	// dialog.launch();
+	// dialog.setZ();
 
 
 	// Force a layout pass so the window's rendered size matches the applied state,
 	// especially when restored from a hidden HTML JSON drop.
-	try {
-		dialog.resize();
-		if (typeof dialog.update === "function") dialog.update();
-		var rect = getRect(dialog.target);
-		if (rect) {
-			var bw = rect.width, bh = rect.height;
-			if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
-				dialog._width = bw;
-				dialog._height = bh;
-				if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
-			}
-		}
-		dialog.resize();
-	} catch (ex) { console.log(ex); }
+	// try {
+	// 	dialog.resize();
+	// 	if (typeof dialog.update === "function") dialog.update();
+	// 	var rect = getRect(dialog.target);
+	// 	if (rect) {
+	// 		var bw = rect.width, bh = rect.height;
+	// 		if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
+	// 			dialog._width = bw;
+	// 			dialog._height = bh;
+	// 			if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
+	// 		}
+	// 	}
+	// 	dialog.resize();
+	// } catch (ex) { console.log(ex); }
 
 	return dialog;
 };
