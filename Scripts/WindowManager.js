@@ -844,7 +844,8 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 			if (string === null) return [];
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
-		} catch (exception) {
+		} catch (ex) {
+			console.log(ex); 
 			return [];
 		}
 	}
@@ -939,9 +940,9 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 			}
 		}
 		dialog.resize();
-	} catch (exception) { /* ignore */ }
+	} catch (ex) { console.log(ex); }
 
-		return dialog;
+	return dialog;
 };
 
 /** @param {boolean} enabled */
@@ -1039,10 +1040,10 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			node = node.parentElement;
 		}
 		if (isInteractive) {
-			try { dialog.focus(); } catch (ex) {}
+			try { dialog.focus(); } catch (ex) { console.log(ex); }
 			return dialog;
 		}
-	} catch (ex) {}
+	} catch (ex) { console.log(ex); }
 
 	cancelDomEvent(event);
 
@@ -1062,7 +1063,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	} else dialog.clearExposéVisual();
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
+		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.log(ex); }
 	}
 	this.activeDialog = dialog;
 	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
@@ -1810,7 +1811,6 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
  * Registering an extension that is enabled also enables it, so an extension that
  * has to set something up when it is switched on does not have to do that itself
  * right after registering.
- *
  * @param {Extension} ext
  * @returns {Extension | null} The registered extension, or null when it is not one.
  */
@@ -2397,7 +2397,7 @@ function Dialog(object) {
 	this._maximizing = false;
 	this.maximizeAnimations = 0;
 
-	// this._isLoa
+	/** @type {boolean} */
 	this.fixed = false;
 
 
@@ -2475,6 +2475,9 @@ function Dialog(object) {
 	/** @type {boolean} */
 	this.moveEvents = false;
 
+	/** @type {boolean} */
+	this.scroll = false;
+
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
 			this.target = object;
@@ -2493,7 +2496,7 @@ function Dialog(object) {
 			}
 			this.setTitle(object.title);
 			this.fixed = object.fixed || false;
-			this.scroll = object.scroll;
+			this.scroll = object.scroll|| false;
 			if (this.frame) {
 				if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
 				this.frame.setAttribute("allow", "fullscreen");
