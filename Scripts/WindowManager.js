@@ -1150,7 +1150,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	this.setPointerPosition(newX, newY);
 
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
-	if (snap) {
+	if (snap && this.dragAction.direction) {
 
 		var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
 		if (snapZone) {
@@ -1283,7 +1283,7 @@ WindowManager.prototype.isVerticalResizeDirection = function (direction) {
  */
 WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	var drawnHeight = this.snapHeight(this.getSnapContainer(dialog));
-	if (dialog.target) setClass(dialog.target, "height-snapped", false);
+	setClass(dialog.target, "height-snapped", false);
 	dialog._snappingOut = false;
 	dialog._snappingOutState = null;
 	this._heightSnapReleased = true;
@@ -1384,7 +1384,10 @@ WindowManager.prototype.snapHeight = function (section) {
 	return area ? area.clientHeight : window.innerHeight;
 };
 
-/** {@param {number} x} @param {number} y */
+/**
+ * @param {number} x
+ * @param {number} y
+ */
 WindowManager.prototype.setPointerPosition = function (x, y) {
 	this.pointerPosition.x = x;
 	this.pointerPosition.y = y;
