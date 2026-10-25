@@ -483,17 +483,32 @@ DesktopManager.prototype.clearWallpaperCache = function() {
 
 window.desktopManager = new DesktopManager();
 
+function isFileDrag(ev) {
+	var transfer = ev && ev.dataTransfer;
+	var types = transfer && transfer.types;
+	if (!types) return false;
+	for (var i = 0; i < types.length; i++) {
+		if (String(types[i]).toLowerCase() === "files") return true;
+	}
+	return false;
+}
+
+function setDesktopDragOpacity(opacity) {
+	var desktop = document.getElementById("desktop");
+	if (desktop) desktop.style.opacity = opacity;
+}
+
 // Drag and drop wallpaper support: drag and drop an image file onto the desktop to set it as wallpaper.
 window.ondrag = document.ondrag = function(ev){
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (elements.desktop) elements.desktop.style.opacity = "0.5";
+    ev = ev || window.event;
+    if (!isFileDrag(ev)) return;
+    setDesktopDragOpacity("0.5");
 };
 
 window.ondragleave = document.ondragleave = function(ev){
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (elements.desktop) elements.desktop.style.opacity = "";
+    ev = ev || window.event;
+    if (!isFileDrag(ev)) return;
+    setDesktopDragOpacity("");
 };
 
 /**
@@ -625,7 +640,7 @@ function loadWallpaperFromLocalStorage() {
 function handleWallpaperDrop(ev) {
 	ev.preventDefault();
 	ev.stopPropagation();
-    if (elements.desktop) elements.desktop.style.opacity = "";
+    setDesktopDragOpacity("");
 
     
     if (!ev.dataTransfer || !ev.dataTransfer.files) return;
