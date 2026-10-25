@@ -2,6 +2,7 @@
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function init() {
+	return;
 	var launchpadElement = document.getElementById("launchpad");
 
 	if (launchpad && launchpadElement) {
