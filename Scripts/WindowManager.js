@@ -4431,7 +4431,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 Dialog.prototype.updateScale = function(useScale) {
 	this._useScale = useScale;
 	var target = this.target;
-	if (!target) return;
 	if (useScale) {
 		target.style.right = "";
 		target.style.bottom = "";
@@ -4526,10 +4525,7 @@ Dialog.prototype.screenshot = function() {
 
 //#region DragAction
 
-/**
- * @constructor
- * @class
- */
+/**  @class */
 function DragAction() {
 	/** @type {DragFunction} */
 	this.execute = function(){};
