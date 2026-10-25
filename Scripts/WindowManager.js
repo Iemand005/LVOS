@@ -3505,7 +3505,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	var self = this;
 	var enabled = false;
 	this.animate(function() {
-		if (self.target) enabled = setClass(self.target, className, force);
+		enabled = setClass(self.target, className, force);
 		if (onToggled) onToggled.call(self, enabled);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
@@ -3694,7 +3694,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		this._maximizing = enable;
 		this.setScale(1, 1, undefined, true);
 		this.updateTransform();
-		if (this.useTransform) this.toggleMinSizeConstraints(enable);
+		this.toggleMinSizeConstraints(enable);
 		this.maximizeAnimations--;
 		return;
 	}
