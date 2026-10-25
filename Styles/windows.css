@@ -99,6 +99,10 @@ body {
 	border-radius: inherit;
 }
 
+.hidden {
+	opacity: 0;
+}
+
 svg {
 	fill: rgb(255, 255, 255);
 }
