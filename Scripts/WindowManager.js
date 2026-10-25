@@ -414,8 +414,10 @@ function flipElement(element, onToggled, thisArg) {
 	});
 }
 
-/** Undoes everything {@link flipElement} wrote, so the element is back to its own state.
- * @param {HTMLElement} element */
+/**
+ * Undoes everything {@link flipElement} wrote, so the element is back to its own state.
+ * @param {HTMLElement} element
+ */
 function clearFlip(element) {
 	if (element._flipFrame) {
 		window.cancelAnimationFrame(element._flipFrame);
