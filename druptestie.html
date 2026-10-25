@@ -70,43 +70,43 @@
             });
         }
 
-        drop.addEventListener("dragover", function (e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "copy";
-            this.className = "over";
-        });
+        drop.ondragenter = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			return false;
+		};
 
-        drop.addEventListener("dragleave", function () {
-            this.className = "";
-        });
+		drop.ondragover = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			e.dataTransfer.dropEffect = "copy";
+			this.className = "over";
+			return false;
+		};
 
-        drop.addEventListener("drop", function (e) {
-            e.preventDefault();
-            this.className = "";
+		drop.ondragleave = function () {
+			this.className = "";
+		};
 
-            var data = e.dataTransfer.getData("Text");
+		drop.ondrop = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			this.className = "";
 
-            if (window.clipboardData) {
-                window.clipboardData.setData("Text", data);
-                status.innerText = "Copied to clipboard!\n" + data;
-            } else if (document.queryCommandSupported &&
-                       document.queryCommandSupported("copy")) {
-                var textarea = document.createElement("textarea");
-                textarea.value = data;
-                document.body.appendChild(textarea);
-                textarea.select();
+			var data = e.dataTransfer.getData("Text");
 
-                var copied = document.execCommand("copy");
-                document.body.removeChild(textarea);
+			if (window.clipboardData) {
+				window.clipboardData.setData("Text", data);
+				status.innerText = "Copied!\n" + data;
+			} else {
+				status.innerText = "Dropped:\n" + data;
+			}
 
-                status.innerText = copied
-                    ? "Copied to clipboard!\n" + data
-                    : "Clipboard copy failed.";
-            } else {
-                status.innerText =
-                    "Clipboard unavailable. Select and copy:\n" + data;
-            }
-        });
+			return false;
+		};
     }());
     </script>
 </body>
