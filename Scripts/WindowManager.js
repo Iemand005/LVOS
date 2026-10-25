@@ -2096,7 +2096,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 		return name === "inset";
 	}, function() {
 	}, this);
-}
+};
 
 /**
  * @param {Dialog} dialog
@@ -2123,16 +2123,13 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	}, function() {
 		this.hidden = true;
 	}, this, 120);
-}
+};
 
 //#endregion
 
 //#region ClickOffset
 
-/**
- * @constructor
- * @class ClickOffset
- */
+/** @class */
 function ClickOffset() {
 	this.clickX = 0;
 	this.clickY = 0;
@@ -2258,7 +2255,6 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 
 //#endregion
 /**
- * @constructor
  * @class
  * @param {HTMLElement} target
  */
@@ -2310,7 +2306,7 @@ Transformable.prototype.scale = function(x, y, update, animate) {
 	this._transform.scaleX = x || 1;
 	this._transform.scaleY = y || 1;
 	if (update) this.update(animate);
-}
+};
 
 /**
  * @param {number} x
@@ -2328,7 +2324,7 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	}
 
 	this.update(animate);
-}
+};
 
 //#region Dialog
 
@@ -2337,7 +2333,6 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
  * A window that can be moved around and resized and stuff.
  * @author Lasse Lauwerys
  * @param {HTMLElement | Application} [object] This is a dialog element from the HTML structure, or an object that defines the properties of the window.
- * @constructor
  * @class
  */
 function Dialog(object) {
