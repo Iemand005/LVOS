@@ -3292,6 +3292,7 @@ Dialog.prototype.setIcon = function(iconUrl, onError) {
 
 	this._appIcon.onerror = function (e) {
 		if (self._appIcon) self._appIcon.className = "";
+		console.warn(e);
 		if (onError) onError();
 	};
 
