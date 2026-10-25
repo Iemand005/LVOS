@@ -4,9 +4,7 @@ test('debug touch tiling geometry', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
 
-	await vulpOS.page.evaluate(() => {
-		window.flags.useAnimations = true;
-	});
+	await vulpOS.setAnimations(true);
 
 	const titleBar = await vulpOS.titleBarPoint(window);
 	await vulpOS.touchDrag(titleBar, { x: 2, y: 400 });

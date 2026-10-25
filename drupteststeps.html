@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Drag and drop bisect</title>
+<style>
+	body {
+		font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+		margin: 20px;
+		color: #222;
+		background: #f7f7f7;
+	}
+	h1 {
+		font-size: 20px;
+		margin: 0 0 4px;
+	}
+	p.intro {
+		max-width: 900px;
+		margin: 0 0 12px;
+		font-size: 13px;
+		line-height: 1.45;
+	}
+	#toolbar {
+		margin: 0 0 12px;
+		font-size: 12px;
+	}
+	#toolbar label {
+		margin-right: 18px;
+	}
+	#drop {
+		border: 3px dashed #888;
+		background: #fafafa;
+		padding: 22px 12px;
+		text-align: center;
+		font-size: 13px;
+		margin: 0 0 12px;
+		max-width: 900px;
+	}
+	#drop.over {
+		background: #dceeff;
+		border-color: #2674c7;
+	}
+	#log {
+		max-width: 900px;
+		max-height: 230px;
+		overflow: auto;
+		background: #111;
+		color: #d6ffd6;
+		font: 11px/1.45 Consolas, 'Courier New', monospace;
+		padding: 8px;
+		margin: 0 0 14px;
+		white-space: pre-wrap;
+	}
+	#stages {
+		max-width: 1200px;
+	}
+	.stage {
+		display: inline-block;
+		vertical-align: top;
+		width: 270px;
+		margin: 0 10px 14px 0;
+		padding: 8px;
+		border: 1px solid #bbb;
+		background: #fff;
+	}
+	.stage h2 {
+		font-size: 12px;
+		margin: 0 0 3px;
+	}
+	.stage .hint {
+		font-size: 11px;
+		color: #555;
+		margin: 0 0 6px;
+		min-height: 30px;
+	}
+	.stage .status {
+		font-size: 11px;
+		color: #2674c7;
+		margin-top: 5px;
+		min-height: 15px;
+	}
+	.card,
+	.item {
+		position: relative;
+		width: 250px;
+		height: 120px;
+		background: #fff;
+		border: 1px solid #333;
+		box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+		overflow: hidden;
+		cursor: move;
+	}
+	.item {
+		height: auto;
+		padding: 18px 8px;
+		box-sizing: border-box;
+		text-align: center;
+		font-size: 13px;
+	}
+	.card .content {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.card header {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		height: 28px;
+		padding: 0 6px;
+		background: #e8e8e8;
+		cursor: move;
+	}
+	.card header h1 {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+		-webkit-box-flex: 1;
+		-ms-flex: 1;
+		flex: 1;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.card header .buttons {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+	}
+	.card header button {
+		width: 20px;
+		height: 20px;
+		margin-left: 2px;
+		padding: 0;
+		border: 1px solid #999;
+		background: #fff;
+		font: 11px/16px sans-serif;
+		pointer-events: auto !important;
+	}
+	.card article {
+		padding: 8px;
+		font-size: 12px;
+		line-height: 1.4;
+	}
+	.card.header-none header,
+	.card.header-none .content {
+		pointer-events: none;
+	}
+	.card.header-none article {
+		pointer-events: auto;
+	}
+	.card.header-none header h1 {
+		pointer-events: none;
+	}
+	.card.no-select * {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	.card {
+		pointer-events: auto;
+	}
+	.card .sizer {
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		z-index: 0;
+		pointer-events: auto;
+	}
+	.card .sizer-1 {
+		top: 0;
+		left: 0;
+		width: 100%;
+		cursor: n-resize;
+	}
+	.card .sizer-2 {
+		top: 0;
+		right: 0;
+		height: 100%;
+		cursor: e-resize;
+	}
+	.card .sizer-3 {
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		cursor: s-resize;
+	}
+	.card .sizer-4 {
+		top: 0;
+		left: 0;
+		height: 100%;
+		cursor: w-resize;
+	}
+	.card .sizer-5 {
+		top: 0;
+		left: 0;
+		cursor: nw-resize;
+	}
+	.card .sizer-6 {
+		top: 0;
+		right: 0;
+		cursor: ne-resize;
+	}
+	.card .sizer-7 {
+		bottom: 0;
+		right: 0;
+		cursor: se-resize;
+	}
+	.card .sizer-8 {
+		bottom: 0;
+		left: 0;
+		cursor: sw-resize;
+	}
+	.transformed {
+		position: relative;
+		height: 140px;
+		overflow: hidden;
+		background: #ececec;
+		-webkit-transform: translateZ(0);
+		transform: translateZ(0);
+	}
+	.transformed .card {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	#toolbar,
+	#toolbar *,
+	#drop {
+		pointer-events: auto;
+	}
+</style>
+</head>
+<body>
+	<h1>Drag and drop bisect</h1>
+	<p class="intro">
+		Each stage is one step closer to the window manager. Hold <b>Ctrl</b>, grab a card by its title bar,
+		and drop it on the dashed area. Compare the log with the stage text: the last stage that works tells
+		us which addition broke IE11. Stages 1 to 5 do not require Ctrl; stages 6 and up do.
+	</p>
+	<div id="toolbar">
+		<label><input type="checkbox" id="globalSelect"> global document.onselectstart (like DesktopManager)</label>
+		<label><input type="checkbox" id="globalDrag"> old window.ondrag preventDefault (reproduces the IE11 failure)</label>
+		<label><input type="checkbox" id="bodyNone"> body pointer-events: none (like DesktopManager)</label>
+		<label><input type="checkbox" id="globalLog"> log dragover/dragenter</label>
+		<button type="button" id="clearLog">Clear log</button>
+	</div>
+	<div id="drop">Drop here</div>
+	<pre id="log"></pre>
+	<div id="stages"></div>
+	<script>
+	(function () {
+		"use strict";
+
+		var stages = [
+			{
+				title: "1. Plain demo item",
+				hint: "The working baseline. One draggable element, text only.",
+				item: true
+			},
+			{
+				title: "2. Window, header receives events",
+				hint: "Whole card is draggable, but the header still has pointer-events: auto.",
+				headerNone: false,
+				contentNone: false
+			},
+			{
+				title: "3. Window, header passes through",
+				hint: "Header and content have pointer-events: none, so mousedown targets the card.",
+				headerNone: true,
+				contentNone: true
+			},
+			{
+				title: "4. + selectstart cancel",
+				hint: "Cancels selectstart unless Ctrl is held, like the window manager did.",
+				headerNone: true,
+				contentNone: true,
+				cancelSelect: true
+			},
+			{
+				title: "5. + user-select: none",
+				hint: "Adds the user-select rules the window manager puts on window children.",
+				headerNone: true,
+				contentNone: true,
+				noSelect: true
+			},
+			{
+				title: "6. + Ctrl gate (event.ctrlKey)",
+				hint: "Dragstart is prevented unless the dragstart event itself reports ctrlKey.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "key"
+			},
+			{
+				title: "7. + flag from mousedown",
+				hint: "Dragstart is prevented unless the earlier mousedown saw Ctrl.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "flag",
+				activation: "mousedown"
+			},
+			{
+				title: "8. + flag from pointerdown",
+				hint: "Same as 7 but listens for pointerdown. If the flag never sets, this is the IE11 bug.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "flag",
+				activation: "pointerdown"
+			},
+			{
+				title: "9. + Ctrl or flag (manager)",
+				hint: "The current window manager gate: ctrlKey on dragstart or a mousedown flag.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown"
+			},
+			{
+				title: "10. + legacy data and drag image",
+				hint: "Adds the Text/URL fallback and setDragImage used by the window manager.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown",
+				legacyData: true,
+				setDragImage: true
+			},
+			{
+				title: "11. + resize sizers",
+				hint: "15px resize handles cover the window edges like the real manager. Try the top 15px, then lower on the title bar.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown",
+				sizers: true
+			},
+			{
+				title: "12. + content tag and transform",
+				hint: "Uses a real <content> tag in a transformed, overflow-hidden container, like the desktop section.",
+				headerNone: true,
+				contentNone: true,
+				ctrlGate: "either",
+				activation: "mousedown",
+				contentTag: true,
+				transformed: true
+			}
+		];
+
+		var logElement = document.getElementById("log");
+		var logLines = 0;
+		var dropElement = document.getElementById("drop");
+
+		function now() {
+			var d = new Date();
+			function pad(n) { return n < 10 ? "0" + n : String(n); }
+			return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+		}
+
+		function log(message) {
+			var line = "[" + now() + "] " + message;
+			if (logLines === 0) logElement.textContent = line;
+			else logElement.textContent = line + "\n" + logElement.textContent;
+			logLines++;
+			if (logLines > 300) {
+				var lines = logElement.textContent.split("\n");
+				logElement.textContent = lines.slice(0, 300).join("\n");
+				logLines = 300;
+			}
+		}
+
+		function describe(element) {
+			if (!element) return "(null)";
+			var name = element.nodeName ? element.nodeName.toLowerCase() : "?";
+			var id = element.id ? "#" + element.id : "";
+			var className = "";
+			if (element.className && typeof element.className === "string") {
+				className = "." + element.className.replace(/^\s+|\s+$/g, "").replace(/\s+/g, ".");
+			}
+			return name + id + className;
+		}
+
+		function findStage(element) {
+			while (element && element !== document.body) {
+				if (element.getAttribute && element.getAttribute("data-stage") !== null) return element;
+				element = element.parentNode;
+			}
+			return null;
+		}
+
+		function stageLabel(stage) {
+			if (!stage) return "outside";
+			return "stage " + stage.getAttribute("data-stage") + " (" + stage.getAttribute("data-name") + ")";
+		}
+
+		function cancel(event) {
+			if (!event) return;
+			if (event.preventDefault) event.preventDefault();
+			event.returnValue = false;
+			return false;
+		}
+
+		function typeList(dataTransfer) {
+			var result = [];
+			if (!dataTransfer || !dataTransfer.types) return "";
+			var types = dataTransfer.types;
+			for (var i = 0; i < types.length; i++) result.push(types[i]);
+			return result.join(",");
+		}
+
+		function setData(event, stage) {
+			var dt = event.dataTransfer;
+			var label = "stage " + stage.index + ": " + stage.name;
+			var json = JSON.stringify({ stage: stage.index, name: stage.name });
+			var ok = false;
+			try {
+				dt.setData("application/json", json);
+				dt.setData("text/plain", label);
+				dt.setData("text/uri-list", "https://example.com/stage/" + stage.index);
+				dt.setData("text/html", "<b>" + label + "</b>");
+				ok = true;
+			} catch (exception) {
+				ok = false;
+			}
+			if (!ok) {
+				try { dt.setData("Text", label + " | " + json); } catch (exception) {}
+				try { dt.setData("URL", "https://example.com/stage/" + stage.index); } catch (exception) {}
+			}
+			try { dt.effectAllowed = "copyMove"; } catch (exception) {}
+			return ok;
+		}
+
+		function readData(dataTransfer) {
+			var result = {};
+			try { result.json = dataTransfer.getData("application/json"); } catch (e) { result.jsonError = String(e); }
+			try { result.plain = dataTransfer.getData("text/plain"); } catch (e) { result.plainError = String(e); }
+			try { result.Text = dataTransfer.getData("Text"); } catch (e) { result.TextError = String(e); }
+			try { result.URL = dataTransfer.getData("URL"); } catch (e) { result.URLError = String(e); }
+			return result;
+		}
+
+		function makeStage(config, index) {
+			var stage = document.createElement("div");
+			stage.className = "stage";
+			stage.setAttribute("data-stage", String(index + 1));
+			stage.setAttribute("data-name", config.title);
+
+			var heading = document.createElement("h2");
+			heading.textContent = config.title;
+			stage.appendChild(heading);
+
+			var hint = document.createElement("div");
+			hint.className = "hint";
+			hint.textContent = config.hint;
+			stage.appendChild(hint);
+
+			var card;
+			if (config.item) {
+				card = document.createElement("div");
+				card.className = "item";
+				card.textContent = "Hello World";
+			} else {
+				card = document.createElement("div");
+				card.className = "card";
+				if (config.headerNone) card.className += " header-none";
+				if (config.noSelect) card.className += " no-select";
+				var openContent = config.contentTag ? '<content class="content">' : '<div class="content">';
+				var closeContent = config.contentTag ? '</content>' : '</div>';
+				card.innerHTML =
+					openContent +
+						'<header>' +
+							'<h1>Stage ' + (index + 1) + '</h1>' +
+							'<div class="buttons"><button type="button" tabindex="-1">x</button></div>' +
+						'</header>' +
+						'<article>Drag the title bar with Ctrl. Drop it on the dashed area.</article>' +
+					closeContent;
+				if (config.sizers) {
+					for (var sizerIndex = 1; sizerIndex <= 8; sizerIndex++) {
+						var sizer = document.createElement("div");
+						sizer.className = "sizer sizer-" + sizerIndex;
+						sizer.draggable = false;
+						card.appendChild(sizer);
+					}
+				}
+			}
+			card.setAttribute("draggable", "true");
+
+			if (config.transformed) {
+				var host = document.createElement("div");
+				host.className = "transformed";
+				host.appendChild(card);
+				stage.appendChild(host);
+			} else {
+				stage.appendChild(card);
+			}
+
+			var status = document.createElement("div");
+			status.className = "status";
+			status.textContent = "idle";
+			stage.appendChild(status);
+
+			var state = { ctrlFlag: false };
+
+			if (config.cancelSelect) {
+				card.addEventListener("selectstart", function (event) {
+					event = event || window.event;
+					if (event.ctrlKey) {
+						log(stageLabel(stage) + " selectstart ctrlKey=true allowed");
+						return;
+					}
+					log(stageLabel(stage) + " selectstart ctrlKey=false cancelled");
+					cancel(event);
+				}, false);
+			}
+
+			function activation(event) {
+				event = event || window.event;
+				state.ctrlFlag = !!event.ctrlKey;
+				log(stageLabel(stage) + " " + event.type + " target=" + describe(event.target || event.srcElement) + " ctrl=" + state.ctrlFlag);
+			}
+
+			if (config.activation === "mousedown") {
+				card.addEventListener("mousedown", activation, false);
+			} else if (config.activation === "pointerdown") {
+				card.addEventListener("pointerdown", activation, false);
+			}
+
+			card.addEventListener("mouseup", function () { state.ctrlFlag = false; }, false);
+			card.addEventListener("dragend", function () {
+				state.ctrlFlag = false;
+				status.textContent = "dragend";
+			}, false);
+
+			card.addEventListener("dragstart", function (event) {
+				event = event || window.event;
+				var allowed = true;
+				if (config.ctrlGate === "key") allowed = !!event.ctrlKey;
+				else if (config.ctrlGate === "flag") allowed = !!state.ctrlFlag;
+				else if (config.ctrlGate === "either") allowed = !!event.ctrlKey || !!state.ctrlFlag;
+
+				if (!allowed) {
+					status.textContent = "dragstart blocked";
+					log(stageLabel(stage) + " dragstart BLOCKED ctrlKey=" + !!event.ctrlKey + " flag=" + state.ctrlFlag + " target=" + describe(event.target || event.srcElement));
+					cancel(event);
+					return false;
+				}
+
+				var modern;
+				if (config.item) {
+					modern = false;
+					try { event.dataTransfer.setData("Text", "stage " + (index + 1) + ": " + config.title); } catch (exception) {}
+					try { event.dataTransfer.effectAllowed = "copy"; } catch (exception) {}
+				} else {
+					modern = setData(event, { index: index + 1, name: config.title });
+				}
+				if (config.setDragImage && event.dataTransfer && event.dataTransfer.setDragImage) {
+					try {
+						var rect = card.getBoundingClientRect();
+						event.dataTransfer.setDragImage(card, event.clientX - rect.left, event.clientY - rect.top);
+						log(stageLabel(stage) + " setDragImage ok");
+					} catch (exception) {
+						log(stageLabel(stage) + " setDragImage failed: " + exception);
+					}
+				}
+				status.textContent = "dragstart (modern=" + modern + ")";
+				return true;
+			}, false);
+
+			card.addEventListener("click", function (event) {
+				event = event || window.event;
+				var target = event.target || event.srcElement;
+				if (target && target.nodeName && target.nodeName.toLowerCase() === "button") {
+					status.textContent = "button click survived";
+				}
+			}, false);
+
+			return stage;
+		}
+
+		function supportsMouse() {
+			return true;
+		}
+
+		var container = document.getElementById("stages");
+		for (var i = 0; i < stages.length; i++) {
+			container.appendChild(makeStage(stages[i], i));
+		}
+
+		document.addEventListener("mousedown", function (event) {
+			event = event || window.event;
+			log(stageLabel(findStage(event.target || event.srcElement)) + " document mousedown target=" + describe(event.target || event.srcElement) + " ctrl=" + !!event.ctrlKey);
+		}, true);
+
+		document.addEventListener("pointerdown", function (event) {
+			event = event || window.event;
+			log(stageLabel(findStage(event.target || event.srcElement)) + " document pointerdown target=" + describe(event.target || event.srcElement) + " ctrl=" + !!event.ctrlKey);
+		}, true);
+
+		document.addEventListener("selectstart", function (event) {
+			event = event || window.event;
+			log(stageLabel(findStage(event.target || event.srcElement)) + " document selectstart target=" + describe(event.target || event.srcElement) + " ctrl=" + !!event.ctrlKey);
+		}, true);
+
+		document.addEventListener("dragstart", function (event) {
+			event = event || window.event;
+			log(stageLabel(findStage(event.target || event.srcElement)) + " document dragstart target=" + describe(event.target || event.srcElement) + " ctrl=" + !!event.ctrlKey + " types=" + typeList(event.dataTransfer));
+		}, true);
+
+		document.addEventListener("dragend", function (event) {
+			event = event || window.event;
+			log(stageLabel(findStage(event.target || event.srcElement)) + " document dragend target=" + describe(event.target || event.srcElement) + " ctrl=" + !!event.ctrlKey);
+		}, true);
+
+		var overLogged = false;
+		document.body.ondragenter = function (event) {
+			event = event || window.event;
+			if (document.getElementById("globalLog").checked)
+				log(stageLabel(findStage(event.target || event.srcElement)) + " dragenter target=" + describe(event.target || event.srcElement));
+		};
+
+		document.body.ondragover = function (event) {
+			event = event || window.event;
+			cancel(event);
+			dropElement.className = "over";
+			if (event.dataTransfer) {
+				try { event.dataTransfer.dropEffect = "copy"; } catch (exception) {}
+			}
+			if (!overLogged && document.getElementById("globalLog").checked) {
+				overLogged = true;
+				log(stageLabel(findStage(event.target || event.srcElement)) + " dragover target=" + describe(event.target || event.srcElement) + " types=" + typeList(event.dataTransfer));
+			}
+			return false;
+		};
+
+		document.body.ondrop = function (event) {
+			event = event || window.event;
+			cancel(event);
+			dropElement.className = "";
+			overLogged = false;
+
+			var dt = event.dataTransfer;
+			var data = readData(dt);
+			var payload = data.json || data.plain || data.Text || data.URL || "";
+			var stage = findStage(event.target || event.srcElement);
+			log(stageLabel(stage) + " DROP target=" + describe(event.target || event.srcElement));
+			log(
+				"  json=" + JSON.stringify(data.json) +
+				" plain=" + JSON.stringify(data.plain) +
+				" Text=" + JSON.stringify(data.Text) +
+				" URL=" + JSON.stringify(data.URL)
+			);
+			if (!payload) log("  payload was empty");
+			return false;
+		};
+
+		document.body.ondragleave = function (event) {
+			event = event || window.event;
+			var target = event.target || event.srcElement;
+			if (target === dropElement) dropElement.className = "";
+		};
+
+		document.getElementById("clearLog").onclick = function () {
+			logElement.textContent = "";
+			logLines = 0;
+		};
+
+		document.getElementById("globalSelect").onclick = function () {
+			if (this.checked) {
+				document.onselectstart = function (event) {
+					event = event || window.event;
+					log("global selectstart ctrl=" + !!event.ctrlKey + " allowed=" + !!event.ctrlKey);
+					return !!(event && event.ctrlKey);
+				};
+			} else {
+				document.onselectstart = null;
+			}
+		};
+
+		document.getElementById("globalDrag").onclick = function () {
+			if (this.checked) {
+				window.ondrag = document.ondrag = function (event) {
+					event = event || window.event;
+					log("global drag prevented target=" + describe(event.target || event.srcElement));
+					cancel(event);
+					if (event.stopPropagation) event.stopPropagation();
+					return false;
+				};
+				window.ondragleave = document.ondragleave = function (event) {
+					event = event || window.event;
+					cancel(event);
+					if (event.stopPropagation) event.stopPropagation();
+					return false;
+				};
+			} else {
+				window.ondrag = document.ondrag = null;
+				window.ondragleave = document.ondragleave = null;
+			}
+		};
+
+		document.getElementById("bodyNone").onclick = function () {
+			document.body.style.pointerEvents = this.checked ? "none" : "";
+		};
+	}());
+	</script>
+</body>
+</html>

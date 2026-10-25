@@ -3,12 +3,10 @@
  * @param {{onSelect: (el: Element)=>void, onMove?: (this: ElementPicker, el: HTMLElement) => boolean}} options
  */
 function ElementPicker(options) {
-	options = options;
 	this.active = false;
 	this.onSelect = options.onSelect || function (el) {
 		console.log('Selected:', el);
 	};
-	this.box = null;
 	this.statusEl = null;
 
 	/** @type {HTMLElement | null} */
@@ -42,7 +40,6 @@ ElementPicker.prototype.register = function () {
  
 ElementPicker.prototype.start = function () {
 	this.active = true;
-	this.createBox();
 	document.body.style.cursor = 'crosshair';
 
 	document.addEventListener('mousemove', this.boundMove, true);
@@ -56,8 +53,6 @@ ElementPicker.prototype.start = function () {
 ElementPicker.prototype.stop = function () {
 	this.active = false;
 	document.body.style.cursor = '';
-
-	if (this.box) this.box.style.display = 'none';
 
 	document.removeEventListener('mousemove', this.boundMove, true);
 	document.removeEventListener('click', this.boundClick, true);
@@ -84,25 +79,6 @@ ElementPicker.prototype.unhighlight = function (skipRemove) {
 	this.prevOutline = '';
 };
 
-// /** @param {Event} e */
-// ElementPicker.prototype.onMove = function (e) {
-// 	var el = e.target;
-// 	if (!(el instanceof HTMLElement)) return;
-// 	this.highlight(el);
-// };
-
-/** @param {HTMLElement} el */
-ElementPicker.prototype.drawRectAround = function (el) {
-	if (!this.box) return;
-	var r = el.getBoundingClientRect();
-	var s = this.box.style;
-	s.display = 'block';
-	s.left = r.left + 'px';
-	s.top = r.top + 'px';
-	s.width = r.width + 'px';
-	s.height = r.height + 'px';
-};
- 
 /** @param {MouseEvent} e */
 ElementPicker.prototype.onClick = function (e) {
 	if (!e.isTrusted) return;
@@ -117,20 +93,6 @@ ElementPicker.prototype.onClick = function (e) {
 /** @param {KeyboardEvent} e */
 ElementPicker.prototype.onKey = function (e) {
 	if (e.key === 'Escape') this.stop();
-};
- 
-ElementPicker.prototype.createBox = function () {
-	if (this.box) return;
-	this.box = document.createElement('div');
-	Object.assign(this.box.style, {
-		position: 'fixed',
-		pointerEvents: 'none',
-		zIndex: 2147483646,
-		border: '2px solid #2f81f7',
-		background: 'rgba(47,129,247,0.15)',
-		display: 'none'
-	});
-	document.body.appendChild(this.box);
 };
  
 ElementPicker.prototype.status = function (msg) {

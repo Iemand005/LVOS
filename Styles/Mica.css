@@ -52,8 +52,51 @@
   border: none;
 }
 
-.mica.glass .backdrop-filter,
-.glass .mica .backdrop-filter {
+/* The Mica extension puts this class on the windows that carry a backdrop. */
+.mica-window article {
+  border: none;
+}
+
+.mica-window article > * {
+  border: none;
+}
+
+/* The Mica theme paints the window content transparent, so the material the
+   Mica extension puts in the window shows through. The color alone is not
+   enough: the themes that paint a gradient there use a background image, and
+   that image has to go as well. */
+.mica .window > content,
+.mica .window > .content {
+  background: none !important;
+}
+
+/* The modern theme does its blurring on the content instead of on a backdrop
+   of its own, so it hides the backdrop clip. A Mica window needs the clip:
+   that is where the material lives. */
+.modern .mica-window .backdrop-clip {
+  display: block;
+}
+
+/* The backdrop the Mica extension puts in the window: a copy of the wallpaper,
+   as big as the wallpaper. The extension lines it up with the wallpaper and
+   moves it when the window moves, so here it only has to be put in the corner
+   of the window and given the blur that makes it a material instead of a
+   picture. */
+.mica-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  filter: blur(10px);
+}
+
+/* The glass theme expands the area the backdrop filter blurs, so the blur does
+   not fade at the edges of the window. The Mica backdrop is left out of that:
+   it is a copy of the wallpaper that the extension lines up with the wallpaper
+   itself, and the inset would put it out of line. */
+.mica.glass .backdrop-filter {
   position: absolute;
   inset: -20px;
 
@@ -61,8 +104,7 @@
   height: calc(100% + 40px);
 }
 
-.mica.glass .backdrop-filter > *,
-.glass .mica .backdrop-filter > * {
+.mica.glass .backdrop-filter > *:not(.mica-backdrop) {
   position: absolute;
   inset: 20px;
 }

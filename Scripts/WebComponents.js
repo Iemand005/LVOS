@@ -1,50 +1,36 @@
 
-class DesktopElement extends HTMLElement {
-
-}
-
 class WindowElement extends HTMLDivElement {
 
 	constructor() {
 		super();
-		/** @type {Dialog?} */
+		/** @type {Dialog | null} */
 		this.dialog = null;
 	}
 
-	connectedCallback() {
-		console.log("I connected balls");
-	}
 	/** @param {boolean} [enable] Enable maximization */
 	toggleMaximizedVT(enable) {
-
-		if (document.activeViewTransition)
-			document.activeViewTransition.skipTransition();
-
 		this.style.viewTransitionName = "window-fullscreen";
+		document.activeViewTransition?.skipTransition();
 
-		const self = this;
+		const toggle = () => this.classList.toggle("maximized", enable);
+		if (!("startViewTransition" in document)) return toggle();
 
-		if (document.startViewTransition) {
-			var transition = document.startViewTransition(() => self.classList.toggle("maximized", enable));
+		var transition = document.startViewTransition(toggle);
+		transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
-			transition.ready.catch(ev => console.warn("transition interrupted:", ev));
-
-			const dialog = this.dialog;
-			if (dialog) transition.finished.finally(() => {
-				if (dialog.maximizeAnimations <= 1)
-					self.style.viewTransitionName = "";
-				dialog.maximizeAnimations--;
-			});
-		} else this.classList.toggle("maximized", enable);
+		const dialog = this.dialog;
+		if (dialog) transition.finished.finally(() => {
+			if (dialog.maximizeAnimations <= 1)
+				this.style.viewTransitionName = "";
+			dialog.maximizeAnimations--;
+		});
 	}
 }
 
 class OdometerDigit extends HTMLSpanElement {
-	constructor()  { super(); this.lineHeight = 40, this._value = 0; }
-	connectedCallback() { this.setAttribute("is", "odometer-track"); }
+	constructor() { super(); this.lineHeight = 40; }
 	/** @param {number} digit Digit value */
 	set value(digit) { this.style.transform = `translateY(-${digit * this.lineHeight}px)`; }
-	get value() { return this._value;}
 }
 
 class OdometerDisplay extends HTMLTimeElement {
@@ -55,46 +41,42 @@ class OdometerDisplay extends HTMLTimeElement {
 	}
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
-
 		this.textContent = "";
-
 		this.style.display = "flex";
 		this.style.overflow = "hidden";
 	}
 
-	/** @param {number} digits */
-	init(digits) {
-		this.innerHTML = "";
-		this.tracks.length = 0;
-		const height = this.clientHeight;
-		for (let i = 0; i < digits; i++) {
-			const digit = this.addDigit();
-			if (digit && height > 0) digit.lineHeight = height;
-		}
-	}
-
-	addDigit() {
-		const track = document.createElement("span", { is: "odometer-track" });
-		if (!(track instanceof OdometerDigit)) return;
-		track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-		this.tracks.push(track);
-		this.appendChild(track);
-		return track;
-	}
 	/**
-	 * @param {number} value
-	 * @param {number} pos
+	 * Rebuilds the tracks: one for every digit, the groups separated by a colon.
+	 * @param {number[]} groups Number of digits in each group
 	 */
-	getDigit(value, pos) {
-		return Math.floor(value / Math.pow(10, pos)) % 10;
-	}
-	/** @param {number} value */
-	set value(value) {
-		this.tracks.forEach((track, i) => {
-			track.value = this.getDigit(value, this.tracks.length - 1 - i);
+	buildTracks(groups) {
+		this.textContent = "";
+		this.tracks.length = 0;
+
+		const height = this.clientHeight;
+		groups.forEach((digits, group) => {
+			for (let i = 0; i < digits; i++) {
+				const track = document.createElement("span", { is: "odometer-track" });
+				track.textContent = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+				if (track instanceof OdometerDigit) {
+					if (height > 0) track.lineHeight = height;
+					this.tracks.push(track);
+				}
+				this.appendChild(track);
+			}
+			if (group < groups.length - 1) this.append(":");
 		});
 	}
+
+	/** @param {number} digits Number of digits */
+	init(digits) { this.buildTracks([digits]); }
+
+	/** @type {DigitGetter} */
+	getDigit = (value, pos) => Math.floor(value / Math.pow(10, pos)) % 10;
+
+	/** @param {number} value */
+	set value(value) { this.tracks.forEach((track, i) => track.value = this.getDigit(value, this.tracks.length - 1 - i)); }
 }
 
 class OdometerTime extends OdometerDisplay {
@@ -102,50 +84,28 @@ class OdometerTime extends OdometerDisplay {
 	static get observedAttributes() { return ["datetime", "value"]; }
 
 	connectedCallback() {
-		this.setAttribute("is", "odometer-time");
-
-		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim()) {
+		if (!this.hasAttribute("value") && !this.hasAttribute("datetime") && this.textContent.trim())
 			this.setAttribute("value", this.textContent.trim());
-		}
-
-		this.buildTracks(this.currentGroupCount());
+		this.buildTracks(this.groupSizes());
 		this.update();
-
-		// this.style.display = "flex";
 		this.style.overflow = "hidden";
-		// this.style.justifyContent = "center";
 	}
 
-	get dateTime() { return this.getAttribute("datetime") || ""; }
-	set dateTime(value) { this.setAttribute("datetime", value); }
+	/** Whether the digits come from the value attribute instead of the date. */
+	usingValue() { return this.hasAttribute("value"); }
 
-	/** value wins if present; otherwise fall back to datetime */
-	usingValue() {
-		return this.hasAttribute("value");
-	}
-
-	currentGroupCount() {
-		if (this.usingValue()) {
-			const v = this.getAttribute("value") || "00:00:00";
-			return v.split(":").length;
+	/** The digits of each group: the groups of the value, or the hours, minutes and seconds. */
+	groups() {
+		if (!this.usingValue()) {
+			const date = new Date(this.dateTime);
+			return [date.getHours(), date.getMinutes(), date.getSeconds()].map(part => String(part || 0).padStart(2, "0"));
 		}
-		return 3; // datetime mode always renders HH:MM:SS (3 segments, 2 colons)
+		const parts = (this.getAttribute("value") || "00:00:00").split(":");
+		return parts.map((part, i) => String(parseInt(part, 10) || 0).padStart(i === 0 && parts.length === 4 ? 3 : 2, "0"));
 	}
-	/** @param {number} groups */
-	buildTracks(groups) {
-		this.textContent = "";
-		this.tracks.length = 0;
 
-		for (let i = 0; i < groups; i++) {
-			const digitsInGroup = (i === 0 && groups === 4) ? 3 : 2; // days group gets 3 digits
-			for (let j = 0; j < digitsInGroup; j++) this.addDigit();
-			if (i < groups - 1) this.append(":");
-		}
-
-		// Align each digit's roll to the element's own height so one full digit is visible.
-		const height = this.clientHeight;
-		if (height > 0) this.tracks.forEach(track => { track.lineHeight = height; });
-	}
+	/** The number of digits in each group. */
+	groupSizes() { return this.groups().map(group => group.length); }
 
 	/**
 	 * @param {string} name Name of the attribute
@@ -154,119 +114,70 @@ class OdometerTime extends OdometerDisplay {
 	 */
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (oldValue === newValue) return;
-
-		if (name === "value") {
-			this.update();
-			return;
-		}
-
-		if (name === "datetime" && !this.usingValue()) {
-			if (this.tracks.length !== 6) this.buildTracks(3); // HH:MM:SS → 6 digit tracks
-			this.update();
-		}
+		if (name === "value") return this.update();
+		if (name !== "datetime" || this.usingValue()) return;
+		if (this.tracks.length !== 6) this.buildTracks([2, 2, 2]);
+		this.update();
 	}
 
 	update() {
-		/** @type {number[]} */
-		let digits;
-
-		if (this.usingValue()) {
-			const value = this.getAttribute("value") || "00:00:00";
-			const parts = value.split(":").map(n => parseInt(n, 10) || 0);
-			digits = [];
-			parts.forEach((part, i) => {
-				const width = (i === 0 && parts.length === 4) ? 3 : 2;
-				const str = String(part).padStart(width, "0");
-				for (const ch of str) digits.push(parseInt(ch, 10));
-			});
-		} else {
-			// const dateTime = this.getAttribute("datetime");
-			// if (!dateTime) return;
-			// const target = new Date(dateTime);
-			// const diff = Math.max(0, target.getTime() - Date.now());
-			// const totalSeconds = Math.floor(diff / 1000);
-
-			// const days = Math.floor(totalSeconds / 86400);
-			// const hours = Math.floor((totalSeconds % 86400) / 3600);
-			// const minutes = Math.floor((totalSeconds % 3600) / 60);
-			// const seconds = totalSeconds % 60;
-
-			// digits = [
-			// 	...String(days).padStart(3, "0").split("").map(Number),
-			// 	Math.floor(hours / 10), hours % 10,
-			// 	Math.floor(minutes / 10), minutes % 10,
-			// 	Math.floor(seconds / 10), seconds % 10
-			// ];
-			const date = new Date(this.dateTime);
-			const hours = date.getHours();
-			const minutes = date.getMinutes();
-			const seconds = date.getSeconds();
-
-			digits = [
-				Math.floor(hours / 10), hours % 10,
-				Math.floor(minutes / 10), minutes % 10,
-				Math.floor(seconds / 10), seconds % 10
-			];
-		}
-
-		this.tracks.forEach((track, i) => {
-			if (digits[i] !== undefined) track.value = digits[i];
-		});
+		const digits = this.groups().join("").split("").map(Number);
+		this.tracks.forEach((track, i) => { if (digits[i] !== undefined) track.value = digits[i]; });
 	}
 }
 
-customElements.define("window-div", WindowElement, {
-	extends: "div"
-});
+/** @type {CustomElementMap} */
+let customElems;
+/** @constant */
+const customs = customElems = {
+	"window-div": { constructor: WindowElement, extends: "div" },
+	"odometer-track": { constructor: OdometerDigit, extends: "span" },
+	"odometer-display": { constructor: OdometerDisplay, extends: "time" },
+	"odometer-time": { constructor: OdometerTime, extends: "time" }
+};
 
-customElements.define("odometer-track", OdometerDigit, {
-	extends: "span"
-});
-
-customElements.define("odometer-display", OdometerDisplay, {
-	extends: "time"
-});
-
-customElements.define("odometer-time", OdometerTime, {
-	extends: "time"
-});
-
+Object.entries(customElems).forEach(([name, c]) => customElements.define(name, c.constructor, c));
 
 class Modern {
-
 	/**
-	 * @param {HTMLElement} el
-	 * @param {(pipWindow:Window)=>void} callback
+	 * Moves an element into a picture-in-picture window, and back when it closes.
+	 * @param {HTMLElement} el The element to move
+	 * @param {(pipWindow: Window)=>void} callback Called when the window is open
+	 * @param {string|string[]} [stylesheets] The stylesheets the window should use
 	 */
-	static toggleElementPip(el, callback) {
-		if (typeof window.documentPictureInPicture === "undefined") {
-			console.warn("Document Picture-in-Picture not supported in this browser.");
-			return;
-		}
+	static toggleElementPip(el, callback, stylesheets) {
+		const pip = window.documentPictureInPicture;
+		if (!pip) return console.warn("Document Picture-in-Picture not supported in this browser.");
+		pip.window?.close();
 
-		var existing = window.documentPictureInPicture.window;
-		if (existing)
-			existing.close();
+		const rect = el.getBoundingClientRect();
+		pip.requestWindow({ width: Math.round(rect.width) || 400, height: Math.round(rect.height) || 300 }).then(pipWindow => {
+			const parent = el.parentNode, sibling = el.nextSibling;
+			const sheets = ["./Styles/pip.css"];
+			if (stylesheets) sheets.push(...(Array.isArray(stylesheets) ? stylesheets : [stylesheets]));
 
-		var rect = el.getBoundingClientRect();
-		var width = Math.round(rect.width) || 400;
-		var height = Math.round(rect.height) || 300;
-
-		window.documentPictureInPicture.requestWindow({ width, height }).then(pipWindow => {
-			var originalParent = el.parentNode;
-			var originalNextSibling = el.nextSibling;
-
-			pipWindow.document.body.style.margin = "0";
+			Modern.loadStylesheets(pipWindow, sheets).then(() => pipWindow.dispatchEvent(new Event("resize")));
 			pipWindow.document.body.appendChild(el);
-
-			pipWindow.addEventListener("pagehide", () => {
-				if (!originalParent) return;
-				if (originalNextSibling) originalParent.insertBefore(el, originalNextSibling);
-				else originalParent.appendChild(el);
-			}, { once: true });
-
+			pipWindow.addEventListener("pagehide", () => parent && (sibling ? parent.insertBefore(el, sibling) : parent.appendChild(el)), { once: true });
 			callback(pipWindow);
 		});
-	};
+	}
 
+	/**
+	 * Loads stylesheets into a picture-in-picture window. The window is a document
+	 * of its own, so it needs the styles it should have.
+	 * @param {Window} pipWindow The window to load the stylesheets into
+	 * @param {string[]} stylesheets The stylesheets to load
+	 */
+	static loadStylesheets(pipWindow, stylesheets) {
+		const head = pipWindow.document.head || pipWindow.document.documentElement;
+		return Promise.all(stylesheets.map(stylesheet => new Promise(resolve => {
+			const link = pipWindow.document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = new URL(stylesheet, document.baseURI).href;
+			link.addEventListener("load", resolve, { once: true });
+			link.addEventListener("error", resolve, { once: true });
+			head.appendChild(link);
+		})));
+	}
 }

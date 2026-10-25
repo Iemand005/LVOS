@@ -10,6 +10,7 @@
 	},
 	"cSpell.words": [
 		"LVOS",
+		"VulpOS",
 		"Lasse",
 		"Lauwerys",
 		"contenteditable",
@@ -18,7 +19,7 @@
 		"lerp"
 	],
 	"workbench.colorCustomizations": {
-		"activityBar.background": "#ca5406",
+		"activityBar.background": "#1d1d1d",
 		"activityBar.foreground": "#f7f6f6",
 		"activityBar.activeBackground": "#a14000",
 		"activityBar.inactiveForeground": "#bfbfbf",
@@ -31,7 +32,13 @@
 		"statusBar.debuggingBackground": "#9B4207",
 		"statusBar.debuggingForeground": "#FFF8F4",
 		"statusBar.noFolderBackground": "#9B4207",
-		"statusBar.noFolderForeground": "#FFF8F4"
+		"statusBar.noFolderForeground": "#FFF8F4",
+		"button.background": "#ca5406",
+		"button.foreground": "#ffffff",
+		"button.border": "#ca5406",
+		"button.hoverBackground": "#d36820",
+		"button.secondaryBackground": "#333333",
+		"button.secondaryForeground": "#ffffff"
 	},
 	"workbench.browser.autoReloadOnFileChange": true,
 	"workbench.browser.showInTitleBar": true,
@@ -54,7 +61,7 @@
 		"**/node_modules": true,
 		"**/bower_components": true,
 		"**/*.code-search": true,
-		"**/Dist": true,
+		"Dist": true,
 	},
 	// liveserve
 	// "liveServer.settings.port": 

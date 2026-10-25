@@ -1,6 +1,6 @@
 {
-	"name": "LVOS Mobile",
-	"short_name": "LVOS Mobile",
+	"name": "VulpOS Mobile",
+	"short_name": "VulpOS Mobile",
 	"id": "lvos.mobile",
 	"start_url": "./mobile.html",
 	"display": "standalone",

@@ -1,4 +1,4 @@
-/* AppRegistry - Lightweight app registry for LVOS Mobile.
+/* AppRegistry - Lightweight app registry for VulpOS and VulpOS Mobile.
    Provides app registration, iteration, and persistence
    without the full WindowManager/Dialog desktop scaffolding.
 
@@ -82,12 +82,8 @@ AppManager.prototype.addApp = function(app) {
 //  * @param {arguments: any[]}
  */
 AppManager.prototype.addApps = function() {
-	for (var i = 0; i < arguments.length; i++) {
-		var arr = arguments[i];
-		if (arr instanceof Array)
-			for (var j = 0; j < arr.length; j++)
-				this.addApp(arr[j]);
-	}
+	for (var i = 0; i < arguments.length; i++)
+		if (arguments[i] instanceof Array) arguments[i].forEach(this.addApp, this);
 };
 /** @param {string} id */
 AppManager.prototype.getApp = function(id) {
@@ -100,24 +96,20 @@ AppManager.prototype.removeApp = function(id) {
 	if (!id) return;
 	delete this._apps[id];
 };
+/** @param {{[id:string]: Application}} map @param {(app: Application, id: string)=>void} callback */
+AppManager.prototype._forEach = function(map, callback) {
+	if (typeof callback !== "function") return;
+	for (var id in map)
+		if (map.hasOwnProperty(id) && map[id]) callback(map[id], id);
+};
 /** @param {(app: Application, id: string)=>void} callback */
 AppManager.prototype.forEachApp = function(callback) {
-	if (typeof callback !== "function") return;
-	for (var id in this._apps)
-		if (this._apps.hasOwnProperty(id)) {
-			var app = this._apps[id];
-			if (app) callback(app, id);
-		}
+	this._forEach(this._apps, callback);
 };
 
 /** @param {(app: Application, id: string)=>void} callback */
 AppManager.prototype.forEachWallpaper = function(callback) {
-	if (typeof callback !== "function") return;
-	for (var id in this._wallpapers)
-		if (this._wallpapers.hasOwnProperty(id)) {
-			var app = this._wallpapers[id];
-			if (app) callback(app, id);
-		}
+	this._forEach(this._wallpapers, callback);
 };
 
 Object.defineProperty(AppManager.prototype, "apps", {
@@ -146,9 +138,7 @@ AppManager.prototype.saveApp = function(app) {
 	if (!app || typeof app !== "object" || !app.id) return;
 	try {
 		var apps = this.installedApps;
-		for (var i = 0; i < apps.length; i++) {
-			if (apps[i].id === app.id) return;
-		}
+		if (apps.some(function (existing) { return existing.id === app.id; })) return;
 		apps.push(app);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
 	} catch (exception) {
@@ -160,11 +150,9 @@ AppManager.prototype.loadApps = function() {
 	if (!canSave || !hasLocalStorage) return;
 	var self = this;
 	try {
-		var apps = this.installedApps;
-		for (var i = 0; i < apps.length; i++) {
-			var app = apps[i];
+		this.installedApps.forEach(function (app) {
 			if (app && app.src) self.addApp(app);
-		}
+		});
 	} catch (exception) {
 		handleStorageException(exception);
 	}
@@ -207,9 +195,7 @@ AppManager.prototype.setWallpaper = function(id) {
  * @param {(url: string | null)=>void} [onLoad]
  */
 AppManager.prototype.openAppInIFrame = function(id, frame, onLoad) {
-
-	var self = this;
-	let timeout = -1;
+	var timeout = -1;
 	/** @type {string | null} */
 	var src = null;
 
@@ -227,7 +213,7 @@ AppManager.prototype.openAppInIFrame = function(id, frame, onLoad) {
 
 	var fallbackUrls = baseUrls.concat(application.altUrls);
 
-	let index = 0;
+	var index = 0;
 
 	function tryNext() {
 		var url = fallbackUrls[index++];

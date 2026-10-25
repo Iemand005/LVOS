@@ -1,7 +1,7 @@
 
 function Launchpad() {
 	/** @type {HTMLElement | null} */
-	this.launchpad = null;
+	this.element = null;
 	this.list = document.createElement("ul");
 	this._isMobile = true;
 }
@@ -42,7 +42,10 @@ MobileFrameManager.prototype._showFrame = function(id) {
 	var keys = Object.keys(this._frames);
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
-		this._frames[key].style.display = key === id ? "block" : "none";
+		if (key) {
+			var frame = this._frames[key];
+			if (frame) frame.style.display = key === id ? "block" : "none";
+		}
 	}
 	this._activeId = id;
 	this._container.classList.add("open");
@@ -75,29 +78,29 @@ MobileFrameManager.prototype.getActiveId = function() {
 var mobileFrameManager = new MobileFrameManager;
 window.mobileFrameManager = mobileFrameManager;
 
-/** @param {HTMLElement} launchpad */
-Launchpad.prototype.init = function(launchpad) {
+/** @param {HTMLElement} element */
+Launchpad.prototype.init = function(element) {
 	var closeButton = document.createElement("button");
 	var self = this;
 	closeButton.onclick = function() { self.close(); };
 	closeButton.textContent = "Close";
-	launchpad.appendChild(closeButton);
+	element.appendChild(closeButton);
 
-	launchpad.appendChild(this.list);
-	this.launchpad = launchpad;
+	element.appendChild(this.list);
+	this.element = element;
 
 	var container = document.getElementById("main-frame");
 	if (container) mobileFrameManager.init(container);
 };
 
 Launchpad.prototype.open = function() {
-	if (!this.launchpad) return;
-	this.launchpad.classList.add("open");
+	if (!this.element) return;
+	this.element.classList.add("open");
 };
 
 Launchpad.prototype.close = function() {
-	if (!this.launchpad) return;
-	this.launchpad.classList.remove("open");
+	if (!this.element) return;
+	this.element.classList.remove("open");
 };
 
 /** @param {Application} app */
@@ -125,17 +128,12 @@ Launchpad.prototype._createMobileButton = function(app) {
 /** @param {Dialog | Application} app */
 Launchpad.prototype.addApp = function(app) {
 	var appElement = document.createElement("li");
+	var openButton;
 
-	// /**@type {isMobile is Dialog} */
-	// var isMobile = this._isMobile
-	
 	if ("createOpenButton" in app) {
-		var openButton = app.createOpenButton();
-		appElement.appendChild(openButton);
+		openButton = app.createOpenButton();
 	} else {
-		var openButton = this._createMobileButton(app);
-		appElement.appendChild(openButton);
-
+		openButton = this._createMobileButton(app);
 		openButton.onclick = function() {
 			mobileFrameManager.open(app);
 		};
@@ -145,6 +143,7 @@ Launchpad.prototype.addApp = function(app) {
 		appElement.appendChild(appLabel);
 	}
 
+	appElement.appendChild(openButton);
 	this.list.appendChild(appElement);
 };
 

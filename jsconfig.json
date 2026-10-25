@@ -24,11 +24,11 @@
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
 		"ScrollTabs/**/*.js",
-		"*.d.ts",
-		"Tests/**/*"
+		"*.d.ts"
 	],
 	"exclude": [
 		"node_modules",
+		"Tests",
 		"./Applications/**/WebGraphics",
 		"./Applications/StereogramMaker",
 		"LVOS-dist",

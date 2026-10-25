@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>IE11 Drag and Drop Clipboard Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #222;
+        }
+
+        .item {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            background: #f3f3f3;
+            cursor: move;
+        }
+
+        #drop {
+            padding: 60px 20px;
+            margin-top: 20px;
+            border: 3px dashed #888;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        #drop.over {
+            background: #dceeff;
+            border-color: #2674c7;
+        }
+
+        #status {
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drag &amp; Drop Clipboard Demo</h1>
+
+    <div class="item" draggable="true" data-copy="Hello World">
+        Hello World
+    </div>
+
+    <div class="item" draggable="true" data-copy="<b>Hello HTML</b>">
+        Some HTML: &lt;b&gt;Hello HTML&lt;/b&gt;
+    </div>
+
+    <div class="item" draggable="true" data-copy="https://example.com">
+        https://example.com
+    </div>
+
+    <div id="drop">Drop an item here to copy it</div>
+    <div id="status"></div>
+
+    <script>
+    (function () {
+        var items = document.querySelectorAll(".item");
+        var drop = document.getElementById("drop");
+        var status = document.getElementById("status");
+        var i;
+
+        for (i = 0; i < items.length; i++) {
+            items[i].addEventListener("dragstart", function (e) {
+                e.dataTransfer.setData("Text", this.getAttribute("data-copy"));
+                e.dataTransfer.effectAllowed = "copy";
+            });
+        }
+
+        drop.ondragenter = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			return false;
+		};
+
+		drop.ondragover = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			e.dataTransfer.dropEffect = "copy";
+			this.className = "over";
+			return false;
+		};
+
+		drop.ondragleave = function () {
+			this.className = "";
+		};
+
+		drop.ondrop = function (e) {
+			e = e || window.event;
+			e.preventDefault();
+			e.returnValue = false;
+			this.className = "";
+
+			var data = e.dataTransfer.getData("Text");
+
+			if (window.clipboardData) {
+				window.clipboardData.setData("Text", data);
+				status.innerText = "Copied!\n" + data;
+			} else {
+				status.innerText = "Dropped:\n" + data;
+			}
+
+			return false;
+		};
+    }());
+    </script>
+</body>
+</html>
