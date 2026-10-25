@@ -315,6 +315,7 @@ var windowButtons = {
 	close: 2
 };
 
+/** @class */
 var Helpers = {
 	/** @param {WindowProperties} properties */
 	stringifyDialogProperties: function(properties){
