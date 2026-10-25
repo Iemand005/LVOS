@@ -39,13 +39,6 @@ body {
 
 /* Main */
 
-main {
-	height: 100%;
-	width: 100%;
-	pointer-events: none;
-	/*perspective: 1000px;*/
-}
-
 .window {
 	/* Concrete, not auto: floating windows place themselves with a transform and clear
 	   left, so left would otherwise be auto and snapping could not interpolate it. auto
