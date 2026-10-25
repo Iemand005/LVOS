@@ -205,12 +205,14 @@ body {
 .windows-10 .window header button:nth-child(3):hover,
 .windows-11 .window header button:nth-child(3):hover {
 	background-color: #e81123;
+	color: white;
 }
 
 .windows .window header button:nth-child(3):active,
 .windows-10 .window header button:nth-child(3):active,
 .windows-11 .window header button:nth-child(3):active {
 	background-color: #c50f1f;
+	color: white;
 }
 
 .windows .window content,
