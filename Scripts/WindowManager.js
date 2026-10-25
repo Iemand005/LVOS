@@ -2542,6 +2542,7 @@ function Dialog(object) {
 	if (body) body.addEventListener("load", function () { try {
 		self.verifyEjectCapability();
 	} catch (exception) {
+		console.log(exception);
 		if (buttons[0]) buttons[0].style.display = "none";
 	}}, false);
 
