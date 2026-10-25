@@ -2591,6 +2591,9 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 
 		target.addEventListener("dragstart", function (event) {
+			event.dataTransfer.setData("Text", this.getAttribute("data-copy"));
+			event.dataTransfer.effectAllowed = "copy";
+			return
 			if (!event.ctrlKey || !event.dataTransfer || !self.application) {
 				event.preventDefault();
 				return;
