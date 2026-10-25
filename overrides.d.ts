@@ -1,3 +1,9 @@
+/** ESignore */
+/**  *
+ * /
+ */
+// //@ts-ignor
+
 export {};
 
 interface DocumentPictureInPictureOptions {
