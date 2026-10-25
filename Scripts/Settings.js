@@ -291,9 +291,9 @@ function setWallpaperOption(value) {
 		return;
 	}
 	if (window.desktopManager) {
-		if (typeof window.desktopManager.restoreDefaultWallpaper == "function")
+		if (typeof window.desktopManager.restoreDefaultWallpaper === "function")
 			window.desktopManager.restoreDefaultWallpaper();
-		if (typeof window.desktopManager.clearWallpaperCache == "function")
+		if (typeof window.desktopManager.clearWallpaperCache === "function")
 			window.desktopManager.clearWallpaperCache();
 	}
 }
@@ -302,13 +302,13 @@ function setWallpaperOption(value) {
 function applyWallpaperFile(files) {
 	if (!files || !files.length) return;
 	var file = files[0];
-	if (typeof file.type != "string" || !file.type.match(/^image\//)) return;
+	if (typeof file.type !== "string" || !file.type.match(/^image\//)) return;
 
 	var reader = new FileReader();
 	reader.onload = function (e) {
 		if (!e.target) return;
 		var dataUrl = e.target.result;
-		if (typeof dataUrl != "string" || !window.desktopManager) return;
+		if (typeof dataUrl !== "string" || !window.desktopManager) return;
 		window.desktopManager.applyWallpaperImage(dataUrl, undefined, function () {
 			console.warn("Failed to apply wallpaper image");
 		});
