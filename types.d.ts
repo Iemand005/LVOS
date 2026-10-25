@@ -215,14 +215,14 @@ type DigitGetter = (value: number, pos: number) => number;
 type DragHandler = (ev: PointerEvent | MouseEvent) => void;
 
 interface WindowOpenProperties {
-	scrollbars: boolean,
-	resizable: boolean,
-	status: boolean,
-	location: boolean,
-	toolbar: boolean,
-	menubar: boolean,
-	width: number,
-	height: number,
-	left: number,
-	top: number;
+	scrollbars?: boolean;
+	resizable?: boolean;
+	status?: boolean;
+	location?: boolean;
+	toolbar?: boolean;
+	menubar?: boolean;
+	width?: number;
+	height?: number;
+	left?: number;
+	top?: number;
 }
