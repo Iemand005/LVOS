@@ -318,7 +318,8 @@ function Helpers() {
 	this. ok = false;
 }
 
-Helpers.stringifyDialogProperties = function(properties){
+/** @prop {} properties */
+Helpers.stringifyWindowOpenProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
 };
 
@@ -4359,7 +4360,7 @@ Dialog.prototype.createPopOut = function() {
 	var titleBarHeight = titleBar && titleBar.getBoundingClientRect().height || 0;
 	var viewBoxPosition = getViewBoxPosition();
 
-	this._popupWindow = window.open(this.href, this.title || "LVOS", Helpers.stringifyDialogProperties({
+	this._popupWindow = window.open(this.href, this.title || "LVOS", Helpers.stringifyWindowOpenProperties({
 		scrollbars: true,
 		resizable: true,
 		status: false,
