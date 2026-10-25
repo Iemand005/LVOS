@@ -151,14 +151,13 @@ function getWindowChromeHeight(window) {
 }
 
 /**
- * @deprecated
  * @param {HTMLElement} element
  * @param {number} x
  * @param {number} y
  */
-function translateElement(element, x, y) {
+Helpers.translateElement = function(element, x, y) {
 	transformElement(element, { x: x, y: y });
-}
+};
 
 /**
  * @param {HTMLElement} element

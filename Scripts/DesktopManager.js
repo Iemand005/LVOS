@@ -254,8 +254,8 @@ function ContextMenu() {
 ContextMenu.prototype.open = function(x, y) {
     if (!this.element) return;
     // translateElement(this.element, x, y);
-    this.element.style.left = toPixels(x);
-    this.element.style.top = toPixels(y);
+    this.element.style.left = Helpers.toPixels(x);
+    this.element.style.top = Helpers.toPixels(y);
     this.element.classList.add("open");
 };
 
