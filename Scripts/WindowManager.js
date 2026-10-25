@@ -911,8 +911,12 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	}
 	if (!dialog) return null;
 
+	dialog.target.classList.remove("animating");
+
 	if (typeof x === "number" && typeof y === "number")
 		dialog.moveCenterTo(x - (offset ? offset.x : 0), y - (offset ? offset.y : 0), false);
+
+	void dialog.target.offsetLeft;
 
 	if (!state) state = {};
 
