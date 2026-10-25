@@ -3062,7 +3062,7 @@ Object.defineProperty(Dialog.prototype, "left", {
 		this._width = width;
 		this._x = left / window.innerWidth;
 		if (this.useTransform) {
-			this.target.style.width = toPixels(width);
+			if (this.target) this.target.style.width = toPixels(width);
 			this.updateTransform();
 		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
@@ -3181,7 +3181,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	set: function(id) {
 		this._id = id;
 		windowManager.windows[id] = this;
-		this.target.setAttribute("id", id);
+		if (this.target) this.target.setAttribute("id", id);
 	}
 });
 
@@ -3476,7 +3476,7 @@ Dialog.prototype.stopAnimating = function () {
 		return;
 	}
 	if (this._dragScaleAnimating) return;
-	this.target.classList.remove("animating");
+	if (this.target) this.target.classList.remove("animating");
 };
 
 /**
@@ -3487,7 +3487,7 @@ Dialog.prototype.stopAnimating = function () {
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout, flip) {
-	animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
+	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
 };
 /**
  * @param {string} className
@@ -4292,7 +4292,7 @@ Dialog.prototype.moveBody = function (x, y) {
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (this.useScale) right = undefined, bottom = undefined;
-	insetElement(this.target, top, left, right, bottom);
+	if (this.target) insetElement(this.target, top, left, right, bottom);
 };
 
 /** @param {string} [url] */
@@ -4486,7 +4486,7 @@ Dialog.prototype.getState = function() {
 Dialog.prototype.loadState = function(state) {
 	if ("open" in state) {
 		if (state.open) this.launch();
-		else this.toggleOpen(false);
+		else if (this.target) this.toggleOpen(false);
 	}
 	if ("title" in state) this.title = state.title;
 	if ("x" in state || "y" in state)
