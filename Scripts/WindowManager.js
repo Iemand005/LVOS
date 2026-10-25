@@ -4030,10 +4030,14 @@ Dialog.prototype.resize = function (width, height, direction) {
 };
 
 /**
- * Applies a resize that keeps the opposite edges of the given direction fixed.
- * @param {number} width
- * @param {number} height
- * @param {ResizeDirection} [direction]
+ * @param {number} newW
+ * @param {number} newH
+ * @param {number} newX
+ * @param {number} newY
+ * @param {number} oldX
+ * @param {number} oldY
+ * @param {number} minW
+ * @param {number} minH
  */
 Dialog.prototype._commitResize = function (newW, newH, newX, newY, oldX, oldY, minW, minH) {
 	this._width = newW;
