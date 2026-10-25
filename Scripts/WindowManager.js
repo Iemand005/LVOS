@@ -2466,13 +2466,6 @@ function Dialog(object) {
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
-
-	this.initWithObject(object);
-}
-
-/** @param {HTMLElement | Application | Dialog} object */
-Dialog.prototype.initWithObject = function(object) {
-
 	
 	if (object instanceof Dialog) {
 		if (object.target) return;
