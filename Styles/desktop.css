@@ -216,6 +216,10 @@ iframe {
     height: 100%;
 }
 
+#dock-area {
+	color: white;
+}
+
 #dock {
 	position: absolute;
 	height: 50px;
