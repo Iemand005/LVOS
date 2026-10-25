@@ -61,3 +61,7 @@ if (document.documentMode === 9) {
 	script.src = "./Scripts/Animation.js";
 	document.getElementsByTagName("head")[0].appendChild(script);
 }
+
+window.onerror = function() {
+	return true;
+};
