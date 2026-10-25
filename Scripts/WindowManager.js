@@ -2600,7 +2600,7 @@ Dialog.prototype.initWithObject = function(object) {
 			var dragState = {
 				state: self.getState(),
 				app: self.application
-			}
+			};
 
 			// Remember where inside the window the pointer grabbed it, so a drop can put
 			// the window back under the cursor exactly where the drag preview showed it.
@@ -2611,15 +2611,16 @@ Dialog.prototype.initWithObject = function(object) {
 			};
 
 			var data = JSON.stringify(dragState);
-			event.dataTransfer.setData("application/json", data);
-			event.dataTransfer.setData("text/plain", self.src || self.title || self.id);
-			if (self.src) event.dataTransfer.setData("text/uri-list", self.src);
+			try {
+				event.dataTransfer.setData("application/json", data);
+				event.dataTransfer.setData("text/plain", self.src || self.title || self.id);
+				if (self.src) event.dataTransfer.setData("text/uri-list", self.src);
+				event.dataTransfer.setData("text/html", data);
+			} catch(ex) {
+				event.dataTransfer.setData("Text", "my-data");
+			}
 
-			event.dataTransfer.setData(
-				"text/html",
-				data
-			);
-		});
+		}, false);
 	}
 
 	if (this.id) windowManager.windows[this.id] = this;
@@ -2635,7 +2636,7 @@ Dialog.prototype.initWithObject = function(object) {
 	
 	if (this.application && this.application.launch) this.launch();
 
-	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; });
+	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 };
 
 /** @param {HTMLElement} element */
