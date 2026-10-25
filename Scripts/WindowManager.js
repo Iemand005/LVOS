@@ -2433,7 +2433,6 @@ function Dialog(object) {
 	this._id = id;
 	/** @type {HTMLButtonElement[]} */
 	this.buttons = [];
-	this.originalBody = this.body;
 	this.clickOffset = new ClickOffset;
 
 	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
@@ -2640,6 +2639,8 @@ function Dialog(object) {
 	// if (this.application && this.application.launch) this.launch();
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
+
+	this.originalBody = this.body;
 };
 
 /**
