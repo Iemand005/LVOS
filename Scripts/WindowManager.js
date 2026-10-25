@@ -356,12 +356,11 @@ function createDialogElement() {
 	// var container = document.getElementById("window-section");
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
-	var clone = template.cloneNode(true);
-	if (clone instanceof Element) {
-		/** @type {Element | WindowElement} */
-		var dialogElement = removeComments(clone);
-		if (isElement(dialogElement)) return dialogElement;
-	}
+	var clone = removeComments(template.cloneNode(true));
+	if (!(clone instanceof HTMLElement)) throw new Error("Cloned dialog is not an element")
+	/** @type {Element | WindowElement} */
+	var dialogElement = clone;
+	return dialogElement;
 	throw new Error("Failed to clone element");
 }
 
