@@ -44,7 +44,7 @@ MobileFrameManager.prototype._showFrame = function(id) {
 		var key = keys[i];
 		if (key) {
 			var frame = this._frames[key];
-			if (frame)  frame.style.display = key === id ? "block" : "none";
+			if (frame) frame.style.display = key === id ? "block" : "none";
 		}
 	}
 	this._activeId = id;

@@ -473,7 +473,7 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 		return;
 	}
 
-	state.timer = timeout && setTimeout(callEnd, timeout);
+	state.timer = timeout && setTimeout(callEnd, timeout) || 0;
 
 	if (supportsTransitions) {
 		if (flip) {
