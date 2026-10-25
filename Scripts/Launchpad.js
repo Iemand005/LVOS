@@ -1,7 +1,7 @@
 
 function Launchpad() {
 	/** @type {HTMLElement | null} */
-	this.launchpad = null;
+	this.element = null;
 	this.list = document.createElement("ul");
 	this._isMobile = true;
 }
@@ -84,20 +84,20 @@ Launchpad.prototype.init = function(launchpad) {
 	launchpad.appendChild(closeButton);
 
 	launchpad.appendChild(this.list);
-	this.launchpad = launchpad;
+	this.element = launchpad;
 
 	var container = document.getElementById("main-frame");
 	if (container) mobileFrameManager.init(container);
 };
 
 Launchpad.prototype.open = function() {
-	if (!this.launchpad) return;
-	this.launchpad.classList.add("open");
+	if (!this.element) return;
+	this.element.classList.add("open");
 };
 
 Launchpad.prototype.close = function() {
-	if (!this.launchpad) return;
-	this.launchpad.classList.remove("open");
+	if (!this.element) return;
+	this.element.classList.remove("open");
 };
 
 /** @param {Application} app */
