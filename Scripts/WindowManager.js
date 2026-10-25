@@ -2472,6 +2472,9 @@ function Dialog(object) {
 	/** @type {HTMLElement} */
 	this.target;
 
+	/** @type {boolean} */
+	this.moveEvents = false;
+
 	if (!(object instanceof Dialog)) {
 		if (isElement(object)) {
 			this.target = object;
