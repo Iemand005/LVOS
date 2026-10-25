@@ -2453,7 +2453,10 @@ function Dialog(object) {
 	this._appIcon = null;
 
 	var self = this;
-	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
+	/**
+	 * @param {MouseEvent | PointerEvent} ev
+	 * @param {number} [id]
+	 */
 	this.activationHandler = function (ev, id) {
 		self._ctrlDrag = !!ev.ctrlKey;
 		if (ev.ctrlKey) {
