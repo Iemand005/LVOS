@@ -2534,7 +2534,7 @@ function Dialog(object) {
 
 	// target.addEventListener("dragstart", cancelDomEvent, false);
 	target.addEventListener("selectstart", function (event) {
-		if (event.ctrlKey || self._ctrlDrag) return;
+		if (self._ctrlDrag) return;
 		cancelDomEvent(event);
 	}, false);
 
@@ -2550,7 +2550,7 @@ function Dialog(object) {
 		var rect = getRect(header);
 		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 		var node = event.target;
-		while (node && node !== header) {
+		if (node instanceof Node) while (node && node !== header) {
 			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
 			node = node.parentElement;
 		}
