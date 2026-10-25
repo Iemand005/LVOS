@@ -139,7 +139,7 @@ function getSiteName(url) {
 
 
 /**
- * @param {Node | null} [object]
+ * @param {Node | EventTarget | null} [object]
  * @returns {object is HTMLElement}
  */
 Helpers.isElement = function(object) { return object && "nodeType" in object || false; };
@@ -1956,11 +1956,11 @@ WindowSnap.prototype.attachTo = function(dialog) {
 
 /**
  * @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped]
- * @param outset
- * @param direction
- * @param noAnimation
- * @param isTouch
- * @param preserveSnapped
+ * @param {number} outset
+ * @param {number} direction
+ * @param {number} noAnimation
+ * @param {number} isTouch
+ * @param {number} preserveSnapped
  */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
