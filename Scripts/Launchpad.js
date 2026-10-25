@@ -75,16 +75,16 @@ MobileFrameManager.prototype.getActiveId = function() {
 var mobileFrameManager = new MobileFrameManager;
 window.mobileFrameManager = mobileFrameManager;
 
-/** @param {HTMLElement} launchpadElement */
-Launchpad.prototype.init = function(launchpadElement) {
+/** @param {HTMLElement} element */
+Launchpad.prototype.init = function(element) {
 	var closeButton = document.createElement("button");
 	var self = this;
 	closeButton.onclick = function() { self.close(); };
 	closeButton.textContent = "Close";
-	launchpadElement.appendChild(closeButton);
+	element.appendChild(closeButton);
 
-	launchpadElement.appendChild(this.list);
-	this.element = launchpadElement;
+	element.appendChild(this.list);
+	this.element = element;
 
 	var container = document.getElementById("main-frame");
 	if (container) mobileFrameManager.init(container);
