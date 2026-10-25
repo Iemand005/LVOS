@@ -35,9 +35,9 @@ body {
 	-o-user-drag: none;
 	user-select: none;
 	cursor: default;
+	/* Main */
 }
 
-/* Main */
 
 .window {
 	/* Concrete, not auto: floating windows place themselves with a transform and clear
