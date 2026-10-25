@@ -2550,7 +2550,8 @@ function Dialog(object) {
 		var rect = getRect(header);
 		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 		var node = event.target;
-		if (node instanceof Node) while (node && node !== header) {
+		if (!(node instanceof HTMLElement)) return;
+		while (node && node !== header) {
 			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
 			node = node.parentElement;
 		}
