@@ -911,13 +911,10 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	}
 	if (!dialog) return null;
 
-	if (typeof x === "number" && typeof y === "number") {
-		var grabX = offset ? offset.x : 0;
-		var grabY = offset ? offset.y : 0;
-		dialog.moveCenterTo(x - grabX, y - grabY, false);
-	}
+	if (typeof x === "number" && typeof y === "number")
+		dialog.moveCenterTo(x - (offset ? offset.x : 0), y - (offset ? offset.y : 0), false);
 
-	state = state || {};
+	if (!state) state = {};
 
 	state.x = dialog.x;
 	state.y = dialog.y;
