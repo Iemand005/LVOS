@@ -2435,7 +2435,6 @@ function Dialog(object) {
 	this.buttons = [];
 	this.clickOffset = new ClickOffset;
 
-	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
@@ -2514,9 +2513,7 @@ function Dialog(object) {
 
 	this.setMinSize(180, 250);
 
-	this.originalBody = this.body;
-
-	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
+	
 
 	this.toggleCloseButton(true);
 	this.toggleFullButton(true);
@@ -2640,7 +2637,12 @@ function Dialog(object) {
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 
+	
+	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
+	
 	this.originalBody = this.body;
+
+	if(!this.scroll && this.body) this.body.style.overflow = "hidden";
 };
 
 /**
