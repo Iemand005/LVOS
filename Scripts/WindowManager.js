@@ -911,7 +911,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	}
 	if (!dialog) return null;
 
-	
+
 	if (typeof x === "number" && typeof y === "number") {
 		// Cancel out the grab offset so the point of the window the pointer held stays
 		// under the pointer, which is where the drag preview left it.
