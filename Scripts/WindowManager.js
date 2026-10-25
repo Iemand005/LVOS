@@ -1372,7 +1372,10 @@ WindowManager.prototype.getSnapGroup = function (section) {
 	return group;
 };
 
-/** Width of the window area snaps lay out against. @param {HTMLElement | null} [section] */
+/**
+ * Width of the window area snaps lay out against.
+ * @param {HTMLElement | null} [section]
+ */
 WindowManager.prototype.snapWidth = function (section) {
 	var area = section || this.getSnapContainer();
 	return area ? area.clientWidth : window.innerWidth;
