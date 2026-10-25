@@ -2,18 +2,6 @@
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function init() {
-	return;
-	var launchpadElement = document.getElementById("launchpad");
-
-	if (launchpad && launchpadElement) {
-		launchpad.init(launchpadElement);
-
-		if (typeof appManager !== "undefined") {
-			appManager.forEachApp(launchpad.addApp.bind(launchpad));
-			// launchpad.open();
-			appManager.reloadWallpaper();
-		}
-	}
 	// The window manager must be initialized even on pages without a launchpad:
 	// initializeDialogs() registers the document/window pointerup listener that ends
 	// a drag, so skipping it leaves every window stuck to the cursor.
@@ -25,6 +13,18 @@ function init() {
 		windowManager.initializeDialogs();
 
 		LVMessenger.receive(messageReceived);
+	}
+	return;
+	var launchpadElement = document.getElementById("launchpad");
+
+	if (launchpad && launchpadElement) {
+		launchpad.init(launchpadElement);
+
+		if (typeof appManager !== "undefined") {
+			appManager.forEachApp(launchpad.addApp.bind(launchpad));
+			// launchpad.open();
+			appManager.reloadWallpaper();
+		}
 	}
 
 
