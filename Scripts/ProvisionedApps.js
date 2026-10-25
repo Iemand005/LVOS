@@ -119,13 +119,7 @@ function initApps() {
 }
 
 /**
- * Finalize the app installation and refresh everything that depends on the app
- * 
- * 
- * 
- * 
- * 
- * registry. AppRegistry.js is loaded async, so the apps may not have made it
+ * Finalize the app installation and refresh everything that depends on the app registry. AppRegistry.js is loaded async, so the apps may not have made it
  * into the registry when the deferred scripts (Settings) first ran; calling
  * this once everything is in place repopulates dependents like the wallpaper
  * dropdown.
@@ -135,11 +129,9 @@ function finishAppInstall() {
 		appManager.addApps(applications, games);
 		appManager.loadApps();
 	}
-	if (typeof restoreWallpaperSetting == "function") restoreWallpaperSetting();
+	if (typeof restoreWallpaperSetting === "function") restoreWallpaperSetting();
 }
 
 finishAppInstall();
-alert("Injecting ur mom")
-
 
 window.addEventListener("load", initApps, false);
