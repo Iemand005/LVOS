@@ -209,9 +209,8 @@ body {
 	background-color: #c50f1f;
 }
 
-.windows .window header button:nth-child(3):hover,
-.windows .window header button:nth-child(3):active {
-	color: white;
+.windows .window header button:nth-child(3):hover svg,
+.windows .window header button:nth-child(3):active svg {
 	fill: white;
 }
 
