@@ -29,29 +29,31 @@ test('a ctrl dragstart carries the application', async ({ vulpOS }) => {
 	expect(state.state).toBeTruthy();
 });
 
-test('the title bar becomes draggable only while ctrl is held', async ({ vulpOS }) => {
+test('the header lets the window be the drag source but keeps its buttons clickable', async ({ vulpOS }) => {
+	const dialog = await vulpOS.openCube();
+
+	const result = await dialog.evaluate((w: any) => ({
+		header: getComputedStyle(w.titleBar).pointerEvents,
+		button: getComputedStyle(w.titleBar.getElementsByTagName('button')[0]).pointerEvents,
+	}));
+
+	expect(result.header).toBe('none');
+	expect(result.button).toBe('auto');
+});
+
+test('the ctrl flag allows a dragstart when the browser omits ctrlKey', async ({ vulpOS }) => {
 	const dialog = await vulpOS.openCube();
 
 	const result = await dialog.evaluate((w: any) => {
-		const header = w.titleBar;
-		const down = new PointerEvent('pointerdown', {
-			bubbles: true,
-			cancelable: true,
-			ctrlKey: true,
-			pointerId: 1,
-			pointerType: 'mouse',
-		});
-		w.target.dispatchEvent(down);
-		const set = header.getAttribute('draggable');
-
-		const end = new DragEvent('dragend', { bubbles: true });
-		w.target.dispatchEvent(end);
-
-		return { set, cleared: header.getAttribute('draggable') };
+		w._ctrlDrag = true;
+		const dataTransfer = new DataTransfer();
+		const event = new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer });
+		w.target.dispatchEvent(event);
+		return { prevented: event.defaultPrevented, json: dataTransfer.getData('application/json') };
 	});
 
-	expect(result.set).toBe('true');
-	expect(result.cleared).toBe(null);
+	expect(result.prevented).toBe(false);
+	expect(JSON.parse(result.json).app.id).toBe('cube');
 });
 
 test('drops app data that only exists in the legacy Text and URL formats', async ({ vulpOS }) => {

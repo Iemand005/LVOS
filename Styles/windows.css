@@ -78,7 +78,7 @@ body {
 .window header,
 .window .header {
 	margin: 0;
-	pointer-events: auto;
+	pointer-events: none;
 	justify-content: space-between;
 	padding: 8px;
 	border-width: 0px;
@@ -122,7 +122,7 @@ svg {
 	top: 0;
 	right: 0;
 	overflow: hidden;
-	pointer-events: auto;
+	pointer-events: none;
 	border: inherit;
 	border-width: inherit;
 	border-color: inherit;
