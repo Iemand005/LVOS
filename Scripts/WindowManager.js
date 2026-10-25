@@ -4525,7 +4525,7 @@ Dialog.prototype.screenshot = function() {
 
 //#region DragAction
 
-/**  @class */
+/** @class */
 function DragAction() {
 	/** @type {DragFunction} */
 	this.execute = function(){};
