@@ -923,7 +923,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 		// under the pointer, which is where the drag preview left it.
 		var grabX = offset ? offset.x : 0;
 		var grabY = offset ? offset.y : 0;
-		// dialog.moveCenterTo(x - grabX, y - grabY, false);
+		dialog.moveCenterTo(x - grabX, y - grabY, false);
 	}
 
 	// Force a layout pass so the window's rendered size matches the applied state,
