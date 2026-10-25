@@ -3433,7 +3433,6 @@ Object.defineProperty(Dialog.prototype, "href", { get: function () {
 /** @param {boolean} enable */
 Dialog.prototype.togglePointerEvents = function(enable) {
 	var target = this.target;
-	if (!target) return;
 	if (enable === null) enable = target.style.pointerEvents === "none";
 	if (enable) while (target.classList.contains("dragging")) target.className = target.className.replace("dragging", "");
 	else if (!target.classList.contains("dragging")) target.className = target.className + " dragging";
@@ -3537,7 +3536,6 @@ Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, 
  */
 Dialog.prototype.toggleSnapped = function (enable) {
 	var target = this.target;
-	if (!target) return;
 	if (enable == null) enable = !target.classList.contains("snapped");
 	if (target.classList.contains("snapped") === enable) return;
 
@@ -3581,7 +3579,6 @@ Dialog.prototype.toggleSnapped = function (enable) {
  */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
 	var target = this.target;
-	if (!target) return;
 	if (enable == null) enable = !target.classList.contains("height-snapped");
 	if (target.classList.contains("height-snapped") === enable) return;
 
@@ -4412,7 +4409,6 @@ Dialog.prototype.inspect = function() { if (window.inspect) window.inspect(this.
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
 	var target = this.target;
-	if (!target) return;
 	if (useTransform) {
 		target.style.top = "";
 		target.style.left = "";
