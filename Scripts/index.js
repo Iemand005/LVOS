@@ -28,7 +28,7 @@ function init() {
 
 
 
-	if (location.protocol === 'file:') {
+	if (location.protocol === "file:") {
 		/**@type {NodeListOf<HTMLScriptElement>}*/
 		var scripts = document.querySelectorAll('script[type="module"]');
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
