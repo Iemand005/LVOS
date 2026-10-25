@@ -3722,7 +3722,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		active: true,
 		raf: 0,
 		timer: 0,
-		/** @type {((e: any) => void) | null} */
+		/** @type {((e: TransitionEvent) => void) | null} */
 		endHandler: null,
 		cancel: function () {
 			if (!this.active) return;
