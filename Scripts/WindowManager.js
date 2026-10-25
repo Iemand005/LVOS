@@ -318,7 +318,7 @@ function Helpers() {
 	this. ok = false;
 }
 
-/** @prop {} properties */
+/** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
 };
@@ -347,6 +347,7 @@ Helpers.fromPixels = function(text){
 function handleStorageException(exception) {
 	localStorage.windowState = null;
 	windowManager.canSave = false;
+	console.warn(exception);
 }
 
 function getDialogTemplate() {
@@ -435,7 +436,7 @@ function clearFlip(element) {
 }
 
 /**
- * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
+ * @template {Record<string, unknown> | HTMLElement} [T=HTMLElement]
  * @param {HTMLElement} element
  * @param {(this: T) => void} [onToggled]
  * @param {TransitionEndCallback} [onTransitionEnd]
