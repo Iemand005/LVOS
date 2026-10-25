@@ -15,14 +15,14 @@
 var useTransform = true,
 	useScale = false;
 
-// HTA can expose PointerEvent without behaving correctly for drag/resize, so prefer the old IE pointer flags.
-var supportsPointer = typeof window !== "undefined" && ("PointerEvent" in window || "MSPointerEvent" in window);
+var isBlink = "chrome" in window;
+var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+
+// IE and HTA expose MSPointerEvent but never fire the unprefixed pointer events the manager listens for.
+var supportsPointer = typeof window !== "undefined" && "PointerEvent" in window && !isIE && !("MSPointerEvent" in window);
 var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit !== "undefined");
 var supportsTransitions = false;
 var supportsTransform = false;
-
-var isBlink = "chrome" in window;
-var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 var isLocal = location.protocol === "file:" || location.hostname === "localhost";
 
@@ -1638,6 +1638,7 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 };
 
 WindowManager.prototype.disableDialogDrag = function() {
+	if (this.activeDialog) this.activeDialog._ctrlDrag = false;
 	if (!this.isDragging) return;
 	// if (flipped) return;
 	// The release can outrun the throttled drag frame: the last pointermove of the gesture
@@ -2447,6 +2448,7 @@ function Dialog(object) {
 	this._popupPositionInterval = 0;
 
 	this.dragging = false;
+	this._ctrlDrag = false;
 
 	/** @type {HTMLImageElement| null} */
 	this._appIcon = null;
@@ -2454,12 +2456,11 @@ function Dialog(object) {
 	var self = this;
 	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
+		self._ctrlDrag = !!ev.ctrlKey;
 		if (ev.ctrlKey) {
-			if (self.titleBar) self.titleBar.setAttribute("draggable", "true");
 			ev.stopImmediatePropagation();
 			return
 		}
-		if (self.titleBar) self.titleBar.removeAttribute("draggable");
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
@@ -2564,7 +2565,7 @@ Dialog.prototype.initWithObject = function(object) {
 
 		// target.addEventListener("dragstart", cancelDomEvent, false);
 		target.addEventListener("selectstart", function (event) {
-			if (event.ctrlKey) return;
+			if (event.ctrlKey || self._ctrlDrag) return;
 			cancelDomEvent(event);
 		}, false);
 
@@ -2576,8 +2577,16 @@ Dialog.prototype.initWithObject = function(object) {
 		}}, false);
 
 		var header = this.titleBar;
-		if (header)
-			header.addEventListener("dblclick", this.toggleMaximized.bind(this, undefined), false);
+		if (header) target.addEventListener("dblclick", function (event) {
+			var rect = getRect(header);
+			if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+			var node = event.target;
+			while (node && node !== header) {
+				if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
+				node = node.parentElement;
+			}
+			self.toggleMaximized();
+		}, false);
 
 
 		if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
@@ -2597,7 +2606,7 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 
 		target.addEventListener("dragstart", function (event) {
-			if (!event.ctrlKey || !event.dataTransfer || !self.application) {
+			if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
 				event.preventDefault();
 				return;
 			}
@@ -2619,6 +2628,10 @@ Dialog.prototype.initWithObject = function(object) {
 			var data = JSON.stringify(dragState);
 			var transfer = event.dataTransfer;
 
+			if (rect && typeof transfer.setDragImage === "function") {
+				try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) {}
+			}
+
 			try {
 				transfer.setData("application/json", data);
 				transfer.setData("text/plain", self.src || self.title || self.id);
@@ -2634,7 +2647,7 @@ Dialog.prototype.initWithObject = function(object) {
 		}, false);
 
 		target.addEventListener("dragend", function () {
-			if (header) header.removeAttribute("draggable");
+			self._ctrlDrag = false;
 		}, false);
 	}
 
