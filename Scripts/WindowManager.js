@@ -3137,7 +3137,6 @@ Object.defineProperty(Dialog.prototype, "title", {
 
 Object.defineProperty(Dialog.prototype, "maximized", {
 	get: function() {
-		if (!this.target) return false;
 		return this.target.classList.contains("maximized");
 	},
 	set: function(maximized) { this.toggleMaximized(maximized); }
@@ -3145,7 +3144,6 @@ Object.defineProperty(Dialog.prototype, "maximized", {
 
 Object.defineProperty(Dialog.prototype, "snapped", {
 	get: function() {
-		if (!this.target) return false;
 		return this.target.classList.contains("snapped");
 	},
 	set: function(snapped) { this.toggleSnapped(snapped); }
@@ -3153,7 +3151,6 @@ Object.defineProperty(Dialog.prototype, "snapped", {
 
 Object.defineProperty(Dialog.prototype, "heightSnapped", {
 	get: function() {
-		if (!this.target) return false;
 		return this.target.classList.contains("height-snapped");
 	},
 	set: function(snapped) { this.toggleHeightSnapped(snapped); }
@@ -3186,7 +3183,6 @@ Object.defineProperty(Dialog.prototype, "id", {
 
 Object.defineProperty(Dialog.prototype, "content", {
 	get: function() {
-		if (!this.target) return null;
 		return this.getElementByTagOrClassName("content");
 	}
 });
@@ -3512,7 +3508,7 @@ Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, 
 	var self = this;
 	var enabled = false;
 	this.animate(function() {
-		if (self.target) enabled = setClass(self.target, className, force);
+		enabled = setClass(self.target, className, force);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout, true);
 };
 
@@ -3529,7 +3525,7 @@ Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, 
  */
 Dialog.prototype.toggleSnapped = function (enable) {
 	var target = this.target;
-	if (enable == null) enable = !target.classList.contains("snapped");
+	if (enable === null) enable = !target.classList.contains("snapped");
 	if (target.classList.contains("snapped") === enable) return;
 
 	// Leaving the group has to survive the drag's own animation cancelling, so it is
@@ -3572,7 +3568,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
  */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
 	var target = this.target;
-	if (enable == null) enable = !target.classList.contains("height-snapped");
+	if (enable === null) enable = !target.classList.contains("height-snapped");
 	if (target.classList.contains("height-snapped") === enable) return;
 
 	// Before the class goes on: while it is off, move() still takes the y it is handed.
