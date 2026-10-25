@@ -2499,10 +2499,6 @@ function Dialog(object) {
 			this.close();
 		} else {
 
-			// this.application = 	;
-
-			// this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
-
 			if (object.exists) {
 				var target = document.getElementById(object.id);
 				if (target && this.application) {
