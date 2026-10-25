@@ -598,6 +598,10 @@ button {
 	padding: 5px 10px;
 }
 
+.modern .window header button {
+	border-radius: 0;
+}
+
 .modern .backdrop-clip {
 	display: none;
 }
