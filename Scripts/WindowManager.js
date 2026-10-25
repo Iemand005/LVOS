@@ -4286,8 +4286,7 @@ Dialog.prototype.moveBody = function (x, y) {
  * @param {number} [bottom]
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
-	if (this.useScale) right = undefined, bottom = undefined;
-	insetElement(this.target, top, left, right, bottom);
+	insetElement(this.target, top, left, this.useScale ? right : undefined, this.useScale ? bottom : undefined);
 };
 
 /** @param {string} [url] */
