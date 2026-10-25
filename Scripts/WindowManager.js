@@ -355,7 +355,7 @@ function getDialogTemplate() {
 function createDialogElement() {
 	var container = document.getElementById("window-section");
 	var template = getDialogTemplate();
-	if (!template) return null;
+	if (!template) throw new Error("Can't find dialog template!");
 	var clone = template.cloneNode(true);
 	if (container && clone instanceof Element) {
 		/** @type {Element | WindowElement} */
@@ -2510,7 +2510,7 @@ Dialog.prototype.initWithObject = function(object) {
 				var doc = this.contentDocument;
 				// if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 			} else {
-				// this.target = createDialogElement();
+				this.target = createDialogElement();
 				// this.openUrl(object.src);
 			}
 			return;
