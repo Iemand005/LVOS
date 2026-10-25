@@ -2006,12 +2006,12 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
  */
 WindowSnap.prototype.applyInsetStyle = function(top, left, right, bottom) {
 	insetElement(this.element, top, left, right, bottom);
-}
+};
 
 /** @param {number} inset */
 WindowSnap.prototype.setInset = function(inset) {
 	insetElement(this.element, inset);
-}
+};
 
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
@@ -2457,7 +2457,7 @@ function Dialog(object) {
 		self._ctrlDrag = !!ev.ctrlKey;
 		if (ev.ctrlKey) {
 			ev.stopImmediatePropagation();
-			return
+			return;
 		}
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
