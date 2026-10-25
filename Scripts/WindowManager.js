@@ -4367,7 +4367,7 @@ Dialog.prototype.createPopOut = function() {
 	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
 	var titleBarHeight = titleBar && titleBar.getBoundingClientRect().height || 0;
-	var viewBoxPosition = getViewBoxPosition();
+	var viewBoxPosition = Helpers.getViewBoxPosition();
 
 	this._popupWindow = window.open(this.href, this.title || "LVOS", Helpers.stringifyWindowOpenProperties({
 		scrollbars: true,
