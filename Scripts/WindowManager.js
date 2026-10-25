@@ -2549,7 +2549,7 @@ function Dialog(object) {
 	if (header) target.addEventListener("dblclick", function (event) {
 		var rect = getRect(header);
 		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
-		/** @type {Element} */
+		/** @type {HTMLElement} */
 		var node = event.target;
 		while (node && node !== header) {
 			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
