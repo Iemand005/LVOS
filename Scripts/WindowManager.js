@@ -2611,13 +2611,16 @@ Dialog.prototype.initWithObject = function(object) {
 			};
 
 			var data = JSON.stringify(dragState);
+			var transfer = event.dataTransfer;
+
 			try {
-				event.dataTransfer.setData("application/json", data);
-				event.dataTransfer.setData("text/plain", self.src || self.title || self.id);
-				if (self.src) event.dataTransfer.setData("text/uri-list", self.src);
-				event.dataTransfer.setData("text/html", data);
+				transfer.setData("application/json", data);
+				transfer.setData("text/plain", self.src || self.title || self.id);
+				if (self.src) transfer.setData("text/uri-list", self.src);
+				transfer.setData("text/html", data);
 			} catch(ex) {
-				event.dataTransfer.setData("Text", data);
+				transfer.setData("Text", data);
+				transfer.setData("URL", self.src);
 			}
 
 		}, false);
