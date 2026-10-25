@@ -2620,7 +2620,7 @@ Dialog.prototype.initWithObject = function(object) {
 				transfer.setData("text/html", data);
 			} catch(ex) {
 				transfer.setData("Text", data);
-				transfer.setData("URL", self.src);
+				if (self.src) transfer.setData("URL", self.src);
 			}
 
 		}, false);
