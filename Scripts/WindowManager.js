@@ -3836,10 +3836,10 @@ Dialog.prototype.toggleEjectButton = function (enable) {
 Dialog.prototype.toggleFullButton = function (enable) {
   	this.toggleButton(windowButtons.full, enable);
 };
-// frat
+
 /**
  * @param {MessageType} type
- * @param {*} [message]
+ * @param {unknown} [message]
  */
 Dialog.prototype.messageFrame = function (type, message) {
 	var frame = this.frame;
