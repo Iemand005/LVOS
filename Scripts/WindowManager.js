@@ -2620,6 +2620,7 @@ function Dialog(object) {
 			if (self.src) transfer.setData("text/uri-list", self.src);
 			transfer.setData("text/html", data);
 		} catch(ex) {
+			console.warn(ex);
 			transfer.setData("Text", data);
 			if (self.src) transfer.setData("URL", self.src);
 		}
@@ -3227,7 +3228,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 		this.content.style.border = Helpers.toPixels(value);
 		this.content.style.borderRadius = Helpers.toPixels(value);
 	},
-	get: function () { return this.content && fromPixels(this.content.style.padding); }
+	get: function () { return this.content && Helpers.fromPixels(this.content.style.padding); }
 });
 
 Object.defineProperty(Dialog.prototype, "popup", {
