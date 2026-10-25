@@ -325,23 +325,23 @@ Helpers.stringifyDialogProperties = function(properties){
 
 Helpers.getViewBoxPosition = function() {
 	return { x: window.screenLeft, y: window.screenTop };
-}
+};
 
-function toPixels(/** @type {number} */value) { return Math.round(value) + "px"; }
-function toDegrees(/** @type {number} */value) { return Math.round(value) + "deg"; }
+Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value) + "px"; };
+Helpers.toDegrees = function(/** @type {number} */value) { return Math.round(value) + "deg"; };
 
 /** @param {number} pixels */
-function pixelsToCentimeters(pixels){
+Helpers.pixelsToCentimeters = function(pixels){
 	return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
-}
+};
 
 /** @param {string} text */
-function fromPixels(text){
+Helpers.fromPixels = function(text){
 	if (text !== null) try {
 		return typeof text === "number" ? text : parseInt(text.replace("px", ""));
 	} catch (ex) { console.warn("Failed to parse pixels:", ex); }
 	return 0;
-}
+};
 
 /** @param {*} exception */
 function handleStorageException(exception) {
