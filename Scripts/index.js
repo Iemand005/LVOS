@@ -5,7 +5,7 @@ function init() {
 	var launchpadElement = document.getElementById("launchpad");
 
 	if (launchpad && launchpadElement) {
-		launchpad.init(launchpadElement);
+		launchpad.init.call(launchpad, launchpadElement);
 
 		if (typeof appManager !== "undefined") {
 			appManager.forEachApp(launchpad.addApp.bind(launchpad));
