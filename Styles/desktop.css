@@ -216,7 +216,8 @@ iframe {
     height: 100%;
 }
 
-#dock-area, #dock-area button {
+#dock-area,
+#dock-area button {
 	color: white;
 }
 
