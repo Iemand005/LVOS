@@ -723,9 +723,6 @@ Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
 });
 
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
-	/**
-     * @this {WindowManager}
-     */
 	get: function() { return this._isWindowUpdatesEnabled; },
 	set: function(value) {
 		if (value) window.addEventListener("resize", this.resizeHandler, false);
