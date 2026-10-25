@@ -353,19 +353,19 @@ function getDialogTemplate() {
 }
 
 function createDialogElement() {
-	var container = document.getElementById("window-section");
+	// var container = document.getElementById("window-section");
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
 	var clone = template.cloneNode(true);
-	if (container && clone instanceof Element) {
+	if (clone instanceof Element) {
 		/** @type {Element | WindowElement} */
 		var dialogElement = removeComments(clone);
 		if (isElement(dialogElement)) return dialogElement;
 	}
-	throw new Error("Failed to find container or clone element");
+	throw new Error("Failed to clone element");
 }
 
-/** @param {Element} element */
+/** @param {Node} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
 	element.childNodes.forEach(function (child) {
 		if (child.nodeName === "#comment") element.removeChild(child);
