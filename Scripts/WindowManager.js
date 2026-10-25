@@ -2288,7 +2288,7 @@ Transformable.prototype.applyTransform = function() {
 Transformable.prototype.update = function(animate) {
 	if (animate) animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
 	else this.applyTransform();
-}
+};
 
 /**
  * @param {number} x
@@ -2300,7 +2300,7 @@ Transformable.prototype.move = function(x, y, animate) {
 	this._transform.y = y;
 
 	this.update(animate);
-}
+};
 
 /**
  * @param {number} [x]
