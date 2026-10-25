@@ -723,7 +723,7 @@ Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
 });
 
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
-	 /**
+	/**
      * @this {WindowManager}
      */
 	get: function() { return this._isWindowUpdatesEnabled; },
@@ -924,23 +924,22 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 
 	// Force a layout pass so the window's rendered size matches the applied state,
 	// especially when restored from a hidden HTML JSON drop.
-	if (dialog.target) {
-		try {
-			dialog.resize();
-			if (typeof dialog.update === "function") dialog.update();
-			var rect = getRect(dialog.target);
-			if (rect) {
-				var bw = rect.width, bh = rect.height;
-				if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
-					dialog._width = bw;
-					dialog._height = bh;
-					if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
-				}
+	try {
+		dialog.resize();
+		if (typeof dialog.update === "function") dialog.update();
+		var rect = getRect(dialog.target);
+		if (rect) {
+			var bw = rect.width, bh = rect.height;
+			if (Math.abs(bw - dialog.width) > 1 || Math.abs(bh - dialog.height) > 1) {
+				dialog._width = bw;
+				dialog._height = bh;
+				if (typeof dialog.broadcastState === "function") dialog.broadcastState({ width: bw, height: bh });
 			}
-			dialog.resize();
-		} catch (exception) { /* ignore */ }
-	}
-	return dialog;
+		}
+		dialog.resize();
+	} catch (exception) { /* ignore */ }
+
+		return dialog;
 };
 
 /** @param {boolean} enabled */
@@ -985,7 +984,7 @@ Object.defineProperty(WindowManager, "windowBounds", {
 WindowManager.prototype.focusDialog = function(dialog) {
 	if (this.focusedDialog !== null && this.focusedDialog.target)
 		this.focusedDialog.target.removeAttribute("focus");
-	if (dialog.target) dialog.target.setAttribute("focus", String(true));
+	dialog.target.setAttribute("focus", String(true));
 	this.focusedDialog = dialog;
 };
 
@@ -1008,12 +1007,10 @@ WindowManager.prototype.initializeDialogs = function() {
 	this.dragAction.set(0);
 	if (typeof document !== "undefined") {
 		var dialogs = document.getElementsByClassName("window");
-		if (dialogs) {
-			for (var i = 0; i < dialogs.length; i++) {
-				var dialog = dialogs[i];
-				if (isElement(dialog))
-					self.loadApp(dialog);
-			}
+		for (var i = 0; i < dialogs.length; i++) {
+			var dialog = dialogs[i];
+			if (isElement(dialog))
+				self.loadApp(dialog);
 		}
 	}
 	this.loadState();
