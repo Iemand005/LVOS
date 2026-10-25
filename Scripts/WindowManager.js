@@ -2684,7 +2684,6 @@ Dialog.prototype.moveToDesktop = function(i){
  */
 Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	var target = this.target;
-	if (!target || !root) return;
 	var before = target.getBoundingClientRect();
 	this.setParentElement(root);
 	var after = target.getBoundingClientRect();
@@ -2729,7 +2728,7 @@ Dialog.prototype.clearExposéVisual = function() {
 	this._exposeVisualScale = undefined;
 	this._exposeVisualWidth = undefined;
 	this._exposeContentScale = undefined;
-	/** @type {Coord} */
+	/** @type {Coord | null} */
 	this._exposeGrab = null;
 };
 
@@ -2839,8 +2838,6 @@ Dialog.prototype.reportState = function() {
  * @param {boolean} [kill]
  */
 Dialog.prototype.toggleOpen = function (forceOpen, kill) {
-	var target = this.target;
-	if (!target) return;
 	var self = this;
 	var wasOpen = this._stateOpen;
 	this._stateOpen = forceOpen || false;
@@ -2880,7 +2877,7 @@ Object.defineProperty(Dialog.prototype, "frame", {
 Object.defineProperty(Dialog.prototype, "resizable", {
 	get: function() { return !this.application ? true : this.application.resizable !== false; },
 	set: function(v) { if (v) this._createSizers(); }
-})
+});
 Object.defineProperty(Dialog.prototype, "src", {
 	get: function() { return this._src || this.application && this.application.src; },
 	set: function(url) { this.openUrl(url); }
@@ -3046,7 +3043,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 		this._height = height;
 		this._y = top / window.innerHeight;
 		if (this.useTransform) {
-			if (this.target) this.target.style.height = toPixels(height);
+			this.target.style.height = toPixels(height);
 			this.updateTransform();
 		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
 		this._isMinHeight = height === this.minHeight;
@@ -3065,7 +3062,7 @@ Object.defineProperty(Dialog.prototype, "left", {
 		this._width = width;
 		this._x = left / window.innerWidth;
 		if (this.useTransform) {
-			if (this.target) this.target.style.width = toPixels(width);
+			this.target.style.width = toPixels(width);
 			this.updateTransform();
 		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
@@ -3184,7 +3181,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	set: function(id) {
 		this._id = id;
 		windowManager.windows[id] = this;
-		if (this.target) this.target.setAttribute("id", id);
+		this.target.setAttribute("id", id);
 	}
 });
 
@@ -3479,7 +3476,7 @@ Dialog.prototype.stopAnimating = function () {
 		return;
 	}
 	if (this._dragScaleAnimating) return;
-	if (this.target) this.target.classList.remove("animating");
+	this.target.classList.remove("animating");
 };
 
 /**
@@ -3490,7 +3487,7 @@ Dialog.prototype.stopAnimating = function () {
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout, flip) {
-	if (this.target) animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
+	animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
 };
 /**
  * @param {string} className
@@ -4295,7 +4292,7 @@ Dialog.prototype.moveBody = function (x, y) {
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
 	if (this.useScale) right = undefined, bottom = undefined;
-	if (this.target) insetElement(this.target, top, left, right, bottom);
+	insetElement(this.target, top, left, right, bottom);
 };
 
 /** @param {string} [url] */
@@ -4489,7 +4486,7 @@ Dialog.prototype.getState = function() {
 Dialog.prototype.loadState = function(state) {
 	if ("open" in state) {
 		if (state.open) this.launch();
-		else if (this.target) this.toggleOpen(false);
+		else this.toggleOpen(false);
 	}
 	if ("title" in state) this.title = state.title;
 	if ("x" in state || "y" in state)
