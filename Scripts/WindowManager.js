@@ -315,7 +315,9 @@ var windowButtons = {
 	close: 2
 };
 
-function Helpers() {}
+function Helpers() {
+	this. ok = false;
+}
 
 Helpers.stringifyDialogProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
