@@ -2648,7 +2648,6 @@ function Dialog(object) {
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
-	if (!target) return null;
 	var elements = target.getElementsByTagName(name);
 	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
 	var element = elements.length ? elements[0] : null;
@@ -2659,7 +2658,6 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 /** @param {HTMLElement} element */
 Dialog.prototype.setParentElement = function(element) {
 	var target = this.target;
-	if (!target || !element) return;
 	if (target.parentNode === element) return;
 
 	if (typeof element.moveBefore === "function" && target.isConnected) try {
@@ -2714,6 +2712,7 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 
 /** Remove the exposé inverse transform left on the content element, if any. */
 Dialog.prototype.clearExposéVisual = function() {
+	/** @type {boolen | null} */
 	this._exposeOrigin = null;
 	if (typeof this._exposeVisualScale !== "number") return;
 	var content = this.content;
