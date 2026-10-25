@@ -138,8 +138,6 @@ var onLoad = function () {
         var url;
         try { url = new URL(droppedUrl, location.href).href; } catch (exception) { return; }
 
-        if (!window.appManager || !window.windowManager) return;
-
         var existing = null;
         // Try to find an app with this src (or distSrc)
         for (var id in window.appManager.apps) {
@@ -149,14 +147,14 @@ var onLoad = function () {
             }
         }
         if (existing) {
-            window.windowManager.dropApplication(existing, ev.clientX, ev.clientY, null, null);
+            window.windowManager.dropApplication(existing, ev.clientX, ev.clientY);
             return;
         }
 
         // Create a basic app for the dropped URL and open it.
         var newApp = window.appManager.createApp(url, url, "dropped." + Date.now());
         window.appManager.addApp(newApp);
-        window.windowManager.dropApplication(newApp, ev.clientX, ev.clientY, null, null);
+        window.windowManager.dropApplication(newApp, ev.clientX, ev.clientY);
 	};
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("./Scripts/sw.js")["then"](function(reg) {
