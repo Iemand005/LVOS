@@ -2443,7 +2443,6 @@ function Dialog(object) {
 
 	var metroAppList = document.getElementById("metroapplist");
 	if (metroAppList) metroAppList.appendChild(this.createOpenButton());
-	this.initWithObject(object);
 
 	this._popupPositionInterval = 0;
 
@@ -2456,14 +2455,18 @@ function Dialog(object) {
 	/** @param {MouseEvent | PointerEvent} ev @param {number} [id] */
 	this.activationHandler = function (ev, id) {
 		if (ev.ctrlKey) {
+			if (self.titleBar) self.titleBar.setAttribute("draggable", "true");
 			ev.stopImmediatePropagation();
 			return
 		}
+		if (self.titleBar) self.titleBar.removeAttribute("draggable");
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
+
+	this.initWithObject(object);
 }
 
 
@@ -2560,7 +2563,10 @@ Dialog.prototype.initWithObject = function(object) {
 		if(this.resizable && createSizers) this._createSizers();
 
 		// target.addEventListener("dragstart", cancelDomEvent, false);
-		target.addEventListener("selectstart", cancelDomEvent, false);
+		target.addEventListener("selectstart", function (event) {
+			if (event.ctrlKey) return;
+			cancelDomEvent(event);
+		}, false);
 
 		var body = this.body;
 		if (body) body.addEventListener("load", function () { try {
@@ -2591,9 +2597,6 @@ Dialog.prototype.initWithObject = function(object) {
 		this.toggleOpen(false);
 
 		target.addEventListener("dragstart", function (event) {
-			event.dataTransfer.setData("Text", "hi");
-			event.dataTransfer.effectAllowed = "copy";
-			return
 			if (!event.ctrlKey || !event.dataTransfer || !self.application) {
 				event.preventDefault();
 				return;
@@ -2628,6 +2631,10 @@ Dialog.prototype.initWithObject = function(object) {
 
 			transfer.effectAllowed = "copyMove";
 
+		}, false);
+
+		target.addEventListener("dragend", function () {
+			if (header) header.removeAttribute("draggable");
 		}, false);
 	}
 

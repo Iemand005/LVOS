@@ -78,10 +78,20 @@ var onLoad = function () {
         
         dt.dropEffect = "copy";
 
-        var json = dt.getData("application/json");
-        var plain = dt.getData("text/plain");
-        var uriList = dt.getData("text/uri-list") || "";
-        var html = dt.getData("text/html") || "";
+        var json = "";
+        var plain = "";
+        var uriList = "";
+        var html = "";
+
+        try {
+            json = dt.getData("application/json") || "";
+            plain = dt.getData("text/plain") || "";
+            uriList = dt.getData("text/uri-list") || "";
+            html = dt.getData("text/html") || "";
+        } catch (exception) { }
+
+        try { if (!plain) plain = dt.getData("Text") || ""; } catch (exception) { }
+        try { if (!uriList) uriList = dt.getData("URL") || ""; } catch (exception) { }
 
         var droppedUrl = "";
         if (uriList) {
@@ -199,8 +209,8 @@ var onLoad = function () {
 		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", stopIt, false);
 	}
 
-    document.onselectstart = function () {
-        return false;
+    document.onselectstart = function (event) {
+        return !!(event && event.ctrlKey);
     };
 
     if (window.desktopManager) window.desktopManager.init();
