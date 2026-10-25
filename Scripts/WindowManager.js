@@ -139,10 +139,10 @@ function getSiteName(url) {
 
 
 /**
- * @param {Node} object
+ * @param {Node | null} [object]
  * @returns {object is HTMLElement}
  */
-Helpers.isElement = function(object) { return object && "nodeType" in object; }
+Helpers.isElement = function(object) { return object && "nodeType" in object || false; };
 
 
 /** @param {Window} window */
@@ -846,7 +846,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
 		} catch (ex) {
-			console.log(ex); 
+			console.log(ex);
 			return [];
 		}
 	}
@@ -1954,7 +1954,14 @@ WindowSnap.prototype.attachTo = function(dialog) {
 		section.insertBefore(this.element, section.firstChild);
 };
 
-/** @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped] */
+/**
+ * @param {Dialog} dialog @param {number} [outset] @param {number} [direction] @param {boolean} [noAnimation] @param {boolean} [isTouch] @param {boolean} [preserveSnapped]
+ * @param outset
+ * @param direction
+ * @param noAnimation
+ * @param isTouch
+ * @param preserveSnapped
+ */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
 
