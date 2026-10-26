@@ -2353,6 +2353,37 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
+function ensureClassList(elem) {
+    if (elem.classList) return;
+
+    elem.classList = {
+        add: function (cls) {
+            if (!this.contains(cls)) {
+                elem.className = (elem.className ? elem.className + " " : "") + cls;
+            }
+        },
+        remove: function (cls) {
+            var classes = (elem.className || "").split(/\s+/);
+            for (var i = classes.length - 1; i >= 0; i--) {
+                if (classes[i] === cls) classes.splice(i, 1);
+            }
+            elem.className = classes.join(" ");
+        },
+        contains: function (cls) {
+            return new RegExp("(^|\\s+)" + cls + "(\\s+|$)").test(elem.className || "");
+        },
+        toggle: function (cls) {
+            if (this.contains(cls)) {
+                this.remove(cls);
+                return false;
+            } else {
+                this.add(cls);
+                return true;
+            }
+        }
+    };
+}
+
 //#region Dialog
 
 
@@ -2560,9 +2591,7 @@ function Dialog(object) {
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
 	};
 
-	if (!this.target.classList) this.target.classList = {
-		
-	}
+	if (!this.target.classList) ensureClassList(this.target);
 
 	var target = this.target;
 
