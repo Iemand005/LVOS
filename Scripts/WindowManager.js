@@ -685,7 +685,7 @@ function WindowManager() {
 		} catch (ex) { console.warn(ex); }
 	};
 
-	this.windowSnap = document.documentMode && document.documentMode > 8 ? new WindowSnap : null;
+	this.windowSnap = new WindowSnap;
 
 	/**
 	 * Snap tile groups, one per desktop window-section. A group only ever lays out
@@ -1932,6 +1932,8 @@ function WindowSnap() {
 	 * @type {HTMLElement | null}
 	 */
 	this._section = null;
+
+	if (document.documentMode && document.documentMode < 9) return;
 
 	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
 	// first snap positions it, so without this the first drop flies it in from wherever
