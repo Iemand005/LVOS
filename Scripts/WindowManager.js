@@ -97,6 +97,13 @@ var flags = {
 	},
 	windowReaper: false,
 	verboseLogs: false,
+	_exposeAndDesktops: true,
+	get exposeAndDesktops() { return this._exposeAndDesktops; },
+	set exposeAndDesktops(value) {
+		this._exposeAndDesktops = value;
+		if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
+			window.desktopManager.setExposéEnabled(value);
+	},
 	_enableExtensions: true,
 	get enableExtensions() { return this._enableExtensions; },
 	set enableExtensions(value) {
@@ -230,7 +237,7 @@ function setClass(element, className, enabled) {
  * @param {number} [index]
  */
 function getRect(element, index) {
-	if (!element) return null;
+	if (!element) return;
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 }
 
@@ -2608,15 +2615,12 @@ function Dialog(object) {
 			return;
 		}
 
-
 		/** @type {DialogDropState} */
 		var dragState = {
 			state: self.getState(),
 			app: self.application
 		};
 
-		// Remember where inside the window the pointer grabbed it, so a drop can put
-		// the window back under the cursor exactly where the drag preview showed it.
 		var rect = getRect(self.target);
 		if (rect) dragState.offset = {
 			x: event.clientX - (rect.left + rect.width / 2),
@@ -2625,10 +2629,6 @@ function Dialog(object) {
 
 		var data = JSON.stringify(dragState);
 		var transfer = event.dataTransfer;
-
-		// if (rect && typeof transfer.setDragImage === "function") {
-		// 	try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
-		// }
 
 		try {
 			transfer.setData("application/json", data);
