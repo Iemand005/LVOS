@@ -45,9 +45,9 @@ https://iemand005.github.io/LVOS/
 
 https://iemand005.github.io/LVOS/mobile.html
 
-**Netscape 6–9 / Opera Presto**
+**Netscape 6–9 / Opera Presto / Internet Explorer 8-**
 
-https://iemand005.github.io/LVOS/indexN.html
+https://iemand005.github.io/LVOS/indexIE8.html
 
 **Netscape 4**
 
