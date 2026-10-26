@@ -2,7 +2,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "build:dev": "node build.js --no-minify"
+    "build:dev": "node build.js --no-minify",
+    "build:ie8": "node build.js --ie8"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

@@ -134,7 +134,7 @@ function descriptorsHaveAccessor(node) {
 /**
  * Find every accessor name that has to be rerouted, plus the object variables
  * that carry object-literal accessors (their dynamic [key] reads need the
- * helper too). Also reserve all existing get*/set* property names so a
+ * helper too). Also reserve all existing get and set property names so a
  * generated accessor method never overwrites a real method.
  *
  * @param {ts.SourceFile} sourceFile
