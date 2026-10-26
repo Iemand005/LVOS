@@ -35,6 +35,7 @@ const SCRIPTS = join(ROOT, "Scripts");
  * Static assets copied verbatim into the dist folder. Each entry's "from" is
  * resolved relative to ROOT and its "to" relative to the dist folder.
  */
+/** @type {{from: string, to?: string, exclude?: string[]}} */
 const ASSETS = [
 	{ from: "Styles", to: "Styles" },
 	{ from: "Applications", to: "Applications" },
