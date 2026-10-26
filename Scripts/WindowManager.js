@@ -2639,6 +2639,7 @@ function Dialog(object) {
 			console.warn(ex);
 			transfer.setData("Text", data);
 			if (self.src) transfer.setData("URL", self.src);
+			transfer.setData("URL", "https://example.com")
 		}
 
 		transfer.effectAllowed = "copyMove";
