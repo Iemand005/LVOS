@@ -34,7 +34,7 @@ const SCRIPTS = join(ROOT, "Scripts");
 /**
  * Static assets copied verbatim into the dist folder. Each entry's "from" is
  * resolved relative to ROOT and its "to" relative to the dist folder.
- * @type {{from: string, to?: string, exclude?: string[]}}
+ * @type {{from: string, to?: string, exclude?: string[]}[]}
  */
 const ASSETS = [
 	{ from: "Styles" },
@@ -131,6 +131,8 @@ function isNotTypeDeclaration(src) {
 }
 function copyAssets(dist) {
 	for (const asset of ASSETS) {
+		if (!asset.to) asset.to = asset.from;
+		if (!asset.exclude) asset.exclude = [];
 		const src = join(ROOT, asset.from);
 		const dest = join(dist, asset.to);
 		if (!existsSync(src)) {
@@ -141,7 +143,7 @@ function copyAssets(dist) {
 			recursive: true,
 			filter: (path) =>
 				isNotTypeDeclaration(path) &&
-				!["MPTool", "GeodeWeb"].includes(basename(path))
+				!asset.exclude.includes(basename(path))
 		});
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
