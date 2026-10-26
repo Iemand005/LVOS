@@ -4279,11 +4279,12 @@ Dialog.prototype.update = function () {
 /**
  * @param {number} [width]
  * @param {number} [height]
+ * @param {boolean} [update]
  */
-Dialog.prototype.setMinSize = function (width, height) {
+Dialog.prototype.setMinSize = function (width, height, update) {
 	this._minWidth = typeof width === "number" ? width : 180;
 	this._minHeight = typeof height === "number" ? height : 200;
-	this.resize();
+	if (update) this.resize();
 };
 /**
  * @param {number} [width]
