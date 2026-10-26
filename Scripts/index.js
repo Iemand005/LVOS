@@ -29,7 +29,7 @@ function init() {
 
 
 
-	if (location.protocol === "file:") {
+	if (location.protocol === "file:") try {
 		/**@type {NodeListOf<HTMLScriptElement>}*/
 		var scripts = document.querySelectorAll('script[type="module"]');
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
@@ -40,7 +40,7 @@ function init() {
 				s.replaceWith(replacement);
 			} catch(ex) {}
 		});
-	}
+	} catch(ex) {}
 
 	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
 	if (window.__LVMessenger)
