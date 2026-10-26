@@ -207,7 +207,7 @@ function collectInfo(sourceFile) {
  * @param {ts.SourceFile} sourceFile
  * @param {{ accessorNames: Set<string>, accessorObjects: Set<string> }} info
  */
-function createTransformer(sourceFile, info) {
+function createTransformer(sourceFile, info, context) {
 	const { accessorNames, accessorObjects } = info;
 
 	/** @param {string} name @param {ts.Expression[]} args */
@@ -370,7 +370,6 @@ function createTransformer(sourceFile, info) {
 		]);
 	};
 
-	const context = arguments.length > 1 ? arguments[2] : null;
 	return visit;
 }
 
@@ -409,7 +408,7 @@ function injectHelper(code, reserved) {
 	const declaration = "var __lvosReserved = {" + names.map((name) => JSON.stringify(name) + ": true").join(", ") + "};\n" +
 		"var __lvosAccessors = {};\nvar __lvosMethodNames = {};\n";
 	const helper = declaration + HELPER_FUNCTIONS;
-	const match = code.match(/^([\s\S]*?(["'])use strict\2\s*;?[ \t]*(?:\r?\n|$))/);
+	const match = code.match(/^((?:\s|\/\/[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*(["'])use strict\2\s*;?[ \t]*(?:\r?\n|$))/);
 	if (match) return match[1] + helper + code.slice(match[1].length);
 	return helper + code;
 }
