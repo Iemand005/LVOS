@@ -73,11 +73,11 @@ The project includes support for:
 
 * Chrome (All versions)
 * Firefox (All versions, including the betas like Mozilla Suite, Phoenix and Firebird)
-* Microsoft Edge
+* Microsoft Edge (All versions as these are just IE and Chrome evolved)
 * Internet Explorer 9-11 (IE8 in progress)
 * Netscape 6–9
-* Opera Presto
-* Netscape 4
+* Opera Presto (Latest version)
+* Netscape 4 (Lite version)
 
 Modern browsers get the full modern implementation and can use newer web APIs. Older browsers use compatibility-focused builds and code paths.
 
