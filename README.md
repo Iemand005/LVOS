@@ -71,8 +71,8 @@ VulpOS has been developed with a much wider browser range in mind than most mode
 
 The project includes support for:
 
-* Chrome
-* Firefox
+* Chrome (All versions)
+* Firefox (All versions, including the betas like Mozilla Suite, Phoenix and Firebird)
 * Microsoft Edge
 * Internet Explorer 9-11 (IE8 in progress)
 * Netscape 6–9
