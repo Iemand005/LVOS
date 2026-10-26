@@ -212,10 +212,10 @@ function writePages(dist, ie8) {
 	}
 }
 
-function writeServiceWorker(dist) {
+function writeServiceWorker(dist, ie8) {
 	// Generate a dedicated production service worker that precaches the bundles
 	// and static assets. Kept intentionally simple and deterministic.
-	const precacheUrls = [
+	const urls = [
 		"\'./\'",
 		"\'./index.html\'",
 		"\'./mobile.html\'",
@@ -225,7 +225,11 @@ function writeServiceWorker(dist) {
 		"\'./icon-512.png\'",
 		"\'./desktop.dist.js\'",
 		"\'./mobile.dist.js\'"
-	].join(",\n\t");
+	];
+	if (ie8) {
+		urls.push("\'./indexIE8.html\'", "\'./desktop.ie8.dist.js\'");
+	}
+	const precacheUrls = urls.join(",\n\t");
 
 	const sw = `const CACHE_VERSION = 'lvos-v2';
 const STATIC_CACHE = 'lvos-static-' + CACHE_VERSION;
@@ -491,8 +495,8 @@ async function build() {
 	}
 
 	copyAssets(dist);
-	writePages(dist);
-	writeServiceWorker(dist);
+	writePages(dist, ie8);
+	writeServiceWorker(dist, ie8);
 
 	console.log("\nDone.");
 }
