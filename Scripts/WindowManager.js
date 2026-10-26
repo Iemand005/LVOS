@@ -2629,9 +2629,15 @@ function Dialog(object) {
 		// 	try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
 		// }
 
+		var ieDropCompatibleMode = true;
+
 		try {
 			transfer.setData("application/json", data);
-			transfer.setData("text/plain", self.src || self.title || self.id);
+			if (ieDropCompatibleMode) {
+				transfer.setData("Text", data);
+				transfer.setData("text/plain", data);
+			}
+			else transfer.setData("text/plain", self.src || self.title || self.id);
 			if (self.src) transfer.setData("text/uri-list", self.src);
 			transfer.setData("text/html", data);
 			transfer.setData("URL", self.src + "\n" + data);

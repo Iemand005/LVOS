@@ -1,98 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>IE11 URL Drag-and-Drop Test</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-        }
-
-        #source, #target {
-            padding: 20px;
-            margin: 10px 0;
-            border: 2px solid #888;
-            width: 400px;
-        }
-
-        #source {
-            background: #def;
-            cursor: move;
-        }
-
-        #target {
-            background: #eee;
-            min-height: 80px;
-        }
-
-        #log {
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-    </style>
+<meta charset="utf-8">
+<title>IE11 Drag Data Transfer Diagnostic</title>
+<style>
+body { font: 14px Consolas, monospace; margin: 20px; }
+#source, #target { box-sizing: border-box; width: 100%; padding: 24px; margin: 12px 0; border: 2px solid #777; }
+#source { background: #dcecff; cursor: move; }
+#target { background: #eee; min-height: 100px; }
+#log { white-space: pre-wrap; overflow-wrap: anywhere; }
+button { padding: 8px 12px; }
+</style>
 </head>
 <body>
-    <h1>IE11 URL Drag-and-Drop Test</h1>
+<h1>IE11 Drag Data Transfer Diagnostic</h1>
+<p>Drag the blue box into the grey box.</p>
+<div id="source" draggable="true">DRAG ME</div>
+<div id="target">DROP HERE</div>
+<button id="clear">Clear log</button>
+<pre id="log"></pre>
+<script>
+(function () {
+    var source = document.getElementById("source");
+    var target = document.getElementById("target");
+    var log = document.getElementById("log");
+    var testUrl = "https://example.com/";
+    var formats = [
+        "URL", "url", "Url",
+        "Text", "text", "TEXT",
+        "text/uri-list", "text/plain",
+        "text/html", "application/x-test",
+        "DownloadURL"
+    ];
 
-    <div id="source" draggable="true">
-        Drag this to the drop zone
-    </div>
+    function out(s) {
+        log.appendChild(document.createTextNode(s + "\r\n"));
+    }
 
-    <div id="target">
-        Drop here
-    </div>
+    function safe(label, fn) {
+        try {
+            var value = fn();
+            out(label + " = " + show(value));
+        } catch (e) {
+            out(label + " THREW " + e.name + ": " + e.message);
+        }
+    }
 
-    <h2>Event log</h2>
-    <pre id="log"></pre>
+    function show(value) {
+        if (value === null) return "null";
+        if (typeof value === "undefined") return "undefined";
+        if (typeof value === "string") return "[" + value + "]";
+        try {
+            if (typeof value.length === "number") {
+                var items = [];
+                for (var i = 0; i < value.length; i++) {
+                    items.push(value[i]);
+                }
+                return Object.prototype.toString.call(value) +
+                    " length=" + value.length + " " + JSON.stringify(items);
+            }
+        } catch (e) {}
+        return String(value);
+    }
 
-    <script>
-        var source = document.getElementById("source");
-        var target = document.getElementById("target");
-        var log = document.getElementById("log");
-        var testUrl = "https://example.com/";
+    function inspect(dt, phase) {
+        out("");
+        out("=== " + phase + " ===");
 
-        function write(message) {
-            log.innerText += message + "\r\n";
+        if (!dt) {
+            out("dataTransfer is null/undefined");
+            return;
         }
 
-        source.addEventListener("dragstart", function (event) {
-            log.innerText = "";
+        safe("dataTransfer.types", function () { return dt.types; });
 
-            event.dataTransfer.setData("URL", testUrl);
-
-            write("dragstart fired");
-            write("setData URL: " + testUrl);
-            write("Types: " + event.dataTransfer.types);
+        safe("types enumeration", function () {
+            var result = [];
+            var types = dt.types;
+            if (!types) return result;
+            for (var i = 0; i < types.length; i++) {
+                result.push(types[i]);
+            }
+            return result.join(", ");
         });
 
-        target.addEventListener("dragenter", function (event) {
-            event.preventDefault();
+        safe("dataTransfer.getData.length", function () {
+            return dt.getData.length;
         });
 
-        target.addEventListener("dragover", function (event) {
-            event.preventDefault();
-            event.dataTransfer.dropEffect = "copy";
+        for (var i = 0; i < formats.length; i++) {
+            (function (format) {
+                safe('getData("' + format + '")', function () {
+                    return dt.getData(format);
+                });
+            })(formats[i]);
+        }
+
+        safe("dataTransfer.items", function () { return dt.items; });
+        safe("dataTransfer.files", function () { return dt.files; });
+    }
+
+    source.addEventListener("dragstart", function (e) {
+        log.innerText = "";
+        out("FILE: " + location.href);
+        out("USER AGENT: " + navigator.userAgent);
+        out("Writing test data...");
+
+        var dt = e.dataTransfer;
+        if (!dt) {
+            out("No dataTransfer object!");
+            return;
+        }
+
+        var values = {
+            URL: testUrl,
+            url: testUrl,
+            Url: testUrl,
+            Text: "TEXT_PAYLOAD",
+            text: "text_payload",
+            TEXT: "TEXT_UPPER_PAYLOAD",
+            "text/uri-list": "https://uri-list.example/",
+            "text/plain": "PLAIN_PAYLOAD",
+            "text/html": "<b>HTML_PAYLOAD</b>",
+            "application/x-test": "CUSTOM_PAYLOAD",
+            DownloadURL: "text/plain:test.txt:https://example.com/test.txt"
+        };
+
+        for (var format in values) {
+            if (Object.prototype.hasOwnProperty.call(values, format)) {
+                (function (f, v) {
+                    safe('setData("' + f + '")', function () {
+                        dt.setData(f, v);
+                        return "returned normally";
+                    });
+                })(format, values[format]);
+            }
+        }
+
+        inspect(dt, "DRAGSTART: immediate readback");
+
+        safe("window.clipboardData", function () {
+            return window.clipboardData;
         });
+    });
 
-        target.addEventListener("drop", function (event) {
-            event.preventDefault();
+    target.addEventListener("dragenter", function (e) {
+        e.preventDefault();
+    });
 
-            var url = event.dataTransfer.getData("URL");
-            var text = event.dataTransfer.getData("Text");
+    target.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
+    });
 
-            write("");
-            write("drop fired");
-            write("getData URL: [" + url + "]");
-            write("getData Text: [" + text + "]");
-            write("URL success: " + (url === testUrl));
-
-            target.innerText = url || "(URL was empty)";
+    target.addEventListener("drop", function (e) {
+        e.preventDefault();
+        inspect(e.dataTransfer, "DROP");
+        safe("drop window.clipboardData", function () {
+            return window.clipboardData;
         });
+        target.innerText = "Drop completed. See diagnostic log.";
+    });
 
-        source.addEventListener("dragend", function () {
-            write("dragend fired");
+    source.addEventListener("dragend", function (e) {
+        out("");
+        out("=== DRAGEND ===");
+        safe("dropEffect", function () {
+            return e.dataTransfer.dropEffect;
         });
-    </script>
+    });
+
+    document.getElementById("clear").onclick = function () {
+        log.innerText = "";
+    };
+})();
+</script>
 </body>
 </html>
