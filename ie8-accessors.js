@@ -143,6 +143,7 @@ function collectInfo(sourceFile) {
 	const accessorNames = new Set();
 	const accessorObjects = new Set();
 	const reserved = new Set();
+	const classAccessors = new Map();
 
 	/** @param {string | null} name */
 	const reserve = (name) => {
@@ -153,8 +154,22 @@ function collectInfo(sourceFile) {
 	const visit = (node) => {
 		if (ts.isPropertyAccessExpression(node)) reserve(node.name.text);
 
-		if (ts.isPropertyAssignment(node) || ts.isMethodDeclaration(node) || ts.isGetAccessorDeclaration(node) || ts.isSetAccessorDeclaration(node))
+		if (ts.isPropertyAssignment(node) || ts.isMethodDeclaration(node) || isAccessor(node))
 			reserve(getPropertyName(node.name));
+
+		if (isAccessor(node) && (ts.isClassDeclaration(node.parent) || ts.isClassExpression(node.parent))) {
+			const name = getPropertyName(node.name);
+			if (name !== null) {
+				accessorNames.add(name);
+				let entry = classAccessors.get(name);
+				if (!entry) {
+					entry = { get: false, set: false };
+					classAccessors.set(name, entry);
+				}
+				if (ts.isGetAccessorDeclaration(node)) entry.get = true;
+				else entry.set = true;
+			}
+		}
 
 		if (ts.isObjectLiteralExpression(node)) {
 			const names = [];
@@ -198,17 +213,36 @@ function collectInfo(sourceFile) {
 	};
 	visit(sourceFile);
 
-	return { accessorNames, accessorObjects, reserved };
+	const methodNames = new Map();
+	const used = new Set();
+	/** @param {string} prefix @param {string} name */
+	const allocate = (prefix, name) => {
+		const base = prefix + name.charAt(0).toUpperCase() + name.slice(1).replace(/[^A-Za-z0-9_$]/g, "_");
+		let method = base;
+		let index = 1;
+		while (reserved.has(method) || used.has(method)) method = base + "$" + (index++);
+		used.add(method);
+		reserved.add(method);
+		return method;
+	};
+	classAccessors.forEach((entry, name) => {
+		const methods = {};
+		if (entry.get) methods.get = allocate("get", name);
+		if (entry.set) methods.set = allocate("set", name);
+		methodNames.set(name, methods);
+	});
+
+	return { accessorNames, accessorObjects, reserved, methodNames };
 }
 
 /**
  * Rewrite accessors and accessor property accesses to plain method calls.
  *
  * @param {ts.SourceFile} sourceFile
- * @param {{ accessorNames: Set<string>, accessorObjects: Set<string> }} info
+ * @param {{ accessorNames: Set<string>, accessorObjects: Set<string>, methodNames: Map<string, { get?: string, set?: string }> }} info
  */
 function createTransformer(sourceFile, info, context) {
-	const { accessorNames, accessorObjects } = info;
+	const { accessorNames, accessorObjects, methodNames } = info;
 
 	/** @param {string} name @param {ts.Expression[]} args */
 	const call = (name, args) => ts.factory.createCallExpression(ts.factory.createIdentifier(name), undefined, args);
@@ -241,6 +275,8 @@ function createTransformer(sourceFile, info, context) {
 
 	/** @param {ts.Node} node */
 	const visit = (node) => {
+		if (ts.isClassDeclaration(node) || ts.isClassExpression(node)) return transformClass(node);
+
 		if (ts.isAssignmentExpression(node)) {
 			const target = accessInfo(node.left);
 			if (target) {
@@ -373,6 +409,40 @@ function createTransformer(sourceFile, info, context) {
 			ts.factory.createObjectLiteralExpression(properties, node.multiLine),
 			ts.factory.createArrayLiteralExpression(descriptors, true)
 		]);
+	};
+
+	/**
+	 * @param {ts.ClassDeclaration | ts.ClassExpression} node
+	 */
+	const transformClass = (node) => {
+		const members = node.members.map((member) => {
+			if (!isAccessor(member)) return ts.visitNode(member, visit);
+
+			const name = getPropertyName(member.name);
+			const methods = name === null ? undefined : methodNames.get(name);
+			const methodName = methods && (ts.isGetAccessorDeclaration(member) ? methods.get : methods.set);
+			if (!methodName) return ts.visitNode(member, visit);
+
+			const parameters = member.parameters.map((parameter) => ts.visitNode(parameter, visit));
+			const body = member.body ? ts.visitNode(member.body, visit) : undefined;
+			const method = ts.factory.createMethodDeclaration(
+				ts.getModifiers(member),
+				undefined,
+				ts.factory.createIdentifier(methodName),
+				undefined,
+				undefined,
+				parameters,
+				member.type,
+				body
+			);
+			ts.setOriginalNode(method, member);
+			ts.setTextRange(method, member);
+			return method;
+		});
+
+		if (ts.isClassDeclaration(node))
+			return ts.factory.updateClassDeclaration(node, ts.getModifiers(node), node.name, node.typeParameters, node.heritageClauses, members);
+		return ts.factory.updateClassExpression(node, ts.getModifiers(node), node.name, node.typeParameters, node.heritageClauses, members);
 	};
 
 	return visit;
