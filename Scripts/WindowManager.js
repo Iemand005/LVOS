@@ -2560,6 +2560,10 @@ function Dialog(object) {
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
 	};
 
+	if (!this.target.classList) this.target.classList = {
+		
+	}
+
 	var target = this.target;
 
 	var buttons = target.getElementsByTagName("button");
