@@ -2439,6 +2439,7 @@ function Dialog(object) {
 	this.application = null;
 	if (!Helpers.isElement(object))
 		this.application = object;
+	else this.target = object;
 
 	if (!id) id = object.title;
 	if (object.title) this._title = object.title;
@@ -2687,6 +2688,7 @@ function Dialog(object) {
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
+	if (!target) return null;
 	var elements = target.getElementsByTagName(name);
 	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
 	var element = elements.length ? elements[0] : null;
