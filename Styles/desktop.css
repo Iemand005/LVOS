@@ -151,7 +151,7 @@ body.color-debug .tab-page {
 }
 
 @keyframes page-scale-cover {
-	33% {
+	33%, 34% {
 		transform: rotateY(-45deg) scale(0.8);
 		opacity: 0.7;
 	}
@@ -161,7 +161,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	66% {
+	64%, 67% {
 		transform: rotateY(0deg) scale(1);
 		opacity: 1;
 	}
