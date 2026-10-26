@@ -81,7 +81,6 @@ const BUNDLES = {
 	"desktop.dist.js": [
 		"CustomPrototypes.js", // shared prototypes + "use strict" prologue
 		"physics.js",          // Vector
-		"youtube.js",          // YouTubeParser
 		"Messenger.js",        // LVMessenger
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
