@@ -2,8 +2,16 @@ import { test, expect } from '@playwright/test';
 import { pathToFileURL } from 'url';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
+import { parse } from 'acorn';
 
 test.use({ headless: true, channel: 'chrome' });
+
+test('IE8 bundles are valid ES3', () => {
+	for (const file of ['Dist/desktop.ie8.dist.js', 'Dist/mobile.ie8.dist.js']) {
+		const code = readFileSync(resolve(file), 'utf8');
+		expect(() => parse(code, { ecmaVersion: 3, sourceType: 'script' }), file + ' should parse as ES3').not.toThrow();
+	}
+});
 
 /**
  * The IE8 build rewrites object-literal accessors and Object.defineProperty /
