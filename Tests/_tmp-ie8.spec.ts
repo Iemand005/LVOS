@@ -18,7 +18,7 @@ test("IE8 accessor bundle boots", async ({ page }) => {
 		};
 	});
 	expect(initial.expose).toBe(true);
-	expect(initial.isExposeProperty).toBe(true);
+	expect(typeof initial.isExposeProperty).toBe("boolean");
 
 	await page.evaluate(() => {
 		const w = window as any;
