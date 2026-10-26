@@ -3116,7 +3116,7 @@ Object.defineProperty(Dialog.prototype, "rightFromLeft", {
 });
 
 Object.defineProperty(Dialog.prototype, "right", {
-	get: function() { return window.innerWidth - this.rightFromLeft; },
+	get: function() { var rfl = this.rightFromLeft; return typeof rfl === "number" && rfl === rfl ? window.innerWidth - rfl : 0; },
 	set: function(right) {
 		if (typeof right === "number") {
 			var bounds = WindowManager.windowBounds;
@@ -3133,7 +3133,7 @@ Object.defineProperty(Dialog.prototype, "bottomFromTop", {
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
-	get: function() { return window.innerHeight - this.bottomFromTop; },
+	get: function() { var bft = this.bottomFromTop; return typeof bft === "number" && bft === bft ? window.innerHeight - bft : 0; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
 			var bounds = WindowManager.windowBounds;

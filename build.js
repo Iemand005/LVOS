@@ -490,6 +490,24 @@ function quoteReservedProperties(code) {
 	);
 	return code.replace(pattern, function(_, kw) { return "[\"" + kw + "\"]"; });
 }
+
+/**
+ * Apply patches required specifically for IE8:
+ * 1. Disable theme setting/loading so <body> class mutations and theme lookups don't crash
+ * 2. Disable console interception on load
+ */
+function applyIe8SpecificPatches(code) {
+	// Disable theme application functions in IE8 (return early)
+	code = code.replace(/function setThemeOption\([^)]*\)\s*\{/, "$&return;");
+	code = code.replace(/function loadThemeSetting\([^)]*\)\s*\{/, "$&return;");
+
+	// Disable bindConsole
+	code = code.replace(/var bindConsole\s*=\s*true;/, "var bindConsole = false;");
+	// Disable interceptor.bindage()
+	code = code.replace(/interceptor\.bindage\(\);?/, "/* interceptor.bindage(); */");
+
+	return code;
+}
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
@@ -530,7 +548,7 @@ async function build() {
 			legalComments: "none"
 		});
 		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");
-		const ie8Code = quoteReservedProperties(ie8Result.code);
+		const ie8Code = applyIe8SpecificPatches(quoteReservedProperties(ie8Result.code));
 		assertEs3(ie8Code, ie8Outfile);
 		writeFileSync(join(dist, ie8Outfile), ie8Code);
 		console.log(

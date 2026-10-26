@@ -7,6 +7,37 @@ import ts from "typescript";
  * property access is routed through these helpers.
  */
 const HELPER_FUNCTIONS = `
+/* ES5 Array/String polyfills for IE8 */
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(searchElement, fromIndex) {
+		var len = this == null ? 0 : this.length >>> 0;
+		if (len === 0) return -1;
+		var n = typeof fromIndex === "number" ? fromIndex | 0 : 0;
+		if (n >= len) return -1;
+		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+		for (; k < len; k++) {
+			if (k in this && this[k] === searchElement) return k;
+		}
+		return -1;
+	};
+}
+if (!Array.prototype.lastIndexOf) {
+	Array.prototype.lastIndexOf = function(searchElement, fromIndex) {
+		var len = this == null ? 0 : this.length >>> 0;
+		if (len === 0) return -1;
+		var n = typeof fromIndex === "number" ? fromIndex | 0 : len - 1;
+		var k = n >= 0 ? Math.min(n, len - 1) : len - Math.abs(n);
+		for (; k >= 0; k--) {
+			if (k in this && this[k] === searchElement) return k;
+		}
+		return -1;
+	};
+}
+if (!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\\s+|\\s+$/g, "");
+	};
+}
 /* IE8 classList polyfill – installed only when the native implementation is absent. */
 (function() {
 	if (typeof document === "undefined" || !document.createElement) return;
