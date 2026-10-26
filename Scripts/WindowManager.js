@@ -97,6 +97,13 @@ var flags = {
 	},
 	windowReaper: false,
 	verboseLogs: false,
+	_exposeAndDesktops: true,
+	get exposeAndDesktops() { return this._exposeAndDesktops; },
+	set exposeAndDesktops(value) {
+		this._exposeAndDesktops = value;
+		if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
+			window.desktopManager.setExposéEnabled(value);
+	},
 	_enableExtensions: true,
 	get enableExtensions() { return this._enableExtensions; },
 	set enableExtensions(value) {

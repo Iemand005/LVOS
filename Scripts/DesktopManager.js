@@ -306,6 +306,11 @@ function DesktopManager() {
 
     /** @type {TabScroller | null} */
     this.scrollTabs = null;
+
+    /** @type {Node | null} */
+    this.desktopParent = null;
+    /** @type {Node | null} */
+    this.desktopNextSibling = null;
 }
 
 Object.defineProperty(DesktopManager.prototype, "isExposé", {
@@ -329,16 +334,61 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
+    var windowSection = document.getElementById("window-section");
+    if (windowSection) {
+        this.desktopParent = windowSection.parentNode;
+        this.desktopNextSibling = windowSection.nextSibling;
+    }
 
-	// var oh flag maybe
-	var multiDesktop = "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
+    this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
+};
 
-    this.scrollTabs = multiDesktop ? new TabScroller(document.querySelector("main")) : null;
+DesktopManager.prototype.isExposéSupported = function() {
+    return "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
+};
 
-    // this.scrollTabs.addTab(document.getElementById("desktop"));
-    this.addDesktop("Main", document.getElementById("window-section") || undefined);
+/** @param {boolean} enabled */
+DesktopManager.prototype.setExposéEnabled = function(enabled) {
+    if (enabled) this.enableExposé();
+    else this.disableExposé();
+};
+
+DesktopManager.prototype.enableExposé = function() {
+    if (this.scrollTabs || !this.isExposéSupported()) return;
+
+    var windowSection = document.getElementById("window-section");
+    if (!windowSection) return;
+
+    if (!this.desktopParent) {
+        this.desktopParent = windowSection.parentNode;
+        this.desktopNextSibling = windowSection.nextSibling;
+    }
+
+    document.body.classList.add("exposé");
+
+    this.scrollTabs = new TabScroller(document.querySelector("main"));
+    this.addDesktop("Main", windowSection);
     this.addDesktop();
     this.addDesktop();
+};
+
+DesktopManager.prototype.disableExposé = function() {
+    document.body.classList.remove("exposé");
+
+    var windowSection = document.getElementById("window-section");
+    var parent = this.desktopParent || document.getElementById("desktop-area");
+    if (windowSection && parent) {
+        if (this.desktopNextSibling && this.desktopNextSibling.parentNode === parent)
+            parent.insertBefore(windowSection, this.desktopNextSibling);
+        else parent.appendChild(windowSection);
+    }
+
+    if (this.scrollTabs && this.scrollTabs.container && this.scrollTabs.container.parentNode)
+        this.scrollTabs.container.parentNode.removeChild(this.scrollTabs.container);
+
+    this.scrollTabs = null;
+    this.desktops = [];
+    this.gapDesktop = null;
 };
 
 /** @param {string} [name] @param {HTMLElement} [desktopElement] */
