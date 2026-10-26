@@ -158,47 +158,57 @@ function copyAssets(dist) {
 	}
 }
 
-function writePages(dist) {
-	for (const [page, config] of Object.entries(PAGES)) {
-		const srcPath = join(ROOT, config.source);
-		if (!existsSync(srcPath)) {
-			console.warn(config.source + " not found; skipping " + page + ".");
-			continue;
-		}
+function writePage(dist, page, config) {
+	const srcPath = join(ROOT, config.source);
+	if (!existsSync(srcPath)) {
+		console.warn(config.source + " not found; skipping " + page + ".");
+		return;
+	}
 
-		// Replace every <script> tag (external or inline) with the production bundle.
-		// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
-		// without module support download them; modern Chrome ignores the tag entirely.
-		const src = readFileSync(srcPath, "utf8");
+	// Replace every <script> tag (external or inline) with the production bundle.
+	// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
+	// without module support download them; modern Chrome ignores the tag entirely.
+	const src = readFileSync(srcPath, "utf8");
 
-		// Extensions are never bundled: the dist folder must not contain an
-		// extension implementation baked into a bundle. The scripts the page asks
-		// for are copied into the dist folder as they are and loaded separately
-		// (deferred) instead, so the extension is a file that can be added, changed
-		// or left out without rebuilding the bundle.
-		const extensionScripts = [];
-		const extensionPattern = new RegExp(
-			'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
-			"gi"
+	// Extensions are never bundled: the dist folder must not contain an
+	// extension implementation baked into a bundle. The scripts the page asks
+	// for are copied into the dist folder as they are and loaded separately
+	// (deferred) instead, so the extension is a file that can be added, changed
+	// or left out without rebuilding the bundle.
+	const extensionScripts = [];
+	const extensionPattern = new RegExp(
+		'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
+		"gi"
+	);
+	for (const match of src.matchAll(extensionPattern)) {
+		extensionScripts.push(match[1].replace(/^\.\//, ""));
+	}
+
+	const extras = (config.extras || [])
+		.concat(extensionScripts)
+		.map((extra) => '<script src="./' + extra + '" defer></script>\n')
+		.join("");
+	const out = src
+		.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(
+			/<\/head>/i,
+			'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
+			'<script src="./' + config.script + '" defer></script>\n' +
+			extras + '</head>'
 		);
-		for (const match of src.matchAll(extensionPattern)) {
-			extensionScripts.push(match[1].replace(/^\.\//, ""));
-		}
+	writeFileSync(join(dist, page), out);
+	console.log("[page] " + page + " -> scripts replaced with " + config.script);
+}
 
-		const extras = (config.extras || [])
-			.concat(extensionScripts)
-			.map((extra) => '<script src="./' + extra + '" defer></script>\n')
-			.join("");
-		const out = src
-			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
-			.replace(
-				/<\/head>/i,
-				'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
-				'<script src="./' + config.script + '" defer></script>\n' +
-				extras + '</head>'
-			);
-		writeFileSync(join(dist, page), out);
-		console.log("[page] " + page + " -> scripts replaced with " + config.script);
+function writePages(dist, ie8) {
+	for (const [page, config] of Object.entries(PAGES)) writePage(dist, page, config);
+
+	if (ie8) {
+		writePage(dist, "indexIE8.html", {
+			source: "index.html",
+			script: "desktop.ie8.dist.js",
+			extras: []
+		});
 	}
 }
 
