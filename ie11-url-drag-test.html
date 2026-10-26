@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>IE11 URL Drag-and-Drop Test</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #source, #target {
+            padding: 20px;
+            margin: 10px 0;
+            border: 2px solid #888;
+            width: 400px;
+        }
+
+        #source {
+            background: #def;
+            cursor: move;
+        }
+
+        #target {
+            background: #eee;
+            min-height: 80px;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>IE11 URL Drag-and-Drop Test</h1>
+
+    <div id="source" draggable="true">
+        Drag this to the drop zone
+    </div>
+
+    <div id="target">
+        Drop here
+    </div>
+
+    <h2>Event log</h2>
+    <pre id="log"></pre>
+
+    <script>
+        var source = document.getElementById("source");
+        var target = document.getElementById("target");
+        var log = document.getElementById("log");
+        var testUrl = "https://example.com/";
+
+        function write(message) {
+            log.innerText += message + "\r\n";
+        }
+
+        source.addEventListener("dragstart", function (event) {
+            log.innerText = "";
+
+            event.dataTransfer.setData("URL", testUrl);
+
+            write("dragstart fired");
+            write("setData URL: " + testUrl);
+            write("Types: " + event.dataTransfer.types);
+        });
+
+        target.addEventListener("dragenter", function (event) {
+            event.preventDefault();
+        });
+
+        target.addEventListener("dragover", function (event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "copy";
+        });
+
+        target.addEventListener("drop", function (event) {
+            event.preventDefault();
+
+            var url = event.dataTransfer.getData("URL");
+            var text = event.dataTransfer.getData("Text");
+
+            write("");
+            write("drop fired");
+            write("getData URL: [" + url + "]");
+            write("getData Text: [" + text + "]");
+            write("URL success: " + (url === testUrl));
+
+            target.innerText = url || "(URL was empty)";
+        });
+
+        source.addEventListener("dragend", function () {
+            write("dragend fired");
+        });
+    </script>
+</body>
+</html>
