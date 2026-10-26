@@ -412,10 +412,16 @@ function mergeDefineProperties(source, fileName) {
 }
 
 function readGroup(files, mergeProps, ie8) {
+	// IE8 has no custom elements or ES2015 built-ins, so the custom-element
+	// definitions (and their HTMLSpanElement/HTMLTimeElement base classes) are
+	// left out of the legacy bundle.
+	const ie8Skip = new Set(["WebComponents.js"]);
 	const parts = [];
 	let calls = 0;
 	let groups = 0;
 	for (const file of files) {
+		if (ie8 && ie8Skip.has(file)) continue;
+
 		// Bundle entries are relative to Scripts/ by default, but may also point at a
 		// repo-root file (e.g. "ScrollTabs/ScrollTabs.js").
 		const underScripts = join(SCRIPTS, file);
