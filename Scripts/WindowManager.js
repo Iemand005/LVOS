@@ -272,7 +272,7 @@ function messageReceived(type, data, source){
 					}
 					if (!overlay) return;
 					overlay.ontransitionend = null;
-					overlay.requestFullscreen().catch(function() {});
+					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
 					if (dialog.body) overlay.appendChild(dialog.body);
 					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
 				};
