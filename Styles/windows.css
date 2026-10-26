@@ -317,10 +317,6 @@ article, .article {
 	right: 0;
 }
 
-body {
-	overflow: hidden !important;
-}
-
 @supports (display: flex) {
 	article, .article {
 		position: unset;
