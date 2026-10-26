@@ -226,7 +226,9 @@ function createTransformer(sourceFile, info, context) {
 	const accessInfo = (expression) => {
 		if (ts.isPropertyAccessExpression(expression)) {
 			const name = expression.name.text;
-			if (isAccessorName(name)) return { object: expression.expression, key: ts.factory.createStringLiteral(name), literal: true };
+			const isAccessorObject = ts.isIdentifier(expression.expression) && accessorObjects.has(expression.expression.text);
+			if (isAccessorName(name) || isAccessorObject)
+				return { object: expression.expression, key: ts.factory.createStringLiteral(name), literal: true };
 		} else if (ts.isElementAccessExpression(expression)) {
 			const key = expression.argumentExpression;
 			if ((ts.isStringLiteral(key) || ts.isNumericLiteral(key)) && isAccessorName(key.text))
@@ -291,8 +293,11 @@ function createTransformer(sourceFile, info, context) {
 
 		if (ts.isPropertyAccessExpression(node)) {
 			const expression = ts.visitNode(node.expression, visit);
-			if (isAccessorName(node.name.text))
-				return get(expression, ts.factory.createStringLiteral(node.name.text));
+			const name = node.name.text;
+			const isAccessorObject = ts.isIdentifier(node.expression) && accessorObjects.has(node.expression.text);
+			const isCallee = ts.isCallExpression(node.parent) && node.parent.expression === node;
+			if (isAccessorName(name) || (isAccessorObject && !isCallee))
+				return get(expression, ts.factory.createStringLiteral(name));
 			return ts.factory.updatePropertyAccessExpression(node, expression, node.name);
 		}
 
