@@ -721,7 +721,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
 	get: function () {
 		/** @type {DesktopState} */
 		var state = {};
-		for (var id in this.windows) {
+		for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 			var window = this.windows[id];
 			if (window) state[id] = window.getState();
 		}
@@ -768,7 +768,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			dialog.loadState(windowStates[dialog.id]);
 			this.updateTopZ(dialog.z);
 		} else {
-			for (var id in windowStates) try {
+			for (var id in windowStates) if (windowStates.hasOwnProperty(id)) try {
 				var dialog = this.windows[id];
 				if (dialog && windowStates[id]) dialog.loadState(windowStates[id]);
 			} catch (ex) { console.log(ex); }
@@ -1599,7 +1599,7 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 	// it was laid out with. Its element is already a child of the section, which is
 	// where every window is created, so there is nothing to move: clearing flex/order
 	// drops it back out of the flex row into the absolute box it floats in.
-	for (var id in this.windows) {
+	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
 		if (!dialog || !dialog.target || members[id]) continue;
 		if (this.getSnapContainer(dialog) !== section) continue;
