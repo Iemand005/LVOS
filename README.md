@@ -74,7 +74,7 @@ The project includes support for:
 * Chrome
 * Firefox
 * Microsoft Edge
-* Internet Explorer
+* Internet Explorer 9-11 (IE8 in progress)
 * Netscape 6–9
 * Opera Presto
 * Netscape 4
