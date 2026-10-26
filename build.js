@@ -132,26 +132,16 @@ function copyAssets(dist) {
 	for (const asset of ASSETS) {
 		const src = join(ROOT, asset.from);
 		const dest = join(dist, asset.to);
-
 		if (!existsSync(src)) {
 			console.warn("Asset not found, skipping: " + asset.from);
 			continue;
 		}
-
-		if (asset.from.endsWith("MPTool")) {
-			for (const entry of readdirSync(src)) {
-				cpSync(join(src, entry), join(dest, entry), {
-					recursive: true,
-					filter: isNotTypeDeclaration
-				});
-			}
-		} else {
-			cpSync(src, dest, {
-				recursive: true,
-				filter: isNotTypeDeclaration
-			});
-		}
-
+		cpSync(src, dest, {
+			recursive: true,
+			filter: (path) =>
+				isNotTypeDeclaration(path) &&
+				!["MPTool", "GeodeWeb"].includes(basename(path))
+		});
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
 
