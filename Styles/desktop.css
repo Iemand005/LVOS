@@ -144,7 +144,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	66% {
+	66%, 67% {
 		scale: 1;
 		opacity: 1;
 	}
