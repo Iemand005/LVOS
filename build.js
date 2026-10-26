@@ -37,6 +37,8 @@ const SCRIPTS = join(ROOT, "Scripts");
  */
 const ASSETS = [
 	{ from: "Styles", to: "Styles" },
+	{ from: "Applications", to: "Applications" },
+	{ from: "Assets", to: "Assets" },
 	{ from: "manifest.json", to: "manifest.json" },
 	{ from: "manifest-mobile.json", to: "manifest-mobile.json" },
 	{ from: "icon-192.png", to: "icon-192.png" },
