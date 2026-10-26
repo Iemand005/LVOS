@@ -685,7 +685,7 @@ function WindowManager() {
 		} catch (ex) { console.warn(ex); }
 	};
 
-	this.windowSnap = new WindowSnap;
+	this.windowSnap = document.documentMode && document.documentMode > 8 ? new WindowSnap : null;
 
 	/**
 	 * Snap tile groups, one per desktop window-section. A group only ever lays out
