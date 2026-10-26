@@ -7,6 +7,70 @@ import ts from "typescript";
  * property access is routed through these helpers.
  */
 const HELPER_FUNCTIONS = `
+/* IE8 classList polyfill – installed only when the native implementation is absent. */
+(function() {
+	if (typeof document === "undefined" || !document.createElement) return;
+	var testEl = document.createElement("div");
+	if (testEl.classList) return; // already supported
+	/* Trim leading/trailing whitespace in a class string. */
+	function trim(s) { return s.replace(/^\\s+|\\s+$/g, ""); }
+	/* Split a class string into a non-empty token array. */
+	function tokens(el) {
+		var raw = el.className || "";
+		var parts = raw.split(/\\s+/);
+		var result = [];
+		for (var i = 0; i < parts.length; i++) if (parts[i]) result.push(parts[i]);
+		return result;
+	}
+	function join(list) { return list.join(" "); }
+	function DOMTokenList(el) { this._el = el; }
+	DOMTokenList.prototype = {
+		add: function() {
+			var list = tokens(this._el);
+			for (var i = 0; i < arguments.length; i++) {
+				var token = String(arguments[i]);
+				if (list.indexOf(token) === -1) list.push(token);
+			}
+			this._el.className = join(list);
+		},
+		remove: function() {
+			var list = tokens(this._el);
+			for (var i = 0; i < arguments.length; i++) {
+				var token = String(arguments[i]);
+				var idx = list.indexOf(token);
+				if (idx !== -1) list.splice(idx, 1);
+			}
+			this._el.className = join(list);
+		},
+		toggle: function(token, force) {
+			var has = this.contains(token);
+			if (has && force !== true) this.remove(token);
+			else if (!has && force !== false) this.add(token);
+			return !has;
+		},
+		contains: function(token) {
+			return tokens(this._el).indexOf(String(token)) !== -1;
+		},
+		toString: function() { return this._el.className || ""; },
+		bind: function(method) {
+			var self = this, args = Array.prototype.slice.call(arguments, 1);
+			return function() { self[method].apply(self, args.concat(Array.prototype.slice.call(arguments))); };
+		}
+	};
+	/* Install a classList getter on HTMLElement.prototype if defineProperty works on DOM nodes. */
+	try {
+		Object.defineProperty(HTMLElement.prototype, "classList", {
+			get: function() {
+				if (!this.__classList) this.__classList = new DOMTokenList(this);
+				return this.__classList;
+			},
+			enumerable: false,
+			configurable: true
+		});
+	} catch(e) {
+		/* Fallback: patch individual elements on-the-fly via __lvosGet/classList usage is handled above. */
+	}
+})();
 function __lvosCapitalize(name) {
 	var text = String(name);
 	return text.charAt(0).toUpperCase() + text.slice(1);

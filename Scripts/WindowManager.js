@@ -335,7 +335,7 @@ Helpers.getViewBoxPosition = function() {
 	return { x: window.screenLeft, y: window.screenTop };
 };
 
-Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value) + "px"; };
+Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value || 0) + "px"; };
 Helpers.toDegrees = function(/** @type {number} */value) { return Math.round(value) + "deg"; };
 
 /** @param {number} pixels */
@@ -4477,8 +4477,9 @@ Dialog.prototype.updateScale = function(useScale) {
 		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		if (this.useTransform) return;
-		target.style.right = Helpers.toPixels(this.right);
-		target.style.bottom = Helpers.toPixels(this.bottom);
+		var right = this.right, bottom = this.bottom;
+		if (right === right) target.style.right = Helpers.toPixels(right);
+		if (bottom === bottom) target.style.bottom = Helpers.toPixels(bottom);
 	}
 	target.classList.toggle("use-scale", useScale);
 

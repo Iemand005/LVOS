@@ -459,6 +459,37 @@ function assertEs3(code, outfile) {
 	}
 }
 
+
+/**
+ * ES3 reserved words that IE8 rejects when used as identifier property names
+ * (e.g. `x.catch(...)`, `x.delete`, `x.class = 1`). Esbuild's `es5` target
+ * does not quote them, so we do a targeted regex pass after minification.
+ */
+const ES3_RESERVED_PROPS = [
+	"abstract", "boolean", "byte", "char", "class", "const", "debugger",
+	"double", "enum", "export", "extends", "final", "float", "goto",
+	"implements", "import", "int", "interface", "long", "native", "package",
+	"private", "protected", "public", "short", "static", "super",
+	"synchronized", "throws", "transient", "volatile",
+	// ES1 keywords also forbidden as property names in IE8:
+	"catch", "delete", "finally", "in", "instanceof", "new",
+	"return", "switch", "throw", "try", "typeof", "void", "with"
+];
+
+/**
+ * Rewrite `expr.keyword` property accesses to bracket notation so IE8 does
+ * not choke on reserved words in property position.
+ *
+ * @param {string} code
+ * @returns {string}
+ */
+function quoteReservedProperties(code) {
+	const pattern = new RegExp(
+		"\\.(" + ES3_RESERVED_PROPS.join("|") + ")(?=[^A-Za-z0-9_$]|$)",
+		"g"
+	);
+	return code.replace(pattern, function(_, kw) { return "[\"" + kw + "\"]"; });
+}
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
@@ -499,13 +530,14 @@ async function build() {
 			legalComments: "none"
 		});
 		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");
-		assertEs3(ie8Result.code, ie8Outfile);
-		writeFileSync(join(dist, ie8Outfile), ie8Result.code);
+		const ie8Code = quoteReservedProperties(ie8Result.code);
+		assertEs3(ie8Code, ie8Outfile);
+		writeFileSync(join(dist, ie8Outfile), ie8Code);
 		console.log(
 			"[ie8 ] " +
 			ie8Outfile.padEnd(20) +
 			" -> " +
-			(Buffer.byteLength(ie8Result.code) / 1024).toFixed(1) + " KB (" +
+			(Buffer.byteLength(ie8Code) / 1024).toFixed(1) + " KB (" +
 			ie8Group.accessors + " accessor names)"
 		);
 	}
