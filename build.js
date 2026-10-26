@@ -13,6 +13,7 @@
  *   node build.js            -> write minified bundles into the dist folder
  *   node build.js --no-minify-> write unminified (readable) bundles
  *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
+ *   node build.js --ie8      -> also emit accessor-free *.ie8.dist.js bundles
  *   node build.js --help     -> show this message
  *
  * The dist folder defaults to the sibling "LVOS-dist" repo if it exists,
@@ -24,6 +25,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
+import { transformAccessorsForIe8 } from "./ie8-accessors.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = join(ROOT, "Scripts");
@@ -396,7 +398,7 @@ function mergeDefineProperties(source, fileName) {
 	return { code, calls, groups: edits.length };
 }
 
-function readGroup(files, mergeProps) {
+function readGroup(files, mergeProps, ie8) {
 	const parts = [];
 	let calls = 0;
 	let groups = 0;
@@ -419,19 +421,27 @@ function readGroup(files, mergeProps) {
 		}
 		parts.push("// ===== " + file + " =====\n" + src);
 	}
-	return { code: parts.join("\n\n"), calls, groups };
+	let code = parts.join("\n\n");
+	let accessors = 0;
+	if (ie8) {
+		const transformed = transformAccessorsForIe8(code, "bundle.js");
+		code = transformed.code;
+		accessors = transformed.accessors;
+	}
+	return { code, calls, groups, accessors };
 }
 
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
+	const ie8 = process.argv.includes("--ie8");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
 	if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
 
 	for (const [outfile, files] of Object.entries(BUNDLES)) {
-		const group = readGroup(files, mergeProps);
+		const group = readGroup(files, mergeProps, false);
 		const result = await esbuild.transform(group.code, {
 			minify: !noMinify,
 			target: "esnext",
@@ -450,6 +460,24 @@ async function build() {
 			" -> " +
 			(bytes / 1024).toFixed(1) + " KB (" + files.length + " files)" +
 			merged
+		);
+
+		if (!ie8) continue;
+
+		const ie8Group = readGroup(files, mergeProps, true);
+		const ie8Result = await esbuild.transform(ie8Group.code, {
+			minify: !noMinify,
+			target: "esnext",
+			legalComments: "none"
+		});
+		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");
+		writeFileSync(join(dist, ie8Outfile), ie8Result.code);
+		console.log(
+			"[ie8 ] " +
+			ie8Outfile.padEnd(20) +
+			" -> " +
+			(Buffer.byteLength(ie8Result.code) / 1024).toFixed(1) + " KB (" +
+			ie8Group.accessors + " accessor names)"
 		);
 	}
 
