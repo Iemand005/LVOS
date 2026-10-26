@@ -67,6 +67,7 @@ var flags = {
 	broadcastWindowMoves: !document.documentMode,
 	_useTransform: useTransform,
 	useAnimations: true,
+	ieDropCompatibleMode: true,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
@@ -2499,14 +2500,10 @@ function Dialog(object) {
 			this.close();
 		} else {
 
-			// this.application = 	;
-
-			// this.target = object.exists && document.getElementById(object.id) ||  createDialogElement();
-
 			if (object.exists) {
-				var target = document.getElementById(object.id);
-				if (target && this.application) {
-					this.target = target;
+				var element = document.getElementById(object.id);
+				if (element && this.application) {
+					this.target = element;
 					var doc = this.contentDocument;
 					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 				}
@@ -2515,7 +2512,6 @@ function Dialog(object) {
 				this.openUrl(object.src);
 			}
 
-			// return;
 			if (this.windowTarget) this.windowTarget.dialog = this;
 
 			if (object.classes && typeof object.classes === "object"){
@@ -2636,13 +2632,19 @@ function Dialog(object) {
 
 		try {
 			transfer.setData("application/json", data);
-			transfer.setData("text/plain", self.src || self.title || self.id);
+			if (flagsieDropCompatibleMode) {
+				transfer.setData("Text", data);
+				transfer.setData("text/plain", data);
+			}
+			else transfer.setData("text/plain", self.src || self.title || self.id);
 			if (self.src) transfer.setData("text/uri-list", self.src);
 			transfer.setData("text/html", data);
+			transfer.setData("URL", self.src + "\n" + data);
 		} catch(ex) {
 			console.warn(ex);
 			transfer.setData("Text", data);
 			if (self.src) transfer.setData("URL", self.src);
+			transfer.setData("URL", "https://example.com")
 		}
 
 		transfer.effectAllowed = "copyMove";
