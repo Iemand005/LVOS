@@ -2634,7 +2634,7 @@ function Dialog(object) {
 			transfer.setData("text/plain", self.src || self.title || self.id);
 			if (self.src) transfer.setData("text/uri-list", self.src);
 			transfer.setData("text/html", data);
-			transfer.getData("URL");
+			transfer.setData("URL", self.src + "\n" + data);
 		} catch(ex) {
 			console.warn(ex);
 			transfer.setData("Text", data);
