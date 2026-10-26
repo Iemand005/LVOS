@@ -310,19 +310,13 @@ function createTransformer(sourceFile, info, context) {
 			return transformObjectLiteral(node);
 
 		if (isObjectCall(node, "defineProperty")) {
-			const descriptor = node.arguments[2];
-			if (descriptor && descriptorHasAccessor(descriptor)) {
-				const args = node.arguments.map((argument) => ts.visitNode(argument, visit));
-				return call("__lvosDefineProperty", args);
-			}
+			const args = node.arguments.map((argument) => ts.visitNode(argument, visit));
+			return call("__lvosDefineProperty", args);
 		}
 
 		if (isObjectCall(node, "defineProperties")) {
-			const descriptors = node.arguments[1];
-			if (descriptors && descriptorsHaveAccessor(descriptors)) {
-				const args = node.arguments.map((argument) => ts.visitNode(argument, visit));
-				return call("__lvosDefineProperties", args);
-			}
+			const args = node.arguments.map((argument) => ts.visitNode(argument, visit));
+			return call("__lvosDefineProperties", args);
 		}
 
 		if (ts.isPropertyAccessExpression(node)) {
