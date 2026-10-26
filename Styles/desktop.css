@@ -161,7 +161,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	64%, 67% {
+	66%, 67% {
 		transform: rotateY(0deg) scale(1);
 		opacity: 1;
 	}
@@ -178,7 +178,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	66% {
+	66%, 67% {
 		transform: rotateY(0deg) scale(1);
 		opacity: 1;
 	}
