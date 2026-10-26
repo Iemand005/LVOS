@@ -67,6 +67,7 @@ var flags = {
 	broadcastWindowMoves: !document.documentMode,
 	_useTransform: useTransform,
 	useAnimations: true,
+	ieDropCompatibleMode: true,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
@@ -2629,11 +2630,9 @@ function Dialog(object) {
 		// 	try { transfer.setDragImage(self.target, event.clientX - rect.left, event.clientY - rect.top); } catch (ex) { console.log(ex); }
 		// }
 
-		var ieDropCompatibleMode = true;
-
 		try {
 			transfer.setData("application/json", data);
-			if (ieDropCompatibleMode) {
+			if (flagsieDropCompatibleMode) {
 				transfer.setData("Text", data);
 				transfer.setData("text/plain", data);
 			}
