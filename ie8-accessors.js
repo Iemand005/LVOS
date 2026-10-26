@@ -504,6 +504,7 @@ export function transpileForIe8(source, fileName) {
 		reportDiagnostics: true,
 		compilerOptions: {
 			target: ts.ScriptTarget.ES5,
+			ignoreDeprecations: "6.0",
 			removeComments: false,
 			useDefineForClassFields: false,
 			newLine: ts.NewLineKind.LineFeed
