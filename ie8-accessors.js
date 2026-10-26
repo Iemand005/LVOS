@@ -26,12 +26,10 @@ function __lvosRegister(target, name, getter, setter, enumerable) {
 	if (!info) info = __lvosAccessors[name] = { get: null, set: null };
 	if (typeof getter === "function") {
 		if (!info.get) info.get = __lvosMethodName("get", name);
-		getter.__lvosAccessorName = name;
 		target[info.get] = getter;
 	}
 	if (typeof setter === "function") {
 		if (!info.set) info.set = __lvosMethodName("set", name);
-		setter.__lvosAccessorName = name;
 		target[info.set] = setter;
 	}
 	if (enumerable && !(name in target)) target[name] = undefined;
@@ -64,7 +62,7 @@ function __lvosGet(object, key) {
 	var info = __lvosAccessors[key];
 	if (info && info.get) {
 		var getter = object[info.get];
-		if (typeof getter === "function" && getter.__lvosAccessorName === key) return getter.call(object);
+		if (typeof getter === "function") return getter.call(object);
 	}
 	return object[key];
 }
@@ -74,13 +72,13 @@ function __lvosSet(object, key, value) {
 	if (info) {
 		if (info.set) {
 			var setter = object[info.set];
-			if (typeof setter === "function" && setter.__lvosAccessorName === key) {
+			if (typeof setter === "function") {
 				setter.call(object, value);
 				return value;
 			}
 		} else if (info.get) {
 			var getter = object[info.get];
-			if (typeof getter === "function" && getter.__lvosAccessorName === key) return value;
+			if (typeof getter === "function") return value;
 		}
 	}
 	object[key] = value;
@@ -477,15 +475,50 @@ function forInKey(initializer) {
 	return null;
 }
 
-/** @param {string} code @param {Set<string>} reserved */
-function injectHelper(code, reserved) {
+/** @param {string} code @param {Set<string>} reserved @param {Map<string, { get?: string, set?: string }>} methodNames */
+function injectHelper(code, reserved, methodNames) {
 	const names = Array.from(reserved).sort();
+	const accessors = {};
+	methodNames.forEach((methods, name) => { accessors[name] = methods; });
 	const declaration = "var __lvosReserved = {" + names.map((name) => JSON.stringify(name) + ": true").join(", ") + "};\n" +
-		"var __lvosAccessors = {};\nvar __lvosMethodNames = {};\n";
+		"var __lvosAccessors = " + JSON.stringify(accessors) + ";\nvar __lvosMethodNames = {};\n";
 	const helper = declaration + HELPER_FUNCTIONS;
 	const match = code.match(/^((?:\s|\/\/[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*(["'])use strict\2\s*;?[ \t]*(?:\r?\n|$))/);
 	if (match) return match[1] + helper + code.slice(match[1].length);
 	return helper + code;
+}
+
+/**
+ * TypeScript cannot turn object-literal accessors into ES3, so those are
+ * rewritten first. The resulting accessor-free source is then downleveled to
+ * ES3, which turns classes, arrow functions, shorthand properties, template
+ * literals, const/let and destructuring into syntax IE8 can parse.
+ *
+ * @param {string} source
+ * @param {string} fileName
+ * @returns {string}
+ */
+export function transpileForIe8(source, fileName) {
+	const result = ts.transpileModule(source, {
+		fileName,
+		reportDiagnostics: true,
+		compilerOptions: {
+			target: ts.ScriptTarget.ES3,
+			module: ts.ModuleKind.None,
+			removeComments: false,
+			downlevelIteration: false,
+			useDefineForClassFields: false,
+			newLine: ts.NewLineKind.LineFeed
+		}
+	});
+	const errors = (result.diagnostics || []).filter((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
+	if (errors.length) {
+		const message = errors.map((diagnostic) =>
+			ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
+		).join("\n");
+		throw new Error("IE8 downlevel failed for " + fileName + ":\n" + message);
+	}
+	return result.outputText;
 }
 
 /**
@@ -504,7 +537,7 @@ export function transformAccessorsForIe8(source, fileName) {
 	result.dispose();
 
 	return {
-		code: injectHelper(code, info.reserved),
+		code: injectHelper(code, info.reserved, info.methodNames),
 		accessors: info.accessorNames.size,
 		reserved: info.reserved.size
 	};

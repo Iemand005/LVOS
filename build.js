@@ -25,7 +25,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
-import { transformAccessorsForIe8 } from "./ie8-accessors.js";
+import { transformAccessorsForIe8, transpileForIe8 } from "./ie8-accessors.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = join(ROOT, "Scripts");
@@ -438,7 +438,7 @@ function readGroup(files, mergeProps, ie8) {
 	let accessors = 0;
 	if (ie8) {
 		const transformed = transformAccessorsForIe8(code, "bundle.js");
-		code = transformed.code;
+		code = transpileForIe8(transformed.code, "bundle.js");
 		accessors = transformed.accessors;
 	}
 	return { code, calls, groups, accessors };
