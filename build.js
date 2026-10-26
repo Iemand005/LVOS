@@ -25,6 +25,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
+import { parse } from "acorn";
 import { transformAccessorsForIe8, transpileForIe8 } from "./ie8-accessors.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
@@ -450,6 +451,14 @@ function readGroup(files, mergeProps, ie8) {
 	return { code, calls, groups, accessors };
 }
 
+function assertEs3(code, outfile) {
+	try {
+		parse(code, { ecmaVersion: 3, sourceType: "script" });
+	} catch (error) {
+		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message);
+	}
+}
+
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
@@ -490,6 +499,7 @@ async function build() {
 			legalComments: "none"
 		});
 		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");
+		assertEs3(ie8Result.code, ie8Outfile);
 		writeFileSync(join(dist, ie8Outfile), ie8Result.code);
 		console.log(
 			"[ie8 ] " +
