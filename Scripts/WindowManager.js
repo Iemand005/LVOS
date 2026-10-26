@@ -2542,7 +2542,7 @@ function Dialog(object) {
 	}
 
 
-	this.setMinSize(180, 250);
+	this.setMinSize(180, 250, false);
 
 
 
