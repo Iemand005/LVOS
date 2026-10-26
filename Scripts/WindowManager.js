@@ -2828,7 +2828,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
 		sizer.draggable = false;
 		sizer.id = id.toString();
-		// sizer.classList.add(sizerId);
+		sizer.classList.add(sizerId);
 		/** @param {PointerEvent | MouseEvent} ev */
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
