@@ -480,7 +480,7 @@ async function build() {
 		const ie8Group = readGroup(files, mergeProps, true);
 		const ie8Result = await esbuild.transform(ie8Group.code, {
 			minify: !noMinify,
-			target: "esnext",
+			target: "es5",
 			legalComments: "none"
 		});
 		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");

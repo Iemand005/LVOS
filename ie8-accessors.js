@@ -503,10 +503,8 @@ export function transpileForIe8(source, fileName) {
 		fileName,
 		reportDiagnostics: true,
 		compilerOptions: {
-			target: ts.ScriptTarget.ES3,
-			module: ts.ModuleKind.None,
+			target: ts.ScriptTarget.ES5,
 			removeComments: false,
-			downlevelIteration: false,
 			useDefineForClassFields: false,
 			newLine: ts.NewLineKind.LineFeed
 		}
