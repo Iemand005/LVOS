@@ -206,7 +206,7 @@ function writePages(dist, ie8) {
 
 	if (ie8) {
 		writePage(dist, "indexIE8.html", {
-			source: "index.html",
+			source: "indexIE8.html",
 			script: "desktop.ie8.dist.js",
 			extras: []
 		});
