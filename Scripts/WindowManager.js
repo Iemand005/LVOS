@@ -2989,8 +2989,8 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
 	if (frame || create === false) return frame;
-	var body = this.body;
-	if (!body && this.target) {
+	var body = null;
+	if (this.target) {
 		var content = this.content || this.getElementByTagOrClassName("content", this.target);
 		if (content) {
 			body = this.getElementByTagOrClassName("article", content);
@@ -2998,15 +2998,31 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 				var articles = content.getElementsByTagName("article");
 				if (articles && articles.length) body = articles[0];
 			}
+			if (!body && content.getElementsByClassName) {
+				var articlesc = content.getElementsByClassName("article");
+				if (articlesc && articlesc.length) body = articlesc[0];
+			}
 		}
 		if (!body && this.target.getElementsByTagName) {
 			var articles2 = this.target.getElementsByTagName("article");
 			if (articles2 && articles2.length) body = articles2[0];
 		}
+		if (!body && this.target.getElementsByClassName) {
+			var articles3 = this.target.getElementsByClassName("article");
+			if (articles3 && articles3.length) body = articles3[0];
+		}
 	}
+	if (!body) body = this.body;
 	if (!body) return null;
 	if (this.target && body === this.target) return null;
-	return body.appendChild(document.createElement("iframe"));
+	if (this.target && body.nodeName && body.nodeName.toLowerCase && body.nodeName.toLowerCase() === "div" && body.className && body.className.indexOf("window") !== -1) return null;
+	try {
+		var frameEl = document.createElement("iframe");
+		body.appendChild(frameEl);
+		return frameEl;
+	} catch (ex) {
+		return null;
+	}
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
