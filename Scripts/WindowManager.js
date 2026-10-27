@@ -386,7 +386,7 @@ function getDialogTemplate() {
 	if (!template) return;
 	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-	return content.children[0] || content.childNodes[1];
+	return content.children ? content.children[0] : content.childNodes[1];
 }
 
 /** @returns {HTMLElement | WindowElement} */
