@@ -656,9 +656,9 @@ function WindowManager() {
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
-	this.channel = BroadcastChannel && new BroadcastChannel("lvos");
+	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos");
 
-	this.channel.onmessage = function(ev) {
+	if (this.channel) this.channel.onmessage = function(ev) {
 		var data = ev.data;
 		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return console.warn(ex); }
 		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
