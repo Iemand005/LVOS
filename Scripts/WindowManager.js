@@ -1963,7 +1963,7 @@ function WindowSnap() {
 	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
 	// first snap positions it, so without this the first drop flies it in from wherever
 	// that box sat rather than from behind the window.
-	this.element.classList.add("hidden");
+	if (this.element.classList) this.element.classList.add("hidden");
 }
 
 Object.defineProperty(WindowSnap.prototype, "hidden", {
