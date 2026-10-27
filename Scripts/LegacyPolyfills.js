@@ -5,7 +5,7 @@
 
 'use strict';
 
-alert( "OKKK")
+// alert( "OKKK")
 
 if (typeof HTMLElement != 'undefined') {
     if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
