@@ -2982,7 +2982,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
-	if (frame || !create || !this.body) return frame;
+	if (frame || create === false || !this.body) return frame;
 	return this.body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
