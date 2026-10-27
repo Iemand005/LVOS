@@ -245,6 +245,8 @@ body:not(.blur) .window > article {
 }
 
 #desktop {
+	top: 0;
+	left: 0;
 	bottom: 0;
 	position: absolute;
 	height: 100%;
