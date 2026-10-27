@@ -142,7 +142,7 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
   };                    
     
 // if (!Console.prototype.log)
-if (typeof console == "undefined") {
+if (typeof console == "undefined") try {
     // Assign through `window`: a bare `console = ...` is a ReferenceError in strict mode.
     window.console = {
         log: function(message) {
@@ -155,7 +155,7 @@ if (typeof console == "undefined") {
             alert("Error: " + message);
         }
     };
-}
+} catch(ex) {}
 
 if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
     Object.defineProperty(HTMLElement.prototype, "classList", {
