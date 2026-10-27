@@ -2660,7 +2660,7 @@ function Dialog(object) {
 
 	this.toggleOpen(false);
 
-	target.addEventListener("dragstart", function (event) {
+	target.ondragstart = function (event) {
 		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
 			event.preventDefault();
 			return;
@@ -2703,7 +2703,7 @@ function Dialog(object) {
 		self.target.classList.add("hidden");
 
 
-	}, false);
+	};
 
 	target.ondragend = function () {
 		self._ctrlDrag = false;
