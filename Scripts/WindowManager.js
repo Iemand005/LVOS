@@ -59,10 +59,14 @@ if (isIE) useTransform = true;
 
 if (!supportsTransform) useTransform = false;
 
+var allowUpdateRateLimit = true;
+
+if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
+
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: true,
-	updateRateLimit: true,
+	updateRateLimit: allowUpdateRateLimit,
 	useDragOverlay: true,
 	broadcastWindowMoves: !document.documentMode,
 	_useTransform: useTransform,
