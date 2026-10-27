@@ -137,8 +137,8 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
       var finalArgs = args.concat(slice.call(arguments));
       return fn.apply(thisArg, finalArgs);
     };  
-  };
-
+  };                    
+    
 // if (!Console.prototype.log)
 if (typeof console == "undefined") {
     // Assign through `window`: a bare `console = ...` is a ReferenceError in strict mode.
@@ -152,7 +152,7 @@ if (typeof console == "undefined") {
         error: function(message) {
             alert("Error: " + message);
         }
-    }
+    };
 }
 
 if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
