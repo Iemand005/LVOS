@@ -121,10 +121,13 @@ var flags = {
 
 /** @param {Event} event */
 function cancelDomEvent(event) {
-	if (typeof event.preventDefault === "function") event.preventDefault();
-	event.returnValue = false;
-	if (typeof event.stopPropagation === "function") event.stopPropagation();
-	event.cancelBubble = true;
+	try {
+		if (typeof event.preventDefault === "function") event.preventDefault();
+		event.returnValue = false;
+		if (typeof event.stopPropagation === "function") event.stopPropagation();
+		event.cancelBubble = true;
+		return false;
+	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
 	return false;
 }
 
