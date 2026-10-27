@@ -261,7 +261,7 @@ if (typeof URLSearchParams == "undefined") {
 	try {
 		if (Object.defineProperty) Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
 
-	} catch(ex)
+	} catch(ex) {}
 
 // URLSearchParams.prototype.__defineGetter__('size', function() {
 //     return this._data.size;
