@@ -91,15 +91,8 @@ function getWindows() {
 	return windowManager.windows;
 }
 
-if (typeof windowManager !== "undefined" && "Window" in window) {
-	Object.defineProperty(Window.prototype, "windows", {
-		get: function () {
-			return windowManager.windows;
-		}
-	});
-} else {
-	window.getWindows = 
-}
+if (typeof windowManager !== "undefined" && "Window" in window)
+	Object.defineProperty(Window.prototype, "windows", { get: getWindows });
 
 /** @param {Dialog?} dialog */
 function dockApp(dialog) {
