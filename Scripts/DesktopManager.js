@@ -26,9 +26,8 @@ var onLoad = function () {
 
 	var applist = document.getElementById("applist");
 
-	if (applist) {
-		applist.addEventListener("submit", eventPrevent, false);
-	}
+	if (applist)
+		applist.onsubmit = eventPrevent;
 
 	var appButtons = document.getElementById("dockapplist");
 
