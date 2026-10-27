@@ -13,12 +13,6 @@
     <link rel="stylesheet" href="./Styles/Mica.css">
     <link rel="manifest" href="./manifest.json">
 
-    <script language="JavaScript" src="modern_code.js">
-        // Netscape 3.0+ will ignore this block and load modern_code.js instead.
-        // Netscape 2.0 will ignore the 'src' and run THIS code block instead!
-        alert("oh no your browser is too old broski");
-    </script>
-
 	<script>
 		window.onerror = function(msg, url, line, character, error) {
 			alert(url + " JS Error on line " + line + ":" + character + " Because " + msg);
@@ -27,10 +21,14 @@
 	</script>
 
 
+	<script language="JavaScript" src="./Scripts/LegacyPolyfills.js" defer>
+		// Netscape 3.0+ will ignore this block and load modern_code.js instead.
+        // Netscape 2.0 will ignore the 'src' and run THIS code block instead!
+        alert("oh no your browser is too old broski");
+	</script>
     <script src="./Scripts/physics.js" defer></script>
     <script src="./Scripts/Animation.js" defer></script>
     <script src="./Scripts/Messenger.js" defer></script>
-    <script src="./Scripts/LegacyPolyfills.js" defer></script>
     <script src="./Scripts/Console.js" defer></script>
     <script src="./Scripts/DesktopManager.js" defer></script>
     <script src="./Scripts/AppRegistry.js"></script>
