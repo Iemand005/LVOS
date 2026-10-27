@@ -641,6 +641,7 @@ if (typeof Array.from != "function") {
 
 // if (typeof module != "undefined" && module.)
 if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element;
+if (typeof window.HTMLInputElement == "undefined") window.HTMLInputElement = Element;
 if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {};
 
 // IE / HTA settings storage. Settings.js falls back to this when localStorage is missing.
