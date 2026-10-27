@@ -72,7 +72,7 @@ ConsoleInterceptor.prototype.bindage = function() {
 	var self = this;
 
 	// We gaan hier de console calls opvangen door de functie te binden aan een nieuwe en de originele te vervangen met een aangepaste.
-	if (bindConsole && console.log) {
+	if (bindConsole && console && console.log) {
 		console.standardLog = console.log.bind(console);
 		console.logs = [];
 		console.log = function() {
