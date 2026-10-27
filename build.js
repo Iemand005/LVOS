@@ -156,6 +156,7 @@ function copyAssets(dist) {
 		{ from: "Scripts/WebAura", to: "Scripts/WebAura" },
 		{ from: "Scripts/WebMedia", to: "Scripts/WebMedia" },
 		{ from: "Scripts/LegacyPolyfills.js", to: "Scripts/LegacyPolyfills.js" },
+		{ from: "Scripts/Animation.js", to: "Scripts/Animation.js" },
 		{ from: "ScrollTabs", to: "ScrollTabs" },
 		{ from: EXTENSIONS_FOLDER, to: EXTENSIONS_FOLDER }
 	];
