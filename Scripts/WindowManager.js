@@ -2528,8 +2528,9 @@ function Dialog(object) {
 	 */
 	this.activationHandler = function (ev, id) {
 		if (!ev) {
-			ev = window.event;
-			ev.target = ev.srcElement;
+			var event = window.event;
+			event.target = event.srcElement;
+			ev = event;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);
 		if (self._ctrlDrag) {
