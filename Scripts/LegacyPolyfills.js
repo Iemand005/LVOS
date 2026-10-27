@@ -503,6 +503,7 @@ if (typeof Array.from != "function") {
 	var targets = [win, doc];
 	if (typeof Element !== "undefined") targets.push(Element.prototype);
 	if (typeof HTMLDocument !== "undefined") targets.push(HTMLDocument.prototype);
+	if (typeof HTMLDocument !== "undefined") targets.push(HTMLDocument.prototype);
 
 	for (var i = 0; i < targets.length; i++) {
 		if (targets[i]) {
