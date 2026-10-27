@@ -466,7 +466,9 @@ if (typeof Array.from != "function") {
 			}
 
 			// Bind correct `this` context to the DOM node
-			return handler.call(element, e);
+			try() {
+				return handler.call(element, e);
+			} catch(ex){}
 		};
 	}
 
