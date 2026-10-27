@@ -3,7 +3,7 @@
 //    Lasse Lauwerys © 2023
 //    23/12/2023
 
-'use strict';
+'use strict";
 
 if (typeof HTMLElement != 'undefined') {
     if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
