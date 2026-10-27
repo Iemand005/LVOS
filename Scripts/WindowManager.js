@@ -2991,31 +2991,25 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 	if (frame || create === false) return frame;
 	var body = null;
 	if (this.target) {
-		var content = this.content || this.getElementByTagOrClassName("content", this.target);
-		if (content) {
-			body = this.getElementByTagOrClassName("article", content);
-			if (!body && content.getElementsByTagName) {
-				var articles = content.getElementsByTagName("article");
-				if (articles && articles.length) body = articles[0];
+		if (this.target.getElementsByTagName) {
+			var articles = this.target.getElementsByTagName("article");
+			if (articles && articles.length) {
+				body = articles[0];
 			}
-			if (!body && content.getElementsByClassName) {
-				var articlesc = content.getElementsByClassName("article");
-				if (articlesc && articlesc.length) body = articlesc[0];
-			}
-		}
-		if (!body && this.target.getElementsByTagName) {
-			var articles2 = this.target.getElementsByTagName("article");
-			if (articles2 && articles2.length) body = articles2[0];
 		}
 		if (!body && this.target.getElementsByClassName) {
-			var articles3 = this.target.getElementsByClassName("article");
-			if (articles3 && articles3.length) body = articles3[0];
+			var ac = this.target.getElementsByClassName("article");
+			if (ac && ac.length) body = ac[0];
 		}
 	}
 	if (!body) body = this.body;
+	if (!body && this.target) {
+		if (this.target.getElementsByTagName) {
+			var articles2 = this.target.getElementsByTagName("article");
+			if (articles2 && articles2.length) body = articles2[0];
+		}
+	}
 	if (!body) return null;
-	if (this.target && body === this.target) return null;
-	if (this.target && body.nodeName && body.nodeName.toLowerCase && body.nodeName.toLowerCase() === "div" && body.className && body.className.indexOf("window") !== -1) return null;
 	try {
 		var frameEl = document.createElement("iframe");
 		body.appendChild(frameEl);
@@ -4448,8 +4442,12 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
+	var self = this;
 	var frame = this.getOrCreateFrame(true);
-	if (!frame) return;
+	if (!frame) {
+		setTimeout(function() { self.openUrl(url); }, 5);
+		return;
+	}
 
 	var self = this;
 	var timeout = -1;
