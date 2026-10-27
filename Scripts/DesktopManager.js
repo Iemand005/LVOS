@@ -417,7 +417,10 @@ function setTheme(theme) {
     window.windowManager.synchronizeStates();
 }
 /** @param {string} theme */
-DesktopManager.removeTheme = function(theme) { document.body.classList.remove(theme); };
+DesktopManager.removeTheme = function(theme) {
+	ensureClassList(document.body);
+	document.body.classList.remove(theme);
+};
 /** @param {boolean} [force] */
 DesktopManager.toggleCharms = function(force){
 	var charms = document.getElementById("charms");
