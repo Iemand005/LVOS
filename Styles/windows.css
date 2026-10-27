@@ -882,6 +882,7 @@ button:hover {
 /* Force second row (article) to absorb 100% */
 .window table.content td.article {
     height: 100% !important;
+	top: 0;
     vertical-align: top !important;
     position: relative;
 }
