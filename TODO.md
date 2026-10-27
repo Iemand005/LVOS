@@ -13,7 +13,9 @@ const settings = {
 
 	},
 	flags: {
-		
+
 	}
 };
 ```
+
+ooo yeahhh hand then these become tabs on the sizede adn tin that is then te properties to change or even subtabs so the side the first level of the obj become tabs then iit can be a setting or another subtab wihc is then like in ios o rwindows a thing that can collapese OR a button to another screen yeah!!!
