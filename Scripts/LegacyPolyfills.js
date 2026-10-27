@@ -258,8 +258,11 @@ if (typeof URLSearchParams == "undefined") {
     URLSearchParams.prototype.get = function (key) {
         return this._data.get(key);
     };
+	try {
+		if (Object.defineProperty) Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
 
-    if (Object.defineProperty) Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
+	} catch(ex)
+
 // URLSearchParams.prototype.__defineGetter__('size', function() {
 //     return this._data.size;
 // });
