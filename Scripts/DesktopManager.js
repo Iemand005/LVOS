@@ -10,11 +10,11 @@ var eventPrevent = function (/** @type {Event} */event) { event.preventDefault()
 var onLoad = function () {
 
 	var desktop = document.getElementById("desktop");
-	if (desktop) desktop.addEventListener("mousedown", function () {
+	if (desktop) desktop.onmousedown = function () {
 		DesktopManager.toggleCharms(false);
         if (launchpad) launchpad.close();
         contextMenu.close();
-	}, false);
+	};
 
     // var wallpaper = window.windows["wallpaper"];
     // if (wallpaper instanceof HTMLIFrameElement) {
