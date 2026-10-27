@@ -2576,11 +2576,17 @@ function Dialog(object) {
 				if (element && this.application) {
 					this.target = element;
 					var doc = this.contentDocument;
-					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
+					var self2 = this;
+					this.openUrl(this.application.src);
+					setTimeout(function() { if (!self2.frame) self2.openUrl(self2.application.src); }, 0);
+					setTimeout(function() { if (!self2.frame) self2.openUrl(self2.application.src); }, 50);
 				}
 			} else {
-				this.target = createDialogElement();
-				this.openUrl(object.src);
+			this.target = createDialogElement();
+			var self = this;
+			this.openUrl(object.src);
+			setTimeout(function() { if (!self.frame && self.application) self.openUrl(self.application.src); }, 0);
+			setTimeout(function() { if (!self.frame && self.application) self.openUrl(self.application.src); }, 50);
 			}
 
 			if (this.windowTarget) this.windowTarget.dialog = this;
@@ -2988,8 +2994,15 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
-	if (frame || create === false || !this.body) return frame;
-	return this.body.appendChild(document.createElement("iframe"));
+	if (frame || create === false) return frame;
+	var body = this.body;
+	if (!body) {
+		var content = this.content;
+		if (content) body = content;
+		else body = this.target;
+	}
+	if (!body) return null;
+	return body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
@@ -4415,10 +4428,13 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
-	var frame = this.getOrCreateFrame(true);
-	if (!frame) return;
-
 	var self = this;
+	var frame = this.getOrCreateFrame(true);
+	if (!frame) {
+		setTimeout(function() { self.openUrl(url); }, 0);
+		return;
+	}
+
 	var timeout = -1;
 
 	frame.onload = function() {
@@ -4437,20 +4453,24 @@ Dialog.prototype.openUrl = function(url) {
 	var index = 0;
 
 	function tryNext() {
-		// Skip over missing entries (e.g. an app with no distSrc/altUrls) and stop at
-		// the end. The old code recursed on an undefined url, which re-entered forever.
-		var url;
-		while (index < fallbackUrls.length && !(url = fallbackUrls[index++]));
-		if (!url || !frame) return;
+		var nextUrl;
+		while (index < fallbackUrls.length && !(nextUrl = fallbackUrls[index++]));
+		if (!nextUrl || !frame) return;
 
-		frame.src = url;
-		self._src = url;
+		try {
+			frame.src = nextUrl;
+		} catch (ex) { }
+		self._src = nextUrl;
 
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 3000);
 	}
 
-	frame.addEventListener("error", tryNext, false);
+	if (frame.attachEvent) {
+		frame.attachEvent("onerror", tryNext);
+	} else if (frame.addEventListener) {
+		frame.addEventListener("error", tryNext, false);
+	}
 
 	tryNext();
 };
