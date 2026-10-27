@@ -1398,7 +1398,7 @@ WindowManager.prototype.getSnapGroup = function (section) {
 /** @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapWidth = function (section) {
 	var area = section || this.getSnapContainer();
-	return area ? area.clientWidth : window.innerWidth;
+	return area ? area.clientWidth : Helpers.getViewportWidth();
 };
 
 /**  @param {HTMLElement | null} [section] */
@@ -2048,7 +2048,7 @@ WindowSnap.prototype.setInset = function(inset) {
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
 	var section = this._section || (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section");
-	return section ? section.clientWidth : window.innerWidth;
+	return section ? section.clientWidth : Helpers.getViewportWidth();
 };
 
 /**
@@ -2713,7 +2713,7 @@ function Dialog(object) {
 	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
-		else this.moveCenterTo(window.innerWidth / 2, Helpers.getViewportHeight() / 2);
+		else this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
 	// if (this.application && this.application.launch) this.launch();
 
@@ -2994,7 +2994,7 @@ Object.defineProperty(Dialog.prototype, "contentWindow", {
 
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () {
-		return this._x * window.innerWidth; // TODO: get ehe window bounds calculated on resize evt
+		return this._x * Helpers.getViewportWidth(); // TODO: get ehe window bounds calculated on resize evt
 	},
 	set: function (x) {
 		if (typeof x === "number") this.move(x, this.y);
@@ -3147,11 +3147,11 @@ Object.defineProperty(Dialog.prototype, "left", {
 		var width = Math.max(Math.min(right - left, this.maxWidth), this.minWidth);
 		left = right - width;
 		this._width = width;
-		this._x = left / window.innerWidth;
+		this._x = left / Helpers.getViewportWidth();
 		if (this.useTransform) {
 			this.target.style.width = Helpers.toPixels(width);
 			this.updateTransform();
-		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+		} else this.setInset(this.top, left, Helpers.getViewportWidth() - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
 	}
 });
@@ -3162,13 +3162,13 @@ Object.defineProperty(Dialog.prototype, "rightFromLeft", {
 });
 
 Object.defineProperty(Dialog.prototype, "right", {
-	get: function() { var rfl = this.rightFromLeft; return typeof rfl === "number" && rfl === rfl ? window.innerWidth - rfl : 0; },
+	get: function() { var rfl = this.rightFromLeft; return typeof rfl === "number" && rfl === rfl ? Helpers.getViewportWidth() - rfl : 0; },
 	set: function(right) {
 		if (typeof right === "number") {
 			var bounds = WindowManager.windowBounds;
 			if (right > bounds.right) right = bounds.right;
 			if (right < bounds.left) right = bounds.left;
-			this.width = (window.innerWidth - right) - this.x;
+			this.width = (Helpers.getViewportWidth() - right) - this.x;
 		}
 	}
 });
@@ -3728,12 +3728,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
 				self.y = Anim.lerp(startPos.y, 0, ease(t));
-				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
+				self.width = Anim.lerp(startSize.x, Helpers.getViewportWidth(), ease(t));
 				self.height = Anim.lerp(startSize.y, Helpers.getViewportHeight(), ease(t));
 			} else {
 				self.x = Anim.lerp(0, startPos.x, ease(t));
 				self.y = Anim.lerp(0, startPos.y, ease(t));
-				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
+				self.width = Anim.lerp(Helpers.getViewportWidth(), startSize.x, ease(t));
 				self.height = Anim.lerp(Helpers.getViewportHeight(), startSize.y, ease(t));
 			}
 		}, function () {
@@ -3778,7 +3778,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}
 
 	var windowSection = windowManager.getSnapContainer(this);
-	var endWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
+	var endWidth = windowSection ? windowSection.clientWidth : Helpers.getViewportWidth();
 	var endHeight = windowSection ? windowSection.clientHeight : Helpers.getViewportHeight();
 	var startWidth = this.width || target.offsetWidth || 300;
 	var startHeight = this.height || target.offsetHeight || 200;
@@ -3985,7 +3985,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (y < bounds.top) y = bounds.top;
 		if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	}
-	var windowWidth = window.innerWidth;
+	var windowWidth = Helpers.getViewportWidth();
 	var windowHeight = Helpers.getViewportHeight();
 	var previousX = this._x, previousY = this._y;
 	this._x = x / windowWidth;
@@ -4471,7 +4471,7 @@ Dialog.prototype.createPopOut = function() {
 		}
 
 		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
-		var width = self._popupWindow.innerWidth || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
+		var width = self._popupHelpers.getViewportWidth() || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
 		outerX = Math.round(outerX);
 		outerY = Math.round(outerY);
 		width = Math.round(width);
