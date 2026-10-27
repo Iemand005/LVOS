@@ -355,13 +355,6 @@ function createTransformer(sourceFile, info, context) {
 	 */
 	const accessInfo = (expression) => {
 		if (ts.isPropertyAccessExpression(expression)) {
-			if (
-				ts.isPropertyAccessExpression(expression.expression) &&
-				expression.expression.name.text === "style"
-			) {
-				return null;
-			}
-
 			const name = expression.name.text;
 			const isAccessorObject = ts.isIdentifier(expression.expression) && accessorObjects.has(expression.expression.text);
 			if (isAccessorName(name) || isAccessorObject)
@@ -381,6 +374,19 @@ function createTransformer(sourceFile, info, context) {
 		if (ts.isClassDeclaration(node) || ts.isClassExpression(node)) return transformClass(node);
 
 		if (ts.isAssignmentExpression(node)) {
+			if (
+				ts.isPropertyAccessExpression(node.left) &&
+				ts.isPropertyAccessExpression(node.left.expression) &&
+				node.left.expression.name.text === "style"
+			) {
+				return ts.factory.updateBinaryExpression(
+					node,
+					ts.visitNode(node.left, visit),
+					node.operatorToken,
+					ts.visitNode(node.right, visit)
+				);
+			}
+
 			const target = accessInfo(node.left);
 			if (target) {
 				const object = ts.visitNode(target.object, visit);
