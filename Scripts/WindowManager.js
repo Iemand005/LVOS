@@ -4057,11 +4057,11 @@ Dialog.prototype.setZ = function(z) {
 	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
 Dialog.prototype.updateWidth = function () {
-	if (this.useTransform) this.target.style.width = Helpers.toPixels(this._width);
+	if (this.useTransform || this.useScale) this.target.style.width = Helpers.toPixels(this._width);
 	else this.target.style.right = Helpers.toPixels(this.right);
 };
 Dialog.prototype.updateHeight = function () {
-	if (this.useTransform) this.target.style.height = Helpers.toPixels(this._height);
+	if (this.useTransform || this.useScale) this.target.style.height = Helpers.toPixels(this._height);
 	else this.target.style.bottom = Helpers.toPixels(this.bottom);
 };
 /**
