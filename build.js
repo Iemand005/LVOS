@@ -205,6 +205,7 @@ function writePage(dist, page, config) {
 		.replace(
 			/<\/head>/i,
 			'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
+			'<script nomodule src="./Scripts/Animation.js"></script>\n' +
 			'<script src="./' + config.script + '" defer></script>\n' +
 			extras + '</head>'
 		);
