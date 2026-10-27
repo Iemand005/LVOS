@@ -866,7 +866,7 @@ button:hover {
 /* Force first row in IE7 to collapse to 1px / 30px */
 .window table.content > tbody > tr:first-child,
 .window table.content td.header {
-    height: 1px !important;
+    height: 25px !important;
     max-height: 30px !important;
     vertical-align: top !important;
 }
