@@ -335,6 +335,14 @@ Helpers.getViewBoxPosition = function() {
 	return { x: window.screenLeft, y: window.screenTop };
 };
 
+Helpers.getViewportHeight = function() {
+	return window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
+};
+
+Helpers.getViewportWidth = function() {
+	return window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
+};
+
 Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value || 0) + "px"; };
 Helpers.toDegrees = function(/** @type {number} */value) { return Math.round(value) + "deg"; };
 
