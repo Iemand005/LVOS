@@ -21,7 +21,7 @@
  */
 
 import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
-import { dirname, join } from "path";
+import { basename, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
