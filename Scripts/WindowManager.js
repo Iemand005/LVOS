@@ -2740,10 +2740,31 @@ function Dialog(object) {
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
 	if (!target) return null;
+
 	var elements = target.getElementsByTagName(name);
-	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
-	var element = elements.length ? elements[0] : null;
-	if (Helpers.isElement(element)) return element;
+
+	if (!elements || !elements.length) {
+		if (target.getElementsByClassName) {
+			elements = target.getElementsByClassName(name);
+		} else if (document.getElementsByClassName) {
+			// Fall for IE7 when element instances don't inherit getElementsByClassName
+			var candidates = document.getElementsByClassName(name);
+			var filtered = [];
+			for (var i = 0; i < candidates.length; i++) {
+				var node = candidates[i];
+				// Check  the candidate node is inside target
+				if (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16))) {
+					filtered.push(node);
+				}
+			}
+			elements = filtered;
+		}
+	}
+
+	// 3. Extract first element safely
+	var element = (elements && elements.length) ? elements[0] : null;
+
+	if (element && Helpers.isElement(element)) return element;
 	return null;
 };
 
