@@ -21,6 +21,39 @@ if (!Array.prototype.indexOf) {
 		return -1;
 	};
 }
+/* IE8 window.innerWidth / window.innerHeight polyfill */
+if (typeof window !== "undefined") {
+	if (typeof window.innerWidth === "undefined") {
+		try {
+			Object.defineProperty(window, "innerWidth", {
+				get: function() {
+					return document.documentElement && document.documentElement.clientWidth 
+						? document.documentElement.clientWidth 
+						: document.body.clientWidth;
+				},
+				configurable: true
+			});
+		} catch(e) {
+			// Fallback if Object.defineProperty fails on window in IE8
+			window.innerWidth = document.documentElement.clientWidth || document.body.clientWidth;
+		}
+	}
+	if (typeof window.innerHeight === "undefined") {
+		try {
+			Object.defineProperty(window, "innerHeight", {
+				get: function() {
+					return document.documentElement && document.documentElement.clientHeight 
+						? document.documentElement.clientHeight 
+						: document.body.clientHeight;
+				},
+				configurable: true
+			});
+		} catch(e) {
+			// Fallback if Object.defineProperty fails on window in IE8
+			window.innerHeight = document.documentElement.clientHeight || document.body.clientHeight;
+		}
+	}
+}
 if (!Array.prototype.lastIndexOf) {
 	Array.prototype.lastIndexOf = function(searchElement, fromIndex) {
 		var len = this == null ? 0 : this.length >>> 0;
