@@ -6,6 +6,14 @@ Add da boot anims option to setting s and uh hmm how bout a settings object like
 
 ```js
 const settings = {
+	general: {
 
+	},
+	advanced: {
+
+	},
+	flags: {
+		
+	}
 };
 ```
