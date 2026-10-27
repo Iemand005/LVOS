@@ -4455,6 +4455,10 @@ Dialog.prototype.openUrl = function(url) {
 	frame.onload = function() {
 		clearTimeout(timeout);
 		self.reportState();
+		try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); } catch (ex) {}
+		try { if (typeof self.update === "function") self.update(); } catch (ex) {}
+		setTimeout(function() { try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); if (typeof self.update === "function") self.update(); } catch (ex) {} }, 0);
+		setTimeout(function() { try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); if (typeof self.update === "function") self.update(); } catch (ex) {} }, 50);
 	};
 
 	if (!this.application) return;
