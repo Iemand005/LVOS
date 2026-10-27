@@ -2644,19 +2644,19 @@ function Dialog(object) {
 	};
 
 
-	if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
-	else target.addEventListener("mousedown", this.activationHandler, false);
+	if (supportsPointer) target.onpointerdown = this.activationHandler;
+	else target.onmousedown = this.activationHandler;
 
 	var ejectButton = buttons[windowButtons.eject];
 	if (ejectButton)
-		ejectButton.addEventListener("click", this.eject.bind(this), false);
+		ejectButton.onclick = this.eject.bind(this);
 
 	var closeButton = buttons[windowButtons.close];
 	if (closeButton)
-		closeButton.addEventListener("click", this.close.bind(this), false);
+		closeButton.onclick = this.close.bind(this);
 	var fullscreenButton = buttons[windowButtons.full];
 	if (fullscreenButton)
-		fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+		fullscreenButton.onclick = function () { self.toggleMaximized(); };
 
 	this.toggleOpen(false);
 
@@ -2695,7 +2695,7 @@ function Dialog(object) {
 			console.warn(ex);
 			transfer.setData("Text", data);
 			if (self.src) transfer.setData("URL", self.src);
-			transfer.setData("URL", "https://example.com")
+			transfer.setData("URL", "https://example.com");
 		}
 
 		transfer.effectAllowed = "copyMove";
@@ -2705,9 +2705,9 @@ function Dialog(object) {
 
 	}, false);
 
-	target.addEventListener("dragend", function () {
+	target.ondragend = function () {
 		self._ctrlDrag = false;
-	}, false);
+	};
 
 	if (this.id) windowManager.windows[this.id] = this;
 
