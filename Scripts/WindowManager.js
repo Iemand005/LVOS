@@ -59,7 +59,7 @@ if (isIE) useTransform = true;
 
 if (!supportsTransform) useTransform = false;
 
-var allowUpdateRateLimit = true;
+var allowUpdateRateLimit = false;
 
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 
