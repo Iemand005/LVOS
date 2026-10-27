@@ -392,6 +392,7 @@ function createDialogElement() {
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
 	for (var i in element.childNodes) {
 		var child = element.childNodes[i];
+		if (q`1`1!child) continue;
 		if (child.nodeName === "#comment") element.removeChild(child);
 		else if (Helpers.isElement(child)) removeComments(child);
 	}
