@@ -873,7 +873,7 @@ button:hover {
 
 /* Force header container div */
 .window .header-inner {
-    height: 30px !important;
+    /* height: 30px !important; */
     max-height: 30px !important;
     overflow: hidden !important;
     zoom: 1; /* Triggers hasLayout in IE7 */
