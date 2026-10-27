@@ -154,7 +154,7 @@ function __lvosObject(target, accessors) {
 }
 function __lvosGet(object, key) {
 	try {
-		if (object == null) return undefined;
+		if (object == null) return;
 		var info = __lvosAccessors[key];
 		if (info && info.get) {
 			var getter = object[info.get];
@@ -162,6 +162,7 @@ function __lvosGet(object, key) {
 		}
 		return object[key];
 	} catch(ex) { console.warn ("Failed to get key in object:", object, key, ex); }
+	return;
 }
 function __lvosSet(object, key, value) {
 	if (object == null) return value;
