@@ -10,11 +10,11 @@ var eventPrevent = function (/** @type {Event} */event) { event.preventDefault()
 var onLoad = function () {
 
 	var desktop = document.getElementById("desktop");
-	if (desktop) desktop.addEventListener("mousedown", function () {
+	if (desktop) desktop.onmousedown = function () {
 		DesktopManager.toggleCharms(false);
         if (launchpad) launchpad.close();
         contextMenu.close();
-	}, false);
+	};
 
     // var wallpaper = window.windows["wallpaper"];
     // if (wallpaper instanceof HTMLIFrameElement) {
@@ -26,9 +26,8 @@ var onLoad = function () {
 
 	var applist = document.getElementById("applist");
 
-	if (applist) {
-		applist.addEventListener("submit", eventPrevent, false);
-	}
+	if (applist)
+		applist.onsubmit = eventPrevent;
 
 	var appButtons = document.getElementById("dockapplist");
 
@@ -412,11 +411,15 @@ DesktopManager.prototype.addOrMoveDesktopGap = function() {
 
 /** @param {string} theme */
 function setTheme(theme) {
+	ensureClassList(document.body);
     document.body.classList.add(theme);
     window.windowManager.synchronizeStates();
 }
 /** @param {string} theme */
-DesktopManager.removeTheme = function(theme) { document.body.classList.remove(theme); };
+DesktopManager.removeTheme = function(theme) {
+	ensureClassList(document.body);
+	document.body.classList.remove(theme);
+};
 /** @param {boolean} [force] */
 DesktopManager.toggleCharms = function(force){
 	var charms = document.getElementById("charms");

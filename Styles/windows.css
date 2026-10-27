@@ -825,3 +825,72 @@ button:hover {
 .snap-splitter:hover {
 	background: rgba(255, 255, 255, 0.3);
 }
+
+/* 1. Ensure the container and table force fixed table-layout */
+.window table.content {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed; /* Enforces strict height/width calculations */
+    border-collapse: collapse;
+}
+
+/* 2. Constrain header row to minimal height */
+.window table.content td.header {
+    height: 1px !important; /* Forces IE7/8 to collapse row to minimum height */
+    vertical-align: top;
+}
+
+/* 3. Force article row to claim all remaining height */
+.window table.content td.article {
+    height: 100% !important; /* Claims remaining space in the 100% table */
+    vertical-align: top;
+    position: relative;
+}
+
+/* 4. Ensure iframe inside fills article cell completely */
+.window table.content td.article iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Outer window table */
+.window table.content {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Force first row in IE7 to collapse to 1px / 30px */
+.window table.content > tbody > tr:first-child,
+.window table.content td.header {
+    height: 25px !important;
+    max-height: 30px !important;
+    vertical-align: top !important;
+}
+
+/* Force header container div */
+.window .header-inner {
+    /* height: 30px !important; */
+    max-height: 30px !important;
+    overflow: hidden !important;
+    zoom: 1; /* Triggers hasLayout in IE7 */
+}
+
+/* Force second row (article) to absorb 100% */
+.window table.content td.article {
+    height: 100% !important;
+	top: 0;
+    vertical-align: top !important;
+    position: relative;
+}
+
+/* Force iframe expansion */
+.window table.content td.article iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}

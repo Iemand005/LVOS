@@ -13,6 +13,7 @@
  *   node build.js            -> write minified bundles into the dist folder
  *   node build.js --no-minify-> write unminified (readable) bundles
  *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
+ *   node build.js --ie8      -> also emit accessor-free *.ie8.dist.js bundles
  *   node build.js --help     -> show this message
  *
  * The dist folder defaults to the sibling "LVOS-dist" repo if it exists,
@@ -20,10 +21,12 @@
  */
 
 import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
-import { dirname, join } from "path";
+import { basename, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
+import { parse } from "acorn";
+import { transformAccessorsForIe8, transpileForIe8 } from "./ie8-accessors.js";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS = join(ROOT, "Scripts");
@@ -31,13 +34,16 @@ const SCRIPTS = join(ROOT, "Scripts");
 /**
  * Static assets copied verbatim into the dist folder. Each entry's "from" is
  * resolved relative to ROOT and its "to" relative to the dist folder.
+ * @type {{from: string, to?: string, exclude?: string[]}[]}
  */
 const ASSETS = [
-	{ from: "Styles", to: "Styles" },
-	{ from: "manifest.json", to: "manifest.json" },
-	{ from: "manifest-mobile.json", to: "manifest-mobile.json" },
-	{ from: "icon-192.png", to: "icon-192.png" },
-	{ from: "icon-512.png", to: "icon-512.png" }
+	{ from: "Styles" },
+	{ from: "Applications", exclude: ["MPTool", "GeodeWeb"] },
+	{ from: "Assets" },
+	{ from: "manifest.json" },
+	{ from: "manifest-mobile.json" },
+	{ from: "icon-192.png" },
+	{ from: "icon-512.png" }
 ];
 
 /**
@@ -79,7 +85,6 @@ const BUNDLES = {
 	"desktop.dist.js": [
 		"CustomPrototypes.js", // shared prototypes + "use strict" prologue
 		"physics.js",          // Vector
-		"youtube.js",          // YouTubeParser
 		"Messenger.js",        // LVMessenger
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
@@ -126,13 +131,20 @@ function isNotTypeDeclaration(src) {
 }
 function copyAssets(dist) {
 	for (const asset of ASSETS) {
+		if (!asset.to) asset.to = asset.from;
+		if (!asset.exclude) asset.exclude = [];
 		const src = join(ROOT, asset.from);
 		const dest = join(dist, asset.to);
 		if (!existsSync(src)) {
 			console.warn("Asset not found, skipping: " + asset.from);
 			continue;
 		}
-		cpSync(src, dest, { recursive: true, filter: isNotTypeDeclaration });
+		cpSync(src, dest, {
+			recursive: true,
+			filter: (path) =>
+				isNotTypeDeclaration(path) &&
+				!asset.exclude.includes(basename(path))
+		});
 		console.log("[copy] " + asset.from + " -> " + dest);
 	}
 
@@ -144,6 +156,7 @@ function copyAssets(dist) {
 		{ from: "Scripts/WebAura", to: "Scripts/WebAura" },
 		{ from: "Scripts/WebMedia", to: "Scripts/WebMedia" },
 		{ from: "Scripts/LegacyPolyfills.js", to: "Scripts/LegacyPolyfills.js" },
+		{ from: "Scripts/Animation.js", to: "Scripts/Animation.js" },
 		{ from: "ScrollTabs", to: "ScrollTabs" },
 		{ from: EXTENSIONS_FOLDER, to: EXTENSIONS_FOLDER }
 	];
@@ -157,54 +170,65 @@ function copyAssets(dist) {
 	}
 }
 
-function writePages(dist) {
-	for (const [page, config] of Object.entries(PAGES)) {
-		const srcPath = join(ROOT, config.source);
-		if (!existsSync(srcPath)) {
-			console.warn(config.source + " not found; skipping " + page + ".");
-			continue;
-		}
+function writePage(dist, page, config) {
+	const srcPath = join(ROOT, config.source);
+	if (!existsSync(srcPath)) {
+		console.warn(config.source + " not found; skipping " + page + ".");
+		return;
+	}
 
-		// Replace every <script> tag (external or inline) with the production bundle.
-		// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
-		// without module support download them; modern Chrome ignores the tag entirely.
-		const src = readFileSync(srcPath, "utf8");
+	// Replace every <script> tag (external or inline) with the production bundle.
+	// The legacy ES5 polyfills are re-added with `nomodule`, so only browsers
+	// without module support download them; modern Chrome ignores the tag entirely.
+	const src = readFileSync(srcPath, "utf8");
 
-		// Extensions are never bundled: the dist folder must not contain an
-		// extension implementation baked into a bundle. The scripts the page asks
-		// for are copied into the dist folder as they are and loaded separately
-		// (deferred) instead, so the extension is a file that can be added, changed
-		// or left out without rebuilding the bundle.
-		const extensionScripts = [];
-		const extensionPattern = new RegExp(
-			'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
-			"gi"
+	// Extensions are never bundled: the dist folder must not contain an
+	// extension implementation baked into a bundle. The scripts the page asks
+	// for are copied into the dist folder as they are and loaded separately
+	// (deferred) instead, so the extension is a file that can be added, changed
+	// or left out without rebuilding the bundle.
+	const extensionScripts = [];
+	const extensionPattern = new RegExp(
+		'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
+		"gi"
+	);
+	for (const match of src.matchAll(extensionPattern)) {
+		extensionScripts.push(match[1].replace(/^\.\//, ""));
+	}
+
+	const extras = (config.extras || [])
+		.concat(extensionScripts)
+		.map((extra) => '<script src="./' + extra + '" defer></script>\n')
+		.join("");
+	const out = src
+		.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(
+			/<\/head>/i,
+			'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
+			'<script nomodule src="./Scripts/Animation.js"></script>\n' +
+			'<script src="./' + config.script + '" defer></script>\n' +
+			extras + '</head>'
 		);
-		for (const match of src.matchAll(extensionPattern)) {
-			extensionScripts.push(match[1].replace(/^\.\//, ""));
-		}
+	writeFileSync(join(dist, page), out);
+	console.log("[page] " + page + " -> scripts replaced with " + config.script);
+}
 
-		const extras = (config.extras || [])
-			.concat(extensionScripts)
-			.map((extra) => '<script src="./' + extra + '" defer></script>\n')
-			.join("");
-		const out = src
-			.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
-			.replace(
-				/<\/head>/i,
-				'<script nomodule src="./Scripts/LegacyPolyfills.js"></script>\n' +
-				'<script src="./' + config.script + '" defer></script>\n' +
-				extras + '</head>'
-			);
-		writeFileSync(join(dist, page), out);
-		console.log("[page] " + page + " -> scripts replaced with " + config.script);
+function writePages(dist, ie8) {
+	for (const [page, config] of Object.entries(PAGES)) writePage(dist, page, config);
+
+	if (ie8) {
+		writePage(dist, "indexIE8.html", {
+			source: "indexIE8.html",
+			script: "desktop.ie8.dist.js",
+			extras: []
+		});
 	}
 }
 
-function writeServiceWorker(dist) {
+function writeServiceWorker(dist, ie8) {
 	// Generate a dedicated production service worker that precaches the bundles
 	// and static assets. Kept intentionally simple and deterministic.
-	const precacheUrls = [
+	const urls = [
 		"\'./\'",
 		"\'./index.html\'",
 		"\'./mobile.html\'",
@@ -214,7 +238,11 @@ function writeServiceWorker(dist) {
 		"\'./icon-512.png\'",
 		"\'./desktop.dist.js\'",
 		"\'./mobile.dist.js\'"
-	].join(",\n\t");
+	];
+	if (ie8) {
+		urls.push("\'./indexIE8.html\'", "\'./desktop.ie8.dist.js\'");
+	}
+	const precacheUrls = urls.join(",\n\t");
 
 	const sw = `const CACHE_VERSION = 'lvos-v2';
 const STATIC_CACHE = 'lvos-static-' + CACHE_VERSION;
@@ -396,11 +424,17 @@ function mergeDefineProperties(source, fileName) {
 	return { code, calls, groups: edits.length };
 }
 
-function readGroup(files, mergeProps) {
+function readGroup(files, mergeProps, ie8) {
+	// IE8 has no custom elements or ES2015 built-ins, so the custom-element
+	// definitions (and their HTMLSpanElement/HTMLTimeElement base classes) are
+	// left out of the legacy bundle.
+	const ie8Skip = new Set(["WebComponents.js"]);
 	const parts = [];
 	let calls = 0;
 	let groups = 0;
 	for (const file of files) {
+		if (ie8 && ie8Skip.has(file)) continue;
+
 		// Bundle entries are relative to Scripts/ by default, but may also point at a
 		// repo-root file (e.g. "ScrollTabs/ScrollTabs.js").
 		const underScripts = join(SCRIPTS, file);
@@ -419,19 +453,84 @@ function readGroup(files, mergeProps) {
 		}
 		parts.push("// ===== " + file + " =====\n" + src);
 	}
-	return { code: parts.join("\n\n"), calls, groups };
+	let code = parts.join("\n\n");
+	let accessors = 0;
+	if (ie8) {
+		const transformed = transformAccessorsForIe8(code, "bundle.js");
+		code = transpileForIe8(transformed.code, "bundle.js");
+		accessors = transformed.accessors;
+	}
+	return { code, calls, groups, accessors };
 }
 
+function assertEs3(code, outfile) {
+	try {
+		parse(code, { ecmaVersion: 3, sourceType: "script" });
+	} catch (error) {
+		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message);
+	}
+}
+
+
+/**
+ * ES3 reserved words that IE8 rejects when used as identifier property names
+ * (e.g. `x.catch(...)`, `x.delete`, `x.class = 1`). Esbuild's `es5` target
+ * does not quote them, so we do a targeted regex pass after minification.
+ */
+const ES3_RESERVED_PROPS = [
+	"abstract", "boolean", "byte", "char", "class", "const", "debugger",
+	"double", "enum", "export", "extends", "final", "float", "goto",
+	"implements", "import", "int", "interface", "long", "native", "package",
+	"private", "protected", "public", "short", "static", "super",
+	"synchronized", "throws", "transient", "volatile",
+	// ES1 keywords also forbidden as property names in IE8:
+	"catch", "delete", "finally", "in", "instanceof", "new",
+	"return", "switch", "throw", "try", "typeof", "void", "with"
+];
+
+/**
+ * Rewrite `expr.keyword` property accesses to bracket notation so IE8 does
+ * not choke on reserved words in property position.
+ *
+ * @param {string} code
+ * @returns {string}
+ */
+function quoteReservedProperties(code) {
+	const pattern = new RegExp(
+		"\\.(" + ES3_RESERVED_PROPS.join("|") + ")(?=[^A-Za-z0-9_$]|$)",
+		"g"
+	);
+	return code.replace(pattern, function(_, kw) { return "[\"" + kw + "\"]"; });
+}
+
+/**
+ * Apply patches required specifically for IE8:
+ * 1. Disable theme setting/loading so <body> class mutations and theme lookups don't crash
+ * 2. Disable console interception on load
+ */
+function applyIe8SpecificPatches(code) {
+	// Disable theme application functions in IE8 (return early)
+	code = code.replace(/function setThemeOption\([^)]*\)\s*\{/, "$&return;");
+	code = code.replace(/function loadThemeSetting\([^)]*\)\s*\{/, "$&return;");
+
+	// Disable bindConsole
+	code = code.replace(/var bindConsole\s*=\s*true;/, "var bindConsole = false;");
+	// Disable interceptor.bindage()
+	code = code.replace(/interceptor\.bindage\(\);?/, "/* interceptor.bindage(); */");
+
+	return code;
+}
 async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
+	const ie8 = process.argv.includes("--ie8");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
 	if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
 
 	for (const [outfile, files] of Object.entries(BUNDLES)) {
-		const group = readGroup(files, mergeProps);
+		const group = readGroup(files, mergeProps, false);
 		const result = await esbuild.transform(group.code, {
 			minify: !noMinify,
 			target: "esnext",
@@ -451,17 +550,37 @@ async function build() {
 			(bytes / 1024).toFixed(1) + " KB (" + files.length + " files)" +
 			merged
 		);
+
+		if (!ie8) continue;
+
+		const ie8Group = readGroup(files, mergeProps, true);
+		const ie8Result = await esbuild.transform(ie8Group.code, {
+			minify: !noMinify,
+			target: "es5",
+			legalComments: "none"
+		});
+		const ie8Outfile = outfile.replace(/\.dist\.js$/, ".ie8.dist.js");
+		const ie8Code = applyIe8SpecificPatches(quoteReservedProperties(ie8Result.code));
+		assertEs3(ie8Code, ie8Outfile);
+		writeFileSync(join(dist, ie8Outfile), ie8Code);
+		console.log(
+			"[ie8 ] " +
+			ie8Outfile.padEnd(20) +
+			" -> " +
+			(Buffer.byteLength(ie8Code) / 1024).toFixed(1) + " KB (" +
+			ie8Group.accessors + " accessor names)"
+		);
 	}
 
 	copyAssets(dist);
-	writePages(dist);
-	writeServiceWorker(dist);
+	writePages(dist, ie8);
+	writeServiceWorker(dist, ie8);
 
 	console.log("\nDone.");
 }
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --help            show this help");
+	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --help            show this help");
 } else {
 	build().catch(function (err) {
 		console.error(err);

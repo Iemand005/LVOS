@@ -66,6 +66,7 @@ if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
 var nodeListPrototype = typeof NodeList != "undefined" ? NodeList.prototype : null;
 if (nodeListPrototype && !nodeListPrototype.forEach) nodeListPrototype.forEach = forEachIndexed;
 
+if (!(document.documentMode && document.documentMode < 9))
 if (!Object.defineProperty) {
     Object.defineProperty = function(o, key, attributes) {
         if (!attributes || !(o instanceof Object)) return;
@@ -257,8 +258,11 @@ if (typeof URLSearchParams == "undefined") {
     URLSearchParams.prototype.get = function (key) {
         return this._data.get(key);
     };
+	try {
+		if (Object.defineProperty) Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
 
-    Object.defineProperty(URLSearchParams.prototype, 'size', { get: function () { return this._data.size; }});
+	} catch(ex) {}
+
 // URLSearchParams.prototype.__defineGetter__('size', function() {
 //     return this._data.size;
 // });
@@ -433,6 +437,96 @@ if (typeof Array.from != "function") {
   window.Promise = ES3Promise;
 })();
 
+/* Global Event Listener Polyfill for IE8 and IE7 */
+(function(win, doc) {
+	if (win.addEventListener) return; // Native support exists
+
+	function createCustomEvent(element, eventType, handler) {
+		return function(e) {
+			e = e || win.event;
+
+			// Normalize target
+			if (!e.target) e.target = e.srcElement || doc;
+
+			// Polyfill preventDefault
+			if (!e.preventDefault) {
+				e.preventDefault = function() {
+					e.returnValue = false;
+				};
+			}
+
+			// Polyfill stopPropagation & stopImmediatePropagation
+			if (!e.stopPropagation) {
+				e.stopPropagation = function() {
+					e.cancelBubble = true;
+				};
+			}
+			if (!e.stopImmediatePropagation) {
+				e.stopImmediatePropagation = function() {
+					e._isImmediatePropagationStopped = true;
+					e.cancelBubble = true;
+				};
+			}
+
+			// Bind correct `this` context to the DOM node
+			try {
+				return handler.call(element, e);
+			} catch(ex){}
+		};
+	}
+
+	function addEventListenerPolyfill(type, handler) {
+		var element = this;
+		if (!element._events) element._events = {};
+		if (!element._events[type]) element._events[type] = [];
+
+		var wrapper = createCustomEvent(element, type, handler);
+		element._events[type].push({ original: handler, wrapper: wrapper });
+
+		if (element.attachEvent) {
+			element.attachEvent("on" + type, wrapper);
+		}
+	}
+
+	function removeEventListenerPolyfill(type, handler) {
+		var element = this;
+		if (!element._events || !element._events[type]) return;
+
+		var list = element._events[type];
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].original === handler) {
+				if (element.detachEvent) {
+					element.detachEvent("on" + type, list[i].wrapper);
+				}
+				list.splice(i, 1);
+				break;
+			}
+		}
+	}
+
+	// Apply polyfill globally to Element, Document, and Window
+	var targets = [win, doc];
+	if (typeof Element !== "undefined") targets.push(Element.prototype);
+	if (typeof HTMLDocument !== "undefined") targets.push(HTMLDocument.prototype);
+	if (typeof HTMLDocument !== "undefined") targets.push(HTMLDocument.prototype);
+
+	for (var i = 0; i < targets.length; i++) {
+		if (targets[i]) {
+			targets[i].addEventListener = addEventListenerPolyfill;
+			targets[i].removeEventListener = removeEventListenerPolyfill;
+		}
+	}
+})(window, document);
+
+(function () {
+	if (!("Element" in window)) {
+		function Element() {
+
+		};
+		window.Element = Element;
+	}
+})();
+
 (function () {
 
     if (window.addEventListener) return;
@@ -501,7 +595,7 @@ if (typeof Array.from != "function") {
                 }
             }
         };
-    }
+    };
 
     patch(window);
     patch(document);
@@ -552,6 +646,7 @@ if (typeof Array.from != "function") {
 
 // if (typeof module != "undefined" && module.)
 if (typeof window.HTMLElement == "undefined") window.HTMLElement = Element;
+if (typeof window.HTMLInputElement == "undefined") window.HTMLInputElement = Element;
 if (typeof window.HTMLTemplateElement == "undefined") window.HTMLTemplateElement = function() {};
 
 // IE / HTA settings storage. Settings.js falls back to this when localStorage is missing.
@@ -690,3 +785,13 @@ ActiveXStorage.prototype.getItem = function (key) {
 })();
 
 if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function(){};
+
+if (typeof Event !== "undefined" && Event.prototype) {
+	if (!Event.prototype.stopImmediatePropagation) {
+		Event.prototype.stopImmediatePropagation = function() {
+			this.isImmediatePropagationStopped = function() { return true; };
+			this.cancelBubble = true;
+			if (this.stopPropagation) this.stopPropagation();
+		};
+	}
+}

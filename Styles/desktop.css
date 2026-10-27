@@ -161,7 +161,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	64%, 67% {
+	66%, 67% {
 		transform: rotateY(0deg) scale(1);
 		opacity: 1;
 	}
@@ -178,7 +178,7 @@ body.color-debug .tab-page {
 		opacity: 0.7;
 	}
 
-	66% {
+	66%, 67% {
 		transform: rotateY(0deg) scale(1);
 		opacity: 1;
 	}
@@ -245,6 +245,8 @@ body:not(.blur) .window > article {
 }
 
 #desktop {
+	top: 0;
+	left: 0;
 	bottom: 0;
 	position: absolute;
 	height: 100%;

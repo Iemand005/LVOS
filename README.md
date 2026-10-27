@@ -45,9 +45,9 @@ https://iemand005.github.io/LVOS/
 
 https://iemand005.github.io/LVOS/mobile.html
 
-**Netscape 6–9 / Opera Presto**
+**Netscape 6–9 / Opera Presto / Internet Explorer 8-**
 
-https://iemand005.github.io/LVOS/indexN.html
+https://iemand005.github.io/LVOS/indexIE8.html
 
 **Netscape 4**
 
@@ -71,13 +71,13 @@ VulpOS has been developed with a much wider browser range in mind than most mode
 
 The project includes support for:
 
-* Chrome
-* Firefox
-* Microsoft Edge
-* Internet Explorer
+* Chrome (All versions)
+* Firefox (All versions, including the betas like Mozilla Suite, Phoenix and Firebird)
+* Microsoft Edge (All versions as these are just IE and Chrome evolved)
+* Internet Explorer 8-11 (IE8 requires compiled legacy HTML, IE5-7 partially working)
 * Netscape 6–9
-* Opera Presto
-* Netscape 4
+* Opera Presto (Latest version)
+* Netscape 4 (Lite version)
 
 Modern browsers get the full modern implementation and can use newer web APIs. Older browsers use compatibility-focused builds and code paths.
 

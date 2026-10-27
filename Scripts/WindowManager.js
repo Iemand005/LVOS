@@ -13,7 +13,7 @@
 
 // Modifiable settings
 var useTransform = true,
-	useScale = false;
+	useScale = true;
 
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
@@ -59,19 +59,29 @@ if (isIE) useTransform = true;
 
 if (!supportsTransform) useTransform = false;
 
+var allowUpdateRateLimit = true;
+
+if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
+
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: true,
-	updateRateLimit: true,
+	updateRateLimit: allowUpdateRateLimit,
 	useDragOverlay: true,
 	broadcastWindowMoves: !document.documentMode,
-	_useTransform: useTransform,
 	useAnimations: true,
 	ieDropCompatibleMode: true,
+	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+	},
+	_useScale: useScale,
+	get useScale() { return this._useScale; },
+	set useScale(value) {
+		this._useScale = value;
+		windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
 	},
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
@@ -117,10 +127,13 @@ var flags = {
 
 /** @param {Event} event */
 function cancelDomEvent(event) {
-	if (typeof event.preventDefault === "function") event.preventDefault();
-	event.returnValue = false;
-	if (typeof event.stopPropagation === "function") event.stopPropagation();
-	event.cancelBubble = true;
+	try {
+		if (typeof event.preventDefault === "function") event.preventDefault();
+		event.returnValue = false;
+		if (typeof event.stopPropagation === "function") event.stopPropagation();
+		event.cancelBubble = true;
+		return false;
+	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
 	return false;
 }
 
@@ -147,15 +160,15 @@ function getSiteName(url) {
 
 
 /**
- * @param {unknown} [object]
+ * @param {any} [object]
  * @returns {object is HTMLElement}
  */
-Helpers.isElement = function(object) { return object && "nodeType" in object || false; };
+Helpers.isElement = function(object) { return (typeof object === "object") && ("nodeType" in object) || false; };
 
 
 /** @param {Window} window */
 function getWindowChromeHeight(window) {
-	return window.outerHeight - window.innerHeight;
+	return window.outerHeight - Helpers.getViewportHeight();
 }
 
 /**
@@ -272,7 +285,7 @@ function messageReceived(type, data, source){
 					}
 					if (!overlay) return;
 					overlay.ontransitionend = null;
-					overlay.requestFullscreen().catch(function() {});
+					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
 					if (dialog.body) overlay.appendChild(dialog.body);
 					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
 				};
@@ -335,7 +348,15 @@ Helpers.getViewBoxPosition = function() {
 	return { x: window.screenLeft, y: window.screenTop };
 };
 
-Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value) + "px"; };
+Helpers.getViewportHeight = function() {
+	return window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
+};
+
+Helpers.getViewportWidth = function() {
+	return window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
+};
+
+Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value || 0) + "px"; };
 Helpers.toDegrees = function(/** @type {number} */value) { return Math.round(value) + "deg"; };
 
 /** @param {number} pixels */
@@ -372,16 +393,18 @@ function createDialogElement() {
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
 	var clone = removeComments(template.cloneNode(true));
-	if (!(clone instanceof HTMLElement)) throw new Error("Cloned dialog is not an element");
+	if (!Helpers.isElement(clone)) throw new Error("Cloned dialog is not an element");
 	return clone;
 }
 
 /** @param {Node} element */
 function removeComments(element){ // Removes the comments of an HTMLElement based object.
-	element.childNodes.forEach(function (child) {
+	for (var i in element.childNodes) {
+		var child = element.childNodes[i];
+		if (!child) continue;
 		if (child.nodeName === "#comment") element.removeChild(child);
 		else if (Helpers.isElement(child)) removeComments(child);
-	});
+	}
 	return element;
 }
 
@@ -721,7 +744,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
 	get: function () {
 		/** @type {DesktopState} */
 		var state = {};
-		for (var id in this.windows) {
+		for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 			var window = this.windows[id];
 			if (window) state[id] = window.getState();
 		}
@@ -768,7 +791,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			dialog.loadState(windowStates[dialog.id]);
 			this.updateTopZ(dialog.z);
 		} else {
-			for (var id in windowStates) try {
+			for (var id in windowStates) if (windowStates.hasOwnProperty(id)) try {
 				var dialog = this.windows[id];
 				if (dialog && windowStates[id]) dialog.loadState(windowStates[id]);
 			} catch (ex) { console.log(ex); }
@@ -990,8 +1013,8 @@ WindowManager.recalculateWindowBounds = function() {
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
 	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
-	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
-	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
+	WindowManager._windowBounds.right = inset.right !== null ? Helpers.getViewportWidth() - inset.right : Infinity;
+	WindowManager._windowBounds.bottom = inset.bottom !== null ? Helpers.getViewportHeight() - inset.bottom : Infinity;
 };
 
 Object.defineProperty(WindowManager, "windowBounds", {
@@ -1390,13 +1413,13 @@ WindowManager.prototype.getSnapGroup = function (section) {
 /** @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapWidth = function (section) {
 	var area = section || this.getSnapContainer();
-	return area ? area.clientWidth : window.innerWidth;
+	return area ? area.clientWidth : Helpers.getViewportWidth();
 };
 
 /**  @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapHeight = function (section) {
 	var area = section || this.getSnapContainer();
-	return area ? area.clientHeight : window.innerHeight;
+	return area ? area.clientHeight : Helpers.getViewportHeight();
 };
 
 /**
@@ -1599,7 +1622,7 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 	// it was laid out with. Its element is already a child of the section, which is
 	// where every window is created, so there is nothing to move: clearing flex/order
 	// drops it back out of the flex row into the absolute box it floats in.
-	for (var id in this.windows) {
+	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
 		if (!dialog || !dialog.target || members[id]) continue;
 		if (this.getSnapContainer(dialog) !== section) continue;
@@ -1933,6 +1956,8 @@ function WindowSnap() {
 	 */
 	this._section = null;
 
+	if (document.documentMode && document.documentMode < 9) return;
+
 	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
 	// first snap positions it, so without this the first drop flies it in from wherever
 	// that box sat rather than from behind the window.
@@ -2038,7 +2063,7 @@ WindowSnap.prototype.setInset = function(inset) {
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
 	var section = this._section || (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section");
-	return section ? section.clientWidth : window.innerWidth;
+	return section ? section.clientWidth : Helpers.getViewportWidth();
 };
 
 /**
@@ -2351,6 +2376,37 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
+function ensureClassList(elem) {
+    if (elem.classList) return;
+
+    elem.classList = {
+        add: function (cls) {
+            if (!this.contains(cls)) {
+                elem.className = (elem.className ? elem.className + " " : "") + cls;
+            }
+        },
+        remove: function (cls) {
+            var classes = (elem.className || "").split(/\s+/);
+            for (var i = classes.length - 1; i >= 0; i--) {
+                if (classes[i] === cls) classes.splice(i, 1);
+            }
+            elem.className = classes.join(" ");
+        },
+        contains: function (cls) {
+            return new RegExp("(^|\\s+)" + cls + "(\\s+|$)").test(elem.className || "");
+        },
+        toggle: function (cls) {
+            if (this.contains(cls)) {
+                this.remove(cls);
+                return false;
+            } else {
+                this.add(cls);
+                return true;
+            }
+        }
+    };
+}
+
 //#region Dialog
 
 
@@ -2439,6 +2495,7 @@ function Dialog(object) {
 	this.application = null;
 	if (!Helpers.isElement(object))
 		this.application = object;
+	else this.target = object;
 
 	if (!id) id = object.title;
 	if (object.title) this._title = object.title;
@@ -2476,11 +2533,18 @@ function Dialog(object) {
 	 * @param {number} [id]
 	 */
 	this.activationHandler = function (ev, id) {
-		self._ctrlDrag = !!ev.ctrlKey;
-		if (ev.ctrlKey) {
+		if (!ev) {
+			var event = window.event;
+			event.target = event.srcElement;
+			ev = event;
+		}
+		self._ctrlDrag = !!(ev && ev.ctrlKey);
+		if (self._ctrlDrag) {
 			ev.stopImmediatePropagation();
 			return;
 		}
+
+		ensureClassList(ev.target);
 		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
@@ -2541,7 +2605,7 @@ function Dialog(object) {
 	}
 
 
-	this.setMinSize(180, 250);
+	this.setMinSize(180, 250, false);
 
 
 
@@ -2557,6 +2621,8 @@ function Dialog(object) {
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
 	};
 
+	if (!this.target.classList) ensureClassList(this.target);
+
 	var target = this.target;
 
 	var buttons = target.getElementsByTagName("button");
@@ -2565,22 +2631,21 @@ function Dialog(object) {
 
 	if(this.resizable && createSizers) this._createSizers();
 
-	// target.addEventListener("dragstart", cancelDomEvent, false);
-	target.addEventListener("selectstart", function (event) {
+	target.onselectstart = function (event) {
 		if (self._ctrlDrag) return;
 		cancelDomEvent(event);
-	}, false);
+	};
 
 	var body = this.body;
-	if (body) body.addEventListener("load", function () { try {
+	if (body) body.onload = function () { try {
 		self.verifyEjectCapability();
 	} catch (exception) {
 		console.log(exception);
 		if (buttons[0]) buttons[0].style.display = "none";
-	}}, false);
+	}};
 
 	var header = this.titleBar;
-	if (header) target.addEventListener("dblclick", function (event) {
+	if (header) target.ondblclick = function (event) {
 		var rect = getRect(header);
 		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 
@@ -2590,26 +2655,26 @@ function Dialog(object) {
 			node = node.parentElement;
 		}
 		self.toggleMaximized();
-	}, false);
+	};
 
 
-	if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
-	else target.addEventListener("mousedown", this.activationHandler, false);
+	if (supportsPointer) target.onpointerdown = this.activationHandler;
+	else target.onmousedown = this.activationHandler;
 
 	var ejectButton = buttons[windowButtons.eject];
 	if (ejectButton)
-		ejectButton.addEventListener("click", this.eject.bind(this), false);
+		ejectButton.onclick = this.eject.bind(this);
 
 	var closeButton = buttons[windowButtons.close];
 	if (closeButton)
-		closeButton.addEventListener("click", this.close.bind(this), false);
+		closeButton.onclick = this.close.bind(this);
 	var fullscreenButton = buttons[windowButtons.full];
 	if (fullscreenButton)
-		fullscreenButton.addEventListener("click", this.toggleMaximized.bind(this, undefined), false);
+		fullscreenButton.onclick = function () { self.toggleMaximized(); };
 
 	this.toggleOpen(false);
 
-	target.addEventListener("dragstart", function (event) {
+	target.ondragstart = function (event) {
 		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
 			event.preventDefault();
 			return;
@@ -2644,7 +2709,7 @@ function Dialog(object) {
 			console.warn(ex);
 			transfer.setData("Text", data);
 			if (self.src) transfer.setData("URL", self.src);
-			transfer.setData("URL", "https://example.com")
+			transfer.setData("URL", "https://example.com");
 		}
 
 		transfer.effectAllowed = "copyMove";
@@ -2652,11 +2717,11 @@ function Dialog(object) {
 		self.target.classList.add("hidden");
 
 
-	}, false);
+	};
 
-	target.addEventListener("dragend", function () {
+	target.ondragend = function () {
 		self._ctrlDrag = false;
-	}, false);
+	};
 
 	if (this.id) windowManager.windows[this.id] = this;
 
@@ -2667,7 +2732,7 @@ function Dialog(object) {
 	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
-		else this.moveCenterTo(window.innerWidth / 2, window.innerHeight / 2);
+		else this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
 	// if (this.application && this.application.launch) this.launch();
 
@@ -2687,10 +2752,29 @@ function Dialog(object) {
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
+	if (!target) return null;
+
 	var elements = target.getElementsByTagName(name);
-	if (!elements || !elements.length) elements = target.getElementsByClassName(name);
-	var element = elements.length ? elements[0] : null;
-	if (Helpers.isElement(element)) return element;
+
+	if (!elements || !elements.length) {
+		if (target.getElementsByClassName) {
+			elements = target.getElementsByClassName(name);
+		} else if (document.getElementsByClassName) {
+			var candidates = document.getElementsByClassName(name);
+			var filtered = [];
+			for (var i = 0; i < candidates.length; i++) {
+				var node = candidates[i];
+				if (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16))) {
+					filtered.push(node);
+				}
+			}
+			elements = filtered;
+		}
+	}
+
+	var element = (elements && elements.length) ? elements[0] : null;
+
+	if (element && Helpers.isElement(element)) return element;
 	return null;
 };
 
@@ -2824,6 +2908,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 
 		var sizer = self.getElementByTagOrClassName(sizerId);
 		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
+		ensureClassList(sizer);
 		sizer.draggable = false;
 		sizer.id = id.toString();
 		sizer.classList.add(sizerId);
@@ -2903,7 +2988,7 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
-	if (frame || !create || !this.body) return frame;
+	if (frame || create === false || !this.body) return frame;
 	return this.body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
@@ -2946,7 +3031,7 @@ Object.defineProperty(Dialog.prototype, "contentWindow", {
 
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () {
-		return this._x * window.innerWidth; // TODO: get ehe window bounds calculated on resize evt
+		return this._x * Helpers.getViewportWidth(); // TODO: get ehe window bounds calculated on resize evt
 	},
 	set: function (x) {
 		if (typeof x === "number") this.move(x, this.y);
@@ -2955,7 +3040,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 Object.defineProperty(Dialog.prototype, "y", {
 	get: function () {
-		return this._y * window.innerHeight;
+		return this._y * Helpers.getViewportHeight();
 	},
 	set: function (y) {
 		if (typeof y === "number") this.move(this.x, y);
@@ -3080,11 +3165,11 @@ Object.defineProperty(Dialog.prototype, "top", {
 		var height = Math.max(Math.min(bottom - top, this.maxHeight), this.minHeight);
 		top = bottom - height;
 		this._height = height;
-		this._y = top / window.innerHeight;
+		this._y = top / Helpers.getViewportHeight();
 		if (this.useTransform) {
 			this.target.style.height = Helpers.toPixels(height);
 			this.updateTransform();
-		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+		} else this.setInset(top, this.left, this.right, Helpers.getViewportHeight() - bottom);
 		this._isMinHeight = height === this.minHeight;
 	}
 });
@@ -3099,11 +3184,11 @@ Object.defineProperty(Dialog.prototype, "left", {
 		var width = Math.max(Math.min(right - left, this.maxWidth), this.minWidth);
 		left = right - width;
 		this._width = width;
-		this._x = left / window.innerWidth;
+		this._x = left / Helpers.getViewportWidth();
 		if (this.useTransform) {
 			this.target.style.width = Helpers.toPixels(width);
 			this.updateTransform();
-		} else this.setInset(this.top, left, window.innerWidth - right, this.bottom);
+		} else this.setInset(this.top, left, Helpers.getViewportWidth() - right, this.bottom);
 		this._isMinWidth = width === this.minWidth;
 	}
 });
@@ -3114,13 +3199,13 @@ Object.defineProperty(Dialog.prototype, "rightFromLeft", {
 });
 
 Object.defineProperty(Dialog.prototype, "right", {
-	get: function() { return window.innerWidth - this.rightFromLeft; },
+	get: function() { var rfl = this.rightFromLeft; return typeof rfl === "number" && rfl === rfl ? Helpers.getViewportWidth() - rfl : 0; },
 	set: function(right) {
 		if (typeof right === "number") {
 			var bounds = WindowManager.windowBounds;
 			if (right > bounds.right) right = bounds.right;
 			if (right < bounds.left) right = bounds.left;
-			this.width = (window.innerWidth - right) - this.x;
+			this.width = (Helpers.getViewportWidth() - right) - this.x;
 		}
 	}
 });
@@ -3131,13 +3216,13 @@ Object.defineProperty(Dialog.prototype, "bottomFromTop", {
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
-	get: function() { return window.innerHeight - this.bottomFromTop; },
+	get: function() { var bft = this.bottomFromTop; return typeof bft === "number" && bft === bft ? Helpers.getViewportHeight() - bft : 0; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
 			var bounds = WindowManager.windowBounds;
 			if (bottom > bounds.bottom) bottom = bounds.bottom;
 			if (bottom < bounds.top) bottom = bounds.top;
-			this.height = (window.innerHeight - bottom) - this.y;
+			this.height = (Helpers.getViewportHeight() - bottom) - this.y;
 		}
 	}
 });
@@ -3680,13 +3765,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
 				self.y = Anim.lerp(startPos.y, 0, ease(t));
-				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
-				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
+				self.width = Anim.lerp(startSize.x, Helpers.getViewportWidth(), ease(t));
+				self.height = Anim.lerp(startSize.y, Helpers.getViewportHeight(), ease(t));
 			} else {
 				self.x = Anim.lerp(0, startPos.x, ease(t));
 				self.y = Anim.lerp(0, startPos.y, ease(t));
-				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
-				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
+				self.width = Anim.lerp(Helpers.getViewportWidth(), startSize.x, ease(t));
+				self.height = Anim.lerp(Helpers.getViewportHeight(), startSize.y, ease(t));
 			}
 		}, function () {
 			if (enable) toggleMaximizedFallback();
@@ -3730,8 +3815,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}
 
 	var windowSection = windowManager.getSnapContainer(this);
-	var endWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
-	var endHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
+	var endWidth = windowSection ? windowSection.clientWidth : Helpers.getViewportWidth();
+	var endHeight = windowSection ? windowSection.clientHeight : Helpers.getViewportHeight();
 	var startWidth = this.width || target.offsetWidth || 300;
 	var startHeight = this.height || target.offsetHeight || 200;
 	var startX = this.x;
@@ -3937,8 +4022,8 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (y < bounds.top) y = bounds.top;
 		if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	}
-	var windowWidth = window.innerWidth;
-	var windowHeight = window.innerHeight;
+	var windowWidth = Helpers.getViewportWidth();
+	var windowHeight = Helpers.getViewportHeight();
 	var previousX = this._x, previousY = this._y;
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
@@ -3978,11 +4063,11 @@ Dialog.prototype.setZ = function(z) {
 	if (previous !== this._z) this.broadcastState({ z: this._z });
 };
 Dialog.prototype.updateWidth = function () {
-	if (this.useTransform) this.target.style.width = Helpers.toPixels(this._width);
+	if (this.useTransform || this.useScale) this.target.style.width = Helpers.toPixels(this._width);
 	else this.target.style.right = Helpers.toPixels(this.right);
 };
 Dialog.prototype.updateHeight = function () {
-	if (this.useTransform) this.target.style.height = Helpers.toPixels(this._height);
+	if (this.useTransform || this.useScale) this.target.style.height = Helpers.toPixels(this._height);
 	else this.target.style.bottom = Helpers.toPixels(this.bottom);
 };
 /**
@@ -4277,11 +4362,12 @@ Dialog.prototype.update = function () {
 /**
  * @param {number} [width]
  * @param {number} [height]
+ * @param {boolean} [update]
  */
-Dialog.prototype.setMinSize = function (width, height) {
+Dialog.prototype.setMinSize = function (width, height, update) {
 	this._minWidth = typeof width === "number" ? width : 180;
 	this._minHeight = typeof height === "number" ? height : 200;
-	this.resize();
+	if (update !== false) this.resize();
 };
 /**
  * @param {number} [width]
@@ -4422,7 +4508,7 @@ Dialog.prototype.createPopOut = function() {
 		}
 
 		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
-		var width = self._popupWindow.innerWidth || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
+		var width = self._popupHelpers.getViewportWidth() || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
 		outerX = Math.round(outerX);
 		outerY = Math.round(outerY);
 		width = Math.round(width);
@@ -4460,7 +4546,7 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 		target.style.height = "";
 	}
 
-	this.updateScale(useTransform);
+	this.updateScale(this.useScale);
 
 	this.update();
 };
@@ -4474,8 +4560,9 @@ Dialog.prototype.updateScale = function(useScale) {
 		this.toggleMinSizeConstraints(this.maximized);
 	} else {
 		if (this.useTransform) return;
-		target.style.right = Helpers.toPixels(this.right);
-		target.style.bottom = Helpers.toPixels(this.bottom);
+		var right = this.right, bottom = this.bottom;
+		if (right === right) target.style.right = Helpers.toPixels(right);
+		if (bottom === bottom) target.style.bottom = Helpers.toPixels(bottom);
 	}
 	target.classList.toggle("use-scale", useScale);
 
