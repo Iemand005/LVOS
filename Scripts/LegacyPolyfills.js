@@ -434,6 +434,84 @@ if (typeof Array.from != "function") {
   window.Promise = ES3Promise;
 })();
 
+/* Global Event Listener Polyfill for IE8 and IE7 */
+(function(win, doc) {
+	if (win.addEventListener) return; // Native support exists
+
+	function createCustomEvent(element, eventType, handler) {
+		return function(e) {
+			e = e || win.event;
+
+			// Normalize target
+			if (!e.target) e.target = e.srcElement || doc;
+
+			// Polyfill preventDefault
+			if (!e.preventDefault) {
+				e.preventDefault = function() {
+					e.returnValue = false;
+				};
+			}
+
+			// Polyfill stopPropagation & stopImmediatePropagation
+			if (!e.stopPropagation) {
+				e.stopPropagation = function() {
+					e.cancelBubble = true;
+				};
+			}
+			if (!e.stopImmediatePropagation) {
+				e.stopImmediatePropagation = function() {
+					e._isImmediatePropagationStopped = true;
+					e.cancelBubble = true;
+				};
+			}
+
+			// Bind correct `this` context to the DOM node
+			return handler.call(element, e);
+		};
+	}
+
+	function addEventListenerPolyfill(type, handler) {
+		var element = this;
+		if (!element._events) element._events = {};
+		if (!element._events[type]) element._events[type] = [];
+
+		var wrapper = createCustomEvent(element, type, handler);
+		element._events[type].push({ original: handler, wrapper: wrapper });
+
+		if (element.attachEvent) {
+			element.attachEvent("on" + type, wrapper);
+		}
+	}
+
+	function removeEventListenerPolyfill(type, handler) {
+		var element = this;
+		if (!element._events || !element._events[type]) return;
+
+		var list = element._events[type];
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].original === handler) {
+				if (element.detachEvent) {
+					element.detachEvent("on" + type, list[i].wrapper);
+				}
+				list.splice(i, 1);
+				break;
+			}
+		}
+	}
+
+	// Apply polyfill globally to Element, Document, and Window
+	var targets = [win, doc];
+	if (typeof Element !== "undefined") targets.push(Element.prototype);
+	if (typeof HTMLDocument !== "undefined") targets.push(HTMLDocument.prototype);
+
+	for (var i = 0; i < targets.length; i++) {
+		if (targets[i]) {
+			targets[i].addEventListener = addEventListenerPolyfill;
+			targets[i].removeEventListener = removeEventListenerPolyfill;
+		}
+	}
+})(window, document);
+
 (function () {
 	if (!("Element" in window)) {
 		function Element() {
