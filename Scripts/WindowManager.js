@@ -4546,7 +4546,7 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 		target.style.height = "";
 	}
 
-	this.updateScale(useTransform);
+	this.updateScale(this.useScale);
 
 	this.update();
 };
