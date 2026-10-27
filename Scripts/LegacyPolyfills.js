@@ -690,3 +690,13 @@ ActiveXStorage.prototype.getItem = function (key) {
 })();
 
 if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function(){};
+
+if (typeof Event !== "undefined" && Event.prototype) {
+	if (!Event.prototype.stopImmediatePropagation) {
+		Event.prototype.stopImmediatePropagation = function() {
+			this.isImmediatePropagationStopped = function() { return true; };
+			this.cancelBubble = true;
+			if (this.stopPropagation) this.stopPropagation();
+		};
+	}
+}
