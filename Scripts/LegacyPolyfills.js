@@ -435,6 +435,15 @@ if (typeof Array.from != "function") {
 })();
 
 (function () {
+	if (!("Element" in window)) {
+		function Element() {
+
+		};
+		window.Element = Element;
+	}
+})();
+
+(function () {
 
     if (window.addEventListener) return;
 
