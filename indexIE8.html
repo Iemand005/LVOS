@@ -20,8 +20,8 @@
     </script>
 
 	<script>
-		window.onerror = function(msg, url, line) {
-			alert(url + " JS Error on line " + line + ": " + msg);
+		window.onerror = function(msg, url, line, character, error) {
+			alert(url + " JS Error on line " + line + ":" + character + " Because " + msg);
 			return true; // suppress default handling
 		};
 	</script>
