@@ -155,7 +155,7 @@ Helpers.isElement = function(object) { return object && "nodeType" in object || 
 
 /** @param {Window} window */
 function getWindowChromeHeight(window) {
-	return window.outerHeight - window.innerHeight;
+	return window.outerHeight - Helpers.getViewportHeight();
 }
 
 /**
@@ -998,8 +998,8 @@ WindowManager.recalculateWindowBounds = function() {
 	var inset = WindowManager.windowBoundsInset;
 	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
 	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
-	WindowManager._windowBounds.right = inset.right !== null ? window.innerWidth - inset.right : Infinity;
-	WindowManager._windowBounds.bottom = inset.bottom !== null ? window.innerHeight - inset.bottom : Infinity;
+	WindowManager._windowBounds.right = inset.right !== null ? Helpers.getViewportWidth() - inset.right : Infinity;
+	WindowManager._windowBounds.bottom = inset.bottom !== null ? Helpers.getViewportHeight() - inset.bottom : Infinity;
 };
 
 Object.defineProperty(WindowManager, "windowBounds", {
@@ -1404,7 +1404,7 @@ WindowManager.prototype.snapWidth = function (section) {
 /**  @param {HTMLElement | null} [section] */
 WindowManager.prototype.snapHeight = function (section) {
 	var area = section || this.getSnapContainer();
-	return area ? area.clientHeight : window.innerHeight;
+	return area ? area.clientHeight : Helpers.getViewportHeight();
 };
 
 /**
@@ -2713,7 +2713,7 @@ function Dialog(object) {
 	if (!Helpers.isElement(object))
 		if (object instanceof Dialog)
 			this.move(object.x, object.y);
-		else this.moveCenterTo(window.innerWidth / 2, window.innerHeight / 2);
+		else this.moveCenterTo(window.innerWidth / 2, Helpers.getViewportHeight() / 2);
 
 	// if (this.application && this.application.launch) this.launch();
 
@@ -3003,7 +3003,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 
 Object.defineProperty(Dialog.prototype, "y", {
 	get: function () {
-		return this._y * window.innerHeight;
+		return this._y * Helpers.getViewportHeight();
 	},
 	set: function (y) {
 		if (typeof y === "number") this.move(this.x, y);
@@ -3128,11 +3128,11 @@ Object.defineProperty(Dialog.prototype, "top", {
 		var height = Math.max(Math.min(bottom - top, this.maxHeight), this.minHeight);
 		top = bottom - height;
 		this._height = height;
-		this._y = top / window.innerHeight;
+		this._y = top / Helpers.getViewportHeight();
 		if (this.useTransform) {
 			this.target.style.height = Helpers.toPixels(height);
 			this.updateTransform();
-		} else this.setInset(top, this.left, this.right, window.innerHeight - bottom);
+		} else this.setInset(top, this.left, this.right, Helpers.getViewportHeight() - bottom);
 		this._isMinHeight = height === this.minHeight;
 	}
 });
@@ -3179,13 +3179,13 @@ Object.defineProperty(Dialog.prototype, "bottomFromTop", {
 });
 
 Object.defineProperty(Dialog.prototype, "bottom", {
-	get: function() { var bft = this.bottomFromTop; return typeof bft === "number" && bft === bft ? window.innerHeight - bft : 0; },
+	get: function() { var bft = this.bottomFromTop; return typeof bft === "number" && bft === bft ? Helpers.getViewportHeight() - bft : 0; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
 			var bounds = WindowManager.windowBounds;
 			if (bottom > bounds.bottom) bottom = bounds.bottom;
 			if (bottom < bounds.top) bottom = bounds.top;
-			this.height = (window.innerHeight - bottom) - this.y;
+			this.height = (Helpers.getViewportHeight() - bottom) - this.y;
 		}
 	}
 });
@@ -3729,12 +3729,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
 				self.y = Anim.lerp(startPos.y, 0, ease(t));
 				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
-				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
+				self.height = Anim.lerp(startSize.y, Helpers.getViewportHeight(), ease(t));
 			} else {
 				self.x = Anim.lerp(0, startPos.x, ease(t));
 				self.y = Anim.lerp(0, startPos.y, ease(t));
 				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
-				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
+				self.height = Anim.lerp(Helpers.getViewportHeight(), startSize.y, ease(t));
 			}
 		}, function () {
 			if (enable) toggleMaximizedFallback();
@@ -3779,7 +3779,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	var windowSection = windowManager.getSnapContainer(this);
 	var endWidth = windowSection ? windowSection.clientWidth : window.innerWidth;
-	var endHeight = windowSection ? windowSection.clientHeight : window.innerHeight;
+	var endHeight = windowSection ? windowSection.clientHeight : Helpers.getViewportHeight();
 	var startWidth = this.width || target.offsetWidth || 300;
 	var startHeight = this.height || target.offsetHeight || 200;
 	var startX = this.x;
@@ -3986,7 +3986,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (bounds.bottom !== Infinity && y > bounds.bottom - this.height) y = bounds.bottom - this.height;
 	}
 	var windowWidth = window.innerWidth;
-	var windowHeight = window.innerHeight;
+	var windowHeight = Helpers.getViewportHeight();
 	var previousX = this._x, previousY = this._y;
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
