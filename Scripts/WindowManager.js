@@ -2576,17 +2576,11 @@ function Dialog(object) {
 				if (element && this.application) {
 					this.target = element;
 					var doc = this.contentDocument;
-					var self2 = this;
-					this.openUrl(this.application.src);
-					setTimeout(function() { if (!self2.frame) self2.openUrl(self2.application.src); }, 0);
-					setTimeout(function() { if (!self2.frame) self2.openUrl(self2.application.src); }, 50);
+					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
 				}
 			} else {
-			this.target = createDialogElement();
-			var self = this;
-			this.openUrl(object.src);
-			setTimeout(function() { if (!self.frame && self.application) self.openUrl(self.application.src); }, 0);
-			setTimeout(function() { if (!self.frame && self.application) self.openUrl(self.application.src); }, 50);
+				this.target = createDialogElement();
+				this.openUrl(object.src);
 			}
 
 			if (this.windowTarget) this.windowTarget.dialog = this;
@@ -2996,12 +2990,22 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
 	if (frame || create === false) return frame;
 	var body = this.body;
-	if (!body) {
-		var content = this.content;
-		if (content) body = content;
-		else body = this.target;
+	if (!body && this.target) {
+		var content = this.content || this.getElementByTagOrClassName("content", this.target);
+		if (content) {
+			body = this.getElementByTagOrClassName("article", content);
+			if (!body && content.getElementsByTagName) {
+				var articles = content.getElementsByTagName("article");
+				if (articles && articles.length) body = articles[0];
+			}
+		}
+		if (!body && this.target.getElementsByTagName) {
+			var articles2 = this.target.getElementsByTagName("article");
+			if (articles2 && articles2.length) body = articles2[0];
+		}
 	}
 	if (!body) return null;
+	if (this.target && body === this.target) return null;
 	return body.appendChild(document.createElement("iframe"));
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
@@ -4428,13 +4432,10 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
-	var self = this;
 	var frame = this.getOrCreateFrame(true);
-	if (!frame) {
-		setTimeout(function() { self.openUrl(url); }, 0);
-		return;
-	}
+	if (!frame) return;
 
+	var self = this;
 	var timeout = -1;
 
 	frame.onload = function() {
@@ -4457,9 +4458,7 @@ Dialog.prototype.openUrl = function(url) {
 		while (index < fallbackUrls.length && !(nextUrl = fallbackUrls[index++]));
 		if (!nextUrl || !frame) return;
 
-		try {
-			frame.src = nextUrl;
-		} catch (ex) { }
+		frame.src = nextUrl;
 		self._src = nextUrl;
 
 		clearTimeout(timeout);
