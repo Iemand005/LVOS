@@ -2617,22 +2617,21 @@ function Dialog(object) {
 
 	if(this.resizable && createSizers) this._createSizers();
 
-	// target.addEventListener("dragstart", cancelDomEvent, false);
-	target.addEventListener("selectstart", function (event) {
+	target.onselectstart = function (event) {
 		if (self._ctrlDrag) return;
 		cancelDomEvent(event);
-	}, false);
+	};
 
 	var body = this.body;
-	if (body) body.addEventListener("load", function () { try {
+	if (body) body.onload = function () { try {
 		self.verifyEjectCapability();
 	} catch (exception) {
 		console.log(exception);
 		if (buttons[0]) buttons[0].style.display = "none";
-	}}, false);
+	}};
 
 	var header = this.titleBar;
-	if (header) target.addEventListener("dblclick", function (event) {
+	if (header) target.ondblclick = function (event) {
 		var rect = getRect(header);
 		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 
@@ -2642,7 +2641,7 @@ function Dialog(object) {
 			node = node.parentElement;
 		}
 		self.toggleMaximized();
-	}, false);
+	};
 
 
 	if (supportsPointer) target.addEventListener("pointerdown", this.activationHandler, false);
