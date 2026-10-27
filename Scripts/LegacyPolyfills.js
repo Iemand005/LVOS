@@ -66,6 +66,7 @@ if(!Array.prototype.forEach) Array.prototype.forEach = forEachIndexed;
 var nodeListPrototype = typeof NodeList != "undefined" ? NodeList.prototype : null;
 if (nodeListPrototype && !nodeListPrototype.forEach) nodeListPrototype.forEach = forEachIndexed;
 
+if (!(document.documentMode && document.documentMode < 9))
 if (!Object.defineProperty) {
     Object.defineProperty = function(o, key, attributes) {
         if (!attributes || !(o instanceof Object)) return;
