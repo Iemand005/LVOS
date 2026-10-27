@@ -69,13 +69,19 @@ var flags = {
 	updateRateLimit: allowUpdateRateLimit,
 	useDragOverlay: true,
 	broadcastWindowMoves: !document.documentMode,
-	_useTransform: useTransform,
 	useAnimations: true,
 	ieDropCompatibleMode: true,
+	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
 		this._useTransform = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+	},
+	_useScale: useScale,
+	get useScale() { return this._useScale; },
+	set useScale(value) {
+		this._useScale = value;
+		windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
 	},
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
