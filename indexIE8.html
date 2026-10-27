@@ -21,7 +21,7 @@
 
 	<script>
 		window.onerror = function(msg, url, line) {
-			alert("JS Error on line " + line + ": " + msg);
+			alert(url + " JS Error on line " + line + ": " + msg);
 			return true; // suppress default handling
 		};
 	</script>
