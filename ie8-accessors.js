@@ -355,6 +355,13 @@ function createTransformer(sourceFile, info, context) {
 	 */
 	const accessInfo = (expression) => {
 		if (ts.isPropertyAccessExpression(expression)) {
+			if (
+				ts.isPropertyAccessExpression(expression.expression) &&
+				expression.expression.name.text === "style"
+			) {
+				return null;
+			}
+
 			const name = expression.name.text;
 			const isAccessorObject = ts.isIdentifier(expression.expression) && accessorObjects.has(expression.expression.text);
 			if (isAccessorName(name) || isAccessorObject)
