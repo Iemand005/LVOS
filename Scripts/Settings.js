@@ -68,10 +68,10 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 					toggle.id = "flag-" + flagId;
 					toggle.checked = flagValue;
 
-                    toggle.addEventListener("change", function() {
+                    toggle.onchange = function() {
                         flags[currentKey] = toggle.checked;
                         handler.saveFlags(flags);
-                    }, false);
+                    };
 
 					var label = document.createElement("label");
 					label.htmlFor = toggle.id;
