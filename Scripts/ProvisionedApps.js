@@ -87,7 +87,7 @@ var games = [
 	provisionedApp("Horizon Background", "horizon-bg", "https://iemand005.github.io/HorizonBackground/", { wallpaper: true })
 ];
 
-if (typeof windowManager !== "undefined") {
+if (typeof windowManager !== "undefined" && "Window" in window) {
 	Object.defineProperty(Window.prototype, "windows", {
 		get: function () {
 			return windowManager.windows;
