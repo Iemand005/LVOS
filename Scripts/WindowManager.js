@@ -2527,8 +2527,8 @@ function Dialog(object) {
 	 * @param {number} [id]
 	 */
 	this.activationHandler = function (ev, id) {
-		self._ctrlDrag = !!ev.ctrlKey;
-		if (ev.ctrlKey) {
+		self._ctrlDrag = !!(ev && ev.ctrlKey);
+		if (self._ctrlDrag) {
 			ev.stopImmediatePropagation();
 			return;
 		}
