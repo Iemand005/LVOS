@@ -13,7 +13,7 @@
 
 // Modifiable settings
 var useTransform = true,
-	useScale = false;
+	useScale = true;
 
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
