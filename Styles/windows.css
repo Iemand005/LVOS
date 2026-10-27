@@ -854,3 +854,42 @@ button:hover {
     height: 100%;
     border: none;
 }
+
+/* Outer window table */
+.window table.content {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Force first row in IE7 to collapse to 1px / 30px */
+.window table.content > tbody > tr:first-child,
+.window table.content td.header {
+    height: 30px !important; /* Fixed height for IE7 */
+    max-height: 30px !important;
+    vertical-align: top !important;
+}
+
+/* Force header container div */
+.window .header-inner {
+    height: 30px !important;
+    max-height: 30px !important;
+    overflow: hidden !important;
+    zoom: 1; /* Triggers hasLayout in IE7 */
+}
+
+/* Force second row (article) to absorb 100% */
+.window table.content td.article {
+    height: 100% !important;
+    vertical-align: top !important;
+    position: relative;
+}
+
+/* Force iframe expansion */
+.window table.content td.article iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
