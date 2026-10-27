@@ -433,6 +433,14 @@ function createTransformer(sourceFile, info, context) {
 		if (ts.isPropertyAccessExpression(node)) {
 			const expression = ts.visitNode(node.expression, visit);
 			const name = node.name.text;
+
+			if (
+				ts.isPropertyAccessExpression(node.expression) &&
+				node.expression.name.text === "style"
+			) {
+				return ts.factory.updatePropertyAccessExpression(node, expression, node.name);
+			}
+
 			const isAccessorObject = ts.isIdentifier(node.expression) && accessorObjects.has(node.expression.text);
 			const isCallee = ts.isCallExpression(node.parent) && node.parent.expression === node;
 			if (isAccessorName(name) || (isAccessorObject && !isCallee))
