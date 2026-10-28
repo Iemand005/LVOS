@@ -615,6 +615,9 @@ aside#metroapplist > button {
 	width: 100%;
 	height: 100%;
 	object-fit: scale-down;
+
+	scale: 0.2;
+	filter: blur(10px);
 }
 
 #dockapplist {
