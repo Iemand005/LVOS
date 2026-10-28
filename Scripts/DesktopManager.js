@@ -373,11 +373,12 @@ DesktopManager.prototype.playBootAnimation = function() {
 	var log = logo;
 
 	this._endAnim = function() {
+		this.toggleOverlayVisible(false);
+
 		Helpers.animateElement(log, function() {
 			log.classList.add("end");
 
 		});
-		this.toggleOverlayVisible(false)
 	};
 
 	Helpers.animateElement(log, function() {
