@@ -373,9 +373,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 
 	}, undefined, function() {
 		Helpers.animateElement(log, function() {
-			log.classList.add("neutral");
-
-		}, undefined, function() {
+			log.classList.add("end");
 
 		});
 	});
