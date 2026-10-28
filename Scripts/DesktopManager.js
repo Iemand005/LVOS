@@ -350,15 +350,17 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 
 /** @param {boolean} visible */
 DesktopManager.prototype.toggleOverlayVisible = function(visible) {
-	var overlay = document.getElementById("overlay");
+	var overlay = this.overlay;
 	if (!overlay) return;
 	overlay.className = visible ? "open" : "";
 };
 
 DesktopManager.prototype.playBootAnimation = function() {
-	var img = document.createElement("img")
-	o.appendChild(img) 
-}
+	var overlay = this.overlay;
+	if (!overlay) return;
+	var logo = document.createElement("img");
+	overlay.appendChild(logo); 
+};
 
 DesktopManager.prototype.isExposéSupported = function() {
     return "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
