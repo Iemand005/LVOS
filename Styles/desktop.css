@@ -683,7 +683,7 @@ aside#metroapplist > button {
 	transition: all 200ms cubic-bezier(.77,.14,.38,.51);
 }
 
-main.animating {
+main {
 	perspective: 1000px;
 }
 
