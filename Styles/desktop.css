@@ -823,6 +823,10 @@ body > canvas {
 	height: 100%;
 }
 
+.no-animations {
+	transition: none !important;
+}
+
 #window-snap {
 	position: absolute;
     backdrop-filter: blur(20px) saturate(1.5);
