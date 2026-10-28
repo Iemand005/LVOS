@@ -469,6 +469,8 @@ DesktopManager.prototype.playBootAnimation = function(name) {
 	if (!logo) return;
 	var log = logo;
 
+	log.className = "";
+
 	var self = this;
 	this._endAnim = function() {
 		self.toggleOverlayVisible(false);
