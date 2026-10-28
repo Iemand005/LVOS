@@ -2446,7 +2446,7 @@ function Dialog(object) {
 	this._previousX = 0;
 	this._previousY = 0;
 	this._minWidth = 200;
-	this._minHeight = 200;
+	this._minHeight = 40;
 	this._maxWidth = 2000;
 	this._maxHeight = 1000;
 	this._minAspectRatio = 0;
