@@ -31,7 +31,8 @@ export default defineConfig(
 				getScreenShooter: "readonly",
 				launchpad: "readonly",
 				Helpers: "readonly",
-				TabScroller: "readonly"
+				TabScroller: "readonly",
+				initApps: "readonly"
 			}
 		},
 

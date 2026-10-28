@@ -337,6 +337,8 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
+	this.playBootAnimation();
+
     var windowSection = document.getElementById("window-section");
     if (windowSection) {
         this.desktopParent = windowSection.parentNode;
@@ -345,7 +347,8 @@ DesktopManager.prototype.init = function() {
 
     this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
 
-	this.playBootAnimation();
+
+	initApps();
 };
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {
