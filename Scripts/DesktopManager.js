@@ -443,7 +443,8 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	overlay.className = className;
 };
 
-DesktopManager.prototype.playBootAnimation = function() {
+/** @Param {string} name */
+DesktopManager.prototype.playBootAnimation = function(name) {
 	this.toggleOverlayVisible(true, false);
 	var overlay = this.overlay;
 	if (!overlay) return;
