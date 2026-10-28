@@ -1,0 +1,19 @@
+
+.window > .sizer-3, .window > div.touch-sizer-3 {
+	bottom: -30px;
+	left: 0;
+	cursor: s-resize;
+	width: 100%;
+}
+
+.window > .sizer-7 {
+	bottom: -30px;
+	right: 0;
+	cursor: se-resize;
+}
+
+.window > .sizer-8 {
+	bottom: -30px;
+	left: 0;
+	cursor: sw-resize;
+}
