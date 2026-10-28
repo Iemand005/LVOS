@@ -434,8 +434,9 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 /**
  * @param {boolean} visible
  * @param {boolean} [animate]
+ * @param {string} [className]
  */
-DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
+DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, className) {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var className = visible ? "open " : "";
@@ -443,7 +444,9 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	overlay.className = className;
 };
 
-/** @Param {string} name */
+/** @typedef {"zoom" | "flip"} AnimationName */
+
+/** @param {AnimationName} [name] */
 DesktopManager.prototype.playBootAnimation = function(name) {
 	this.toggleOverlayVisible(true, false);
 	var overlay = this.overlay;
