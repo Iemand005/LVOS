@@ -9,11 +9,11 @@
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function loadScript(url, callback) {
-  var script = document.createElement('script');
+  var script = document.createElement("script");
   script.src = url;
-  
+
   script.onload = callback;
-  
+
   document.head.appendChild(script);
 }
 
@@ -47,9 +47,9 @@ function init() {
 
 	if (location.protocol === "file:") try {
 		/**@type {NodeListOf<HTMLScriptElement>}*/
-		var scripts = document.querySelectorAll('script[type="module"]');
+		var scripts = document.querySelectorAll("script[type=\"module\"]");
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
-			var replacement = document.createElement('script');
+			var replacement = document.createElement("script");
 			replacement.src = s.src;
 			try {
 
@@ -294,7 +294,10 @@ function createDesktop() {
     return windowSection;
 }
 
-/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+/**
+ * @param {string} [name] @param {HTMLElement} [desktopElement]
+ * @param desktopElement
+ */
 function Desktop(name, desktopElement) {
     this.name = name;
 
@@ -448,6 +451,12 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extra
 
 	if (animate) overlay.classList.add("animating");
 	else overlay.classList.remove("animating");
+
+	if (extraClass) overlay.classList.add(extraClass);
+};
+
+DesktopManager.prototype.resetOverlay = function() {
+
 };
 
 /** @typedef {"zoom" | "flip"} AnimationName */
@@ -533,7 +542,10 @@ DesktopManager.prototype.disableExposé = function() {
     this.gapDesktop = null;
 };
 
-/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+/**
+ * @param {string} [name] @param {HTMLElement} [desktopElement]
+ * @param desktopElement
+ */
 DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     if (!this.scrollTabs) return;
     var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1), desktopElement);
@@ -645,7 +657,10 @@ DesktopManager.prototype.clearWallpaperContent = function() {
 	wallpaper.style.backgroundImage = "";
 };
 
-/** Apply one of the registered (provisioned) wallpaper apps, e.g. Frosted Colours or Horizon Background. */
+/**
+ * Apply one of the registered (provisioned) wallpaper apps, e.g. Frosted Colours or Horizon Background.
+ * @param id
+ */
 DesktopManager.prototype.applyRegisteredWallpaper = function(id) {
 	this.clearWallpaperContent();
 	var frame = this.ensureWallpaperFrame();
@@ -757,7 +772,8 @@ function initWallpaperDB(onSuccess, onFailure) {
         }
     };
 }
-/** /
+/**
+ * /
  * @param {string} dataUrl
  */
 function localStorageFabblack(dataUrl) {
