@@ -380,7 +380,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 		log.classList.add("neutral");
 
 	}, undefined, function() {
-		seett
+		setTimeout(endAnim, 1000)
 	});
 };
 
