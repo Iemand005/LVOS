@@ -869,6 +869,10 @@ button {
     zoom: 1; /* Triggers hasLayout in IE7 */
 }
 
+.window table.content tr {
+    height: 100% !important;
+}
+
 /* Force second row (article) to absorb 100% */
 .window table.content td.article {
     height: 100% !important;
