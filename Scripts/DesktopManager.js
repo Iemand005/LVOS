@@ -900,11 +900,13 @@ window.addEventListener("keydown", function(event) {
 		document.body.classList.add("slow-animations");
 	}
 
-	if (event.key === "J" && jebNumber === 0) {
+	console.log(event.key)
+
+	if (event.key === "j" && jebNumber === 0) {
 		jebNumber++;
-	} else if (event.key === "E" && jebNumber === 1) {
+	} else if (event.key === "e" && jebNumber === 1) {
 		jebNumber++;
-	} else if (event.key === "B" && jebNumber === 2) {
+	} else if (event.key === "b" && jebNumber === 2) {
 		setTheme("jeb");
 	}
 }, false);
