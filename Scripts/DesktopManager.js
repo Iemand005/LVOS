@@ -340,6 +340,8 @@ DesktopManager.prototype.init = function() {
     }
 
     this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
+
+	this.toggleOverlayVisible(false);
 };
 
 /** @param {boolean} visible */
