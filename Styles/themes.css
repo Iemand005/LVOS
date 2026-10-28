@@ -848,23 +848,22 @@ body.jeb .window > content svg {
 }
 
 @keyframes jeb {
-	0%   { color: black; fill:black; background: red; }
-	10%  { color: black; fill:black; background: orange; }
-	20%  { color: black; fill:black; background: yellow; }
-	40%  { color: black; fill:black; background: rgb(0, 255, 0); }
-	70%  { color: white; fill:white; background: blue; }
-	90%  { color: white; fill:white; background: purple; }
-	100% { color: black; fill:blackblack; background: red; }
+	0%, 100%  { background: orange; }
+	10%  { background: yellow; }
+	20%  { background: rgb(0, 255, 0); }
+	40%  { background: blue; }
+	60%  { background: purple; }
+	80% { background: red; }
 }
 
 @keyframes jeb-svg {
-	0%   { fill:black; }
-	10%  { fill:black; }
-	20%  { fill:black; }
-	40%  { fill:black; }
-	70%  { fill:white; }
-	90%  { fill:white; }
-	100% { fill:blackblack; }
+	0%   { color: black; fill:black; }
+	10%  { color: black; fill:black; }
+	20%  { color: black; fill:black; }
+	40%  { color: black; fill:black; }
+	70%  { color: white; fill:white; }
+	90%  { color: white; fill:white; }
+	100% { color: black; fill:black; }
 }
 
 @supports (corner-shape: squircle) {
