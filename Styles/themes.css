@@ -847,13 +847,13 @@ body.jeb .window > content h1 {
 }
 
 @keyframes jeb {
-	0%  { color: white; background: red; }
-	10% { color: black; background: orange; }
-	20% { color: black; background: yellow; }
-	40% { color: black; background: rgb(0, 255, 0); }
-	70% { color: white; background: blue; }
-	90% { color: white; background: purple; }
-	100% { color: white; background: red; }
+	0%   { color: white; fill:white; background: red; }
+	10%  { color: black; fill:black; background: orange; }
+	20%  { color: black; fill:black; background: yellow; }
+	40%  { color: black; fill:black; background: rgb(0, 255, 0); }
+	70%  { color: white; fill:white; background: blue; }
+	90%  { color: white; fill:white; background: purple; }
+	100% { color: white; fill:white; background: red; }
 }
 
 @supports (corner-shape: squircle) {
