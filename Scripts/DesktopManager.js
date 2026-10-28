@@ -310,6 +310,9 @@ function DesktopManager() {
     this.desktopParent = null;
     /** @type {Node | null} */
     this.desktopNextSibling = null;
+
+	/** @type {(() => void) | null} */
+	this._endAnim = null;
 }
 
 Object.defineProperty(DesktopManager.prototype, "isExposé", {
