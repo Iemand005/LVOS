@@ -402,6 +402,11 @@ function installAppFromUrl(useProxy) {
 function loadElements() {
 	if (typeof flags !== "undefined") settings.loadFlags(flags);
 
+	if (!flags.bootAnimation) {
+		var logo = document.getElementById("boot-logo");
+		if (logo) 
+	}
+
 	elements.color = document.getElementById("color");
 	elements.accent = document.getElementById("accent");
 	elements.border = document.getElementById("border");
