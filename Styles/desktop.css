@@ -824,9 +824,7 @@ body > canvas {
 }
 
 .no-animations * {
-	transition: none !important;
-	animation: none !important;
-	animation-duration: 0ms !important;
+	animation-duration: 0hos !important;
 	transition-duration: 0s !important;
 }
 
