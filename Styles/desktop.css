@@ -826,7 +826,8 @@ body > canvas {
 .no-animations * {
 	transition: none !important;
 	animation: none !important;
-	animation-duration: 0ms;
+	animation-duration: 0ms !important;
+	transition-duration: 0s !important;
 }
 
 #window-snap {
