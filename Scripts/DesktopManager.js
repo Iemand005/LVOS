@@ -516,7 +516,7 @@ DesktopManager.prototype.enableExposé = function() {
 
     document.body.classList.add("exposé");
 
-	var main = document.getElementById("dekstop");
+	var main = document.getElementById("desktop");
     this.scrollTabs = main ? new TabScroller(main) : null;
     this.addDesktop("Main", windowSection);
     this.addDesktop();
