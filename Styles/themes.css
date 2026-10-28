@@ -857,6 +857,16 @@ body.jeb .window > content svg {
 	100% { color: black; fill:blackblack; background: red; }
 }
 
+@keyframes jeb-svg {
+	0%   { fill:black; }
+	10%  { fill:black; }
+	20%  { fill:black; }
+	40%  { fill:black; }
+	70%  { fill:white; }
+	90%  { fill:white; }
+	100% { fill:blackblack; }
+}
+
 @supports (corner-shape: squircle) {
 	.squircles .window {
 		--window-outer-radius: calc(var(--window-radius) * 2);
