@@ -82,7 +82,7 @@ body {
 	margin: 0;
 	pointer-events: none;
 	justify-content: space-between;
-	padding: 8px;
+	padding: 0 8px;
 	border-width: 0px;
 	border-color: inherit;
 	cursor: grab;
