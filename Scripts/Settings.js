@@ -382,7 +382,7 @@ function installAppFromUrl(useProxy) {
 				getFaviconUrl(url)
 			);
 		} else {
-			app = appManager.createApp(url);
+			app ={"state":{"title":"Calculator","x":161.1999969482422,"y":40,"z":609,"width":233.60000610351562,"height":250,"open":true,"maximized":false},"app":{"title":"Calculator","id":"calculator","src":"./Applications/Calculator/calculator.html","minWidth":180,"minHeight":40},"offset":{"x":-61,"y":-105}} appManager.createApp(url);
 		}
 		appManager.addApp(app);
 		appManager.saveApp(app);
