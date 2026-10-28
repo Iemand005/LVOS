@@ -341,7 +341,7 @@ DesktopManager.prototype.init = function() {
 
     this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
 
-	this.toggleOverlayVisible(false);
+	this.playBootAnimation();
 };
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {
@@ -350,7 +350,7 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 
 /**
  * @param {boolean} visible
- * @param {boolean} animate
+ * @param {boolean} [animate]
  */
 DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	var overlay = this.overlay;
