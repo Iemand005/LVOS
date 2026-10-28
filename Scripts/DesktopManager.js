@@ -368,14 +368,19 @@ DesktopManager.prototype.playBootAnimation = function() {
 	// logo.onanimationend
 	if (!logo) return;
 	var log = logo;
-	Helpers.animateElement(log, function() {
-		log.classList.add("neutral");
 
-	}, undefined, function() {
+	var endAnim = function() {
 		Helpers.animateElement(log, function() {
 			log.classList.add("end");
 
 		});
+	};
+
+	Helpers.animateElement(log, function() {
+		log.classList.add("neutral");
+
+	}, undefined, function() {
+		seett
 	});
 };
 
