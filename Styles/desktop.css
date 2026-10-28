@@ -618,6 +618,8 @@ aside#metroapplist > button {
 
 	scale: 0.2;
 	filter: blur(10px);
+
+	transition: all 300ms linear;
 }
 
 #dockapplist {
