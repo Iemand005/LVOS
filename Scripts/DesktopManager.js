@@ -424,7 +424,7 @@ DesktopManager.prototype.init = function() {
 	}
 
 
-	this.finishBootAnimationEarly();
+	setTimeout(this.finishBootAnimationEarly, 2000);
 };
 
 window.addEventListener('beforeunload', () => {
