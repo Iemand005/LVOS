@@ -445,7 +445,7 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extra
 	if (visible) overlay.classList.add("open");
 	else overlay.classList.remove("open");
 
-	if (animate) overlay.classList.add("animating");
+	if (animate 	`1`!!!) overlay.classList.add("animating");
 	else overlay.classList.remove("animating");
 
 	if (extraClass) overlay.classList.add(extraClass);
