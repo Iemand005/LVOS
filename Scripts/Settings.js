@@ -400,6 +400,8 @@ function installAppFromUrl(useProxy) {
 }
 
 function loadElements() {
+	if (typeof flags !== "undefined") settings.loadFlags(flags);
+
 	elements.color = document.getElementById("color");
 	elements.accent = document.getElementById("accent");
 	elements.border = document.getElementById("border");
@@ -441,7 +443,6 @@ function loadElements() {
 	}
 
 
-	if (typeof flags !== "undefined") settings.loadFlags(flags);
 }
 
 addEventListener("load", function() {
