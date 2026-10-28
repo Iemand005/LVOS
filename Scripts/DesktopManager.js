@@ -342,8 +342,8 @@ DesktopManager.prototype.init = function() {
     this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
 };
 
+/** @param {boolean} visible */
 DesktopManager.prototype.toggleOverlayVisible = function(visible) {
-qqq`q1	q1	`1	`1	`q11q	`q	`1queueMicrotask`q1	q1		1`
 	var overlay = document.getElementById("overlay");
 	if (!overlay) return;
 	overlay.className = visible ? "open" : "";
