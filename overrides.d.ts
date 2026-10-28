@@ -151,4 +151,4 @@ https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/v
 https://marketplace.visualstudio.com/_apis/public/gallery/publishers/VisualStudioExptTeam/vsextensions/vscodeintellicode/!.3.2/vspackage?targetPlatform=win32-x64
 VisualStudioExptTeam.vscodeintellicode\
 history
-hi
+hi				1``1	`1		`1q	`1q	`1	1q	`1	1	1`q	1q`q	`1q	`1q	`1q	1`1q	w`
