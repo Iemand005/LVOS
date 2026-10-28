@@ -349,6 +349,8 @@ DesktopManager.prototype.init = function() {
 
 
 	initApps();
+
+	this.finishBootAnimationEarly();
 };
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {
