@@ -456,7 +456,9 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extra
 };
 
 DesktopManager.prototype.resetOverlay = function() {
-
+	var overlay = this.overlay;
+	if (!overlay) return;
+	overlay.className = "";
 };
 
 /** @typedef {"zoom" | "flip"} AnimationName */
