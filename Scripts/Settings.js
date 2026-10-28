@@ -214,7 +214,9 @@ function setAccentColor(color) {
 	if (elements.accent) elements.accent.value = color;
 	settings.set("accentColor", color);
 	var isWhite = isColorDark(color);
-	var metroStyle = document.getElementById("metro").style, charmStyle = document.getElementById("charms").style;
+	var metro = document.getElementById("metro");
+	if (!metro) return;
+	var metroStyle = metro.style, charmStyle = document.getElementById("charms").style;
 	metroStyle.backgroundColor = charmStyle.backgroundColor = color;
 	metroStyle.color = charmStyle.color = isWhite?"white":"black";
 	// document.getElementById("metro").style.backgroundColor = document.getElementById("charms").style.backgroundColor = color;;
