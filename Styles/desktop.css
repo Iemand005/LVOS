@@ -625,6 +625,8 @@ aside#metroapplist > button {
 #boot-logo.neutral {
 	scale: 1;
 	filter: blur(0px);
+
+	transition: all 1000ms linear;
 }
 
 #boot-logo.neutral-big {
