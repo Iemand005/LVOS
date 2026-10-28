@@ -853,10 +853,10 @@ body > canvas {
 	height: 100%;
 }
 
-body.no-animations #charms,
-body.no-animations #desktop {
+body.no-animations #charms *,
+body.no-animations #desktop * {
 	animation-duration: 2ms;
-	transition-duration: 0s;
+	transition-duration: 0s;f
 }
 
 #window-snap {
