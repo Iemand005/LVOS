@@ -348,11 +348,16 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 	get: function() { return document.getElementById("overlay"); }
 });
 
-/** @param {boolean} visible */
-DesktopManager.prototype.toggleOverlayVisible = function(visible) {
+/**
+ * @param {boolean} visible
+ * @param {boolean} animate
+ */
+DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	var overlay = this.overlay;
 	if (!overlay) return;
-	overlay.className = visible ? "open animating" : "animating";
+	var className = visible ? "open" : "";
+	if (animate) className += "animating";
+	overlay.className = className;
 };
 
 DesktopManager.prototype.playBootAnimation = function() {
