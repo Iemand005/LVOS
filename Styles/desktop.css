@@ -612,7 +612,7 @@ aside#metroapplist > button {
 }
 
 #boot-logo {
-	will-change: opacity;
+	will-change: opacity, scale;
 }
 
 #overlay.zoom #boot-logo {
