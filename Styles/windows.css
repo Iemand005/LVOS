@@ -870,7 +870,7 @@ button {
 }
 
 .window table.content tr {
-    /* height: 100% !important; */
+    height: 100% !important;
 }
 
 /* Force second row (article) to absorb 100% */
