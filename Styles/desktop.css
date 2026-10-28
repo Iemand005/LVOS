@@ -824,8 +824,8 @@ body > canvas {
 }
 
 .no-animations *:not(#overlay) * {
-	animation-duration: 2ms !important;
-	transition-duration: 0s !important;
+	animation-duration: 2ms;
+	transition-duration: 0s;
 }
 
 #window-snap {
