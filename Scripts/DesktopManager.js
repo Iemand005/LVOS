@@ -359,7 +359,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.createElement("img");
-	overlay.appendChild(logo); 
+	overlay.appendChild(logo);
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
