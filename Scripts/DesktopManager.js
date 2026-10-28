@@ -427,18 +427,6 @@ DesktopManager.prototype.init = function() {
 	setTimeout(this.finishBootAnimationEarly, 200);
 };
 
-window.addEventListener('beforeunload', () => {
-  // Quickly inject or show a black/white overlay mask
-  const mask = document.createElement('div');
-  mask.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:white;z-index:99999;transition:opacity 0.2s;opacity:0;';
-  document.body.appendChild(mask);
-  
-  // Force a quick flash fade before the browser destroys the thread
-  requestAnimationFrame(() => {
-    mask.style.opacity = '1';
-  });
-});
-
 Object.defineProperty(DesktopManager.prototype, "overlay", {
 	get: function() { return document.getElementById("overlay"); }
 });
