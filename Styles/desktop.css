@@ -627,7 +627,7 @@ aside#metroapplist > button {
 	scale: 1;
 	filter: blur(0px);
 
-	opacity: 20;
+	opacity: 1;
 
 	/* transition: all 100ms cubic-bezier(.32,.24,.25,1); */
 
