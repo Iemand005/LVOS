@@ -387,7 +387,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 
 	}, "scale", function() {
 		log.classList.add("neutral-big");
-		if (this._endAnim) setTimeout(this._endAnim, 1000);
+		if (this._endAnim) setTimeout(this._endAnim, 500);
 	}, this);
 };
 
