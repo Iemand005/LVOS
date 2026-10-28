@@ -902,6 +902,10 @@ window.addEventListener("keydown", function(event) {
 
 	if (event.key === "J" && jebNumber === 0) {
 		jebNumber++;
+	} else if (event.key === "E" && jebNumber === 1) {
+		jebNumber++;
+	} else if (event.key === "B" && jebNumber === 2) {
+		setTheme("jeb");
 	}
 }, false);
 
