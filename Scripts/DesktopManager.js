@@ -449,7 +449,7 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extra
 
 /** @param {AnimationName} [name] */
 DesktopManager.prototype.playBootAnimation = function(name) {
-	this.toggleOverlayVisible(true, false, name || "zoom");
+	this.toggleOverlayVisible(true, false, name);
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.getElementById("boot-logo");
