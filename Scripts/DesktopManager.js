@@ -5,6 +5,73 @@
  */
 "use strict";
 
+/** @type {Launchpad?} */
+var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
+
+function loadScript(url, callback) {
+  var script = document.createElement('script');
+  script.src = url;
+  
+  script.onload = callback;
+  
+  document.head.appendChild(script);
+}
+
+function init() {
+	// The window manager must be initialized even on pages without a launchpad:
+	// initializeDialogs() registers the document/window pointerup listener that ends
+	// a drag, so skipping it leaves every window stuck to the cursor.
+	if (typeof windowManager !== "undefined" && "windowManager" in window) {
+		if (launchpad) windowManager.forEachWindow(function(dialog) {
+			if (dialog.application) launchpad.addApp(dialog);
+		});
+		if (!isBlink) DesktopManager.removeTheme("glass");
+		windowManager.initializeDialogs();
+
+		LVMessenger.receive(messageReceived);
+	}
+	// return;
+	var launchpadElement = document.getElementById("launchpad");
+
+	if (launchpad && launchpadElement) {
+		launchpad.init(launchpadElement);
+
+		if (typeof appManager !== "undefined") {
+			appManager.forEachApp(launchpad.addApp.bind(launchpad));
+			// launchpad.open();
+			appManager.reloadWallpaper();
+		}
+	}
+
+
+
+	if (location.protocol === "file:") try {
+		/**@type {NodeListOf<HTMLScriptElement>}*/
+		var scripts = document.querySelectorAll('script[type="module"]');
+		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
+			var replacement = document.createElement('script');
+			replacement.src = s.src;
+			try {
+
+				s.replaceWith(replacement);
+			} catch(ex) {}
+		});
+	} catch(ex) {}
+
+	window.metaThemeColor = document.querySelector("meta[name=\"theme-color\"]") || undefined;
+	if (window.__LVMessenger)
+		window.__LVMessenger.accent = window.metaThemeColor;
+}
+
+function ready(fn) {
+	if (document.readyState === "complete" || document.readyState === "interactive") {
+		setTimeout(fn, 0);
+		return;
+	}
+	window.addEventListener("DOMContentLoaded", fn, false);
+}
+ready(init);
+
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
 var onLoad = function () {
@@ -350,8 +417,27 @@ DesktopManager.prototype.init = function() {
 
 	initApps();
 
+	if (document.documentMode === 9) {
+		var script = document.createElement("script");
+		script.src = "./Scripts/Animation.js";
+		document.getElementsByTagName("head")[0].appendChild(script);
+	}
+
+
 	this.finishBootAnimationEarly();
 };
+
+window.addEventListener('beforeunload', () => {
+  // Quickly inject or show a black/white overlay mask
+  const mask = document.createElement('div');
+  mask.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:white;z-index:99999;transition:opacity 0.2s;opacity:0;';
+  document.body.appendChild(mask);
+  
+  // Force a quick flash fade before the browser destroys the thread
+  requestAnimationFrame(() => {
+    mask.style.opacity = '1';
+  });
+});
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {
 	get: function() { return document.getElementById("overlay"); }
