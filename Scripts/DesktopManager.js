@@ -280,10 +280,11 @@ window.addEventListener("keydown", function(event) {
       break;
     case "F10":
       event.preventDefault();
-      /** @type {Dialog} */
       var c = windowManager.windows["console"];
-      c.open();
-      c.maximize();
+	  if (c) {
+		  c.open();
+		  c.maximize();
+	  }
       break;
     case "F9":
         event.preventDefault();
