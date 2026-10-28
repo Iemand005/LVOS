@@ -355,7 +355,7 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	var overlay = this.overlay;
 	if (!overlay) return;
-	var className = visible ? "open" : "";
+	var className = visible ? "open " : "";
 	if (animate !== false) className += "animating";
 	overlay.className = className;
 };
