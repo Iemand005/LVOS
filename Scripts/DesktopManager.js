@@ -442,7 +442,12 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extra
 	var className = visible ? "open " : "";
 	if (animate !== false) className += "animating";
 	if (extraClass) className += extraClass;
-	overlay.className = className;
+	// overlay.className = className;
+	if (visible) overlay.classList.add("open");
+	else overlay.classList.remove("open");
+
+	if (animate) overlay.classList.add("animating");
+	else overlay.classList.remove("animating");
 };
 
 /** @typedef {"zoom" | "flip"} AnimationName */
