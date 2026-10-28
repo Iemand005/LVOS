@@ -846,9 +846,12 @@ body.jeb .window > content {
 }
 
 @keyframes jeb {
-	0% {
-		background: red !important;
-	}
+	0% { background: red !important; }
+	20% { background: orange !important; }
+	20% { background: yellow !important; }
+	20% { background: greenyellow !important; }
+	20% { background: blue !important; }
+	20% { background: purple !important; }
 }
 
 @supports (corner-shape: squircle) {
