@@ -823,7 +823,7 @@ body > canvas {
 	height: 100%;
 }
 
-.no-animations * {
+.no-animations *:not(#window-snap) {
 	animation-duration: 2ms !important;
 	transition-duration: 0s !important;
 }
