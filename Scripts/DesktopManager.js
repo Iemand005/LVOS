@@ -344,12 +344,21 @@ DesktopManager.prototype.init = function() {
 	this.toggleOverlayVisible(false);
 };
 
+Object.defineProperty(DesktopManager.prototype, "overlay", {
+	get: function() { return document.getElementById("overlay"); }
+});
+
 /** @param {boolean} visible */
 DesktopManager.prototype.toggleOverlayVisible = function(visible) {
 	var overlay = document.getElementById("overlay");
 	if (!overlay) return;
 	overlay.className = visible ? "open" : "";
 };
+
+DesktopManager.prototype.playBootAnimation = function() {
+	var img = document.createElement("img")
+	o.appendChild(img) 
+}
 
 DesktopManager.prototype.isExposéSupported = function() {
     return "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
