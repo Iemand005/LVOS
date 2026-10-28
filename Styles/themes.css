@@ -851,16 +851,16 @@ body.jeb .window > content svg {
 
 @keyframes jeb {
 	0%, 100%  { background: orange; }
-	10%  { background: yellow; }
-	20%  { background: rgb(0, 255, 0); }
-	40%  { background: blue; }
-	60%  { background: purple; }
+	10% { background: yellow; }
+	20% { background: rgb(0, 255, 0); }
+	40% { background: blue; }
+	60% { background: purple; }
 	80% { background: red; }
 }
 
 @keyframes jeb-svg {
-	0%, 100%   { color: black; fill:black; }
-	70%, 90%  { color: white; fill:white; }
+	0%, 100% { color: black; fill:black; }
+	70%, 90% { color: white; fill:white; }
 }
 
 @supports (corner-shape: squircle) {
