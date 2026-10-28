@@ -841,6 +841,14 @@ body.no-blur.modern.blur .window content {
 	backdrop-filter: blur(1000px) !important;
 }
 
+.jeb .window > content {
+	animation: ;
+}
+
+@keyframes jeb {
+	
+}
+
 @supports (corner-shape: squircle) {
 	.squircles .window {
 		--window-outer-radius: calc(var(--window-radius) * 2);
