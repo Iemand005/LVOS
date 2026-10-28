@@ -356,7 +356,7 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var className = visible ? "open" : "";
-	if (animate) className += "animating";
+	if (animate !== false) className += "animating";
 	overlay.className = className;
 };
 
