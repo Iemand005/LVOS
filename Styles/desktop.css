@@ -823,7 +823,7 @@ body > canvas {
 	height: 100%;
 }
 
-.no-animations *:not(#overlay) * {
+body.no-animations *:not(#overlay) * {
 	animation-duration: 2ms;
 	transition-duration: 0s;
 }
