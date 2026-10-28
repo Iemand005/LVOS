@@ -611,7 +611,7 @@ aside#metroapplist > button {
 	/* opacity: 1; */
 }
 
-#boot-logo {
+#overlay.zoom #boot-logo {
 	width: 100%;
 	height: 100%;
 	object-fit: scale-down;
@@ -623,27 +623,62 @@ aside#metroapplist > button {
 	transition: all 250ms cubic-bezier(.77,.14,.38,.51);
 }
 
-#boot-logo.neutral {
+#overlay.zoom #boot-logo.neutral {
 	scale: 1;
 	filter: blur(0px);
 
 	opacity: 1;
 }
 
-#boot-logo.neutral-big {
+#overlay.zoom #boot-logo.neutral-big {
 	scale: 1.7;
 	filter: blur(0px);
 
 	transition: all 1000ms cubic-bezier(.31,.35,.75,.37);
 }
 
-#boot-logo.end {
+#overlay.zoom #boot-logo.end {
 	scale: 10;
 	filter: blur(10px);
 	opacity: 0;
 
 	transition: all 200ms cubic-bezier(.77,.14,.38,.51);
 }
+
+#overlay.flip #boot-logo {
+	width: 100%;
+	height: 100%;
+	object-fit: scale-down;
+
+	scale: 0.2;
+	filter: blur(10px);
+	opacity: 0;
+
+	transition: all 250ms cubic-bezier(.77,.14,.38,.51);
+}
+
+#overlay.flip #boot-logo.neutral {
+	scale: 1;
+	filter: blur(0px);
+
+	opacity: 1;
+}
+
+#overlay.flip #boot-logo.neutral-big {
+	scale: 1.7;
+	filter: blur(0px);
+
+	transition: all 1000ms cubic-bezier(.31,.35,.75,.37);
+}
+
+#overlay.flip #boot-logo.end {
+	scale: 10;
+	filter: blur(10px);
+	opacity: 0;
+
+	transition: all 200ms cubic-bezier(.77,.14,.38,.51);
+}
+
 
 #dockapplist {
 	/* ToDo: Implement moving apps in and out the cock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
