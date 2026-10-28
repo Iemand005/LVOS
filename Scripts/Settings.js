@@ -1,7 +1,7 @@
 // Settings handler
 // Lasse Lauwerys © 2024
 
-'use strict';
+"use strict";
 
 /**
  * @param {string} text
@@ -15,7 +15,7 @@ function formatCamelCase(text) {
 
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
-	this.storage = typeof localStorage != "undefined" && localStorage || (typeof ActiveXStorage != "undefined" && new ActiveXStorage());
+	this.storage = typeof localStorage !== "undefined" && localStorage || (typeof ActiveXStorage !== "undefined" && new ActiveXStorage());
 }
 
 SettingsHandler.prototype.get = function (key) {
@@ -39,10 +39,10 @@ SettingsHandler.prototype.saveFlags = function (flags) {
 /** @param {{[key:string]: boolean}} flags */
 SettingsHandler.prototype.restoreFlags = function (flags) {
 	var saved = this.get("flags");
-	if (!saved || typeof saved != "object") return;
+	if (!saved || typeof saved !== "object") return;
 	for (var flagId in saved) {
 		if (!saved.hasOwnProperty(flagId)) continue;
-		if (typeof flags[flagId] == "boolean" && typeof saved[flagId] == "boolean") {
+		if (typeof flags[flagId] === "boolean" && typeof saved[flagId] === "boolean") {
 			flags[flagId] = saved[flagId];
 		}
 	}
@@ -178,23 +178,23 @@ function setBorderSize(size) {
 }
 
 function hexToRGB(hex) {
-	if (typeof hex == 'undefined' || !hex) return;
+	if (typeof hex === "undefined" || !hex) return;
 	// var int = parseInt(hex.replace('#', ''), 16);
 	var bla = 0;
 	return {r: (bla >> 16) & 255, g: (bla >> 8) & 255, b: bla & 255};
 }
 
 function isColorDark(color) {
-	if (typeof color == 'undefined') return;
+	if (typeof color === "undefined") return;
 	var rgb = hexToRGB(color);
 	if (!rgb) return false;
 	return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b < 128;
 }
 
 function setColor(color){
-	if (typeof color == 'undefined' || !(elements.color instanceof HTMLInputElement)) return;
+	if (typeof color === "undefined" || !(elements.color instanceof HTMLInputElement)) return;
 	settings.set("color", elements.color.value = color);
-	
+
 	var isWhite = isColorDark(color);
 	if (!("windowManager" in window)) return;
 	for (var index in windowManager.windows) if (windowManager.windows.hasOwnProperty(index)) {
@@ -205,7 +205,7 @@ function setColor(color){
 		content.style.backgroundColor = color;
 		content.style.color = isWhite ? "white" : "black";
 	}
-	if (window.metaThemeColor) window.metaThemeColor.setAttribute('content', color);
+	if (window.metaThemeColor) window.metaThemeColor.setAttribute("content", color);
 }
 
 /** @param {string} color */
@@ -247,7 +247,7 @@ function loadWallpaperOptions() {
 	noneOption.textContent = "None";
 	elements.wallpaperSelect.appendChild(noneOption);
 
-	if (typeof appManager != "undefined" && typeof appManager.forEachWallpaper == "function") {
+	if (typeof appManager !== "undefined" && typeof appManager.forEachWallpaper === "function") {
 		appManager.forEachWallpaper(function (app, id) {
 			var option = document.createElement("option");
 			option.value = "registered:" + id;
@@ -269,10 +269,10 @@ function loadWallpaperOptions() {
 function restoreWallpaperSetting() {
 	loadWallpaperOptions();
 	var wallpaper = settings.get("wallpaper");
-	if (typeof wallpaper != "string" || !wallpaper) return;
+	if (typeof wallpaper !== "string" || !wallpaper) return;
 	if (wallpaper === "image") return; // handled by the cached wallpaper loader
 	if (wallpaper.indexOf("registered:") === 0 && window.desktopManager &&
-		typeof window.desktopManager.applyRegisteredWallpaper == "function") {
+		typeof window.desktopManager.applyRegisteredWallpaper === "function") {
 		window.desktopManager.applyRegisteredWallpaper(wallpaper.slice("registered:".length));
 	}
 }
@@ -283,12 +283,12 @@ function setWallpaperOption(value) {
 	updateWallpaperImageButton();
 	if (value === "image") {
 		// Reload the image that was picked before (if any) instead of asking again.
-		if (typeof loadWallpaperFromCache == "function") loadWallpaperFromCache();
+		if (typeof loadWallpaperFromCache === "function") loadWallpaperFromCache();
 		return;
 	}
 	if (value.indexOf("registered:") === 0) {
 		var id = value.slice("registered:".length);
-		if (window.desktopManager && typeof window.desktopManager.applyRegisteredWallpaper == "function")
+		if (window.desktopManager && typeof window.desktopManager.applyRegisteredWallpaper === "function")
 			window.desktopManager.applyRegisteredWallpaper(id);
 		return;
 	}
@@ -340,12 +340,12 @@ function loadThemeSetting() {
 		if (elements.theme) elements.theme.value = theme;
 	}
 	var colorDebug = settings.get("color-debug");
-	if (typeof colorDebug == "boolean") {
+	if (typeof colorDebug === "boolean") {
 		document.body.classList.toggle("color-debug", colorDebug);
 		if (elements.colorDebug) elements.colorDebug.checked = colorDebug;
 	}
 	var squircles = settings.get("squircles");
-	if (typeof squircles == "boolean") {
+	if (typeof squircles === "boolean") {
 		document.body.classList.toggle("squircles", squircles);
 		if (elements.squircles) elements.squircles.checked = squircles;
 	}
@@ -382,7 +382,7 @@ function installAppFromUrl(useProxy) {
 				getFaviconUrl(url)
 			);
 		} else {
-			app ={"state":{"title":"Calculator","x":161.1999969482422,"y":40,"z":609,"width":233.60000610351562,"height":250,"open":true,"maximized":false},"app":{"title":"Calculator","id":"calculator","src":"./Applications/Calculator/calculator.html","minWidth":180,"minHeight":40},"offset":{"x":-61,"y":-105}} appManager.createApp(url);
+			app = appManager.createApp(url);
 		}
 		appManager.addApp(app);
 		appManager.saveApp(app);
@@ -390,9 +390,9 @@ function installAppFromUrl(useProxy) {
 		return;
 	}
 	if (typeof windowManager !== "undefined") {
-		if (useProxy && typeof windowManager.installAppProxied == "function") {
+		if (useProxy && typeof windowManager.installAppProxied === "function") {
 			windowManager.installAppProxied(url);
-		} else if (typeof windowManager.installApp == "function") {
+		} else if (typeof windowManager.installApp === "function") {
 			windowManager.installApp(url);
 		}
 		if (elements.installAppUrl) elements.installAppUrl.value = "";
@@ -406,7 +406,7 @@ function loadElements() {
 		var logo = document.getElementById("overlay");
 		// DesktopManager.
 		// desktopManager.
-		logo.style.display = "none"
+		logo.style.display = "none";
 	}
 
 	elements.color = document.getElementById("color");
@@ -425,7 +425,7 @@ function loadElements() {
 
 	var applist = document.getElementById("applist");
 	var charmsButton = applist ? applist.appendChild(document.createElement("button")) : document.createElement("button");
-	
+
 	charmsButton.textContent = "Settings";
 
 	if (charmsButton) charmsButton.onclick = function () { DesktopManager.toggleCharms(); };
@@ -458,17 +458,17 @@ addEventListener("load", function() {
 }, false);
 
 /**
- * @param {*} object 
- * @param {string} [fileName] 
+ * @param {*} object
+ * @param {string} [fileName]
  */
 function downloadObject(object, fileName) {
-	var uri = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(object));
+	var uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(object));
 
-	var a = document.createElement('a');
+	var a = document.createElement("a");
 	a.setAttribute("href", uri);
 	a.setAttribute("download", fileName || "öbject" + ".json");
-	
-	document.body.appendChild(a);     
+
+	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
 }
