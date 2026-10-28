@@ -637,7 +637,7 @@ aside#metroapplist > button {
 	scale: 1.5;
 	filter: blur(0px);
 
-	transition: all 1000ms cubic-bezier(.31,.35,.;
+	transition: all 1000ms cubic-bezier(.31,.35,.75,.37);
 }
 
 #boot-logo.end {
