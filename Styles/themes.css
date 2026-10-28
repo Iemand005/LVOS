@@ -841,12 +841,14 @@ body.no-blur.modern.blur .window content {
 	backdrop-filter: blur(1000px) !important;
 }
 
-.jeb .window > content {
-	animation: ;
+body.jeb .window > content {
+	animation: jeb;
 }
 
 @keyframes jeb {
-	
+	0% {
+		background: red !important;
+	}
 }
 
 @supports (corner-shape: squircle) {
