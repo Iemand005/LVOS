@@ -365,12 +365,15 @@ DesktopManager.prototype.playBootAnimation = function() {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.getElementById("boot-logo");
-	if (!logo) return;
 	// logo.onanimationend
-	animateElement(logo, undefined, function() {
+	if (!logo) return;
+	animateElement(logo, function() {
+		if (!logo) return;
+		logo.classList.add("neutral");
+
+	}, function() {
 
 	});
-	logo.classList.add("neutral");
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
