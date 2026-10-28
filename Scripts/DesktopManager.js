@@ -8,6 +8,15 @@
 /** @type {Launchpad?} */
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
+function loadScript(url, callback) {
+  var script = document.createElement('script');
+  script.src = url;
+  
+  script.onload = callback;
+  
+  document.head.appendChild(script);
+}
+
 function init() {
 	// The window manager must be initialized even on pages without a launchpad:
 	// initializeDialogs() registers the document/window pointerup listener that ends
@@ -62,17 +71,6 @@ function ready(fn) {
 	window.addEventListener("DOMContentLoaded", fn, false);
 }
 ready(init);
-
-
-if (document.documentMode === 9) {
-	var script = document.createElement("script");
-	script.src = "./Scripts/Animation.js";
-	document.getElementsByTagName("head")[0].appendChild(script);
-}
-
-window.onerror = function() {
-	return true;
-};
 
 var eventPrevent = function (/** @type {Event} */event) { event.preventDefault(); };
 
@@ -418,6 +416,13 @@ DesktopManager.prototype.init = function() {
 
 
 	initApps();
+
+	if (document.documentMode === 9) {
+		var script = document.createElement("script");
+		script.src = "./Scripts/Animation.js";
+		document.getElementsByTagName("head")[0].appendChild(script);
+	}
+
 
 	this.finishBootAnimationEarly();
 };
