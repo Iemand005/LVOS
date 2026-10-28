@@ -841,10 +841,12 @@ body.no-blur.modern.blur .window content {
 	backdrop-filter: blur(1000px) !important;
 }
 
-body.jeb .window > content,
+body.jeb .window > content {
+	animation: jeb 10s infinite;
+}
 body.jeb .window > content h1,
 body.jeb .window > content svg {
-	animation: jeb 10s infinite;
+	animation: jeb-svg 10s infinite;
 }
 
 @keyframes jeb {
