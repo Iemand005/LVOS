@@ -619,7 +619,7 @@ aside#metroapplist > button {
 	scale: 0.2;
 	filter: blur(10px);
 
-	transition: all 200ms cubic-bezier(.32,.24,.25,1);
+	transition: all 100ms cubic-bezier(.32,.24,.25,1);
 }
 
 #boot-logo.neutral {
