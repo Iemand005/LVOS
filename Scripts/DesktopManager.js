@@ -372,7 +372,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 	if (!logo) return;
 	var log = logo;
 
-	var endAnim = function() {
+	this._endAnim = function() {
 		Helpers.animateElement(log, function() {
 			log.classList.add("end");
 
@@ -384,8 +384,8 @@ DesktopManager.prototype.playBootAnimation = function() {
 
 	}, "scale", function() {
 		log.classList.add("neutral-big");
-		setTimeout(endAnim, 1000);
-	});
+		setTimeout(this._endAnim, 1000);
+	}, this);
 };
 
 DesktopManager.prototype.finishBootAnimationEarly = function() {
