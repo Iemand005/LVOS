@@ -824,7 +824,7 @@ body > canvas {
 }
 
 body.no-animations #charms,
-body.no-animations #DeskTOP {
+body.no-animations #desktop {
 	animation-duration: 2ms;
 	transition-duration: 0s;
 }
