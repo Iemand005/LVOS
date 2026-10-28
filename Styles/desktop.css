@@ -823,7 +823,8 @@ body > canvas {
 	height: 100%;
 }
 
-body.no-animations #charms  {
+body.no-animations #charms,
+body.no-animations #DeskTOP {
 	animation-duration: 2ms;
 	transition-duration: 0s;
 }
