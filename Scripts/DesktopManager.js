@@ -361,6 +361,7 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
 };
 
 DesktopManager.prototype.playBootAnimation = function() {
+	this.toggleOverlayVisible(true, false);
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.createElement("img");
