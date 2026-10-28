@@ -2499,7 +2499,8 @@ function Dialog(object) {
 	this.application = null;
 	if (!Helpers.isElement(object)) {
 		this.application = object;
-		this._minHeight = object.minHeight, this._minWidth = object.minWidth;
+		if (object.minWidth) this._minWidth = object.minWidth;
+		if (object.minHeight) this._minHeight = object.minHeight;
 	} else this.target = object;
 
 	if (!id) id = object.title;
