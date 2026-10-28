@@ -367,9 +367,9 @@ DesktopManager.prototype.playBootAnimation = function() {
 	var logo = document.getElementById("boot-logo");
 	// logo.onanimationend
 	if (!logo) return;
+	var log = logo;
 	animateElement(logo, function() {
-		if (!logo) return;
-		logo.classList.add("neutral");
+		log.classList.add("neutral");
 
 	}, function() {
 
