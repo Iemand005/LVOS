@@ -368,11 +368,11 @@ DesktopManager.prototype.playBootAnimation = function() {
 	// logo.onanimationend
 	if (!logo) return;
 	var log = logo;
-	animateElement(log, function() {
+	Helpers.animateElement(log, function() {
 		log.classList.add("neutral");
 
 	}, undefined, function() {
-		animateElement(log, function() {
+		Helpers.animateElement(log, function() {
 			log.classList.add("neutral");
 
 		}, undefined, function() {

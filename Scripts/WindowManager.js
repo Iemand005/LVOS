@@ -478,7 +478,7 @@ function clearFlip(element) {
  * @param {number} [timeout]
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
-function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
+Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
 	/** @type {T} */
 	// @ts-ignore
 	var boundContext = thisArg || element;
