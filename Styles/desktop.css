@@ -627,6 +627,11 @@ aside#metroapplist > button {
 	filter: blur(0px);
 }
 
+#boot-logo.neutral-big {
+	scale: 1.5;
+	filter: blur(0px);
+}
+
 #boot-logo.end {
 	scale: 10;
 	filter: blur(10px);
