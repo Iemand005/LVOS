@@ -842,7 +842,8 @@ body.no-blur.modern.blur .window content {
 }
 
 body.jeb .window > content,
-body.jeb .window > content h1 {
+body.jeb .window > content h1,
+body.jeb .window > content svg {
 	animation: jeb 10s infinite;
 }
 
