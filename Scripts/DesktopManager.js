@@ -893,13 +893,15 @@ if (document.readyState === "loading") {
     loadWallpaperFromCache();
 }
 
+var jebNumber = 0;
+
 window.addEventListener("keydown", function(event) {
 	if (event.key === "Shift" || event.keyCode === 16) {
 		document.body.classList.add("slow-animations");
 	}
 
-	if (event.key === "J") {
-		
+	if (event.key === "J" && jebNumber === 0) {
+		jebNumber++;
 	}
 }, false);
 
