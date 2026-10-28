@@ -327,6 +327,7 @@ Object.defineProperty(DesktopManager.prototype, "isExposé", {
 DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
     for (var i = 0; i < this.desktops.length; i++) {
         var desktop = this.desktops[i];
+		if (!desktop) continue;
         var element = desktop.target;
         if (!element || !element.getBoundingClientRect) continue;
         var rect = element.getBoundingClientRect();
