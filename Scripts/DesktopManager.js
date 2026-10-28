@@ -367,6 +367,8 @@ DesktopManager.prototype.playBootAnimation = function() {
 	var logo = document.createElement("img");
 	logo.src = "./Assets/Logo_512x512.png";
 	overlay.appendChild(logo);
+
+	$0.classList.add("neutral")
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
