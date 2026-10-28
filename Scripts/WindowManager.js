@@ -2497,9 +2497,10 @@ function Dialog(object) {
 
 	/** @type {Application | null} */
 	this.application = null;
-	if (!Helpers.isElement(object))
+	if (!Helpers.isElement(object)) {
 		this.application = object;
-	else this.target = object;
+		this._minHeight = object.minHeight, this._minWidth = object.minWidth;
+	} else this.target = object;
 
 	if (!id) id = object.title;
 	if (object.title) this._title = object.title;
