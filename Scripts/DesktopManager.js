@@ -404,7 +404,7 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
-	this.playBootAnimation();
+	if (flags.bootAnimation) this.playBootAnimation();
 
     var windowSection = document.getElementById("window-section");
     if (windowSection) {

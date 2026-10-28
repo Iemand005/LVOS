@@ -73,6 +73,7 @@ var flags = {
 	broadcastWindowMoves: !document.documentMode,
 	useAnimations: true,
 	ieDropCompatibleMode: true,
+	bootAnimation: true,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
