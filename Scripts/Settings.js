@@ -403,8 +403,10 @@ function loadElements() {
 	if (typeof flags !== "undefined") settings.loadFlags(flags);
 
 	if (!flags.bootAnimation) {
-		var logo = document.getElementById("boot-logo");
-		if (logo) 
+		var logo = document.getElementById("overlay");
+		// DesktopManager.
+		// desktopManager.
+		logo.style.display = "none"
 	}
 
 	elements.color = document.getElementById("color");
