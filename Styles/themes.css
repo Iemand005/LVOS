@@ -857,13 +857,8 @@ body.jeb .window > content svg {
 }
 
 @keyframes jeb-svg {
-	0%   { color: black; fill:black; }
-	10%  { color: black; fill:black; }
-	20%  { color: black; fill:black; }
-	40%  { color: black; fill:black; }
-	70%  { color: white; fill:white; }
-	90%  { color: white; fill:white; }
-	100% { color: black; fill:black; }
+	0%, 100%   { color: black; fill:black; }
+	70%, 90%  { color: white; fill:white; }
 }
 
 @supports (corner-shape: squircle) {
