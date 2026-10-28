@@ -150,3 +150,5 @@ hi =
 https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2024.17.2024100401/vspackage?targetPlatform=win32-x64
 https://marketplace.visualstudio.com/_apis/public/gallery/publishers/VisualStudioExptTeam/vsextensions/vscodeintellicode/!.3.2/vspackage?targetPlatform=win32-x64
 VisualStudioExptTeam.vscodeintellicode\
+history
+hi
