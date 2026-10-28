@@ -780,12 +780,6 @@ button:hover {
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	.window, button {
-		color: white;
-	}
-}
-
 @media (prefers-color-scheme: light) {
 	.window, button {
 		color: black;
