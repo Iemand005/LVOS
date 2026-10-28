@@ -2039,7 +2039,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	// scale 1.
 	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
 
-	if (!noAnimation) animateElement(this.element, function() {
+	if (!noAnimation) Helpers.animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
 	}, function(name) {
 		return name === "inset";
@@ -2137,7 +2137,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	// one it would sit behind the very thing it is meant to cover.
 	if (dialog) this.element.style.zIndex = dialog.z.toString();
 
-	animateElement(this.element, function() {
+	Helpers.animateElement(this.element, function() {
 		switch(type) {
 			case "maximize": this.setInset(WindowSnap.margin); break;
 			case "left":
@@ -2167,7 +2167,7 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 
 	// noAnimation: this method already animates the element, and moveToDialog must not
 	// start a competing animation on the same element or it cancels this one.
-	animateElement(this.element, function() {
+	Helpers.animateElement(this.element, function() {
 
 		this.moveToDialog(dialog, 0, undefined, true);
 	}, function(name) {
@@ -2332,7 +2332,7 @@ Transformable.prototype.applyTransform = function() {
 
 /** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
-	if (animate) animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
+	if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
 	else this.applyTransform();
 };
 
@@ -3628,7 +3628,7 @@ Dialog.prototype.stopAnimating = function () {
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout, flip) {
-	animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
+	Helpers.animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
 };
 /**
  * @param {string} className
