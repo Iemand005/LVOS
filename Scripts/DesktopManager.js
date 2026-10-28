@@ -385,6 +385,10 @@ DesktopManager.prototype.playBootAnimation = function() {
 	});
 };
 
+DesktopManager.prototype.finishBootAnimationEarly = function() {
+	
+}
+
 DesktopManager.prototype.isExposéSupported = function() {
     return "TabScroller" in window && !(document.documentMode && document.documentMode < 10);
 };
