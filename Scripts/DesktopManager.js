@@ -389,7 +389,7 @@ DesktopManager.prototype.playBootAnimation = function() {
 };
 
 DesktopManager.prototype.finishBootAnimationEarly = function() {
-
+	if (this._endAnim) this._endAnim();
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
