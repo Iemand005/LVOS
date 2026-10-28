@@ -378,7 +378,6 @@ DesktopManager.prototype.playBootAnimation = function() {
 
 		Helpers.animateElement(log, function() {
 			log.classList.add("end");
-
 		});
 	};
 
