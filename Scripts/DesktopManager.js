@@ -894,9 +894,13 @@ if (document.readyState === "loading") {
 }
 
 window.addEventListener("keydown", function(event) {
-  if (event.key === "Shift" || event.keyCode === 16) {
-    document.body.classList.add("slow-animations");
-  }
+	if (event.key === "Shift" || event.keyCode === 16) {
+		document.body.classList.add("slow-animations");
+	}
+
+	if (event.key === "J") {
+		
+	}
 }, false);
 
 window.addEventListener("keyup", function(event) {
