@@ -856,7 +856,7 @@ button {
 /* Force first row in IE7 to collapse to 1px / 30px */
 .window table.content > tbody > tr:first-child,
 .window table.content td.header {
-    height: 25px !important;
+    height: 30px !important;
     max-height: 30px !important;
     vertical-align: top !important;
 }
@@ -870,7 +870,7 @@ button {
 }
 
 .window table.content tr {
-    height: 100% !important;
+    /* height: 100% !important; */
 }
 
 /* Force second row (article) to absorb 100% */
