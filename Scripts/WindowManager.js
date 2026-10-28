@@ -13,7 +13,7 @@
 
 // Modifiable settings
 var useTransform = true,
-	useScale = true;
+	useScale = false;
 
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
@@ -59,9 +59,11 @@ if (isIE) useTransform = true;
 
 if (!supportsTransform) useTransform = false;
 
-var allowUpdateRateLimit = true;
+var allowUpdateRateLimit = false;
 
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
+
+if (document.documentMode && document.documentMode < 8) useScale = true;
 
 var flags = {
 	useSkewAnimations: false,
@@ -384,7 +386,7 @@ function getDialogTemplate() {
 	if (!template) return;
 	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-	return content.children[0];
+	return content.children ? content.children[0] : content.childNodes[1];
 }
 
 /** @returns {HTMLElement | WindowElement} */
@@ -476,7 +478,7 @@ function clearFlip(element) {
  * @param {number} [timeout]
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
-function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
+Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
 	/** @type {T} */
 	// @ts-ignore
 	var boundContext = thisArg || element;
@@ -523,10 +525,11 @@ function animateElement(element, onToggled, onTransitionEnd, onEnd, thisArg, tim
 
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (!onTransitionEnd) return;
-			if (typeof onTransitionEnd === "string") {
-				if (event.propertyName !== onTransitionEnd) return;
-			} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
+			if (onTransitionEnd) {
+				if (typeof onTransitionEnd === "string") {
+					if (event.propertyName !== onTransitionEnd) return;
+				} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
+			}
 
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
 			clearTimeout(state.timer);
@@ -654,9 +657,9 @@ function WindowManager() {
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
-	this.channel = BroadcastChannel && new BroadcastChannel("lvos");
+	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos");
 
-	this.channel.onmessage = function(ev) {
+	if (this.channel) this.channel.onmessage = function(ev) {
 		var data = ev.data;
 		if (typeof data === "string") try { data = JSON.parse(data); } catch (ex) { return console.warn(ex); }
 		if (!data || typeof data !== "object" || typeof data.type !== "string") return;
@@ -1961,7 +1964,7 @@ function WindowSnap() {
 	// Hidden from the moment it exists: it is an unpositioned, border-only box until the
 	// first snap positions it, so without this the first drop flies it in from wherever
 	// that box sat rather than from behind the window.
-	this.element.classList.add("hidden");
+	if (this.element.classList) this.element.classList.add("hidden");
 }
 
 Object.defineProperty(WindowSnap.prototype, "hidden", {
@@ -2037,7 +2040,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	// scale 1.
 	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
 
-	if (!noAnimation) animateElement(this.element, function() {
+	if (!noAnimation) Helpers.animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
 	}, function(name) {
 		return name === "inset";
@@ -2135,7 +2138,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	// one it would sit behind the very thing it is meant to cover.
 	if (dialog) this.element.style.zIndex = dialog.z.toString();
 
-	animateElement(this.element, function() {
+	Helpers.animateElement(this.element, function() {
 		switch(type) {
 			case "maximize": this.setInset(WindowSnap.margin); break;
 			case "left":
@@ -2165,7 +2168,7 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 
 	// noAnimation: this method already animates the element, and moveToDialog must not
 	// start a competing animation on the same element or it cancels this one.
-	animateElement(this.element, function() {
+	Helpers.animateElement(this.element, function() {
 
 		this.moveToDialog(dialog, 0, undefined, true);
 	}, function(name) {
@@ -2330,7 +2333,7 @@ Transformable.prototype.applyTransform = function() {
 
 /** @param {boolean} [animate] */
 Transformable.prototype.update = function(animate) {
-	if (animate) animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
+	if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
 	else this.applyTransform();
 };
 
@@ -2988,8 +2991,35 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
  */
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
-	if (frame || create === false || !this.body) return frame;
-	return this.body.appendChild(document.createElement("iframe"));
+	if (frame || create === false) return frame;
+	var body = null;
+	if (this.target) {
+		if (this.target.getElementsByTagName) {
+			var articles = this.target.getElementsByTagName("article");
+			if (articles && articles.length) {
+				body = articles[0];
+			}
+		}
+		if (!body && this.target.getElementsByClassName) {
+			var ac = this.target.getElementsByClassName("article");
+			if (ac && ac.length) body = ac[0];
+		}
+	}
+	if (!body) body = this.body;
+	if (!body && this.target) {
+		if (this.target.getElementsByTagName) {
+			var articles2 = this.target.getElementsByTagName("article");
+			if (articles2 && articles2.length) body = articles2[0];
+		}
+	}
+	if (!body) return null;
+	try {
+		var frameEl = document.createElement("iframe");
+		body.appendChild(frameEl);
+		return frameEl;
+	} catch (ex) {
+		return null;
+	}
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
@@ -3599,7 +3629,7 @@ Dialog.prototype.stopAnimating = function () {
  * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
  */
 Dialog.prototype.animate = function (onToggled, onTransitionEnd, onEnd, timeout, flip) {
-	animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
+	Helpers.animateElement(this.target, onToggled, onTransitionEnd, onEnd, this, timeout, flip);
 };
 /**
  * @param {string} className
@@ -4415,8 +4445,12 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 
 /** @param {string} [url] */
 Dialog.prototype.openUrl = function(url) {
+	var self = this;
 	var frame = this.getOrCreateFrame(true);
-	if (!frame) return;
+	if (!frame) {
+		setTimeout(function() { self.openUrl(url); }, 5);
+		return;
+	}
 
 	var self = this;
 	var timeout = -1;
@@ -4424,6 +4458,10 @@ Dialog.prototype.openUrl = function(url) {
 	frame.onload = function() {
 		clearTimeout(timeout);
 		self.reportState();
+		try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); } catch (ex) {}
+		try { if (typeof self.update === "function") self.update(); } catch (ex) {}
+		setTimeout(function() { try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); if (typeof self.update === "function") self.update(); } catch (ex) {} }, 0);
+		setTimeout(function() { try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); if (typeof self.update === "function") self.update(); } catch (ex) {} }, 50);
 	};
 
 	if (!this.application) return;
@@ -4437,20 +4475,22 @@ Dialog.prototype.openUrl = function(url) {
 	var index = 0;
 
 	function tryNext() {
-		// Skip over missing entries (e.g. an app with no distSrc/altUrls) and stop at
-		// the end. The old code recursed on an undefined url, which re-entered forever.
-		var url;
-		while (index < fallbackUrls.length && !(url = fallbackUrls[index++]));
-		if (!url || !frame) return;
+		var nextUrl;
+		while (index < fallbackUrls.length && !(nextUrl = fallbackUrls[index++]));
+		if (!nextUrl || !frame) return;
 
-		frame.src = url;
-		self._src = url;
+		frame.src = nextUrl;
+		self._src = nextUrl;
 
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 3000);
 	}
 
-	frame.addEventListener("error", tryNext, false);
+	if (frame.attachEvent) {
+		frame.attachEvent("onerror", tryNext);
+	} else if (frame.addEventListener) {
+		frame.addEventListener("error", tryNext, false);
+	}
 
 	tryNext();
 };

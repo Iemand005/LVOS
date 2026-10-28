@@ -5,6 +5,8 @@
 
 'use strict';
 
+// alert( "OKKK")
+
 if (typeof HTMLElement != 'undefined') {
     if(!HTMLElement.prototype.createAttribute) HTMLElement.prototype.createAttribute = function(attribute) {
         this.setAttribute(attribute, null);
@@ -137,12 +139,12 @@ if (!Function.prototype.bind) Function.prototype.bind = function(thisArg) {
       var finalArgs = args.concat(slice.call(arguments));
       return fn.apply(thisArg, finalArgs);
     };  
-  };
-
+  };                    
+    
 // if (!Console.prototype.log)
-if (typeof console == "undefined") {
+if (typeof console == "undefined") try {
     // Assign through `window`: a bare `console = ...` is a ReferenceError in strict mode.
-    window.console = {
+    console = {
         log: function(message) {
             // alert(message);
         },
@@ -152,8 +154,8 @@ if (typeof console == "undefined") {
         error: function(message) {
             alert("Error: " + message);
         }
-    }
-}
+    };
+} catch(ex) {}
 
 if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
     Object.defineProperty(HTMLElement.prototype, "classList", {
@@ -795,3 +797,39 @@ if (typeof Event !== "undefined" && Event.prototype) {
 		};
 	}
 }
+
+/* document.hasFocus() Polyfill for IE7 / IE8 */
+(function(doc, win) {
+	if (typeof doc.hasFocus === "function") return; // Native support exists
+
+	// Track document focus state manually
+	var isFocused = true;
+
+	function onFocus() {
+		isFocused = true;
+	}
+
+	function onBlur() {
+		isFocused = false;
+	}
+
+	// 1. Check IE's legacy activeElement property as an initial indicator
+	doc.hasFocus = function() {
+		// In IE7/IE8, document.activeElement is set when an element inside the page is focused
+		if (doc.activeElement && doc.activeElement.nodeType === 1) {
+			return doc.activeElement.tagName.toLowerCase() !== "body";
+		}
+		return isFocused;
+	};
+
+	// 2. Attach focus/blur listeners to window & document for state tracking
+	if (win.attachEvent) {
+		win.attachEvent("onfocus", onFocus);
+		win.attachEvent("onblur", onBlur);
+		doc.attachEvent("onfocusin", onFocus);
+		doc.attachEvent("onfocusout", onBlur);
+	} else if (win.addEventListener) {
+		win.addEventListener("focus", onFocus, false);
+		win.addEventListener("blur", onBlur, false);
+	}
+})(document, window);

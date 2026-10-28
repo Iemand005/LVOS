@@ -30,7 +30,9 @@ export default defineConfig(
 				flags: "readonly",
 				getScreenShooter: "readonly",
 				launchpad: "readonly",
-				Helpers: "readonly"
+				Helpers: "readonly",
+				TabScroller: "readonly",
+				initApps: "readonly"
 			}
 		},
 

@@ -85,4 +85,4 @@ window.addEventListener("load", function(e){
 	LVMessenger.onHostBeingLVOS(function() {
 		document.body.classList.add("transparent");
 	});
-});
+}, false);

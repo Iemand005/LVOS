@@ -132,5 +132,3 @@ function finishAppInstall() {
 }
 
 finishAppInstall();
-
-window.addEventListener("load", initApps, false);

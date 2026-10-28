@@ -280,10 +280,11 @@ window.addEventListener("keydown", function(event) {
       break;
     case "F10":
       event.preventDefault();
-      /** @type {Dialog} */
       var c = windowManager.windows["console"];
-      c.open();
-      c.maximize();
+	  if (c) {
+		  c.open();
+		  c.maximize();
+	  }
       break;
     case "F9":
         event.preventDefault();
@@ -310,6 +311,9 @@ function DesktopManager() {
     this.desktopParent = null;
     /** @type {Node | null} */
     this.desktopNextSibling = null;
+
+	/** @type {(() => void) | null} */
+	this._endAnim = null;
 }
 
 Object.defineProperty(DesktopManager.prototype, "isExposé", {
@@ -324,8 +328,8 @@ Object.defineProperty(DesktopManager.prototype, "isExposé", {
 DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
     for (var i = 0; i < this.desktops.length; i++) {
         var desktop = this.desktops[i];
+		if (!desktop) continue;
         var element = desktop.target;
-        if (!element || !element.getBoundingClientRect) continue;
         var rect = element.getBoundingClientRect();
         if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return i;
     }
@@ -333,6 +337,8 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
+	this.playBootAnimation();
+
     var windowSection = document.getElementById("window-section");
     if (windowSection) {
         this.desktopParent = windowSection.parentNode;
@@ -340,6 +346,58 @@ DesktopManager.prototype.init = function() {
     }
 
     this.setExposéEnabled(!(typeof flags !== "undefined" && flags.exposeAndDesktops === false));
+
+
+	initApps();
+
+	this.finishBootAnimationEarly();
+};
+
+Object.defineProperty(DesktopManager.prototype, "overlay", {
+	get: function() { return document.getElementById("overlay"); }
+});
+
+/**
+ * @param {boolean} visible
+ * @param {boolean} [animate]
+ */
+DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
+	var overlay = this.overlay;
+	if (!overlay) return;
+	var className = visible ? "open " : "";
+	if (animate !== false) className += "animating";
+	overlay.className = className;
+};
+
+DesktopManager.prototype.playBootAnimation = function() {
+	this.toggleOverlayVisible(true, false);
+	var overlay = this.overlay;
+	if (!overlay) return;
+	var logo = document.getElementById("boot-logo");
+	// logo.onanimationend
+	if (!logo) return;
+	var log = logo;
+
+	var self = this;
+	this._endAnim = function() {
+		self.toggleOverlayVisible(false);
+
+		Helpers.animateElement(log, function() {
+			log.classList.add("end");
+		});
+	};
+
+	Helpers.animateElement(log, function() {
+		log.classList.add("neutral");
+
+	}, "scale", function() {
+		log.classList.add("neutral-big");
+		if (this._endAnim) setTimeout(this._endAnim, 500);
+	}, this);
+};
+
+DesktopManager.prototype.finishBootAnimationEarly = function() {
+	if (this._endAnim) this._endAnim();
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
@@ -365,7 +423,8 @@ DesktopManager.prototype.enableExposé = function() {
 
     document.body.classList.add("exposé");
 
-    this.scrollTabs = new TabScroller(document.querySelector("main"));
+	var main = document.querySelector("main");
+    this.scrollTabs = main ? new TabScroller(main) : null;
     this.addDesktop("Main", windowSection);
     this.addDesktop();
     this.addDesktop();

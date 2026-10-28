@@ -82,7 +82,7 @@ body {
 	margin: 0;
 	pointer-events: none;
 	justify-content: space-between;
-	padding: 8px;
+	padding: 0 8px;
 	border-width: 0px;
 	border-color: inherit;
 	cursor: grab;
@@ -605,10 +605,6 @@ button {
 	pointer-events: auto !important;
 }
 
-button:hover {
-	background-color: rgba(153, 153, 153, 0.219);
-}
-
 .blur button {
 	backdrop-filter: blur(10px);
 }
@@ -780,12 +776,6 @@ button:hover {
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	.window, button {
-		color: white;
-	}
-}
-
 @media (prefers-color-scheme: light) {
 	.window, button {
 		color: black;
@@ -866,7 +856,7 @@ button:hover {
 /* Force first row in IE7 to collapse to 1px / 30px */
 .window table.content > tbody > tr:first-child,
 .window table.content td.header {
-    height: 25px !important;
+    height: 30px !important;
     max-height: 30px !important;
     vertical-align: top !important;
 }
@@ -877,6 +867,10 @@ button:hover {
     max-height: 30px !important;
     overflow: hidden !important;
     zoom: 1; /* Triggers hasLayout in IE7 */
+}
+
+.window table.content tr {
+    height: 100% !important;
 }
 
 /* Force second row (article) to absorb 100% */
