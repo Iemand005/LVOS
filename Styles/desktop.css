@@ -823,7 +823,7 @@ body > canvas {
 	height: 100%;
 }
 
-.no-animations {
+.no-animations * {
 	transition: none !important;
 }
 
