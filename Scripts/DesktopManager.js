@@ -434,13 +434,14 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 /**
  * @param {boolean} visible
  * @param {boolean} [animate]
- * @param {string} [className]
+ * @param {string} [extraClass]
  */
-DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, className) {
+DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extraClass) {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var className = visible ? "open " : "";
 	if (animate !== false) className += "animating";
+	if (extraClass) className += extraClass;
 	overlay.className = className;
 };
 
@@ -448,7 +449,7 @@ DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, class
 
 /** @param {AnimationName} [name] */
 DesktopManager.prototype.playBootAnimation = function(name) {
-	this.toggleOverlayVisible(true, false);
+	this.toggleOverlayVisible(true, false, name || "zoom");
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.getElementById("boot-logo");
