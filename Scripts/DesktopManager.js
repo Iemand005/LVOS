@@ -329,7 +329,6 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
         var desktop = this.desktops[i];
 		if (!desktop) continue;
         var element = desktop.target;
-        if (!element || !element.getBoundingClientRect) continue;
         var rect = element.getBoundingClientRect();
         if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return i;
     }
