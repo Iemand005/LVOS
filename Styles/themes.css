@@ -842,7 +842,7 @@ body.no-blur.modern.blur .window content {
 }
 
 body.jeb .window > content {
-	animation: jeb 1s infinite;
+	animation: jeb 10s infinite;
 }
 
 @keyframes jeb {
