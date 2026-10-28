@@ -65,8 +65,6 @@ if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = f
 
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
-// allo
-
 var flags = {
 	useSkewAnimations: false,
 	aeroSnap: true,
