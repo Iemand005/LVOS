@@ -622,6 +622,11 @@ aside#metroapplist > button {
 	transition: all 300ms linear;
 }
 
+#boot-logo.neutral {
+	scale: 1;
+	filter: blur(0px);
+}
+
 #dockapplist {
 	/* ToDo: Implement moving apps in and out the cock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
 	position: absolute;
