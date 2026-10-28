@@ -364,11 +364,9 @@ DesktopManager.prototype.playBootAnimation = function() {
 	this.toggleOverlayVisible(true, false);
 	var overlay = this.overlay;
 	if (!overlay) return;
-	var logo = document.createElement("img");
-	logo.src = "./Assets/Logo_512x512.png";
-	overlay.appendChild(logo);
-
-	$0.classList.add("neutral")
+	var logo = document.getElementById("boot-logo");
+	if (!logo) return;
+	logo.classList.add("neutral");
 };
 
 DesktopManager.prototype.isExposéSupported = function() {
