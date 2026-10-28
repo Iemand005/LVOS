@@ -525,10 +525,11 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
-			if (!onTransitionEnd) return;
-			if (typeof onTransitionEnd === "string") {
-				if (event.propertyName !== onTransitionEnd) return;
-			} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
+			if (onTransitionEnd) {
+				if (typeof onTransitionEnd === "string") {
+					if (event.propertyName !== onTransitionEnd) return;
+				} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
+			}
 
 			element.removeEventListener(transitionEndEvent, animationHandler, false);
 			clearTimeout(state.timer);
