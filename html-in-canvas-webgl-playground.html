@@ -99,13 +99,13 @@ c.requestPaint();
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // 1) background triangle (no depth, so the cube always lands on top)
-  gl.disable(gl.DEPTH_TEST);
-  gl.useProgram(bgProg);
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
-  gl.enableVertexAttribArray(bgP);
-  gl.vertexAttribPointer(bgP, 2, gl.FLOAT, false, 0, 0);
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  gl.disableVertexAttribArray(bgP);
+//   gl.disable(gl.DEPTH_TEST);
+//   gl.useProgram(bgProg);
+//   gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
+//   gl.enableVertexAttribArray(bgP);
+//   gl.vertexAttribPointer(bgP, 2, gl.FLOAT, false, 0, 0);
+//   gl.drawArrays(gl.TRIANGLES, 0, 3);
+//   gl.disableVertexAttribArray(bgP);
 
   // 2) spinning cube
   gl.enable(gl.DEPTH_TEST);
