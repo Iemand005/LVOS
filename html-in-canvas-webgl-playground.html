@@ -30,6 +30,17 @@ function makeProgram(vs, fs) {
 const FRAG = `precision mediump float; uniform sampler2D s; varying vec2 v;
               void main() { gl_FragColor = texture2D(s, v); }`;
 
+// ---------- background: one big triangle covering the screen ----------
+const bgProg = makeProgram(`
+  attribute vec2 p; varying vec2 v;
+  void main() {
+    v = vec2(p.x * .5 + .5, .5 - p.y * .5);   // texture is top-down
+    gl_Position = vec4(p, 0., 1.);
+  }`, FRAG);
+const bgBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+
 // ---------- cube ----------
 const cubeProg = makeProgram(`
   attribute vec3 p; attribute vec2 t; uniform float a, asp; varying vec2 v;
@@ -58,6 +69,7 @@ const idxBuf = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(I), gl.STATIC_DRAW);
 
+const bgP = gl.getAttribLocation(bgProg, 'p');
 const cubeP = gl.getAttribLocation(cubeProg, 'p');
 const cubeT = gl.getAttribLocation(cubeProg, 't');
 const uAngle = gl.getUniformLocation(cubeProg, 'a');
@@ -85,6 +97,15 @@ c.requestPaint();
 // ---------- draw ----------
 (function draw(t) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // 1) background triangle (no depth, so the cube always lands on top)
+  gl.disable(gl.DEPTH_TEST);
+  gl.useProgram(bgProg);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuf);
+  gl.enableVertexAttribArray(bgP);
+  gl.vertexAttribPointer(bgP, 2, gl.FLOAT, false, 0, 0);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.disableVertexAttribArray(bgP);
 
   // 2) spinning cube
   gl.enable(gl.DEPTH_TEST);
