@@ -486,7 +486,7 @@ DesktopManager.prototype.playBootAnimation = function(name) {
 	}, "transform", function() {
 		log.classList.add("neutral-big");
 		if (this._endAnim) setTimeout(this._endAnim, 500);
-	}, this);
+	}, this, 2000);
 };
 
 DesktopManager.prototype.finishBootAnimationEarly = function() {
