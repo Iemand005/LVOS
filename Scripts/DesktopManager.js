@@ -483,7 +483,7 @@ DesktopManager.prototype.playBootAnimation = function(name) {
 	Helpers.animateElement(log, function() {
 		log.classList.add("neutral");
 
-	}, "scale", function() {
+	}, "transform", function() {
 		log.classList.add("neutral-big");
 		if (this._endAnim) setTimeout(this._endAnim, 500);
 	}, this);
