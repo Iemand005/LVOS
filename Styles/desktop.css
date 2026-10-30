@@ -620,7 +620,6 @@ aside#metroapplist > button {
 	height: 100%;
 	object-fit: scale-down;
 
-	/* scale: 0.2; */
 	transform: scale(0.2);
 
 	filter: blur(10px);
@@ -630,7 +629,6 @@ aside#metroapplist > button {
 }
 
 #overlay.zoom #boot-logo.neutral {
-	/* scale: 1; */
 	transform: scale(1);
 	filter: blur(0px);
 
@@ -638,7 +636,6 @@ aside#metroapplist > button {
 }
 
 #overlay.zoom #boot-logo.neutral-big {
-	/* scale: 1.7; */
 	transform: scale(1.7);
 	filter: blur(0px);
 
@@ -646,7 +643,6 @@ aside#metroapplist > button {
 }
 
 #overlay.zoom #boot-logo.end {
-	/* scale: 10; */
 	transform: scale(10);
 	filter: blur(10px);
 	opacity: 0;
