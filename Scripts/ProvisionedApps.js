@@ -70,7 +70,8 @@ var applications = [
 	provisionedApp("LVOS", "lvos", "index.html", { distSrc: "https://iemand005.github.io/LVOS/", altUrls: ["https://iemand005.github.io/LVOS-dist/", "https://vulpos.pages.dev/", "https://localhost:5000/index.html", "https://localhost:5001/index.html", "https://lvos.neocities.org"] }),
 	provisionedApp("Speak", "speak", "Applications/Speak/speak.html"),
 	provisionedApp("Tepartive.NET", "tepartive", "https://tepartive.net/"),
-	provisionedApp("ColourTool", "color-tool", "Applications/ColorTool/colors.html")
+	provisionedApp("ColourTool", "color-tool", "Applications/ColorTool/colors.html"),
+	provisionedApp("AIOne", "aione-web", "https://aione-web.pages.dev/")
 ];
 
 /** @type {Application[]} */
