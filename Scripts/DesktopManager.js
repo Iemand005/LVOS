@@ -500,7 +500,7 @@ DesktopManager.prototype.isExposéSupported = function() {
 /** @param {boolean} enabled */
 DesktopManager.prototype.setExposéEnabled = function(enabled) {
     if (enabled) this.enableExposé();
-    else this.disableExposé();z
+    else this.disableExposé();
 };
 
 DesktopManager.prototype.enableExposé = function() {
