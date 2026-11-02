@@ -9,11 +9,11 @@
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
 function loadScript(url, callback) {
-  var script = document.createElement('script');
+  var script = document.createElement("script");
   script.src = url;
-  
+
   script.onload = callback;
-  
+
   document.head.appendChild(script);
 }
 
@@ -47,9 +47,9 @@ function init() {
 
 	if (location.protocol === "file:") try {
 		/**@type {NodeListOf<HTMLScriptElement>}*/
-		var scripts = document.querySelectorAll('script[type="module"]');
+		var scripts = document.querySelectorAll("script[type=\"module\"]");
 		scripts.forEach(function (/**@type {HTMLScriptElement}*/s) {
-			var replacement = document.createElement('script');
+			var replacement = document.createElement("script");
 			replacement.src = s.src;
 			try {
 
@@ -294,7 +294,10 @@ function createDesktop() {
     return windowSection;
 }
 
-/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+/**
+ * @param {string} [name] @param {HTMLElement} [desktopElement]
+ * @param desktopElement
+ */
 function Desktop(name, desktopElement) {
     this.name = name;
 
@@ -404,7 +407,7 @@ DesktopManager.prototype.getDesktopIndexAt = function(x, y) {
 };
 
 DesktopManager.prototype.init = function() {
-	this.playBootAnimation();
+	if (flags.bootAnimation) this.playBootAnimation();
 
     var windowSection = document.getElementById("window-section");
     if (windowSection) {
@@ -424,20 +427,8 @@ DesktopManager.prototype.init = function() {
 	}
 
 
-	this.finishBootAnimationEarly();
+	setTimeout(this.finishBootAnimationEarly, 200);
 };
-
-window.addEventListener('beforeunload', () => {
-  // Quickly inject or show a black/white overlay mask
-  const mask = document.createElement('div');
-  mask.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:white;z-index:99999;transition:opacity 0.2s;opacity:0;';
-  document.body.appendChild(mask);
-  
-  // Force a quick flash fade before the browser destroys the thread
-  requestAnimationFrame(() => {
-    mask.style.opacity = '1';
-  });
-});
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {
 	get: function() { return document.getElementById("overlay"); }
@@ -446,23 +437,39 @@ Object.defineProperty(DesktopManager.prototype, "overlay", {
 /**
  * @param {boolean} visible
  * @param {boolean} [animate]
+ * @param {string} [extraClass]
  */
-DesktopManager.prototype.toggleOverlayVisible = function(visible, animate) {
+DesktopManager.prototype.toggleOverlayVisible = function(visible, animate, extraClass) {
 	var overlay = this.overlay;
 	if (!overlay) return;
-	var className = visible ? "open " : "";
-	if (animate !== false) className += "animating";
-	overlay.className = className;
+	if (visible) overlay.classList.add("open");
+	else overlay.classList.remove("open");
+
+	if (animate !== false) overlay.classList.add("animating");
+	else overlay.classList.remove("animating");
+
+	if (extraClass) overlay.classList.add(extraClass);
 };
 
-DesktopManager.prototype.playBootAnimation = function() {
-	this.toggleOverlayVisible(true, false);
+DesktopManager.prototype.resetOverlay = function() {
+	var overlay = this.overlay;
+	if (!overlay) return;
+	overlay.className = "";
+};
+
+/** @typedef {"zoom" | "flip"} AnimationName */
+
+/** @param {AnimationName} [name] */
+DesktopManager.prototype.playBootAnimation = function(name) {
+	this.toggleOverlayVisible(true, false, name || "zoom");
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.getElementById("boot-logo");
 	// logo.onanimationend
 	if (!logo) return;
 	var log = logo;
+
+	log.className = "";
 
 	var self = this;
 	this._endAnim = function() {
@@ -476,10 +483,10 @@ DesktopManager.prototype.playBootAnimation = function() {
 	Helpers.animateElement(log, function() {
 		log.classList.add("neutral");
 
-	}, "scale", function() {
+	}, "transform", function() {
 		log.classList.add("neutral-big");
 		if (this._endAnim) setTimeout(this._endAnim, 500);
-	}, this);
+	}, this, 2000);
 };
 
 DesktopManager.prototype.finishBootAnimationEarly = function() {
@@ -509,7 +516,7 @@ DesktopManager.prototype.enableExposé = function() {
 
     document.body.classList.add("exposé");
 
-	var main = document.querySelector("main");
+	var main = document.getElementById("desktop-area");
     this.scrollTabs = main ? new TabScroller(main) : null;
     this.addDesktop("Main", windowSection);
     this.addDesktop();
@@ -535,7 +542,10 @@ DesktopManager.prototype.disableExposé = function() {
     this.gapDesktop = null;
 };
 
-/** @param {string} [name] @param {HTMLElement} [desktopElement] */
+/**
+ * @param {string} [name] @param {HTMLElement} [desktopElement]
+ * @param desktopElement
+ */
 DesktopManager.prototype.addDesktop = function(name, desktopElement) {
     if (!this.scrollTabs) return;
     var desktop = new Desktop(name || "Desktop " + (this.desktops.length + 1), desktopElement);
@@ -647,7 +657,10 @@ DesktopManager.prototype.clearWallpaperContent = function() {
 	wallpaper.style.backgroundImage = "";
 };
 
-/** Apply one of the registered (provisioned) wallpaper apps, e.g. Frosted Colours or Horizon Background. */
+/**
+ * Apply one of the registered (provisioned) wallpaper apps, e.g. Frosted Colours or Horizon Background.
+ * @param id
+ */
 DesktopManager.prototype.applyRegisteredWallpaper = function(id) {
 	this.clearWallpaperContent();
 	var frame = this.ensureWallpaperFrame();
@@ -759,7 +772,8 @@ function initWallpaperDB(onSuccess, onFailure) {
         }
     };
 }
-/** /
+/**
+ * /
  * @param {string} dataUrl
  */
 function localStorageFabblack(dataUrl) {
@@ -879,10 +893,22 @@ if (document.readyState === "loading") {
     loadWallpaperFromCache();
 }
 
+var jebNumber = 0;
+
 window.addEventListener("keydown", function(event) {
-  if (event.key === "Shift" || event.keyCode === 16) {
-    document.body.classList.add("slow-animations");
-  }
+	if (event.key === "Shift" || event.keyCode === 16) {
+		document.body.classList.add("slow-animations");
+	}
+
+	console.log(event.key)
+
+	if (event.key === "j" && jebNumber === 0) {
+		jebNumber++;
+	} else if (event.key === "e" && jebNumber === 1) {
+		jebNumber++;
+	} else if (event.key === "b" && jebNumber === 2) {
+		setTheme("jeb");
+	}
 }, false);
 
 window.addEventListener("keyup", function(event) {

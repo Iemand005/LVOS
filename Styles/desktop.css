@@ -612,6 +612,45 @@ aside#metroapplist > button {
 }
 
 #boot-logo {
+	will-change: opacity, scale;
+}
+
+#overlay.zoom #boot-logo {
+	width: 100%;
+	height: 100%;
+	object-fit: scale-down;
+
+	transform: scale(0.2);
+
+	filter: blur(10px);
+	opacity: 0;
+
+	transition: all 400ms cubic-bezier(.77,.14,.38,.51);
+}
+
+#overlay.zoom #boot-logo.neutral {
+	transform: scale(1);
+	filter: blur(0px);
+
+	opacity: 1;
+}
+
+#overlay.zoom #boot-logo.neutral-big {
+	transform: scale(1.7);
+	filter: blur(0px);
+
+	transition: all 1000ms cubic-bezier(.31,.35,.75,.37);
+}
+
+#overlay.zoom #boot-logo.end {
+	transform: scale(10);
+	filter: blur(10px);
+	opacity: 0;
+
+	transition: all 300ms cubic-bezier(.77,.14,.38,.51);
+}
+
+#overlay.flip #boot-logo {
 	width: 100%;
 	height: 100%;
 	object-fit: scale-down;
@@ -620,33 +659,37 @@ aside#metroapplist > button {
 	filter: blur(10px);
 	opacity: 0;
 
-	transition: all 300ms cubic-bezier(.77,.14,.38,.51);
+	transition: all 250ms cubic-bezier(.77,.14,.38,.51);
 }
 
-#boot-logo.neutral {
+#overlay.flip #boot-logo.neutral {
 	scale: 1;
 	filter: blur(0px);
 
 	opacity: 1;
-
-	/* transition: all 100ms cubic-bezier(.32,.24,.25,1); */
-
 }
 
-#boot-logo.neutral-big {
-	scale: 1.5;
+#overlay.flip #boot-logo.neutral-big {
+	scale: 1.7;
 	filter: blur(0px);
 
 	transition: all 1000ms cubic-bezier(.31,.35,.75,.37);
 }
 
-#boot-logo.end {
+#overlay.flip #boot-logo.end {
 	scale: 10;
 	filter: blur(10px);
 	opacity: 0;
 
-	transition: all 300ms cubic-bezier(.77,.14,.38,.51);
+	transition: all 200ms cubic-bezier(.77,.14,.38,.51);
 }
+
+main {
+	perspective: 1000px;
+	perspective: 1000px;
+	transform-style: preserve-3d;
+}
+
 
 #dockapplist {
 	/* ToDo: Implement moving apps in and out the cock, add a gap and fix reflections of dock icons. (reflections are there but they're flipped 180° and thus exit the view.). And fart in a jar. */
@@ -680,9 +723,7 @@ aside#metroapplist > button {
 	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.windows #clock,
-.windows-10 #clock,
-.windows-11 #clock {
+.windows #clock {
 	font-size: 12px;
 }
 
@@ -823,9 +864,10 @@ body > canvas {
 	height: 100%;
 }
 
-.no-animations * {
-	animation-duration: 0s !important;
-	transition-duration: 0s !important;
+body.no-animations #charms *,
+body.no-animations #desktop * {
+	animation-duration: 2ms;
+	transition-duration: 0s;
 }
 
 #window-snap {

@@ -73,6 +73,7 @@ var flags = {
 	broadcastWindowMoves: !document.documentMode,
 	useAnimations: true,
 	ieDropCompatibleMode: true,
+	bootAnimation: true,
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform; },
 	set useTransform(value) {
@@ -2445,8 +2446,8 @@ function Dialog(object) {
 	this._previousX = 0;
 	this._previousY = 0;
 	this._minWidth = 200;
-	this._minHeight = 200;
-	this._maxWidth = 1000;
+	this._minHeight = 40;
+	this._maxWidth = 2000;
 	this._maxHeight = 1000;
 	this._minAspectRatio = 0;
 	this._maxAspectRatio = Infinity;
@@ -2496,9 +2497,11 @@ function Dialog(object) {
 
 	/** @type {Application | null} */
 	this.application = null;
-	if (!Helpers.isElement(object))
+	if (!Helpers.isElement(object)) {
 		this.application = object;
-	else this.target = object;
+		if (object.minWidth) this._minWidth = object.minWidth;
+		if (object.minHeight) this._minHeight = object.minHeight;
+	} else this.target = object;
 
 	if (!id) id = object.title;
 	if (object.title) this._title = object.title;

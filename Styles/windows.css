@@ -514,6 +514,7 @@ body.slow-animations *.window,
 .slow-animations .window.animating > .backdrop-clip * {
 	-webkit-transition-duration: 3s !important;
 	transition-duration: 3s !important;
+	animation-duration: 3s !important;
 }
 
 article > *,
