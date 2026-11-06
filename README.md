@@ -22,12 +22,6 @@ Supports TypeScript 3-6
 
 TODO:
 
-mobile launchpad (without windowmgr?)
-uh
-- view transitipn api opening app from uh aunchpad
-- default appicon (letter as ion the icomn?)
-wallpaper share between desktop and mobile uh
-
 custom back fwd handling to nav the apps in iframe maybe?
 - share d uh pagination/ tab control fo r launcpad, geodetahbs and frzona
 
