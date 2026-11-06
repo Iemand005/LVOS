@@ -3,15 +3,6 @@ interface Array<T> {
 	forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
 }
 
-interface BeforeNavigate2Handler {
-	(pDisp: any, URL: string, Flags: any, TargetFrameName: any, PostData: any, Headers: any, Cancel: any): void;
-}
-
-interface DropTargetBrowser extends IWebBrowser2 {
-	attachEvent?(event: string, handler: BeforeNavigate2Handler): void;
-	BeforeNavigate2?: BeforeNavigate2Handler;
-}
-
 interface Application {
 	title: string;
 	id: string;
