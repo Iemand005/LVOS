@@ -2,6 +2,7 @@
 	"name": "vulpos",
 	"type": "module",
 	"scripts": {
+		"dev": "vite",
 		"build": "node build.js",
 		"build:dev": "node build.js --no-minify",
 		"build:ie8": "node build.js --ie8"
@@ -16,6 +17,7 @@
 		"globals": "^17.11.0",
 		"jshint": "^2.13.6",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.62.1"
+		"typescript-eslint": "^8.62.1",
+		"vite": "^8.3.6"
 	}
 }
