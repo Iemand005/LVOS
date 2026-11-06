@@ -16,17 +16,7 @@
     <script defer>
         // @ts-check
         /**
-         * @typedef {{
-         *   RegisterAsDropTarget: boolean,
-         *   Navigate: (url: string) => void,
-         *   Document: {
-         *     parentWindow: {
-         *       handleDroppedFilePath: (url: string) => void
-         *     }
-         *   },
-         *   attachEvent?: (event: "onbeforenavigate2", handler: (pDisp: any, URL: string, Flags: number, TargetFrameName: string, PostData: any, Headers: string, Cancel: { value: boolean } | null) => void) => void,
-         *   BeforeNavigate2?: (pDisp: any, URL: string, Flags: number, TargetFrameName: string, PostData: any, Headers: string, Cancel: { value: boolean } | null) => void
-         * }} IWebBrowser
+         * @typedef {import('./node_modules/com-types/lib.com.web.d.ts').IWebBrowser} IWebBrowser
          */
 
         window.onload = function() {
