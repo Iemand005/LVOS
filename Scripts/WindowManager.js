@@ -2639,7 +2639,7 @@ function Dialog(object) {
 
 	if(this.resizable && createSizers) this._createSizers();
 
-	target.onselectstart = function (event) {
+	if (target.onselectstart !== null) target.onselectstart = function (event) {
 		if (self._ctrlDrag) return;
 		cancelDomEvent(event);
 	};
