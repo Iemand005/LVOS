@@ -1,5 +1,5 @@
 (function () {
-	/** @type {IWebBrowser} */
+	/** @type {IWebBrowser2} */
 	var wb = /** @type {any} */ (document.getElementById("wb"));
 
 	window.onload = function () {
