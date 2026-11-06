@@ -221,7 +221,7 @@ svg {
 }
 
 .window > content,
-.window > .content {
+.window .content {
 	background-color: orange;
 	display: -webkit-box;
 	display: -ms-flexbox;
