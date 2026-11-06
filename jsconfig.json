@@ -6,9 +6,10 @@
 		"allowJs": true,
 		"strict": true,
 		"typeRoots": [
-			"./node_modules/@types"
+			"./node_modules/@types",
+			"./node_modules/com-types"
 		],
-		"types": ["w3c-web-hid"],
+		"types": ["w3c-web-hid", "com-types"],
 		"traceResolution": true,
 		"noImplicitThis": true,
 		"noUncheckedIndexedAccess": true,
