@@ -1773,7 +1773,7 @@ WindowManager.prototype.getWindowById = function(id) {
  * @param {string} [id]
  */
 WindowManager.prototype.broadcast = function(type, data, id) {
-	this.channel && LVMessenger.broadcast(this.channel, type, data, id);
+	if (this.channel) LVMessenger.broadcast(this.channel, type, data, id);
 };
 
 /** Share the current theme with the other running OS instances. */
