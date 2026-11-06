@@ -2561,9 +2561,7 @@ function Dialog(object) {
 		return true;
 	};
 
-	if (object instanceof Dialog) {
-		if (object.application) object = object.application;
-	}
+	if (object instanceof Dialog && object.application) object = object.application;
 
 	/** @type {HTMLElement} */
 	this.target;
