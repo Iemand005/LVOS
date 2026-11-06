@@ -1,10 +1,3 @@
-/**
- * @typedef {IWebBrowser2 & {
- *   attachEvent?: (event: string, handler: Function) => void;
- *   BeforeNavigate2?: Function;
- * }} DropTargetBrowserX
- */
-
 (function () {
 	/** @type {DropTargetBrowserX} */
 	var wb = /** @type {any} */ (document.getElementById("wb"));
