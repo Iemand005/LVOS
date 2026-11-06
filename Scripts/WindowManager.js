@@ -129,7 +129,7 @@ var flags = {
 //#region Functions
 
 /** @param {Event} event */
-function cancelDomEvent(event) {
+Helpers.cancelDomEvent = function(event) {
 	try {
 		if (typeof event.preventDefault === "function") event.preventDefault();
 		event.returnValue = false;
@@ -138,7 +138,7 @@ function cancelDomEvent(event) {
 		return false;
 	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
 	return false;
-}
+};
 
 /** @param {string} url */
 function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
