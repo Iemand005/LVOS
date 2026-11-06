@@ -39,7 +39,10 @@ const SCRIPTS = join(ROOT, "Scripts");
 const ASSETS = [
 	{ from: "Styles" },
 	{ from: "Applications", exclude: ["MPTool", "GeodeWeb"] },
-	{ from: "Assets" },
+	// Assets/src holds source art (Blender/photos). Manja.jpg is the one runtime
+	// asset in there (Coverflow uses it), so publish just that file.
+	{ from: "Assets", exclude: ["src"] },
+	{ from: "Assets/src/Manja.jpg", to: "Assets/Manja.jpg" },
 	{ from: "manifest.json" },
 	{ from: "manifest-mobile.json" },
 	{ from: "icon-192.png" },
@@ -129,6 +132,26 @@ function resolveDist() {
 function isNotTypeDeclaration(src) {
 	return !src.endsWith(".d.ts");
 }
+
+/** Repo metadata, tooling and docs that must never be published. */
+const DIST_IGNORED_NAMES = new Set([
+	".vscode",
+	".git",
+	".gitignore",
+	".gitmodules",
+	".gitattributes",
+	"node_modules",
+	"README.md",
+	"package.json",
+	"package-lock.json",
+	"jsconfig.json",
+	".jshintrc"
+]);
+
+/** @param {string} src */
+function isDistFile(src) {
+	return isNotTypeDeclaration(src) && !src.endsWith(".log") && !DIST_IGNORED_NAMES.has(basename(src));
+}
 function copyAssets(dist) {
 	for (const asset of ASSETS) {
 		if (!asset.to) asset.to = asset.from;
@@ -142,7 +165,7 @@ function copyAssets(dist) {
 		cpSync(src, dest, {
 			recursive: true,
 			filter: (path) =>
-				isNotTypeDeclaration(path) &&
+				isDistFile(path) &&
 				!asset.exclude.includes(basename(path))
 		});
 		console.log("[copy] " + asset.from + " -> " + dest);
@@ -164,7 +187,7 @@ function copyAssets(dist) {
 		const src = join(ROOT, d.from);
 		const dest = join(dist, d.to);
 		if (existsSync(src)) {
-			cpSync(src, dest, { recursive: true, filter: isNotTypeDeclaration });
+			cpSync(src, dest, { recursive: true, filter: isDistFile });
 			console.log("[copy] " + d.from + " -> " + dest);
 		}
 	}
