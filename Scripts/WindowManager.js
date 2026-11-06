@@ -658,7 +658,7 @@ function WindowManager() {
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
-	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos");
+	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos") || null;
 
 	if (this.channel) this.channel.onmessage = function(ev) {
 		var data = ev.data;
@@ -2380,6 +2380,7 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
+/** @param {HTMLElement} elem */
 function ensureClassList(elem) {
     if (elem.classList) return;
 
