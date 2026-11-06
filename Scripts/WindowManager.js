@@ -2705,7 +2705,7 @@ function Dialog(object) {
 
 		try {
 			transfer.setData("application/json", data);
-			if (flagsieDropCompatibleMode) {
+			if (flags.ieDropCompatibleMode) {
 				transfer.setData("Text", data);
 				transfer.setData("text/plain", data);
 			}
