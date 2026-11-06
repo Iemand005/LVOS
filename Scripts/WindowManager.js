@@ -683,7 +683,7 @@ function WindowManager() {
 				self.disableDialogDrag();
 				return;
 			}
-			cancelDomEvent(event);
+			Helpers.cancelDomEvent(event);
 
 			var isTouch = "pointerType" in event && event.pointerType === "touch";
 
@@ -1087,7 +1087,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 		}
 	} catch (ex) { console.log(ex); }
 
-	cancelDomEvent(event);
+	Helpers.cancelDomEvent(event);
 
 	if (window.desktopManager && window.desktopManager.isExposé) {
 		var root = document.querySelector("main");
@@ -2642,7 +2642,7 @@ function Dialog(object) {
 
 	target.onselectstart = function (/** @type {Event} */event) {
 		if (self._ctrlDrag) return;
-		cancelDomEvent(event);
+		Helpers.cancelDomEvent(event);
 	};
 
 	var body = this.body;
@@ -2926,7 +2926,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
 			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id);
-			cancelDomEvent(ev);
+			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
 		if (supportsPointer) {
@@ -4729,7 +4729,7 @@ window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
-window.addEventListener("dragover", cancelDomEvent, false);
+window.addEventListener("dragover", Helpers.cancelDomEvent, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
 }, false);
