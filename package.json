@@ -12,6 +12,7 @@
 		"@types/node": "^26.6.4",
 		"@types/w3c-web-hid": "^1.0.7",
 		"acorn": "^8.19.0",
+		"com-types": "^0.0.0-stage",
 		"esbuild": "^0.28.2",
 		"eslint-plugin-jsdoc": "^63.3.3",
 		"globals": "^17.11.0",
