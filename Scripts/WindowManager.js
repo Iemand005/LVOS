@@ -2922,6 +2922,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
 		ensureClassList(sizer);
 		sizer.draggable = false;
+		sizer.setAttribute("unselectable", "on");
 		sizer.id = id.toString();
 		sizer.classList.add(sizerId);
 		/** @param {PointerEvent | MouseEvent} ev */

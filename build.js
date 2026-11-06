@@ -490,7 +490,9 @@ function assertEs3(code, outfile) {
 	try {
 		parse(code, { ecmaVersion: 3, sourceType: "script" });
 	} catch (error) {
-		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message);
+		const offset = error.pos || 0;
+		const excerpt = code.slice(Math.max(0, offset - 50), offset + 50);
+		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message + "\n" + excerpt);
 	}
 }
 
@@ -539,7 +541,7 @@ function applyIe8SpecificPatches(code) {
 	// Disable bindConsole
 	code = code.replace(/var bindConsole\s*=\s*true;/, "var bindConsole = false;");
 	// Disable interceptor.bindage()
-	code = code.replace(/interceptor\.bindage\(\);?/, "/* interceptor.bindage(); */");
+	code = code.replace(/interceptor\.bindage\(\);?/, "void 0");
 
 	return code;
 }
