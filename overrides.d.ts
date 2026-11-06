@@ -97,7 +97,7 @@ declare global {
 
 	interface Element {
 		setAttribute(qualifiedName: "is", value: CustomElementNames): void;
-		get classList(): undefined | DOMTokenList;
+		get classList?(): undefined | DOMTokenList;
 	}
 
 	interface Navigator {
