@@ -2654,17 +2654,20 @@ function Dialog(object) {
 	}};
 
 	var header = this.titleBar;
-	if (header) target.ondblclick = function (event) {
-		var rect = getRect(header);
-		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+	if (header) {
+		header.onselectstart = function () { return false; };
+		target.ondblclick = function (event) {
+			var rect = getRect(header);
+			if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 
-		var node = event.target instanceof HTMLElement ? event.target : null;
-		while (node && node !== header) {
-			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
-			node = node.parentElement;
-		}
-		self.toggleMaximized();
-	};
+			var node = event.target instanceof HTMLElement ? event.target : null;
+			while (node && node !== header) {
+				if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
+				node = node.parentElement;
+			}
+			self.toggleMaximized();
+		};
+	}
 
 
 	if (supportsPointer) target.onpointerdown = this.activationHandler;
