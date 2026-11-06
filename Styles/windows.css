@@ -350,6 +350,7 @@ article, .article {
 
 .window.open {
 	pointer-events: auto;
+	display: block;
 }
 
 .window:not(.open) > content,
