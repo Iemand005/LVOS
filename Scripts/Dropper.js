@@ -7,20 +7,11 @@
 
 		wb.Navigate(location.href.replace(/[^\/\\]+$/, "") + "index.html");
 
-		if (wb.attachEvent) {
-			wb.attachEvent('onbeforenavigate2', function (pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
-				if (URL.indexOf("index.html") == -1) {
-					wb.Document.parentWindow.handleDroppedFilePath(URL);
-					if (Cancel != null) Cancel.value = true;
-				}
-			});
-		} else {
-			wb.BeforeNavigate2 = function (pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
-				if (URL.indexOf("index.html") == -1) {
-					wb.Document.parentWindow.handleDroppedFilePath(URL);
-					if (Cancel != null) Cancel.value = true;
-				}
-			};
-		}
+		wb.attachEvent('onbeforenavigate2', function (pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel) {
+			if (URL.indexOf("index.html") == -1) {
+				wb.Document.parentWindow.handleDroppedFilePath(URL);
+				if (Cancel != null) Cancel.value = true;
+			}
+		});
 	};
 })();
