@@ -344,6 +344,7 @@ article, .article {
 	.window {
 		display: block;
 		opacity: 0;
+		pointer-events: none;
 	}
 }
 
