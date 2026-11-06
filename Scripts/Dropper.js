@@ -1,5 +1,5 @@
 (function () {
-	/** @type {DropTargetBrowserX} */
+	/** @type {DropTargetBrowser} */
 	var wb = /** @type {any} */ (document.getElementById("wb"));
 
 	window.onload = function () {
