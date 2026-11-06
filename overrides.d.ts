@@ -1,3 +1,6 @@
+/// <reference path="./node_modules/com-types/lib.com.d.ts" />
+/// <reference path="./node_modules/com-types/lib.com.web.d.ts" />
+
 export {};
 
 interface DocumentPictureInPictureOptions {
