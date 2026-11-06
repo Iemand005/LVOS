@@ -2544,7 +2544,7 @@ function Dialog(object) {
 			var event = window.event;
 			if (event) {
 				target = event.srcElement;
-				ev = event;
+				ev = /** @type {MouseEvent} */(event);
 			}
 			if (!ev) return;
 		}
