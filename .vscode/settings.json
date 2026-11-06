@@ -8,6 +8,7 @@
 	"files.associations": {
 		"*.hta": "html"
 	},
+	"js/ts.implicitProjectConfig.strictNullChecks": true,
 	"cSpell.words": [
 		"LVOS",
 		"VulpOS",

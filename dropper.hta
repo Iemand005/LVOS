@@ -19,9 +19,13 @@
          * @typedef {{
          *   RegisterAsDropTarget: boolean,
          *   Navigate: (url: string) => void,
-         *   Document: any,
-         *   attachEvent?: (event: string, handler: (pDisp: any, URL: string, Flags: any, TargetFrameName: any, PostData: any, Headers: any, Cancel: any) => void) => void,
-         *   BeforeNavigate2?: (pDisp: any, URL: string, Flags: any, TargetFrameName: any, PostData: any, Headers: any, Cancel: any) => void
+         *   Document: {
+         *     parentWindow: {
+         *       handleDroppedFilePath: (url: string) => void
+         *     }
+         *   },
+         *   attachEvent?: (event: "onbeforenavigate2", handler: (pDisp: any, URL: string, Flags: number, TargetFrameName: string, PostData: any, Headers: string, Cancel: { value: boolean } | null) => void) => void,
+         *   BeforeNavigate2?: (pDisp: any, URL: string, Flags: number, TargetFrameName: string, PostData: any, Headers: string, Cancel: { value: boolean } | null) => void
          * }} IWebBrowser
          */
 
