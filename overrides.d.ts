@@ -69,6 +69,8 @@ declare global {
 
 		metaThemeColor?: HTMLMetaElement;
 
+		wb: string;
+
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
