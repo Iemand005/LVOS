@@ -340,8 +340,11 @@ article, .article {
 	display: none;
 }
 
-@supports (opacity: 0;) {
-	
+@supports (opacity: 0) {
+	.window {
+		display: block;
+		opacity: 0;
+	}
 }
 
 .window.open {
