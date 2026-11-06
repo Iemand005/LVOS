@@ -2535,14 +2535,18 @@ function Dialog(object) {
 
 	var self = this;
 	/**
-	 * @param {MouseEvent | PointerEvent} ev
+	 * @param {MouseEvent | PointerEvent} [ev]
 	 * @param {number} [id]
 	 */
 	this.activationHandler = function (ev, id) {
+		var target = ev && ev.target;
 		if (!ev) {
 			var event = window.event;
-			event.target = event.srcElement;
-			ev = event;
+			if (event) {
+				target = event.srcElement;
+				ev = event;
+			}
+			if (!ev) return;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);
 		if (self._ctrlDrag) {
@@ -2550,8 +2554,8 @@ function Dialog(object) {
 			return;
 		}
 
-		ensureClassList(ev.target);
-		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
+		ensureClassList(target);
+		if (target instanceof HTMLElement && target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
