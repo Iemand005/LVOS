@@ -126,14 +126,12 @@ var onLoad = function () {
 	}
 
 	document.body.ondragover = window.ondragover = function(ev) {
-		ev.preventDefault();
-		ev.stopPropagation();
+		Helpers.cancelDomEvent(ev);
 		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
 	};
 
     document.body.ondrop = function(ev) {
-		ev.preventDefault();
-		ev.stopPropagation();
+		Helpers.cancelDomEvent(ev);
 		setDesktopDragOpacity("");
 		if (!ev.dataTransfer) return;
 

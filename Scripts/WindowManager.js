@@ -132,8 +132,8 @@ var flags = {
 Helpers.cancelDomEvent = function(event) {
 	try {
 		if (typeof event.preventDefault === "function") event.preventDefault();
-		event.returnValue = false;
 		if (typeof event.stopPropagation === "function") event.stopPropagation();
+		event.returnValue = false;
 		event.cancelBubble = true;
 		return false;
 	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
