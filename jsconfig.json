@@ -24,7 +24,10 @@
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
 		"ScrollTabs/**/*.js",
-		"*.d.ts"
+		"*.d.ts",
+		"*.hta",
+		"*.html",
+		"node_modules/com-types/lib.com.web.d.ts"
 	],
 	"exclude": [
 		"node_modules",
