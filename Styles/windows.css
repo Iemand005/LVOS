@@ -348,6 +348,12 @@ article, .article {
 	}
 }
 
+@supports (transform) {
+	.window tr, .window td {
+		height: 100%;
+	}
+}
+
 .window.open {
 	pointer-events: auto;
 	display: block;
