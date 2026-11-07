@@ -45,6 +45,7 @@ const ASSETS = [
 	{ from: "Assets/src/Manja.jpg", to: "Assets/Manja.jpg" },
 	{ from: "manifest.json" },
 	{ from: "manifest-mobile.json" },
+	{ from: "indexNS4.html" },
 	{ from: "icon-192.png" },
 	{ from: "icon-512.png" }
 ];
