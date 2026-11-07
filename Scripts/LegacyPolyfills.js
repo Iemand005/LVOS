@@ -521,10 +521,9 @@ if (typeof Array.from != "function") {
 })(window, document);
 
 (function () {
-	if (!("Element" in window)) {
-		function Element() {
+	function Element() {}
 
-		};
+	if (!("Element" in window)) {
 		window.Element = Element;
 	}
 })();
