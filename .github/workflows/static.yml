@@ -3,7 +3,6 @@ name: Deploy static content to Pages
 on:
   push:
     branches: ["master"]
-
   workflow_dispatch:
 
 permissions:
@@ -15,12 +14,20 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  SUBMODULES: >-
+    Scripts/WebGraphics
+    Scripts/WebAura
+    Scripts/WebAudioVisualizer
+    Scripts/WebMedia
+    Applications/FrostedColours
+    ScrollTabs
+
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
 
     steps:
@@ -30,37 +37,58 @@ jobs:
           ref: master
           path: current
           submodules: false
+          fetch-depth: 1
 
-      - name: Checkout old site (old branch)
+      # Cache keys come from the commit SHAs the repo points at
+      - name: Compute cache keys
+        id: keys
+        run: |
+          SUB_HASH=$(git -C current ls-tree HEAD $SUBMODULES | sha256sum | cut -c1-16)
+          OLD_SHA=$(git ls-remote "https://github.com/${{ github.repository }}.git" refs/heads/old | cut -f1)
+          echo "subs=$SUB_HASH" >> "$GITHUB_OUTPUT"
+          echo "old=$OLD_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Cache submodule contents
+        id: cache-subs
+        uses: actions/cache@v4
+        with:
+          path: |
+            current/Scripts/WebGraphics
+            current/Scripts/WebAura
+            current/Scripts/WebAudioVisualizer
+            current/Scripts/WebMedia
+            current/Applications/FrostedColours
+            current/ScrollTabs
+          key: submodules-${{ steps.keys.outputs.subs }}
+
+      - name: Initialize submodules (only on cache miss)
+        if: steps.cache-subs.outputs.cache-hit != 'true'
+        working-directory: current
+        run: |
+          git submodule sync
+          git submodule update --init --depth 1 --jobs 6 $SUBMODULES
+
+      - name: Cache old site
+        id: cache-old
+        uses: actions/cache@v4
+        with:
+          path: oldsite
+          key: oldsite-${{ steps.keys.outputs.old }}
+
+      - name: Checkout old site (only on cache miss)
+        if: steps.cache-old.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
           ref: old
           path: oldsite
           submodules: false
-
-      - name: Initialize submodules for current site
-        working-directory: current
-        run: |
-          git submodule sync
-          git submodule update --init Scripts/WebGraphics
-          git submodule update --init Scripts/WebAura
-          git submodule update --init Scripts/WebAudioVisualizer
-          git submodule update --init Scripts/WebMedia
-          git submodule update --init Applications/FrostedColours
-          git submodule update --init ScrollTabs
-          # git submodule update --init Applications/StereogramMaker
-          # git submodule update --init Applications/Cyanide
+          fetch-depth: 1
 
       - name: Build Pages folder
         run: |
-          mkdir public
-
-          # Copy current site to root
-          cp -r current/* public/
-
-          # Copy old site into /old
           mkdir -p public/old
-          cp -r oldsite/* public/old/
+          rsync -a --exclude='.git' --exclude='.github' current/ public/
+          rsync -a --exclude='.git' oldsite/ public/old/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
