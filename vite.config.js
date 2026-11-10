@@ -1,2 +1,3 @@
+import { defineConfig } from 'vite'
 
-defaultConfig
+defineConfig

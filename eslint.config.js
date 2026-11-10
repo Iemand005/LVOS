@@ -10,7 +10,7 @@ export default defineConfig(
 		languageOptions: {
 			parser: tseslint.parser,
 			parserOptions: {
-				project: "./jsconfig.json"
+				project: "./tsconfig.json"
 			},
 			globals: {
 				...globals.browser,
