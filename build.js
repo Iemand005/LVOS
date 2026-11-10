@@ -39,9 +39,13 @@ const SCRIPTS = join(ROOT, "Scripts");
 const ASSETS = [
 	{ from: "Styles" },
 	{ from: "Applications", exclude: ["MPTool", "GeodeWeb"] },
-	{ from: "Assets" },
+	// Assets/src holds source art (Blender/photos). Manja.jpg is the one runtime
+	// asset in there (Coverflow uses it), so publish just that file.
+	{ from: "Assets", exclude: ["src"] },
+	{ from: "Assets/src/Manja.jpg", to: "Assets/Manja.jpg" },
 	{ from: "manifest.json" },
 	{ from: "manifest-mobile.json" },
+	{ from: "indexNS4.html" },
 	{ from: "icon-192.png" },
 	{ from: "icon-512.png" }
 ];
@@ -129,6 +133,26 @@ function resolveDist() {
 function isNotTypeDeclaration(src) {
 	return !src.endsWith(".d.ts");
 }
+
+/** Repo metadata, tooling and docs that must never be published. */
+const DIST_IGNORED_NAMES = new Set([
+	".vscode",
+	".git",
+	".gitignore",
+	".gitmodules",
+	".gitattributes",
+	"node_modules",
+	"README.md",
+	"package.json",
+	"package-lock.json",
+	"jsconfig.json",
+	".jshintrc"
+]);
+
+/** @param {string} src */
+function isDistFile(src) {
+	return isNotTypeDeclaration(src) && !src.endsWith(".log") && !DIST_IGNORED_NAMES.has(basename(src));
+}
 function copyAssets(dist) {
 	for (const asset of ASSETS) {
 		if (!asset.to) asset.to = asset.from;
@@ -142,7 +166,7 @@ function copyAssets(dist) {
 		cpSync(src, dest, {
 			recursive: true,
 			filter: (path) =>
-				isNotTypeDeclaration(path) &&
+				isDistFile(path) &&
 				!asset.exclude.includes(basename(path))
 		});
 		console.log("[copy] " + asset.from + " -> " + dest);
@@ -164,7 +188,7 @@ function copyAssets(dist) {
 		const src = join(ROOT, d.from);
 		const dest = join(dist, d.to);
 		if (existsSync(src)) {
-			cpSync(src, dest, { recursive: true, filter: isNotTypeDeclaration });
+			cpSync(src, dest, { recursive: true, filter: isDistFile });
 			console.log("[copy] " + d.from + " -> " + dest);
 		}
 	}
@@ -467,7 +491,9 @@ function assertEs3(code, outfile) {
 	try {
 		parse(code, { ecmaVersion: 3, sourceType: "script" });
 	} catch (error) {
-		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message);
+		const offset = error.pos || 0;
+		const excerpt = code.slice(Math.max(0, offset - 50), offset + 50);
+		throw new Error("IE8 bundle " + outfile + " is not valid ES3: " + error.message + "\n" + excerpt);
 	}
 }
 
@@ -516,7 +542,7 @@ function applyIe8SpecificPatches(code) {
 	// Disable bindConsole
 	code = code.replace(/var bindConsole\s*=\s*true;/, "var bindConsole = false;");
 	// Disable interceptor.bindage()
-	code = code.replace(/interceptor\.bindage\(\);?/, "/* interceptor.bindage(); */");
+	code = code.replace(/interceptor\.bindage\(\);?/, "void 0");
 
 	return code;
 }

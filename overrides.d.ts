@@ -1,3 +1,6 @@
+/// <reference path="./node_modules/com-types/lib.com.d.ts" />
+/// <reference path="./node_modules/com-types/lib.com.web.d.ts" />
+
 export {};
 
 interface DocumentPictureInPictureOptions {
@@ -69,6 +72,8 @@ declare global {
 
 		metaThemeColor?: HTMLMetaElement;
 
+		wb: string;
+
 	}
 
 	interface DocumentPictureInPicture extends EventTarget {
@@ -92,6 +97,9 @@ declare global {
 
 	interface Element {
 		setAttribute(qualifiedName: "is", value: CustomElementNames): void;
+		// classList?: DOMTokenList;
+		get classList(): DOMTokenList | undefined;
+		set classList(value: string);
 	}
 
 	interface Navigator {
@@ -144,12 +152,3 @@ declare global {
 		remove?(): void;
 	}
 }
-
-hi =
- https://marketplace.visualstudio.com/_apis/public/gallery/publishers/
-https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2024.17.2024100401/vspackage?targetPlatform=win32-x64
-https://marketplace.visualstudio.com/_apis/public/gallery/publishers/VisualStudioExptTeam/vsextensions/vscodeintellicode/!.3.2/vspackage?targetPlatform=win32-x64
-VisualStudioExptTeam.vscodeintellicode\
-history
-hi				1``1	`1		`1q	`1q	`1	1q	`1	1	1`q	1q`q	`1q	`1q	`1q	1`1q	w`
-hi

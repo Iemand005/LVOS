@@ -3,11 +3,12 @@
 	"editor.indentSize": "tabSize",
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
-	"chat.disableAIFeatures": true,
+	"chat.disableAIFeatures": false,
 	"editor.inlineSuggest.enabled": true,
 	"files.associations": {
 		"*.hta": "html"
 	},
+	"js/ts.implicitProjectConfig.strictNullChecks": true,
 	"cSpell.words": [
 		"LVOS",
 		"VulpOS",

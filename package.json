@@ -1,7 +1,8 @@
 {
-	"name": "lvos",
+	"name": "vulpos",
 	"type": "module",
 	"scripts": {
+		"dev": "vite",
 		"build": "node build.js",
 		"build:dev": "node build.js --no-minify",
 		"build:ie8": "node build.js --ie8"
@@ -11,11 +12,13 @@
 		"@types/node": "^26.6.4",
 		"@types/w3c-web-hid": "^1.0.7",
 		"acorn": "^8.19.0",
+		"com-types": "^0.0.0-stage",
 		"esbuild": "^0.28.2",
 		"eslint-plugin-jsdoc": "^63.3.3",
 		"globals": "^17.11.0",
 		"jshint": "^2.13.6",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.62.1"
+		"typescript-eslint": "^8.62.1",
+		"vite": "^8.3.6"
 	}
 }

@@ -129,16 +129,16 @@ var flags = {
 //#region Functions
 
 /** @param {Event} event */
-function cancelDomEvent(event) {
+Helpers.cancelDomEvent = function(event) {
 	try {
 		if (typeof event.preventDefault === "function") event.preventDefault();
-		event.returnValue = false;
 		if (typeof event.stopPropagation === "function") event.stopPropagation();
+		event.returnValue = false;
 		event.cancelBubble = true;
 		return false;
 	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
 	return false;
-}
+};
 
 /** @param {string} url */
 function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
@@ -658,7 +658,7 @@ function WindowManager() {
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
-	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos");
+	this.channel = "BroadcastChannel" in window && new BroadcastChannel("lvos") || null;
 
 	if (this.channel) this.channel.onmessage = function(ev) {
 		var data = ev.data;
@@ -683,7 +683,7 @@ function WindowManager() {
 				self.disableDialogDrag();
 				return;
 			}
-			cancelDomEvent(event);
+			Helpers.cancelDomEvent(event);
 
 			var isTouch = "pointerType" in event && event.pointerType === "touch";
 
@@ -1087,7 +1087,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 		}
 	} catch (ex) { console.log(ex); }
 
-	cancelDomEvent(event);
+	Helpers.cancelDomEvent(event);
 
 	if (window.desktopManager && window.desktopManager.isExposé) {
 		var root = document.querySelector("main");
@@ -1773,7 +1773,7 @@ WindowManager.prototype.getWindowById = function(id) {
  * @param {string} [id]
  */
 WindowManager.prototype.broadcast = function(type, data, id) {
-	LVMessenger.broadcast(this.channel, type, data, id);
+	if (this.channel) LVMessenger.broadcast(this.channel, type, data, id);
 };
 
 /** Share the current theme with the other running OS instances. */
@@ -2380,6 +2380,7 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
+/** @param {HTMLElement} elem */
 function ensureClassList(elem) {
     if (elem.classList) return;
 
@@ -2535,14 +2536,18 @@ function Dialog(object) {
 
 	var self = this;
 	/**
-	 * @param {MouseEvent | PointerEvent} ev
+	 * @param {MouseEvent | PointerEvent} [ev]
 	 * @param {number} [id]
 	 */
 	this.activationHandler = function (ev, id) {
+		var target = ev && ev.target;
 		if (!ev) {
 			var event = window.event;
-			event.target = event.srcElement;
-			ev = event;
+			if (event) {
+				target = event.srcElement;
+				ev = /** @type {MouseEvent} */(event);
+			}
+			if (!ev) return;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);
 		if (self._ctrlDrag) {
@@ -2550,16 +2555,14 @@ function Dialog(object) {
 			return;
 		}
 
-		ensureClassList(ev.target);
-		if (ev.target instanceof HTMLElement && ev.target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
+		ensureClassList(target);
+		if (target instanceof HTMLElement && target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
 
-	if (object instanceof Dialog) {
-		if (object.application) object = object.application;
-	}
+	if (object instanceof Dialog && object.application) object = object.application;
 
 	/** @type {HTMLElement} */
 	this.target;
@@ -2637,9 +2640,9 @@ function Dialog(object) {
 
 	if(this.resizable && createSizers) this._createSizers();
 
-	target.onselectstart = function (event) {
+	target.onselectstart = function (/** @type {Event} */event) {
 		if (self._ctrlDrag) return;
-		cancelDomEvent(event);
+		Helpers.cancelDomEvent(event);
 	};
 
 	var body = this.body;
@@ -2651,17 +2654,20 @@ function Dialog(object) {
 	}};
 
 	var header = this.titleBar;
-	if (header) target.ondblclick = function (event) {
-		var rect = getRect(header);
-		if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+	if (header) {
+		header.onselectstart = function () { return false; };
+		target.ondblclick = function (event) {
+			var rect = getRect(header);
+			if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 
-		var node = event.target instanceof HTMLElement ? event.target : null;
-		while (node && node !== header) {
-			if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
-			node = node.parentElement;
-		}
-		self.toggleMaximized();
-	};
+			var node = event.target instanceof HTMLElement ? event.target : null;
+			while (node && node !== header) {
+				if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
+				node = node.parentElement;
+			}
+			self.toggleMaximized();
+		};
+	}
 
 
 	if (supportsPointer) target.onpointerdown = this.activationHandler;
@@ -2703,7 +2709,7 @@ function Dialog(object) {
 
 		try {
 			transfer.setData("application/json", data);
-			if (flagsieDropCompatibleMode) {
+			if (flags.ieDropCompatibleMode) {
 				transfer.setData("Text", data);
 				transfer.setData("text/plain", data);
 			}
@@ -2916,6 +2922,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
 		ensureClassList(sizer);
 		sizer.draggable = false;
+		sizer.setAttribute("unselectable", "on");
 		sizer.id = id.toString();
 		sizer.classList.add(sizerId);
 		/** @param {PointerEvent | MouseEvent} ev */
@@ -2923,7 +2930,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
 			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id);
-			cancelDomEvent(ev);
+			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
 		if (supportsPointer) {
@@ -4726,7 +4733,7 @@ window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener(supportsPointer? "pointermove" : "mousemove", ClickOffset.handleMouseDrag, false);
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
-window.addEventListener("dragover", cancelDomEvent, false);
+window.addEventListener("dragover", Helpers.cancelDomEvent, false);
 window.addEventListener("drop", function(e) {
 	e.preventDefault();
 }, false);
