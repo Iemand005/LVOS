@@ -67,10 +67,10 @@ export default defineConfig(
 
 			"no-restricted-syntax": [
 				"error",
-				// {
-				// 	selector: "ArrowFunctionExpression",
-				// 	message: "Arrow functions are not allowed. Use a regular function instead."
-				// },
+				{
+					selector: "ArrowFunctionExpression",
+					message: "Arrow functions are not allowed. Use a regular function instead."
+				},
 				{
 					selector: "ChainExpression",
 					message: "Optional chaining (?.) is not allowed."
@@ -85,7 +85,11 @@ export default defineConfig(
 
 	// ES6 files: allow arrow functions and optional chaining
 	{
-		files: ["Scripts/WebComponents.js"],
+		files: [
+			"Scripts/WebComponents.js",
+			"eslint.config.js",
+			"vite.config.js"
+		],
 
 		rules: {
 			"no-restricted-syntax": [
