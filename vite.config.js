@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { build } from "build.js";
+import build from "./build.js";
 
 export default defineConfig({
 	server: {
