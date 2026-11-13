@@ -28,6 +28,6 @@ export default defineConfig(({ mode }) => ({
 	assetsInclude: "**/*.html",
 	envDir: "./",
 	builder: {
-		buildApp: build
+		buildApp: () => build({ ie8: mode === "ie8" })
 	}
 }));
