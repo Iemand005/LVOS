@@ -15,7 +15,7 @@
 	};
 	}
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	plugins: [customHtmlBuilder()],
 	server: {
 		port: 3621
@@ -30,4 +30,4 @@ export default defineConfig({
 	builder: {
 		buildApp: build
 	}
-});
+}));
