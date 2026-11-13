@@ -4,9 +4,7 @@
 	function customHtmlBuilder() {
 	return {
 		name: "custom-html-builder",
-		async buildStart() {
-		await build();
-		},
+		buildStart () => build(),
 		async handleHotUpdate({ file, server }) {
 		if (file.endsWith(".html") && !file.includes("Dist")) {
 			await build();
