@@ -17,6 +17,6 @@ export default defineConfig({
 		buildApp: () => {
 			// builder.
 			build();
-		}
+		} 
 	}
 });
