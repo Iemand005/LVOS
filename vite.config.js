@@ -12,5 +12,10 @@ export default defineConfig({
 		assetsDir: "Assets",
 		
 	},
-	publicDir: "Dist"
+	publicDir: "Dist",
+	builder: {
+		buildApp: builder => {
+			// builder.
+		}
+	}
 });
