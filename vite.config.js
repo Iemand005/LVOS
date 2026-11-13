@@ -5,6 +5,12 @@ export default defineConfig({
 		port: 3621
 	},
 	esbuild: {
+
+	},
+	build: {
+		outDir: "Dist",
+		assetsDir: "Assets",
 		
-	}
+	},
+	publicDir: "Dist"
 });
