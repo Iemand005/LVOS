@@ -15,6 +15,7 @@ export default defineConfig({
 	publicDir: "Dist",
 	assetsInclude: "*.html",
 	envDir: "Dist",
+	base: "Dist",
 	builder: {
 		buildApp: () => {
 			// builder.
