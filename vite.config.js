@@ -1,35 +1,38 @@
-import { defineConfig } from "vite";
-import build from "./build.js";
+	import { defineConfig } from "vite";
+	import build from "./build.js";
+
+	function customHtmlBuilder() {
+	return {
+		name: "custom-html-builder",
+		async buildStart() {
+		await build();
+		},
+		async handleHotUpdate({ file, server }) {
+		// Only trigger for source HTML files, not files generated inside Dist
+		if (file.endsWith(".html") && !file.includes("Dist")) {
+			await build();
+			server.ws.send({ type: "full-reload", path: "*" });
+			return [];
+		}
+		}
+	};
+	}
 
 export default defineConfig({
+	plugins: [customHtmlBuilder()],
 	server: {
 		port: 3621
-	},
-	esbuild: {
-
 	},
 	build: {
 		outDir: "Dist",
 		assetsDir: "Assets"
 	},
-	publicDir: "Dist",
-	assetsInclude: "*.html",
-	envDir: "Dist",
-	html: {
-
-	},
-	dev: {
-
-	},
-	environments: {
-		"dev": {
-			
-		}
-	}
+	publicDir: "public",
+	assetsInclude: "**/*.html",
+	envDir: "./",
 	builder: {
 		buildApp: () => {
-			// builder.
-			build();
+		build();
 		}
 	}
 });
