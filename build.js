@@ -546,7 +546,7 @@ function applyIe8SpecificPatches(code) {
 
 	return code;
 }
-async function build() {
+export default async function build() {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
 	const ie8 = process.argv.includes("--ie8");
