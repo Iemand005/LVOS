@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { build } from "build.js";
 
 export default defineConfig({
 	server: {
@@ -16,6 +17,7 @@ export default defineConfig({
 	builder: {
 		buildApp: builder => {
 			// builder.
+			build();
 		}
 	}
 });
