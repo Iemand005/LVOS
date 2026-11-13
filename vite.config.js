@@ -6,11 +6,11 @@
 		name: "custom-html-builder",
 		buildStart: () => build(),
 		async handleHotUpdate({ file, server }) {
-		if (file.endsWith(".html") && !file.includes("Dist")) {
-			await build();
-			server.ws.send({ type: "full-reload", path: "*" });
-			return [];
-		}
+			if (file.endsWith(".html") && !file.includes("Dist")) {
+				await build();
+				server.ws.send({ type: "full-reload", path: "*" });
+				return [];
+			}
 		}
 	};
 	}
