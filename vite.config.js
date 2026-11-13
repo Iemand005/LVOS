@@ -28,8 +28,6 @@ export default defineConfig({
 	assetsInclude: "**/*.html",
 	envDir: "./",
 	builder: {
-		buildApp: () => {
-		build();
-		}
+		buildApp: build
 	}
 });
