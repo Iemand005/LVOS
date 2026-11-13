@@ -8,7 +8,6 @@
 		await build();
 		},
 		async handleHotUpdate({ file, server }) {
-		// Only trigger for source HTML files, not files generated inside Dist
 		if (file.endsWith(".html") && !file.includes("Dist")) {
 			await build();
 			server.ws.send({ type: "full-reload", path: "*" });
