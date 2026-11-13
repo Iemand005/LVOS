@@ -547,11 +547,11 @@ function applyIe8SpecificPatches(code) {
 	return code;
 }
 /** @typedef {{ ie8: boolean }} BuildOptions */
-/** @param {BuildOptions} options */
+/** @param {BuildOptions} [options] */
 export default async function build(options) {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
-	const ie8 = options.ie8 || process.argv.includes("--ie8");
+	const ie8 = options?.ie8 || process.argv.includes("--ie8");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
