@@ -13,13 +13,11 @@ export default defineConfig({
 		assetsDir: "Assets"
 	},
 	publicDir: "Dist",
+	assetsInclude: "*.html",
 	builder: {
 		buildApp: () => {
 			// builder.
 			build();
-		},
-	sharedPlugins: {
-		
-	}
+		}
 	}
 });
