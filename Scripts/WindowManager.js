@@ -3022,9 +3022,7 @@ Dialog.prototype.createOpenButton = function () {
 			var instance = windowManager.spawnApp(application);
 			if (instance) instance.launch();
 		};
-	} else {
-		openButton.onclick = this.launch.bind(this);
-	}
+	} else openButton.onclick = this.launch.bind(this);
 	return openButton;
 };
 /**
@@ -3347,10 +3345,8 @@ Dialog.prototype.broadcastState = function (overrides) {
  */
 Dialog.prototype.move = function (x, y, update, animate) {
 	if (this.fixed) return;
-	if (flags.useSkewAnimations) {
-		this._previousX = this.x;
-		this._previousY = this.y;
-	}
+	if (flags.useSkewAnimations)
+		this._previousX = this.x, this._previousY = this.y;
 	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
 	if (this.heightSnapped) y = this.y;
