@@ -1485,10 +1485,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 	}
 	if (!dialog) return;
 	this.synchronizing = false;
-	try {
-		dialog.loadState(data);
-	} finally {
-	}
+	try { dialog.loadState(data); } finally {}
 };
 
 /**
@@ -1499,10 +1496,9 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 	/** @type {Dialog | null} */
 	var foundDialog = null;
 	this.forEachWindow(function(dialog) {
-		if (dialog.body === el) {
-			foundDialog = dialog;
-			return true;
-		}
+		if (dialog.body !== el) return;
+		foundDialog = dialog;
+		return true;
 	});
 	return foundDialog;
 };
