@@ -3534,25 +3534,6 @@ Dialog.prototype.resize = function (width, height, direction) {
 };
 
 /**
- * @param {number} newW
- * @param {number} newH
- * @param {number} newX
- * @param {number} newY
- * @param {number} oldX
- * @param {number} oldY
- * @param {number} minW
- * @param {number} minH
- */
-Dialog.prototype._commitResize = function (newW, newH, newX, newY, oldX, oldY, minW, minH) {
-	this._width = newW;
-	this._height = newH;
-	this._isMinWidth = newW === minW;
-	this._isMinHeight = newH === minH;
-	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
-	this.updateWidth();
-	this.updateHeight();
-};
-/**
  * @param {number} width
  * @param {number} height
  * @param {ResizeDirection} [direction]
@@ -3598,7 +3579,13 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 			break;
 	}
 
-	this._commitResize(newW, newH, newX, newY, oldX, oldY, minW, minH);
+	this._width = newW;
+	this._height = newH;
+	this._isMinWidth = newW === minW;
+	this._isMinHeight = newH === minH;
+	if (newX !== oldX || newY !== oldY) this.move(newX, newY);
+	this.updateWidth();
+	this.updateHeight();
 };
 
 /**
@@ -3719,10 +3706,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	this.updateWidth();
 	this.updateHeight();
 };
-Dialog.prototype.update = function () {
-	this.move();
-	this.resize();
-};
+Dialog.prototype.update = function () { this.move(); this.resize(); };
 /**
  * @param {number} [width]
  * @param {number} [height]
