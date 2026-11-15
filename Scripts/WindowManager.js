@@ -1558,11 +1558,7 @@ WindowManager.prototype.registerExtension = function(ext) {
  * @returns {Extension | null}
  */
 WindowManager.prototype.getExtension = function(id) {
-	for (var i = 0; i < this.extensions.length; i++) {
-		var ext = this.extensions[i];
-		if (ext && ext.id === id) return ext;
-	}
-	return null;
+	return this.extensions.find(function(ext) { return ext && ext.id === id; }) || null;
 };
 
 /**
