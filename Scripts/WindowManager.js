@@ -688,7 +688,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 WindowManager.prototype.forEachWindow = function (callback) {
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
-		if (dialog) callback(dialog, id);
+		if (dialog) if (callback(dialog, id)) break;
 	}
 };
 
@@ -1496,14 +1496,12 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
  * @returns {Dialog | null}
  */
 WindowManager.prototype.getWindowOwningElement = function(el) {
-	var found = false;
 	/** @type {Dialog | null} */
 	var foundDialog = null;
 	this.forEachWindow(function(dialog) {
-		if (found) return;
 		if (dialog.body === el) {
-			found = true;
 			foundDialog = dialog;
+			return true;
 		}
 	});
 	return foundDialog;
