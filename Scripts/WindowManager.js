@@ -2813,9 +2813,7 @@ Object.defineProperty(Dialog.prototype, "heightSnapped", {
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
-		if (target && "dialog" in target)
-			return /** @type {WindowElement} */ (target);
-		return null;
+		return target && "dialog" in target ? /** @type {WindowElement} */ (target) : null;
 	}
 });
 
@@ -2894,9 +2892,7 @@ Object.defineProperty(Dialog.prototype, "icon", {
 });
 
 Object.defineProperty(Dialog.prototype, "iconUrl", {
-	get: function() {
-		return this.getIconUrl();
-	}
+	get: function() { return this.getIconUrl(); }
 });
 
 Dialog.prototype.getIconUrl = function() {
