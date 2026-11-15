@@ -2900,12 +2900,7 @@ Object.defineProperty(Dialog.prototype, "iconUrl", {
 });
 
 Dialog.prototype.getIconUrl = function() {
-	if (!this.application) return null;
-	if (this.application.iconUrl) {
-		return this.application.iconUrl;
-	} else {
-		return getFaviconUrl(this.application.src);
-	}
+	return this.application && (this.application.iconUrl || getFaviconUrl(this.application.src));
 };
 
 Dialog.prototype.getMiniIconUrl = function() {
