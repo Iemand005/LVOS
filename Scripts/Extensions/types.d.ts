@@ -28,3 +28,5 @@ interface Extension {
 
 type ExtensionHook = Extract<keyof Extension, `on${string}`>;
 
+type NoArgHook = { [K in ExtensionHook]: Parameters<NonNullable<Extension[K]>> extends [] ? K : never }[ExtensionHook];
+type DialogHook = { [K in ExtensionHook]: Parameters<NonNullable<Extension[K]>> extends [Dialog] ? K : never }[ExtensionHook];

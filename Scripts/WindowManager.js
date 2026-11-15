@@ -1593,11 +1593,6 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 };
 
 /**
- * @typedef {{ [K in ExtensionHook]: Parameters<NonNullable<Extension[K]>> extends [] ? K : never }[ExtensionHook]} NoArgHook
- * @typedef {{ [K in ExtensionHook]: Parameters<NonNullable<Extension[K]>> extends [Dialog] ? K : never }[ExtensionHook]} DialogHook
- */
-
-/**
  * @overload
  * @param {NoArgHook} hook
  * @returns {void}
