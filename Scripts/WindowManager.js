@@ -685,14 +685,14 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 };
 
 /**
- * @template {any} T
+ * @template {any} [T=WindowManager]
  * @param {WindowCallback} callback
  * @param {T} [thisArg]
  */
 WindowManager.prototype.forEachWindow = function (callback, thisArg) {
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
-		if (dialog) if (callback.call(thisArg, dialog, id)) break;
+		if (dialog) if (callback.call(thisArg || this, dialog, id)) break;
 	}
 };
 
@@ -1437,7 +1437,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 		var self = this;
 		this.forEachWindow(function(dialog) {
 			if (dialog && dialog.z >= this.topZ) this.topZ = dialog.z + 1;
-		});
+		}, this);
 	}
 };
 
