@@ -609,12 +609,11 @@ function WindowManager() {
 
 	this.windowSnap = new WindowSnap;
 
-	/** Snap tile groups, one per desktop window-section. A group only ever lays out the windows of its own section, so snapping a window on any desktop tiles it inside that desktop and never moves it to another one. @type {Map<Element, WindowGroup>} */
+	/** @type {Map<Element, WindowGroup>} */
 	this.snapGroups = new Map();
 
 	/** @type {Extension[]} */
 	this.extensions = [];
-
 }
 
 Object.defineProperty(WindowManager.prototype, "windows", {
