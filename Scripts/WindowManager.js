@@ -3227,6 +3227,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var target = this.target;
 	var content = this.content;
 
+	var fsTimeout = 0;
+
 	this.setZ();
 
 	this.broadcastState({ maximized: enable === true });
@@ -3236,175 +3238,108 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (flags.useViewTransitionMaximize && this.windowTarget)
 		return this.windowTarget.toggleMaximizedVT(enable);
 
-	if (!supportsTransitions) {
+	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
+		return name === "transform" || name === "width";
+	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		this.maximizeAnimations--;
+	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
+		return name === "transform";
+	}, function onEnd(enabled) {
+		if (fsTimeout) clearTimeout(fsTimeout);
+		var target = this.target;
+		if (!target) return;
+
+		target.classList.toggle("maximized", enabled);
+
+
+		this.setScale(1, 1);
+		if (!content) return;
+		Helpers.transformElement(content, {x: 0, y: 0, scaleX :1, scaleY: 1});
+		content.style.width = "";
+		content.style.height = "";
+		this.maximizeAnimations--;
+
+	}, function onToggled(enabled) {
+		var timeOffsetMs = 50;
+		var totalDuration = 280; //Can I uh get this from uh the css somehow
+		var invertDurationOnShrink = false;
+
+		var target = this.target;
+		if (!target) return;
+
+		this._maximizing = enabled;
+
+		var startWidth = this.width;
+		var startHeight = this.height;
+
+		var windowSection = document.getElementById("window-section");
+		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
+
+		var scaleX = window.innerWidth / startWidth;
+		var scaleY = height / startHeight;
+
+		target.style.transformOrigin = "top left";
+		target.style.pointerEvents = "none";
+
+		if (!enabled) {
+			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+
+			scaleX = 1 / scaleX;
+			scaleY = 1 / scaleY;
+		}
+
+		this.setScale(scaleX, scaleY);
+
+		var targetWidth = enabled ? window.innerWidth : self.width;
+		var targetHeight = enabled ? height : self.height;
+
+
+
+		fsTimeout = setTimeout(function() {
+			// if (maximizeAnimations > 1) {
+			// 	console.log("Animainois ongoign");
+			// 	return;
+			// }
+			requestAnimationFrame(function() {
+				if (!content) return;
+				content.style.width = Helpers.toPixels(targetWidth);
+				content.style.height = Helpers.toPixels(targetHeight);
+				void content.offsetWidth;
+
+				Helpers.transformElement(content, {x: 0, y: 0, scaleX:  1 / scaleX, scaleY: 1 / scaleY});
+			});
+		}, timeOffsetMs);
+	});
+	else {
 		var startPos = self.position;
 		var startSize = self.size;
+		var target = self.target;
+		if (!target) return;
 		enable = !target.classList.contains("maximized");
-		var toggleMaximizedFallback = function () {
+		var toggleMaximized = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
-			self.target.classList.toggle("maximized", enable);
+			if (self.target) self.target.classList.toggle("maximized", enable);
 		};
-		if (!enable) toggleMaximizedFallback();
-		Anim.animate(300, function (t) {
+		if (!enable) toggleMaximized();
+		Anim.animate(300, function(t) {
 			var ease = Anim.easeSharpCenterStrong;
 			if (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
 				self.y = Anim.lerp(startPos.y, 0, ease(t));
-				self.width = Anim.lerp(startSize.x, Helpers.getViewportWidth(), ease(t));
-				self.height = Anim.lerp(startSize.y, Helpers.getViewportHeight(), ease(t));
+				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
+				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
 			} else {
 				self.x = Anim.lerp(0, startPos.x, ease(t));
 				self.y = Anim.lerp(0, startPos.y, ease(t));
-				self.width = Anim.lerp(Helpers.getViewportWidth(), startSize.x, ease(t));
-				self.height = Anim.lerp(Helpers.getViewportHeight(), startSize.y, ease(t));
+				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
+				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
 			}
-		}, function () {
-			if (enable) toggleMaximizedFallback();
-			self.maximizeAnimations--;
-		});
-		return;
-	}
-
-	if (!flags.compositorResize || !this.useTransform) {
-		this.toggleClassAnimated("maximized", enable, function (name) {
-			return name === "transform" || name === "width";
-		}, undefined, function (isMaximized) {
-			if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-			self.maximizeAnimations--;
-		}, 1000);
-		return;
-	}
-
-	if (!flags.useAnimations) {
-		target.classList.toggle("maximized", enable);
-		target.classList.toggle("scaled-max", enable);
-		target.style.pointerEvents = "";
-		this._maximizing = enable;
-		this.setScale(1, 1, undefined, true);
-		this.updateTransform();
-		this.toggleMinSizeConstraints(enable);
-		this.maximizeAnimations--;
-		return;
-	}
-
-	if (this._compositorMaxState) {
-		this._compositorMaxState.cancel();
-		this._compositorMaxState = null;
-	}
-
-	var windowSection = windowManager.getSnapContainer(this);
-	var endWidth = windowSection ? windowSection.clientWidth : Helpers.getViewportWidth();
-	var endHeight = windowSection ? windowSection.clientHeight : Helpers.getViewportHeight();
-	var startWidth = this.width || target.offsetWidth || 300;
-	var startHeight = this.height || target.offsetHeight || 200;
-	var startX = this.x;
-	var startY = this.y;
-
-	var scaleX = startWidth > 0 ? endWidth / startWidth : 1;
-	var scaleY = startHeight > 0 ? endHeight / startHeight : 1;
-
-	var isSlow = document.body && document.body.classList.contains("slow-animations");
-	var duration = isSlow ? 3000 : 280;
-
-	var toTransform = function (x, y, sx, sy) {
-		Helpers.transformElement(target, {x: x, y: y, scaleX: sx, scaleY: sy});
-	};
-
-	var state = {
-		active: true,
-		raf: 0,
-		timer: 0,
-		/** @type {((e: TransitionEvent) => void) | null} */
-		endHandler: null,
-		cancel: function () {
-			if (!this.active) return;
-			this.active = false;
-			if (this.raf) cancelAnimationFrame(this.raf);
-			if (this.timer) clearTimeout(this.timer);
-			if (this.endHandler) target.removeEventListener("transitionend", this.endHandler, false);
-			target.style.removeProperty("transition");
-			target.style.transformOrigin = "";
-			target.style.pointerEvents = "";
-			target.classList.remove("animating");
-			if (content) {
-				content.style.width = "";
-				content.style.height = "";
-			}
-			self.maximizeAnimations--;
-		}
-	};
-	this._compositorMaxState = state;
-
-	var finishCompositorMaximize = function () {
-		if (!state.active) return;
-		state.active = false;
-		if (state.timer) clearTimeout(state.timer);
-		if (state.endHandler) target.removeEventListener("transitionend", state.endHandler, false);
-		self._compositorMaxState = null;
-
-		target.classList.remove("animating");
-		target.style.removeProperty("transition");
-		target.style.transformOrigin = "";
-		target.style.pointerEvents = "";
-		if (content) {
-			content.style.width = "";
-			content.style.height = "";
-		}
-
-		if (enable) {
-			target.classList.add("maximized", "scaled-max");
-			self._maximizing = true;
-		} else {
-			target.classList.remove("maximized", "scaled-max");
-			self._maximizing = false;
-		}
-
-		self.setScale(1, 1, undefined, true);
-		self.updateTransform();
-		if (self.useTransform && target) self.toggleMinSizeConstraints(enable);
-		self.maximizeAnimations--;
-	};
-
-	state.endHandler = function (e) {
-		if (e.target === target && (e.propertyName === "transform" || !e.propertyName)) {
-			finishCompositorMaximize();
-		}
-	};
-	target.addEventListener("transitionend", state.endHandler, false);
-	state.timer = setTimeout(finishCompositorMaximize, duration + 100);
-
-	target.style.transformOrigin = "top left";
-	target.style.pointerEvents = "none";
-
-	if (enable) {
-		target.classList.add("scaled-max");
-		target.classList.remove("maximized");
-		target.style.setProperty("transition", "none", "important");
-		toTransform(startX, startY, 1, 1);
-		void target.offsetWidth;
-
-		state.raf = requestAnimationFrame(function () {
-			state.raf = 0;
-			if (!state.active) return;
-			target.classList.add("animating");
-			target.style.removeProperty("transition");
-			toTransform(0, 0, scaleX, scaleY);
-		});
-	} else {
-		target.classList.add("maximized", "scaled-max");
-		target.style.setProperty("transition", "none", "important");
-		toTransform(0, 0, 1, 1);
-		void target.offsetWidth;
-
-		state.raf = requestAnimationFrame(function () {
-			state.raf = 0;
-			if (!state.active) return;
-			target.classList.add("animating");
-			target.style.removeProperty("transition");
-			toTransform(startX, startY, 1 / scaleX, 1 / scaleY);
+		}, function() {
+			if (enable) toggleMaximized();
 		});
 	}
 };
