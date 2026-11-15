@@ -1,6 +1,6 @@
 function swapMetroBody() {
 	if (!windowManager.flipped) return;
-	windowManager.activeDialogToMetro();
+	if (windowManager.activeDialog) windowManager.activeDialog.exportDialogBodyToMetro();
 }
 
 /** @param {boolean} enable */

@@ -891,8 +891,6 @@ WindowManager.prototype.focusDialog = function(dialog) {
 	this.focusedDialog = dialog;
 };
 
-WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
-
 WindowManager.prototype.initializeDialogs = function() {
 	var self = this;
 	var stop = function() { self.disableDialogDrag(); };
@@ -4056,7 +4054,6 @@ Dialog.prototype.loadState = function(state) {
 	if ("maximized" in state) this.toggleMaximized(state.maximized === true);
 };
 
-Dialog.prototype.exportDialogBodyToMetro = function() {};
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;

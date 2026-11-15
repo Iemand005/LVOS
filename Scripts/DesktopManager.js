@@ -923,6 +923,7 @@ if (wallpaper) {
 
 // WebGraphics is loaded separately (deferred) and may be absent on some pages, so the
 // screenshot helper is created on first use instead of at boot.
+/** @type {ScreenShooter | null} */
 var screenShooter = null;
 function getScreenShooter() {
 	if (screenShooter) return screenShooter;
