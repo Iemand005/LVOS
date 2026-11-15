@@ -685,7 +685,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 };
 
 /**
- * @template {any} [T=WindowManager]
+ * @template {Record<string, any>} [T=WindowManager]
  * @param {((this: T, dialog: Dialog, id: string) => undefined) | ((this: T, dialog: Dialog, id: string) => boolean)} callback
  * @param {T} [thisArg]
  */
