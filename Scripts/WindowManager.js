@@ -3355,8 +3355,7 @@ Dialog.prototype.updatePosition = function() {
 /** @param {Partial<DialogState>} [overrides] The state fields that actually changed. */
 Dialog.prototype.broadcastState = function (overrides) {
 	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
-	if (!this.id) return;
-	windowManager.broadcast("dialog-state", overrides || this.getState(), this.id);
+	if (this.id) windowManager.broadcast("dialog-state", overrides || this.getState(), this.id);
 };
 
 /**
@@ -3405,8 +3404,8 @@ Dialog.prototype.move = function (x, y, update, animate) {
  * @param {boolean} [animate]
  */
 Dialog.prototype.moveCenterTo = function(centerX, centerY, animate) {
-	if (typeof centerX !== "number" || typeof centerY !== "number") return;
-	this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
+	if (typeof centerX === "number" || typeof centerY === "number")
+		this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
 };
 
 /** @param {number} [z] */
@@ -3516,17 +3515,15 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 
 	var newW = width, newH = height;
 
-	if (direction === "left" || direction === "bottom-left" || direction === "top-left") {
+	if (direction === "left" || direction === "bottom-left" || direction === "top-left")
 		newW = Math.min(newW, oldX + oldW - bounds.left);
-	} else if (direction !== "top" && direction !== "bottom") {
+	else if (direction !== "top" && direction !== "bottom")
 		newW = Math.min(newW, bounds.right - oldX);
-	}
 
-	if (direction === "top" || direction === "top-left" || direction === "top-right") {
+	if (direction === "top" || direction === "top-left" || direction === "top-right")
 		newH = Math.min(newH, oldY + oldH - bounds.top);
-	} else if (direction !== "left" && direction !== "right") {
+	else if (direction !== "left" && direction !== "right")
 		newH = Math.min(newH, bounds.bottom - oldY);
-	}
 
 	if (newW === oldW && newH === oldH) return;
 
@@ -3534,15 +3531,10 @@ Dialog.prototype._resizeFree = function (width, height, direction) {
 
 	switch (direction) {
 		case "bottom-left":
-		case "left":
-			newX = oldX + oldW - newW;
-			break;
-		case "top-left":
-			newX = oldX + oldW - newW;
+		case "left": newX = oldX + oldW - newW; break;
+		case "top-left": newX = oldX + oldW - newW;
 		case "top-right":
-		case "top":
-			newY = oldY + oldH - newH;
-			break;
+		case "top": newY = oldY + oldH - newH; break;
 	}
 
 	this._width = newW;
@@ -3604,14 +3596,12 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 		if (height < 0) height = 0;
 
 		var driveByWidth;
-		if (direction === "top" || direction === "bottom") {
+		if (direction === "top" || direction === "bottom")
 			driveByWidth = false;
-		} else if (isCorner) {
+		else if (isCorner) {
 			var boxRatio = height ? width / height : (width > 0 ? Infinity : 1);
 			driveByWidth = this._constrainAspectRatioInner ? boxRatio <= ratio : boxRatio > ratio;
-		} else {
-			driveByWidth = true;
-		}
+		} else driveByWidth = true;
 
 		if (driveByWidth) {
 			newW = Math.max(Math.min(width, maxW), minW);
@@ -3643,7 +3633,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	var newX = oldX, newY = oldY;
 	switch (direction) {
-		case "bottom-left": newX = oldRight - newW; break;
+		case "bottom-left": newX = oldRight - newW;  break;
 		case "top-left":    newX = oldRight - newW;
 		case "top-right":   newY = oldBottom - newH; break;
 		case "left":        newX = oldRight - newW;
