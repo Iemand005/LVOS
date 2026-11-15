@@ -763,7 +763,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 		if (typeof localStorage === "undefined") return [];
 		try {
 			var string = localStorage.getItem("installedApps");
-			if (string === null) return [];
+			if (!string) return [];
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
 		} catch (ex) {
