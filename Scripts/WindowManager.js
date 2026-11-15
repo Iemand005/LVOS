@@ -494,7 +494,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 			if (onToggled) onToggled.call(boundContext);
 		});
 	}
-}
+};
 
 //#endregion
 
