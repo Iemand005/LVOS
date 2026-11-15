@@ -3309,7 +3309,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var isSlow = document.body && document.body.classList.contains("slow-animations");
 	var duration = isSlow ? 3000 : 280;
 
-	Helpers.translateElement()
 	var toTransform = function (x, y, sx, sy) {
 		Helpers.transformElement(target, {x: x, y: y, scaleX: sx, scaleY: sy});
 	};
@@ -3384,7 +3383,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.add("scaled-max");
 		target.classList.remove("maximized");
 		target.style.setProperty("transition", "none", "important");
-		target.style.transform = toTransform(startX, startY, 1, 1);
+		toTransform(startX, startY, 1, 1);
 		void target.offsetWidth;
 
 		state.raf = requestAnimationFrame(function () {
@@ -3392,12 +3391,12 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (!state.active) return;
 			target.classList.add("animating");
 			target.style.removeProperty("transition");
-			target.style.transform = toTransform(0, 0, scaleX, scaleY);
+			toTransform(0, 0, scaleX, scaleY);
 		});
 	} else {
 		target.classList.add("maximized", "scaled-max");
 		target.style.setProperty("transition", "none", "important");
-		target.style.transform = toTransform(0, 0, 1, 1);
+		toTransform(0, 0, 1, 1);
 		void target.offsetWidth;
 
 		state.raf = requestAnimationFrame(function () {
@@ -3405,7 +3404,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (!state.active) return;
 			target.classList.add("animating");
 			target.style.removeProperty("transition");
-			target.style.transform = toTransform(startX, startY, 1 / scaleX, 1 / scaleY);
+			toTransform(startX, startY, 1 / scaleX, 1 / scaleY);
 		});
 	}
 };
