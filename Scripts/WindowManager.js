@@ -177,7 +177,7 @@ Helpers.translateElement = function(element, x, y) {
  * @param {HTMLElement} element
  * @param {Transform} t
  */
-function transformElement(element, t) {
+Helpers.transformElement = function(element, t) {
 	var transform = "";
 
 	if (t.x && t.y) transform += "translate(" + Helpers.toPixels(t.x) + "," + Helpers.toPixels(t.y) + ")";
@@ -3309,6 +3309,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var isSlow = document.body && document.body.classList.contains("slow-animations");
 	var duration = isSlow ? 3000 : 280;
 
+	Helpers.translateElement()
 	var toTransform = function (x, y, sx, sy) {
 		return "translate(" + Helpers.toPixels(x) + "," + Helpers.toPixels(y) + ") scale(" + sx + "," + sy + ")";
 	};
@@ -3457,7 +3458,7 @@ Dialog.prototype.updatePosition = function() {
 	windowManager.notifyExtensions("onWindowMove", this);
 };
 
-/** Broadcasts this window's state change to other tabs through the window manager. When a partial is given, exactly those changed fields are sent (a move emits only {x,y}, maximize only {maximized}, etc.); when omitted, the full DialogState snapshot is sent. Only the active tab broadcasts; background tabs only listen and apply (guarded by focus, so applying never echoes back). @param {Partial<DialogState>} [overrides] The state fields that actually changed. */
+/** @param {Partial<DialogState>} [overrides] The state fields that actually changed. */
 Dialog.prototype.broadcastState = function (overrides) {
 	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
 	if (!this.id) return;
@@ -4039,7 +4040,7 @@ Dialog.prototype.getState = function() {
 	};
 };
 
-/** Applies a (possibly partial) DialogState. Only the fields present in the state are touched, so a geometry-only broadcast never disturbs open/maximized/title and vice versa. Used both for cross-tab dialog-state broadcasts and local restore. @param {Partial<DialogState>} state */
+/** @param {Partial<DialogState>} state */
 Dialog.prototype.loadState = function(state) {
 	if ("open" in state) {
 		if (state.open) this.launch();
