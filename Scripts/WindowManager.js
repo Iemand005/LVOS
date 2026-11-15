@@ -1861,10 +1861,8 @@ ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
 	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
 
-	if (!flags.useDragOverlay || !this._overlay) {
-		windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
-		return;
-	}
+	if (!flags.useDragOverlay || !this._overlay)
+		return windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 
 	if (cursor) this._overlay.style.cursor = cursor;
 	else this._overlay.style.cursor = "";
@@ -1881,16 +1879,15 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 };
 
 //#endregion
+
 /**
  * @class
  * @param {HTMLElement} target
  */
 function Transformable(target) {
 	this.target = target;
-
 	/** @type {Transform} */
 	this._transform = {};
-
 	this._perspective = 100;
 }
 
@@ -1898,7 +1895,8 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 	get: function() { return this._perspective; },
 	set: function(value) {
 		var parent = this.target.parentElement;
-		if (parent) parent.style.perspective = Helpers.toPixels(this._perspective = value); }
+		if (parent) parent.style.perspective = Helpers.toPixels(this._perspective = value);
+	}
 });
 
 Transformable.prototype.applyTransform = function() {
