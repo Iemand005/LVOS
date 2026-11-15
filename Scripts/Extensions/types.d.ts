@@ -1,8 +1,5 @@
 type DialogEvent = { dialog: Dialog };
 
-/** The hooks the window manager calls on the extensions it knows. */
-// type ExtensionHook = "onWindowLaunch" | "onWindowMove" | "onEnable" | "onDisable";
-
 /**
  * An extension of the window manager.
  *

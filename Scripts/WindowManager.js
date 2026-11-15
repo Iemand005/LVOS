@@ -1582,8 +1582,8 @@ WindowManager.prototype.setExtensionEnabled = function(ext, enabled) {
  */
 WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	if (!ext || typeof ext !== "object") return;
-	/** @type {((this: Extension, dialog?: Dialog) => void) | undefined} */
-	var callback = ext[hook];
+
+	var callback = /** @type {((this: Extension, dialog?: Dialog) => void)} */(ext[hook]);
 	if (typeof callback !== "function") return;
 	try {
 		callback.call(ext, dialog);
