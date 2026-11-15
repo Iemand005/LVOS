@@ -1467,13 +1467,10 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		var className = data && data.className;
 		if (typeof className !== "string") return;
 		document.body.className = className;
-		this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
-		return;
+		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
 	}
-	if (type !== "dialog-state") {
-		messageReceived(type, data, id);
-		return;
-	}
+	if (type !== "dialog-state")
+		return messageReceived(type, data, id);
 	if (!data || !id) return;
 
 	var dialog = this.getWindowById(id);
@@ -1667,9 +1664,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 
 	if (!noAnimation) Helpers.animateElement(this.element, function() {
 		this.applyInsetStyle(top, left, right, bottom);
-	}, function(name) {
-		return name === "inset";
-	}, undefined, this, 200);
+	}, "inset", undefined, this, 200);
 	else this.applyInsetStyle(top, left, right, bottom);
 };
 
