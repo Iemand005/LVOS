@@ -1763,7 +1763,6 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	if (this.hidden) return;
 
 	Helpers.animateElement(this.element, function() {
-
 		this.moveToDialog(dialog, 0, undefined, true);
 	}, function(name) {
 		return name === "inset";
@@ -1829,8 +1828,7 @@ ClickOffset.prototype.update = function(x, y){
 };
 
 ClickOffset.prototype.clear = function () {
-	this.clickX = 0;
-	this.clickY = 0;
+	this.clickX = 0, this.clickY = 0;
 };
 /**
  * @param {number} x
