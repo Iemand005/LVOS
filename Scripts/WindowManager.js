@@ -3031,7 +3031,6 @@ Dialog.prototype.activate = function() {
 	this.focus();
 	this.setZ();
 	this.messageFrame("open");
-	return swapMetroBody();
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
 Dialog.prototype.open = function () {
@@ -3249,9 +3248,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var target = this.target;
 
 		target.classList.toggle("maximized", enabled);
+		target.style.pointerEvents = "";
 
 
-		this.setScale(1, 1);
+		this.setScale(1, 1, undefined, true);
+		this.updateTransform();
 		if (!content) return;
 		Helpers.transformElement(content, {x: 0, y: 0, scaleX :1, scaleY: 1});
 		content.style.width = "";
@@ -3286,7 +3287,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			scaleY = 1 / scaleY;
 		}
 
-		this.setScale(scaleX, scaleY);
+		this.setScale(scaleX, scaleY, false);
 		this.updateTransform();
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
