@@ -2359,10 +2359,9 @@ Dialog.prototype.setParentElement = function(element) {
 };
 
 /** @param {number} i */
-Dialog.prototype.moveToDesktop = function(i){
-	if (this.snapped && windowManager) windowManager.unsnapDialog(this);
-	if (!window.desktopManager) return;
-	var desktop = window.desktopManager.desktops[i];
+Dialog.prototype.moveToDesktop = function(i) {
+	if (this.snapped && window.windowManager) windowManager.unsnapDialog(this);
+	var desktop = window.desktopManager && window.desktopManager.desktops[i];
 	if (desktop) desktop.insertWindow(this);
 };
 
