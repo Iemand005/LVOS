@@ -170,14 +170,14 @@ function getWindowChromeHeight(window) {
  * @param {number} y
  */
 Helpers.translateElement = function(element, x, y) {
-	transformElement(element, { x: x, y: y });
+	Helpers.transformElement(element, { x: x, y: y });
 };
 
 /**
  * @param {HTMLElement} element
  * @param {Transform} t
  */
-function transformElement(element, t) {
+Helpers.transformElement = function(element, t) {
 	var transform = "";
 
 	if (t.x && t.y) transform += "translate(" + Helpers.toPixels(t.x) + "," + Helpers.toPixels(t.y) + ")";
@@ -299,36 +299,14 @@ function messageReceived(type, data, source){
 	}
 }
 
-function swapMetroBody() {
-	if (!windowManager.flipped) return;
-	windowManager.activeDialogToMetro();
-}
-
-/** @param {boolean} enable */
-function flip(enable){
-	var desktop = document.getElementById("desktop");;
-	if (!desktop) return;
-	desktop.toggleAttribute("flipped", enable); // Deprecated; moving to a class attribute.
-	flipHandler(desktop.classList.toggle("flipped", enable));
-}
-
-/** @param {boolean} enable */
-function flipHandler(enable){
-	DesktopManager.toggleCharms(false);
-	swapMetroBody();
-	windowManager.flipped = enable;
-	return windowManager.flipped;
-}
-
 var windowButtons = {
 	eject: 0,
 	full: 1,
 	close: 2
 };
 
-function Helpers() {
-	this. ok = false;
-}
+/** @class */
+function Helpers() {}
 
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
@@ -912,8 +890,6 @@ WindowManager.prototype.focusDialog = function(dialog) {
 	dialog.target.setAttribute("focus", String(true));
 	this.focusedDialog = dialog;
 };
-
-WindowManager.prototype.activeDialogToMetro = function() { if (this.activeDialog) this.activeDialog.exportDialogBodyToMetro(); };
 
 WindowManager.prototype.initializeDialogs = function() {
 	var self = this;
@@ -1580,11 +1556,7 @@ WindowManager.prototype.registerExtension = function(ext) {
  * @returns {Extension | null}
  */
 WindowManager.prototype.getExtension = function(id) {
-	for (var i = 0; i < this.extensions.length; i++) {
-		var ext = this.extensions[i];
-		if (ext && ext.id === id) return ext;
-	}
-	return null;
+	return this.extensions.find(function(ext) { return ext.id === id; }) || null;
 };
 
 /**
@@ -1608,7 +1580,8 @@ WindowManager.prototype.setExtensionEnabled = function(ext, enabled) {
  */
 WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	if (!ext || typeof ext !== "object") return;
-	var callback = ext[hook];
+
+	var callback = /** @type {((this: Extension, dialog?: Dialog) => void)} */(ext[hook]);
 	if (typeof callback !== "function") return;
 	try {
 		callback.call(ext, dialog);
@@ -1617,6 +1590,17 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	}
 };
 
+/**
+ * @overload
+ * @param {NoArgHook} hook
+ * @returns {void}
+ */
+/**
+ * @overload
+ * @param {DialogHook} hook
+ * @param {Dialog} dialog
+ * @returns {void}
+ */
 /**
  * @param {ExtensionHook} hook
  * @param {Dialog} [dialog]
@@ -1820,8 +1804,8 @@ function ClickOffset() {
 	this.width = 0;
 	this.startY = 0;
 	this.startX = 0;
-	this.last = 0;
 	this.start = 0;
+	this.last = 0;
 	this.position = new Vector;
 	this.lastPosition = new Vector;
 	this.difference = new Vector;
@@ -1938,7 +1922,7 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 });
 
 Transformable.prototype.applyTransform = function() {
-	transformElement(this.target, this._transform);
+	Helpers.transformElement(this.target, this._transform);
 };
 
 /** @param {boolean} [animate] */
@@ -2346,6 +2330,7 @@ function Dialog(object) {
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 
 	this.originalBody = this.body;
+
 	if (!this.scroll && this.originalBody) this.originalBody.style.overflow = "hidden";
 };
 
@@ -2576,7 +2561,8 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 Dialog.prototype.getOrCreateFrame = function(create) {
 	var frame = this.frame;
 	if (frame || create === false) return frame;
-	var body = this.body; if (!body) return null;
+	var body = this.body;
+	if (!body) return null;
 	try {
 		var frameEl = document.createElement("iframe");
 		body.appendChild(frameEl);
@@ -3207,7 +3193,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOutState = target._animationState;
 };
 
-/** Full-height snap, the state that is neither tiled nor maximized: the window paints edge to edge vertically and keeps only its width and x as its own, so it can still be dragged sideways. A top or bottom resize whose edge reaches the screen puts the offer up, dropping the window there enters it, and pulling it back down leaves it. The height is a CSS layer, exactly like maximizing: _height is never written, so it still holds the size the window had when the state was entered and hands it straight back when the class goes. y is the opposite — the drawn frame starts at the top of the area, so y is pinned there too, otherwise the grab would be recorded against one frame and the window drawn in another and every sideways drag would walk it off its full height. Only x is left alone, which is what the sideways drag is free to change. Animated through the same toggleClassAnimated path tiling uses, so entering and leaving get the identical transition rather than a second implementation of it. @param {boolean} [enable] */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
 	var target = this.target;
 	if (enable === null) enable = !target.classList.contains("height-snapped");
@@ -3241,6 +3227,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var target = this.target;
 	var content = this.content;
 
+	var fsTimeout = 0;
+
 	this.setZ();
 
 	this.broadcastState({ maximized: enable === true });
@@ -3250,175 +3238,102 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (flags.useViewTransitionMaximize && this.windowTarget)
 		return this.windowTarget.toggleMaximizedVT(enable);
 
-	if (!supportsTransitions) {
+	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
+		return name === "transform" || name === "width";
+	}, undefined, function(isMaximized) {
+		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+		this.maximizeAnimations--;
+	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
+		return name === "transform";
+	}, function onEnd(enabled) {
+		if (fsTimeout) clearTimeout(fsTimeout);
+		var target = this.target;
+
+		target.classList.toggle("maximized", enabled);
+
+
+		this.setScale(1, 1);
+		if (!content) return;
+		Helpers.transformElement(content, {x: 0, y: 0, scaleX :1, scaleY: 1});
+		content.style.width = "";
+		content.style.height = "";
+		this.maximizeAnimations--;
+
+	}, function onToggled(enabled) {
+		var timeOffsetMs = 50;
+		var totalDuration = 280; //Can I uh get this from uh the css somehow
+		var invertDurationOnShrink = false;
+
+		var target = this.target;
+
+		this._maximizing = enabled;
+
+		var startWidth = this.width;
+		var startHeight = this.height;
+
+		var windowSection = document.getElementById("window-section");
+		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
+
+		var scaleX = window.innerWidth / startWidth;
+		var scaleY = height / startHeight;
+
+		target.style.transformOrigin = "top left";
+		target.style.pointerEvents = "none";
+
+		if (!enabled) {
+			if (invertDurationOnShrink) timeOffsetMs = totalDuration - timeOffsetMs;
+
+			scaleX = 1 / scaleX;
+			scaleY = 1 / scaleY;
+		}
+
+		this.setScale(scaleX, scaleY);
+		this.updateTransform();
+
+		var targetWidth = enabled ? window.innerWidth : self.width;
+		var targetHeight = enabled ? height : self.height;
+
+
+
+		fsTimeout = setTimeout(function() {
+			requestAnimationFrame(function() {
+				if (!content) return;
+				content.style.width = Helpers.toPixels(targetWidth);
+				content.style.height = Helpers.toPixels(targetHeight);
+				void content.offsetWidth;
+
+				Helpers.transformElement(content, {x: 0, y: 0, scaleX:  1 / scaleX, scaleY: 1 / scaleY});
+			});
+		}, timeOffsetMs);
+	});
+	else {
 		var startPos = self.position;
 		var startSize = self.size;
+		var target = self.target;
 		enable = !target.classList.contains("maximized");
-		var toggleMaximizedFallback = function () {
+		var toggleMaximized = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
 			self.target.classList.toggle("maximized", enable);
 		};
-		if (!enable) toggleMaximizedFallback();
-		Anim.animate(300, function (t) {
+		if (!enable) toggleMaximized();
+		Anim.animate(300, function(t) {
 			var ease = Anim.easeSharpCenterStrong;
 			if (enable) {
 				self.x = Anim.lerp(startPos.x, 0, ease(t));
 				self.y = Anim.lerp(startPos.y, 0, ease(t));
-				self.width = Anim.lerp(startSize.x, Helpers.getViewportWidth(), ease(t));
-				self.height = Anim.lerp(startSize.y, Helpers.getViewportHeight(), ease(t));
+				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
+				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
 			} else {
 				self.x = Anim.lerp(0, startPos.x, ease(t));
 				self.y = Anim.lerp(0, startPos.y, ease(t));
-				self.width = Anim.lerp(Helpers.getViewportWidth(), startSize.x, ease(t));
-				self.height = Anim.lerp(Helpers.getViewportHeight(), startSize.y, ease(t));
+				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
+				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
 			}
-		}, function () {
-			if (enable) toggleMaximizedFallback();
-			self.maximizeAnimations--;
-		});
-		return;
-	}
-
-	if (!flags.compositorResize || !this.useTransform) {
-		this.toggleClassAnimated("maximized", enable, function (name) {
-			return name === "transform" || name === "width";
-		}, undefined, function (isMaximized) {
-			if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-			self.maximizeAnimations--;
-		}, 1000);
-		return;
-	}
-
-	if (!flags.useAnimations) {
-		target.classList.toggle("maximized", enable);
-		target.classList.toggle("scaled-max", enable);
-		target.style.pointerEvents = "";
-		this._maximizing = enable;
-		this.setScale(1, 1, undefined, true);
-		this.updateTransform();
-		this.toggleMinSizeConstraints(enable);
-		this.maximizeAnimations--;
-		return;
-	}
-
-	if (this._compositorMaxState) {
-		this._compositorMaxState.cancel();
-		this._compositorMaxState = null;
-	}
-
-	var windowSection = windowManager.getSnapContainer(this);
-	var endWidth = windowSection ? windowSection.clientWidth : Helpers.getViewportWidth();
-	var endHeight = windowSection ? windowSection.clientHeight : Helpers.getViewportHeight();
-	var startWidth = this.width || target.offsetWidth || 300;
-	var startHeight = this.height || target.offsetHeight || 200;
-	var startX = this.x;
-	var startY = this.y;
-
-	var scaleX = startWidth > 0 ? endWidth / startWidth : 1;
-	var scaleY = startHeight > 0 ? endHeight / startHeight : 1;
-
-	var isSlow = document.body && document.body.classList.contains("slow-animations");
-	var duration = isSlow ? 3000 : 280;
-
-	var toTransform = function (x, y, sx, sy) {
-		return "translate(" + Helpers.toPixels(x) + "," + Helpers.toPixels(y) + ") scale(" + sx + "," + sy + ")";
-	};
-
-	var state = {
-		active: true,
-		raf: 0,
-		timer: 0,
-		/** @type {((e: TransitionEvent) => void) | null} */
-		endHandler: null,
-		cancel: function () {
-			if (!this.active) return;
-			this.active = false;
-			if (this.raf) cancelAnimationFrame(this.raf);
-			if (this.timer) clearTimeout(this.timer);
-			if (this.endHandler) target.removeEventListener("transitionend", this.endHandler, false);
-			target.style.removeProperty("transition");
-			target.style.transformOrigin = "";
-			target.style.pointerEvents = "";
-			target.classList.remove("animating");
-			if (content) {
-				content.style.width = "";
-				content.style.height = "";
-			}
-			self.maximizeAnimations--;
-		}
-	};
-	this._compositorMaxState = state;
-
-	var finishCompositorMaximize = function () {
-		if (!state.active) return;
-		state.active = false;
-		if (state.timer) clearTimeout(state.timer);
-		if (state.endHandler) target.removeEventListener("transitionend", state.endHandler, false);
-		self._compositorMaxState = null;
-
-		target.classList.remove("animating");
-		target.style.removeProperty("transition");
-		target.style.transformOrigin = "";
-		target.style.pointerEvents = "";
-		if (content) {
-			content.style.width = "";
-			content.style.height = "";
-		}
-
-		if (enable) {
-			target.classList.add("maximized", "scaled-max");
-			self._maximizing = true;
-		} else {
-			target.classList.remove("maximized", "scaled-max");
-			self._maximizing = false;
-		}
-
-		self.setScale(1, 1, undefined, true);
-		self.updateTransform();
-		if (self.useTransform && target) self.toggleMinSizeConstraints(enable);
-		self.maximizeAnimations--;
-	};
-
-	state.endHandler = function (e) {
-		if (e.target === target && (e.propertyName === "transform" || !e.propertyName)) {
-			finishCompositorMaximize();
-		}
-	};
-	target.addEventListener("transitionend", state.endHandler, false);
-	state.timer = setTimeout(finishCompositorMaximize, duration + 100);
-
-	target.style.transformOrigin = "top left";
-	target.style.pointerEvents = "none";
-
-	if (enable) {
-		target.classList.add("scaled-max");
-		target.classList.remove("maximized");
-		target.style.setProperty("transition", "none", "important");
-		target.style.transform = toTransform(startX, startY, 1, 1);
-		void target.offsetWidth;
-
-		state.raf = requestAnimationFrame(function () {
-			state.raf = 0;
-			if (!state.active) return;
-			target.classList.add("animating");
-			target.style.removeProperty("transition");
-			target.style.transform = toTransform(0, 0, scaleX, scaleY);
-		});
-	} else {
-		target.classList.add("maximized", "scaled-max");
-		target.style.setProperty("transition", "none", "important");
-		target.style.transform = toTransform(0, 0, 1, 1);
-		void target.offsetWidth;
-
-		state.raf = requestAnimationFrame(function () {
-			state.raf = 0;
-			if (!state.active) return;
-			target.classList.add("animating");
-			target.style.removeProperty("transition");
-			target.style.transform = toTransform(startX, startY, 1 / scaleX, 1 / scaleY);
+		}, function() {
+			if (enable) toggleMaximized();
 		});
 	}
 };
@@ -3471,7 +3386,7 @@ Dialog.prototype.updatePosition = function() {
 	windowManager.notifyExtensions("onWindowMove", this);
 };
 
-/** Broadcasts this window's state change to other tabs through the window manager. When a partial is given, exactly those changed fields are sent (a move emits only {x,y}, maximize only {maximized}, etc.); when omitted, the full DialogState snapshot is sent. Only the active tab broadcasts; background tabs only listen and apply (guarded by focus, so applying never echoes back). @param {Partial<DialogState>} [overrides] The state fields that actually changed. */
+/** @param {Partial<DialogState>} [overrides] The state fields that actually changed. */
 Dialog.prototype.broadcastState = function (overrides) {
 	if (!windowManager || !flags.broadcastWindowMoves || !document.hasFocus()) return;
 	if (!this.id) return;
@@ -3872,10 +3787,8 @@ Dialog.prototype.openUrl = function(url) {
 	}
 
 	var timeout = -1;
-
 	var refreshLayout = function() {
-		try { self.updateBodyOffset(); if (typeof self.resize === "function") self.resize(self.width, self.height); } catch (ex) {}
-		try { if (typeof self.update === "function") self.update(); } catch (ex) {}
+		try { self.updateBodyOffset(); self.resize(self.width, self.height); self.update(); } catch (ex) {}
 	};
 
 	frame.onload = function() {
@@ -3969,7 +3882,7 @@ Dialog.prototype.createPopOut = function() {
 		}
 
 		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
-		var width = self._popupHelpers.getViewportWidth() || self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
+		var width = self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
 		outerX = Math.round(outerX);
 		outerY = Math.round(outerY);
 		width = Math.round(width);
@@ -4055,7 +3968,7 @@ Dialog.prototype.getState = function() {
 	};
 };
 
-/** Applies a (possibly partial) DialogState. Only the fields present in the state are touched, so a geometry-only broadcast never disturbs open/maximized/title and vice versa. Used both for cross-tab dialog-state broadcasts and local restore. @param {Partial<DialogState>} state */
+/** @param {Partial<DialogState>} state */
 Dialog.prototype.loadState = function(state) {
 	if ("open" in state) {
 		if (state.open) this.launch();
@@ -4070,7 +3983,6 @@ Dialog.prototype.loadState = function(state) {
 	if ("maximized" in state) this.toggleMaximized(state.maximized === true);
 };
 
-Dialog.prototype.exportDialogBodyToMetro = function() {};
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
 	var doc = this.contentDocument;
