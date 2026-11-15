@@ -1558,7 +1558,7 @@ WindowManager.prototype.registerExtension = function(ext) {
  * @returns {Extension | null}
  */
 WindowManager.prototype.getExtension = function(id) {
-	return this.extensions.find(function(ext) { return ext && ext.id === id; }) || null;
+	return this.extensions.find(function(ext) { return ext.id === id; }) || null;
 };
 
 /**
@@ -1585,7 +1585,8 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	var callback = ext[hook];
 	if (typeof callback !== "function") return;
 	try {
-		callback.call(ext, dialog);
+		if (dialog) callback.call(ext, dialog);
+		else callback.call(ext);
 	} catch (ex) {
 		console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex);
 	}
