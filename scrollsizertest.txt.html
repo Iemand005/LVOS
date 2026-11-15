@@ -1,0 +1,43 @@
+<div class="css-window">
+  <div class="title-bar">Pure CSS Window</div>
+  <div class="window-body">
+    Drag the bottom-right corner to resize me!
+  </div>
+</div>
+
+<style>
+  .css-window {
+    /* 1. The magic combo */
+    resize: both;
+    overflow: auto;
+
+    /* 2. Set boundaries so the user can't break it */
+    width: 320px;
+    height: 200px;
+    min-width: 200px;
+    min-height: 120px;
+    max-width: 90vw;
+    max-height: 90vh;
+
+    /* 3. Window styling */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title-bar {
+    background: #f0f0f0;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    user-select: none;
+  }
+
+  .window-body {
+    padding: 12px;
+    flex: 1;
+  }
+</style>
