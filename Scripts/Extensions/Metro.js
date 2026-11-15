@@ -18,3 +18,8 @@ function flipHandler(enable){
 	windowManager.flipped = enable;
 	return windowManager.flipped;
 }
+
+windowManager.registerExtension({
+	id: "metro",
+	name: "Metro"
+});
