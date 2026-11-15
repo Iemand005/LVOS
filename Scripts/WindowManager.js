@@ -3219,7 +3219,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (typeof enable !== "boolean") enable = !this.maximized;
 	if (this.maximized === enable) return;
-
 	if (enable && this.snapped && windowManager) windowManager.unsnapDialog(this);
 	if (enable && this.heightSnapped) this.toggleHeightSnapped(false);
 
