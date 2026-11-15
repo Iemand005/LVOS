@@ -3309,6 +3309,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var isSlow = document.body && document.body.classList.contains("slow-animations");
 	var duration = isSlow ? 3000 : 280;
 
+	Helpers.translateElement()
+	var toTransform = function (x, y, sx, sy) {
+		Helpers.transformElement(target, {x: x, y: y, scaleX: sx, scaleY: sy});
+	};
+
 	var state = {
 		active: true,
 		raf: 0,
@@ -3379,7 +3384,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.add("scaled-max");
 		target.classList.remove("maximized");
 		target.style.setProperty("transition", "none", "important");
-		target.style.transform = Helpers.transformElement(target, {x:startX,  y: startY, scaleX: 1,scaleY: 1});
+		target.style.transform = toTransform(startX, startY, 1, 1);
 		void target.offsetWidth;
 
 		state.raf = requestAnimationFrame(function () {
