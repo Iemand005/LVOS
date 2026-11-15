@@ -2361,10 +2361,9 @@ Dialog.prototype.setParentElement = function(element) {
 /** @param {number} i */
 Dialog.prototype.moveToDesktop = function(i){
 	if (this.snapped && windowManager) windowManager.unsnapDialog(this);
-	if (window.desktopManager) {
-		var desktop = window.desktopManager.desktops[i];
-		if (desktop) desktop.insertWindow(this);
-	}
+	if (!window.desktopManager) return;
+	var desktop = window.desktopManager.desktops[i];
+	if (desktop) desktop.insertWindow(this);
 };
 
 /** Detach the window to the given root (e.g. <main>) for an exposé drag while keeping it visually exactly where it was: the desktop's preview scale is undone by an inverse scale+translate on the content element. Everything is measured, not derived. @param {HTMLElement} root */
@@ -2413,7 +2412,7 @@ Dialog.prototype.clearExposéVisual = function() {
 	this._exposeGrab = null;
 };
 
-/** Drop the window into desktop i, landing it on the new desktop at the exact spot it visually appeared at under the cursor. @param {number} i */
+/** @param {number} i */
 Dialog.prototype.dropIntoDesktop = function(i) {
 	var visualLeft = null, visualTop = null, unscaledWidth = this._exposeVisualWidth;
 	if (this.content) {
@@ -2547,9 +2546,7 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 		var frameEl = document.createElement("iframe");
 		body.appendChild(frameEl);
 		return frameEl;
-	} catch (ex) {
-		return null;
-	}
+	} catch (ex) { return console.warn(ex); }
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
