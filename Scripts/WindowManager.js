@@ -2172,9 +2172,9 @@ function Dialog(object) {
 
 	this.setMinSize(180, 250, false);
 
-	this.toggleCloseButton(true);
-	this.toggleFullButton(true);
-	if (this.verifyEjectCapability()) this.toggleEjectButton(true);
+	this.toggleButton(windowButtons.close, true);
+	this.toggleButton(windowButtons.full, true);
+	if (this.verifyEjectCapability()) this.toggleButton(windowButtons.eject, true);
 
 	this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
@@ -3306,19 +3306,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 Dialog.prototype.maximize = function () {
   	this.toggleMaximized(true);
 };
-/** @param {boolean} [enable] */
-Dialog.prototype.toggleCloseButton = function (enable) {
-  	this.toggleButton(windowButtons.close, enable);
-};
-/** @param {boolean} [enable] */
-Dialog.prototype.toggleEjectButton = function (enable) {
-  	this.toggleButton(windowButtons.eject, enable);
-};
-/** @param {boolean} [enable] */
-Dialog.prototype.toggleFullButton = function (enable) {
-  	this.toggleButton(windowButtons.full, enable);
-};
-
 /**
  * @param {MessageType} type
  * @param {unknown} [message]
