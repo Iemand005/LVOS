@@ -1,7 +1,7 @@
 type DialogEvent = { dialog: Dialog };
 
 /** The hooks the window manager calls on the extensions it knows. */
-type ExtensionHook = "onWindowLaunch" | "onWindowMove" | "onEnable" | "onDisable";
+// type ExtensionHook = "onWindowLaunch" | "onWindowMove" | "onEnable" | "onDisable";
 
 /**
  * An extension of the window manager.
@@ -28,3 +28,6 @@ interface Extension {
 	/** Called when the extension is switched off. */
 	onDisable?(): void;
 }
+
+type ExtensionHook = Extract<keyof Extension, `on${string}`>;
+
