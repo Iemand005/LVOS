@@ -3643,24 +3643,13 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 
 	var newX = oldX, newY = oldY;
 	switch (direction) {
-		case "bottom-left":
-			newX = oldRight - newW;
-			break;
-		case "top-left":
-			newX = oldRight - newW;
-		case "top-right":
-			newY = oldBottom - newH;
-			break;
-		case "left":
-			newX = oldRight - newW;
-		case "right":
-			newY = oldY + oldH / 2 - newH / 2;
-			break;
-		case "top":
-			newY = oldBottom - newH;
-		case "bottom":
-			newX = oldX + oldW / 2 - newW / 2;
-			break;
+		case "bottom-left": newX = oldRight - newW; break;
+		case "top-left":    newX = oldRight - newW;
+		case "top-right":   newY = oldBottom - newH; break;
+		case "left":        newX = oldRight - newW;
+		case "right":       newY = oldY + oldH / 2 - newH / 2; break;
+		case "top":         newY = oldBottom - newH;
+		case "bottom":      newX = oldX + oldW / 2 - newW / 2; break;
 	}
 
 	this._width = newW;
@@ -4000,9 +3989,7 @@ window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
 
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
 window.addEventListener("dragover", Helpers.cancelDomEvent, false);
-window.addEventListener("drop", function(e) {
-	e.preventDefault();
-}, false);
+window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
 //#endregion
 
