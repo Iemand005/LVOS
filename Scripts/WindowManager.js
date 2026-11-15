@@ -684,7 +684,11 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 	}
 };
 
-/** @param {WindowCallback} callback */
+/**
+ * @emits
+ * @template {any} T
+ * @param {WindowCallback} callback
+ * */
 WindowManager.prototype.forEachWindow = function (callback) {
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
@@ -1427,12 +1431,12 @@ WindowManager.prototype.enableDialogDrag = function() {
 
 /** @param {number} [newZ]  */
 WindowManager.prototype.updateTopZ = function(newZ) {
-	if (typeof newZ === "number") {
+	if (typeof newZ === "number")
 		this.topZ = Math.max(this.topZ, newZ + 1);
-	} else {
+	else {
 		var self = this;
 		this.forEachWindow(function(dialog) {
-			if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
+			if (dialog && dialog.z >= this.topZ) this.topZ = dialog.z + 1;
 		});
 	}
 };
