@@ -2999,12 +2999,8 @@ Dialog.prototype.activate = function() {
 	this.messageFrame("open");
 };
 Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrClassName("h1"); };
-Dialog.prototype.open = function () {
-	return this.toggleOpen(true);
-};
-Dialog.prototype.close = function () {
-	return this.toggleOpen(false);
-};
+Dialog.prototype.open = function () { return this.toggleOpen(true); };
+Dialog.prototype.close = function () { return this.toggleOpen(false); };
 
 /** @param {number} [index] */
 Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
@@ -3303,9 +3299,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		});
 	}
 };
-Dialog.prototype.maximize = function () {
-  	this.toggleMaximized(true);
-};
+Dialog.prototype.maximize = function () { this.toggleMaximized(true); };
 /**
  * @param {MessageType} type
  * @param {unknown} [message]
