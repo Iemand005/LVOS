@@ -514,28 +514,28 @@ function WindowManager() {
 	/** @constant */
 	this.dragAction = new DragAction;
 
-	/** How close to the top edge a dragged window must be for aero snap to engage, in CSS pixels. Shared by the drag preview and the snap on drop, so the indicator cannot promise a snap the drop then refuses. 0 requires the very top edge. @type {number} */
+	/** @type {number} */
 	this.snapFullThreshold = 30;
 
-	/** How close to the left or right edge the pointer must be for a dragged window to snap to that half, in CSS pixels. Shared by the drag preview and the snap on drop, for the same reason as {@link WindowManager#snapFullThreshold}. @type {number} */
+	/** @type {number} */
 	this.snapSideThreshold = 30;
 
-	/** How far below its grab point a full-height snapped window has to be pulled before it lets go, in CSS pixels. Sideways dragging keeps the state, so this is the only number that decides when the window drops back onto its own height. @type {number} */
+	/** @type {number} */
 	this.heightSnapReleaseThreshold = 10;
 
-	/** Width of a gap tile as a share of the window area. One gap matches one half-width window, so a lone window snapped right sits exactly in the right half. @type {number} */
+	/** @type {number} */
 	this.snapGapWidth = 0.5;
 
-	/** Whether snapping a window to a side inserts a gap tile to hold its position. With gaps on, a window snapped right sits flush against the right edge and a lone window keeps its own width, leaving the rest of the desktop free. Turn this off for a full tiling window manager: no gaps, and the last window absorbs the leftover width so the group always fills the area. @type {boolean} */
+	/** @type {boolean} */
 	this.snapInsertGaps = true;
 
-	/** The snap zone the indicator is currently showing, or "" for none. Shared by the drag preview and the snap on drop so the two cannot disagree. @type {"" | "maximize" | "left" | "right" | "height"} */
+	/** @type {"" | "maximize" | "left" | "right" | "height"} */
 	this._snapZone = "";
 
-	/** Last pointer position during a drag, so the drop can decide the same zone the preview did once the pointer has gone. @type {Coord} */
+	/** @type {Coord} */
 	this.pointerPosition = { x: 0, y: 0 };
 
-	/** Set when a gesture lets go of a full-height snapped window by resizing it down, so the rest of that gesture claims no snap zone: a small pull off the edge would otherwise bounce straight back into full height on release. Cleared when the next gesture starts. @type {boolean} */
+	/** @type {boolean} */
 	this._heightSnapReleased = false;
 
 	/** @type {Dialog | null} */
@@ -637,12 +637,7 @@ Object.defineProperty(WindowManager.prototype, "state", {
 	get: function () {
 		/** @type {DesktopState} */
 		var state = {};
-		windowManager.forEachWindow(function (window, id) {
-			state[id] = window.getState();
-		});
-		for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
-			var window = this.windows[id];
-		}
+		windowManager.forEachWindow(function (window, id) { state[id] = window.getState(); });
 		return state;
 	}
 });
@@ -1598,7 +1593,7 @@ WindowManager.prototype.notifyExtensions = function(hook, dialog) {
 	}
 };
 
-/** Gap the snap indicator keeps from every edge of the area it covers, so it reads as floating over the desktop rather than filling it. Shared by the maximize and side snap indicators so they stay consistent. @type {number} */
+/** @type {number} */
 WindowSnap.margin = 15;
 
 function WindowSnap() {
@@ -1606,7 +1601,7 @@ function WindowSnap() {
 	this.element.id = "window-snap";
 	this._snapped = "";
 
-	/** The desktop section the indicator currently lives in. It is moved into the section of the window it is previewing, so its insets are measured in that desktop's own space and it scrolls along with that desktop. @type {HTMLElement | null} */
+	/** @type {HTMLElement | null} */
 	this._section = null;
 
 	if (document.documentMode && document.documentMode < 9) return;
