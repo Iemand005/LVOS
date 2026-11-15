@@ -11,6 +11,7 @@
 
 "use strict";
 
+// Modifiab
 var useTransform = true,
 	useScale = false;
 
