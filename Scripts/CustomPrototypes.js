@@ -30,7 +30,7 @@ if (!Object.prototype.hasOwnProperty("forEach")) Object.defineProperty(Object.pr
 });
 
 if (!Array.prototype.find) {
-	/** @param {Parameters<typeof Array.prototype.find>[0]} find */
+	/** @param {Parameters<typeof Array.prototype.find>[0]} predicate */
   Array.prototype.find = function(predicate) {
     for (var i = 0; i < this.length; i++) {
       if (predicate(this[i], i, this)) {
