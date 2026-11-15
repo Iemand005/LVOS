@@ -1429,12 +1429,12 @@ WindowManager.prototype.enableDialogDrag = function() {
 WindowManager.prototype.updateTopZ = function(newZ) {
 	if (typeof newZ === "number") {
 		this.topZ = Math.max(this.topZ, newZ + 1);
-		return;
+	} else {
+		var self = this;
+		this.forEachWindow(function(dialog) {
+			if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
+		});
 	}
-	var self = this;
-	this.forEachWindow(function(dialog) {
-		if (dialog && dialog.z >= self.topZ) self.topZ = dialog.z + 1;
-	});
 };
 
 /** @param {string} [id] */
