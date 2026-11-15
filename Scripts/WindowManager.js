@@ -508,7 +508,6 @@ function WindowManager() {
 	/** @type {DesktopState | null} */
 	this._windowStates = null;
 
-	this._isBlurEnabled = true;
 	this._isWindowUpdatesEnabled = false;
 
 	this.isDragging = false;
@@ -647,13 +646,6 @@ Object.defineProperty(WindowManager.prototype, "state", {
 	}
 });
 
-Object.defineProperty(WindowManager.prototype, "isBlurEnabled", {
-	get: function () { return this._isBlurEnabled; },
-	set: function (value) {
-		if (typeof value === "boolean") this._isBlurEnabled = value;
-	}
-});
-
 Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 	get: function() { return this._isWindowUpdatesEnabled; },
 	set: function(value) {
@@ -705,9 +697,7 @@ WindowManager.prototype.forEachWindow = function (callback) {
 	}
 };
 
-WindowManager.prototype.synchronizeStates = function () {
-	this.forEachWindow(function(dialog) { dialog.reportState(); });
-};
+WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(function(dialog) { dialog.reportState(); }); };
 
 /** @param {Application | HTMLElement} app */
 WindowManager.prototype.loadApp = function(app) {
@@ -748,11 +738,7 @@ WindowManager.prototype.spawnApp = function(application) {
  */
 WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	/** @type {Application} */
-	var application = {
-		src: url,
-		id: id || "custom." + getDomain(url),
-		title: title || getSiteName(url) || "unkle"
-	};
+	var application = { src: url, id: id || "custom." + getDomain(url), title: title || getSiteName(url) || "unkle" };
 	if (iconUrl) application.iconUrl = iconUrl;
 	this.loadApp(application);
 	this.saveInstalledApp(application);
