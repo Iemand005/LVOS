@@ -3385,8 +3385,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
  * @param {boolean} [animate]
  */
 Dialog.prototype.moveCenterTo = function(centerX, centerY, animate) {
-	if (typeof centerX === "number" || typeof centerY === "number")
-		this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
+	this.move(centerX - this.width / 2, centerY - this.height / 2, true, animate);
 };
 
 /** @param {number} [z] */
