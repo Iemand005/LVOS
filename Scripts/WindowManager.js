@@ -3193,7 +3193,7 @@ Dialog.prototype.toggleSnapped = function (enable) {
 	this._snappingOutState = target._animationState;
 };
 
-/** Full-height snap, the state that is neither tiled nor maximized: the window paints edge to edge vertically and keeps only its width and x as its own, so it can still be dragged sideways. A top or bottom resize whose edge reaches the screen puts the offer up, dropping the window there enters it, and pulling it back down leaves it. The height is a CSS layer, exactly like maximizing: _height is never written, so it still holds the size the window had when the state was entered and hands it straight back when the class goes. y is the opposite — the drawn frame starts at the top of the area, so y is pinned there too, otherwise the grab would be recorded against one frame and the window drawn in another and every sideways drag would walk it off its full height. Only x is left alone, which is what the sideways drag is free to change. Animated through the same toggleClassAnimated path tiling uses, so entering and leaving get the identical transition rather than a second implementation of it. @param {boolean} [enable] */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
 	var target = this.target;
 	if (enable === null) enable = !target.classList.contains("height-snapped");
@@ -3248,7 +3248,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}, function onEnd(enabled) {
 		if (fsTimeout) clearTimeout(fsTimeout);
 		var target = this.target;
-		if (!target) return;
 
 		target.classList.toggle("maximized", enabled);
 
@@ -3266,7 +3265,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var invertDurationOnShrink = false;
 
 		var target = this.target;
-		if (!target) return;
 
 		this._maximizing = enabled;
 
@@ -3297,10 +3295,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 
 		fsTimeout = setTimeout(function() {
-			// if (maximizeAnimations > 1) {
-			// 	console.log("Animainois ongoign");
-			// 	return;
-			// }
 			requestAnimationFrame(function() {
 				if (!content) return;
 				content.style.width = Helpers.toPixels(targetWidth);
@@ -3315,14 +3309,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		var startPos = self.position;
 		var startSize = self.size;
 		var target = self.target;
-		if (!target) return;
 		enable = !target.classList.contains("maximized");
 		var toggleMaximized = function() {
 			self.x = startPos.x;
 			self.y = startPos.y;
 			self.width = startSize.x;
 			self.height = startSize.y;
-			if (self.target) self.target.classList.toggle("maximized", enable);
+			self.target.classList.toggle("maximized", enable);
 		};
 		if (!enable) toggleMaximized();
 		Anim.animate(300, function(t) {
