@@ -170,7 +170,7 @@ function getWindowChromeHeight(window) {
  * @param {number} y
  */
 Helpers.translateElement = function(element, x, y) {
-	transformElement(element, { x: x, y: y });
+	Helpers.transformElement(element, { x: x, y: y });
 };
 
 /**
@@ -1922,7 +1922,7 @@ Object.defineProperty(Transformable.prototype, "perspective", {
 });
 
 Transformable.prototype.applyTransform = function() {
-	transformElement(this.target, this._transform);
+	Helpers.transformElement(this.target, this._transform);
 };
 
 /** @param {boolean} [animate] */
@@ -3309,11 +3309,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	var isSlow = document.body && document.body.classList.contains("slow-animations");
 	var duration = isSlow ? 3000 : 280;
 
-	Helpers.translateElement()
-	var toTransform = function (x, y, sx, sy) {
-		return "translate(" + Helpers.toPixels(x) + "," + Helpers.toPixels(y) + ") scale(" + sx + "," + sy + ")";
-	};
-
 	var state = {
 		active: true,
 		raf: 0,
@@ -3384,7 +3379,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.add("scaled-max");
 		target.classList.remove("maximized");
 		target.style.setProperty("transition", "none", "important");
-		target.style.transform = toTransform(startX, startY, 1, 1);
+		target.style.transform = Helpers.transformElement(target, {x:startX,  y: startY, scaleX: 1,scaleY: 1});
 		void target.offsetWidth;
 
 		state.raf = requestAnimationFrame(function () {
