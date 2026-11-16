@@ -11,12 +11,7 @@
 
 "use strict";
 
-var useTransform = true,
-	useScale = false;
-
-var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
-
-var supportsPointer = typeof window !== "undefined" && "PointerEvent" in window && !isIE && !("MSPointerEvent" in window);
+var useTransform = true, useScale = false;
 
 var isLocal = location.protocol === "file:" || location.hostname === "localhost";
 var allowUpdateRateLimit = false;
@@ -48,7 +43,6 @@ var flags = {
 	_compositorResize: true,
 	get compositorResize() { return this._compositorResize; },
 	set compositorResize(value) {
-
 		document.body.classList.toggle("compositor-animations", !!value);
 		if (value) this._useViewTransitionMaximize = false;
 		this._compositorResize = value;
@@ -56,14 +50,12 @@ var flags = {
 	_useViewTransitionMaximize: true,
 	get useViewTransitionMaximize() { return this._useViewTransitionMaximize; },
 	set useViewTransitionMaximize(value) {
-
 		if (value) this.compositorResize = false;
 		this._useViewTransitionMaximize = value;
 	},
 	_preserveMaximizeAspect: false,
 	get preserveMaximizeAspect() { return this._preserveMaximizeAspect; },
 	set preserveMaximizeAspect(value) {
-
 		document.body.classList.toggle("preserve-aspect", !!value);
 		this._preserveMaximizeAspect = value;
 	},
