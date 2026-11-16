@@ -3786,8 +3786,8 @@ DragAction.prototype.set = function (direction) {
 
 //#region Event Listeners
 
-window.addEventListener("resize", WindowManager.recalculateWindowBounds, false);
-window.addEventListener("load", WindowManager.recalculateWindowBounds, false);
+window.addEventListener("resize", WindowManager.updateWindowRect, false);
+window.addEventListener("load", WindowManager.updateWindowRect, false);
 
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
 window.addEventListener("dragover", Helpers.cancelDomEvent, false);
