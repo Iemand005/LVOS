@@ -523,15 +523,12 @@ function WindowManager() {
 	} catch(ex) { console.warn("Local storage access denied.", ex); }
 
 	this.ticking = false;
-
 	/** @type {PointerEvent | MouseEvent | null} Newest drag event waiting for the next frame. */
 	this._pendingDragEvent = null;
 
 	this.flipped = false;
-
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
-
 	/** @type {boolean} Set while applying a broadcast from another tab, so applying it never re-broadcasts (echo loop prevention). */
 	this.synchronizing = false;
 
@@ -2265,9 +2262,8 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 			var filtered = [];
 			for (var i = 0; i < candidates.length; i++) {
 				var node = candidates[i];
-				if (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16))) {
+				if (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16)))
 					filtered.push(node);
-				}
 			}
 			elements = filtered;
 		}
@@ -2298,7 +2294,7 @@ Dialog.prototype.moveToDesktop = function(i) {
 	if (desktop) desktop.insertWindow(this);
 };
 
-/** Detach the window to the given root (e.g. <main>) for an exposé drag while keeping it visually exactly where it was: the desktop's preview scale is undone by an inverse scale+translate on the content element. Everything is measured, not derived. @param {HTMLElement} root */
+/** @param {HTMLElement} root */
 Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	var target = this.target;
 	var before = target.getBoundingClientRect();
