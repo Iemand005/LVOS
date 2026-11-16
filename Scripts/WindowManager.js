@@ -651,6 +651,8 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 	}
 });
 
+WindowManager.prototype.setTopZ = function(value) { this.topZ = value };
+
 WindowManager.prototype.saveState = function() {
 	if (!this.loaded) return;
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
