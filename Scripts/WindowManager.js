@@ -3039,10 +3039,8 @@ Dialog.prototype.setInset = function(top, left, right, bottom) {
 Dialog.prototype.openUrl = function(url) {
 	var self = this;
 	var frame = this.getOrCreateFrame(true);
-	if (!frame) {
-		setTimeout(function() { self.openUrl(url); }, 5);
-		return;
-	}
+	if (!frame)
+		return setTimeout(function() { self.openUrl(url); }, 5);
 
 	var timeout = -1;
 	var refreshLayout = function() {
@@ -3080,7 +3078,6 @@ Dialog.prototype.launch = function() {
 	if (!this.isOpen) this.insertIntoDOM();
 	this.target.classList.remove("hidden");
 	windowManager.notifyExtensions("onWindowLaunch", this);
-
 	this.open();
 };
 
@@ -3160,9 +3157,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 Dialog.prototype.getState = function() {
 	return {
 		title: this.title || this.id || "Unc",
-		x: this.x,
-		y: this.y,
-		z: this.z,
+		x: this.x, y: this.y, z: this.z,
 		width: this.width || this.minWidth,
 		height: this.height || this.minHeight,
 		open: this._stateOpen || this.isOpen || false,
@@ -3208,8 +3203,6 @@ Dialog.prototype.moveElementIntoPipById = function(id, stylesheet) {
 		};
 	}, stylesheet);
 };
-
-
 
 //#endregion
 
