@@ -3064,7 +3064,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		return name === "transform";
 	}, function onEnd(enabled) {
 		if (fsTimeout) clearTimeout(fsTimeout);
-		var target = this.target;
 
 		target.classList.toggle("maximized", enabled);
 		target.style.pointerEvents = "";
@@ -3080,8 +3079,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
-
-		var target = this.target;
 
 		this._maximizing = enabled;
 
