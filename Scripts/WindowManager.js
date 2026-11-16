@@ -936,7 +936,7 @@ WindowManager.prototype.getSnapSpacer = function (section) {
 	return group.spacer;
 };
 
-/** Lays a desktop's snap group out across its own window-section: the section itself is the flex row, so its members are the group's windows in the group's order, each taking the share of the area the group holds for it. That share and the order ride inline on the element, so the window's own geometry state is never written and comes back intact when it leaves the group, and no element is ever reparented — a tiled window holding an iframe is never torn down and reloaded. The layout is scoped to the section the windows already live in, so a snap on any desktop tiles inside that desktop and never moves the window to another one. Every window takes its own width, and gap tiles only reserve space, so a lone tiled window stays at 50% and leaves the rest of the desktop free to drag a second window onto. Clear {@link WindowManager#snapInsertGaps} for a full tiling window manager: no gaps are inserted and the last window soaks up whatever width is left over, so the group always fills the area. @param {HTMLElement} section */
+/** @param {HTMLElement} section */
 WindowManager.prototype.reflowSnapGroup = function (section) {
 	var group = this.getSnapGroup(section);
 	var tiles = /** @type {WindowTile[]} */ (group.windows);
@@ -1279,13 +1279,14 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	this.element.style.zIndex = dialog.z.toString();
 	this.hidden = false;
 	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
-	var apply = function() { insetElement(this.element, top, left, right, bottom); }.bind(this);
+	var self = this;
+	var apply = function() { Helpers.insetElement(self.element, top, left, right, bottom); }.bind(this);
 	if (!noAnimation) Helpers.animateElement(this.element, apply, "top", undefined, this, 500);
 	else apply();
 };
 
 /** @param {number} inset */
-WindowSnap.prototype.setInset = function(inset) { insetElement(this.element, inset); };
+WindowSnap.prototype.setInset = function(inset) { Helpers.insetElement(this.element, inset); };
 
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
@@ -1636,7 +1637,7 @@ function Dialog(application) {
 		var element = id && document.getElementById(id);
 		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
 		this.target = element;
-	} else this.target = createDialogElement();
+	} else this.target = Helpers.createDialogElement();
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
