@@ -83,7 +83,7 @@ interface GraphicsBase {
 
 interface Graphics2D extends GraphicsBase {
 	ctx: CanvasRenderingContext2D;
-	resize();
+	resize() : any;
 }
 }
 
