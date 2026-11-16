@@ -1582,7 +1582,7 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 
 //#region Dialog
 
-/** @param {*} exception */
+/** @param {unknown} exception */
 function handleStorageException(exception) {
 	localStorage.windowState = null;
 	windowManager.canSave = false;
@@ -2462,11 +2462,11 @@ Object.defineProperty(Dialog.prototype, "iconUrl", {
 });
 
 Dialog.prototype.getIconUrl = function() {
-	return this.application.iconUrl || (this.application.src && getFaviconUrl(this.application.src)) || null;
+	return this.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
 };
 
 Dialog.prototype.getMiniIconUrl = function() {
-	return this.application.src ? getFaviconUrl(this.application.src) : null;
+	return this.application.src ? Helpers.getFaviconUrl(this.application.src) : null;
 };
 
 /**
@@ -2660,7 +2660,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	var self = this;
 	var enabled = false;
 	this.animate(function() {
-		enabled = setClass(self.target, className, force);
+		enabled = Helpers.setClass(self.target, className, force);
 		if (onToggled) onToggled.call(self, enabled);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
@@ -2688,7 +2688,7 @@ Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitio
 
 	var self = this;
 	var onEnd = function () { self._endSnapTransition(); };
-	if (useFlip) this.animate(function () { setClass(self.target, className, enable); }, onTransitionEnd, onEnd, 1000, true);
+	if (useFlip) this.animate(function () { Helpers.setClass(self.target, className, enable); }, onTransitionEnd, onEnd, 1000, true);
 	else this.toggleClassAnimated(className, enable, onTransitionEnd, onEnd, undefined, 1000);
 
 	this._snappingOutState = /** @type {any} */ (target)._animationState;
@@ -3167,8 +3167,8 @@ Dialog.prototype.moveBody = function (x, y) {
  * @param {number} [bottom]
  */
 Dialog.prototype.setInset = function(top, left, right, bottom) {
-	if (this.useScale) insetElement(this.target, top, left);
-	else insetElement(this.target, top, left, right, bottom);
+	if (this.useScale) Helpers.insetElement(this.target, top, left);
+	else Helpers.insetElement(this.target, top, left, right, bottom);
 };
 
 /** @param {string} [url] */
@@ -3251,8 +3251,8 @@ Dialog.prototype.createPopOut = function() {
 	if (!this._popupWindow) return;
 	var self = this;
 	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
-	var windowChromeHeight = getWindowChromeHeight(window);
-	var chromeHeight = getWindowChromeHeight(this._popupWindow);
+	var windowChromeHeight = Helpers.getWindowChromeHeight(window);
+	var chromeHeight = Helpers.getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
 		if (!self._popupWindow || self._popupWindow.closed) {
 			clearInterval(self._popupPositionInterval);
