@@ -157,8 +157,11 @@ if (typeof console == "undefined") try {
     };
 } catch(ex) {}
 
-if (typeof console.warn !== "function") try {
-	console.warn = function(awa) {}
+try {
+	if (typeof console.log !== "function")
+		console.log = function(awa) {};
+	if (typeof console.warn !== "function")
+		console.warn = function(awa) {};
 } catch(ex) {}
 
 if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
