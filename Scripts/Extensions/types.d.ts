@@ -26,6 +26,8 @@ interface Extension {
 	onEnable?(): void;
 	/** Called when the extension is switched off. */
 	onDisable?(): void;
+	onWindowOpen:?(): void;
+	onWindowClose:?(): void;
 }
 
 type ExtensionHook = Extract<keyof Extension, `on${string}`>;

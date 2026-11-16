@@ -1239,7 +1239,7 @@ function messageReceived(type, data, source){
 				overlay.classList.toggle("open");
 				break;
 			case "readyToLaunchOverlay":
-				var overlay1 = getOverlay();
+				var overlay1 = Helpers.getOverlay();
 				if (!overlay1) break;
 				if (dialog.body) overlay1.appendChild(dialog.body);
 				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
@@ -1344,13 +1344,13 @@ WindowSnap.prototype.areaWidth = function() {
 /** @param {"left" | "right"} side */
 WindowSnap.prototype.setHalfInset = function(side) {
 	var half = Math.round(this.areaWidth() / 2), inset = WindowSnap.margin;
-	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
+	Helpers.insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 };
 
 /** @param {Dialog} dialog */
 WindowSnap.prototype.setHeightInset = function(dialog) {
 	var inset = WindowSnap.margin;
-	insetElement(this.element, inset, Math.max(inset, dialog.x - inset), Math.max(inset, this.areaWidth() - dialog.x - dialog.width - inset), inset);
+	Helpers.insetElement(this.element, inset, Math.max(inset, dialog.x - inset), Math.max(inset, this.areaWidth() - dialog.x - dialog.width - inset), inset);
 };
 
 /**
@@ -2088,8 +2088,8 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 		if (kill && !opened) self.kill();
 		if (opened) {
 			self.reportState();
-			if (windowManager) windowManager.notifyExtensions("onWindowOpen", self);
-		} else if (windowManager) windowManager.notifyExtensions("onWindowClose", self);
+			windowManager.notifyExtensions("onWindowOpen", self);
+		} else windowManager.notifyExtensions("onWindowClose", self);
 	}, function (opening) {
 		self._stateOpen = opening;
 		if (opening) self.activate();
