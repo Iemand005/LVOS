@@ -2008,7 +2008,6 @@ function Dialog(application) {
 	if (application.minHeight) this._minHeight = application.minHeight;
 
 	var id = application.id || application.title || "";
-	if (application.title) this._title = application.title;
 
 	this._id = id;
 	/** @type {HTMLButtonElement[]} */
@@ -2715,7 +2714,7 @@ Object.defineProperty(Dialog.prototype, "windowTarget", {
 
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
-	this._title = title;
+	this.application.title = title;
 	var titleElement = this.getTitleElement();
 	if (titleElement) titleElement.innerHTML = title;
 };
