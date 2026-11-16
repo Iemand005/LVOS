@@ -1129,11 +1129,8 @@ WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) 
  */
 WindowManager.prototype.getSnapContainer = function (dialog) {
 	var target = dialog && dialog.target;
-	if (target && target.closest) {
-		var section = /** @type {HTMLElement | null} */ (target.closest("#window-section, .window-section"));
-		if (section) return section;
-	}
-	return document.getElementById("window-section");
+	var section = target && target.closest && /** @type {HTMLElement | null} */ (target.closest("#window-section, .window-section"));
+	return section || document.getElementById("window-section");
 };
 
 /**
@@ -1683,12 +1680,9 @@ WindowSnap.prototype.setHalfInset = function(side) {
 /** @param {Dialog} dialog */
 WindowSnap.prototype.setHeightInset = function(dialog) {
 	var inset = WindowSnap.margin;
-
-	var right = this.areaWidth() - dialog.x - dialog.width - inset;
-
 	insetElement(this.element, inset,
-		Math.max(inset, dialog.left - inset),
-		Math.max(inset, right),
+		Math.max(inset, dialog.x - inset),
+		Math.max(inset, this.areaWidth() - dialog.x - dialog.width - inset),
 		inset);
 };
 
@@ -3025,20 +3019,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 		if (onToggled) onToggled.call(self, enabled);
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
-/**
- * @param {string} className
- * @param {boolean} [force]
- * @param {TransitionEndCallback} [onTransitionEnd]
- * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
- * @param {number} [timeout]
- */
-Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, onEnd, timeout) {
-	var self = this;
-	var enabled = false;
-	this.animate(function() {
-		enabled = setClass(self.target, className, force);
-	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout, true);
-};
 
 Dialog.prototype._endSnapTransition = function () {
 	this._snappingOut = false;
@@ -3056,7 +3036,6 @@ Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitio
 	var target = this.target;
 	if (enable === null) enable = !target.classList.contains(className);
 	if (target.classList.contains(className) === enable) return;
-
 	if (enable && onEnable) onEnable.call(this);
 
 	this._snappingOut = !enable;
@@ -3064,7 +3043,7 @@ Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitio
 
 	var self = this;
 	var onEnd = function () { self._endSnapTransition(); };
-	if (useFlip) this.toggleClassFlip(className, enable, onTransitionEnd, onEnd, 1000);
+	if (useFlip) this.animate(function () { setClass(self.target, className, enable); }, onTransitionEnd, onEnd, 1000, true);
 	else this.toggleClassAnimated(className, enable, onTransitionEnd, onEnd, undefined, 1000);
 
 	this._snappingOutState = /** @type {any} */ (target)._animationState;
