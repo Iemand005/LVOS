@@ -682,12 +682,25 @@ WindowManager.prototype.forEachWindow = function (callback, thisArg) {
 
 WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(function(dialog) { dialog.reportState(); }); };
 
-/** @param {Application | HTMLElement} app */
-WindowManager.prototype.loadApp = function(app) {
+/**
+ * @param {HTMLElement} element
+ * @returns {Application}
+ */
+WindowManager.prototype.createAppFromElement = function(element) {
+	var id = element.id || "";
+	var titleEl = element.querySelector("h1, header, .title, [data-title]");
+	var title = (titleEl && (titleEl.textContent || titleEl.innerText)) || id || "Window";
+	/** @type {Application} */
+	var application = { id: id, title: title, exists: true, element: element };
+	return application;
+};
+
+/** @param {Application} application */
+WindowManager.prototype.loadApp = function(application) {
 	try {
-		var dialog = new Dialog(app);
-		this._windows[app.id] = dialog;
-		if (!(app instanceof HTMLElement)) appManager.addApp(app);
+		var dialog = new Dialog(application);
+		this._windows[application.id] = dialog;
+		appManager.addApp(application);
 		return dialog;
 	} catch(ex) { console.warn("App load failed", ex); return null; }
 };
@@ -876,9 +889,9 @@ WindowManager.prototype.initializeDialogs = function() {
 	if (typeof document !== "undefined") {
 		var dialogs = document.getElementsByClassName("window");
 		for (var i = 0; i < dialogs.length; i++) {
-			var dialog = dialogs[i];
-			if (Helpers.isElement(dialog))
-				self.loadApp(dialog);
+			var element = dialogs[i];
+			if (Helpers.isElement(element))
+				self.loadApp(self.createAppFromElement(element));
 		}
 	}
 	this.loadState();
@@ -1917,10 +1930,10 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 
 /**
  * @author Lasse Lauwerys
- * @param {HTMLElement | Application} [object] This is a dialog element from the HTML structure, or an object that defines the properties of the window.
+ * @param {Application} application
  * @class
  */
-function Dialog(object) {
+function Dialog(application) {
 
 	/** @type {number} */
 	this._x = 0;
@@ -1990,30 +2003,33 @@ function Dialog(object) {
 	/** @type {{_fsTimeout: number | null, _fsRaf: number | null, _fsToken: number | null, _fsTokenAtStart: number | null }} @const */
 	this._animationProps = { _fsTimeout: 0, _fsRaf: null, _fsToken: null, _fsTokenAtStart: null };
 
-	if (!object) return;
+	/** @type {Application} */
+	this.application = application;
 
-	var id = object.id;
+	if (application.minWidth) this._minWidth = application.minWidth;
+	if (application.minHeight) this._minHeight = application.minHeight;
 
-	/** @type {Application | null} */
-	this.application = null;
-	if (!Helpers.isElement(object)) {
-		this.application = object;
-		if (object.minWidth) this._minWidth = object.minWidth;
-		if (object.minHeight) this._minHeight = object.minHeight;
-	} else this.target = object;
-
-	if (!id) id = object.title;
-	if (object.title) this._title = object.title;
-	else {
-		var titleElement = this.getTitleElement();
-		if (titleElement) this._title = titleElement.innerText;
-		if (!id) id = this.id || this.title || "";
-	}
+	var id = application.id || application.title || "";
+	if (application.title) this._title = application.title;
 
 	this._id = id;
 	/** @type {HTMLButtonElement[]} */
 	this.buttons = [];
 	this.clickOffset = new ClickOffset;
+
+	/** @type {HTMLElement} */
+	this.target;
+
+	if (application.exists) {
+		var element = application.element || (id && document.getElementById(id));
+		if (element) this.target = element;
+	}
+	if (!this.target) this.target = createDialogElement();
+
+	if (!application.title) {
+		var titleElement = this.getTitleElement();
+		if (titleElement) this._title = titleElement.innerText;
+	}
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
@@ -2056,56 +2072,35 @@ function Dialog(object) {
 		return true;
 	};
 
-	if (object instanceof Dialog && object.application) object = object.application;
-
-	/** @type {HTMLElement} */
-	this.target;
-
 	/** @type {boolean} */
 	this.moveEvents = false;
 
 	/** @type {boolean} */
 	this.scroll = false;
 
-	if (!(object instanceof Dialog)) {
-		if (Helpers.isElement(object)) {
-			this.target = object;
-			if (this.target.parentElement && this.target.parentElement.nodeName === "TEMPLATE") return;
-			this.close();
-		} else {
+	if (application.exists) {
+		var doc = this.contentDocument;
+		if (doc && doc.readyState !== "complete" && application.src) this.openUrl(application.src);
+	} else if (application.src) this.openUrl(application.src);
 
-			if (object.exists) {
-				var element = document.getElementById(object.id);
-				if (element && this.application) {
-					this.target = element;
-					var doc = this.contentDocument;
-					if (doc && doc.readyState !== "complete") this.openUrl(this.application.src);
-				}
-			} else {
-				this.target = createDialogElement();
-				this.openUrl(object.src);
-			}
+	if (this.windowTarget) this.windowTarget.dialog = this;
 
-			if (this.windowTarget) this.windowTarget.dialog = this;
-
-			if (object.classes && typeof object.classes === "object"){
-				object.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
-			}
-			this.setTitle(object.title);
-			this.fixed = object.fixed || false;
-			this.scroll = object.scroll|| false;
-			if (this.frame) {
-				if (object.microphone || object.camera) this.frame.setAttribute("allow", "camera; microphone");
-				this.frame.setAttribute("allow", "fullscreen");
-			}
-
-			this.moveEvents = object.moveEvents || false;
-
-			this.setIcon(this.getMiniIconUrl(), function() {
-				self.setIcon(self.getIconUrl());
-			});
-		}
+	if (application.classes && typeof application.classes === "object") {
+		application.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
 	}
+	if (application.title) this.setTitle(application.title);
+	this.fixed = application.fixed || false;
+	this.scroll = application.scroll || false;
+	if (this.frame) {
+		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
+		this.frame.setAttribute("allow", "fullscreen");
+	}
+
+	this.moveEvents = application.moveEvents || false;
+
+	this.setIcon(this.getMiniIconUrl(), function() {
+		self.setIcon(self.getIconUrl());
+	});
 
 	this.setMinSize(180, 250, false);
 
@@ -2226,10 +2221,7 @@ function Dialog(object) {
 	this.updateScale(this.useScale);
 	this.update();
 
-	if (!Helpers.isElement(object))
-		if (object instanceof Dialog)
-			this.move(object.x, object.y);
-		else this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
+	this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 
@@ -2458,11 +2450,11 @@ Object.defineProperty(Dialog.prototype, "frame", {
 	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Object.defineProperty(Dialog.prototype, "resizable", {
-	get: function() { return !this.application ? true : this.application.resizable !== false; },
+	get: function() { return this.application.resizable !== false; },
 	set: function(v) { if (v) this._createSizers(); }
 });
 Object.defineProperty(Dialog.prototype, "src", {
-	get: function() { return this._src || this.application && this.application.src; },
+	get: function() { return this._src || this.application.src; },
 	set: function(url) { this.openUrl(url); }
 });
 Object.defineProperty(Dialog.prototype, "body", {
@@ -2768,7 +2760,7 @@ Object.defineProperty(Dialog.prototype, "transform", {
 });
 
 Object.defineProperty(Dialog.prototype, "killable", {
-	get: function() { return this.application !== null; }
+	get: function() { return true; }
 });
 
 Object.defineProperty(Dialog.prototype, "borderSize", {
@@ -2809,12 +2801,11 @@ Object.defineProperty(Dialog.prototype, "iconUrl", {
 });
 
 Dialog.prototype.getIconUrl = function() {
-	return this.application && (this.application.iconUrl || getFaviconUrl(this.application.src));
+	return this.application.iconUrl || (this.application.src && getFaviconUrl(this.application.src)) || null;
 };
 
 Dialog.prototype.getMiniIconUrl = function() {
-	if (!this.application) return null;
-	return getFaviconUrl(this.application.src);
+	return this.application.src ? getFaviconUrl(this.application.src) : null;
 };
 
 /**
@@ -2949,10 +2940,9 @@ Dialog.prototype.remapClickOffset = function (frameX, frameY, frameWidth, frameH
 	offset.clickX = this.x + (offset.clickX - frameX) * (this.width / frameWidth);
 	offset.clickY = this.y + (offset.clickY - frameY) * (this.height / frameHeight);
 };
-Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.href); };
+Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.application.src); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
-	if (!this.application) return null;
-	return this.application.src;
+	return this.application.src || null;
 }});
 /** @param {boolean} enable */
 Dialog.prototype.togglePointerEvents = function(enable) {
@@ -3594,13 +3584,11 @@ Dialog.prototype.openUrl = function(url) {
 		setTimeout(refreshLayout, 50);
 	};
 
-	if (!this.application) return;
-
 	var baseUrls = [url || this.src, this.application.distSrc];
 
 	if (!isLocal) baseUrls.reverse();
 
-	var fallbackUrls = baseUrls.concat(this.application.altUrls);
+	var fallbackUrls = baseUrls.concat(this.application.altUrls || []);
 
 	var index = 0;
 
