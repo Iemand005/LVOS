@@ -2759,12 +2759,11 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		if (animate) this.animate(this.updatePosition);
 		else this.updatePosition();
 
-	if (previousX !== this._x || previousY !== this._y) {
-		var state = {};
-		if (previousX !== this._x) state.x = this.x;
-		if (previousY !== this._y) state.y = this.y;
-		this.broadcastState(state);
-	}
+	if (previousX === this._x && previousY === this._y) return;
+	var state = {};
+	if (previousX !== this._x) state.x = this.x;
+	if (previousY !== this._y) state.y = this.y;
+	this.broadcastState(state);
 };
 /**
  * @param {number} centerX
