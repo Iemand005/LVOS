@@ -32,7 +32,8 @@ export default defineConfig(
 				launchpad: "readonly",
 				Helpers: "readonly",
 				TabScroller: "readonly",
-				initApps: "readonly"
+				initApps: "readonly",
+				capabilities: "writable"
 			}
 		},
 
