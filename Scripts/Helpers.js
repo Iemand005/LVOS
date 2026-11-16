@@ -1,6 +1,6 @@
 
 /** @class */
-Helpers.Helpers = function() {}
+function Helpers() {}
 
 /** @param {Event} event */
 Helpers.cancelDomEvent = function(event) {
