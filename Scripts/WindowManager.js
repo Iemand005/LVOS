@@ -1423,7 +1423,7 @@ ClickOffset.prototype.reset = function () {
 /** @param {number} x @param {number} y */
 ClickOffset.prototype.update = function(x, y){
 	this.last = Date.now();
-	this.position.x = x; this.position.y = y;
+	this.position.x = x, this.position.y = y;
 	var lastPosition = this.position.clone();
 	this.difference = this.lastPosition.clone().sub(this.position);
 	this.lastPosition = lastPosition;
