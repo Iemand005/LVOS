@@ -480,6 +480,8 @@ function readGroup(files, mergeProps, ie8) {
 	let code = parts.join("\n\n");
 	let accessors = 0;
 	if (ie8) {
+		code = code.replace(/(\w+)\.addEventListener\(\s*"error"\s*,\s*(\w+)\s*,\s*false\s*\)/g, '$1.attachEvent("onerror", $2)');
+
 		const transformed = transformAccessorsForIe8(code, "bundle.js");
 		code = transpileForIe8(transformed.code, "bundle.js");
 		accessors = transformed.accessors;

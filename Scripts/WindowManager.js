@@ -3671,11 +3671,7 @@ Dialog.prototype.openUrl = function(url) {
 		timeout = setTimeout(tryNext, 3000);
 	}
 
-	if (frame.attachEvent) {
-		frame.attachEvent("onerror", tryNext);
-	} else if (frame.addEventListener) {
-		frame.addEventListener("error", tryNext, false);
-	}
+	frame.addEventListener("error", tryNext, false);
 
 	tryNext();
 };
