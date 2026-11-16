@@ -1269,7 +1269,7 @@ WindowManager.prototype.findSnapTile = function (id, section) {
 	return -1;
 };
 
-/** Removes a window from the snap group, if it is in one. @param {Dialog} dialog */
+/** @param {Dialog} dialog */
 WindowManager.prototype.unsnapDialog = function (dialog) {
 	var section = this.getSnapContainer(dialog);
 	if (!section) return;
@@ -1418,7 +1418,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	if (!this.activeDialog.moveEvents) return;
 
 	var func = this.activeDialog.exchangeDialogMouseUpEvent;
-	if (func) func();
+	func();
 };
 
 WindowManager.prototype.enableDialogDrag = function() {
@@ -1608,7 +1608,7 @@ WindowSnap.prototype.init = function() {
 	snapParent.insertBefore(this.element, snapParent.firstChild);
 };
 
-/** Puts the indicator into the desktop section of the window it is previewing, so its insets line up with that desktop's coordinate space and it moves with the desktop instead of being pinned to the first one. It goes in first rather than last: it shares the previewed window's z-index, and a later sibling wins that tie, so being the first child is what keeps the frame behind the window it is offering instead of painting its blur over it. @param {Dialog} dialog */
+/** @param {Dialog} dialog */
 WindowSnap.prototype.attachTo = function(dialog) {
 	var section = windowManager.getSnapContainer(dialog);
 	if (!section) return;
@@ -2109,7 +2109,7 @@ function Dialog(application) {
 
 	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
-		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
+		this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
 	};
 	var target = this.target;
 
