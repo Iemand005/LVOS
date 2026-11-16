@@ -19,21 +19,7 @@ try {
 	hasLocalStorage = false;
 }
 
-if (!hasLocalStorage) canSave = false;
-
-/**
- * @param {any} object
- * @returns {object is HTMLElement}
- */
-function isElement(object) {
-	return object && "nodeType" in object;
-}
-
-/** @param {string} url */
-function getFaviconUrl(url) {
-	var m = url.match(/^([a-z]+:\/\/[^\/]+)/i);
-	return (m ? m[1] : url) + "/favicon.ico";
-}
+if (!hasLocalStorage) canSave = false;t
 
 /** @param {string} url */
 function getDomain(url) {
