@@ -368,10 +368,7 @@ Object.defineProperty(WindowManager.prototype, "installedApps", {
 			if (!string) return [];
 			var apps = JSON.parse(string);
 			return apps instanceof Array ? apps : [];
-		} catch (ex) {
-			console.log(ex);
-			return [];
-		}
+		} catch (ex) { console.warn(ex); return []; }
 	}
 });
 
@@ -380,24 +377,16 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 	if (!this.canSave || typeof localStorage === "undefined") return;
 	try {
 		var apps = this.installedApps;
-		for (var i = 0; i < apps.length; i++)
-			if (apps[i].id === application.id) return;
+		for (var i = 0; i < apps.length; i++) if (apps[i].id === application.id) return;
 		apps.push(application);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
-	} catch (exception) {
-		handleStorageException(exception);
-	}
+	} catch (exception) { handleStorageException(exception); }
 };
 
 WindowManager.prototype.loadInstalledApps = function() {
 	if (!this.canSave || typeof localStorage === "undefined") return;
-	try {
-		this.installedApps.forEach(function(application) {
-			if (application && application.src) this.loadApp(application);
-		}, this);
-	} catch (exception) {
-		handleStorageException(exception);
-	}
+	try { this.installedApps.forEach(function(app) { if (app && app.src) this.loadApp(app); }, this); }
+	catch (exception) { handleStorageException(exception); }
 };
 /**
  * @param {string} url
@@ -537,22 +526,18 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
 			node = node.parentElement;
 		}
-		if (isInteractive) {
-			try { dialog.focus(); } catch (ex) { console.log(ex); }
-			return dialog;
-		}
-	} catch (ex) { console.log(ex); }
+		if (isInteractive) { try { dialog.focus(); } catch (ex) {} return dialog; }
+	} catch (ex) {}
 
 	Helpers.cancelDomEvent(event);
 
 	if (window.desktopManager && window.desktopManager.isExposé) {
 		var root = document.querySelector("main");
 		if (root) {
-			var section = dialog.target.closest("#window-section, .window-section");
-			var origin = -1;
+			var section = dialog.target.closest("#window-section, .window-section"), origin = -1;
 			if (section) for (var i = 0; i < window.desktopManager.desktops.length; i++) {
-				var desktop = window.desktopManager.desktops[i];
-				if (desktop && desktop.target === section) { origin = i; break; }
+				var d = window.desktopManager.desktops[i];
+				if (d && d.target === section) { origin = i; break; }
 			}
 			dialog._exposeOrigin = origin >= 0 ? { index: origin, x: dialog.x, y: dialog.y } : null;
 			dialog.detachToRootKeepingVisual(root);
@@ -560,7 +545,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	} else dialog.clearExposéVisual();
 
 	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-		try { event.target.setPointerCapture(event.pointerId); } catch (ex) { console.log(ex); }
+		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
 	}
 	this.activeDialog = dialog;
 	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
@@ -1425,79 +1410,43 @@ ClickOffset._overlay.style.display = "block";
 /** @param {MouseEvent} [ev] */
 ClickOffset.disableOverlay = function (ev) {
 	if (ev && ((ev.buttons || ev.which || ev.button) || (window.windowManager && window.windowManager.isDragging))) return;
-	if (ClickOffset._overlay.remove) ClickOffset._overlay.remove();
-	else if (ClickOffset._overlay.parentNode) ClickOffset._overlay.parentNode.removeChild(ClickOffset._overlay);
+	var o = ClickOffset._overlay;
+	if (o.remove) o.remove(); else if (o.parentNode) o.parentNode.removeChild(o);
 };
-window.addEventListener("mousemove", ClickOffset.disableOverlay, false);
-window.addEventListener("mouseup", ClickOffset.disableOverlay, false);
-window.addEventListener("mouseout", ClickOffset.disableOverlay, false);
+["mousemove", "mouseup", "mouseout"].forEach(function(t) { window.addEventListener(t, ClickOffset.disableOverlay, false); });
 
 ClickOffset.prototype.reset = function () {
-	this.start = Date.now();
-	this.last = this.start;
-	this.position.x = 0;
-	this.position.y = 0;
+	this.start = this.last = Date.now();
+	this.position.x = this.position.y = 0;
 	return this;
 };
-/**
- * @param {number} x
- * @param {number} y
- */
+/** @param {number} x @param {number} y */
 ClickOffset.prototype.update = function(x, y){
 	this.last = Date.now();
-	this.position.x = x;
-	this.position.y = y;
+	this.position.x = x; this.position.y = y;
 	var lastPosition = this.position.clone();
 	this.difference = this.lastPosition.clone().sub(this.position);
 	this.lastPosition = lastPosition;
 	return this;
 };
-
-ClickOffset.prototype.clear = function () {
-	this.clickX = 0, this.clickY = 0;
-};
-/**
- * @param {number} x
- * @param {number} y
- * @param {number} [width ]
- * @param {number} [height]
- * @param {number} [startX]
- * @param {number} [startY]
- */
+ClickOffset.prototype.clear = function () { this.clickX = 0; this.clickY = 0; };
+/** @param {number} x @param {number} y @param {number} [width] @param {number} [height] @param {number} [startX] @param {number} [startY] */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
-	this.reset();
-	this.clickX = x;
-	this.clickY = y;
-	if (typeof width !== "number" || typeof height !== "number" || typeof startX !== "number" || typeof startY !== "number") return;
-	this.width = width;
-	this.height = height;
-	this.startX = startX;
-	this.startY = startY;
+	this.reset(); this.clickX = x; this.clickY = y;
+	if (typeof width === "number" && typeof height === "number" && typeof startX === "number" && typeof startY === "number") {
+		this.width = width; this.height = height; this.startX = startX; this.startY = startY;
+	}
 	return this;
 };
-
-/**
- * @param {boolean} enable
- * @param {(ev:PointerEvent|MouseEvent)=>void} handler
- * @param {Cursor} [cursor]
- */
+/** @param {boolean} enable @param {(ev:PointerEvent|MouseEvent)=>void} handler @param {Cursor} [cursor] */
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
-	if (enable) document.addEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-	else document.removeEventListener(supportsPointer ? "pointermove" : "mousemove", handler, false);
-
+	document[enable ? "addEventListener" : "removeEventListener"](supportsPointer ? "pointermove" : "mousemove", handler, false);
 	if (!flags.useDragOverlay || !this._overlay)
 		return windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
-
-	if (cursor) this._overlay.style.cursor = cursor;
-	else this._overlay.style.cursor = "";
-	if (enable) document.body.appendChild(this._overlay);
-	else this.disableOverlay();
+	this._overlay.style.cursor = cursor || "";
+	if (enable) document.body.appendChild(this._overlay); else this.disableOverlay();
 };
-
-/**
- * @param {boolean} enable
- * @param {Cursor} [cursor]
- */
+/** @param {boolean} enable @param {Cursor} [cursor] */
 ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 	if (this.dragHandler) ClickOffset.toggleDragEventHandler(enable, this.dragHandler, cursor);
 };
@@ -1528,50 +1477,15 @@ Transformable.prototype.applyTransform = function() {
 };
 
 /** @param {boolean} [animate] */
-Transformable.prototype.update = function(animate) {
-	if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000);
-	else this.applyTransform();
-};
-
-/**
- * @param {number} x
- * @param {number} y
- * @param {boolean} [animate]
- */
-Transformable.prototype.move = function(x, y, animate) {
-	this._transform.x = x;
-	this._transform.y = y;
-
-	this.update(animate);
-};
-
-/**
- * @param {number} [x]
- * @param {number} [y]
- * @param {boolean} [update]
- * @param {boolean} [animate]
- */
-Transformable.prototype.scale = function(x, y, update, animate) {
-	this._transform.scaleX = x || 1;
-	this._transform.scaleY = y || 1;
-	if (update) this.update(animate);
-};
-
-/**
- * @param {number} x
- * @param {number} [y]
- * @param {number} [z]
- * @param {boolean} [animate]
- */
+Transformable.prototype.update = function(animate) { if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000); else this.applyTransform(); };
+/** @param {number} x @param {number} y @param {boolean} [animate] */
+Transformable.prototype.move = function(x, y, animate) { this._transform.x = x; this._transform.y = y; this.update(animate); };
+/** @param {number} [x] @param {number} [y] @param {boolean} [update] @param {boolean} [animate] */
+Transformable.prototype.scale = function(x, y, update, animate) { this._transform.scaleX = x || 1; this._transform.scaleY = y || 1; if (update) this.update(animate); };
+/** @param {number} x @param {number} [y] @param {number} [z] @param {boolean} [animate] */
 Transformable.prototype.rotate = function(x, y, z, animate) {
-	if (y === undefined && z === undefined)
-		this._transform.rotate = x;
-	else {
-		this._transform.rotateX = x;
-		this._transform.rotateY = y;
-		this._transform.rotateZ = z;
-	}
-
+	if (y === undefined && z === undefined) this._transform.rotate = x;
+	else { this._transform.rotateX = x; this._transform.rotateY = y; this._transform.rotateZ = z; }
 	this.update(animate);
 };
 
@@ -2148,12 +2062,8 @@ Object.defineProperty(Dialog.prototype, "contentWindow", {
 });
 
 Object.defineProperty(Dialog.prototype, "x", {
-	get: function () {
-		return this._x * Helpers.getViewportWidth(); // TODO: get ehe window bounds calculated on resize evt
-	},
-	set: function (x) {
-		if (typeof x === "number") this.move(x, this.y);
-	}
+	get: function () { return this._x * Helpers.getViewportWidth(); }, // TODO: derive from cached WindowManager.windowRect/work-area bounds
+	set: function (x) { if (typeof x === "number") this.move(x, this.y); }
 });
 
 Object.defineProperty(Dialog.prototype, "y", {
@@ -2870,67 +2780,30 @@ Dialog.prototype.moveCenterTo = function(centerX, centerY, animate) {
 /** @param {number} [z] */
 Dialog.prototype.setZ = function(z) {
 	if (this.fixed) return;
-	var previous = this._z;
-	if (typeof z === "undefined") {
-		if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ;
-	} else this._z = z;
-	if (Helpers.isElement(this.target))
-		this.target.style.zIndex = String(this._z);
-	if (previous !== this._z) this.broadcastState({ z: this._z });
+	var prev = this._z;
+	if (typeof z === "undefined") { if (this._z !== windowManager.topZ) this._z = ++windowManager.topZ; }
+	else this._z = z;
+	if (Helpers.isElement(this.target)) this.target.style.zIndex = String(this._z);
+	if (prev !== this._z) this.broadcastState({ z: this._z });
 };
-Dialog.prototype.updateWidth = function () {
-	if (this.useTransform || this.useScale) this.target.style.width = Helpers.toPixels(this._width);
-	else this.target.style.right = Helpers.toPixels(this.right);
-};
-Dialog.prototype.updateHeight = function () {
-	if (this.useTransform || this.useScale) this.target.style.height = Helpers.toPixels(this._height);
-	else this.target.style.bottom = Helpers.toPixels(this.bottom);
-};
-/**
- * @param {"width"|"height"} axis
- * @param {number} size
- * @param {boolean} [update]
- * @param {boolean} [animate]
- */
+Dialog.prototype.updateWidth = function () { this.useTransform || this.useScale ? this.target.style.width = Helpers.toPixels(this._width) : this.target.style.right = Helpers.toPixels(this.right); };
+Dialog.prototype.updateHeight = function () { this.useTransform || this.useScale ? this.target.style.height = Helpers.toPixels(this._height) : this.target.style.bottom = Helpers.toPixels(this.bottom); };
+/** @param {"width"|"height"} axis @param {number} size @param {boolean} [update] @param {boolean} [animate] */
 Dialog.prototype._setSize = function (axis, size, update, animate) {
 	if (typeof size !== "number" || axis === "height" && !this.target) return;
-	var isWidth = axis === "width";
-	var bounds = WindowManager.windowRect;
-	var far = isWidth ? bounds.right : bounds.bottom;
-	var near = isWidth ? bounds.left : bounds.top;
-	var pos = isWidth ? this.x : this.y;
+	var isW = axis === "width", b = WindowManager.windowRect, far = isW ? b.right : b.bottom, near = isW ? b.left : b.top, pos = isW ? this.x : this.y;
 	if (far !== Infinity) {
 		var overflow = pos + size - far;
-		if (overflow > 0) {
-			var newPos = pos - overflow;
-			if (near !== undefined && newPos < near) newPos = near;
-			if (isWidth) this.move(newPos); else this.move(this.x, newPos);
-		}
-		size = Math.min(size, far - (isWidth ? this.x : this.y));
+		if (overflow > 0) { var np = pos - overflow; if (near !== undefined && np < near) np = near; isW ? this.move(np) : this.move(this.x, np); }
+		size = Math.min(size, far - (isW ? this.x : this.y));
 	}
-	if (isWidth) {
-		this._width = Math.max(Math.min(size, this.maxWidth), this.minWidth);
-		this._isMinWidth = this._width === this.minWidth;
-	} else {
-		this._height = Math.max(Math.min(size, this.maxHeight), this.minHeight);
-		this._isMinHeight = this._height === this.minHeight;
-	}
-	if (update !== false) {
-		if (animate) this.animate(isWidth ? this.updateWidth : this.updateHeight);
-		else if (isWidth) this.updateWidth(); else this.updateHeight();
-	}
+	if (isW) { this._width = Math.max(Math.min(size, this.maxWidth), this.minWidth); this._isMinWidth = this._width === this.minWidth; }
+	else { this._height = Math.max(Math.min(size, this.maxHeight), this.minHeight); this._isMinHeight = this._height === this.minHeight; }
+	if (update !== false) animate ? this.animate(isW ? this.updateWidth : this.updateHeight) : (isW ? this.updateWidth() : this.updateHeight());
 };
-/**
- * @param {number} width
- * @param {boolean} [update]
- * @param {boolean} [animate]
- */
+/** @param {number} width @param {boolean} [update] @param {boolean} [animate] */
 Dialog.prototype.setWidth = function (width, update, animate) { this._setSize("width", width, update, animate); };
-/**
- * @param {number} height
- * @param {boolean} [update]
- * @param {boolean} [animate]
- */
+/** @param {number} height @param {boolean} [update] @param {boolean} [animate] */
 Dialog.prototype.setHeight = function (height, update, animate) { this._setSize("height", height, update, animate); };
 
 /**
@@ -3223,59 +3096,23 @@ Dialog.prototype.eject = function() {
 	this.close();
 };
 Dialog.prototype.createPopOut = function() {
-	var body = this.body;
-	var titleBar = this.titleBar;
+	var body = this.body, titleBar = this.titleBar;
 	if (!body || !this.href) return;
 	var rect = body.getBoundingClientRect();
-	var titleBarHeight = titleBar && titleBar.getBoundingClientRect().height || 0;
-	var viewBoxPosition = Helpers.getViewBoxPosition();
-
+	var v = Helpers.getViewBoxPosition(), th = titleBar && titleBar.getBoundingClientRect().height || 0;
 	this._popupWindow = window.open(this.href, this.title || "LVOS", Helpers.stringifyWindowOpenProperties({
-		scrollbars: true,
-		resizable: true,
-		status: false,
-		location: false,
-		toolbar: false,
-		menubar: false,
-		width: rect.width,
-		height: rect.height,
-		left: rect.left + viewBoxPosition.x,
-		top: rect.top + viewBoxPosition.y + titleBarHeight
+		scrollbars: true, resizable: true, status: false, location: false, toolbar: false, menubar: false,
+		width: rect.width, height: rect.height, left: rect.left + v.x, top: rect.top + v.y + th
 	}));
 	if (!this._popupWindow) return;
-	var self = this;
-	var prevRect = { x: -1, y: -1, width: -1, height: -1 };
-	var windowChromeHeight = Helpers.getWindowChromeHeight(window);
-	var chromeHeight = Helpers.getWindowChromeHeight(this._popupWindow);
+	var self = this, prev = { x: -1, y: -1, w: -1, h: -1 };
+	var wChrome = Helpers.getWindowChromeHeight(window), pChrome = Helpers.getWindowChromeHeight(this._popupWindow);
 	this._popupPositionInterval = setInterval(function() {
-		if (!self._popupWindow || self._popupWindow.closed) {
-			clearInterval(self._popupPositionInterval);
-			self._popupPositionInterval = 0;
-			self.launch();
-			return;
-		}
-
-		var outerX = self._popupWindow.screenX, outerY = self._popupWindow.screenY;
-		var width = self._popupWindow.outerWidth, height = self._popupWindow.innerHeight || self._popupWindow.outerHeight;
-		outerX = Math.round(outerX);
-		outerY = Math.round(outerY);
-		width = Math.round(width);
-		height = Math.round(height);
-
-		if (outerX !== prevRect.x || outerY !== prevRect.y) {
-			var x = outerX - window.screenX,
-				y = outerY - window.screenY - windowChromeHeight + chromeHeight;
-
-			self.moveBody(x, y);
-			prevRect.x = outerX;
-			prevRect.y = outerY;
-		}
-
-		if (width !== prevRect.width || height !== prevRect.height) {
-			self.resizeBody(width, height);
-			prevRect.width = width;
-			prevRect.height = height;
-		}
+		var p = self._popupWindow;
+		if (!p || p.closed) { clearInterval(self._popupPositionInterval); self._popupPositionInterval = 0; self.launch(); return; }
+		var ox = Math.round(p.screenX), oy = Math.round(p.screenY), w = Math.round(p.outerWidth), h = Math.round(p.innerHeight || p.outerHeight);
+		if (ox !== prev.x || oy !== prev.y) { self.moveBody(ox - window.screenX, oy - window.screenY - wChrome + pChrome); prev.x = ox; prev.y = oy; }
+		if (w !== prev.w || h !== prev.h) { self.resizeBody(w, h); prev.w = w; prev.h = h; }
 	}, 100);
 };
 
