@@ -1,0 +1,368 @@
+
+/** @class */
+function Helpers() {}
+
+/** @param {Event} event */
+Helpers.cancelDomEvent = function(event) {
+	try {
+		if (typeof event.preventDefault === "function") event.preventDefault();
+		if (typeof event.stopPropagation === "function") event.stopPropagation();
+		event.returnValue = false;
+		event.cancelBubble = true;
+		return false;
+	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
+	return false;
+};
+
+/** @param {string} url */
+function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
+
+/** @param {string} url */
+function getDomain(url) {
+	var regged = url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0];
+	return regged && regged.split("?")[0];
+}
+
+/** @param {string} url */
+function getSiteName(url) {
+	var domain = getDomain(url);
+	if (!domain) return null;
+	var parts = domain.split(".");
+	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+
+	if (!name) return null;
+
+	return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+/**
+ * @param {any} [object]
+ * @returns {object is HTMLElement}
+ */
+Helpers.isElement = function(object) { return (typeof object === "object") && ("nodeType" in object) || false; };
+
+/** @param {Window} window */
+function getWindowChromeHeight(window) {
+	return window.outerHeight - Helpers.getViewportHeight();
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {number} x
+ * @param {number} y
+ */
+Helpers.translateElement = function(element, x, y) { Helpers.transformElement(element, { x: x, y: y }); };
+
+/**
+ * @param {HTMLElement} element
+ * @param {Transform} t
+ */
+Helpers.transformElement = function(element, t) {
+	var transform = "";
+
+	if (t.x && t.y) transform += "translate(" + Helpers.toPixels(t.x) + "," + Helpers.toPixels(t.y) + ")";
+	else if (t.x) transform += "translateX(" + Helpers.toPixels(t.x) + ")";
+	else if (t.y) transform += "translateY(" + Helpers.toPixels(t.y) + ")";
+
+	if (t.skewX) transform += " skewX(" + Helpers.toDegrees(t.skewX) + ")";
+	if (t.scaleX === 1) t.scaleX = undefined;
+	if (t.scaleY === 1) t.scaleY = undefined;
+	if (t.scaleX && t.scaleY) transform += "scale(" + t.scaleX + "," + t.scaleY + ")";
+	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
+	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
+
+	if (t.rotate) transform += "rotate(" + Helpers.toDegrees(t.rotate) + ")";
+	if (t.rotateX) transform += "rotateX(" + Helpers.toDegrees(t.rotateX) + ")";
+	if (t.rotateY) transform += "rotateY(" + Helpers.toDegrees(t.rotateY) + ")";
+	if (t.rotateZ) transform += "rotateZ(" + Helpers.toDegrees(t.rotateZ) + ")";
+
+	if ("msTransform" in element.style) element.style.msTransform = transform;
+	else element.style.transform = transform;
+};
+
+/**
+ * @param {HTMLElement} element
+ * @param {number} top
+ * @param {number} [left]
+ * @param {number} [right]
+ * @param {number} [bottom]
+ */
+function insetElement(element, top, left, right, bottom) {
+	if ("inset" in element.style)
+		if (typeof left === "undefined") element.style.inset = Helpers.toPixels(top);
+	else element.style.inset = Helpers.toPixels(top) + " " + Helpers.toPixels(right || 0) + " " + Helpers.toPixels(bottom || 0) + " " + Helpers.toPixels(left);
+	else {
+		if (typeof left === "undefined") left = top, right = top, bottom = top;
+		element.style.top = Helpers.toPixels(top);
+		element.style.left = Helpers.toPixels(left);
+		if (typeof right !== "undefined") element.style.right = Helpers.toPixels(right);
+		if (typeof bottom !== "undefined") element.style.bottom = Helpers.toPixels(bottom);
+	}
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} className
+ * @param {boolean} [enabled]
+ */
+function setClass(element, className, enabled) {
+	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
+
+	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
+
+	if (enabled) {
+		if (!re.test(element.className))
+			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	return element.className.indexOf(className) !== -1;
+}
+
+/**
+ * @param {HTMLElement| null} element
+ * @param {number} [index]
+ */
+Helpers.getRect = function(element, index) {
+	if (!element) return;
+	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
+};
+
+function getOverlay() { return document.getElementById("overlay"); }
+
+/**
+ * @param {MessageType} type
+ * @param {any} data
+ * @param {string} [source]
+ */
+function messageReceived(type, data, source){
+
+	if (source && windowManager) {
+
+		var dialog = windowManager.windows[source];
+
+		if (!dialog) return;
+
+		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
+		switch (type) {
+			case "launchOverlay":
+				var overlay = getOverlay();
+				if (!overlay) break;
+
+				overlay.ontransitionend = function () {
+					if (!dialog) return;
+					dialog.messageFrame("prepareToLaunchOverlay");
+					if (dialog.frame) {
+						var oriel = new URL(dialog.frame.src);
+						oriel.searchParams.set("fullscreen", String(true));
+						dialog.frame.src = oriel.href;
+					}
+					if (!overlay) return;
+					overlay.ontransitionend = null;
+					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
+					if (dialog.body) overlay.appendChild(dialog.body);
+					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				};
+				overlay.classList.toggle("open");
+				break;
+			case "readyToLaunchOverlay":
+				var overlay1 = getOverlay();
+				if (!overlay1) break;
+				if (dialog.body) overlay1.appendChild(dialog.body);
+				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
+				break;
+			case "pip":
+				dialog.moveElementIntoPipById(data.id, data.stylesheet);
+				break;
+			case "visualizers":
+				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
+				break;
+		}
+	}
+}
+
+var windowButtons = {
+	eject: 0,
+	full: 1,
+	close: 2
+};
+
+/** @param {WindowOpenProperties} properties */
+Helpers.stringifyWindowOpenProperties = function(properties){
+	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
+};
+
+Helpers.getViewBoxPosition = function() {
+	return { x: window.screenLeft, y: window.screenTop };
+};
+
+Helpers.getViewportHeight = function() {
+	var rect = WindowManager._windowRect;
+	if (rect && rect.height) return rect.height;
+	return window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
+};
+
+Helpers.getViewportWidth = function() {
+	var rect = WindowManager._windowRect;
+	if (rect && rect.width) return rect.width;
+	return window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
+};
+
+Helpers.toPixels = function(/** @type {number} */value) { return Math.round(value || 0) + "px"; };
+Helpers.toDegrees = function(/** @type {number} */value) { return Math.round(value) + "deg"; };
+
+/** @param {number} pixels */
+Helpers.pixelsToCentimeters = function(pixels){
+	return (pixels * 2.54 / 96) * (window.devicePixelRatio || 1);
+};
+
+/** @param {string} text */
+Helpers.fromPixels = function(text){
+	if (text !== null) try {
+		return typeof text === "number" ? text : parseInt(text.replace("px", ""));
+	} catch (ex) { console.warn("Failed to parse pixels:", ex); }
+	return 0;
+};
+
+/** @param {*} exception */
+function handleStorageException(exception) {
+	localStorage.windowState = null;
+	windowManager.canSave = false;
+	console.warn(exception);
+}
+
+function getDialogTemplate() {
+	var template = document.querySelector("template") || document.getElementById("window-template");
+	if (!template) return;
+	var content = template;
+	if (template instanceof HTMLTemplateElement) return template.content.children[0];
+	return content.children ? content.children[0] : content.childNodes[1];
+}
+
+/** @returns {HTMLElement | WindowElement} */
+function createDialogElement() {
+	var template = getDialogTemplate();
+	if (!template) throw new Error("Can't find dialog template!");
+	return /** @type {HTMLElement} */(template.cloneNode(true));
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {(this: any) => void} [onToggled] Applies the change. Runs synchronously.
+ * @param {any} [thisArg]
+ */
+function flipElement(element, onToggled, thisArg) {
+	var first = element.getBoundingClientRect();
+
+	var previousTransition = element.style.transition;
+	element.style.transition = "none";
+
+	if (onToggled) onToggled.call(thisArg || element);
+
+	var last = element.getBoundingClientRect();
+	var dx = first.left - last.left;
+	var dy = first.top - last.top;
+	var scaleX = last.width ? first.width / last.width : 1;
+	var scaleY = last.height ? first.height / last.height : 1;
+
+	element.style.transformOrigin = "top left";
+	element.style.translate = Helpers.toPixels(dx) + " " + Helpers.toPixels(dy);
+	element.style.scale = scaleX + " " + scaleY;
+
+	void element.offsetWidth;
+
+	element.style.transition = previousTransition;
+	element.classList.add("animating", "flipping");
+
+	element._flipFrame = window.requestAnimationFrame(function() {
+		element._flipFrame = 0;
+		element.style.translate = "0px 0px";
+		element.style.scale = "1";
+	});
+}
+
+/** Undoes everything {@link flipElement} wrote, so the element is back to its own state. @param {HTMLElement} element */
+function clearFlip(element) {
+	if (element._flipFrame) window.cancelAnimationFrame(element._flipFrame), element._flipFrame = 0;
+	element.style.translate = "";
+	element.style.scale = "";
+	element.style.transformOrigin = "";
+	element.classList.remove("flipping");
+}
+
+/**
+ * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
+ * @param {HTMLElement} element
+ * @param {(this: T) => void} [onToggled]
+ * @param {TransitionEndCallback} [onTransitionEnd]
+ * @param {(this: T) => void} [onEnd]
+ * @param {T} [thisArg]
+ * @param {number} [timeout]
+ * @param {boolean} [flip] Play the toggled change as a FLIP (see {@link flipElement}).
+ */
+Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, thisArg, timeout, flip) {
+	/** @type {T} */
+	var boundContext = thisArg || element;
+
+	var callEnd = function() {
+		if (!state.active) return;
+		state.active = false;
+		if (element._animationState === state) element._animationState = null;
+
+		element.classList.remove("animating");
+		if (flip) clearFlip(element);
+		if (onEnd) onEnd.call(boundContext);
+	};
+
+	var previous = element._animationState;
+	if (previous) {
+		if (previous.timer) clearTimeout(previous.timer);
+		if (previous.frame) window.cancelAnimationFrame(previous.frame);
+		if (previous.handler) element.removeEventListener(transitionEndEvent, previous.handler, false);
+		if (previous.flip) clearFlip(element);
+	}
+
+	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean }} */
+	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip };
+
+	if (!flags.useAnimations) {
+		if (onToggled) onToggled.call(boundContext);
+		return callEnd();
+	}
+
+	state.timer = timeout && setTimeout(callEnd, timeout) || 0;
+
+	if (supportsTransitions) {
+		if (flip)
+			flipElement(element, onToggled, boundContext);
+		else element.classList.add("animating");
+
+		/** @type {(ev: TransitionEvent)=>void} */
+		var animationHandler = function(event) {
+			if (onTransitionEnd) {
+				if (typeof onTransitionEnd === "string") {
+					if (event.propertyName !== onTransitionEnd) return;
+				} else if (!onTransitionEnd(event.propertyName)) return; // TODO these ifs can probably be made one
+			}
+
+			element.removeEventListener(transitionEndEvent, animationHandler, false);
+			clearTimeout(state.timer);
+			callEnd();
+		};
+
+		state.handler = animationHandler;
+		element.addEventListener(transitionEndEvent, animationHandler, false);
+	}
+
+	if (!flip || !supportsTransitions) {
+		state.frame = window.requestAnimationFrame(function() {
+			state.frame = 0;
+			if (onToggled) onToggled.call(boundContext);
+		});
+	}
+};
+
+//#endregion
+
+//#region Window Manager
+
+/** @class */
+function WindowManager() {

@@ -90,6 +90,7 @@ const BUNDLES = {
 		"CustomPrototypes.js", // shared prototypes + "use strict" prologue
 		"physics.js",          // Vector
 		"Messenger.js",        // LVMessenger
+		"Helpers.js",
 		"Launchpad.js",
 		"AppRegistry.js",      // appRegistry
 		"WindowManager.js",
@@ -106,6 +107,7 @@ const BUNDLES = {
 	],
 	"mobile.dist.js": [
 		"CustomPrototypes.js",
+		"Helpers.js",
 		"Launchpad.js",
 		"AppRegistry.js",
 		"Messenger.js",

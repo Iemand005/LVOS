@@ -1,0 +1,19 @@
+commit a78d04bbdbc71072fed4f0daba84de85df29b6ab
+Author: Lasse Lauwerys <lauweryslasse@gmail.com>
+Date:   Mon Nov 16 04:17:58 2026 +0100
+
+    hmm so much reognazation hmm?
+
+diff --git a/Scripts/WindowManager.js b/Scripts/WindowManager.js
+index f4ffae3b..55547308 100644
+--- a/Scripts/WindowManager.js
++++ b/Scripts/WindowManager.js
+@@ -18,7 +18,6 @@ var isBlink = "chrome" in window;
+ var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
+ 
+ var supportsPointer = typeof window !== "undefined" && "PointerEvent" in window && !isIE && !("MSPointerEvent" in window);
+-var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit !== "undefined");
+ var supportsTransitions = false;
+ var supportsTransform = false;
+ 
+
