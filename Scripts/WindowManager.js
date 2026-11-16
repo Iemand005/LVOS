@@ -115,7 +115,11 @@ var flags = {
 	}
 };
 
-//#region Functions
+//#region Window Manager
+
+/** @class */
+function WindowManager() {
+
 	/** @type {DialogMap} @const */
 	this._windows = {};
 	/** @type {DesktopState | null} */

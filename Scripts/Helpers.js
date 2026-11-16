@@ -361,8 +361,3 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 };
 
 //#endregion
-
-//#region Window Manager
-
-/** @class */
-function WindowManager() {
