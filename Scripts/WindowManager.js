@@ -58,7 +58,6 @@ if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = f
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
 var flags = {
-	useSkewAnimations: false,
 	aeroSnap: true,
 	updateRateLimit: allowUpdateRateLimit,
 	useDragOverlay: true,
@@ -1932,8 +1931,9 @@ function Dialog(application) {
 
 	this._loaded = false;
 
-	this._previousX = 0;
-	this._previousY = 0;
+	this.velocityTracking = false;
+	this.velocityX = 0;
+	this.velocityY = 0;
 	this._minWidth = 200;
 	this._minHeight = 40;
 	this._maxWidth = 2000;
@@ -3108,15 +3108,6 @@ Dialog.prototype.updatePosition = function() {
 	if (this.useTransform) this.updateTransform();
 	else this.setInset(this.top, this.left, this.right, this.bottom);
 
-	if (flags.useSkewAnimations) {
-		var deltaX = this.x - this._previousX, deltaY = this.y - this._previousY;
-
-		var intensity = 1;
-
-		this.skew = -deltaX * intensity / 3;
-		this.scaleY = 1 - deltaY * intensity / 100;
-	}
-
 	windowManager.notifyExtensions("onWindowMove", this);
 };
 
@@ -3134,8 +3125,7 @@ Dialog.prototype.broadcastState = function (overrides) {
  */
 Dialog.prototype.move = function (x, y, update, animate) {
 	if (this.fixed) return;
-	if (flags.useSkewAnimations)
-		this._previousX = this.x, this._previousY = this.y;
+	var prevX = this.x, prevY = this.y;
 	if (typeof x === "undefined" || x === null) x = this.x;
 	if (typeof y === "undefined" || y === null) y = this.y;
 	if (this.heightSnapped) y = this.y;
@@ -3151,6 +3141,10 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	var previousX = this._x, previousY = this._y;
 	this._x = x / windowWidth;
 	this._y = y / windowHeight;
+	if (this.velocityTracking) {
+		this.velocityX = this.x - prevX;
+		this.velocityY = this.y - prevY;
+	}
 
 	if (update !== false) {
 		if (animate) this.animate(this.updatePosition);
