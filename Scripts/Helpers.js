@@ -34,17 +34,17 @@ Helpers.cancelDomEvent = function(event) {
 };
 
 /** @param {string} url */
-Helpers.getFaviconUrl = function(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
+Helpers.getFaviconUrl = function(url) { return "https://" + Helpers.getDomain(url) + "/favicon.ico"; };
 
 /** @param {string} url */
 Helpers.getDomain = function(url) {
 	var regged = url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0];
 	return regged && regged.split("?")[0];
-}
+};
 
 /** @param {string} url */
 Helpers.getSiteName = function(url) {
-	var domain = getDomain(url);
+	var domain = Helpers.getDomain(url);
 	if (!domain) return null;
 	var parts = domain.split(".");
 	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
@@ -52,7 +52,7 @@ Helpers.getSiteName = function(url) {
 	if (!name) return null;
 
 	return name.charAt(0).toUpperCase() + name.slice(1);
-}
+};
 
 /**
  * @param {any} [object]
@@ -63,7 +63,7 @@ Helpers.isElement = function(object) { return (typeof object === "object") && ("
 /** @param {Window} window */
 Helpers.getWindowChromeHeight = function(window) {
 	return window.outerHeight - Helpers.getViewportHeight();
-}
+};
 
 /**
  * @param {HTMLElement} element
@@ -117,7 +117,7 @@ Helpers.insetElement = function(element, top, left, right, bottom) {
 		if (typeof right !== "undefined") element.style.right = Helpers.toPixels(right);
 		if (typeof bottom !== "undefined") element.style.bottom = Helpers.toPixels(bottom);
 	}
-}
+};
 
 /**
  * @param {HTMLElement} element
@@ -134,7 +134,7 @@ Helpers.setClass = function(element, className, enabled) {
 			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	return element.className.indexOf(className) !== -1;
-}
+};
 
 /**
  * @param {HTMLElement| null} element
@@ -145,7 +145,7 @@ Helpers.getRect = function(element, index) {
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 };
 
-Helpers.getOverlay = function() { return document.getElementById("overlay"); }
+Helpers.getOverlay = function() { return document.getElementById("overlay"); };
 
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
@@ -219,7 +219,10 @@ Helpers.flipElement = function(element, onToggled, thisArg) {
 	});
 };
 
-/** Undoes everything {@link flipElement} wrote, so the element is back to its own state. @param {HTMLElement} element */
+/**
+ * Undoes everything {@link flipElement} wrote, so the element is back to its own state.
+ * @param {HTMLElement} element
+ */
 Helpers.clearFlip = function(element) {
 	if (element._flipFrame) window.cancelAnimationFrame(element._flipFrame), element._flipFrame = 0;
 	element.style.translate = "";
@@ -270,9 +273,9 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 
 	state.timer = timeout && setTimeout(callEnd, timeout) || 0;
 
-	if (supportsTransitions) {
+	if (capabilities.supportsTransitions) {
 		if (flip)
-			flipElement(element, onToggled, boundContext);
+			Helpers.flipElement(element, onToggled, boundContext);
 		else element.classList.add("animating");
 
 		/** @type {(ev: TransitionEvent)=>void} */
@@ -292,7 +295,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		element.addEventListener(transitionEndEvent, animationHandler, false);
 	}
 
-	if (!flip || !supportsTransitions) {
+	if (!flip || !capabilities.supportsTransitions) {
 		state.frame = window.requestAnimationFrame(function() {
 			state.frame = 0;
 			if (onToggled) onToggled.call(boundContext);
