@@ -99,7 +99,6 @@ var flags = {
 		document.body.classList.toggle("preserve-aspect", !!value);
 		this._preserveMaximizeAspect = value;
 	},
-	windowReaper: false,
 	verboseLogs: false,
 	_exposeAndDesktops: true,
 	get exposeAndDesktops() { return this._exposeAndDesktops; },
@@ -2378,13 +2377,14 @@ Dialog.prototype.toggleOpen = function (forceOpen, kill) {
 	this.toggleClassAnimated("open", forceOpen, function(a) {
 		return a === "opacity";
 	}, function (opened) {
-		if ((kill || flags.windowReaper) && !opened) self.kill();
-		if (opened) self.reportState();
+		if (kill && !opened) self.kill();
+		if (opened) {
+			self.reportState();
+			if (windowManager) windowManager.notifyExtensions("onWindowOpen", self);
+		} else if (windowManager) windowManager.notifyExtensions("onWindowClose", self);
 	}, function (opening) {
 		self._stateOpen = opening;
 		if (opening) self.activate();
-		if (flags.windowReaper && !opening) setTimeout(function() {
-		}, 1000);
 	});
 
 	windowManager.saveState();
