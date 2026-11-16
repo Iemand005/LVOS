@@ -2846,9 +2846,7 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 		return this.setScale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
-	this.animate(this.updateTransform, function(name) {
-		return name === "transform";
-	}, function() {
+	this.animate(this.updateTransform, "transform", function() {
 		self._dragScaleAnimating = false;
 	}, this.dragScaleDuration);
 	this._scaleX = nextX;
