@@ -360,9 +360,7 @@ function getDialogTemplate() {
 function createDialogElement() {
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
-	var clone = removeComments(template.cloneNode(true));
-	if (!Helpers.isElement(clone)) throw new Error("Cloned dialog is not an element");
-	return clone;
+	return /** @type {HTMLElement} */(template.cloneNode(true));
 }
 
 /**
