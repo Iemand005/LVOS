@@ -2254,18 +2254,7 @@ Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var elements = target.getElementsByTagName(name);
 
 	if (!elements || !elements.length) {
-		if (target.getElementsByClassName) {
-			elements = target.getElementsByClassName(name);
-		} else if (document.getElementsByClassName) {
-			var candidates = document.getElementsByClassName(name);
-			var filtered = [];
-			for (var i = 0; i < candidates.length; i++) {
-				var node = candidates[i];
-				if (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16)))
-					filtered.push(node);
-			}
-			elements = filtered;
-		}
+		if (target.getElementsByClassName) elements = target.getElementsByClassName(name);
 	}
 
 	var element = (elements && elements.length) ? elements[0] : null;

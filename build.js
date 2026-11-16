@@ -481,6 +481,10 @@ function readGroup(files, mergeProps, ie8) {
 	let accessors = 0;
 	if (ie8) {
 		code = code.replace(/(\w+)\.addEventListener\(\s*"error"\s*,\s*(\w+)\s*,\s*false\s*\)/g, '$1.attachEvent("onerror", $2)');
+		code = code.replace(
+			/if \(target\.getElementsByClassName\) elements = target\.getElementsByClassName\(name\);/g,
+			'if (target.getElementsByClassName) {\n\t\t\telements = target.getElementsByClassName(name);\n\t\t} else if (document.getElementsByClassName) {\n\t\t\tvar candidates = document.getElementsByClassName(name);\n\t\t\tvar filtered = [];\n\t\t\tfor (var i = 0; i < candidates.length; i++) {\n\t\t\t\tvar node = candidates[i];\n\t\t\t\tif (target.contains ? target.contains(node) : (target.compareDocumentPosition && (target.compareDocumentPosition(node) & 16)))\n\t\t\t\t\tfiltered.push(node);\n\t\t\t}\n\t\t\telements = filtered;\n\t\t}'
+		);
 
 		const transformed = transformAccessorsForIe8(code, "bundle.js");
 		code = transpileForIe8(transformed.code, "bundle.js");
