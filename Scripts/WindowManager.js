@@ -690,8 +690,8 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
  * @returns {void}
  */
 /**
- * @overload
  * @template T
+ * @overload
  * @param {WindowCallback<T>} callback
  * @param {T} thisArg
  * @returns {void}
