@@ -2250,15 +2250,9 @@ function Dialog(object) {
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
-
 	var elements = target.getElementsByTagName(name);
-
-	if (!elements || !elements.length) {
-		if (target.getElementsByClassName) elements = target.getElementsByClassName(name);
-	}
-
+	if (!elements || !elements.length && target.getElementsByClassName) elements = target.getElementsByClassName(name);
 	var element = (elements && elements.length) ? elements[0] : null;
-
 	if (element && Helpers.isElement(element)) return element;
 	return null;
 };
@@ -2296,10 +2290,8 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	content.style.transformOrigin = "0 0";
 	content.style.scale = String(scale);
 	var measured = content.getBoundingClientRect();
-	content.style.transform = "translate(" +
-		Helpers.toPixels((before.left - measured.left) / scale) + "," +
-		Helpers.toPixels((before.top - measured.top) / scale) + ")";
-
+	Helpers.translateElement(content, (before.left - measured.left) / scale, (before.top - measured.top) / scale);
+	
 	this._exposeVisualScale = scale;
 	this._exposeContentScale = scale;
 	this._exposeVisualWidth = after.width;
