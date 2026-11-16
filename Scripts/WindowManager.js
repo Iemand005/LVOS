@@ -120,6 +120,9 @@ var flags = {
 
 //#region Functions
 
+/** @class */
+function Helpers() {}
+
 /** @param {Event} event */
 Helpers.cancelDomEvent = function(event) {
 	try {
@@ -198,7 +201,7 @@ Helpers.transformElement = function(element, t) {
 
 	if ("msTransform" in element.style) element.style.msTransform = transform;
 	else element.style.transform = transform;
-}
+};
 
 /**
  * @param {HTMLElement} element
@@ -304,9 +307,6 @@ var windowButtons = {
 	full: 1,
 	close: 2
 };
-
-/** @class */
-function Helpers() {}
 
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
