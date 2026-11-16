@@ -25,20 +25,8 @@ var isLocal = location.protocol === "file:" || location.hostname === "localhost"
 (function () {
 	var style = document.createElement("div").style;
 
-	supportsTransitions = (
-		"transition" in style ||
-		"WebkitTransition" in style ||
-		"MozTransition" in style ||
-		"OTransition" in style ||
-		"msTransition" in style
-	);
-	supportsTransform = (
-		"transform" in style ||
-		"webkitTransform" in style ||
-		"msTransform" in style ||
-		"mozTransform" in style ||
-		"OTransform" in style
-	);
+	supportsTransitions = ("transition" in style ||"WebkitTransition" in style ||"MozTransition" in style ||"OTransition" in style ||"msTransition" in style);
+	supportsTransform = ( "transform" in style || "webkitTransform" in style || "msTransform" in style || "mozTransform" in style || "OTransform" in style);
 })();
 
 var allowUpdateRateLimit = false;
