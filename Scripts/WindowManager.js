@@ -44,10 +44,7 @@ var isLocal = location.protocol === "file:" || location.hostname === "localhost"
 var allowUpdateRateLimit = false;
 
 if (isIE) useTransform = true;
-
 if (!supportsTransform) useTransform = false;
-
-
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
