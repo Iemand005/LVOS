@@ -2138,7 +2138,7 @@ function Dialog(object) {
 	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
-	};`n
+	};
 	var target = this.target;
 
 	var buttons = target.getElementsByTagName("button");
