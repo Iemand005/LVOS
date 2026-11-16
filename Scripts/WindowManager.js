@@ -1388,8 +1388,9 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 
 /** @class */
 function ClickOffset() {
-	this.clickX = 0;
-	this.clickY = 0;
+	/** @param {Coord} */
+	this.clickPosition = {x: 0, y: 0};
+	this.clickX = 0, this.clickY = 0;
 	this.height = 0;
 	this.width = 0;
 	this.startY = 0;
