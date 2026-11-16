@@ -582,10 +582,8 @@ function WindowManager() {
 	};
 
 	this.windowSnap = new WindowSnap;
-
 	/** @type {Map<Element, WindowGroup>} */
 	this.snapGroups = new Map();
-
 	/** @type {Extension[]} */
 	this.extensions = [];
 }
