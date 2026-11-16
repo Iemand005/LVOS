@@ -18,14 +18,14 @@ interface Extension {
 	enabled?: boolean;
 	/** Flags defined by the extension */
 	flags?: PropertyDescriptorMap & ThisType<any>;
-	/** Called when a window is launched. */
-	onWindowLaunch?(dialog: Dialog): void;
-	/** Called when a window is moved. */
-	onWindowMove?(dialog: Dialog): void;
 	/** Called when the extension is switched on. */
 	onEnable?(): void;
 	/** Called when the extension is switched off. */
 	onDisable?(): void;
+	/** Called when a window is launched. */
+	onWindowLaunch?(dialog: Dialog): void;
+	/** Called when a window is moved. */
+	onWindowMove?(dialog: Dialog): void;
 	onWindowOpen?(): void;
 	onWindowClose?(): void;
 }
