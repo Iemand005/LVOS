@@ -413,10 +413,8 @@ function flipElement(element, onToggled, thisArg) {
 
 /** Undoes everything {@link flipElement} wrote, so the element is back to its own state. @param {HTMLElement} element */
 function clearFlip(element) {
-	if (element._flipFrame) {
-		window.cancelAnimationFrame(element._flipFrame);
-		element._flipFrame = 0;
-	}
+	if (element._flipFrame)
+		window.cancelAnimationFrame(element._flipFrame), element._flipFrame = 0;
 	element.style.translate = "";
 	element.style.scale = "";
 	element.style.transformOrigin = "";
@@ -460,16 +458,15 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 
 	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
-		callEnd();
-		return;
+		return callEnd();
 	}
 
 	state.timer = timeout && setTimeout(callEnd, timeout) || 0;
 
 	if (supportsTransitions) {
-		if (flip) {
+		if (flip)
 			flipElement(element, onToggled, boundContext);
-		} else element.classList.add("animating");
+		else element.classList.add("animating");
 
 		/** @type {(ev: TransitionEvent)=>void} */
 		var animationHandler = function(event) {
@@ -817,9 +814,9 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	if (!application || !application.id) return null;
 
 	var dialog;
-	if (application.multiple) {
+	if (application.multiple)
 		dialog = this.spawnApp(application);
-	} else {
+	else {
 		dialog = this.windows[application.id];
 		if (!dialog) {
 			this.loadApp(application);
@@ -1712,9 +1709,8 @@ WindowSnap.prototype.setHalfInset = function(side) {
 	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 };
 
-/** @param {Dialog} [dialog] */
+/** @param {Dialog} dialog */
 WindowSnap.prototype.setHeightInset = function(dialog) {
-	if (!dialog) return;
 	var inset = WindowSnap.margin;
 
 	var right = this.areaWidth() - dialog.x - dialog.width - inset;
