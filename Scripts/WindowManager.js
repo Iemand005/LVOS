@@ -2108,16 +2108,13 @@ function Dialog(application) {
 	this.exchangeDialogMouseUpEvent = this.messageFrame.bind(this, "mouseUp", { difference: new Vector });
 
 	/** @param {Coord} difference */
-	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
-		this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
-	};
+	this.exchangeDialogMoveEvent = function(difference) { this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y)); };
 	var target = this.target;
 
 	var buttons = target.getElementsByTagName("button");
 
-	var createSizers = true;
 
-	if(this.resizable && createSizers) this._createSizers();
+	if(this.resizable) this._createSizers();
 
 	target.onselectstart = function (/** @type {Event} */event) {
 		if (self._ctrlDrag) return;
