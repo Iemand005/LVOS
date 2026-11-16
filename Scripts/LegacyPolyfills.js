@@ -157,6 +157,10 @@ if (typeof console == "undefined") try {
     };
 } catch(ex) {}
 
+if (typeof console.warn !== "function") try {
+	console.warn = function(awa) {}
+} catch(ex) {}
+
 if (typeof HTMLElement != 'undefined' && !("classList" in document.documentElement)) {
     Object.defineProperty(HTMLElement.prototype, "classList", {
         get: function() {
