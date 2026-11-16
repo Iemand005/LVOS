@@ -3066,7 +3066,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.classList.toggle("maximized", enabled);
 		target.style.pointerEvents = "";
 
-
 		this.setScale(1, 1, undefined, true);
 		this.updateTransform();
 		if (!content) return;
@@ -3074,7 +3073,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		content.style.width = "";
 		content.style.height = "";
 		this.maximizeAnimations--;
-
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
 
@@ -3092,16 +3090,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		target.style.transformOrigin = "top left";
 		target.style.pointerEvents = "none";
 
-		if (!enabled)
-			scaleX = 1 / scaleX, scaleY = 1 / scaleY;
+		if (!enabled) scaleX = 1 / scaleX, scaleY = 1 / scaleY;
 
 		this.setScale(scaleX, scaleY, false);
 		this.updateTransform();
 
 		var targetWidth = enabled ? window.innerWidth : self.width;
 		var targetHeight = enabled ? height : self.height;
-
-
 
 		fsTimeout = setTimeout(function() {
 			requestAnimationFrame(function() {
@@ -3140,9 +3135,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
 				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
 			}
-		}, function() {
-			if (enable) toggleMaximized();
-		});
+		}, function() { if (enable) toggleMaximized(); });
 	}
 };
 Dialog.prototype.maximize = function () { this.toggleMaximized(true); };
