@@ -1,6 +1,7 @@
 
 var isBlink = "chrome" in window;
 
+/** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" : ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 /** @class */
