@@ -2890,7 +2890,6 @@ Dialog.prototype.createOpenButton = function () {
 	var application = this.application;
 	if (application && application.multiple) {
 		openButton.onclick = function () {
-			if (!application) return;
 			var instance = windowManager.spawnApp(application);
 			if (instance) instance.launch();
 		};
@@ -3019,7 +3018,7 @@ Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitio
 	this._snappingOutState = /** @type {any} */ (target)._animationState;
 };
 
-/** Tiled state, the sibling of maximized: purely visual, so the window keeps its own width/height/position and returns to them untouched when it leaves the group. The window stays a child of #window-section the whole time; the class only switches it between the absolute box it floats in and a flex item of the section's snap row. The switch is played as a FLIP rather than a plain transition, because occupying a different layout box is not something the browser can interpolate: the frames are measured either side of the change and the old one is eased back over the new one. @param {boolean} [enable] */
+/** @param {boolean} [enable] */
 Dialog.prototype.toggleSnapped = function (enable) {
 	this._toggleSnap("snapped", enable, true, function (name) {
 		return name === "translate" || name === "scale";
