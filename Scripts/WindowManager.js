@@ -2714,7 +2714,6 @@ Object.defineProperty(Dialog.prototype, "windowTarget", {
 
 /** @param {string} title */
 Dialog.prototype.setTitle = function(title) {
-	this.application.title = title;
 	var titleElement = this.getTitleElement();
 	if (titleElement) titleElement.innerHTML = title;
 };
