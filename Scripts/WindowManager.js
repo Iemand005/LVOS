@@ -883,12 +883,10 @@ WindowManager.prototype.initializeDialogs = function() {
 	var event = supportsPointer ? "pointerup" : "mouseup";
 	if (typeof document !== "undefined") document.addEventListener(event, stop, false);
 	if (typeof window !== "undefined") window.addEventListener(event, stop, false);
-	if (!supportsPointer && typeof document !== "undefined") {
+	if (!supportsPointer && typeof document !== "undefined")
 		document.addEventListener("mouseup", stop, false);
-	}
-	if (!supportsPointer && typeof window !== "undefined") {
+	if (!supportsPointer && typeof window !== "undefined")
 		window.addEventListener("mouseup", stop, false);
-	}
 
 	this.dragAction.set(0);
 	if (typeof document !== "undefined") {
