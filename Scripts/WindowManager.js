@@ -685,14 +685,26 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 };
 
 /**
- * @template [T=WindowManager]
+ * @overload
+ * @param {WindowCallback<WindowManager>} callback
+ * @returns {void}
+ */
+/**
+ * @overload
+ * @template T
  * @param {WindowCallback<T>} callback
- * @param {T} [thisArg]
+ * @param {T} thisArg
+ * @returns {void}
+ */
+/**
+ * @this {WindowManager}
+ * @param {WindowCallback<any>} callback
+ * @param {any} [thisArg]
  */
 WindowManager.prototype.forEachWindow = function (callback, thisArg) {
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
-		if (dialog) if (/** @type {WindowCallback<any>} */ (callback).call(thisArg || this, dialog, id)) break;
+		if (dialog) if (callback.call(thisArg || this, dialog, id)) break;
 	}
 };
 
