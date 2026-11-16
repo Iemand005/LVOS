@@ -220,28 +220,6 @@ Helpers.fromPixels = function(text){
 	return 0;
 };
 
-/** @param {*} exception */
-Helpers.handleStorageException = function(exception) {
-	localStorage.windowState = null;
-	windowManager.canSave = false;
-	console.warn(exception);
-}
-
-Helpers.getDialogTemplate = function() {
-	var template = document.querySelector("template") || document.getElementById("window-template");
-	if (!template) return;
-	var content = template;
-	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-	return content.children ? content.children[0] : content.childNodes[1];
-};
-
-/** @returns {HTMLElement | WindowElement} */
-Helpers.createDialogElement = function() {
-	var template = getDialogTemplate();
-	if (!template) throw new Error("Can't find dialog template!");
-	return /** @type {HTMLElement} */(template.cloneNode(true));
-};
-
 /**
  * @param {HTMLElement} element
  * @param {(this: any) => void} [onToggled] Applies the change. Runs synchronously.

@@ -1535,6 +1535,28 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 
 //#region Dialog
 
+/** @param {*} exception */
+function handleStorageException(exception) {
+	localStorage.windowState = null;
+	windowManager.canSave = false;
+	console.warn(exception);
+}
+
+function getDialogTemplate() {
+	var template = document.querySelector("template") || document.getElementById("window-template");
+	if (!template) return;
+	var content = template;
+	if (template instanceof HTMLTemplateElement) return template.content.children[0];
+	return content.children ? content.children[0] : content.childNodes[1];
+};
+
+/** @returns {HTMLElement | WindowElement} */
+function createDialogElement() {
+	var template = getDialogTemplate();
+	if (!template) throw new Error("Can't find dialog template!");
+	return /** @type {HTMLElement} */(template.cloneNode(true));
+};
+
 var windowButtons = {
 	eject: 0,
 	full: 1,
@@ -1637,7 +1659,7 @@ function Dialog(application) {
 		var element = id && document.getElementById(id);
 		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
 		this.target = element;
-	} else this.target = Helpers.createDialogElement();
+	} else this.target = createDialogElement();
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
