@@ -1448,16 +1448,9 @@ WindowManager.prototype.enableDialogDrag = function() {
 WindowManager.prototype.updateTopZ = function(newZ) {
 	if (typeof newZ === "number")
 		this.topZ = Math.max(this.topZ, newZ + 1);
-	else {
-		/** @type {(this: WindowManager, dialog: Dialog, id: string) => undefined} */
-		var a = function(dialog) {
-			if (dialog && dialog.z >= this.topZ) this.topZ = dialog.z + 1;
-		};
-
-		this.forEachWindow(function(dialog) {
-			if (dialog && dialog.z >= this.topZ) this.setTopZ(dialog.z + 1);
-		});
-	}
+	else this.forEachWindow(function(dialog) {
+		if (dialog && dialog.z >= this.topZ) this.setTopZ(dialog.z + 1);
+	});
 };
 
 /** @param {string} [id] */
