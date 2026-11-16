@@ -487,7 +487,6 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 function WindowManager() {
 	/** @type {DialogMap} @const */
 	this._windows = {};
-
 	/** @type {DesktopState | null} */
 	this._windowStates = null;
 
@@ -496,36 +495,26 @@ function WindowManager() {
 	this.isDragging = false;
 	/** @constant */
 	this.dragAction = new DragAction;
-
 	/** @type {number} */
 	this.snapFullThreshold = 30;
-
 	/** @type {number} */
 	this.snapSideThreshold = 30;
-
 	/** @type {number} */
 	this.heightSnapReleaseThreshold = 10;
-
 	/** @type {number} */
 	this.snapGapWidth = 0.5;
-
 	/** @type {boolean} */
 	this.snapInsertGaps = true;
-
 	/** @type {"" | "maximize" | "left" | "right" | "height"} */
 	this._snapZone = "";
-
 	/** @type {Coord} */
 	this.pointerPosition = { x: 0, y: 0 };
-
 	/** @type {boolean} */
 	this._heightSnapReleased = false;
-
 	/** @type {Dialog | null} */
 	this.activeDialog = null;
 	this.topZ = 100;
 	this.loaded = false;
-
 	this.canSave = true;
 
 	try {
