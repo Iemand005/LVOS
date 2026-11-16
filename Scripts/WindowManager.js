@@ -3080,7 +3080,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 
 	}, function onToggled(enabled) {
 		var timeOffsetMs = 50;
-		var totalDuration = 280; //Can I uh get this from uh the css somehow
 
 		var target = this.target;
 
