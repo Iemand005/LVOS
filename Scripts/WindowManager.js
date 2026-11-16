@@ -2482,9 +2482,7 @@ Object.defineProperty(Dialog.prototype, "x", {
 });
 
 Object.defineProperty(Dialog.prototype, "y", {
-	get: function () {
-		return this._y * Helpers.getViewportHeight();
-	},
+	get: function () { return this._y * Helpers.getViewportHeight(); },
 	set: function (y) {
 		if (typeof y === "number") this.move(this.x, y);
 	}
