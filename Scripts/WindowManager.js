@@ -1643,9 +1643,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	this.hidden = !outset;
 	if (!preserveSnapped) this._snapped = "";
 	if (!direction) outset = 0;
-	var sides = WindowSnap._sides;
-
-	var s = sides[direction || 0] || sides[0];
+	var s = (WindowSnap._sides[direction || 0] || WindowSnap._sides[0]);
 	if (!s) return;
 	var top = dialog.top - (s.top ? outset : 0);
 	var left = dialog.left - (s.left ? outset : 0);
@@ -1653,30 +1651,15 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 	var bottom = dialog.bottom - (s.bottom ? outset : 0);
 
 	this.element.style.zIndex = dialog.z.toString();
-
 	this.hidden = false;
 	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
-
-	if (!noAnimation) Helpers.animateElement(this.element, function() {
-		this.applyInsetStyle(top, left, right, bottom);
-	}, "inset", undefined, this, 200);
-	else this.applyInsetStyle(top, left, right, bottom);
-};
-
-/**
- * @param {number} top
- * @param {number} [left]
- * @param {number} [right]
- * @param {number} [bottom]
- */
-WindowSnap.prototype.applyInsetStyle = function(top, left, right, bottom) {
-	insetElement(this.element, top, left, right, bottom);
+	var apply = function() { insetElement(this.element, top, left, right, bottom); }.bind(this);
+	if (!noAnimation) Helpers.animateElement(this.element, apply, "top", undefined, this, 500);
+	else apply();
 };
 
 /** @param {number} inset */
-WindowSnap.prototype.setInset = function(inset) {
-	insetElement(this.element, inset);
-};
+WindowSnap.prototype.setInset = function(inset) { insetElement(this.element, inset); };
 
 /** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
@@ -1686,18 +1669,14 @@ WindowSnap.prototype.areaWidth = function() {
 
 /** @param {"left" | "right"} side */
 WindowSnap.prototype.setHalfInset = function(side) {
-	var half = Math.round(this.areaWidth() / 2);
-	var inset = WindowSnap.margin;
+	var half = Math.round(this.areaWidth() / 2), inset = WindowSnap.margin;
 	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 };
 
 /** @param {Dialog} dialog */
 WindowSnap.prototype.setHeightInset = function(dialog) {
 	var inset = WindowSnap.margin;
-	insetElement(this.element, inset,
-		Math.max(inset, dialog.x - inset),
-		Math.max(inset, this.areaWidth() - dialog.x - dialog.width - inset),
-		inset);
+	insetElement(this.element, inset, Math.max(inset, dialog.x - inset), Math.max(inset, this.areaWidth() - dialog.x - dialog.width - inset), inset);
 };
 
 /**
@@ -3050,85 +3029,63 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (flags.useViewTransitionMaximize && this.windowTarget)
 		return this.windowTarget.toggleMaximizedVT(enable);
 
-	if (supportsTransitions) !flags.compositorResize ? this.toggleClassAnimated("maximized", enable, function(name) {
-		return name === "transform" || name === "width";
-	}, undefined, function(isMaximized) {
-		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
-		this.maximizeAnimations--;
-	}) : this.toggleClassAnimated("scaled-max", enable, "transform", function onEnd(enabled) {
-		if (fsTimeout) clearTimeout(fsTimeout);
-
-		target.classList.toggle("maximized", enabled);
-		target.style.pointerEvents = "";
-
-		this.setScale(1, 1, undefined, true);
-		this.updateTransform();
-		if (!content) return;
-		Helpers.transformElement(content, {x: 0, y: 0, scaleX :1, scaleY: 1});
-		content.style.width = "";
-		content.style.height = "";
-		this.maximizeAnimations--;
-	}, function onToggled(enabled) {
-		var timeOffsetMs = 50;
-
-		this._maximizing = enabled;
-
-		var startWidth = this.width;
-		var startHeight = this.height;
-
-		var windowSection = document.getElementById("window-section");
-		var height = windowSection ? windowSection.clientHeight : window.innerHeight;
-
-		var scaleX = window.innerWidth / startWidth;
-		var scaleY = height / startHeight;
-
-		target.style.transformOrigin = "top left";
-		target.style.pointerEvents = "none";
-
-		if (!enabled) scaleX = 1 / scaleX, scaleY = 1 / scaleY;
-
-		this.setScale(scaleX, scaleY, false);
-		this.updateTransform();
-
-		var targetWidth = enabled ? window.innerWidth : self.width;
-		var targetHeight = enabled ? height : self.height;
-
-		fsTimeout = setTimeout(function() {
-			requestAnimationFrame(function() {
-				if (!content) return;
-				content.style.width = Helpers.toPixels(targetWidth);
-				content.style.height = Helpers.toPixels(targetHeight);
-				void content.offsetWidth;
-
-				Helpers.transformElement(content, {x: 0, y: 0, scaleX:  1 / scaleX, scaleY: 1 / scaleY});
-			});
-		}, timeOffsetMs);
-	});
-	else {
-		var startPos = self.position;
-		var startSize = self.size;
-		var target = self.target;
+	if (supportsTransitions) {
+		if (!flags.compositorResize) this.toggleClassAnimated("maximized", enable, function(name) {
+			return name === "transform" || name === "width";
+		}, undefined, function(isMaximized) {
+			if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
+			this.maximizeAnimations--;
+		}); else this.toggleClassAnimated("scaled-max", enable, "transform", function(enabled) {
+			if (fsTimeout) clearTimeout(fsTimeout);
+			target.classList.toggle("maximized", enabled);
+			target.style.pointerEvents = "";
+			this.setScale(1, 1, undefined, true);
+			this.updateTransform();
+			if (!content) { this.maximizeAnimations--; return; }
+			Helpers.transformElement(content, {x: 0, y: 0, scaleX: 1, scaleY: 1});
+			content.style.width = "";
+			content.style.height = "";
+			this.maximizeAnimations--;
+		}, function(enabled) {
+			this._maximizing = enabled;
+			var startWidth = this.width, startHeight = this.height;
+			var windowSection = document.getElementById("window-section");
+			var height = windowSection ? windowSection.clientHeight : window.innerHeight;
+			var scaleX = window.innerWidth / startWidth, scaleY = height / startHeight;
+			target.style.transformOrigin = "top left";
+			target.style.pointerEvents = "none";
+			if (!enabled) { scaleX = 1 / scaleX; scaleY = 1 / scaleY; }
+			this.setScale(scaleX, scaleY, false);
+			this.updateTransform();
+			var targetWidth = enabled ? window.innerWidth : self.width;
+			var targetHeight = enabled ? height : self.height;
+			fsTimeout = setTimeout(function() {
+				requestAnimationFrame(function() {
+					if (!content) return;
+					content.style.width = Helpers.toPixels(targetWidth);
+					content.style.height = Helpers.toPixels(targetHeight);
+					void content.offsetWidth;
+					Helpers.transformElement(content, {x: 0, y: 0, scaleX: 1 / scaleX, scaleY: 1 / scaleY});
+				});
+			}, 50);
+		});
+	} else {
+		var startPos = self.position, startSize = self.size;
 		enable = !target.classList.contains("maximized");
 		var toggleMaximized = function() {
-			self.x = startPos.x;
-			self.y = startPos.y;
-			self.width = startSize.x;
-			self.height = startSize.y;
+			self.x = startPos.x; self.y = startPos.y;
+			self.width = startSize.x; self.height = startSize.y;
 			self.target.classList.toggle("maximized", enable);
 		};
 		if (!enable) toggleMaximized();
 		Anim.animate(300, function(t) {
-			var ease = Anim.easeSharpCenterStrong;
+			var ease = Anim.easeSharpCenterStrong(t);
 			if (enable) {
-				self.x = Anim.lerp(startPos.x, 0, ease(t));
-				self.y = Anim.lerp(startPos.y, 0, ease(t));
-				self.width = Anim.lerp(startSize.x, window.innerWidth, ease(t));
-				self.height = Anim.lerp(startSize.y, window.innerHeight, ease(t));
+				self.x = Anim.lerp(startPos.x, 0, ease); self.y = Anim.lerp(startPos.y, 0, ease);
+				self.width = Anim.lerp(startSize.x, window.innerWidth, ease); self.height = Anim.lerp(startSize.y, window.innerHeight, ease);
 			} else {
-				self.x = Anim.lerp(0, startPos.x, ease(t));
-				self.y = Anim.lerp(0, startPos.y, ease(t));
-				self.width = Anim.lerp(window.innerWidth, startSize.x, ease(t));
-				self.height = Anim.lerp(window.innerHeight, startSize.y, ease(t));
+				self.x = Anim.lerp(0, startPos.x, ease); self.y = Anim.lerp(0, startPos.y, ease);
+				self.width = Anim.lerp(window.innerWidth, startSize.x, ease); self.height = Anim.lerp(window.innerHeight, startSize.y, ease);
 			}
 		}, function() { if (enable) toggleMaximized(); });
 	}
@@ -3541,12 +3498,10 @@ Dialog.prototype.openUrl = function(url) {
 
 	var baseUrls = [url || this.src, this.application.distSrc];
 	if (!isLocal) baseUrls.reverse();
-	var fallbackUrls = baseUrls.concat(this.application.altUrls || []);
-	var index = 0;
-
+	var urls = baseUrls.concat(this.application.altUrls || []);
 	function tryNext() {
 		var nextUrl;
-		while (index < fallbackUrls.length && !(nextUrl = fallbackUrls[index++]));
+		while (urls.length && !(nextUrl = urls.shift()));
 		if (!nextUrl || !frame) return;
 		frame.src = nextUrl;
 		self._src = nextUrl;
@@ -3633,7 +3588,7 @@ Dialog.prototype.createPopOut = function() {
 		}
 	}, 100);
 };
-Dialog.prototype.inspect = function() { if (window.inspect) window.inspect(this.target); };
+
 
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
@@ -3675,8 +3630,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     this.target.style.minHeight = isMaximized ? "100%" : Helpers.toPixels(this.minHeight);
 };
 
-/** @param {boolean} [enable] */
-Dialog.prototype.flip = function(enable) { this.toggleClassAnimated("flipped", enable); };
+
 
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
@@ -3731,10 +3685,7 @@ Dialog.prototype.moveElementIntoPipById = function(id, stylesheet) {
 	}, stylesheet);
 };
 
-Dialog.prototype.screenshot = function() {
-	var shooter = getScreenShooter();
-	if (shooter) shooter.screenshotElement(this.target);
-};
+
 
 //#endregion
 
