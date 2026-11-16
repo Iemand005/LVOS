@@ -359,5 +359,3 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		});
 	}
 };
-
-//#endregion
