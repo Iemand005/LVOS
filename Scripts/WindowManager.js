@@ -1977,10 +1977,8 @@ function Dialog(application) {
 	this._scaleX = 0;
 	this._scaleY = 0;
 	this._rotation = 0;
-
 	/** @type {Transformable | null} */
 	this._transform = null;
-
 	/** @type {Transformable | null} */
 	this._contentTransform = null;
 
@@ -2021,15 +2019,12 @@ function Dialog(application) {
 	this.target;
 
 	if (application.exists) {
-		var element = application.element || (id && document.getElementById(id));
-		if (element) this.target = element;
+		var element = id && document.getElementById(id);
+		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
+		this.target = element;
 	}
-	if (!this.target) this.target = createDialogElement();
 
-	if (!application.title) {
-		var titleElement = this.getTitleElement();
-		if (titleElement) this._title = titleElement.innerText;
-	}
+	this.target = createDialogElement();
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
@@ -3573,7 +3568,7 @@ Dialog.prototype.openUrl = function(url) {
 
 	var timeout = -1;
 	var refreshLayout = function() {
-		try { self.updateBodyOffset(); self.resize(self.width, self.height); self.update(); } catch (ex) {}
+		try { self.updateBodyOffset(); self.resize(self.width, self.height); self.update(); } catch (ex) { console.warn(ex); }
 	};
 
 	frame.onload = function() {
