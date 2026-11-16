@@ -41,7 +41,7 @@ function getMicaBackdrop(dialog) {
 	var clip = getMicaElement(dialog);
 	if (!clip) return null;
 	var backdrop = clip.firstElementChild;
-	return isElement(backdrop) ? backdrop : null;
+	return Helpers.isElement(backdrop) ? backdrop : null;
 }
 
 /**
@@ -63,9 +63,9 @@ function injectMica(dialog) {
 		while (clip.firstChild) clip.removeChild(clip.firstChild);
 
 		var micaWallpaper = null;
-		if (isElement(wallpaper.children[0])) {
+		if (Helpers.isElement(wallpaper.children[0])) {
 			micaWallpaper = wallpaper.children[0].cloneNode(true);
-			if (!(isElement(micaWallpaper))) return false;
+			if (!(Helpers.isElement(micaWallpaper))) return false;
 			// The copy is not the wallpaper itself, so it may not keep its id: the
 			// desktop looks its wallpaper frame up by id.
 			micaWallpaper.removeAttribute("id");
