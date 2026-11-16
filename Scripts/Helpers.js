@@ -1,6 +1,6 @@
 
 /** @class */
-function Helpers() {}
+Helpers.Helpers = function() {}
 
 /** @param {Event} event */
 Helpers.cancelDomEvent = function(event) {
@@ -10,21 +10,21 @@ Helpers.cancelDomEvent = function(event) {
 		event.returnValue = false;
 		event.cancelBubble = true;
 		return false;
-	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt" , ex); }
+	} catch(ex) { console.warn("Failed co tancel dom evemnt.txt", ex); }
 	return false;
 };
 
 /** @param {string} url */
-function getFaviconUrl(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
+Helpers.getFaviconUrl = function(url) { return "https://" + getDomain(url) + "/favicon.ico"; }
 
 /** @param {string} url */
-function getDomain(url) {
+Helpers.getDomain = function(url) {
 	var regged = url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0];
 	return regged && regged.split("?")[0];
 }
 
 /** @param {string} url */
-function getSiteName(url) {
+Helpers.getSiteName = function(url) {
 	var domain = getDomain(url);
 	if (!domain) return null;
 	var parts = domain.split(".");
@@ -42,7 +42,7 @@ function getSiteName(url) {
 Helpers.isElement = function(object) { return (typeof object === "object") && ("nodeType" in object) || false; };
 
 /** @param {Window} window */
-function getWindowChromeHeight(window) {
+Helpers.getWindowChromeHeight = function(window) {
 	return window.outerHeight - Helpers.getViewportHeight();
 }
 
@@ -87,7 +87,7 @@ Helpers.transformElement = function(element, t) {
  * @param {number} [right]
  * @param {number} [bottom]
  */
-function insetElement(element, top, left, right, bottom) {
+Helpers.insetElement = function(element, top, left, right, bottom) {
 	if ("inset" in element.style)
 		if (typeof left === "undefined") element.style.inset = Helpers.toPixels(top);
 	else element.style.inset = Helpers.toPixels(top) + " " + Helpers.toPixels(right || 0) + " " + Helpers.toPixels(bottom || 0) + " " + Helpers.toPixels(left);
@@ -105,7 +105,7 @@ function insetElement(element, top, left, right, bottom) {
  * @param {string} className
  * @param {boolean} [enabled]
  */
-function setClass(element, className, enabled) {
+Helpers.setClass = function(element, className, enabled) {
 	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
 	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
@@ -126,14 +126,14 @@ Helpers.getRect = function(element, index) {
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
 };
 
-function getOverlay() { return document.getElementById("overlay"); }
+Helpers.getOverlay = function() { return document.getElementById("overlay"); }
 
 /**
  * @param {MessageType} type
  * @param {any} data
  * @param {string} [source]
  */
-function messageReceived(type, data, source){
+Helpers.messageReceived = function(type, data, source){
 
 	if (source && windowManager) {
 
@@ -147,7 +147,7 @@ function messageReceived(type, data, source){
 				var overlay = getOverlay();
 				if (!overlay) break;
 
-				overlay.ontransitionend = function () {
+				overlay.ontransitionend = Helpers.() = function {
 					if (!dialog) return;
 					dialog.messageFrame("prepareToLaunchOverlay");
 					if (dialog.frame) {
@@ -223,13 +223,13 @@ Helpers.fromPixels = function(text){
 };
 
 /** @param {*} exception */
-function handleStorageException(exception) {
+Helpers.handleStorageException = function(exception) {
 	localStorage.windowState = null;
 	windowManager.canSave = false;
 	console.warn(exception);
 }
 
-function getDialogTemplate() {
+Helpers.getDialogTemplate = function() {
 	var template = document.querySelector("template") || document.getElementById("window-template");
 	if (!template) return;
 	var content = template;
@@ -238,7 +238,7 @@ function getDialogTemplate() {
 }
 
 /** @returns {HTMLElement | WindowElement} */
-function createDialogElement() {
+Helpers.createDialogElement = function() {
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
 	return /** @type {HTMLElement} */(template.cloneNode(true));
@@ -249,7 +249,7 @@ function createDialogElement() {
  * @param {(this: any) => void} [onToggled] Applies the change. Runs synchronously.
  * @param {any} [thisArg]
  */
-function flipElement(element, onToggled, thisArg) {
+Helpers.flipElement = function(element, onToggled, thisArg) {
 	var first = element.getBoundingClientRect();
 
 	var previousTransition = element.style.transition;
@@ -280,7 +280,7 @@ function flipElement(element, onToggled, thisArg) {
 }
 
 /** Undoes everything {@link flipElement} wrote, so the element is back to its own state. @param {HTMLElement} element */
-function clearFlip(element) {
+Helpers.clearFlip = function(element) {
 	if (element._flipFrame) window.cancelAnimationFrame(element._flipFrame), element._flipFrame = 0;
 	element.style.translate = "";
 	element.style.scale = "";
