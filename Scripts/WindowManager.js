@@ -2688,23 +2688,17 @@ Object.defineProperty(Dialog.prototype, "title", {
 });
 
 Object.defineProperty(Dialog.prototype, "maximized", {
-	get: function() {
-		return this.target.classList.contains("maximized");
-	},
+	get: function() { return this.target.classList.contains("maximized"); },
 	set: function(maximized) { this.toggleMaximized(maximized); }
 });
 
 Object.defineProperty(Dialog.prototype, "snapped", {
-	get: function() {
-		return this.target.classList.contains("snapped");
-	},
+	get: function() { return this.target.classList.contains("snapped"); },
 	set: function(snapped) { this.toggleSnapped(snapped); }
 });
 
 Object.defineProperty(Dialog.prototype, "heightSnapped", {
-	get: function() {
-		return this.target.classList.contains("height-snapped");
-	},
+	get: function() { return this.target.classList.contains("height-snapped"); },
 	set: function(snapped) { this.toggleHeightSnapped(snapped); }
 });
 
