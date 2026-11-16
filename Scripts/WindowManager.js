@@ -172,9 +172,7 @@ function getWindowChromeHeight(window) {
  * @param {number} x
  * @param {number} y
  */
-Helpers.translateElement = function(element, x, y) {
-	Helpers.transformElement(element, { x: x, y: y });
-};
+Helpers.translateElement = function(element, x, y) { Helpers.transformElement(element, { x: x, y: y }); };
 
 /**
  * @param {HTMLElement} element
