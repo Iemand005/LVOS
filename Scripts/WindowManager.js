@@ -183,10 +183,8 @@ function WindowManager() {
 	/** @param {PointerEvent | MouseEvent} event */
 	this.windowDragEvent = function(event) {
 		try {
-			if (event && !event.which && !event.button && event.buttons === 0 && self.isDragging) {
-				self.disableDialogDrag();
-				return;
-			}
+			if (event && !event.which && !event.button && event.buttons === 0 && self.isDragging)
+				return  self.disableDialogDrag();
 			Helpers.cancelDomEvent(event);
 
 			var isTouch = "pointerType" in event && event.pointerType === "touch";
