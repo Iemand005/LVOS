@@ -707,10 +707,9 @@ WindowManager.prototype.forEachWindow = function (callback, thisArg) {
 	var context = thisArg || this;
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
-		if (dialog) if (callback.call(context, dialog, id)) break;
+		if (dialog && callback.call(context, dialog, id)) break;
 	}
 };
-
 
 WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(function(dialog) { dialog.reportState(); }); };
 

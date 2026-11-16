@@ -74,5 +74,6 @@
         "Applications": "${workspaceFolder}/Applications"
 	},
 	"playwright.reuseBrowser": true,
-	"playwright.updateSnapshots": "changed"
+	"playwright.updateSnapshots": "changed",
+	"git.confirmEmptyCommits": false
 }
