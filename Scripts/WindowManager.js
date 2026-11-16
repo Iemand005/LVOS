@@ -2022,9 +2022,7 @@ function Dialog(application) {
 		var element = id && document.getElementById(id);
 		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
 		this.target = element;
-	}
-
-	this.target = createDialogElement();
+	} else this.target = createDialogElement();
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
@@ -2342,8 +2340,6 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 	 * @param {number} id
 	 */
 	var createSizer = function (id) {
-		if (!target || !self.activationHandler) return;
-
 		var sizerId = "sizer-" + id;
 
 		var sizer = self.getElementByTagOrClassName(sizerId);
