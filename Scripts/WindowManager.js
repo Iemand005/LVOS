@@ -459,12 +459,12 @@ WindowManager.prototype.focusDialog = function(dialog) {
 WindowManager.prototype.initializeDialogs = function() {
 	var self = this;
 	var stop = function() { self.disableDialogDrag(); };
-	var event = supportsPointer ? "pointerup" : "mouseup";
+	var event = capabilities.supportsPointer ? "pointerup" : "mouseup";
 	if (typeof document !== "undefined") document.addEventListener(event, stop, false);
 	if (typeof window !== "undefined") window.addEventListener(event, stop, false);
-	if (!supportsPointer && typeof document !== "undefined")
+	if (!capabilities.supportsPointer && typeof document !== "undefined")
 		document.addEventListener("mouseup", stop, false);
-	if (!supportsPointer && typeof window !== "undefined")
+	if (!capabilities.supportsPointer && typeof window !== "undefined")
 		window.addEventListener("mouseup", stop, false);
 
 	this.dragAction.set(0);
@@ -514,10 +514,9 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 		}
 	} else dialog.clearExposéVisual();
 
-	if (supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") {
-		try { event.target.setPointerCapture(event.pointerId); } catch (ex) {}
-	}
-	this.activeDialog = dialog;
+	if (capabilities.supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") try {
+		event.target.setPointerCapture(event.pointerId);
+	} catch (ex) { console.warn(ex); }
 	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
 	this.enableDialogDrag();
 	this.dragAction.set(id || 0);
@@ -1410,7 +1409,7 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 };
 /** @param {boolean} enable @param {(ev:PointerEvent|MouseEvent)=>void} handler @param {Cursor} [cursor] */
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
-	document[enable ? "addEventListener" : "removeEventListener"](supportsPointer ? "pointermove" : "mousemove", handler, false);
+	document[enable ? "addEventListener" : "removeEventListener"](capabilities.supportsPointer ? "pointermove" : "mousemove", handler, false);
 	if (!flags.useDragOverlay || !this._overlay)
 		return windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 	this._overlay.style.cursor = cursor || "";
@@ -1703,7 +1702,7 @@ function Dialog(application) {
 		};
 	}
 
-	if (supportsPointer) target.onpointerdown = this.activationHandler;
+	if (capabilities.supportsPointer) target.onpointerdown = this.activationHandler;
 	else target.onmousedown = this.activationHandler;
 
 	var ejectButton = buttons[windowButtons.eject];
@@ -1892,7 +1891,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 	var self = this;
 	var target = this.target;
 
-	if (typeof createTouchSizers === "undefined") createTouchSizers = supportsPointer;
+	if (typeof createTouchSizers === "undefined") createTouchSizers = capabilities.supportsPointer;
 
 	/**
 	 * @this {Dialog}
@@ -1915,7 +1914,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
-		if (supportsPointer) {
+		if (capabilities.supportsPointer) {
 			sizer.onpointerdown = pointerDown;
 			sizer.onpointerup = pointerUp;
 			sizer.onpointercancel = pointerUp;
@@ -1934,7 +1933,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			touchSizer.classList.add(touchSizerId);
 			touchSizer.classList.add("touch");
 
-			if (supportsPointer) {
+			if (capabilities.supportsPointer) {
 				touchSizer.onpointerdown = pointerDown;
 				touchSizer.onpointerup = pointerUp;
 				touchSizer.onpointercancel = pointerUp;
