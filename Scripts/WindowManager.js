@@ -2488,7 +2488,8 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 		var frameEl = document.createElement("iframe");
 		body.appendChild(frameEl);
 		return frameEl;
-	} catch (ex) { return console.warn(ex); }
+	} catch (ex) { console.warn(ex); }
+	return null;
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
 	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
@@ -3799,9 +3800,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 };
 
 /** @param {boolean} [enable] */
-Dialog.prototype.flip = function(enable) {
-	this.toggleClassAnimated("flipped", enable);
-};
+Dialog.prototype.flip = function(enable) { this.toggleClassAnimated("flipped", enable); };
 
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
