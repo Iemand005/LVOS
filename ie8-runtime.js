@@ -72,8 +72,6 @@ if (!String.prototype.trim) {
 	if (typeof document === "undefined" || !document.createElement) return;
 	var testEl = document.createElement("div");
 	if (testEl.classList) return; // already supported
-	/* Trim leading/trailing whitespace in a class string. */
-	function trim(s) { return s.replace(/^\s+|\s+$/g, ""); }
 	/* Split a class string into a non-empty token array. */
 	function tokens(el) {
 		var raw = el.className || "";
@@ -106,17 +104,18 @@ if (!String.prototype.trim) {
 			var has = this.contains(token);
 			if (has && force !== true) this.remove(token);
 			else if (!has && force !== false) this.add(token);
-			return !has;
+			return has ? !this.contains(token) : this.contains(token);
 		},
 		contains: function(token) {
 			return tokens(this._el).indexOf(String(token)) !== -1;
 		},
-		toString: function() { return this._el.className || ""; },
-		bind: function(method) {
-			var self = this, args = Array.prototype.slice.call(arguments, 1);
-			return function() { self[method].apply(self, args.concat(Array.prototype.slice.call(arguments))); };
-		}
+		toString: function() { return this._el.className || ""; }
 	};
+	function ensureClassList(elem) {
+		if (!elem || elem.classList) return elem;
+		elem.classList = new DOMTokenList(elem);
+		return elem;
+	}
 	/* Install a classList getter on HTMLElement.prototype if defineProperty works on DOM nodes. */
 	try {
 		Object.defineProperty(HTMLElement.prototype, "classList", {
@@ -127,9 +126,10 @@ if (!String.prototype.trim) {
 			enumerable: false,
 			configurable: true
 		});
-	} catch(e) {
-		/* Fallback: patch individual elements on-the-fly via __lvosGet/classList usage is handled above. */
-	}
+	} catch(e) {}
+	/* Expose for transformed property reads so classList is available on every element access. */
+	if (typeof window !== "undefined") window.__lvosEnsureClassList = ensureClassList;
+	else if (typeof global !== "undefined") global.__lvosEnsureClassList = ensureClassList;
 })();
 function __lvosCapitalize(name) {
 	var text = String(name);

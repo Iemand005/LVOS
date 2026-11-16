@@ -564,8 +564,7 @@ DesktopManager.prototype.addOrMoveDesktopGap = function() {
 
 /** @param {string} theme */
 function setTheme(theme) {
-	ensureClassList(document.body);
-    document.body.classList.add(theme);
+        document.body.classList.add(theme);
     window.windowManager.synchronizeStates();
 }
 /** @param {string} theme */

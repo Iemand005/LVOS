@@ -263,6 +263,14 @@ function createTransformer(sourceFile, info, context) {
 				return ts.factory.updatePropertyAccessExpression(node, expression, node.name);
 			}
 
+			if (name === "classList") {
+				return ts.factory.updatePropertyAccessExpression(
+					node,
+					call("__lvosEnsureClassList", [expression]),
+					node.name
+				);
+			}
+
 			const isAccessorObject = ts.isIdentifier(node.expression) && accessorObjects.has(node.expression.text);
 			const isCallee = ts.isCallExpression(node.parent) && node.parent.expression === node;
 			if (isAccessorName(name) || (isAccessorObject && !isCallee))

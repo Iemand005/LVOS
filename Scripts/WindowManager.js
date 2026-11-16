@@ -1946,37 +1946,6 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
-/** @param {HTMLElement} elem */
-function ensureClassList(elem) {
-    if (elem.classList) return;
-
-    elem.classList = {
-        add: function (cls) {
-            if (!this.contains(cls)) {
-                elem.className = (elem.className ? elem.className + " " : "") + cls;
-            }
-        },
-        remove: function (cls) {
-            var classes = (elem.className || "").split(/\s+/);
-            for (var i = classes.length - 1; i >= 0; i--) {
-                if (classes[i] === cls) classes.splice(i, 1);
-            }
-            elem.className = classes.join(" ");
-        },
-        contains: function (cls) {
-            return new RegExp("(^|\\s+)" + cls + "(\\s+|$)").test(elem.className || "");
-        },
-        toggle: function (cls) {
-            if (this.contains(cls)) {
-                this.remove(cls);
-                return false;
-            } else {
-                this.add(cls);
-                return true;
-            }
-        }
-    };
-}
 
 //#region Dialog
 
@@ -2115,7 +2084,6 @@ function Dialog(object) {
 			return;
 		}
 
-		ensureClassList(target);
 		if (target instanceof HTMLElement && target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
 		windowManager.windowActivationEvent(ev, self, id);
@@ -2184,10 +2152,7 @@ function Dialog(object) {
 	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { // Fire-and-forget; keep window move as fast as possible.
 		if (difference && self.clickOffset) this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y));
-	};
-
-	if (!this.target.classList) ensureClassList(this.target);
-
+	};`n
 	var target = this.target;
 
 	var buttons = target.getElementsByTagName("button");
@@ -2451,7 +2416,6 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 
 		var sizer = self.getElementByTagOrClassName(sizerId);
 		if (!sizer || !(Helpers.isElement(sizer))) sizer = document.createElement("div");
-		ensureClassList(sizer);
 		sizer.draggable = false;
 		sizer.setAttribute("unselectable", "on");
 		sizer.id = id.toString();
