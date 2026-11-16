@@ -365,17 +365,6 @@ function createDialogElement() {
 	return clone;
 }
 
-/** @param {Node} element */
-function removeComments(element){ // Removes the comments of an HTMLElement based object.
-	for (var i in element.childNodes) {
-		var child = element.childNodes[i];
-		if (!child) continue;
-		if (child.nodeName === "#comment") element.removeChild(child);
-		else if (Helpers.isElement(child)) removeComments(child);
-	}
-	return element;
-}
-
 /**
  * @param {HTMLElement} element
  * @param {(this: any) => void} [onToggled] Applies the change. Runs synchronously.
