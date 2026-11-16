@@ -258,9 +258,7 @@ WindowManager.prototype.saveState = function() {
 	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
 	try {
 		if (this.canSave && "localStorage" in window) localStorage.setItem("windowState", JSON.stringify(this.state));
-	} catch (exception) {
-		handleStorageException(exception);
-	}
+	} catch (exception) { handleStorageException(exception); }
 };
 
 /** @param {Dialog} [dialog] */
@@ -722,7 +720,7 @@ WindowManager.prototype.isVerticalResizeDirection = function (direction) {
 /** @param {Dialog} dialog */
 WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	var drawnHeight = this.snapHeight(this.getSnapContainer(dialog));
-	setClass(dialog.target, "height-snapped", false);
+	Helpers.setClass(dialog.target, "height-snapped", false);
 	dialog._endSnapTransition();
 	this._heightSnapReleased = true;
 
@@ -732,11 +730,9 @@ WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	dialog.updateHeight();
 
 	var offset = dialog.clickOffset;
-	if (offset) {
 		offset.height = dialog.height;
 		offset.startX = dialog.x;
 		offset.startY = dialog.y;
-	}
 };
 
 /**
