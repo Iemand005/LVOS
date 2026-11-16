@@ -17,21 +17,11 @@ var useTransform = true,
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 var supportsPointer = typeof window !== "undefined" && "PointerEvent" in window && !isIE && !("MSPointerEvent" in window);
-var supportsTransitions = false;
-var supportsTransform = false;
 
 var isLocal = location.protocol === "file:" || location.hostname === "localhost";
-
-(function () {
-	var style = document.createElement("div").style;
-
-	supportsTransitions = ("transition" in style ||"WebkitTransition" in style ||"MozTransition" in style ||"OTransition" in style ||"msTransition" in style);
-	supportsTransform = ( "transform" in style || "webkitTransform" in style || "msTransform" in style || "mozTransform" in style || "OTransform" in style);
-})();
-
 var allowUpdateRateLimit = false;
 
-if (!supportsTransform) useTransform = false;
+if (!capabilities.supportsTransform) useTransform = false;
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 if (document.documentMode && document.documentMode < 8) useScale = true;
 

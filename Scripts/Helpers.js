@@ -6,7 +6,8 @@ var transitionEndEvent = ("transition" in document.documentElement.style) ? "tra
 
 var capabilities = {
 	supportsTransitions: true,
-	supportsTransform: true
+	supportsTransform: true,
+	supportsPointer: typeof window !== "undefined" && "PointerEvent" in window  && !("MSPointerEvent" in window)
 };
 
 (function () {
