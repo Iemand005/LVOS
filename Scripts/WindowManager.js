@@ -2250,7 +2250,6 @@ function Dialog(object) {
  */
 Dialog.prototype.getElementByTagOrClassName = function (name, parent) {
 	var target = parent || this.target;
-	if (!target) return null;
 
 	var elements = target.getElementsByTagName(name);
 
