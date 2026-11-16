@@ -8,6 +8,9 @@
 /** @type {Launchpad?} */
 var launchpad = typeof Launchpad !== "undefined" ? new Launchpad : null;
 
+var supportsObjectFit = Boolean(document.documentElement && document.documentElement.style && typeof document.documentElement.style.objectFit !== "undefined");
+
+
 function loadScript(url, callback) {
   var script = document.createElement("script");
   script.src = url;
