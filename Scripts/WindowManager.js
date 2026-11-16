@@ -3650,10 +3650,8 @@ Dialog.prototype.inspect = function() { if (window.inspect) window.inspect(this.
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
 	var target = this.target;
-	if (useTransform) {
-		target.style.top = "";
-		target.style.left = "";
-	} else {
+	if (useTransform) target.style.top = "", target.style.left = "";
+	else {
 		target.style.transform = "";
 		target.style.webkitTransform = "";
 		target.style.width = "";
@@ -3661,7 +3659,6 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	}
 
 	this.updateScale(this.useScale);
-
 	this.update();
 };
 /** @param {boolean} useScale */
