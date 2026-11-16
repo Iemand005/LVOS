@@ -228,7 +228,7 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 			if (string === null) return null;
 
 			this._windowStates = JSON.parse(string);
-		} catch (ex) { console.log(ex); }
+		} catch (ex) { console.warn(ex); }
 		return this._windowStates;
 	}
 });
@@ -254,18 +254,16 @@ Object.defineProperty(WindowManager.prototype, "isWindowUpdatesEnabled", {
 /** @param {number} topZ */
 WindowManager.prototype.setTopZ = function(topZ) { this.topZ = topZ; };
 WindowManager.prototype.saveState = function() {
-	if (!this.loaded) return;
-	if (window.top !== window.self) return; // Every page that embeds this script shares the same "windowState" storage key. Only the top-level desktop may write to it, otherwise iframes like the mobile view overwrite the desktop's session on unload!
-	try {
-		if (this.canSave && "localStorage" in window) localStorage.setItem("windowState", JSON.stringify(this.state));
-	} catch (exception) { handleStorageException(exception); }
+	if (!this.loaded || window.top !== window.self) return;
+	try { if (this.canSave && "localStorage" in window) localStorage.setItem("windowState", JSON.stringify(this.state)); }
+	catch (exception) { handleStorageException(exception); }
 };
 
 /** @param {Dialog} [dialog] */
-WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state from localstorage on object creation, then keep that in memory for reading and add a func like this that takes one dialog as param and only restores for that
-	if (!this.canSave) return;
+WindowManager.prototype.loadState = function(dialog) {
+	// TODO: cache per-dialog state in memory on creation and restore from there instead of re-parsing localStorage each call
+	if (!this.canSave || !("localStorage" in window)) return;
 	try {
-		if (!("localStorage" in window)) return;
 		var windowStates = this.windowStates;
 		this.loaded = true;
 		if (!windowStates) return;
@@ -274,14 +272,12 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			this.updateTopZ(dialog.z);
 		} else {
 			for (var id in windowStates) if (windowStates.hasOwnProperty(id)) try {
-				var dialog = this.windows[id];
-				if (dialog && windowStates[id]) dialog.loadState(windowStates[id]);
-			} catch (ex) { console.log(ex); }
+				var d = this.windows[id];
+				if (d && windowStates[id]) d.loadState(windowStates[id]);
+			} catch (ex) { console.warn(ex); }
 			this.updateTopZ();
 		}
-	} catch (exception) {
-		handleStorageException(exception);
-	}
+	} catch (exception) { handleStorageException(exception); }
 };
 
 /**
@@ -1802,12 +1798,10 @@ function Dialog(application) {
 	};
 
 	var body = this.body;
-	if (body) body.onload = function () { try {
-		self.verifyEjectCapability();
-	} catch (exception) {
-		console.log(exception);
-		if (buttons[0]) buttons[0].style.display = "none";
-	}};
+	if (body) body.onload = function () {
+		try { self.verifyEjectCapability(); }
+		catch (exception) { console.warn(exception); if (buttons[0]) buttons[0].style.display = "none"; }
+	};
 
 	var header = this.titleBar;
 	if (header) {
