@@ -27,7 +27,7 @@ function getMicaElement(dialog) {
 		var clipElem = dialog.target.getElementsByClassName("backdrop-filter");
 		if (!clipElem || !clipElem.length) return null;
 		var clip = clipElem[0];
-		if (isElement(clip)) return clip;
+		if (Helpers.isElement(clip)) return clip;
 	} catch (ex) { if (ex instanceof Error) console.log(ex.message); }
 	return null;
 }
