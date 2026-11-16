@@ -2291,7 +2291,7 @@ Dialog.prototype.detachToRootKeepingVisual = function(root) {
 	content.style.scale = String(scale);
 	var measured = content.getBoundingClientRect();
 	Helpers.translateElement(content, (before.left - measured.left) / scale, (before.top - measured.top) / scale);
-	
+
 	this._exposeVisualScale = scale;
 	this._exposeContentScale = scale;
 	this._exposeVisualWidth = after.width;
@@ -2908,10 +2908,11 @@ Dialog.prototype.getTitleElement = function() { return this.getElementByTagOrCla
 Dialog.prototype.open = function () { return this.toggleOpen(true); };
 Dialog.prototype.close = function () { return this.toggleOpen(false); };
 
-/** @param {number} [index] */
-Dialog.prototype.getRect = function (index) { return getRect(this.target, index); };
-/** @param {number} [index] */
-Dialog.prototype.getBodyRect = function (index) { return getRect(this.body, index); };
+/**
+ * @param {boolean} [ofBody]
+ * @param {number} [index]
+ */
+Dialog.prototype.getRect = function (ofBody, index) { return getRect(ofBody ? this.body : this.target, index); };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
@@ -3558,7 +3559,7 @@ Dialog.prototype.setMaxSize = function (width, height) {
 	this.resize();
 };
 Dialog.prototype.updateBodyOffset = function () {
-	var bodyRect = this.getBodyRect();
+	var bodyRect = this.getRect(true);
 	if (!bodyRect || (bodyRect.width === 0 && bodyRect.height === 0 && bodyRect.x === 0 && bodyRect.y === 0)) return;
 	this._bodyOffset.width = this.width - bodyRect.width;
 	this._bodyOffset.height = this.height - bodyRect.height;
