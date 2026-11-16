@@ -19,16 +19,11 @@ try {
 	hasLocalStorage = false;
 }
 
-if (!hasLocalStorage) canSave = false;t
-
-/** @param {string} url */
-function getDomain(url) {
-	return url.replace(/^[a-z]+:\/\//i, "").split("/")[0].split("?")[0];
-}
+if (!hasLocalStorage) canSave = false;
 
 /** @param {string} url */
 function getSiteName(url) {
-	var domain = getDomain(url);
+	var domain = Helpers.getDomain(url);
 	if (!domain) return "";
 	var parts = domain.split(".");
 	/** @type {string} */
@@ -154,7 +149,7 @@ AppManager.prototype.createApp = function(url, title, id, iconUrl) {
 	/** @type {Application} */
 	var app = {
 		src: url,
-		id: id || "custom." + getDomain(url),
+		id: id || "custom." + Helpers.getDomain(url),
 		title: title || getSiteName(url)
 	};
 	if (iconUrl) app.iconUrl = iconUrl;
