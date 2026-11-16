@@ -1727,14 +1727,14 @@ WindowSnap.prototype.setHeightInset = function(dialog) {
 
 /**
  * @param {"maximize" | "left" | "right" | "height"} type
- * @param {Dialog} [dialog] The window the offer is about, which the full-height indicator frames and the others only need for their z-order.
+ * @param {Dialog} dialog The window the offer is about, which the full-height indicator frames and the others only need for their z-order.
  */
 WindowSnap.prototype.snap = function(type, dialog) {
 
 	if (type === this._snapped) return;
 	this._snapped = type;
 
-	if (dialog) this.attachTo(dialog);
+	this.attachTo(dialog);
 
 	if (dialog && this.hidden) {
 		this.element.classList.remove("animating");
@@ -1743,7 +1743,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 	}
 
 	this.hidden = false;
-	if (dialog) this.element.style.zIndex = dialog.z.toString();
+	this.element.style.zIndex = dialog.z.toString();
 
 	Helpers.animateElement(this.element, function() {
 		switch(type) {
@@ -1752,10 +1752,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
 			case "right": this.setHalfInset(type); break;
 			case "height": this.setHeightInset(dialog); break;
 		}
-	}, function(name) {
-		return name === "inset";
-	}, function() {
-	}, this);
+	}, "inset", undefined, this);
 };
 
 /**
