@@ -144,10 +144,10 @@ Helpers.messageReceived = function(type, data, source){
 		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
 		switch (type) {
 			case "launchOverlay":
-				var overlay = getOverlay();
+				var overlay = Helpers.getOverlay();
 				if (!overlay) break;
 
-				overlay.ontransitionend = Helpers.() = function {
+				overlay.ontransitionend = function() {
 					if (!dialog) return;
 					dialog.messageFrame("prepareToLaunchOverlay");
 					if (dialog.frame) {
@@ -177,13 +177,9 @@ Helpers.messageReceived = function(type, data, source){
 				break;
 		}
 	}
-}
-
-var windowButtons = {
-	eject: 0,
-	full: 1,
-	close: 2
 };
+
+
 
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){

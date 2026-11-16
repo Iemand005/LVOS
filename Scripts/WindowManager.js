@@ -1537,6 +1537,12 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 
 //#region Dialog
 
+var windowButtons = {
+	eject: 0,
+	full: 1,
+	close: 2
+};
+
 /**
  * @author Lasse Lauwerys
  * @param {Application} application
