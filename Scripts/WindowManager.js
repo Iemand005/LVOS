@@ -259,7 +259,7 @@ WindowManager.prototype.saveState = function() {
 	try {
 		if (this.canSave && "localStorage" in window) localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
-		Helpers.handleStorageException(exception);
+		handleStorageException(exception);
 	}
 };
 
@@ -282,7 +282,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			this.updateTopZ();
 		}
 	} catch (exception) {
-		Helpers.handleStorageException(exception);
+		handleStorageException(exception);
 	}
 };
 
@@ -391,7 +391,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 		apps.push(application);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
 	} catch (exception) {
-		Helpers.handleStorageException(exception);
+		handleStorageException(exception);
 	}
 };
 
@@ -402,7 +402,7 @@ WindowManager.prototype.loadInstalledApps = function() {
 			if (application && application.src) this.loadApp(application);
 		}, this);
 	} catch (exception) {
-		Helpers.handleStorageException(exception);
+		handleStorageException(exception);
 	}
 };
 /**
