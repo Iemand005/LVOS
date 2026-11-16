@@ -509,6 +509,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	if (capabilities.supportsPointer && event && "pointerId" in event && event.target instanceof HTMLElement && typeof event.target.setPointerCapture === "function") try {
 		event.target.setPointerCapture(event.pointerId);
 	} catch (ex) { console.warn(ex); }
+	this.activeDialog = dialog;
 	this.isTouchDrag = event && "pointerType" in event && event.pointerType === "touch";
 	this.enableDialogDrag();
 	this.dragAction.set(id || 0);
