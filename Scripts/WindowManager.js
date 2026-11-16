@@ -2686,10 +2686,10 @@ Object.defineProperty(Dialog.prototype, "useScale", {
 
 Object.defineProperty(Dialog.prototype, "title", {
 	get: function() {
-		if (this._title) return this._title;
+		if (this.application.title) return this.application.title;
 		var titleElement = this.getTitleElement();
-		if (titleElement && titleElement.innerHTML) return titleElement.innerHTML;
-		return this.id;
+		if (titleElement && titleElement.innerHTML) return this.application.title = titleElement.innerHTML;
+		return this.application.title = this.id;
 	},
 	set: function(title) { this.setTitle(title); }
 });
