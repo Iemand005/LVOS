@@ -2708,10 +2708,9 @@ Dialog.prototype.messageFrame = function (type, message) {
 
 /** @param {boolean} [animate] */
 Dialog.prototype.updateTransform = function (animate) {
-	if (!(this.useTransform && this.transform)) return;
-
-	if (this._maximizing) this.transform.move(0, 0, animate);
-	else this.transform.move(this.x, this.y, animate);
+	if (this.useTransform && this.transform)
+		if (this._maximizing) this.transform.move(0, 0, animate);
+		else this.transform.move(this.x, this.y, animate);
 };
 
 Dialog.prototype.updatePosition = function() {
@@ -2756,10 +2755,9 @@ Dialog.prototype.move = function (x, y, update, animate) {
 		this.velocityY = this.y - prevY;
 	}
 
-	if (update !== false) {
+	if (update !== false)
 		if (animate) this.animate(this.updatePosition);
 		else this.updatePosition();
-	}
 
 	if (previousX !== this._x || previousY !== this._y) {
 		var state = {};
