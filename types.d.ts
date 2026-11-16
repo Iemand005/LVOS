@@ -166,6 +166,12 @@ interface Dialog {
 	windowTarget: WindowElement?;
 }
 
+
+declare function ClickOffset(): {
+	new (): ClickOffset;
+
+	windowBounds: Bounds;
+}
 declare function WindowManager(): {
 	new (): WindowManager;
 
