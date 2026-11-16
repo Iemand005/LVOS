@@ -66,6 +66,7 @@ type Side = "left" | "right" | "top" | "bottom";
 type DesktopState = {[key: string]: DialogState};
 type DialogMap = {[id: string]: Dialog};
 type DragFunction = (dialog: Dialog, offset: ClickOffset, difference: Coord) => void;
+type WindowCallback<T> = ((this: T, dialog: Dialog, id: string) => void) | ((this: T, dialog: Dialog, id: string) => boolean)
 
 
 declare global {
