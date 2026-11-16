@@ -5,8 +5,16 @@ var isBlink = "chrome" in window;
 var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" : ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 var capabilities = {
-
+	supportsTransitions: true,
+	supportsTransform: true
 };
+
+(function () {
+	var style = document.createElement("div").style;
+
+	capabilities.supportsTransitions = ("transition" in style ||"WebkitTransition" in style ||"MozTransition" in style ||"OTransition" in style ||"msTransition" in style);
+	capabilities.supportsTransform = ( "transform" in style || "webkitTransform" in style || "msTransform" in style || "mozTransform" in style || "OTransform" in style);
+})();
 
 /** @class */
 function Helpers() {}
