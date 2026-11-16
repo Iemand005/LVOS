@@ -259,7 +259,7 @@ WindowManager.prototype.saveState = function() {
 	try {
 		if (this.canSave && "localStorage" in window) localStorage.setItem("windowState", JSON.stringify(this.state));
 	} catch (exception) {
-		handleStorageException(exception);
+		Helpers.handleStorageException(exception);
 	}
 };
 
@@ -282,7 +282,7 @@ WindowManager.prototype.loadState = function(dialog) { // TODO: Load the state f
 			this.updateTopZ();
 		}
 	} catch (exception) {
-		handleStorageException(exception);
+		Helpers.handleStorageException(exception);
 	}
 };
 
@@ -391,7 +391,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 		apps.push(application);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
 	} catch (exception) {
-		handleStorageException(exception);
+		Helpers.handleStorageException(exception);
 	}
 };
 
@@ -402,7 +402,7 @@ WindowManager.prototype.loadInstalledApps = function() {
 			if (application && application.src) this.loadApp(application);
 		}, this);
 	} catch (exception) {
-		handleStorageException(exception);
+		Helpers.handleStorageException(exception);
 	}
 };
 /**
@@ -411,7 +411,7 @@ WindowManager.prototype.loadInstalledApps = function() {
  */
 WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
 	if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
-	this.installApp(proxyUrl + url, getSiteName(url) || "unkle", "custom." + getDomain(url), getFaviconUrl(url));
+	this.installApp(proxyUrl + url, Helpers.getSiteName(url) || "unkle", "custom." + Helpers.getDomain(url), Helpers.getFaviconUrl(url));
 };
 
 /**
@@ -714,12 +714,12 @@ WindowManager.prototype.getSnapZone = function (x, y, section) {
 	return "";
 };
 
-/** Whether a drag direction is a resize that moves a vertical edge — top, bottom, or any corner. Those are the gestures that can take a full-height snapped window's edge away from the screen, which is how it lets go of the state. @param {number} direction */
+/** @param {number} direction */
 WindowManager.prototype.isVerticalResizeDirection = function (direction) {
 	return direction === 1 || direction === 3 || direction === 5 || direction === 6 || direction === 7 || direction === 8;
 };
 
-/** Lets go of a full-height snapped window by adopting the frame it is drawn at as its real geometry, so a top/bottom resize continues from what the user is holding rather than from the size stored underneath the CSS layer. The class comes off synchronously: move()/resize() pin against it, and an animated exit would leave the CSS layer overriding the geometry the resize is about to write. The grab is re-recorded against the adopted frame: pointerdown measured the offset against the floating height, which is not the edge the user has hold of. @param {Dialog} dialog */
+/** @param {Dialog} dialog */
 WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	var drawnHeight = this.snapHeight(this.getSnapContainer(dialog));
 	setClass(dialog.target, "height-snapped", false);
