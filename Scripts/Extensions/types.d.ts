@@ -26,8 +26,8 @@ interface Extension {
 	onWindowLaunch?(dialog: Dialog): void;
 	/** Called when a window is moved. */
 	onWindowMove?(dialog: Dialog): void;
-	onWindowOpen?(): void;
-	onWindowClose?(): void;
+	onWindowOpen?(dialog: Dialog): void;
+	onWindowClose?(dialog: Dialog): void;
 }
 
 type ExtensionHook = Extract<keyof Extension, `on${string}`>;
