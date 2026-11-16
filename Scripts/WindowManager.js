@@ -581,7 +581,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	}
 
 	/** @type {Coord} */
-	var difference = { x: newX - dialog.clickOffset.clickX, y: newY - dialog.clickOffset.clickY };
+	var difference = { x: newX - dialog.clickOffset.clickPosition.x, y: newY - dialog.clickOffset.clickPosition.y };
 
 	if (dialog.heightSnapped) {
 		var gestureDirection = this.dragAction.direction;
@@ -598,8 +598,8 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	if (typeof dialog._exposeVisualScale === "number" && !dialog._exposeGrab && dialog.clickOffset && dialog.content) {
 		var grabRect = dialog.content.getBoundingClientRect();
 		if (grabRect.width) dialog._exposeGrab = {
-			x: (dialog.clickOffset.clickX - grabRect.left) / dragScale,
-			y: (dialog.clickOffset.clickY - grabRect.top) / dragScale
+			x: (dialog.clickOffset.clickPosition.x - grabRect.left) / dragScale,
+			y: (dialog.clickOffset.clickPosition.y - grabRect.top) / dragScale
 		};
 	}
 	this.dragAction.execute(dialog, dialog.clickOffset, dragScale === 1 ? difference : { x: difference.x / dragScale, y: difference.y / dragScale });
@@ -1388,9 +1388,8 @@ WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 
 /** @class */
 function ClickOffset() {
-	/** @param {Coord} */
-	this.clickPosition = {x: 0, y: 0};
-	this.clickX = 0, this.clickY = 0;
+	/** @type {Coord} */
+	this.clickPosition = { x: 0, y: 0 };
 	this.height = 0;
 	this.width = 0;
 	this.startY = 0;
@@ -1430,10 +1429,10 @@ ClickOffset.prototype.update = function(x, y){
 	this.lastPosition = lastPosition;
 	return this;
 };
-ClickOffset.prototype.clear = function () { this.clickX = 0; this.clickY = 0; };
+ClickOffset.prototype.clear = function () { this.clickPosition.x = 0; this.clickPosition.y = 0; };
 /** @param {number} x @param {number} y @param {number} [width] @param {number} [height] @param {number} [startX] @param {number} [startY] */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
-	this.reset(); this.clickX = x; this.clickY = y;
+	this.reset(); this.clickPosition.x = x; this.clickPosition.y = y;
 	if (typeof width === "number" && typeof height === "number" && typeof startX === "number" && typeof startY === "number") {
 		this.width = width; this.height = height; this.startX = startX; this.startY = startY;
 	}
@@ -2497,8 +2496,8 @@ Dialog.prototype.remapClickOffset = function (frameX, frameY, frameWidth, frameH
 	var offset = this.clickOffset;
 	if (!offset || frameWidth <= 0 || frameHeight <= 0) return;
 
-	offset.clickX = this.x + (offset.clickX - frameX) * (this.width / frameWidth);
-	offset.clickY = this.y + (offset.clickY - frameY) * (this.height / frameHeight);
+	offset.clickPosition.x = this.x + (offset.clickPosition.x - frameX) * (this.width / frameWidth);
+	offset.clickPosition.y = this.y + (offset.clickPosition.y - frameY) * (this.height / frameHeight);
 };
 Dialog.prototype.verifyEjectCapability = function() { return Boolean(this.application.src); };
 Object.defineProperty(Dialog.prototype, "href", { get: function () {
