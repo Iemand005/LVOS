@@ -239,21 +239,21 @@ var onLoad = function () {
 		if (tingeling instanceof HTMLElement) {
 			var selector = document.createElement("div");
 		clickOffset.dragHandler = function(ev) {
-			clickOffset.update(ev.clientX - clickOffset.clickX, ev.clientY - clickOffset.clickY);
+			clickOffset.update(ev.clientX - clickOffset.clickPosition.x, ev.clientY - clickOffset.clickPosition.y);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
 
-			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickPosition.x, height < 0 ? ev.clientY : clickOffset.clickPosition.y);
 
 			selector.style.width = Helpers.toPixels(Math.abs(width));
 			selector.style.height = Helpers.toPixels(Math.abs(height));
 		};
 
 		// if (supportsPointer)
-        tingeling.addEventListener(supportsPointer?"pointerdown":"mousedown", function(ev) {
+        tingeling.addEventListener(capabilities.supportsPointer?"pointerdown":"mousedown", function(ev) {
 			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
-			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickX, height < 0 ? ev.clientY : clickOffset.clickY);
+			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickPosition.x, height < 0 ? ev.clientY : clickOffset.clickPosition.y);
 
 			selector.style.width = Helpers.toPixels(Math.abs(width));
 			selector.style.height = Helpers.toPixels(Math.abs(height));
@@ -572,7 +572,6 @@ function setTheme(theme) {
 }
 /** @param {string} theme */
 DesktopManager.removeTheme = function(theme) {
-	ensureClassList(document.body);
 	document.body.classList.remove(theme);
 };
 /** @param {boolean} [force] */
