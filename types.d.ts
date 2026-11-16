@@ -156,10 +156,10 @@ interface Dialog {
 
 	href: string;
 
-	body: HTMLElement?;
-	content: HTMLElement?;
-	frame: HTMLIFrameElement?;
-	titleBar: HTMLElement?;
+	body: HTMLElement | null;
+	content: HTMLElement | null;
+	frame: HTMLIFrameElement | null;
+	titleBar: HTMLElement | null;
 
 	position: Vector;
 
