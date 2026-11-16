@@ -4,8 +4,8 @@ interface Array<T> {
 }
 
 interface Application {
-	title: string;
 	id: string;
+	title?: string;
 	src?: string;
 	resizable?: boolean;
 	fixed?: boolean;

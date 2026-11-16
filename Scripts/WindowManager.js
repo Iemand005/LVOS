@@ -693,10 +693,8 @@ WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(fun
  */
 WindowManager.prototype.createAppFromElement = function(element) {
 	var id = element.id || "";
-	var titleEl = element.querySelector("h1, header, .title, [data-title]");
-	var title = (titleEl && (titleEl.textContent || titleEl.innerText)) || id || "Window";
 	/** @type {Application} */
-	var application = { id: id, title: title, exists: true };
+	var application = { id: id, exists: true };
 	return application;
 };
 
