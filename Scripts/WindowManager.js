@@ -848,7 +848,7 @@ WindowManager.prototype.injectApplications = function() {
 };
 
 /** @type {Bounds} */
-WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
+WindowManager.windowRectInset = { top: 0, left: -100, right: -100, bottom: -100 };
 
 WindowManager._windowRect = { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
 
@@ -856,7 +856,7 @@ WindowManager.updateWindowRect = function () {
 	var rect = WindowManager._windowRect;
 	rect.width = window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
 	rect.height = window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
-	var inset = WindowManager.windowBoundsInset;
+	var inset = WindowManager.windowRectInset;
 	rect.top = inset.top !== null ? inset.top : -Infinity;
 	rect.left = inset.left !== null ? inset.left : -Infinity;
 	rect.right = inset.right !== null ? rect.width - inset.right : Infinity;
@@ -864,10 +864,6 @@ WindowManager.updateWindowRect = function () {
 };
 
 WindowManager.updateWindowBounds = WindowManager.updateWindowRect;
-
-Object.defineProperty(WindowManager, "windowBounds", {
-	get: function () { return WindowManager._windowRect; }
-});
 
 Object.defineProperty(WindowManager, "windowRect", {
 	get: function () { return WindowManager._windowRect; }
@@ -1132,7 +1128,7 @@ WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) 
 	var section = this.getSnapContainer(dialog);
 
 	if (direction === 1 || direction === 3) {
-		var bounds = WindowManager.windowBounds;
+		var bounds = WindowManager.windowRect;
 		var threshold = this.snapFullThreshold;
 		var atEdge = direction === 1 ?
 			dialog.y <= bounds.top + threshold :
@@ -2590,7 +2586,7 @@ Object.defineProperty(Dialog.prototype, "maxAspectRatio", {
 Object.defineProperty(Dialog.prototype, "top", {
 	get: function() { return this.y; },
 	set: function(top) {
-		var bounds = WindowManager.windowBounds;
+		var bounds = WindowManager.windowRect;
 		var bottom = this.bottomFromTop;
 		if (bounds.bottom !== Infinity && bottom >= bounds.bottom - 0.5) bottom = bounds.bottom;
 		if (top < bounds.top) top = bounds.top;
@@ -2609,7 +2605,7 @@ Object.defineProperty(Dialog.prototype, "top", {
 Object.defineProperty(Dialog.prototype, "left", {
 	get: function() { return this.x; },
 	set: function(left) {
-		var bounds = WindowManager.windowBounds;
+		var bounds = WindowManager.windowRect;
 		var right = this.rightFromLeft;
 		if (bounds.right !== Infinity && right >= bounds.right - 0.5) right = bounds.right;
 		if (left < bounds.left) left = bounds.left;
@@ -2634,7 +2630,7 @@ Object.defineProperty(Dialog.prototype, "right", {
 	get: function() { var rfl = this.rightFromLeft; return typeof rfl === "number" && rfl === rfl ? Helpers.getViewportWidth() - rfl : 0; },
 	set: function(right) {
 		if (typeof right === "number") {
-			var bounds = WindowManager.windowBounds;
+			var bounds = WindowManager.windowRect;
 			if (right > bounds.right) right = bounds.right;
 			if (right < bounds.left) right = bounds.left;
 			this.width = (Helpers.getViewportWidth() - right) - this.x;
@@ -2651,7 +2647,7 @@ Object.defineProperty(Dialog.prototype, "bottom", {
 	get: function() { var bft = this.bottomFromTop; return typeof bft === "number" && bft === bft ? Helpers.getViewportHeight() - bft : 0; },
 	set: function(bottom) {
 		if (typeof bottom === "number") {
-			var bounds = WindowManager.windowBounds;
+			var bounds = WindowManager.windowRect;
 			if (bottom > bounds.bottom) bottom = bounds.bottom;
 			if (bottom < bounds.top) bottom = bounds.top;
 			this.height = (Helpers.getViewportHeight() - bottom) - this.y;
@@ -3198,7 +3194,7 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	if (typeof y === "undefined" || y === null) y = this.y;
 	if (this.heightSnapped) y = this.y;
 	if (typeof this._exposeVisualScale !== "number") {
-		var bounds = WindowManager.windowBounds;
+		var bounds = WindowManager.windowRect;
 		if (x < bounds.left) x = bounds.left;
 		if (bounds.right !== Infinity && x > bounds.right - this.width) x = bounds.right - this.width;
 		if (y < bounds.top) y = bounds.top;
@@ -3259,7 +3255,7 @@ Dialog.prototype.updateHeight = function () {
 Dialog.prototype._setSize = function (axis, size, update, animate) {
 	if (typeof size !== "number" || axis === "height" && !this.target) return;
 	var isWidth = axis === "width";
-	var bounds = WindowManager.windowBounds;
+	var bounds = WindowManager.windowRect;
 	var far = isWidth ? bounds.right : bounds.bottom;
 	var near = isWidth ? bounds.left : bounds.top;
 	var pos = isWidth ? this.x : this.y;
@@ -3329,7 +3325,7 @@ Dialog.prototype.resize = function (width, height, direction) {
 Dialog.prototype._resizeFree = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
-	var bounds = WindowManager.windowBounds;
+	var bounds = WindowManager.windowRect;
 	var maxW = this._maxWidth, maxH = this._maxHeight;
 	var minW = this._minWidth, minH = this._minHeight;
 
@@ -3379,7 +3375,7 @@ Dialog.prototype._resizeWithAspect = function (width, height, direction) {
 	var oldX = this.x, oldY = this.y;
 	var oldW = this.width, oldH = this.height;
 	var oldRight = oldX + oldW, oldBottom = oldY + oldH;
-	var bounds = WindowManager.windowBounds;
+	var bounds = WindowManager.windowRect;
 	var maxW = this._maxWidth, maxH = this._maxHeight;
 	var minW = this._minWidth, minH = this._minHeight;
 
