@@ -1705,14 +1705,14 @@ WindowSnap.prototype.areaWidth = function() {
 	return section ? section.clientWidth : Helpers.getViewportWidth();
 };
 
-/** Covers one half of the window area, held off every edge by the same margin the maximize snap uses so both indicators read as the same kind of thing. @param {"left" | "right"} side */
+/** @param {"left" | "right"} side */
 WindowSnap.prototype.setHalfInset = function(side) {
 	var half = Math.round(this.areaWidth() / 2);
 	var inset = WindowSnap.margin;
 	insetElement(this.element, inset, side === "left" ? inset : half + inset, side === "left" ? half + inset : inset, inset);
 };
 
-/** Frames the window at the full height of the area, held off the top and bottom by the same margin every other indicator uses: the window's own shape stretched vertically, which is exactly what the full-height snap is about to do to it. The sides are the window's own edges pushed out by that same margin, so the frame reads as sitting just outside the window rather than as the window itself. @param {Dialog} [dialog] */
+/** @param {Dialog} [dialog] */
 WindowSnap.prototype.setHeightInset = function(dialog) {
 	if (!dialog) return;
 	var inset = WindowSnap.margin;
