@@ -2726,9 +2726,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 });
 
 Object.defineProperty(Dialog.prototype, "content", {
-	get: function() {
-		return this.getElementByTagOrClassName("content");
-	}
+	get: function() { return this.getElementByTagOrClassName("content"); }
 });
 
 Object.defineProperty(Dialog.prototype, "contentTransform", {
@@ -2800,10 +2798,8 @@ Dialog.prototype.getMiniIconUrl = function() {
  * @param {()=>void} [onError]
  */
 Dialog.prototype.setIcon = function(iconUrl, onError) {
-	if (!iconUrl) {
-		if (onError) onError();
-		return;
-	}
+	if (!iconUrl)
+		return onError && onError();
 	var header = this.titleBar;
 	if (!header) return;
 	this._appIcon = header.getElementsByTagName("img")[0] || null;
