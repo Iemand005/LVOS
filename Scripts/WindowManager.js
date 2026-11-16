@@ -692,9 +692,8 @@ WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(fun
  * @returns {Application}
  */
 WindowManager.prototype.createAppFromElement = function(element) {
-	var id = element.id || "";
 	/** @type {Application} */
-	var application = { id: id, exists: true };
+	var application = { id: element.id, exists: true };
 	return application;
 };
 
