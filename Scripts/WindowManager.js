@@ -3060,9 +3060,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}, undefined, function(isMaximized) {
 		if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 		this.maximizeAnimations--;
-	}) : this.toggleClassAnimated("scaled-max", enable, function(name) {
-		return name === "transform";
-	}, function onEnd(enabled) {
+	}) : this.toggleClassAnimated("scaled-max", enable, "transform", function onEnd(enabled) {
 		if (fsTimeout) clearTimeout(fsTimeout);
 
 		target.classList.toggle("maximized", enabled);
