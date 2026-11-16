@@ -2204,9 +2204,7 @@ Object.defineProperty(Dialog.prototype, "maxHeight", {
 });
 Object.defineProperty(Dialog.prototype, "position", {
 	get: function() { return new Vector(this.x, this.y); },
-	set: function(position) {
-		if (position instanceof Vector) this.move(position.x, position.y);
-	}
+	set: function(position) { if (position instanceof Vector) this.move(position.x, position.y); }
 });
 
 Object.defineProperty(Dialog.prototype, "size", {
