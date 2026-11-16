@@ -132,57 +132,6 @@ Helpers.getRect = function(element, index) {
 
 Helpers.getOverlay = function() { return document.getElementById("overlay"); }
 
-/**
- * @param {MessageType} type
- * @param {any} data
- * @param {string} [source]
- */
-Helpers.messageReceived = function(type, data, source){
-
-	if (source && windowManager) {
-
-		var dialog = windowManager.windows[source];
-
-		if (!dialog) return;
-
-		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
-		switch (type) {
-			case "launchOverlay":
-				var overlay = Helpers.getOverlay();
-				if (!overlay) break;
-
-				overlay.ontransitionend = function() {
-					if (!dialog) return;
-					dialog.messageFrame("prepareToLaunchOverlay");
-					if (dialog.frame) {
-						var oriel = new URL(dialog.frame.src);
-						oriel.searchParams.set("fullscreen", String(true));
-						dialog.frame.src = oriel.href;
-					}
-					if (!overlay) return;
-					overlay.ontransitionend = null;
-					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
-					if (dialog.body) overlay.appendChild(dialog.body);
-					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
-				};
-				overlay.classList.toggle("open");
-				break;
-			case "readyToLaunchOverlay":
-				var overlay1 = getOverlay();
-				if (!overlay1) break;
-				if (dialog.body) overlay1.appendChild(dialog.body);
-				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
-				break;
-			case "pip":
-				dialog.moveElementIntoPipById(data.id, data.stylesheet);
-				break;
-			case "visualizers":
-				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
-				break;
-		}
-	}
-};
-
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
