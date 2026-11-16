@@ -14,7 +14,6 @@
 var useTransform = true,
 	useScale = false;
 
-var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 
 var supportsPointer = typeof window !== "undefined" && "PointerEvent" in window && !isIE && !("MSPointerEvent" in window);
@@ -43,8 +42,6 @@ var isLocal = location.protocol === "file:" || location.hostname === "localhost"
 })();
 
 /** @type {"webkitTransitionEnd" | "transitionend"} */
-var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" :
-	("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
 
 if (isIE) useTransform = true;
 

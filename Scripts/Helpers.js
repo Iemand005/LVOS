@@ -1,4 +1,8 @@
 
+var isBlink = "chrome" in window;
+
+var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" : ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
+
 /** @class */
 function Helpers() {}
 
@@ -179,8 +183,6 @@ Helpers.messageReceived = function(type, data, source){
 	}
 };
 
-
-
 /** @param {WindowOpenProperties} properties */
 Helpers.stringifyWindowOpenProperties = function(properties){
 	return JSON.stringify(properties).replace(/true/g, "yes").replace(/false/g, "no").replace(/:/g, "=").replace(/[}{"]/g, "");
@@ -231,14 +233,14 @@ Helpers.getDialogTemplate = function() {
 	var content = template;
 	if (template instanceof HTMLTemplateElement) return template.content.children[0];
 	return content.children ? content.children[0] : content.childNodes[1];
-}
+};
 
 /** @returns {HTMLElement | WindowElement} */
 Helpers.createDialogElement = function() {
 	var template = getDialogTemplate();
 	if (!template) throw new Error("Can't find dialog template!");
 	return /** @type {HTMLElement} */(template.cloneNode(true));
-}
+};
 
 /**
  * @param {HTMLElement} element
@@ -273,7 +275,7 @@ Helpers.flipElement = function(element, onToggled, thisArg) {
 		element.style.translate = "0px 0px";
 		element.style.scale = "1";
 	});
-}
+};
 
 /** Undoes everything {@link flipElement} wrote, so the element is back to its own state. @param {HTMLElement} element */
 Helpers.clearFlip = function(element) {
@@ -282,7 +284,7 @@ Helpers.clearFlip = function(element) {
 	element.style.scale = "";
 	element.style.transformOrigin = "";
 	element.classList.remove("flipping");
-}
+};
 
 /**
  * @template {Record<string, any> | HTMLElement} [T=HTMLElement]
@@ -304,7 +306,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		if (element._animationState === state) element._animationState = null;
 
 		element.classList.remove("animating");
-		if (flip) clearFlip(element);
+		if (flip) Helpers.clearFlip(element);
 		if (onEnd) onEnd.call(boundContext);
 	};
 
@@ -313,7 +315,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		if (previous.timer) clearTimeout(previous.timer);
 		if (previous.frame) window.cancelAnimationFrame(previous.frame);
 		if (previous.handler) element.removeEventListener(transitionEndEvent, previous.handler, false);
-		if (previous.flip) clearFlip(element);
+		if (previous.flip) Helpers.clearFlip(element);
 	}
 
 	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean }} */
