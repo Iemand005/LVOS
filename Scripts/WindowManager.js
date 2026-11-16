@@ -1594,7 +1594,7 @@ function WindowSnap() {
 
 	if (document.documentMode && document.documentMode < 9) return;
 
-	if (this.element.classList) this.element.classList.add("hidden");
+	this.element.classList.add("hidden");
 }
 
 Object.defineProperty(WindowSnap.prototype, "hidden", {
@@ -1625,27 +1625,25 @@ WindowSnap.prototype.attachTo = function(dialog) {
  * @param {boolean} [isTouch]
  * @param {boolean} [preserveSnapped]
  */
+WindowSnap._sides = [
+	{ top: true, right: true, bottom: true, left: true },
+	{ top: true, right: false, bottom: false, left: false },
+	{ top: false, right: true, bottom: false, left: false },
+	{ top: false, right: false, bottom: true, left: false },
+	{ top: false, right: false, bottom: false, left: true },
+	{ top: true, right: false, bottom: false, left: true },
+	{ top: true, right: true, bottom: false, left: false },
+	{ top: false, right: true, bottom: true, left: false },
+	{ top: false, right: false, bottom: true, left: true }
+];
+
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
-
 	this.attachTo(dialog);
-
 	this.hidden = !outset;
 	if (!preserveSnapped) this._snapped = "";
-
 	if (!direction) outset = 0;
-
-	var sides = [
-		{ top: true, right: true, bottom: true, left: true },
-		{ top: true, right: false, bottom: false, left: false },
-		{ top: false, right: true, bottom: false, left: false },
-		{ top: false, right: false, bottom: true, left: false },
-		{ top: false, right: false, bottom: false, left: true },
-		{ top: true, right: false, bottom: false, left: true },
-		{ top: true, right: true, bottom: false, left: false },
-		{ top: false, right: true, bottom: true, left: false },
-		{ top: false, right: false, bottom: true, left: true }
-	];
+	var sides = WindowSnap._sides;
 
 	var s = sides[direction || 0] || sides[0];
 	if (!s) return;
@@ -3538,26 +3536,20 @@ Dialog.prototype.openUrl = function(url) {
 		clearTimeout(timeout);
 		self.reportState();
 		refreshLayout();
-		setTimeout(refreshLayout, 0);
 		setTimeout(refreshLayout, 50);
 	};
 
 	var baseUrls = [url || this.src, this.application.distSrc];
-
 	if (!isLocal) baseUrls.reverse();
-
 	var fallbackUrls = baseUrls.concat(this.application.altUrls || []);
-
 	var index = 0;
 
 	function tryNext() {
 		var nextUrl;
 		while (index < fallbackUrls.length && !(nextUrl = fallbackUrls[index++]));
 		if (!nextUrl || !frame) return;
-
 		frame.src = nextUrl;
 		self._src = nextUrl;
-
 		clearTimeout(timeout);
 		timeout = setTimeout(tryNext, 3000);
 	}
