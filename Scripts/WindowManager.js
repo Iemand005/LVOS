@@ -2798,8 +2798,7 @@ Dialog.prototype.getMiniIconUrl = function() {
  * @param {()=>void} [onError]
  */
 Dialog.prototype.setIcon = function(iconUrl, onError) {
-	if (!iconUrl)
-		return onError && onError();
+	if (!iconUrl) return onError && onError();
 	var header = this.titleBar;
 	if (!header) return;
 	this._appIcon = header.getElementsByTagName("img")[0] || null;
