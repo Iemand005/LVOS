@@ -1097,8 +1097,7 @@ WindowManager.prototype.isVerticalResizeDirection = function (direction) {
 WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	var drawnHeight = this.snapHeight(this.getSnapContainer(dialog));
 	setClass(dialog.target, "height-snapped", false);
-	dialog._snappingOut = false;
-	dialog._snappingOutState = null;
+	dialog._endSnapTransition();
 	this._heightSnapReleased = true;
 
 	dialog._y = 0;
@@ -3076,44 +3075,48 @@ Dialog.prototype.toggleClassFlip = function (className, force, onTransitionEnd, 
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout, true);
 };
 
-/** Tiled state, the sibling of maximized: purely visual, so the window keeps its own width/height/position and returns to them untouched when it leaves the group. The window stays a child of #window-section the whole time; the class only switches it between the absolute box it floats in and a flex item of the section's snap row. The switch is played as a FLIP rather than a plain transition, because occupying a different layout box is not something the browser can interpolate: the frames are measured either side of the change and the old one is eased back over the new one. @param {boolean} [enable] */
-Dialog.prototype.toggleSnapped = function (enable) {
+Dialog.prototype._endSnapTransition = function () {
+	this._snappingOut = false;
+	this._snappingOutState = null;
+};
+
+/**
+ * @param {string} className
+ * @param {boolean} [enable]
+ * @param {boolean} [useFlip]
+ * @param {TransitionEndCallback} [onTransitionEnd]
+ * @param {(this:Dialog)=>void} [onEnable]
+ */
+Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitionEnd, onEnable) {
 	var target = this.target;
-	if (enable === null) enable = !target.classList.contains("snapped");
-	if (target.classList.contains("snapped") === enable) return;
+	if (enable === null) enable = !target.classList.contains(className);
+	if (target.classList.contains(className) === enable) return;
+
+	if (enable && onEnable) onEnable.call(this);
 
 	this._snappingOut = !enable;
 	this._snappingOutState = null;
 
-	this.toggleClassFlip("snapped", enable, function (name) {
-		return name === "translate" || name === "scale";
-	}, function () {
-		this._snappingOut = false;
-		this._snappingOutState = null;
-	}, 1000);
+	var self = this;
+	var onEnd = function () { self._endSnapTransition(); };
+	if (useFlip) this.toggleClassFlip(className, enable, onTransitionEnd, onEnd, 1000);
+	else this.toggleClassAnimated(className, enable, onTransitionEnd, onEnd, undefined, 1000);
 
-	this._snappingOutState = target._animationState;
+	this._snappingOutState = /** @type {any} */ (target)._animationState;
+};
+
+/** Tiled state, the sibling of maximized: purely visual, so the window keeps its own width/height/position and returns to them untouched when it leaves the group. The window stays a child of #window-section the whole time; the class only switches it between the absolute box it floats in and a flex item of the section's snap row. The switch is played as a FLIP rather than a plain transition, because occupying a different layout box is not something the browser can interpolate: the frames are measured either side of the change and the old one is eased back over the new one. @param {boolean} [enable] */
+Dialog.prototype.toggleSnapped = function (enable) {
+	this._toggleSnap("snapped", enable, true, function (name) {
+		return name === "translate" || name === "scale";
+	});
 };
 
 /** @param {boolean} [enable] */
 Dialog.prototype.toggleHeightSnapped = function (enable) {
-	var target = this.target;
-	if (enable === null) enable = !target.classList.contains("height-snapped");
-	if (target.classList.contains("height-snapped") === enable) return;
-
-	if (enable) this.move(this.x, 0);
-
-	this._snappingOut = !enable;
-	this._snappingOutState = null;
-
-	this.toggleClassAnimated("height-snapped", enable, function (name) {
+	this._toggleSnap("height-snapped", enable, false, function (name) {
 		return name === "height" || name === "transform";
-	}, function () {
-		this._snappingOut = false;
-		this._snappingOutState = null;
-	}, undefined, 1000);
-
-	this._snappingOutState = /** @type {any} */ (target)._animationState;
+	}, function () { this.move(this.x, 0); });
 };
 
 /** @param {boolean} [enable] */
