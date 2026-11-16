@@ -1494,25 +1494,25 @@ WindowManager.prototype.getWindowOwningElement = function(el) {
 };
 
 /**
- * @param {Extension} ext
+ * @param {Extension} extension
  * @returns {Extension | null} The registered extension, or null when it is not one.
  */
-WindowManager.prototype.registerExtension = function(ext) {
-	if (!ext || typeof ext !== "object") return null;
-	if (typeof ext.enabled !== "boolean") ext.enabled = true;
+WindowManager.prototype.registerExtension = function(extension) {
+	if (!extension || typeof extension !== "object") return null;
+	if (typeof extension.enabled !== "boolean") extension.enabled = true;
 
-	if (ext.id) {
-		var existing = this.getExtension(ext.id);
+	if (extension.id) {
+		var existing = this.getExtension(extension.id);
 		if (existing) this.extensions.splice(this.extensions.indexOf(existing), 1);
 	}
 
-	this.extensions.push(ext);
+	this.extensions.push(extension);
 
-	if (ext.enabled) this.notifyExtension(ext, "onEnable");
+	if (extension.enabled) this.notifyExtension(extension, "onEnable");
 
-	if (ext.flags) Object.defineProperties(flags, ext.flags);
+	if (extension.flags) Object.defineProperties(flags, extension.flags);
 
-	return ext;
+	return extension;
 };
 
 /**

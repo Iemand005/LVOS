@@ -12,6 +12,8 @@ interface Extension {
 	id?: string;
 	/** Human readable name of the extension. */
 	name?: string;
+	/** A description DUH!!! */
+	description?: string;
 	/** Whether the extension is switched on. Extensions are switched on when they are registered. */
 	enabled?: boolean;
 	/** Flags defined by the extension */
