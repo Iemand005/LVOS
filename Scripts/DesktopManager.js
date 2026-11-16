@@ -272,7 +272,7 @@ var onLoad = function () {
 			if (selector.parentNode) selector.parentNode.removeChild(selector);
 		};
 
-		window.addEventListener(supportsPointer ? "pointerup" : "mouseup", stopIt, false);
+		window.addEventListener(capabilities.supportsPointer ? "pointerup" : "mouseup", stopIt, false);
 	}
 
     document.onselectstart = function (event) {
