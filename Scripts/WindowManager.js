@@ -244,10 +244,10 @@ function setClass(element, className, enabled) {
  * @param {HTMLElement| null} element
  * @param {number} [index]
  */
-function getRect(element, index) {
+Helpers.getRect = function(element, index) {
 	if (!element) return;
 	return index ? element.getClientRects()[index] : element.getBoundingClientRect();
-}
+};
 
 function getOverlay() { return document.getElementById("overlay"); }
 
@@ -2108,7 +2108,7 @@ function Dialog(application) {
 	if (header) {
 		header.onselectstart = function () { return false; };
 		target.ondblclick = function (event) {
-			var rect = getRect(header);
+			var rect = Helpers.getRect(header);
 			if (!rect || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
 
 			var node = event.target instanceof HTMLElement ? event.target : null;
@@ -2148,7 +2148,7 @@ function Dialog(application) {
 			app: self.application
 		};
 
-		var rect = getRect(self.target);
+		var rect = Helpers.getRect(self.target);
 		if (rect) dragState.offset = {
 			x: event.clientX - (rect.left + rect.width / 2),
 			y: event.clientY - (rect.top + rect.height / 2)
@@ -2849,7 +2849,7 @@ Dialog.prototype.close = function () { return this.toggleOpen(false); };
  * @param {boolean} [ofBody]
  * @param {number} [index]
  */
-Dialog.prototype.getRect = function (ofBody, index) { return getRect(ofBody ? this.body : this.target, index); };
+Dialog.prototype.getRect = function (ofBody, index) { return Helpers.getRect(ofBody ? this.body : this.target, index); };
 /** @param {number} index */
 Dialog.prototype.getButton = function (index) {
   return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
