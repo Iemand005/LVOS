@@ -318,10 +318,14 @@ Helpers.getViewBoxPosition = function() {
 };
 
 Helpers.getViewportHeight = function() {
+	var rect = WindowManager._windowRect;
+	if (rect && rect.height) return rect.height;
 	return window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
 };
 
 Helpers.getViewportWidth = function() {
+	var rect = WindowManager._windowRect;
+	if (rect && rect.width) return rect.width;
 	return window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
 };
 
@@ -544,6 +548,7 @@ function WindowManager() {
 	/** @type {WindowManager} */
     var self = this;
 	this.resizeHandler = function() {
+		WindowManager.updateWindowRect();
 		self.forEachWindow(function (window) { window.update(); });
 	};
 
@@ -849,19 +854,28 @@ WindowManager.prototype.injectApplications = function() {
 
 /** @type {Bounds} */
 WindowManager.windowBoundsInset = { top: 0, left: -100, right: -100, bottom: -100 };
-/** @type {Bounds} */
-WindowManager._windowBounds = { top: 0, left: 0, right: 0, bottom: 0 };
 
-WindowManager.recalculateWindowBounds = function() {
+WindowManager._windowRect = { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+
+WindowManager.updateWindowRect = function () {
+	var rect = WindowManager._windowRect;
+	rect.width = window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || (document.body && document.body.clientWidth) || 0;
+	rect.height = window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || (document.body && document.body.clientHeight) || 0;
 	var inset = WindowManager.windowBoundsInset;
-	WindowManager._windowBounds.top = inset.top !== null ? inset.top : -Infinity;
-	WindowManager._windowBounds.left = inset.left !== null ? inset.left : -Infinity;
-	WindowManager._windowBounds.right = inset.right !== null ? Helpers.getViewportWidth() - inset.right : Infinity;
-	WindowManager._windowBounds.bottom = inset.bottom !== null ? Helpers.getViewportHeight() - inset.bottom : Infinity;
+	rect.top = inset.top !== null ? inset.top : -Infinity;
+	rect.left = inset.left !== null ? inset.left : -Infinity;
+	rect.right = inset.right !== null ? rect.width - inset.right : Infinity;
+	rect.bottom = inset.bottom !== null ? rect.height - inset.bottom : Infinity;
 };
 
+WindowManager.updateWindowBounds = WindowManager.updateWindowRect;
+
 Object.defineProperty(WindowManager, "windowBounds", {
-	get: function () { return WindowManager._windowBounds; }
+	get: function () { return WindowManager._windowRect; }
+});
+
+Object.defineProperty(WindowManager, "windowRect", {
+	get: function () { return WindowManager._windowRect; }
 });
 
 /** @param {Dialog} dialog */
