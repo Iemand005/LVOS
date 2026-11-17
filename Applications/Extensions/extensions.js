@@ -12,7 +12,8 @@ ExtensionApp.prototype.createList = function () {
 		if (!extension) return;
 		var item = document.createElement("li");
 		item.appendChild(document.createTextNode(extension.name));
-		var toggle = 
+		var toggle = document.createElement("input");
+		toggle.type = "toggle";
 		item.appendChild(toggle);
 		list.appendChild(item);
 	}
