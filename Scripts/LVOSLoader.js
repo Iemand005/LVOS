@@ -26,9 +26,11 @@ Loader.loadScript = function (url, callback) {
 	document.head.appendChild(script);
 };
 
-var scriptSrc = document.currentScript &&"src" in document.currentScript  && document.currentScript.src;
-var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
-var stylePath = scriptDir + "../Styles/general.css";
-console.log("Currently in", scriptDir, "wanna load css in", scriptDir + "../Styles/general.css");
+var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
+if (scriptSrc) {
+	var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
+	var stylePath = scriptDir + "../Styles/general.css";
+	console.log("Currently in", scriptDir, "wanna load css in", scriptDir + "../Styles/general.css");
 
-Loader.loadStyleSheet(stylePath);
+	Loader.loadStyleSheet(stylePath);
+}
