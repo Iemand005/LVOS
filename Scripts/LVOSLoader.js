@@ -41,19 +41,12 @@ Loader.onReady = function (fn) {
 	}
 };
 
-Loader.onReady(function () {
-
-	var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
-	if (scriptSrc) {
-		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
-		var stylePath = scriptDir + "../Styles/general.css";
-		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
-
-		Loader.loadStyleSheet(stylePath);
-	}
-});
-
-function hasAttributeCompat(el: Element | null, attrName: string): boolean {
+/**
+ * @param {Element | null} el 
+ * @param {string} attrName 
+ * @returns {boolean}
+ */
+function hasAttributeCompat(el, attrName) {
 	if (!el) return false;
 
 	// Modern browsers & IE8+
@@ -70,3 +63,25 @@ function hasAttributeCompat(el: Element | null, attrName: string): boolean {
 	var val = el.getAttribute(attrName);
 	return val !== null && val !== undefined;
 }
+
+Loader.onReady(function () {
+
+	var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
+	if (scriptSrc) {
+		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
+		var stylePath = scriptDir + "../Styles/general.css";
+		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
+
+		Loader.loadStyleSheet(stylePath);
+	}
+
+	var hasTheme = hasAttributeCompat(loaderScript, 'data-theme');
+
+	if (hasTheme) {
+		// `data-theme` is present! Inject your theme CSS or enable theme mode
+		console.log('LVOSLoader: data-theme detected!');
+	} else {
+		// `data-theme` was omitted
+		console.log('LVOSLoader: no data-theme attribute.');
+	}
+});
