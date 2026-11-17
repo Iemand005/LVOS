@@ -8,6 +8,8 @@ ul {
 	padding: 0;
 
 	background-color: gray;
+
+	border-radius: 15px;
 }
 
 li {
