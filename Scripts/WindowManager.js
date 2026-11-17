@@ -1097,7 +1097,7 @@ WindowManager.prototype.getExtension = function(id) {
  * @param {boolean} [enabled]
  */
 WindowManager.prototype.toggleExtensionEnabled = function(ext, enabled) {
-	if (!ext || typeof ext !== "object" && typeof enabled !== "undefined") return false;
+	if (!ext || typeof ext !== "object" || typeof enabled === "undefined") return false;
 	if (!!ext.enabled === enabled) return enabled;
 	ext.enabled = enabled;
 	this.notifyExtension(ext, enabled ? "onEnable" : "onDisable");
