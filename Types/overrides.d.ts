@@ -93,7 +93,9 @@ declare global {
 		documentMode?: number;
 
 		createElement<K extends CustomTag, I extends CustomElementName<K>>(tagName: K, options: { is: I }): HTMLElementTagNameMap[K] | InstanceType<ClassOf<I>>;
-
+	}
+	
+	interface GlobalEventHandlers {
 		attachEvent?(event: string, listener: (this: Document, ev?: any) => any): boolean;
 		detachEvent?(event: string, listener: (this: Document, ev?: any) => any): void;
 	}

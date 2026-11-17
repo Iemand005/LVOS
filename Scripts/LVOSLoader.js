@@ -26,7 +26,7 @@ Loader._onEventReady = function (target, modernEvent, fn) {
 
 	if (target.addEventListener) {
 		target.addEventListener(modernEvent, finish, false);
-	} else if (/** @type {any} */ (target).attachEvent) {
+	} else if ((target).attachEvent) {
 		/** @type {any} */ (target).attachEvent("onreadystatechange", function () {
 		if (target.readyState === "complete" || (target !== document && target.readyState === "loaded")) {
 			finish(window.event);
