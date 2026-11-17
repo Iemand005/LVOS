@@ -299,6 +299,10 @@ export const test = base.extend<{ vulpOS: VulpOSTester }>({
 	vulpOS: async ({ page }, use) => {
 
 		await page.goto('http://localhost:3621/');
+		await page.waitForFunction(() => {
+			const overlay = document.getElementById('overlay');
+			return !overlay || !overlay.classList.contains('open');
+		}, null, { timeout: 15000 });
 
 		const vulpOS = new VulpOSTester(page);
 		await vulpOS.setAnimations(false);

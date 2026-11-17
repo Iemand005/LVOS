@@ -1902,7 +1902,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
-			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id);
+			// if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id, true);
 			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
@@ -2387,9 +2387,9 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 		return this.setScale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
-	this.animate(this.updateTransform, "transform", function() {
-		self._dragScaleAnimating = false;
-	}, this.dragScaleDuration);
+	// this.animate(this.updateTransform, "transform", function() {
+	// 	self._dragScaleAnimating = false;
+	// }, this.dragScaleDuration);
 	this._scaleX = nextX;
 	this._scaleY = nextY;
 };
