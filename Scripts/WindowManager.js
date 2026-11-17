@@ -1062,7 +1062,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
 	}
 	if (type !== "dialog-state")
-		return messageReceived(type, data, id);
+		return LVMessenger.messageReceived(type, data, id);
 	if (!data || !id) return;
 
 	var dialog = this.getWindowById(id);
@@ -2568,17 +2568,14 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 };
 
 Dialog.prototype.toggleMaximizeButton = function () {
-	var handledSnap = false;
 	if (this.snapped) {
 		if (windowManager) windowManager.unsnapDialog(this);
 		else this.toggleSnapped(false);
-		handledSnap = true;
 	}
 	if (this.heightSnapped) {
 		this.toggleHeightSnapped(false);
-		handledSnap = true;
 	}
-	if (!handledSnap) this.toggleMaximized();
+	if (!(this.snapped || this.heightSnapped)) this.toggleMaximized();
 };
 
 /** @param {boolean} [restored] */

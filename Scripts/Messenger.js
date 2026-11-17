@@ -232,6 +232,7 @@ function messageReceived(type, data, source) {
 	}
 }
 
+LVMessenger.messageReceived = messageReceived;
 window.__LVMessengerReceive = messageReceived;
 window.__LVMessenger = window.__LVMessenger || {};
 LVMessenger.receive(messageReceived);
