@@ -1,7 +1,7 @@
 
-/** @param {WindowManager} windowManager */
-function ExtensionApp(windowManager) {
-	this.wm = windowManager;
+/** @param {WindowManager} wm */
+function ExtensionApp(wm) {
+	this.wm = wm;
 }
 
 ExtensionApp.prototype.createList = function () {
@@ -18,7 +18,7 @@ ExtensionApp.prototype.createList = function () {
 
 LVMessenger.get("os", function(os) {
 	console.log("YO I got that thing and woah intellicode is working!??", os);
-	var ea = new ExtensionApp;
+	var ea = new ExtensionApp(os.windowManager);
 	ea.createList();
 });
 
