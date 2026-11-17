@@ -1536,11 +1536,6 @@ function Dialog(application) {
 	/** @type {Transformable | null} */
 	this._contentTransform = null;
 
-	/** How long the touch-drag downscale animates for, in ms. Must match the transform transition in windows.css; after it elapses the drag stops animating. */
-	this.dragScaleDuration = 280;
-	/** @type {boolean} True while the touch-drag downscale is playing, so the drag handlers do not strip the "animating" class out from under it. */
-	this._dragScaleAnimating = false;
-
 	this._maximizing = false;
 	this.maximizeAnimations = 0;
 
@@ -1902,7 +1897,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
-			// if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id, true);
+			windowManager.windowSnap.moveToDialog(self, 20, id, false, windowManager.isTouchDrag);
 			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
@@ -2499,7 +2494,6 @@ Dialog.prototype.stopAnimating = function () {
 		}
 		return;
 	}
-	if (this._dragScaleAnimating) return;
 	this.target.classList.remove("animating");
 };
 
@@ -2612,6 +2606,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			Helpers.transformElement(content, {x: 0, y: 0, scaleX: 1, scaleY: 1});
 			content.style.width = "";
 			content.style.height = "";
+			if (!enabled) content.style.transformOrigin = "center";
 			this.maximizeAnimations--;
 		}, function(enabled) {
 			this._maximizing = enabled;
@@ -2621,6 +2616,11 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			var scaleX = window.innerWidth / startWidth, scaleY = height / startHeight;
 			target.style.transformOrigin = "top left";
 			target.style.pointerEvents = "none";
+			if (content) {
+				content.style.scale = "";
+				content.style.transformOrigin = "";
+				content.style.transition = "";
+			}
 			if (!enabled) { scaleX = 1 / scaleX; scaleY = 1 / scaleY; }
 			if (this.transform) this.transform.scale(scaleX, scaleY, false);
 			this.updateTransform();

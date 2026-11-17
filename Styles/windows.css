@@ -446,7 +446,7 @@ content.animating,
 }
 
 .compositor-animations .window:not(.maximized):not(.scaled-max) > content {
-	transition: scale 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
+	transition: scale 180ms cubic-bezier(0.44, 0.41, 0, 1) !important;
 	will-change: scale !important;
 }
 
