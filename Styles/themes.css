@@ -849,6 +849,10 @@ body.jeb .window > content svg {
 	animation: jeb-svg 10s infinite;
 }
 
+#window-snap {
+	border-radius: calc(max(--window-outer-radius, 10px));
+}
+
 @keyframes jeb {
 	0%, 100%  { background: orange; }
 	10% { background: yellow; }

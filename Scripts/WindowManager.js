@@ -1819,6 +1819,8 @@ function Dialog(application) {
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
 	this.update();
+	this.updateWidth();
+	this.updateHeight();
 
 	this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
