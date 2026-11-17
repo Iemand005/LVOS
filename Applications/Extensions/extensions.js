@@ -13,7 +13,7 @@ ExtensionApp.prototype.createList = function () {
 		var item = document.createElement("li");
 		item.appendChild(document.createTextNode(extension.name));
 		var toggle = document.createElement("input");
-		toggle.type = "toggle";
+		toggle.type = "checkbox";
 		item.appendChild(toggle);
 		list.appendChild(item);
 	}
