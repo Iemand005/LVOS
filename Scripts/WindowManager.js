@@ -2611,6 +2611,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			this.maximizeAnimations--;
 		}); else this.toggleClassAnimated("scaled-max", enable, "transform", function(enabled) {
 			if (fsTimeout) clearTimeout(fsTimeout);
+			this._maximizing = false;
 			target.classList.toggle("maximized", enabled);
 			target.style.pointerEvents = "";
 			if (this.transform) this.transform.scale(1, 1, undefined, true);
@@ -2667,33 +2668,8 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.x = Anim.lerp(0, startPos.x, ease); self.y = Anim.lerp(0, startPos.y, ease);
 				self.width = Anim.lerp(window.innerWidth, startSize.x, ease); self.height = Anim.lerp(window.innerHeight, startSize.y, ease);
 			}
-		}, function() { if (enable) toggleMaximized(); });
+		}, function() { self.maximizeAnimations--; if (enable) toggleMaximized(); });
 	}
-};
-
-Dialog.prototype.unmaximizeForDrag = function() {
-	var target = this.target;
-	var content = this.content;
-	if (!target || !this.maximized) return;
-	if (document.activeViewTransition && document.activeViewTransition.skipTransition)
-		document.activeViewTransition.skipTransition();
-	Helpers.cancelAnimation(target);
-	target.classList.remove("animating", "scaled-max", "maximized");
-	target.style.pointerEvents = "";
-	target.style.transformOrigin = "";
-	target.style.viewTransitionName = "";
-	if (this.transform) this.transform.scale(1, 1, false, false);
-	if (content) {
-		Helpers.transformElement(content, { x: 0, y: 0, scaleX: 1, scaleY: 1 });
-		content.style.width = "";
-		content.style.height = "";
-		content.style.transformOrigin = "center";
-	}
-	if (this.useTransform) this.toggleMinSizeConstraints(false);
-	this._maximizing = false;
-	this.maximizeAnimations = 0;
-	this.updateMaximizeButton(this.snapped || this.heightSnapped);
-	this.broadcastState({ maximized: false });
 };
 
 /** @param {boolean} [enable] */
