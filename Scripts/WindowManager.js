@@ -2372,7 +2372,7 @@ Dialog.prototype.setSkew = function(skew) {
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 	if (this.contentTransform) {
-		this.contentTransform.target.style.transformOrigin = "center";
+		// this.contentTransform.target.style.transformOrigin = "center";
 		this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
 	}
 };

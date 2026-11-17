@@ -442,12 +442,16 @@ content.animating,
 
 .compositor-animations .window > content {
 	transition: none !important;
-	transform-origin: center;
-	transition: scale 1s linear;
+	transform-origin: left top;
 }
 
-.window.maximized, .window.maximizing {
-	transform-origin: left top;
+.compositor-animations .window:not(.maximized):not(.scaled-max) > content {
+	transition: scale 280ms cubic-bezier(0.44, 0.41, 0, 1) !important;
+	will-change: scale !important;
+}
+
+.compositor-animations .window.maximized, .window.maximizing {
+	transform-origin: left top !important;
 }
 
 .window.maximized {
