@@ -1278,7 +1278,6 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 /** @param {number} inset */
 WindowSnap.prototype.setInset = function(inset) { Helpers.insetElement(this.element, inset); };
 
-/** Width of the window area the indicator lays out against. */
 WindowSnap.prototype.areaWidth = function() {
 	var section = this._section || (windowManager && windowManager.getSnapContainer()) || document.getElementById("window-section");
 	return section ? section.clientWidth : Helpers.getViewportWidth();
