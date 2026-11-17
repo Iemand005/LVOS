@@ -14,6 +14,7 @@ ExtensionApp.prototype.createList = function () {
 		item.appendChild(document.createTextNode(extension.name));
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
+		toggle.checked = extension.enabled;
 		item.appendChild(toggle);
 		list.appendChild(item);
 	}
