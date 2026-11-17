@@ -853,6 +853,10 @@ body.jeb .window > content svg {
 	border-radius: calc(max(var(--window-radius, 10px), 10px));
 }
 
+.window.height-snapped {
+	border-radius: 0 !important;
+}
+
 @keyframes jeb {
 	0%, 100%  { background: orange; }
 	10% { background: yellow; }

@@ -64,7 +64,10 @@ declare global {
 		appManager?: AppManager;
 		windowManager?: WindowManager;
 		windows?: Dialog[];
-		mobileFrameManager?: MobileFrameManager;
+		mobileFrameManager?: {
+			_frames?: Record<string, HTMLIFrameElement>;
+			getActiveFrame?: () => HTMLIFrameElement | null;
+		};
 
 		__LVMessengerReceive?: (type: MessageType, data: any, source?: string) => void;
 		__LVMessenger?: {
