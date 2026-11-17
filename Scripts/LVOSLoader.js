@@ -4,9 +4,9 @@ function Loader() { }
 
 /** @param {string} url */
 Loader.loadStyleSheet = function (url) {
-	var link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
+	var link = document.createElement("link");
+	link.rel = "stylesheet";
+	link.type = "text/css";
 	link.href = url;
 
 	document.head.appendChild(link);
@@ -18,7 +18,7 @@ Loader.loadStyleSheet = function (url) {
  * @param {GlobalEventHandlers['onload']} callback
  */
 Loader.loadScript = function (url, callback) {
-	var script = document.createElement('script');
+	var script = document.createElement("script");
 	script.src = url;
 
 	script.onload = callback;
@@ -26,8 +26,8 @@ Loader.loadScript = function (url, callback) {
 	document.head.appendChild(script);
 };
 
-var scriptSrc = document.currentScript.src;
-var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
+var scriptSrc document.currentScript && = document.currentScript.src;
+var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
 var stylePath = scriptDir + "../Styles/general.css";
 console.log("Currently in", scriptDir, "wanna load css in", scriptDir + "../Styles/general.css");
 
