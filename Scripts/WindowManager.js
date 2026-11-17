@@ -2371,30 +2371,27 @@ Dialog.prototype.setSkew = function(skew) {
  * @param {boolean} [noAnimation]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
-	if (this.contentTransform) {
-		// this.contentTransform.target.style.transformOrigin = "center";
-		this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
-	}
+	var content = this.content;
+	if (!content || this.maximized || this._maximizing) return;
+	content.style.transformOrigin = "center";
+	if (this.contentTransform) this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
 };
 /**
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  */
 Dialog.prototype.setDragScale = function(scaleX, scaleY) {
-	var self = this;
 	var nextX = scaleX || 1;
 	var nextY = scaleY || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
-	if (this._dragScaleAnimating)
-		return this.setScale(nextX, nextY, undefined, false);
-
-	this._dragScaleAnimating = true;
-	// this.animate(this.updateTransform, "transform", function() {
-	// 	self._dragScaleAnimating = false;
-	// }, this.dragScaleDuration);
 	this._scaleX = nextX;
 	this._scaleY = nextY;
+
+	var content = this.content;
+	if (!content || this.maximized || this._maximizing) return;
+	content.style.transformOrigin = "center";
+	content.style.scale = nextX === 1 && nextY === 1 ? "" : nextX + " " + nextY;
 };
 /** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
