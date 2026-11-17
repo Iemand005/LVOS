@@ -2371,7 +2371,10 @@ Dialog.prototype.setSkew = function(skew) {
  * @param {boolean} [noAnimation]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
-	if (this.contentTransform) this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
+	if (this.contentTransform) {
+		this.contentTransform.target.style.transformOrigin = "center";
+		this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
+	}
 };
 /**
  * @param {number} [scaleX]
@@ -2383,8 +2386,11 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	var nextY = scaleY || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
-	if (this._dragScaleAnimating)
-		return this.setScale(nextX, nextY, undefined, false);
+	if (this._dragScaleAnimating) {
+		this.target.style.scale = "0.9";
+		return;
+	}
+		// return this.setScale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
 	// this.animate(this.updateTransform, "transform", function() {
@@ -2606,7 +2612,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			if (fsTimeout) clearTimeout(fsTimeout);
 			target.classList.toggle("maximized", enabled);
 			target.style.pointerEvents = "";
-			this.setScale(1, 1, undefined, true);
+			if (this.transform) this.transform.scale(1, 1, undefined, true);
 			this.updateTransform();
 			if (!content) { this.maximizeAnimations--; return; }
 			Helpers.transformElement(content, {x: 0, y: 0, scaleX: 1, scaleY: 1});
@@ -2622,7 +2628,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			target.style.transformOrigin = "top left";
 			target.style.pointerEvents = "none";
 			if (!enabled) { scaleX = 1 / scaleX; scaleY = 1 / scaleY; }
-			this.setScale(scaleX, scaleY, false);
+			if (this.transform) this.transform.scale(scaleX, scaleY, false);
 			this.updateTransform();
 			var targetWidth = enabled ? window.innerWidth : self.width;
 			var targetHeight = enabled ? height : self.height;
