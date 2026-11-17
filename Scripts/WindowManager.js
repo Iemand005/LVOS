@@ -2521,10 +2521,7 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
 };
 
-Dialog.prototype._endSnapTransition = function () {
-	this._snappingOut = false;
-	this._snappingOutState = null;
-};
+Dialog.prototype._endSnapTransition = function () { this._snappingOut = false, this._snappingOutState = null; };
 
 /**
  * @param {string} className
