@@ -41,14 +41,32 @@ Loader.onReady = function (fn) {
 	}
 };
 
-Loader.onReady(function() {
+Loader.onReady(function () {
 
 	var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
 	if (scriptSrc) {
 		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
 		var stylePath = scriptDir + "../Styles/general.css";
 		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
-	
+
 		Loader.loadStyleSheet(stylePath);
 	}
 });
+
+function hasAttributeCompat(el: Element | null, attrName: string): boolean {
+	if (!el) return false;
+
+	// Modern browsers & IE8+
+	if (typeof el.hasAttribute === 'function') {
+		return el.hasAttribute(attrName);
+	}
+
+	// Legacy IE (IE 5.5 - IE 7) fallback
+	var attrNode = el.getAttributeNode ? el.getAttributeNode(attrName) : null;
+	if (attrNode) {
+		return attrNode.specified;
+	}
+
+	var val = el.getAttribute(attrName);
+	return val !== null && val !== undefined;
+}
