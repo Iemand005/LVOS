@@ -248,6 +248,9 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	var callEnd = function() {
 		if (!state.active) return;
 		state.active = false;
+		if (state.timer) clearTimeout(state.timer);
+		if (state.frame) window.cancelAnimationFrame(state.frame);
+		if (state.handler) element.removeEventListener(transitionEndEvent, state.handler, false);
 		if (element._animationState === state) element._animationState = null;
 
 		element.classList.remove("animating");
@@ -256,15 +259,10 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	};
 
 	var previous = element._animationState;
-	if (previous) {
-		if (previous.timer) clearTimeout(previous.timer);
-		if (previous.frame) window.cancelAnimationFrame(previous.frame);
-		if (previous.handler) element.removeEventListener(transitionEndEvent, previous.handler, false);
-		if (previous.flip) Helpers.clearFlip(element);
-	}
+	if (previous && previous.cancel) previous.cancel();
 
-	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean }} */
-	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip };
+	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean, cancel: () => void }} */
+	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip, cancel: callEnd };
 
 	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
@@ -301,14 +299,4 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 			if (onToggled) onToggled.call(boundContext);
 		});
 	}
-};
-
-Helpers.cancelAnimation = function(element) {
-	var state = element._animationState;
-	if (!state) return;
-	if (state.timer) clearTimeout(state.timer);
-	if (state.frame) window.cancelAnimationFrame(state.frame);
-	if (state.handler) element.removeEventListener(transitionEndEvent, state.handler, false);
-	state.active = false;
-	if (element._animationState === state) element._animationState = null;
 };
