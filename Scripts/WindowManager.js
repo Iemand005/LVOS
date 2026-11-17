@@ -590,9 +590,8 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		var gestureDirection = this.dragAction.direction;
 		if (gestureDirection === 0) {
 			if (difference.y > this.heightSnapReleaseThreshold) dialog.toggleHeightSnapped(false);
-		} else if (gestureDirection && this.isVerticalResizeDirection(gestureDirection)) {
+		} else if (gestureDirection && this.isVerticalResizeDirection(gestureDirection))
 			this.leaveHeightSnappedByResize(dialog);
-		}
 	}
 
 	dialog.stopAnimating();
@@ -713,8 +712,9 @@ WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	dialog.updatePosition();
 	dialog.updateHeight();
 
-	var offset = dialog.clickOffset;
-	offset.height = dialog.height, offset.startX = dialog.x, offset.startY = dialog.y;
+	dialog.clickOffset.height = dialog.height,
+	dialog.clickOffset.startX = dialog.x,
+	dialog.clickOffset.startY = dialog.y;
 };
 
 /**
