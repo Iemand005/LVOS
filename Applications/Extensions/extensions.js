@@ -1,5 +1,8 @@
 
-function ExtensionApp() {}
+/** @param {WindowManager} windowManager */
+function ExtensionApp(windowManager) {
+	this.wm = windowManager;
+}
 
 /** @param {Extension[]} extensions */
 function createList(extensions) {
