@@ -4,6 +4,10 @@ test('debug snap', async ({ vulpOS }) => {
 	const dialog = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
 
+	try {
+		console.log('POINT', JSON.stringify(await vulpOS.titleBarPoint(dialog)));
+	} catch (e) { console.log('POINT ERROR', (e as Error).message); }
+
 	const before = await dialog.evaluate(d => {
 		const bar = d.titleBar || d.target!;
 		const rect = bar.getBoundingClientRect();

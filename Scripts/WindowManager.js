@@ -2378,13 +2378,15 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
  * @param {number} [scaleY]
  */
 Dialog.prototype.setDragScale = function(scaleX, scaleY) {
+	var t = this.contentTransform;
+	if (!t) return;
 	var self = this;
 	var nextX = scaleX || 1;
 	var nextY = scaleY || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
 	if (this._dragScaleAnimating)
-		return this.setScale(nextX, nextY, undefined, false);
+		return t.scale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
 	this.animate(this.updateTransform, "transform", function() {
