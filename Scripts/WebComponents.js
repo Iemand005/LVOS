@@ -7,22 +7,27 @@ class WindowElement extends HTMLDivElement {
 		this.dialog = null;
 	}
 
-	/** @param {boolean} [enable] Enable maximization */
-	toggleMaximizedVT(enable) {
+	/** @param {boolean} [enable] Enable maximization @param {() => void} [onEnd] */
+	toggleMaximizedVT(enable, onEnd) {
 		this.style.viewTransitionName = "window-fullscreen";
 		document.activeViewTransition?.skipTransition();
 
 		const toggle = () => this.classList.toggle("maximized", enable);
-		if (!("startViewTransition" in document)) return toggle();
+		if (!("startViewTransition" in document)) {
+			toggle();
+			if (onEnd) onEnd();
+			return;
+		}
 
 		var transition = document.startViewTransition(toggle);
 		transition.ready.catch(ev => console.warn("transition interrupted:", ev));
 
 		const dialog = this.dialog;
-		if (dialog) transition.finished.finally(() => {
-			if (dialog.maximizeAnimations <= 1)
+		transition.finished.finally(() => {
+			if (dialog && dialog.maximizeAnimations <= 1)
 				this.style.viewTransitionName = "";
-			dialog.maximizeAnimations--;
+			if (dialog) dialog.maximizeAnimations--;
+			if (onEnd) onEnd();
 		});
 	}
 }

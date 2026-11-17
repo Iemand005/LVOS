@@ -2613,7 +2613,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 			this.maximizeAnimations--;
 		}); else this.toggleClassAnimated("scaled-max", enable, "transform", function(enabled) {
 			if (fsTimeout) clearTimeout(fsTimeout);
-			this._maximizing = false;
+			this._maximizing = enabled;
 			this._maximizePending = null;
 			target.classList.toggle("maximized", enabled);
 			target.style.pointerEvents = "";
@@ -2671,7 +2671,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 				self.x = Anim.lerp(0, startPos.x, ease); self.y = Anim.lerp(0, startPos.y, ease);
 				self.width = Anim.lerp(window.innerWidth, startSize.x, ease); self.height = Anim.lerp(window.innerHeight, startSize.y, ease);
 			}
-		}, function() { self.maximizeAnimations--; if (enable) toggleMaximized(); });
+		}, function() { self.maximizeAnimations--; self._maximizePending = null; if (enable) toggleMaximized(); });
 	}
 };
 
