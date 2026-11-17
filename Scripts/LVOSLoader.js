@@ -79,9 +79,8 @@ function hasAttributeCompat(el, attrName) {
 
 /** @returns {HTMLScriptElement | null} */
 function getCurrentScriptCompat() {
-	if (document.currentScript && "src" in document.currentScript) {
+	if (document.currentScript && "src" in document.currentScript)
 		return document.currentScript;
-	}
 
 	var scripts = document.getElementsByTagName("script");
 	for (var i = scripts.length - 1; i >= 0; i--) {
@@ -94,11 +93,9 @@ function getCurrentScriptCompat() {
 	return null;
 }
 
-// 1. Capture the script tag IMMEDIATELY while executing synchronously
 var loaderScript = getCurrentScriptCompat();
 var hasTheme = hasAttributeCompat(loaderScript, "data-theme");
 
-// 2. Wait for DOM ready to inject styles and Messenger.js
 Loader.onReady(function () {
 	if (loaderScript) {
 		var scriptSrc = loaderScript.src;
