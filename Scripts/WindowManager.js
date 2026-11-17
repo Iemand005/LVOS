@@ -1193,6 +1193,8 @@ function messageReceived(type, data, source){
 			case "visualizers":
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
+			case "os":
+				dialog.messageFrame("")
 		}
 	}
 };
