@@ -1156,9 +1156,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	var callback = /** @type {((this: Extension, dialog?: Dialog) => void)} */(ext[hook]);
 	if (typeof callback === "function") try {
 		callback.call(ext, dialog);
-	} catch (ex) {
-		console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex);
-	}
+	} catch (ex) { console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex); }
 };
 
 /**
@@ -1287,7 +1285,6 @@ WindowSnap.prototype.setHeightInset = function(dialog) {
  * @param {Dialog} dialog The window the offer is about, which the full-height indicator frames and the others only need for their z-order.
  */
 WindowSnap.prototype.snap = function(type, dialog) {
-
 	if (type === this._snapped) return;
 	this._snapped = type;
 
@@ -1318,14 +1315,11 @@ WindowSnap.prototype.snap = function(type, dialog) {
  */
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	if (!keepScale) dialog.setDragScale(1, 1);
-
 	if (this.hidden) return;
 
 	Helpers.animateElement(this.element, function() {
 		this.moveToDialog(dialog, 0, undefined, true);
-	}, function(name) {
-		return name === "inset";
-	}, function() {
+	}, "inset", function() {
 		this.hidden = true;
 	}, this, 120);
 };
@@ -1381,9 +1375,8 @@ ClickOffset.prototype.clear = function () { this.clickPosition.x = 0; this.click
 /** @param {number} x @param {number} y @param {number} [width] @param {number} [height] @param {number} [startX] @param {number} [startY] */
 ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
 	this.reset(); this.clickPosition.x = x; this.clickPosition.y = y;
-	if (typeof width === "number" && typeof height === "number" && typeof startX === "number" && typeof startY === "number") {
-		this.width = width; this.height = height; this.startX = startX; this.startY = startY;
-	}
+	if (typeof width === "number" && typeof height === "number" && typeof startX === "number" && typeof startY === "number")
+		this.width = width, this.height = height, this.startX = startX, this.startY = startY;
 	return this;
 };
 /** @param {boolean} enable @param {(ev:PointerEvent|MouseEvent)=>void} handler @param {Cursor} [cursor] */
