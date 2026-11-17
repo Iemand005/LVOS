@@ -56,10 +56,11 @@ function getParentWindow() {
 }
 
 /**
- * @param {MessageType} type
- * @param {*} [message]
+ * @template {MessageType} T
+ * @param {T} type
+ * @param {unknown} [message]
  * @param {string} [id]
- * @param {(value?: any)=>void} [callback]
+ * @param {CallbackFor<T>} [callback]
  */
 LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	var target = getParentWindow();
