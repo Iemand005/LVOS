@@ -65,9 +65,8 @@ LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	var target = getParentWindow();
 	var response;
 	try {
-		if (target && typeof target.__LVMessengerReceive === "function") {
+		if (target && typeof target.__LVMessengerReceive === "function")
 			response = target.__LVMessengerReceive(type, message, id);
-		}
 	} catch (ex) {
 		console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
 		if (target) LVMessenger.broadcast(target, type, message, id);
