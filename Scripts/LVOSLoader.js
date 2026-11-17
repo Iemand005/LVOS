@@ -18,16 +18,13 @@ Loader._onEventReady = function (target, modernEvent, fn) {
 		}
 	}
 
-	// If already complete (works for both document and cached scripts in IE)
-	if (target.readyState === "complete") {
-		finish();
-		return;
-	}
+	if (target.readyState === "complete")
+		return finish();
 
 	if (target.addEventListener) {
 		target.addEventListener(modernEvent, finish, false);
-	} else if ((target).attachEvent) {
-		/** @type {any} */ (target).attachEvent("onreadystatechange", function () {
+	} else if (target.attachEvent) {
+		target.attachEvent("onreadystatechange", function () {
 		if (target.readyState === "complete" || (target !== document && target.readyState === "loaded")) {
 			finish(window.event);
 		}
