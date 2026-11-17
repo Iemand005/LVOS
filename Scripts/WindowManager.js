@@ -2386,11 +2386,8 @@ Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	var nextY = scaleY || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
-	if (this._dragScaleAnimating) {
-		this.target.style.scale = "0.9";
-		return;
-	}
-		// return this.setScale(nextX, nextY, undefined, false);
+	if (this._dragScaleAnimating)
+		return this.setScale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
 	// this.animate(this.updateTransform, "transform", function() {

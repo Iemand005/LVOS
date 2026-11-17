@@ -442,7 +442,7 @@ content.animating,
 
 .compositor-animations .window > content {
 	transition: none !important;
-	transform-origin: left top;
+	transform-origin: center;
 	transition: scale 1s linear;
 }
 
