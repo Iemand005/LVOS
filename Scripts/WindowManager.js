@@ -761,10 +761,7 @@ WindowManager.prototype.getSnapContainer = function (dialog) {
  */
 WindowManager.prototype.getSnapGroup = function (section) {
 	var group = this.snapGroups.get(section);
-	if (!group) {
-		group = { windows: [] };
-		this.snapGroups.set(section, group);
-	}
+	if (!group) this.snapGroups.set(section, group = { windows: [] });
 	return group;
 };
 
@@ -785,8 +782,7 @@ WindowManager.prototype.snapHeight = function (section) {
  * @param {number} y
  */
 WindowManager.prototype.setPointerPosition = function (x, y) {
-	this.pointerPosition.x = x;
-	this.pointerPosition.y = y;
+	this.pointerPosition.x = x, this.pointerPosition.y = y;
 };
 
 /**
@@ -796,18 +792,15 @@ WindowManager.prototype.setPointerPosition = function (x, y) {
 WindowManager.prototype.snapDialog = function (dialog, zone) {
 	if (zone === "height") {
 		this.unsnapDialog(dialog);
-		dialog.toggleHeightSnapped(true);
-		return;
+		return dialog.toggleHeightSnapped(true);
 	}
 
 	if (zone === "maximize") {
 		this.unsnapDialog(dialog);
-		dialog.maximize();
-		return;
+		return dialog.maximize();
 	}
 
-	if (zone !== "left" && zone !== "right") return;
-	this.tileDialog(dialog, zone);
+	if (zone === "left" || zone === "right") this.tileDialog(dialog, zone);
 };
 
 /**
