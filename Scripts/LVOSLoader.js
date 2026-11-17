@@ -15,13 +15,13 @@ Loader.loadStyleSheet = function (url) {
 
 /**
  * @param {string} url
- * @param {GlobalEventHandlers['onload']} callback
+ * @param {GlobalEventHandlers['onload']} onLoad
  */
-Loader.loadScript = function (url, callback) {
+Loader.loadScript = function (url, onLoad) {
 	var script = document.createElement("script");
 	script.src = url;
 
-	script.onload = callback;
+	script.onload = onLoad;
 
 	document.head.appendChild(script);
 };
