@@ -72,6 +72,10 @@ LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	}
 };
 
+LVMessenger.get = function () {
+
+};
+
 /**
  * @param {MessageType} type
  * @param {HTMLIFrameElement} iFrame

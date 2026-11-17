@@ -1193,9 +1193,7 @@ function messageReceived(type, data, source){
 			case "visualizers":
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
-			case "os": return /** @type {VulpOS} */{
-					windowManager: windowManager
-				};
+			case "os": return /** @type {VulpOS} */{ windowManager: windowManager };
 		}
 	}
 };
