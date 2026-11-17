@@ -11,7 +11,9 @@ ExtensionApp.prototype.createList = function () {
 		var extension = extensions[extensionId];
 		if (!extension) return;
 		var item = document.createElement("li");
-		item.textContent = extension.name;
+		item.appendChild(document.createTextNode(extension.name));
+		var toggle = 
+		item.appendChild(toggle)
 		list.appendChild(item);
 	}
 };
