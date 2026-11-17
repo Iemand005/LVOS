@@ -9,9 +9,9 @@ type DialogEvent = { dialog: Dialog };
  */
 interface Extension {
 	/** Identifies the extension. Registering an extension with the same id replaces the old one. */
-	id?: string;
+	id: string;
 	/** Human readable name of the extension. */
-	name?: string;
+	name: string;
 	/** A description DUH!!! */
 	description?: string;
 	/** Whether the extension is switched on. Extensions are switched on when they are registered. */

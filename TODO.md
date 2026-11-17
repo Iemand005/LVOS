@@ -25,3 +25,5 @@ I hav to add uh things yeah things I need either a script loading config for app
 and jus like settings i need there t b a object or extensions that generates the  same ui ilelmme d that firt yeah! I can put a class o  n the parent that tells what type of list it is then just slap oon a raw htlml 7 list element and have it apply my ui design!!
 
 I think the messageReceived callback needs to be moved wosoemwher welse cuz like lvosmobile needs it to donnit maybeid
+
+make loadr inject polies?

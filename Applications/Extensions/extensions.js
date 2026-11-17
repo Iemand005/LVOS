@@ -11,7 +11,7 @@ LVMessenger.get("os", function(os) {
 		var extension = extensions[extensionId];
 		if (!extension) return;
 		var item = document.createElement("li");
-		item.textContent = extension?.name;
+		item.textContent = extension.name;
 		list.appendChild(item);
 	}
 });
