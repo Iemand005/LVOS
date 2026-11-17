@@ -18,6 +18,8 @@ test('debug snap', async ({ vulpOS }) => {
 			candidates.push([Math.round(cx), el && el.tagName, el && (el as HTMLElement).className, el && el.closest('button, a, input, select, label, output, [contenteditable]') !== null]);
 		}
 		return {
+			state: { x: d.x, y: d.y, width: d.width, height: d.height },
+			header: d.titleBar && d.titleBar.outerHTML.slice(0, 500),
 			rect: { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
 			candidates,
 			under: under && under.outerHTML.slice(0, 300),

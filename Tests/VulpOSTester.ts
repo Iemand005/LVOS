@@ -214,7 +214,7 @@ export class VulpOSTester {
 				const under = document.elementFromPoint(x, y);
 				const interactive = under && under.closest('button, a, input, select, label, output, [contenteditable]');
 
-				if (under && bar.contains(under) && !interactive) return { x, y };
+				if (under && (bar.contains(under) || window.target!.contains(under)) && !interactive) return { x, y };
 			}
 
 			throw new Error('No draggable spot on the title bar');
