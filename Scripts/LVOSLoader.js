@@ -1,15 +1,15 @@
 
 /** @class */
-function Loader() {}
+function Loader() { }
 
 /** @param {string} url */
-Loader.loadStyleSheet = function(url) {
-  var link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.type = 'text/css';
-  link.href = url;
-  
-  document.head.appendChild(link);
+Loader.loadStyleSheet = function (url) {
+	var link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = url;
+
+	document.head.appendChild(link);
 
 };
 
@@ -17,13 +17,13 @@ Loader.loadStyleSheet = function(url) {
  * @param {string} url
  * @param {(*)->void} callback
  */
-Loader.loadScript = function(url, callback) {
-  var script = document.createElement('script');
-  script.src = url;
+Loader.loadScript = function (url, callback) {
+	var script = document.createElement('script');
+	script.src = url;
 
-  script.onload = callback;
+	script.onload = callback;
 
-  document.head.appendChild(script);
+	document.head.appendChild(script);
 };
 
 var scriptSrc = document.currentScript.src;
