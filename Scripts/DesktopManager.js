@@ -428,7 +428,7 @@ DesktopManager.prototype.init = function() {
 	}
 
 
-	setTimeout(this.finishBootAnimationEarly, 200);
+	setTimeout(this.finishBootAnimationEarly.bind(this), 200);
 };
 
 Object.defineProperty(DesktopManager.prototype, "overlay", {

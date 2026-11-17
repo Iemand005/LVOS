@@ -569,7 +569,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 	this.setPointerPosition(newX, newY);
 
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
-	if (snap && this.dragAction.direction) {
+	if (snap) {
 
 		var snapZone = this.getGestureSnapZone(dialog, this.dragAction.direction, newX, newY);
 		if (snapZone) {
@@ -961,7 +961,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	if (this.isTouchDrag) this.activeDialog.setDragScale(1, 1);
 
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
-	if (snap && dragDirection) {
+	if (snap) {
 
 		var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
 		if (snapZone) this.snapDialog(this.activeDialog, snapZone);

@@ -39,7 +39,7 @@ input[type="checkbox"] {
 	border-radius: 999px;
 	position: relative;
 	cursor: pointer;
-	transition: background-color 0.25s ease;
+	transition: background-color 0.15s ease;
 }
 
 input[type="checkbox"]::before {
@@ -51,7 +51,7 @@ input[type="checkbox"]::before {
 	aspect-ratio: 1;
 	background-color: white;
 	border-radius: 50%;
-	transition: transform 180ms cubic-bezier(.27,.47,.32,.94);
+	transition: all 180ms cubic-bezier(.27,.47,.32,.94);
 }
 
 input[type="checkbox"]:hover::before {
