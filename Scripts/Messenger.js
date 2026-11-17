@@ -4,8 +4,8 @@
 
 "use strict";
 
-function LVMessenger(){
-}
+/** @class */
+function LVMessenger(){}
 
 /**
  * @param {Window | BroadcastChannel} target
