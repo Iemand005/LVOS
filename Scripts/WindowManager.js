@@ -1157,7 +1157,7 @@ function messageReceived(type, data, source){
 		case "os": return /** @type {VulpOS} */{ windowManager: windowManager };
 	}
 
-	if (source && windowManager) {
+	if (source) {
 
 		var dialog = windowManager.windows[source];
 
