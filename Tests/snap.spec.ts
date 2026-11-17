@@ -128,14 +128,15 @@ test('leaves a window alone when a resize never reaches the edge', async ({ vulp
 	const bottomSizer = await vulpOS.sizerPoint(window, 3);
 
 	// Shrink from the bottom instead: the edge starts wherever the window was placed
-	// and moves away from the screen, so the sizer outline stays but no snap is applied.
+	// and moves away from the screen, so there is nothing to offer.
 	await vulpOS.grabAt(bottomSizer);
+	expect(await vulpOS.snapIndicatorShown()).toBe(false);
+
 	await vulpOS.moveTo({ x: bottomSizer.x, y: bottomSizer.y - 150 });
 
 	const shrunk = await vulpOS.measure(window);
 	expect(shrunk.y + shrunk.height).toBeLessThan(shrunk.sectionY + shrunk.sectionHeight - 40);
-	expect(await vulpOS.snapIndicatorShown()).toBe(true);
-	expect((await vulpOS.state(window)).heightSnapped).toBe(false);
+	expect(await vulpOS.snapIndicatorShown()).toBe(false);
 
 	await vulpOS.release();
 
