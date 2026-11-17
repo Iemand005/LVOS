@@ -1153,6 +1153,10 @@ WindowManager.prototype.notifyExtensions = function(hook, dialog) {
  */
 function messageReceived(type, data, source){
 
+	switch (type) {
+		case "os": return /** @type {VulpOS} */{ windowManager: windowManager };
+	}
+
 	if (source && windowManager) {
 
 		var dialog = windowManager.windows[source];
@@ -1193,7 +1197,6 @@ function messageReceived(type, data, source){
 			case "visualizers":
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
-			case "os": return /** @type {VulpOS} */{ windowManager: windowManager };
 		}
 	}
 };
