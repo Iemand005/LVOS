@@ -44,14 +44,14 @@ body.exposé {
 	view-timeline-inset: 100%;
 }
 
-body::before {
+body.exposé::before {
 	content: "";
 	display: block;
 	flex: 0 0 1px;
 	scroll-snap-align: start;
 }
 
-body::after {
+body.exposé::after {
 	content: "";
 	display: block;
 	flex: 0 0 1px;
