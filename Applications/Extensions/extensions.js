@@ -15,9 +15,10 @@ ExtensionApp.prototype.createList = function () {
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
 		toggle.checked = extension.enabled;
+		var self = this;
 		toggle.onclick = function () {
-			// this.wm
-		}
+			self.wm.setExtensionEnabled(extension, !extension?.enabled);
+		};
 		item.appendChild(toggle);
 		list.appendChild(item);
 	}
