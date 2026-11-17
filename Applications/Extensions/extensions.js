@@ -4,8 +4,8 @@ function ExtensionApp(windowManager) {
 	this.wm = windowManager;
 }
 
-/** @param {Extension[]} extensions */
-ExtensionApp.prototype.createList = function (extensions) {
+ExtensionApp.prototype.createList = function () {
+	var extensions = this.wm.extensions;
 	var list = document.createElement("ul");
 	for (var extensionId in extensions) {
 		var extension = extensions[extensionId];
@@ -18,7 +18,7 @@ ExtensionApp.prototype.createList = function (extensions) {
 
 LVMessenger.get("os", function(os) {
 	console.log("YO I got that thing and woah intellicode is working!??", os);
-	var extensions = os.windowManager.extensions;
-	createList(extensions);
+	var ea = new ExtensionApp;
+	ea.createList();
 });
 
