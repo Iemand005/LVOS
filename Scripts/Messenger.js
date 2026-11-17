@@ -59,7 +59,7 @@ function getParentWindow() {
  * @param {MessageType} type
  * @param {*} [message]
  * @param {string} [id]
- * @param {(value: any)=>void} [callback]
+ * @param {(value?: any)=>void} [callback]
  */
 LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	var target = getParentWindow();
@@ -76,8 +76,20 @@ LVMessenger.broadcastToParent = function (type, message, id, callback) {
 };
 
 /**
- * @param {MessageType} type
- * @param {()=>void} [callback]
+ * @typedef {{
+ *   os: (userId: string, name: string) => void,
+ * }} MessageCallbackMap
+ */
+
+/**
+ * @template {MessageType} T
+ * @typedef {T extends keyof MessageCallbackMap ? MessageCallbackMap[T] : () => void} CallbackFor
+ */
+
+/**
+ * @template {MessageType} T
+ * @param {T} type
+ * @param {CallbackFor<T>} [callback]
  */
 LVMessenger.get = function (type, callback) {
 	LVMessenger.broadcastToParent(type, {}, undefined, callback);
