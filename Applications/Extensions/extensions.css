@@ -17,6 +17,10 @@ li {
 	justify-content: space-between;
 }
 
+li:not(:last-of-type) {
+	border-bottom: 1px solid blackb;
+}
+
 label:has(input[type="checkbox"]) {
 	display: inline-flex;
 	align-items: center;
