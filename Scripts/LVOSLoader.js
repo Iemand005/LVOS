@@ -1,6 +1,9 @@
 
+/** @class */
+function Loader() {}
 
-function loadStyleSheet(url) {
+/** @param {string} url */
+Loader.loadStyleSheet = function(url) {
   var link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
@@ -8,16 +11,20 @@ function loadStyleSheet(url) {
   
   document.head.appendChild(link);
 
-}
+};
 
-function loadScript(url, callback) {
+/**
+ * @param {string} url
+ * @param {(*)->void} callback
+ */
+Loader.loadScript = function(url, callback) {
   var script = document.createElement('script');
   script.src = url;
-  
+
   script.onload = callback;
-  
+
   document.head.appendChild(script);
-}
+};
 
 var scriptSrc = document.currentScript.src;
 var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);

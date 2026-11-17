@@ -1,0 +1,2 @@
+
+LVMessenger.registerThemeChangeHandler();
