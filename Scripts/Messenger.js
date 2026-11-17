@@ -59,8 +59,9 @@ function getParentWindow() {
  * @param {MessageType} type
  * @param {*} [message]
  * @param {string} [id]
+ * @param {()=>void} callback
  */
-LVMessenger.broadcastToParent = function (type, message, id) {
+LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	var target = getParentWindow();
 	try {
 		if (target && typeof target.__LVMessengerReceive === "function")
