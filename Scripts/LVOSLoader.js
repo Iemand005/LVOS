@@ -59,7 +59,7 @@ function hasAttributeCompat(el, attrName) {
 }
 
 Loader.onReady(function () {
-	var script = document.currentScript && "src" in document.currentScript && document.currentScript ;
+	var script = document.currentScript && "src" in document.currentScript && document.currentScript;
 
 	if (script) {
 		var scriptSrc = script.src;
@@ -68,9 +68,9 @@ Loader.onReady(function () {
 		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
 
 		Loader.loadStyleSheet(stylePath);
-		
+
 		var hasTheme = hasAttributeCompat(script, "data-theme");
-	
+
 		if (hasTheme) {
 			console.log("LVOSLoader: data-theme detected!");
 		} else {
