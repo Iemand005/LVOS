@@ -59,23 +59,23 @@ function hasAttributeCompat(el, attrName) {
 }
 
 Loader.onReady(function () {
+	var script = document.currentScript && "src" in document.currentScript;
 
-	var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
-	if (scriptSrc) {
+	if (script) {
+		var scriptSrc = document.currentScript.src;
 		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
 		var stylePath = scriptDir + "../Styles/general.css";
 		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
 
 		Loader.loadStyleSheet(stylePath);
-	}
-
-	var hasTheme = hasAttributeCompat(loaderScript, "data-theme");
-
-	if (hasTheme) {
-		// `data-theme` is present! Inject your theme CSS or enable theme mode
-		console.log("LVOSLoader: data-theme detected!");
-	} else {
-		// `data-theme` was omitted
-		console.log("LVOSLoader: no data-theme attribute.");
-	}
+		
+		var hasTheme = hasAttributeCompat(loaderScript, "data-theme");
+	
+		if (hasTheme) {
+			console.log("LVOSLoader: data-theme detected!");
+		} else {
+			console.log("LVOSLoader: no data-theme attribute.");
+		}
+	};
 });
+
