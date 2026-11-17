@@ -28,13 +28,13 @@ Loader.loadScript = function (url, onLoad) {
 
 /** @param {()=>void} fn */
 Loader.onReady = function (fn) {
-	if (document.readyState === 'complete') {
+	if (document.readyState === "complete") {
 		fn();
 	} else if (document.addEventListener) {
-		document.addEventListener('DOMContentLoaded', fn, false);
+		document.addEventListener("DOMContentLoaded", fn, false);
 	} else if (document.attachEvent) {
-		document.attachEvent('onreadystatechange', function () {
-			if (document.readyState === 'complete') {
+		document.attachEvent("onreadystatechange", function () {
+			if (document.readyState === "complete") {
 				fn();
 			}
 		});
