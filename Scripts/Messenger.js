@@ -72,8 +72,12 @@ LVMessenger.broadcastToParent = function (type, message, id, callback) {
 	}
 };
 
-LVMessenger.get = function () {
-
+/**
+ * @param {MessageType} type
+ * @param {()=>void} [callback]
+ */
+LVMessenger.get = function (type, callback) {
+	LVMessenger.broadcastToParent(type, {}, undefined, callback);
 };
 
 /**
