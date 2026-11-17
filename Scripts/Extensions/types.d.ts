@@ -15,7 +15,7 @@ interface Extension {
 	/** A description DUH!!! */
 	description?: string;
 	/** Whether the extension is switched on. Extensions are switched on when they are registered. */
-	enabled: boolean;
+	enabled?: boolean;
 	/** Flags defined by the extension */
 	flags?: PropertyDescriptorMap & ThisType<any>;
 	/** Called when the extension is switched on. */
