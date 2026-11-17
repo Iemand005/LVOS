@@ -1481,6 +1481,8 @@ var windowButtons = {
 	close: 2
 };
 
+var restoreWindowIcon = '<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg>';
+
 /**
  * @author Lasse Lauwerys
  * @param {Application} application
@@ -1685,7 +1687,7 @@ function Dialog(application) {
 				if (node.nodeName && node.nodeName.toLowerCase() === "button") return;
 				node = node.parentElement;
 			}
-			self.toggleMaximized();
+			self.toggleMaximizeButton();
 		};
 	}
 
@@ -1700,10 +1702,14 @@ function Dialog(application) {
 	if (closeButton)
 		closeButton.onclick = this.close.bind(this);
 	var fullscreenButton = buttons[windowButtons.full];
-	if (fullscreenButton)
-		fullscreenButton.onclick = function () { self.toggleMaximized(); };
+	if (fullscreenButton) {
+		this._maximizeButton = fullscreenButton;
+		this._maximizeIcon = fullscreenButton.innerHTML;
+		fullscreenButton.onclick = function () { self.toggleMaximizeButton(); };
+	}
 
 	this.toggleOpen(false);
+	this.updateMaximizeButton();
 
 	target.ondragstart = function (event) {
 		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
@@ -2565,6 +2571,26 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 	this._toggleSnap("height-snapped", enable, false, function (name) {
 		return name === "height" || name === "transform";
 	}, function () { this.move(this.x, 0); });
+};
+
+Dialog.prototype.toggleMaximizeButton = function () {
+	if (this.snapped) {
+		if (windowManager) windowManager.unsnapDialog(this);
+		else this.toggleSnapped(false);
+	}
+	if (this.heightSnapped) this.toggleHeightSnapped(false);
+	if (!this.snapped && !this.heightSnapped && !this.maximized) this.toggleMaximized();
+};
+
+/** @param {boolean} [restored] */
+Dialog.prototype.updateMaximizeButton = function (restored) {
+	var button = this._maximizeButton;
+	if (!button || typeof this._maximizeIcon !== "string") return;
+	if (typeof restored !== "boolean") restored = this.maximized || this.snapped || this.heightSnapped;
+	var html = restored ? restoreWindowIcon : this._maximizeIcon;
+	if (button.innerHTML !== html) button.innerHTML = html;
+	if (restored) button.setAttribute("aria-label", "Restore");
+	else button.removeAttribute("aria-label");
 };
 
 /** @param {boolean} [enable] */
