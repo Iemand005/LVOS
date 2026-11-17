@@ -10,7 +10,7 @@ function Loader() { }
 Loader._onEventReady = function (target, modernEvent, fn) {
 	var done = false;
 
-	/** @param {T} [ev] */
+	/** @param {EventListenerOrEventListenerObject} [ev] */
 	function finish(ev) {
 		if (!done) {
 			done = true;
