@@ -1113,8 +1113,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	if (!ext || typeof ext !== "object") return;
 
 	var callback = /** @type {((this: Extension, dialog?: Dialog) => void)} */(ext[hook]);
-	if (typeof callback !== "function") return;
-	try {
+	if (typeof callback === "function") try {
 		callback.call(ext, dialog);
 	} catch (ex) {
 		console.warn("Extension '" + (ext.id || "unknown") + "' failed on " + hook + ":", ex);
