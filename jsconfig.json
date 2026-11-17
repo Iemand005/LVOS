@@ -21,13 +21,14 @@
 
 	"ignoreDeprecations": "6.0",
 	"include": [
+		"Types/types.d.ts", "Types/overrides.d.ts",
 		"./Scripts/**/*.js",
 		"./Scripts/**/*.d.ts",
 		"ScrollTabs/**/*.js",
 		"*.d.ts",
 		"*.hta",
 		"*.html",
-		"node_modules/com-types/lib.com.web.d.ts", "Types/types.d.ts", "Types/overrides.d.ts"
+		"node_modules/com-types/lib.com.web.d.ts"
 	],
 	"exclude": [
 		"node_modules",
