@@ -72,13 +72,13 @@ LVMessenger.broadcastToParent = function (type, message, id, callback) {
 		console.warn("Direct parent bridge failed, falling back to postMessage.", ex);
 		if (target) LVMessenger.broadcast(target, type, message, id);
 	}
-
+	// @ts-ignore
 	if (callback) callback(response);
 };
 
 /**
  * @typedef {{
- *   os: (userId: string, name: string) => void,
+ *   os: (os: VulpOS) => void,
  * }} MessageCallbackMap
  */
 
