@@ -193,7 +193,8 @@ test('keeps the right window on the right half when unsnapping the left window',
 	const win2 = await vulpOS.openCube('cube2', 'Cube 2');
 	await vulpOS.enableAeroSnap();
 
-	await vulpOS.drag(await vulpOS.titleBarPoint(win2), { x: 1000, y: 400 });
+	const area = await vulpOS.measure(win2);
+	await vulpOS.drag(await vulpOS.titleBarPoint(win2), { x: area.sectionX + area.sectionWidth - 2, y: 400 });
 	await win1.evaluate(d => (d as any).activate());
 	await vulpOS.drag(await vulpOS.titleBarPoint(win1), { x: 2, y: 400 });
 
