@@ -54,8 +54,7 @@ function hasAttributeCompat(el, attrName) {
 	var attrNode = el.getAttributeNode ? el.getAttributeNode(attrName) : null;
 	if (attrNode) attrNode.specified;
 
-	var val = el.getAttribute(attrName);
-	return val !== null && val !== undefined;
+	return typeof el.getAttribute(attrName) === "string";
 }
 
 Loader.onReady(function () {
