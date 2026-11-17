@@ -20,15 +20,11 @@ Loader._onEventReady = function (target, modernEvent, fn) {
 	if (target.readyState === "complete")
 		return finish();
 
-	if (target.addEventListener) {
-		target.addEventListener(modernEvent, finish, false);
-	} else if (target.attachEvent) {
-		target.attachEvent("onreadystatechange", function () {
-		if (target.readyState === "complete" || (target !== document && target.readyState === "loaded")) {
+	if (target.addEventListener) target.addEventListener(modernEvent, finish, false);
+	else if (target.attachEvent) target.attachEvent("onreadystatechange", function () {
+		if (target.readyState === "complete" || (target !== document && target.readyState === "loaded"))
 			finish(window.event);
-		}
 	});
-	}
 };
 
 /** @param {() => void} fn */
