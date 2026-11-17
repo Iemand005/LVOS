@@ -1512,8 +1512,8 @@ function Dialog(application) {
 	this.velocityTracking = false;
 	this.velocityX = 0;
 	this.velocityY = 0;
-	this._minWidth = 200;
-	this._minHeight = 40;
+	this._minWidth = 169;
+	this._minHeight = 30;
 	this._maxWidth = 2000;
 	this._maxHeight = 1000;
 	this._minAspectRatio = 0;
@@ -1645,7 +1645,7 @@ function Dialog(application) {
 		self.setIcon(self.getIconUrl());
 	});
 
-	this.setMinSize(180, 250, false);
+	// this.setMinSize(180, 2, false);
 
 	this.toggleButton(windowButtons.close, true);
 	this.toggleButton(windowButtons.full, true);
