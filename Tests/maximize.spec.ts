@@ -110,3 +110,40 @@ test('maximize lands via standard class animation when compositor resize is disa
 	expect(Math.abs(restoredRect.x - before.x)).toBeLessThan(2);
 	expect(Math.abs(restoredRect.y - before.y)).toBeLessThan(2);
 });
+
+test('dragging down from a maximized window clears maximize state', async ({ vulpOS }) => {
+	const cube = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+	await vulpOS.setAnimations(true);
+	await cube.evaluate(() => {
+		(globalThis as any).flags.useTransform = true;
+		(globalThis as any).flags.useViewTransitionMaximize = false;
+		(globalThis as any).flags.compositorResize = true;
+	});
+
+	const snappedPoint = await vulpOS.titleBarPoint(cube);
+	await vulpOS.drag(snappedPoint, { x: snappedPoint.x, y: 2 });
+	await expect.poll(() => vulpOS.state(cube).then(s => s.maximized), { timeout: 4000 }).toBe(true);
+
+	const dragPoint = await vulpOS.titleBarPoint(cube);
+	await vulpOS.drag(dragPoint, { x: dragPoint.x, y: dragPoint.y + 220 });
+
+	await expect.poll(() => cube.evaluate((dialog: any) => ({
+		maximized: dialog.maximized,
+		maximizedClass: dialog.target!.classList.contains('maximized'),
+		scaledMaxClass: dialog.target!.classList.contains('scaled-max'),
+		animatingClass: dialog.target!.classList.contains('animating'),
+		animations: dialog.maximizeAnimations,
+		maximizing: dialog._maximizing,
+	})), { timeout: 4000 }).toEqual({
+		maximized: false,
+		maximizedClass: false,
+		scaledMaxClass: false,
+		animatingClass: false,
+		animations: 0,
+		maximizing: false,
+	});
+
+	const transform = await cube.evaluate((dialog: any) => dialog.target!.style.transform);
+	expect(transform).not.toContain('scale(');
+});

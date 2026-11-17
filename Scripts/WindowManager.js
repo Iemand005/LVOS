@@ -535,7 +535,7 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		if (!flags.aeroSnap) return;
 		var snapSection = this.getSnapContainer(dialog);
 		dialog.remapClickOffset(0, 0, this.snapWidth(snapSection), this.snapHeight(snapSection));
-		dialog.maximized = false;
+		dialog.unmaximizeForDrag();
 	} else if (dialog.snapped) {
 		var frame = dialog._snapFrame;
 		if (frame) dialog.remapClickOffset(frame.x, frame.y, frame.width, frame.height);
