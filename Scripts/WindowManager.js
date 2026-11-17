@@ -1185,61 +1185,6 @@ WindowManager.prototype.notifyExtensions = function(hook, dialog) {
 	}
 };
 
-/**
- * @param {MessageType} type
- * @param {any} data
- * @param {string} [source]
- */
-function messageReceived(type, data, source){
-
-	switch (type) {
-		case "os": return /** @type {VulpOS} */{ windowManager: windowManager };
-	}
-
-	if (source) {
-
-		var dialog = windowManager.windows[source];
-
-		if (!dialog) return;
-
-		if (type === "window-size") dialog.resizeBody(data.width, data.height); // Client dictates its size; window wraps around the client area.
-		switch (type) {
-			case "launchOverlay":
-				var overlay = Helpers.getOverlay();
-				if (!overlay) break;
-
-				overlay.ontransitionend = function() {
-					if (!dialog) return;
-					dialog.messageFrame("prepareToLaunchOverlay");
-					if (dialog.frame) {
-						var oriel = new URL(dialog.frame.src);
-						oriel.searchParams.set("fullscreen", String(true));
-						dialog.frame.src = oriel.href;
-					}
-					if (!overlay) return;
-					overlay.ontransitionend = null;
-					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
-					if (dialog.body) overlay.appendChild(dialog.body);
-					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
-				};
-				overlay.classList.toggle("open");
-				break;
-			case "readyToLaunchOverlay":
-				var overlay1 = Helpers.getOverlay();
-				if (!overlay1) break;
-				if (dialog.body) overlay1.appendChild(dialog.body);
-				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
-				break;
-			case "pip":
-				dialog.moveElementIntoPipById(data.id, data.stylesheet);
-				break;
-			case "visualizers":
-				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
-				break;
-		}
-	}
-};
-
 /** @type {number} */
 WindowSnap.margin = 15;
 
@@ -3317,9 +3262,6 @@ window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 var windowManager = new WindowManager;
 window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
-
-window.__LVMessengerReceive = messageReceived;
-window.__LVMessenger = {};
 
 //#endregion
 

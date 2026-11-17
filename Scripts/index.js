@@ -11,8 +11,6 @@ function init() {
 		});
 		if (!isBlink) DesktopManager.removeTheme("glass");
 		windowManager.initializeDialogs();
-
-		LVMessenger.receive(messageReceived);
 	}
 	// return;
 	var launchpadElement = document.getElementById("launchpad");

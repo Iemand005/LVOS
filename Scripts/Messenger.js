@@ -123,3 +123,115 @@ LVMessenger.registerThemeChangeHandler = function() {
 			document.body.className = data.className;
 	});
 };
+
+/**
+ * Find the frame that sent a message, on either the desktop or the mobile host.
+ * @param {string} [source]
+ * @returns {HTMLIFrameElement | null}
+ */
+LVMessenger.getFrameForSource = function(source) {
+	if (!source) return null;
+	var wm = window.windowManager;
+	if (wm) {
+		var dialog = wm.windows && wm.windows[source];
+		return dialog && dialog.frame || null;
+	}
+	var manager = window.mobileFrameManager;
+	if (!manager) return null;
+	var frames = manager._frames;
+	if (frames && frames[source]) return frames[source];
+	return typeof manager.getActiveFrame === "function" ? manager.getActiveFrame() : null;
+};
+
+/**
+ * Put a mobile app frame into fullscreen, keeping the app's fullscreen styling in sync.
+ * @param {HTMLIFrameElement} frame
+ */
+LVMessenger.fullscreenFrame = function(frame) {
+	if (!frame) return;
+	LVMessenger.broadcastToChild("prepareToLaunchOverlay", frame);
+	try {
+		var url = new URL(frame.src, location.href);
+		url.searchParams.set("fullscreen", "true");
+		frame.src = url.href;
+	} catch (ex) {
+		if (frame.src.indexOf("fullscreen=true") === -1)
+			frame.src += (frame.src.indexOf("?") === -1 ? "?" : "&") + "fullscreen=true";
+	}
+	var container = document.getElementById("main-frame");
+	if (container) container.classList.add("fullscreen");
+	try {
+		if (typeof frame.requestFullscreen === "function") {
+			var request = frame.requestFullscreen();
+			if (request && typeof request["catch"] === "function") request["catch"](function() {});
+		} else if (typeof frame.msRequestFullscreen === "function") frame.msRequestFullscreen();
+	} catch (ex) {}
+};
+
+/**
+ * Handle a message sent by an app frame or another LVOS instance.
+ * @param {MessageType} type
+ * @param {any} data
+ * @param {string} [source]
+ */
+function messageReceived(type, data, source) {
+	var wm = window.windowManager;
+
+	switch (type) {
+		case "os": return /** @type {VulpOS} */({ windowManager: wm });
+	}
+
+	if (!source) return;
+
+	var dialog = wm && wm.windows ? wm.windows[source] : null;
+	var frame = dialog ? dialog.frame : LVMessenger.getFrameForSource(source);
+
+	if (dialog && type === "window-size" && data && typeof data === "object")
+		dialog.resizeBody(data.width, data.height);
+
+	switch (type) {
+		case "launchOverlay":
+			if (dialog) {
+				var overlay = Helpers.getOverlay();
+				if (!overlay) break;
+
+				overlay.ontransitionend = function() {
+					if (!dialog) return;
+					dialog.messageFrame("prepareToLaunchOverlay");
+					if (dialog.frame) {
+						var oriel = new URL(dialog.frame.src);
+						oriel.searchParams.set("fullscreen", String(true));
+						dialog.frame.src = oriel.href;
+					}
+					if (!overlay) return;
+					overlay.ontransitionend = null;
+					if (typeof overlay.requestFullscreen === "function") overlay.requestFullscreen()["catch"](function() {});
+					if (dialog.body) overlay.appendChild(dialog.body);
+					window.setTimeout(overlay.classList.add.bind(overlay.classList, "shown"), 500);
+				};
+				overlay.classList.toggle("open");
+			} else if (frame) LVMessenger.fullscreenFrame(frame);
+			break;
+		case "readyToLaunchOverlay":
+			if (dialog) {
+				var overlay1 = Helpers.getOverlay();
+				if (!overlay1) break;
+				if (dialog.body) overlay1.appendChild(dialog.body);
+				window.setTimeout(overlay1.classList.add.bind(overlay1.classList, "shown"), 500);
+			} else if (frame) {
+				var container = document.getElementById("main-frame");
+				if (container) container.classList.add("fullscreen");
+			}
+			break;
+		case "pip":
+			if (dialog) dialog.moveElementIntoPipById(data.id, data.stylesheet);
+			break;
+		case "visualizers":
+			if (dialog && wm) dialog.messageFrame("visualizers", wm.getVisualizerApps());
+			break;
+	}
+}
+
+window.__LVMessengerReceive = messageReceived;
+window.__LVMessenger = window.__LVMessenger || {};
+LVMessenger.receive(messageReceived);

@@ -64,6 +64,7 @@ declare global {
 		appManager?: AppManager;
 		windowManager?: WindowManager;
 		windows?: Dialog[];
+		mobileFrameManager?: MobileFrameManager;
 
 		__LVMessengerReceive?: (type: MessageType, data: any, source?: string) => void;
 		__LVMessenger?: {
