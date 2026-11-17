@@ -2568,13 +2568,8 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 };
 
 Dialog.prototype.toggleMaximizeButton = function () {
-	if (this.snapped) {
-		if (windowManager) windowManager.unsnapDialog(this);
-		else this.toggleSnapped(false);
-	}
-	if (this.heightSnapped) {
-		this.toggleHeightSnapped(false);
-	}
+	if (this.snapped) windowManager.unsnapDialog(this);
+	if (this.heightSnapped) this.toggleHeightSnapped(false);
 	if (!(this.snapped || this.heightSnapped)) this.toggleMaximized();
 };
 
