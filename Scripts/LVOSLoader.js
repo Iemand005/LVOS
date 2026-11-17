@@ -37,10 +37,8 @@ Loader._onEventReady = function (target, modernEvent, fn) {
 
 /** @param {() => void} fn */
 Loader.onReady = function (fn) {
-	if (document.readyState === "interactive" && !document.attachEvent) {
-		fn();
-		return;
-	}
+	if (document.readyState === "interactive" && !document.attachEvent)
+		return fn();
 	Loader._onEventReady(document, "DOMContentLoaded", fn);
 };
 
@@ -66,9 +64,7 @@ Loader.loadScript = function (url, onLoad) {
 	script.src = url;
 	script.defer = true;
 
-	if (onLoad) {
-		Loader._onEventReady(script, "load", onLoad);
-	}
+	if (onLoad) Loader._onEventReady(script, "load", onLoad);
 
 	head.appendChild(script);
 };
@@ -78,13 +74,7 @@ Loader.loadScript = function (url, onLoad) {
  * @param {string} attrName
  */
 function hasAttributeCompat(el, attrName) {
-	if (!el) return false;
-
-	if (typeof el.hasAttribute === "function") {
-		return el.hasAttribute(attrName);
-	}
-
-	return typeof el.getAttribute(attrName) === "string";
+	return el && (typeof el.hasAttribute === "function" ? el.hasAttribute(attrName) : typeof el.getAttribute(attrName) === "string");
 }
 
 /** @returns {HTMLScriptElement | null} */
