@@ -2657,6 +2657,32 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}, function() { if (enable) toggleMaximized(); });
 	}
 };
+
+Dialog.prototype.unmaximizeForDrag = function() {
+	var target = this.target;
+	var content = this.content;
+	if (!target || !this.maximized) return;
+	if (document.activeViewTransition && document.activeViewTransition.skipTransition)
+		document.activeViewTransition.skipTransition();
+	Helpers.cancelAnimation(target);
+	target.classList.remove("animating", "scaled-max", "maximized");
+	target.style.pointerEvents = "";
+	target.style.transformOrigin = "";
+	target.style.viewTransitionName = "";
+	if (this.transform) this.transform.scale(1, 1, false, false);
+	if (content) {
+		Helpers.transformElement(content, { x: 0, y: 0, scaleX: 1, scaleY: 1 });
+		content.style.width = "";
+		content.style.height = "";
+		content.style.transformOrigin = "center";
+	}
+	if (this.useTransform) this.toggleMinSizeConstraints(false);
+	this._maximizing = false;
+	this.maximizeAnimations = 0;
+	this.broadcastState({ maximized: false });
+};
+
+/** @param {boolean} [enable] */
 Dialog.prototype.maximize = function () { this.toggleMaximized(true); };
 /**
  * @param {MessageType} type
