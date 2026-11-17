@@ -27,3 +27,5 @@ and jus like settings i need there t b a object or extensions that generates the
 I think the messageReceived callback needs to be moved wosoemwher welse cuz like lvosmobile needs it to donnit maybeid
 
 make loadr inject polies?
+
+toggle ui design oveer checkbox tags wth animation
