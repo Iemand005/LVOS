@@ -714,9 +714,7 @@ WindowManager.prototype.leaveHeightSnappedByResize = function (dialog) {
 	dialog.updateHeight();
 
 	var offset = dialog.clickOffset;
-		offset.height = dialog.height;
-		offset.startX = dialog.x;
-		offset.startY = dialog.y;
+	offset.height = dialog.height, offset.startX = dialog.x, offset.startY = dialog.y;
 };
 
 /**
@@ -740,9 +738,7 @@ WindowManager.prototype.getGestureSnapZone = function (dialog, direction, x, y) 
 		return atEdge ? "height" : "";
 	}
 
-	if (direction !== 0) return "";
-
-	return this.getSnapZone(x, y, section);
+	return direction === 0 ? this.getSnapZone(x, y, section) : "";
 };
 
 /**
