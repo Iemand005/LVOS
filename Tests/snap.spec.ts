@@ -113,6 +113,7 @@ test('tiles a window dragged to the side with touch, even while animations run',
 	const snapped = await vulpOS.state(window);
 	expect(snapped.snapped).toBe(true);
 
+	await vulpOS.page.waitForTimeout(800);
 	const tiled = await vulpOS.measure(window);
 	expectNear(tiled.width, tiled.sectionWidth / 2);
 	expectNear(tiled.x, tiled.sectionX);
@@ -189,7 +190,7 @@ test('eases the indicator in from behind the window, not from where it was last 
 
 test('keeps the right window on the right half when unsnapping the left window', async ({ vulpOS }) => {
 	const win1 = await vulpOS.openCube();
-	const win2 = await vulpOS.openCube();
+	const win2 = await vulpOS.openCube('cube2', 'Cube 2');
 	await vulpOS.enableAeroSnap();
 
 	// Snap first to left, second to right

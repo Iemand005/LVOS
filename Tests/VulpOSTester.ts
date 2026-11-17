@@ -113,9 +113,8 @@ export class VulpOSTester {
 	}
 
 	/** Install, launch and wait until the window exists to be measured. */
-	async openCube() {
-		const id = 'cube';
-		const dialog = await this.installApp(id, 'Cube');
+	async openCube(id = 'cube', name = 'Cube') {
+		const dialog = await this.installApp(id, name);
 
 		await this.launchWindow(dialog);
 		await this.assertWindowOpen(dialog);
