@@ -32,7 +32,7 @@ test('tiles a window dropped on the left edge and lets go when it is dragged awa
 	expect((await vulpOS.state(window)).snapped).toBe(false);
 });
 
-test('expands the snap indicator on sizer pointerdown, before any move', async ({ vulpOS }) => {
+test('expands the snap indicator on touch sizer pointerdown, before any move', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
 	await vulpOS.setAnimations(true);
@@ -53,21 +53,28 @@ test('expands the snap indicator on sizer pointerdown, before any move', async (
 		};
 	});
 
-	await vulpOS.grabAt(bottomSizer);
+	const client = await vulpOS.page.context().newCDPSession(vulpOS.page);
+	try {
+		await client.send('Input.dispatchTouchEvent', {
+			type: 'touchStart',
+			touchPoints: [{ x: bottomSizer.x, y: bottomSizer.y }],
+		});
 
-	const started = await readSnap();
-	expect(started.hidden).toBe(false);
-	expect(started.animating).toBe(true);
+		const started = await readSnap();
+		expect(started.hidden).toBe(false);
+		expect(started.animating).toBe(true);
 
-	await expect.poll(async () => (await readSnap()).bottom, { timeout: 1000 })
-		.toBeGreaterThan(windowRect.y + windowRect.height + 10);
+		await expect.poll(async () => (await readSnap()).bottom, { timeout: 1000 })
+			.toBeGreaterThan(windowRect.y + windowRect.height + 10);
 
-	const expanded = await readSnap();
-	expectNear(expanded.top, windowRect.y);
-	expectNear(expanded.left, windowRect.x);
-	expectNear(expanded.right, windowRect.x + windowRect.width);
-
-	await vulpOS.release();
+		const expanded = await readSnap();
+		expectNear(expanded.top, windowRect.y);
+		expectNear(expanded.left, windowRect.x);
+		expectNear(expanded.right, windowRect.x + windowRect.width);
+	} finally {
+		await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+		await client.detach();
+	}
 });
 
 test('offers full height while resizing to the bottom edge, and only snaps on release', async ({ vulpOS }) => {
