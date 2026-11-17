@@ -28,7 +28,7 @@
 		"*.hta",
 		"*.html",
 		"node_modules/com-types/lib.com.web.d.ts"
-	],
+, "Types/types.d.ts", "Types/overrides.d.ts"	],
 	"exclude": [
 		"node_modules",
 		"Tests",

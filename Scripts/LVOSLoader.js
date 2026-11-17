@@ -27,20 +27,19 @@ Loader.loadScript = function (url, onLoad) {
 };
 
 /** @param {()=>void} fn */
-Loader.onReady = function(fn) {
-  if (document.readyState === 'complete') {
-    fn();
-  } else if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', fn, false);
-  } else if (document.attachEvent) {
-    // IE 5.5 - IE 8 fallback
-    document.attachEvent('onreadystatechange', function () {
-      if (document.readyState === 'complete') {
-        fn();
-      }
-    });
-  }
-}
+Loader.onReady = function (fn) {
+	if (document.readyState === 'complete') {
+		fn();
+	} else if (document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', fn, false);
+	} else if (document.attachEvent) {
+		document.attachEvent('onreadystatechange', function () {
+			if (document.readyState === 'complete') {
+				fn();
+			}
+		});
+	}
+};
 
 
 var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
