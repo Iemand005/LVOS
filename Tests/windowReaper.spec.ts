@@ -19,12 +19,12 @@ test('window reaper removes closed windows from the DOM', async ({ vulpOS }) => 
 });
 
 test('a reaped window can be launched again', async ({ vulpOS }) => {
-	const window = await vulpOS.openCube();
-	await vulpOS.closeWindow(window);
-	await expect.poll(() => window.evaluate(dialog => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
+	const cube = await vulpOS.openCube();
+	await vulpOS.closeWindow(cube);
+	await expect.poll(() => cube.evaluate((dialog: any) => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
 
-	await vulpOS.launchWindow(window);
-	await expect.poll(() => window.evaluate(dialog => ({
+	await vulpOS.launchWindow(cube);
+	await expect.poll(() => cube.evaluate((dialog: any) => ({
 		inDom: Boolean(dialog.target?.parentElement),
 		open: dialog.isOpen,
 		killing: dialog._killing === true,

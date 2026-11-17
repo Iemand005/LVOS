@@ -1721,21 +1721,25 @@ function Dialog(application) {
 		var data = JSON.stringify(dragState);
 		var transfer = event.dataTransfer;
 
-		try {
-			transfer.setData("application/json", data);
-			if (flags.ieDropCompatibleMode) {
-				transfer.setData("Text", data);
-				transfer.setData("text/plain", data);
+		let useFallback = flags.ieDropCompatibleMode;
+
+		if (!useFallback) {
+			try {
+				transfer.setData("application/json", data);
+				transfer.setData("text/plain", self.src || self.title || self.id);
+				if (self.src) transfer.setData("text/uri-list", self.src);
+				transfer.setData("text/html", data);
+				transfer.setData("URL", `${self.src}\n${data}`);
+			} catch (ex) {
+				console.warn(ex);
+				useFallback = true;
 			}
-			else transfer.setData("text/plain", self.src || self.title || self.id);
-			if (self.src) transfer.setData("text/uri-list", self.src);
-			transfer.setData("text/html", data);
-			transfer.setData("URL", self.src + "\n" + data);
-		} catch(ex) {
-			console.warn(ex);
+		}
+
+		if (useFallback) {
 			transfer.setData("Text", data);
-			if (self.src) transfer.setData("URL", self.src);
-			transfer.setData("URL", "https://example.com");
+			transfer.setData("text/plain", data);
+			transfer.setData("URL", self.src || "https://example.com");
 		}
 
 		transfer.effectAllowed = "copyMove";
@@ -1744,9 +1748,7 @@ function Dialog(application) {
 
 	};
 
-	target.ondragend = function () {
-		self._ctrlDrag = false;
-	};
+	target.ondragend = function () { self._ctrlDrag = false; };
 
 	if (this.id) windowManager.windows[this.id] = this;
 
@@ -1755,7 +1757,6 @@ function Dialog(application) {
 	this.update();
 	this.updateWidth();
 	this.updateHeight();
-
 	this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
@@ -2520,7 +2521,6 @@ Dialog.prototype.toggleClassAnimated = function (className, force, onTransitionE
 };
 
 Dialog.prototype._endSnapTransition = function () { this._snappingOut = false, this._snappingOutState = null; };
-
 /**
  * @param {string} className
  * @param {boolean} [enable]
@@ -3093,7 +3093,6 @@ Dialog.prototype.createPopOut = function() {
 	}, 100);
 };
 
-
 /** @param {boolean} useTransform */
 Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
@@ -3129,8 +3128,6 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
     this.target.style.minWidth = isMaximized ? "100%" : Helpers.toPixels(this.minWidth);
     this.target.style.minHeight = isMaximized ? "100%" : Helpers.toPixels(this.minHeight);
 };
-
-
 
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
@@ -3217,7 +3214,6 @@ DragAction.prototype.set = function (direction) {
 
 window.addEventListener("resize", WindowManager.updateWindowRect, false);
 window.addEventListener("load", WindowManager.updateWindowRect, false);
-
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
 window.addEventListener("dragover", Helpers.cancelDomEvent, false);
 window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
