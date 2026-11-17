@@ -1194,7 +1194,10 @@ function messageReceived(type, data, source){
 				dialog.messageFrame("visualizers", windowManager.getVisualizerApps());
 				break;
 			case "os":
-				dialog.messageFrame("")
+				return /** @type {VulpOS} */{
+					windowManager: windowManager,
+					desktopManager: desktopManager
+				};
 		}
 	}
 };
