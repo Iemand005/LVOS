@@ -32,6 +32,41 @@ test('tiles a window dropped on the left edge and lets go when it is dragged awa
 	expect((await vulpOS.state(window)).snapped).toBe(false);
 });
 
+test('maximize button unsnaps a snapped window and swaps the icon', async ({ vulpOS }) => {
+	const window = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+	const before = await vulpOS.measure(window);
+	const icon = () => window.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+
+	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+
+	await vulpOS.drag(await vulpOS.titleBarPoint(window), { x: 2, y: 400 });
+	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(true);
+	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+
+	await window.evaluate(dialog => dialog.getButton(1)!.click());
+	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(false);
+	expect((await vulpOS.state(window)).maximized).toBe(false);
+	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+
+	const after = await vulpOS.measure(window);
+	expectNear(after.width, before.width);
+});
+
+test('maximizing a snapped window keeps the restore icon', async ({ vulpOS }) => {
+	const window = await vulpOS.openCube();
+	await vulpOS.enableAeroSnap();
+	const icon = () => window.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+
+	await vulpOS.drag(await vulpOS.titleBarPoint(window), { x: 2, y: 400 });
+	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(true);
+	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+
+	await window.evaluate(dialog => dialog.maximize());
+	await expect.poll(() => vulpOS.state(window).then(state => state.maximized), { timeout: 4000 }).toBe(true);
+	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+});
+
 test('expands the snap indicator on touch sizer pointerdown, before any move', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();

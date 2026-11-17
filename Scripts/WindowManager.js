@@ -2544,8 +2544,11 @@ Dialog.prototype._endSnapTransition = function () {
  */
 Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitionEnd, onEnable) {
 	var target = this.target;
-	if (enable === null) enable = !target.classList.contains(className);
+	if (enable === null || typeof enable === "undefined") enable = !target.classList.contains(className);
 	if (target.classList.contains(className) === enable) return;
+	this.updateMaximizeButton(enable || this.maximized ||
+		(className === "snapped" && this.heightSnapped) ||
+		(className === "height-snapped" && this.snapped));
 	if (enable && onEnable) onEnable.call(this);
 
 	this._snappingOut = !enable;
@@ -2574,12 +2577,17 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 };
 
 Dialog.prototype.toggleMaximizeButton = function () {
+	var handledSnap = false;
 	if (this.snapped) {
 		if (windowManager) windowManager.unsnapDialog(this);
 		else this.toggleSnapped(false);
+		handledSnap = true;
 	}
-	if (this.heightSnapped) this.toggleHeightSnapped(false);
-	if (!this.snapped && !this.heightSnapped && !this.maximized) this.toggleMaximized();
+	if (this.heightSnapped) {
+		this.toggleHeightSnapped(false);
+		handledSnap = true;
+	}
+	if (!handledSnap) this.toggleMaximized();
 };
 
 /** @param {boolean} [restored] */
@@ -2600,6 +2608,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	if (this.maximized === enable) return;
 	if (enable && this.snapped && windowManager) windowManager.unsnapDialog(this);
 	if (enable && this.heightSnapped) this.toggleHeightSnapped(false);
+	this.updateMaximizeButton(enable || this.snapped || this.heightSnapped);
 
 	var self = this;
 	var target = this.target;
@@ -2705,6 +2714,7 @@ Dialog.prototype.unmaximizeForDrag = function() {
 	if (this.useTransform) this.toggleMinSizeConstraints(false);
 	this._maximizing = false;
 	this.maximizeAnimations = 0;
+	this.updateMaximizeButton(this.snapped || this.heightSnapped);
 	this.broadcastState({ maximized: false });
 };
 

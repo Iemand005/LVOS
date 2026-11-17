@@ -147,3 +147,18 @@ test('dragging down from a maximized window clears maximize state', async ({ vul
 	const transform = await cube.evaluate((dialog: any) => dialog.target!.style.transform);
 	expect(transform).not.toContain('scale(');
 });
+
+test('maximize button swaps its icon with maximize state', async ({ vulpOS }) => {
+	const cube = await vulpOS.openCube();
+	const icon = () => cube.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+
+	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+
+	await cube.evaluate(dialog => dialog.getButton(1)!.click());
+	await expect.poll(() => vulpOS.state(cube).then(state => state.maximized), { timeout: 4000 }).toBe(true);
+	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+
+	await cube.evaluate(dialog => dialog.getButton(1)!.click());
+	await expect.poll(() => vulpOS.state(cube).then(state => state.maximized), { timeout: 4000 }).toBe(false);
+	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+});
