@@ -41,12 +41,14 @@ Loader.onReady = function (fn) {
 	}
 };
 
+Loader.onReady(function() {
 
-var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
-if (scriptSrc) {
-	var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
-	var stylePath = scriptDir + "../Styles/general.css";
-	console.log("Currently in", scriptDir, "wanna load css in", stylePath);
-
-	Loader.loadStyleSheet(stylePath);
-}
+	var scriptSrc = document.currentScript && "src" in document.currentScript && document.currentScript.src;
+	if (scriptSrc) {
+		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
+		var stylePath = scriptDir + "../Styles/general.css";
+		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
+	
+		Loader.loadStyleSheet(stylePath);
+	}
+});
