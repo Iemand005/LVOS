@@ -3188,10 +3188,9 @@ Dialog.prototype.getState = function() {
 
 /** @param {Partial<DialogState>} state */
 Dialog.prototype.loadState = function(state) {
-	if ("open" in state) {
+	if ("open" in state)
 		if (state.open) this.launch();
 		else this.toggleOpen(false);
-	}
 	if ("title" in state) this.title = state.title;
 	if ("x" in state || "y" in state)
 		this.move("x" in state ? state.x : this.x, "y" in state ? state.y : this.y, true, false);
