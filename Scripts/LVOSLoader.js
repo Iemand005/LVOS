@@ -1,44 +1,76 @@
-
 /** @class */
 function Loader() { }
 
+/**
+ * Shared cross-browser helper for DOM/script readiness
+ * @param {Document | HTMLScriptElement} target
+ * @param {string} modernEvent
+ * @param {(this: any, ev?: any) => any} fn
+ */
+Loader._onEventReady = function (target, modernEvent, fn) {
+	var done = false;
+
+	/** @param {any} [ev] */
+	function finish(ev) {
+		if (!done) {
+			done = true;
+			fn.call(target, ev);
+		}
+	}
+
+	// If already complete (works for both document and cached scripts in IE)
+	if (target.readyState === "complete") {
+		finish();
+		return;
+	}
+
+	if (target.addEventListener) {
+		target.addEventListener(modernEvent, finish, false);
+	} else if (/** @type {any} */ (target).attachEvent) {
+		/** @type {any} */ (target).attachEvent("onreadystatechange", function () {
+		if (target.readyState === "complete" || (target !== document && target.readyState === "loaded")) {
+			finish(window.event);
+		}
+	});
+	}
+};
+
+/** @param {() => void} fn */
+Loader.onReady = function (fn) {
+	if (document.readyState === "interactive" && !document.attachEvent) {
+		fn();
+		return;
+	}
+	Loader._onEventReady(document, "DOMContentLoaded", fn);
+};
+
 /** @param {string} url */
 Loader.loadStyleSheet = function (url) {
+	var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
 	var link = document.createElement("link");
 	link.rel = "stylesheet";
 	link.type = "text/css";
 	link.href = url;
 
-	document.head.appendChild(link);
-
+	head.appendChild(link);
 };
 
 /**
  * @param {string} url
- * @param {GlobalEventHandlers['onload']} onLoad
+ * @param {GlobalEventHandlers["onload"]} [onLoad]
  */
 Loader.loadScript = function (url, onLoad) {
+	var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
 	var script = document.createElement("script");
+	script.type = "text/javascript";
 	script.src = url;
+	script.defer = true;
 
-	script.onload = onLoad;
-
-	document.head.appendChild(script);
-};
-
-/** @param {()=>void} fn */
-Loader.onReady = function (fn) {
-	if (document.readyState === "complete") {
-		fn();
-	} else if (document.addEventListener) {
-		document.addEventListener("DOMContentLoaded", fn, false);
-	} else if (document.attachEvent) {
-		document.attachEvent("onreadystatechange", function () {
-			if (document.readyState === "complete") {
-				fn();
-			}
-		});
+	if (onLoad) {
+		Loader._onEventReady(script, "load", onLoad);
 	}
+
+	head.appendChild(script);
 };
 
 /**
@@ -48,33 +80,50 @@ Loader.onReady = function (fn) {
 function hasAttributeCompat(el, attrName) {
 	if (!el) return false;
 
-	if (typeof el.hasAttribute === "function")
+	if (typeof el.hasAttribute === "function") {
 		return el.hasAttribute(attrName);
-
-	var attrNode = el.getAttributeNode ? el.getAttributeNode(attrName) : null;
-	if (attrNode) attrNode.specified;
+	}
 
 	return typeof el.getAttribute(attrName) === "string";
 }
 
+/** @returns {HTMLScriptElement | null} */
+function getCurrentScriptCompat() {
+	if (document.currentScript && "src" in document.currentScript) {
+		return document.currentScript;
+	}
+
+	var scripts = document.getElementsByTagName("script");
+	for (var i = scripts.length - 1; i >= 0; i--) {
+		var src = scripts[i].src || "";
+		if (src.indexOf("LVOSLoader.js") !== -1) {
+			return scripts[i];
+		}
+	}
+	return null;
+}
+
+// 1. Capture the script tag IMMEDIATELY while executing synchronously
+var loaderScript = getCurrentScriptCompat();
+var hasTheme = hasAttributeCompat(loaderScript, "data-theme");
+
+// 2. Wait for DOM ready to inject styles and Messenger.js
 Loader.onReady(function () {
-	var script = document.currentScript && "src" in document.currentScript && document.currentScript;
-
-	if (script) {
-		var scriptSrc = script.src;
+	if (loaderScript) {
+		var scriptSrc = loaderScript.src;
 		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
-		var stylePath = scriptDir + "../Styles/general.css";
-		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
 
-		Loader.loadStyleSheet(stylePath);
-
-		var hasTheme = hasAttributeCompat(script, "data-theme");
+		Loader.loadStyleSheet(scriptDir + "../Styles/general.css");
 
 		if (hasTheme) {
 			console.log("LVOSLoader: data-theme detected!");
+			Loader.loadStyleSheet(scriptDir + "../Styles/themes.css");
 		} else {
 			console.log("LVOSLoader: no data-theme attribute.");
 		}
-	};
-});
 
+		Loader.loadScript(scriptDir + "Messenger.js", function () {
+			console.log("Messenger.js loaded!");
+		});
+	}
+});
