@@ -5,12 +5,12 @@ function Loader() { }
  * @template T
  * @param {Document | HTMLScriptElement} target
  * @param {string} modernEvent
- * @param {(this: any, ev?: T) => any} fn
+ * @param {(this: any, ev?: Event) => any} fn
  */
 Loader._onEventReady = function (target, modernEvent, fn) {
 	var done = false;
 
-	/** @param {EventListenerOrEventListenerObject} [ev] */
+	/** @param {Event} [ev] */
 	function finish(ev) {
 		if (!done) {
 			done = true;
