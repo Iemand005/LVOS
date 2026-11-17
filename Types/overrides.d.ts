@@ -101,7 +101,7 @@ declare global {
 	}
 
 	interface HTMLScriptElement {
-		readyState?: "uninitialized" | "loading" | "loaded" | "interactive" | "complete";
+		readyState?: DocumentReadyState | "uninitialized" | "loaded";
 	}
 
 	interface Element {
