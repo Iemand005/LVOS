@@ -85,10 +85,11 @@ function getCurrentScriptCompat() {
 
 	var scripts = document.getElementsByTagName("script");
 	for (var i = scripts.length - 1; i >= 0; i--) {
-		var src = scripts[i].src || "";
-		if (src.indexOf("LVOSLoader.js") !== -1) {
-			return scripts[i];
-		}
+		var script = scripts[i];
+		if (!script) return null;
+		var src = script.src || "";
+		if (src.indexOf("LVOSLoader.js") !== -1)
+			return script;
 	}
 	return null;
 }
