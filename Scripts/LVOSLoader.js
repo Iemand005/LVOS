@@ -62,7 +62,7 @@ Loader.onReady(function () {
 	var script = document.currentScript && "src" in document.currentScript;
 
 	if (script) {
-		var scriptSrc = document.currentScript.src;
+		var scriptSrc = script.src;
 		var scriptDir = scriptSrc.substring(0, scriptSrc.lastIndexOf("/") + 1);
 		var stylePath = scriptDir + "../Styles/general.css";
 		console.log("Currently in", scriptDir, "wanna load css in", stylePath);
