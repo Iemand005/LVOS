@@ -17,7 +17,8 @@ ExtensionApp.prototype.createList = function () {
 		item.appendChild(toggle);
 		list.appendChild(item);
 	}
-	document.body
+	var main = document.querySelector("main");
+	if (main) main.appendChild(list);
 };
 
 LVMessenger.get("os", function(os) {
