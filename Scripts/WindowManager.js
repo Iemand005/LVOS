@@ -1897,7 +1897,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 		var pointerDown = function (ev) {
 			if (!self.activationHandler || !self.activationHandler(ev, id)) return;
 			windowManager.dragAction.set(id);
-			windowManager.windowSnap.moveToDialog(self, 20, id, false, windowManager.isTouchDrag);
+			if (windowManager.isTouchDrag) windowManager.windowSnap.moveToDialog(self, 20, id, false, true);
 			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
