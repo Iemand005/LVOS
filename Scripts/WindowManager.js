@@ -956,9 +956,7 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 		element.style.flex = width + " 1 0%";
 		if (tile.gap) usedSpacer = element;
 
-		if (member && !tile.gap) member._snapFrame = {
-			x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight
-		};
+		if (member && !tile.gap) member._snapFrame = { x: offset * areaWidth, y: 0, width: width * areaWidth, height: areaHeight };
 
 		offset += width;
 	}
