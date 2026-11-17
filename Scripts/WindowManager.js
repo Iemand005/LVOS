@@ -1111,7 +1111,6 @@ WindowManager.prototype.toggleExtensionEnabled = function(ext, enabled) {
  */
 WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
 	if (!ext || typeof ext !== "object") return;
-
 	var callback = /** @type {((this: Extension, dialog?: Dialog) => void)} */(ext[hook]);
 	if (typeof callback === "function") try {
 		callback.call(ext, dialog);
