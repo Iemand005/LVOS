@@ -2371,23 +2371,20 @@ Dialog.prototype.setSkew = function(skew) {
  * @param {boolean} [noAnimation]
  */
 Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
-	if (this.transform) this.transform.scale(scaleX, scaleY, update !== false, !noAnimation);
+	if (this.contentTransform) this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
 };
 /**
  * @param {number} [scaleX]
  * @param {number} [scaleY]
  */
 Dialog.prototype.setDragScale = function(scaleX, scaleY) {
-	var t = this.contentTransform;
-	if (!t) return;
-	console.log("scaling down catcher")
 	var self = this;
 	var nextX = scaleX || 1;
 	var nextY = scaleY || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
 	if (this._dragScaleAnimating)
-		return t.scale(nextX, nextY, undefined, false);
+		return this.setScale(nextX, nextY, undefined, false);
 
 	this._dragScaleAnimating = true;
 	this.animate(this.updateTransform, "transform", function() {
