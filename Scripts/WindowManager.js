@@ -1233,14 +1233,6 @@ WindowSnap.prototype.attachTo = function(dialog) {
 		section.insertBefore(this.element, section.firstChild);
 };
 
-/**
- * @param {Dialog} dialog
- * @param {number} [outset]
- * @param {number} [direction]
- * @param {boolean} [noAnimation]
- * @param {boolean} [isTouch]
- * @param {boolean} [preserveSnapped]
- */
 WindowSnap._sides = [
 	{ top: true, right: true, bottom: true, left: true },
 	{ top: true, right: false, bottom: false, left: false },
@@ -1253,6 +1245,14 @@ WindowSnap._sides = [
 	{ top: false, right: false, bottom: true, left: true }
 ];
 
+/**
+ * @param {Dialog} dialog
+ * @param {number} [outset]
+ * @param {number} [direction]
+ * @param {boolean} [noAnimation]
+ * @param {boolean} [isTouch]
+ * @param {boolean} [preserveSnapped]
+ */
 WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimation, isTouch, preserveSnapped) {
 	outset = outset || 0;
 	this.attachTo(dialog);
