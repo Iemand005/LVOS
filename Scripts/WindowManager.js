@@ -1433,7 +1433,7 @@ Transformable.prototype.scale = function(x, y, update, animate) { this._transfor
 /** @param {number} x @param {number} [y] @param {number} [z] @param {boolean} [animate] */
 Transformable.prototype.rotate = function(x, y, z, animate) {
 	if (y === undefined && z === undefined) this._transform.rotate = x;
-	else { this._transform.rotateX = x; this._transform.rotateY = y; this._transform.rotateZ = z; }
+	else this._transform.rotateX = x, this._transform.rotateY = y, this._transform.rotateZ = z;
 	this.update(animate);
 };
 
@@ -1580,25 +1580,17 @@ function Dialog(application) {
 	this._appIcon = null;
 
 	var self = this;
-	/**
-	 * @param {MouseEvent | PointerEvent} [ev]
-	 * @param {number} [id]
-	 */
-	this.activationHandler = function (ev, id) {
+	/**  @param {MouseEvent | PointerEvent} [ev] */
+	this.activationHandler = function (ev) {
 		var target = ev && ev.target;
 		if (!ev) {
 			var event = window.event;
-			if (event) {
-				target = event.srcElement;
-				ev = /** @type {MouseEvent} */(event);
-			}
+			if (event) target = event.srcElement, ev = /** @type {MouseEvent} */(event);			}
 			if (!ev) return;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);
-		if (self._ctrlDrag) {
-			ev.stopImmediatePropagation();
-			return;
-		}
+		if (self._ctrlDrag)
+			return ev.stopImmediatePropagation();
 
 		if (target instanceof HTMLElement && target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
@@ -1619,9 +1611,8 @@ function Dialog(application) {
 
 	if (this.windowTarget) this.windowTarget.dialog = this;
 
-	if (application.classes && typeof application.classes === "object") {
+	if (application.classes && typeof application.classes === "object")
 		application.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
-	}
 	if (application.title) this.setTitle(application.title);
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
@@ -1635,8 +1626,6 @@ function Dialog(application) {
 	this.setIcon(this.getMiniIconUrl(), function() {
 		self.setIcon(self.getIconUrl());
 	});
-
-	// this.setMinSize(180, 2, false);
 
 	this.toggleButton(windowButtons.close, true);
 	this.toggleButton(windowButtons.full, true);
@@ -1654,8 +1643,7 @@ function Dialog(application) {
 	if(this.resizable) this._createSizers();
 
 	target.onselectstart = function (/** @type {Event} */event) {
-		if (self._ctrlDrag) return;
-		Helpers.cancelDomEvent(event);
+		if (!self._ctrlDrag) Helpers.cancelDomEvent(event);
 	};
 
 	var body = this.body;
@@ -1684,12 +1672,10 @@ function Dialog(application) {
 	else target.onmousedown = this.activationHandler;
 
 	var ejectButton = buttons[windowButtons.eject];
-	if (ejectButton)
-		ejectButton.onclick = this.eject.bind(this);
+	if (ejectButton) ejectButton.onclick = this.eject.bind(this);
 
 	var closeButton = buttons[windowButtons.close];
-	if (closeButton)
-		closeButton.onclick = this.close.bind(this);
+	if (closeButton) closeButton.onclick = this.close.bind(this);
 	var fullscreenButton = buttons[windowButtons.full];
 	if (fullscreenButton) {
 		this._maximizeButton = fullscreenButton;
@@ -1729,7 +1715,6 @@ function Dialog(application) {
 				transfer.setData("text/plain", self.src || self.title || self.id);
 				if (self.src) transfer.setData("text/uri-list", self.src);
 				transfer.setData("text/html", data);
-				transfer.setData("URL", `${self.src}\n${data}`);
 			} catch (ex) {
 				console.warn(ex);
 				useFallback = true;
@@ -1738,7 +1723,6 @@ function Dialog(application) {
 
 		if (useFallback) {
 			transfer.setData("Text", data);
-			transfer.setData("text/plain", data);
 			transfer.setData("URL", self.src || "https://example.com");
 		}
 
