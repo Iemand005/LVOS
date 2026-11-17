@@ -850,7 +850,7 @@ body.jeb .window > content svg {
 }
 
 #window-snap {
-	border-radius: calc(max(var(--window-outer-radius, 10px), 10px));
+	border-radius: calc(max(var(--window-radius, 10px), 10px));
 }
 
 @keyframes jeb {
