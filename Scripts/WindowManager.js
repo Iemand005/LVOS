@@ -15,6 +15,8 @@ var useTransform = true, useScale = false;
 
 var isLocal = location.protocol === "file:" || location.hostname === "localhost";
 var allowUpdateRateLimit = false;
+var defaultWindowWidth = 640;
+var defaultWindowHeight = 480;
 
 if (!capabilities.supportsTransform) useTransform = false;
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
@@ -70,6 +72,7 @@ var flags = {
 	_enableExtensions: true,
 	get enableExtensions() { return this._enableExtensions; },
 	set enableExtensions(value) {
+		this._enableExtensions = value;
 		window.windowManager.extensions.forEach(function(ext) {
 			window.windowManager.toggleExtensionEnabled(ext, value);
 		});
@@ -85,6 +88,9 @@ function WindowManager() {
 	this._windows = {};
 	/** @type {DesktopState | null} */
 	this._windowStates = null;
+	/** @type {Record<string, boolean> | null} */
+	this._extensionStates = null;
+	this._extensionLoadHookAdded = false;
 
 	this._isWindowUpdatesEnabled = false;
 
@@ -195,6 +201,18 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 	}
 });
 
+Object.defineProperty(WindowManager.prototype, "extensionStates", {
+	get: function () {
+		if (!this._extensionStates && localStorage)
+		try {
+			var string = localStorage.getItem("extensionState");
+			if (string === null) return null;
+			this._extensionStates = JSON.parse(string);
+		} catch (ex) { console.warn(ex); }
+		return this._extensionStates;
+	}
+});
+
 Object.defineProperty(WindowManager.prototype, "state", {
 	get: function () {
 		/** @type {DesktopState} */
@@ -240,6 +258,29 @@ WindowManager.prototype.loadState = function(dialog) {
 			this.updateTopZ();
 		}
 	} catch (exception) { handleStorageException(exception); }
+};
+
+WindowManager.prototype.saveExtensionStates = function() {
+	if (!this.canSave || !("localStorage" in window)) return;
+	try {
+		var states = this.extensionStates || {};
+		for (var i = 0; i < this.extensions.length; i++) {
+			var ext = this.extensions[i];
+			if (ext && ext.id) states[ext.id] = ext.enabled === true;
+		}
+		this._extensionStates = states;
+		localStorage.setItem("extensionState", JSON.stringify(states));
+	} catch (exception) { handleStorageException(exception); }
+};
+
+WindowManager.prototype.restoreExtensionStates = function() {
+	var states = this.extensionStates;
+	if (!states) return;
+	for (var i = 0; i < this.extensions.length; i++) {
+		var ext = this.extensions[i];
+		if (ext && ext.id && typeof states[ext.id] === "boolean")
+			this.toggleExtensionEnabled(ext, states[ext.id]);
+	}
 };
 
 /**
@@ -1070,6 +1111,10 @@ WindowManager.prototype.registerExtension = function(extension) {
 	if (!extension || typeof extension !== "object") return null;
 	if (typeof extension.enabled !== "boolean") extension.enabled = true;
 
+	var states = this.extensionStates;
+	if (extension.id && states && typeof states[extension.id] === "boolean")
+		extension.enabled = states[extension.id];
+
 	if (extension.id) {
 		var existing = this.getExtension(extension.id);
 		if (existing) this.extensions.splice(this.extensions.indexOf(existing), 1);
@@ -1077,8 +1122,16 @@ WindowManager.prototype.registerExtension = function(extension) {
 
 	this.extensions.push(extension);
 
+	if (!this._extensionLoadHookAdded) {
+		var self = this;
+		window.addEventListener("load", function() { self.restoreExtensionStates(); }, false);
+		this._extensionLoadHookAdded = true;
+		if (document.readyState === "complete") this.restoreExtensionStates();
+	}
+
 	if (extension.enabled) this.notifyExtension(extension, "onEnable");
 	if (extension.flags) Object.defineProperties(flags, extension.flags);
+	this.saveExtensionStates();
 
 	return extension;
 };
@@ -1101,6 +1154,7 @@ WindowManager.prototype.toggleExtensionEnabled = function(ext, enabled) {
 	if (ext.enabled === enabled) return enabled;
 	ext.enabled = enabled;
 	this.notifyExtension(ext, enabled ? "onEnable" : "onDisable");
+	this.saveExtensionStates();
 	return enabled;
 };
 
@@ -1497,9 +1551,9 @@ function Dialog(application) {
 	/** @type {number} */
 	this._z = 0;
 	/** @type {number} */
-	this._width = 0;
+	this._width = Math.max(1, Math.min(defaultWindowWidth, window.innerWidth - 40));
 	/** @type {number} */
-	this._height = 0;
+	this._height = Math.max(1, Math.min(defaultWindowHeight, window.innerHeight - 40));
 	this._isMinWidth = false;
 	this._isMinHeight = false;
 
@@ -1546,6 +1600,7 @@ function Dialog(application) {
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
 	this._stateOpen = false;
+	this._killing = false;
 	/** @constant */
 	this._bodyOffset = { width: 0, height: 0, x: 0, y: 0 };
 
@@ -3098,6 +3153,7 @@ Dialog.prototype.openUrl = function(url) {
 Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.src); };
 
 Dialog.prototype.launch = function() {
+	this._killing = false;
 	if (!this.isOpen) this.insertIntoDOM();
 	this.target.classList.remove("hidden");
 	windowManager.notifyExtensions("onWindowLaunch", this);
@@ -3105,8 +3161,12 @@ Dialog.prototype.launch = function() {
 };
 
 Dialog.prototype.kill = function() {
+	if (this._killing) return;
+	this._killing = true;
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.killable && this.target) parent.removeChild(this.target);
+	this._stateOpen = false;
+	windowManager.saveState();
 };
 Dialog.prototype.eject = function() { this.createPopOut(), this.close(); };
 Dialog.prototype.createPopOut = function() {

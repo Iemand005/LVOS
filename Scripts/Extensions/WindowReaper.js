@@ -3,9 +3,9 @@
 		id: "window-reaper",
 		name: "Window Reaper",
 		description: "Kills windows when they are closed.",
-		enabled: false,
+		enabled: true,
 		onWindowClose: function(dialog) {
-			if (dialog && !dialog._killing) dialog.kill();
+			if (dialog && dialog.killable) dialog.kill();
 		}
 	});
 })();
