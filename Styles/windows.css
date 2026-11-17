@@ -443,6 +443,11 @@ content.animating,
 .compositor-animations .window > content {
 	transition: none !important;
 	transform-origin: left top;
+	transition: scale 1s linear;
+}
+
+.window.maximized, .window.maximizing {
+	transform-origin: left top;
 }
 
 .window.maximized {
