@@ -15,7 +15,7 @@ Loader.loadStyleSheet = function (url) {
 
 /**
  * @param {string} url
- * @param {typeof GlobalEventHandlers.prototype.onload} callback
+ * @param {GlobalEventHandlers['onload']} callback
  */
 Loader.loadScript = function (url, callback) {
 	var script = document.createElement('script');
