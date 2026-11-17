@@ -3139,10 +3139,8 @@ Dialog.prototype.updateUseTransform = function(useTransform) {
 	this._useTransform = useTransform;
 	var target = this.target;
 	if (useTransform) target.style.top = "", target.style.left = "";
-	else {
-		target.style.transform = "", target.style.webkitTransform = "";
+	else target.style.transform = "", target.style.webkitTransform = "",
 		target.style.width = "", target.style.height = "";
-	}
 
 	this.updateScale(this.useScale);
 	this.update();
