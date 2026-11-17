@@ -23,6 +23,7 @@
 	"include": [
 		"Types/types.d.ts", "Types/overrides.d.ts",
 		"./Scripts/**/*.js",
+		"./Applications/**/*.js",
 		"./Scripts/**/*.d.ts",
 		"ScrollTabs/**/*.js",
 		"*.d.ts",
