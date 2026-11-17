@@ -878,7 +878,7 @@ body.no-animations #desktop * {
     border: 1px solid #ffffff40;
 	box-shadow: 0px 0px 40px 20px #00000030;
 	opacity: 1;
-	transition: opacity 120ms linear, visibility 0s linear 120ms;
+	transition: opacity 120ms linear;
 }
 
 #window-snap.animating {
