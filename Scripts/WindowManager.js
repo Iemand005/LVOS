@@ -2380,6 +2380,7 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 Dialog.prototype.setDragScale = function(scaleX, scaleY) {
 	var t = this.contentTransform;
 	if (!t) return;
+	console.log("scaling down catcher")
 	var self = this;
 	var nextX = scaleX || 1;
 	var nextY = scaleY || 1;
