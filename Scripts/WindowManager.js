@@ -2412,9 +2412,7 @@ Dialog.prototype.close = function () { return this.toggleOpen(false); };
  */
 Dialog.prototype.getRect = function (ofBody, index) { return Helpers.getRect(ofBody ? this.body : this.target, index); };
 /** @param {number} index */
-Dialog.prototype.getButton = function (index) {
-  return this.titleBar && this.titleBar.getElementsByTagName("button")[index];
-};
+Dialog.prototype.getButton = function (index) { return this.titleBar && this.titleBar.getElementsByTagName("button")[index]; };
 Dialog.prototype.createOpenButton = function () {
 	var openButton = document.createElement("button");
 	this.buttons.unshift(openButton);
