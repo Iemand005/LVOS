@@ -13,7 +13,7 @@ ExtensionApp.prototype.createList = function () {
 		var item = document.createElement("li");
 		item.appendChild(document.createTextNode(extension.name));
 		var toggle = 
-		item.appendChild(toggle)
+		item.appendChild(toggle);
 		list.appendChild(item);
 	}
 };
