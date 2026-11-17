@@ -1,4 +1,6 @@
 
+function ExtensionApp() {}
+
 /** @param {Extension[]} extensions */
 function createList(extensions) {
 	var list = document.createElement("ul");
@@ -16,3 +18,4 @@ LVMessenger.get("os", function(os) {
 	var extensions = os.windowManager.extensions;
 	createList(extensions);
 });
+
