@@ -2,7 +2,6 @@
 function Loader() { }
 
 /**
- * @template T
  * @param {Document | HTMLScriptElement} target
  * @param {string} modernEvent
  * @param {(this: any, ev?: Event) => any} fn
