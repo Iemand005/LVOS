@@ -555,6 +555,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 	this.enableDialogDrag();
 	this.dragAction.set(id || 0);
 	dialog.setClickOffset(event.clientX, event.clientY);
+	dialog.stopAnimating();
 	dialog.activate();
 	if (this.isTouchDrag) this.windowSnap.moveToDialog(dialog, 0, this.dragAction.direction, true, this.isTouchDrag);
 	this._snapZone = "";
@@ -593,8 +594,6 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 		} else if (gestureDirection && this.isVerticalResizeDirection(gestureDirection))
 			this.leaveHeightSnappedByResize(dialog);
 	}
-
-	dialog.stopAnimating();
 
 	var dragScale = typeof dialog._exposeVisualScale === "number" && dialog._exposeVisualScale > 0 ? dialog._exposeVisualScale : 1;
 	if (typeof dialog._exposeVisualScale === "number" && !dialog._exposeGrab && dialog.clickOffset && dialog.content) {
