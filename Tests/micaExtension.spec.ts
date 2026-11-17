@@ -42,7 +42,7 @@ async function micaOfWindow(dialog: DialogHandle) {
 async function setMicaEnabled(page: Page, enabled: boolean) {
 	await page.evaluate((enabled) => {
 		const wm = (window as any).windowManager;
-		wm.setExtensionEnabled(wm.getExtension('mica'), enabled);
+		wm.toggleExtensionEnabled(wm.getExtension('mica'), enabled);
 	}, enabled);
 }
 

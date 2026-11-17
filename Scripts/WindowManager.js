@@ -71,7 +71,7 @@ var flags = {
 	get enableExtensions() { return this._enableExtensions; },
 	set enableExtensions(value) {
 		window.windowManager.extensions.forEach(function(ext) {
-			window.windowManager.setExtensionEnabled(ext, value);
+			window.windowManager.toggleExtensionEnabled(ext, value);
 		});
 	}
 };
@@ -1078,7 +1078,6 @@ WindowManager.prototype.registerExtension = function(extension) {
 	this.extensions.push(extension);
 
 	if (extension.enabled) this.notifyExtension(extension, "onEnable");
-
 	if (extension.flags) Object.defineProperties(flags, extension.flags);
 
 	return extension;

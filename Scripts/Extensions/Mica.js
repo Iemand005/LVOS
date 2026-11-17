@@ -153,7 +153,7 @@ var micaExtension = {
 			enumerable: true,
 			configurable: true,
 			get: function() { return micaExtension.enabled === true; },
-			set: function(value) { window.windowManager.setExtensionEnabled(micaExtension, !!value); }
+			set: function(value) { window.windowManager.toggleExtensionEnabled(micaExtension, !!value); }
 		}
 	},
 

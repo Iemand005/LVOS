@@ -17,7 +17,7 @@ ExtensionApp.prototype.createList = function () {
 		toggle.checked = extension.enabled;
 		var self = this;
 		toggle.onclick = function () {
-			self.wm.setExtensionEnabled(extension, !extension?.enabled);
+			self.wm.toggleExtensionEnabled(extension);
 		};
 		item.appendChild(toggle);
 		list.appendChild(item);
