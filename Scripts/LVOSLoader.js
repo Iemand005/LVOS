@@ -2,7 +2,7 @@
 function Loader() { }
 
 /**
- * Shared cross-browser helper for DOM/script readiness
+ * @template {T}
  * @param {Document | HTMLScriptElement} target
  * @param {string} modernEvent
  * @param {(this: any, ev?: any) => any} fn
