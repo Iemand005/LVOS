@@ -42,23 +42,17 @@ Loader.onReady = function (fn) {
 };
 
 /**
- * @param {Element | null} el 
- * @param {string} attrName 
- * @returns {boolean}
+ * @param {Element | null} el
+ * @param {string} attrName
  */
 function hasAttributeCompat(el, attrName) {
 	if (!el) return false;
 
-	// Modern browsers & IE8+
-	if (typeof el.hasAttribute === 'function') {
+	if (typeof el.hasAttribute === "function")
 		return el.hasAttribute(attrName);
-	}
 
-	// Legacy IE (IE 5.5 - IE 7) fallback
 	var attrNode = el.getAttributeNode ? el.getAttributeNode(attrName) : null;
-	if (attrNode) {
-		return attrNode.specified;
-	}
+	if (attrNode) attrNode.specified;
 
 	var val = el.getAttribute(attrName);
 	return val !== null && val !== undefined;
@@ -75,13 +69,13 @@ Loader.onReady(function () {
 		Loader.loadStyleSheet(stylePath);
 	}
 
-	var hasTheme = hasAttributeCompat(loaderScript, 'data-theme');
+	var hasTheme = hasAttributeCompat(loaderScript, "data-theme");
 
 	if (hasTheme) {
 		// `data-theme` is present! Inject your theme CSS or enable theme mode
-		console.log('LVOSLoader: data-theme detected!');
+		console.log("LVOSLoader: data-theme detected!");
 	} else {
 		// `data-theme` was omitted
-		console.log('LVOSLoader: no data-theme attribute.');
+		console.log("LVOSLoader: no data-theme attribute.");
 	}
 });
