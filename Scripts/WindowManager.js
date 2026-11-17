@@ -1527,6 +1527,7 @@ function Dialog(application) {
 	this._contentTransform = null;
 
 	this._maximizing = false;
+	this._maximizePending = null;
 	this.maximizeAnimations = 0;
 
 	/** @type {boolean} */
@@ -2583,7 +2584,8 @@ Dialog.prototype.updateMaximizeButton = function (restored) {
 Dialog.prototype.toggleMaximized = function (enable) {
 
 	if (typeof enable !== "boolean") enable = !this.maximized;
-	if (this.maximized === enable) return;
+	if (this.maximized === enable || this._maximizePending === enable) return;
+	this._maximizePending = enable;
 	if (enable && this.snapped && windowManager) windowManager.unsnapDialog(this);
 	if (enable && this.heightSnapped) this.toggleHeightSnapped(false);
 	this.updateMaximizeButton(enable || this.snapped || this.heightSnapped);
@@ -2601,7 +2603,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.maximizeAnimations++;
 
 	if (flags.useViewTransitionMaximize && this.windowTarget)
-		return this.windowTarget.toggleMaximizedVT(enable);
+		return this.windowTarget.toggleMaximizedVT(enable, function() { self._maximizePending = null; });
 
 	if (capabilities.supportsTransitions) {
 		if (!flags.compositorResize) this.toggleClassAnimated("maximized", enable, function(name) {
@@ -2612,6 +2614,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}); else this.toggleClassAnimated("scaled-max", enable, "transform", function(enabled) {
 			if (fsTimeout) clearTimeout(fsTimeout);
 			this._maximizing = false;
+			this._maximizePending = null;
 			target.classList.toggle("maximized", enabled);
 			target.style.pointerEvents = "";
 			if (this.transform) this.transform.scale(1, 1, undefined, true);

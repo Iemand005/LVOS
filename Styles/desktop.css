@@ -753,6 +753,7 @@ aside#charms form {
 	width: 100%;
 	height: 100%;
 	pointer-events: all;
+	top: 0;
 }
 
 .selector {
