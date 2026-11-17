@@ -302,3 +302,13 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		});
 	}
 };
+
+Helpers.cancelAnimation = function(element) {
+	var state = element._animationState;
+	if (!state) return;
+	if (state.timer) clearTimeout(state.timer);
+	if (state.frame) window.cancelAnimationFrame(state.frame);
+	if (state.handler) element.removeEventListener(transitionEndEvent, state.handler, false);
+	state.active = false;
+	if (element._animationState === state) element._animationState = null;
+};
