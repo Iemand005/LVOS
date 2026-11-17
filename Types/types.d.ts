@@ -177,6 +177,11 @@ declare function WindowManager(): {
 
 	windowBounds: Bounds;
 }
+declare function DesktopManager(): {
+	new (): DesktopManager;
+
+	windowBounds: Bounds;
+}
 declare function Dialog(): void;
 interface WindowTile {
 	// Absent on a gap tile, which only reserves space in the group.
@@ -231,4 +236,9 @@ interface WindowOpenProperties {
 	height?: number;
 	left?: number;
 	top?: number;
+}
+
+interface VulpOS {
+	windowManager: WindowManager;
+	desktopManager: DesktopManager;
 }
