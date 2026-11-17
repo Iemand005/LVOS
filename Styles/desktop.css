@@ -890,7 +890,7 @@ body.no-animations #desktop * {
    finish first; a plain visibility change would hide it immediately. */
 #window-snap.hidden {
 	opacity: 0;
-	visibility: hidden;
+	/* visibility: hidden; */
 	
 }
 
