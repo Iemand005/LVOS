@@ -2563,9 +2563,10 @@ Dialog.prototype.toggleHeightSnapped = function (enable) {
 };
 
 Dialog.prototype.toggleMaximizeButton = function () {
+	var snapped = this.snapped || this.heightSnapped;
 	if (this.snapped) windowManager.unsnapDialog(this);
 	if (this.heightSnapped) this.toggleHeightSnapped(false);
-	if (!(this.snapped || this.heightSnapped)) this.toggleMaximized();
+	if (!snapped) this.toggleMaximized();
 };
 
 /** @param {boolean} [restored] */
@@ -3055,7 +3056,7 @@ Dialog.prototype.refresh = function() { if (this.frame) this.openUrl(this.frame.
 
 Dialog.prototype.launch = function() {
 	this._killing = false;
-	if (!this.isOpen) this.insertIntoDOM();
+	if (!this.target.parentNode || !this.isOpen) this.insertIntoDOM();
 	this.target.classList.remove("hidden");
 	windowManager.notifyExtensions("onWindowLaunch", this);
 	this.open();
@@ -3066,6 +3067,7 @@ Dialog.prototype.kill = function() {
 	this._killing = true;
 	var parent = this.target && this.target.parentElement;
 	if (parent && this.killable && this.target) parent.removeChild(this.target);
+	if (this.target) this.target.classList.remove("open");
 	this._stateOpen = false;
 	windowManager.saveState();
 };
