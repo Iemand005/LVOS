@@ -877,6 +877,8 @@ body.no-animations #desktop * {
     background: #3d3d3d3d;
     border: 1px solid #ffffff40;
 	box-shadow: 0px 0px 40px 20px #00000030;
+	opacity: 1;
+	transition: opacity 120ms linear, visibility 0s linear 120ms;
 }
 
 #window-snap.animating {
@@ -889,7 +891,7 @@ body.no-animations #desktop * {
 #window-snap.hidden {
 	opacity: 0;
 	visibility: hidden;
-	transition: opacity 120ms linear, visibility 0s linear 120ms;
+	
 }
 
 .tab-scroller {

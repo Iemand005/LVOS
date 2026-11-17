@@ -12,6 +12,16 @@ test('should install an app', async ({ vulpOS }) => {
 	await vulpOS.installApp('cube', 'Cube');
 });
 
+test('should launch a sizeless app at a natural size', async ({ vulpOS }) => {
+	const window = await vulpOS.openCube();
+	const state = await vulpOS.state(window);
+
+	expect(state.width).toBe(640);
+	expect(state.height).toBe(480);
+	expect(state.width).toBeGreaterThan(await window.evaluate(dialog => dialog.minWidth));
+	expect(state.height).toBeGreaterThan(await window.evaluate(dialog => dialog.minHeight));
+});
+
 test('should maximize and close an app', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 
