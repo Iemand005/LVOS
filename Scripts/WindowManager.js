@@ -309,9 +309,8 @@ WindowManager.prototype.createAppFromElement = function(element) { return { id: 
 /** @param {Application} application */
 WindowManager.prototype.loadApp = function(application) {
 	try {
-		var dialog = this._windows[application.id] = new Dialog(application);
 		appManager.addApp(application);
-		return dialog;
+		return this._windows[application.id] = new Dialog(application);
 	} catch(ex) { console.warn("App load failed", ex); return null; }
 };
 
