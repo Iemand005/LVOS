@@ -1121,7 +1121,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
  * @param {Dialog} [dialog]
  */
 WindowManager.prototype.notifyExtensions = function(hook, dialog) {
-	this.extensions.forEach(function (ext) { if (ext.enabled) this.notifyExtension(ext, hook, dialog); });
+	this.extensions.forEach(function (ext) { if (ext.enabled) this.notifyExtension(ext, hook, dialog); }, this);
 };
 
 /** @type {number} */
@@ -1515,12 +1515,12 @@ function Dialog(application) {
 	this._appIcon = null;
 
 	var self = this;
-	/**  @param {MouseEvent | PointerEvent} [ev] */
-	this.activationHandler = function (ev) {
+	/** @param {MouseEvent | PointerEvent} [ev] @param {number} [id] */
+	this.activationHandler = function (ev, id) {
 		var target = ev && ev.target;
 		if (!ev) {
 			var event = window.event;
-			if (event) target = event.srcElement, ev = /** @type {MouseEvent} */(event);			}
+			if (event) target = event.srcElement, ev = /** @type {MouseEvent} */(event);
 			if (!ev) return;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);

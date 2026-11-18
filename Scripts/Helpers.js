@@ -1,26 +1,19 @@
-
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
-
 /** @type {"webkitTransitionEnd" | "transitionend"} */
 var transitionEndEvent = ("transition" in document.documentElement.style) ? "transitionend" : ("webkitTransition" in document.documentElement.style) ? "webkitTransitionEnd" : "transitionend";
-
 var capabilities = {
 	supportsTransitions: true,
 	supportsTransform: true,
 	supportsPointer: typeof window !== "undefined" && "PointerEvent" in window  && !("MSPointerEvent" in window)
 };
-
 (function () {
 	var style = document.createElement("div").style;
-
 	capabilities.supportsTransitions = ("transition" in style ||"WebkitTransition" in style ||"MozTransition" in style ||"OTransition" in style ||"msTransition" in style);
 	capabilities.supportsTransform = ( "transform" in style || "webkitTransform" in style || "msTransform" in style || "mozTransform" in style || "OTransform" in style);
 })();
-
 /** @class */
 function Helpers() {}
-
 /** @param {Event} event */
 Helpers.cancelDomEvent = function(event) {
 	try {
@@ -35,70 +28,45 @@ Helpers.cancelDomEvent = function(event) {
 
 /** @param {string} url */
 Helpers.getFaviconUrl = function(url) { return "https://" + Helpers.getDomain(url) + "/favicon.ico"; };
-
 /** @param {string} url */
 Helpers.getDomain = function(url) {
 	var regged = url.replace(/^[a-z]+:\/\/+/i, "").split("/")[0];
 	return regged && regged.split("?")[0];
 };
-
 /** @param {string} url */
 Helpers.getSiteName = function(url) {
-	var domain = Helpers.getDomain(url);
-	if (!domain) return null;
-	var parts = domain.split(".");
-	var name = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
-
-	if (!name) return null;
-
-	return name.charAt(0).toUpperCase() + name.slice(1);
+	var domain = Helpers.getDomain(url), parts = domain && domain.split(".");
+	var name = parts && (parts.length >= 2 ? parts[parts.length - 2] : parts[0]);
+	return name ? name.charAt(0).toUpperCase() + name.slice(1) : null;
 };
-
 /**
  * @param {any} [object]
  * @returns {object is HTMLElement}
  */
 Helpers.isElement = function(object) { return object && ("nodeType" in object) || false; };
-
 /** @param {Window} window */
 Helpers.getWindowChromeHeight = function(window) {
 	return window.outerHeight - Helpers.getViewportHeight();
 };
-
-/**
- * @param {HTMLElement} element
- * @param {number} x
- * @param {number} y
- */
 Helpers.translateElement = function(element, x, y) { Helpers.transformElement(element, { x: x, y: y }); };
-
-/**
- * @param {HTMLElement} element
- * @param {Transform} t
- */
 Helpers.transformElement = function(element, t) {
 	var transform = "";
-
 	if (t.x && t.y) transform += "translate(" + Helpers.toPixels(t.x) + "," + Helpers.toPixels(t.y) + ")";
 	else if (t.x) transform += "translateX(" + Helpers.toPixels(t.x) + ")";
 	else if (t.y) transform += "translateY(" + Helpers.toPixels(t.y) + ")";
-
 	if (t.skewX) transform += " skewX(" + Helpers.toDegrees(t.skewX) + ")";
 	if (t.scaleX === 1) t.scaleX = undefined;
 	if (t.scaleY === 1) t.scaleY = undefined;
 	if (t.scaleX && t.scaleY) transform += "scale(" + t.scaleX + "," + t.scaleY + ")";
 	else if (t.scaleX) transform += "scaleX(" + t.scaleX + ")";
 	else if (t.scaleY) transform += "scaleY(" + t.scaleY + ")";
-
 	if (t.rotate) transform += "rotate(" + Helpers.toDegrees(t.rotate) + ")";
 	if (t.rotateX) transform += "rotateX(" + Helpers.toDegrees(t.rotateX) + ")";
 	if (t.rotateY) transform += "rotateY(" + Helpers.toDegrees(t.rotateY) + ")";
 	if (t.rotateZ) transform += "rotateZ(" + Helpers.toDegrees(t.rotateZ) + ")";
-
 	if ("msTransform" in element.style) element.style.msTransform = transform;
 	else element.style.transform = transform;
 };
-
 /**
  * @param {HTMLElement} element
  * @param {number} top
@@ -126,16 +94,11 @@ Helpers.insetElement = function(element, top, left, right, bottom) {
  */
 Helpers.setClass = function(element, className, enabled) {
 	var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
-
 	if (typeof enabled === "undefined") enabled = element.className.indexOf(className) === -1;
-
-	if (enabled) {
-		if (!re.test(element.className))
-			element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
-	} else element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	if (enabled && !re.test(element.className)) element.className = (element.className + " " + className).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+	if (!enabled) element.className = element.className.replace(re, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
 	return element.className.indexOf(className) !== -1;
 };
-
 /**
  * @param {HTMLElement| null} element
  * @param {number} [index]
