@@ -814,15 +814,7 @@ WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
  * @param {HTMLElement} section
  */
 WindowManager.prototype.findSnapTile = function (id, section) {
-	var windows = this.getSnapGroup(section).windows;
-
-	return windows.findIndex(function (dialog) { return dialog.id === id; });
-	// var index = -1;
-	// windows.forEach(function (dialog, i) {
-	// 	if (index >= -1 && dialog.id === id) index = i;
-	// });
-
-	// return index;
+	return this.getSnapGroup(section).windows.findIndex(function (dialog) { return dialog.id === id; });
 };
 
 /** @param {Dialog} dialog */
