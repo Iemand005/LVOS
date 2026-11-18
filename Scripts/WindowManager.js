@@ -386,14 +386,12 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 	if (!application || !application.id) return null;
 
 	var dialog;
-	if (application.multiple)
+	if (application.multiple) {
 		dialog = this.spawnApp(application);
-	else {
-		dialog = this.windows[application.id];
-		if (!dialog) {
+	} else {
+		if (!this.windows[application.id])
 			this.loadApp(application);
-			dialog = this.windows[application.id];
-		}
+		dialog = this.windows[application.id];
 	}
 	if (!dialog) return null;
 
