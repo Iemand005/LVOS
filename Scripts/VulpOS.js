@@ -338,9 +338,11 @@ UIBuilder.prototype.addInputList = function (items) {
  * @param {HTMLElement} container
  */
 UIBuilder.prototype.addNavList = function (items, container) {
-	return this.addInputList(items.map(function (item) { return {label: "Flags", onClick: function () {
-			if (container) container.replaceChildren(item.element);
-		}}}));
+	return this.addInputList(items.map(function (item) {
+		return {label: "Flags", onClick: function () {
+			container.replaceChildren(item.element);
+		}};
+	}));
 };
 
 //#endregion
