@@ -278,6 +278,8 @@ var onLoad = function () {
     };
 
     if (window.desktopManager) window.desktopManager.init();
+
+	window.os.to("desktop-folder").addInputList
 };
 
 function createDesktop() {
