@@ -1,6 +1,7 @@
 
 Loader.onVulpOS(function(os) {
 	var content = document.getElementById("content");
+	if (!content) return;
 	
 	var extPage = os.newTag()
 	.addHeader("Extensions").addInputList(os.wm.extensions.map(function (extension) {
@@ -16,7 +17,7 @@ Loader.onVulpOS(function(os) {
 	os.to(document.getElementById("root"))
 	.addHeader("General").addInputList([
 		{label: "Flags", onClick: function () {
-			content?.replaceChildren(flagsPage);
+			content.replaceChildren(flagsPage);
 		}}
 	]);
 });

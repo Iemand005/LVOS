@@ -324,7 +324,7 @@ UIBuilder.prototype.addHeader = function (text) {
 	return this;
 };
 
-/** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
+/** @param {Array<({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined>} items */
 UIBuilder.prototype.addInputList = function (items) {
 	this.container.appendChild(Helpers.createInputList(items));
 	return this;
