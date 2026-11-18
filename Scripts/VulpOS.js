@@ -330,7 +330,7 @@ UIBuilder.prototype.addHeader = function (text) {
 
 /** @param {IOItemList} items */
 UIBuilder.prototype.addInputList = function (items) {
-	this.container.appendChild(Helpers.createInputList(items));
+	this.container.appendChild(Helpers.createList(items));
 	return this;
 };
 
@@ -381,7 +381,7 @@ VulpOS.prototype.newTag = function (type) {
 
 
 /** @param {IOItemList} items */
-Helpers.createInputList = function (items) {
+Helpers.createList = function (items) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (item) {
@@ -409,6 +409,7 @@ Helpers.createInputList = function (items) {
 			var image = document.createElement("img");
 			image.src = item.icon;
 			var label = document.createElement("label");
+			label.textContent = item.label;
 
 			li.appendChild(image);
 			li.appendChild(label);
