@@ -61,13 +61,8 @@ Loader.loadScript = function (url, onLoad) {
 	head.appendChild(script);
 };
 
-/** @type {(()=>void) | null} */
+/** @type {(flip()=>void) | null} */
 Loader.onLoad = null;
-
-/** @param {VulpOS} os */
-Loader.onVulpOS = function(os) {
-	Loader.onLoad = function() {}
-};
 
 /**
  * @param {Element | null} el
