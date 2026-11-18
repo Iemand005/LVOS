@@ -276,14 +276,14 @@ function VulpOS() {
 }
 
 /**
- * @param {Array<{state: boolean, onInput: (enabled: boolean) => void}>} items
+ * @param {Array<{ label: string} & {state: boolean, onInput: (enabled: boolean) => void}>} items
  */
 VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (itemData) {
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(itemData.status));
+		li.appendChild(document.createTextNode(itemData.statuse));
 
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
