@@ -61,8 +61,13 @@ Loader.loadScript = function (url, onLoad) {
 	head.appendChild(script);
 };
 
-/** @type {(flip()=>void) | null} */
+/** @type {(()=>void) | null} */
 Loader.onLoad = null;
+
+/** @param {(os: VulpOS)=>void} hanlder */
+Loader.onVulpOS = function(hanlder) {
+	Loader.onLoad = function() { LVMessenger.get("os", handler); };
+};
 
 /**
  * @param {Element | null} el
