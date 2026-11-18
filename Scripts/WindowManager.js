@@ -344,9 +344,7 @@ WindowManager.prototype.spawnApp = function(application) {
 	instance.id = id;
 
 	try {
-		var dialog = new Dialog(instance);
-		this._windows[id] = dialog;
-		return dialog;
+		return this._windows[id] = new Dialog(instance);
 	} catch(ex) { console.warn("App spawn failed", ex); return null; }
 };
 /**
