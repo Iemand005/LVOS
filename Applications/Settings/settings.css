@@ -3,7 +3,7 @@ body {
 	display: flex;
 }
 
-header, main {
+main, #content {
 	display: flex;
 	flex-direction: column;
 	overflow: scroll;
@@ -11,12 +11,12 @@ header, main {
 	padding: 10px;
 }
 
-header button, header li {
+aside button, aside li {
 	margin: 0;
 	padding: 0;
 }
 
-header button {
+aside button {
 	width: 100%;
 
 	background: none;
@@ -26,7 +26,7 @@ header button {
 	text-align: start;
 }
 
-main {
+#content {
 	width: 100%;
 	flex: 1;
 }
