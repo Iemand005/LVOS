@@ -12,7 +12,7 @@ ExtensionApp.prototype.createList = function () {
 		return { label: extension.name, state: extension.enabled || false, onInput: function (enabled) {
 			self.os.wm.toggleExtensionEnabled(extension, enabled);
 		}};
-	}));f
+	}));
 	var main = document.querySelector("main");
 	if (main) main.appendChild(list);
 };
