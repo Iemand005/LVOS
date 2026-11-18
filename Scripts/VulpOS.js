@@ -343,13 +343,11 @@ function VulpOS(flags) {
 	this.UIBuilder = UIBuilder;
 }
 
-/** @param {HTMLElement | string} element */
+/** @param {HTMLElement | string | null} element */
 VulpOS.prototype.to = function (element) {
-	var e;
-	if (typeof element === "string") e = document.getElementById(element);
-	else e = element;
-	if (!e) throw new Error("Unable to find elementby ID");
-	return new UIBuilder(e);
+	if (typeof element === "string") element = document.getElementById(element);
+	if (!element) throw new Error("Unable to find elementby ID");
+	return new UIBuilder(element);
 };
 
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
