@@ -260,24 +260,13 @@ WindowManager.prototype.loadState = function(dialog) {
 	} catch (exception) { handleStorageException(exception); }
 };
 
-/** @param {(extension: Extension) => void} callback */
-WindowManager.prototype.forEachExtension = function(callback) {
-	for (var i = 0; i < this.extensions.length; i++) {
-		var ext = this.extensions[i];
-		if (ext) callback(ext);
-	}
-}
-
 WindowManager.prototype.saveExtensionStates = function() {
 	if (!this.canSave || !("localStorage" in window)) return;
 	try {
 		var states = this.extensionStates || {};
 		this.extensions.forEach(function (ext) {
-			if (ext && ext.id) states[ext.id] = ext.enabled === true;
-		));
-		for (var i = 0; i < this.extensions.length; i++) {
-			var ext = this.extensions[i];
-		}
+			states[ext.id] = ext.enabled === true;
+		)};
 		this._extensionStates = states;
 		localStorage.setItem("extensionState", JSON.stringify(states));
 	} catch (exception) { handleStorageException(exception); }
