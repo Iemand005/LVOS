@@ -275,27 +275,36 @@ function VulpOS() {
 	this.wm = new WindowManager;
 }
 
-VulpOS.prototype.createList = function () {
-	var extensions = this.wm.extensions;
+/**
+ * Helper to create and append a toggleable list view.
+ * @param {Array<{label: string, checked: boolean, onToggle: function(boolean): void}>} items
+ * @param {string} [containerSelector="main"]
+ */
+VulpOS.prototype.createToggleList = function (items, containerSelector) {
 	var list = document.createElement("ul");
-	for (var extensionId in extensions) {
-		var extension = extensions[extensionId];
-		if (!extension) return;
-		var item = document.createElement("li");
-		item.appendChild(document.createTextNode(extension.name));
+
+	items.forEach(function (itemData) {
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(itemData.label));
+
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
-		toggle.checked = !!extension.enabled;
-		var self = this;
-		toggle.onclick = function () {
-			if (!extension) return;
-			self.wm.toggleExtensionEnabled(extension);
+		toggle.checked = !!itemData.checked;
+
+		// Using onchange captures the exact checked state and avoids var loop closure bugs
+		toggle.onchange = function () {
+			if (typeof itemData.onToggle === "function") {
+				itemData.onToggle(toggle.checked);
+			}
 		};
-		item.appendChild(toggle);
-		list.appendChild(item);
-	}
-	var main = document.querySelector("main");
-	if (main) main.appendChild(list);
+
+		li.appendChild(toggle);
+		list.appendChild(li);
+	});
+
+	var container = document.querySelector(containerSelector || "main");
+	if (container) container.appendChild(list);
+	return list;
 };
 
 //#endregion
