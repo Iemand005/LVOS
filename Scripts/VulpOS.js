@@ -329,7 +329,7 @@ UIBuilder.prototype.addHeader = function (text) {
 /** @typedef {Array<UIItem>} IOItemList */
 
 /** @param {IOItemList} items */
-UIBuilder.prototype.addInputList = function (items) {
+UIBuilder.prototype.addList = function (items) {
 	this.container.appendChild(Helpers.createList(items));
 	return this;
 };
@@ -339,7 +339,7 @@ UIBuilder.prototype.addInputList = function (items) {
  * @param {HTMLElement} container
  */
 UIBuilder.prototype.addNavList = function (items, container) {
-	return this.addInputList(items.map(function (item) {
+	return this.addList(items.map(function (item) {
 		return {label: item.label, onClick: function () {
 			container.replaceChildren(item.element);
 		}};
@@ -349,7 +349,8 @@ UIBuilder.prototype.addNavList = function (items, container) {
 
 /** @param {{ name: string, icon: string }[]} files */
 UIBuilder.prototype.addFileView = function (files) {
-	return this.addInputList(files.map(function (file) {
+	this.container.classList.add("file-view");
+	return this.addList(files.map(function (file) {
 		return { label: file.name, icon: file.icon };
 	}));
 };
