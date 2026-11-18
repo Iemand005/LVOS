@@ -825,10 +825,9 @@ WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
 WindowManager.prototype.findSnapTile = function (id, section) {
 	var windows = /** @type {WindowTile[]} */ (this.getSnapGroup(section).windows);
 
-	for (var i = 0; i < windows.length; i++) {
-		var dialog = windows[i];
-		if (dialog && dialog.id === id) return i;
-	}
+	windows.forEach(function (dialog) {
+		if (dialog.id === id) return i;
+	});
 
 	return -1;
 };
@@ -846,11 +845,8 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 	/** @type {"left" | "right" | undefined} */
 	var survivorSide;
 	if (windows.length === 2 && this.snapInsertGaps) {
-		if (index === 0) {
-			survivorSide = "right";
-		} else if (index === 1) {
-			survivorSide = "left";
-		}
+		if (index === 0) survivorSide = "right";
+		else if (index === 1) survivorSide = "left";
 	}
 
 	windows.splice(index, 1);
@@ -867,8 +863,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  */
 WindowManager.prototype.getSnapSpacer = function (section) {
 	var group = this.getSnapGroup(section);
-	if (!group.spacer) group.spacer = document.createElement("div"), group.spacer.className = "snap-spacer";
-	return group.spacer;
+	return group.spacer || (group.spacer = document.createElement("div"), group.spacer.className = "snap-spacer");
 };
 
 /** @param {HTMLElement} section */
