@@ -348,8 +348,8 @@ UIBuilder.prototype.addNavList = function (items, container) {
 
 
 /** @param {{ name: string, icon: string }[]} files */
-UIBulder.prototype.addFileView = function (files) {
-	return this.newTag().addInputList(files.map(function (file) {
+UIBuilder.prototype.addFileView = function (files) {
+	return this.addInputList(files.map(function (file) {
 		return { label: file.name, icon: file.icon };
 	}));
 };

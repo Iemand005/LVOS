@@ -279,8 +279,8 @@ var onLoad = function () {
 
     if (window.desktopManager) window.desktopManager.init();
 
-	window.os.to("desktop-folder").AddFileView([
-		{ name: Konk, icon: "sometpathrnomorecatkakatja?"}
+	window.os.to("desktop-folder").addFileView([
+		{ name: "Konk", icon: "Assets/icon-192.png"}
 	]);
 };
 
