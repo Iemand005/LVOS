@@ -59,6 +59,10 @@ The project also has a separate mobile interface. Mobile devices are not simply 
 
 The goal is to keep the system lightweight without giving up the feeling of using an actual desktop environment.
 
+## Where did it come from?
+
+This was in fact the first school project I was allowed to use JavaScript for. Prior to this I was only allowed to use HTML and CSS, if you look at my [Web Archive](https://iemand005.github.io/Archive-2023/) you can see that I attempted to add reactive elements and interactions to my websites without JavaScript before this as we weren't allowed to use JS. For this one we could use JavaScript so I decided to go all the way on my homework and here's the result. I think it turned out pretty well for being a first time JavaScript project.
+
 ## Browser support
 
 VulpOS has been developed with a much wider browser range in mind than most modern web applications.
