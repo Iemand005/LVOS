@@ -29,6 +29,7 @@ interface Application {
 	exists?: boolean;
 	/** When true, opening the app spawns an extra window instance instead of reusing the open one. */
 	multiple?: boolean;
+	fileTypes: string[];
 }
 
 interface DialogState {
