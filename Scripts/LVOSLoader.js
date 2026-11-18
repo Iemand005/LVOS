@@ -113,6 +113,8 @@ Loader.onReady(function () {
 		Loader.loadScript(scriptDir + "Messenger.js", function () {
 			console.log("Messenger.js loaded!");
 
+if(Loader.onLoad)			Loader.onLoad();
+
 			if (hasTheme) LVMessenger.registerThemeChangeHandler();
 		});
 
