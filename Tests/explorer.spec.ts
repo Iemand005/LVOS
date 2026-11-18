@@ -8,6 +8,7 @@ test('explorer shows the navigation shell, file view and status count', async ({
 	await vulpOS.assertWindowOpen(dialog);
 
 	const frame = vulpOS.page.frameLocator('iframe[src*="explorer.html"]');
+	await expect(frame.locator('script[src*="Messenger.js"]')).toHaveCount(1);
 	await expect(frame.locator('header nav button')).toHaveCount(3);
 	await expect(frame.locator('#address')).toBeVisible();
 	await expect(frame.locator('#search')).toBeVisible();
