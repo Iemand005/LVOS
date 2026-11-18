@@ -28,4 +28,4 @@ I think the messageReceived callback needs to be moved wosoemwher welse cuz like
 
 make loadr inject polies?
 
-toggle ui design oveer checkbox tags wth animation
+Notification  system on the os object. I want to be able to make push notifs with icon title and  description (all optionals or so except title maybe), a notification history with the time and notification data object whcih is the title and descr and stuff, I want the default ddesing to kinda look like win10 or 8, just a notif that shows up flying in from bottom right corner, flies in, has a close button, if you click on it a callback is called which is then an onClick on the same data object, just like how the data objects for constructing UI of files and other UI elements is organized!!!
