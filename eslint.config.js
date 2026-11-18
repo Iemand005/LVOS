@@ -33,7 +33,8 @@ export default defineConfig(
 				Helpers: "readonly",
 				TabScroller: "readonly",
 				initApps: "readonly",
-				capabilities: "writable"
+				capabilities: "writable",
+				VulpOS: "readonly"
 			}
 		},
 
