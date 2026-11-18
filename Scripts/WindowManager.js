@@ -1977,18 +1977,6 @@ Object.defineProperty(Dialog.prototype, "body", {
 Object.defineProperty(Dialog.prototype, "titleBar", {
 	get: function() { return this.getElementByTagOrClassName("header"); }
 });
-Object.defineProperty(Dialog.prototype, "contentDocument", {
-	get: function() {
-		var frame = this.frame;
-		return frame && frame.contentDocument;
-	}
-});
-Object.defineProperty(Dialog.prototype, "contentWindow", {
-	get: function() {
-		var frame = this.frame;
-		return frame && frame.contentWindow;
-	}
-});
 
 Object.defineProperty(Dialog.prototype, "x", {
 	get: function () { return this._x * Helpers.getViewportWidth(); }, // TODO: derive from cached WindowManager.windowRect/work-area bounds
@@ -3130,8 +3118,7 @@ Dialog.prototype.loadState = function(state) {
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
 	var frame = this.frame;
-	var doc = frame && frame.contentDocument;
-	return doc && doc.getElementById(id);
+	return frame && frame.contentDocument && frame.contentDocument.getElementById(id);
 };
 Dialog.prototype.insertIntoDOM = function() {
 	var container = document.getElementById("window-section");
