@@ -31,6 +31,12 @@ var flags = {
 	useAnimations: true,
 	ieDropCompatibleMode: true,
 	bootAnimation: true,
+	_noBlurFullscreen: true,
+	get noBlurFullscreen() { return this._noBlurFullscreen || false; },
+	set noBlurFullscreen(value) {
+		this._noBlurFullscreen = !!value;
+		updateFullscreenBlurState();
+	},
 	_useTransform: useTransform,
 	get useTransform() { return this._useTransform || false; },
 	set useTransform(value) {
@@ -2374,7 +2380,7 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	this.maximizeAnimations++;
 
 	if (flags.useViewTransitionMaximize && this.windowTarget)
-		return this.windowTarget.toggleMaximizedVT(enable, function() { self._maximizePending = null; });
+		return this.windowTarget.toggleMaximizedVT(enable, function() { self._maximizePending = null; updateFullscreenBlurState(); });
 
 	if (capabilities.supportsTransitions) {
 		if (!flags.compositorResize) this.toggleClassAnimated("maximized", enable, function(name) {
@@ -2382,11 +2388,13 @@ Dialog.prototype.toggleMaximized = function (enable) {
 		}, undefined, function(isMaximized) {
 			if (this.useTransform && this.target) this.toggleMinSizeConstraints(isMaximized);
 			this.maximizeAnimations--;
+			updateFullscreenBlurState();
 		}); else this.toggleClassAnimated("scaled-max", enable, "transform", function(enabled) {
 			if (fsTimeout) clearTimeout(fsTimeout);
 			this._maximizing = enabled;
 			this._maximizePending = null;
 			target.classList.toggle("maximized", enabled);
+			updateFullscreenBlurState();
 			target.style.pointerEvents = "";
 			if (this.transform) this.transform.scale(1, 1, undefined, true);
 			this.updateTransform();
@@ -2966,10 +2974,30 @@ DragAction.prototype.set = function (direction) { this.execute = this.resizeFunc
 
 //#endregion
 
+var fullscreenBlurWatchInstalled = false;
+
+function updateFullscreenBlurState() {
+	var anyFullscreen = !!document.querySelector(".window.open.maximized");
+	document.body.classList.toggle("no-blur", anyFullscreen && flags.noBlurFullscreen === true);
+	ensureFullscreenBlurWatch();
+}
+
+function ensureFullscreenBlurWatch() {
+	if (fullscreenBlurWatchInstalled || typeof MutationObserver === "undefined" || !document.body) return;
+	fullscreenBlurWatchInstalled = true;
+	new MutationObserver(updateFullscreenBlurState).observe(document.body, {
+		childList: true,
+		subtree: true,
+		attributes: true,
+		attributeFilter: ["class"]
+	});
+}
+
 //#region Event Listeners
 
 window.addEventListener("resize", WindowManager.updateWindowRect, false);
 window.addEventListener("load", WindowManager.updateWindowRect, false);
+window.addEventListener("load", updateFullscreenBlurState, false);
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
 window.addEventListener("dragover", Helpers.cancelDomEvent, false);
 window.addEventListener("drop", function(e) { e.preventDefault(); }, false);

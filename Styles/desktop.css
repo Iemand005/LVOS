@@ -786,6 +786,16 @@ aside#charms form {
 	object-fit: contain;
 }
 
+.folder-content .file-item {
+	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.folder-content .file-item:active {
+	cursor: grabbing;
+}
+
 .selector {
 	position: absolute;
 	border: 1px dashed rgb(0, 89, 255);

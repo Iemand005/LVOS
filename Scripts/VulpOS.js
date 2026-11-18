@@ -380,6 +380,45 @@ VulpOS.prototype.newTag = function (type) {
 };
 
 
+Helpers.makeFileDraggable = function (element) {
+	var downEvent = capabilities.supportsPointer ? "pointerdown" : "mousedown";
+	var moveEvent = capabilities.supportsPointer ? "pointermove" : "mousemove";
+	var upEvent = capabilities.supportsPointer ? "pointerup" : "mouseup";
+	var startX = 0, startY = 0, originX = 0, originY = 0, dragging = false;
+
+	var move = function (ev) {
+		if (!dragging) return;
+		ev.preventDefault();
+		Helpers.translateElement(element, originX + ev.clientX - startX, originY + ev.clientY - startY);
+	};
+
+	var up = function (ev) {
+		if (!dragging) return;
+		originX += ev.clientX - startX;
+		originY += ev.clientY - startY;
+		element._fileDragX = originX;
+		element._fileDragY = originY;
+		dragging = false;
+		ev.preventDefault();
+		ev.stopPropagation();
+		document.removeEventListener(moveEvent, move, false);
+		document.removeEventListener(upEvent, up, false);
+	};
+
+	element.addEventListener(downEvent, function (ev) {
+		if (ev.button !== undefined && ev.button !== 0) return;
+		ev.preventDefault();
+		ev.stopPropagation();
+		dragging = true;
+		startX = ev.clientX;
+		startY = ev.clientY;
+		originX = element._fileDragX || 0;
+		originY = element._fileDragY || 0;
+		document.addEventListener(moveEvent, move, false);
+		document.addEventListener(upEvent, up, false);
+	}, false);
+};
+
 /** @param {IOItemList} items */
 Helpers.createList = function (items) {
 	var list = document.createElement("ul");
@@ -408,11 +447,14 @@ Helpers.createList = function (items) {
 		} else if ("icon" in item) { // File!
 			var image = document.createElement("img");
 			image.src = item.icon;
+			image.draggable = false;
 			var label = document.createElement("label");
 			label.textContent = item.label;
 
+			li.className = "file-item";
 			li.appendChild(image);
 			li.appendChild(label);
+			Helpers.makeFileDraggable(li);
 		}
 		list.appendChild(li);
 	});

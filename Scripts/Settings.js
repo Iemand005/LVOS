@@ -348,7 +348,6 @@ var elements = {
 	theme: null,
 	colorDebug: null,
 	squircles: null,
-	noBlurFullscreen: null,
 	installAppUrl: null,
 	installAppButton: null,
 	installAppProxiedButton: null,
