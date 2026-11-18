@@ -6,6 +6,7 @@ main {
 	height: 100%;
 }
 
-main > ul, section {
+section {
 	width: 100%;
+	overflow: scroll;
 }

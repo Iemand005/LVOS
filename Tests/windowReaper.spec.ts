@@ -45,16 +45,21 @@ test('a reaped window opens from its launch button on the first click', async ({
 	})), { timeout: 4000 }).toEqual({ inDom: true, open: true, killing: false });
 });
 
-test('diag launchpad buttons', async ({ vulpOS }) => {
-	const info = await vulpOS.page.evaluate(() => ({
-		buttons: Array.from(document.querySelectorAll('#launchpad button')).map(button => ({
-			text: button.textContent,
-			id: button.id,
-			onclick: String((button as HTMLButtonElement).onclick).slice(0, 100),
-		})),
-		windows: Object.keys((window as any).windowManager.windows),
-	}));
-	console.log(JSON.stringify(info, null, 2));
+test('diag dock relaunch', async ({ vulpOS }) => {
+	const music = await vulpOS.getWindow('music');
+	await music.evaluate((dialog: any) => dialog.close());
+	await expect.poll(() => music.evaluate((dialog: any) => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
+
+	const buttons = await vulpOS.page.locator('#dockapplist button').allTextContents();
+	console.log('dock buttons', JSON.stringify(buttons));
+
+	await vulpOS.page.locator('#dockapplist button', { hasText: 'Music' }).click();
+	console.log('after click', JSON.stringify(await music.evaluate((dialog: any) => ({
+		inDom: Boolean(dialog.target?.parentElement),
+		open: dialog.isOpen,
+		stateOpen: dialog._stateOpen,
+		killing: dialog._killing === true,
+	}))));
 });
 
 test('extension enabled states persist across reloads', async ({ vulpOS }) => {
