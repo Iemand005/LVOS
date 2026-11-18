@@ -288,11 +288,12 @@ function VulpOS(flags) {
 	this.Helpers = Helpers;
 }
 
-/** @param {Array<{ label: string} & {state: boolean, onInput: (enabled: boolean) => void}>} items */
+/** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
 VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (item) {
+		if (!item) return;
 		var li = document.createElement("li");
 		li.appendChild(document.createTextNode(item.label));
 
