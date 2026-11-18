@@ -800,10 +800,7 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
  * @param {"left" | "right"} [side] Which half the lone window is held in. Read from the window's current offset when omitted.
  */
 WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
-	for (var i = tiles.length - 1; i >= 0; i--) {
-		var tile = tiles[i];
-		if (tile && tile.gap) tiles.splice(i, 1);
-	}
+	tiles = tiles.filter(tile => !(tile && tile.gap));
 
 	if (tiles.length !== 1) return;
 	var firstTile = tiles[0];
@@ -823,11 +820,11 @@ WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
  * @param {HTMLElement} section
  */
 WindowManager.prototype.findSnapTile = function (id, section) {
-	var windows = /** @type {WindowTile[]} */ (this.getSnapGroup(section).windows);
+	var windows = this.getSnapGroup(section).windows;
 
 	var index = -1;
 	windows.forEach(function (dialog, i) {
-		if (number >= -1 && dialog.id === id) index = i;
+		if (index >= -1 && dialog.id === id) index = i;
 	});
 
 	return index;
