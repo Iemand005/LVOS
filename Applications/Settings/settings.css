@@ -19,6 +19,9 @@ header button {
 
 	background: none;
 	border: none;
+
+	padding: 10px;
+	text-align: start;
 }
 
 main {
