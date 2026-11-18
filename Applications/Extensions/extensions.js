@@ -28,7 +28,7 @@ ExtensionApp.prototype.createList = function () {
 };
 
 LVMessenger.get("os", function(os) {
-	var ea = new ExtensionApp(os.windowManager);
-	ea.createList();
+	var app = new ExtensionApp(os.windowManager);
+	app.createList();
 });
 
