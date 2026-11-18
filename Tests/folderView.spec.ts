@@ -107,7 +107,7 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 	await expect(vulpOS.page.locator('#desktop-folder .file-item')).toHaveCount(0);
 });
 
-test('clicking empty space or a selected icon clears the selection', async ({ vulpOS }) => {
+test('clicking empty space clears the selection but clicking a selected icon keeps it', async ({ vulpOS }) => {
 	await hideOverlays(vulpOS.page);
 
 	const item = vulpOS.page.locator('#desktop-folder .file-item').first();
@@ -120,7 +120,7 @@ test('clicking empty space or a selected icon clears the selection', async ({ vu
 	await item.click();
 	await expect(vulpOS.page.locator('#desktop-folder .file-item.selected')).toHaveCount(1);
 	await item.click();
-	await expect(vulpOS.page.locator('#desktop-folder .file-item.selected')).toHaveCount(0);
+	await expect(vulpOS.page.locator('#desktop-folder .file-item.selected')).toHaveCount(1);
 });
 
 test('dragging the selector selects files under the rectangle', async ({ vulpOS }) => {
@@ -154,4 +154,23 @@ test('dropping a file on the desktop places it under the drop point', async ({ v
 	expect(box).not.toBeNull();
 	expect(Math.abs(box!.x + box!.width / 2 - 400)).toBeLessThanOrEqual(12);
 	expect(Math.abs(box!.y + box!.height / 2 - 300)).toBeLessThanOrEqual(12);
+});
+
+test('addFileView forwards click callbacks to file icons', async ({ vulpOS }) => {
+	await hideOverlays(vulpOS.page);
+	await vulpOS.page.evaluate(() => {
+		(window as any).__clicked = [];
+		window.os.to('desktop-folder').addFileView(
+			[{ name: 'Callback', icon: 'Assets/icon-192.png' }],
+			() => (window as any).__clicked.push('click'),
+			() => (window as any).__clicked.push('dblclick'));
+	});
+
+	const icon = vulpOS.page.locator('#desktop-folder .file-item').filter({ hasText: 'Callback' });
+	await icon.click();
+	await icon.dblclick();
+
+	const clicked = await vulpOS.page.evaluate(() => (window as any).__clicked);
+	expect(clicked).toContain('click');
+	expect(clicked).toContain('dblclick');
 });

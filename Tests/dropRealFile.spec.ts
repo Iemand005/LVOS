@@ -64,3 +64,46 @@ test('a real file drop does not open the filename as a URL app', async ({ vulpOS
 	});
 	expect(bogusApp).toBe(false);
 });
+
+test('double clicking a dropped file logs the bound File object', async ({ vulpOS }) => {
+	await dropFiles(vulpOS.page, [
+		{ name: 'notes.txt', type: 'text/plain', content: 'hello notes' },
+	], { x: 500, y: 300 });
+
+	await vulpOS.page.evaluate(() => {
+		(window as any).__logged = [];
+		console.log = (...args: any[]) => (window as any).__logged.push(args);
+	});
+
+	const icon = vulpOS.page.locator('#desktop-folder > .file-item.placed').filter({ hasText: 'notes.txt' });
+	await icon.dblclick();
+
+	const logged = await vulpOS.page.evaluate(() => {
+		const args = (window as any).__logged;
+		const file = args[0] && args[0][0];
+		return {
+			count: args.length,
+			isFile: file instanceof File,
+			name: file && file.name,
+			type: file && file.type,
+		};
+	});
+	expect(logged).toEqual({ count: 1, isFile: true, name: 'notes.txt', type: 'text/plain' });
+});
+
+test('file click callbacks receive the bound File object', async ({ vulpOS }) => {
+	await vulpOS.page.evaluate(() => {
+		const file = new File(['callback'], 'callback.txt', { type: 'text/plain' });
+		(window as any).__calls = [];
+		Helpers.addDesktopFile(file, 300, 200,
+			(bound: File) => (window as any).__calls.push(['click', bound.name]),
+			(bound: File) => (window as any).__calls.push(['dblclick', bound.name]));
+	});
+
+	const icon = vulpOS.page.locator('#desktop-folder > .file-item.placed').filter({ hasText: 'callback.txt' });
+	await icon.dblclick();
+
+	const calls = await vulpOS.page.evaluate(() => (window as any).__calls);
+	expect(calls.some((call: string[]) => call[0] === 'click')).toBe(true);
+	expect(calls.filter((call: string[]) => call[0] === 'dblclick')).toEqual([['dblclick', 'callback.txt']]);
+});

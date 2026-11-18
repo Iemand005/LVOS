@@ -347,10 +347,15 @@ UIBuilder.prototype.addNavList = function (items, container) {
 };
 
 
-/** @param {{ name: string, icon: string }[]} files */
-UIBuilder.prototype.addFileView = function (files) {
+/** @param {{ name: string, icon: string, onFileClick?: Function, onFileDoubleClick?: Function }[]} files */
+UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClick) {
 	var builder = this.addList(files.map(function (file) {
-		return { label: file.name, icon: file.icon };
+		return {
+			label: file.name,
+			icon: file.icon,
+			onFileClick: file.onFileClick || onFileClick,
+			onFileDoubleClick: file.onFileDoubleClick || onFileDoubleClick
+		};
 	}));
 	Helpers.prepareFileDropTarget(closestFolderContent(this.container));
 	return builder;
@@ -435,10 +440,15 @@ function placeFileElement(element, folder, clientX, clientY) {
 	Helpers.selectFileItem(element);
 }
 
-Helpers.addDesktopFile = function (file, clientX, clientY) {
+Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDoubleClick) {
 	var folder = document.getElementById("desktop-folder");
 	if (!folder || !file) return null;
-	var list = Helpers.createList([{ label: file.name, icon: "Assets/icon-192.png" }]);
+	var list = Helpers.createList([{
+		label: file.name,
+		icon: "Assets/icon-192.png",
+		onFileClick: onFileClick,
+		onFileDoubleClick: onFileDoubleClick || function (droppedFile) { console.log(droppedFile); }
+	}]);
 	var element = list.firstChild;
 	if (!element) return null;
 	element.lvFile = file;
@@ -541,8 +551,15 @@ Helpers.prepareFileItem = function (element, item) {
 	element.addEventListener(downEvent, function (ev) {
 		if (ev.button !== undefined && ev.button !== 0) return;
 		ev.stopPropagation();
-		if (element.classList.contains("selected")) element.classList.remove("selected");
-		else Helpers.selectFileItem(element);
+		Helpers.selectFileItem(element);
+	}, false);
+
+	element.addEventListener("click", function () {
+		if (item.onFileClick) item.onFileClick(element.lvFile || null, element);
+	}, false);
+
+	element.addEventListener("dblclick", function () {
+		if (item.onFileDoubleClick) item.onFileDoubleClick(element.lvFile || null, element);
 	}, false);
 
 	element.addEventListener("dragstart", function (ev) {
@@ -596,7 +613,12 @@ Helpers.createList = function (items) {
 			li.className = "file-item";
 			li.appendChild(image);
 			li.appendChild(label);
-			Helpers.prepareFileItem(li, { label: item.label, icon: item.icon });
+			Helpers.prepareFileItem(li, {
+				label: item.label,
+				icon: item.icon,
+				onFileClick: item.onFileClick,
+				onFileDoubleClick: item.onFileDoubleClick
+			});
 		}
 		list.appendChild(li);
 	});
