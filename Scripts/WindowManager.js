@@ -2258,16 +2258,15 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 };
 /**  @param {number} [scale] */
 Dialog.prototype.setDragScale = function(scale) {
-	var nextX = scale || 1,  nextY = scale || 1;
+	var next = scale || 1;
 
-	if (nextX === this._scaleX && nextY === this._scaleY) return;
-	this._scaleX = nextX;
-	this._scaleY = nextY;
+	if (next === this._scaleX && next === this._scaleY) return;
+	this._scaleX = next, this._scaleY = next;
 
 	var content = this.content;
 	if (!content || this.maximized || this._maximizing) return;
 	content.style.transformOrigin = "center";
-	content.style.scale = nextX === 1 && nextY === 1 ? "" : nextX + " " + nextY;
+	content.style.scale = next === 1 ? "" : next + " " + next;
 };
 /** @param {number} scaleY */
 Dialog.prototype.setScaleY = function(scaleY) {
