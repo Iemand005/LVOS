@@ -1492,14 +1492,16 @@ function Dialog(application) {
 	this.buttons = [];
 	this.clickOffset = new ClickOffset;
 
-	/** @type {HTMLElement} */
-	this.target;
+	/** @type {HTMLElement | WindowDiv} */
+	var target;
 
 	if (application.exists) {
 		var element = id && document.getElementById(id);
 		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
 		this.target = element;
 	} else this.target = createDialogElement();
+
+	this.target = target;
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
@@ -1525,8 +1527,7 @@ function Dialog(application) {
 			if (!ev) return;
 		}
 		self._ctrlDrag = !!(ev && ev.ctrlKey);
-		if (self._ctrlDrag)
-			return ev.stopImmediatePropagation();
+		if (self._ctrlDrag) return ev.stopImmediatePropagation();
 
 		if (target instanceof HTMLElement && target.classList.contains("touch") && (!("pointerType" in ev) || ev.pointerType !== "touch"))
 			return false;
@@ -1547,8 +1548,10 @@ function Dialog(application) {
 
 	if (this.windowTarget) this.windowTarget.dialog = this;
 
+	var target = this.target;
+
 	if (application.classes && typeof application.classes === "object")
-		application.classes.forEach(function (clazz) { this.target && this.target.classList.add(clazz); }, this); // `class` is a reserved keyword.
+		application.classes.forEach(function (clazz) { target.classList.add(clazz); }, this); // `class` is a reserved keyword.
 	if (application.title) this.setTitle(application.title);
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
@@ -1571,16 +1574,11 @@ function Dialog(application) {
 
 	/** @param {Coord} difference */
 	this.exchangeDialogMoveEvent = function(difference) { this.messageFrame("windowMove", self.clickOffset.update(difference.x, difference.y)); };
-	var target = this.target;
-
 	var buttons = target.getElementsByTagName("button");
-
 
 	if(this.resizable) this._createSizers();
 
-	target.onselectstart = function (/** @type {Event} */event) {
-		if (!self._ctrlDrag) Helpers.cancelDomEvent(event);
-	};
+	target.onselectstart = function (/** @type {Event} */event) { if (!self._ctrlDrag) Helpers.cancelDomEvent(event); };
 
 	var body = this.body;
 	if (body) body.onload = function () {
