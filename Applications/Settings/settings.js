@@ -2,11 +2,8 @@
 Loader.onVulpOS(function(os) {
 	var container = document.getElementById("content");
 	if (!container) return;
-
-	var extensions = os.wm.extensions;
-
 	container.appendChild(os.createHeader("Extensions"));
-	container.appendChild(os.createInputList(extensions.map(function (extension) {
+	container.appendChild(os.createInputList(os.wm.extensions.map(function (extension) {
 		return { label: extension.name, state: extension.enabled || false, onInput: function (enabled) {
 			os.wm.toggleExtensionEnabled(extension, enabled);
 		}};
