@@ -373,6 +373,10 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
+VulpOS.prototype.buildFolderView = function () {
+	
+}
+
 /** @param {IOItemList} items */
 Helpers.createInputList = function (items) {
 	var list = document.createElement("ul");
