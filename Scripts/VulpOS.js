@@ -279,7 +279,7 @@ function VulpOS() {
  * @param {Array<{label: string, checked: boolean, onToggle: function(boolean): void}>} items
  * @param {string} [containerSelector="main"]
  */
-VulpOS.prototype.createInputList = function (items, containerSelector) {
+VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (itemData) {
@@ -299,8 +299,6 @@ VulpOS.prototype.createInputList = function (items, containerSelector) {
 		list.appendChild(li);
 	});
 
-	var container = document.querySelector(containerSelector || "main");
-	if (container) container.appendChild(list);
 	return list;
 };
 
