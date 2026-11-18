@@ -45,13 +45,18 @@ test('a reaped window opens from its launch button on the first click', async ({
 	})), { timeout: 4000 }).toEqual({ inDom: true, open: true, killing: false });
 });
 
-test('diag close race', async ({ vulpOS }) => {
+test('diag applist relaunch', async ({ vulpOS }) => {
 	const cube = await vulpOS.openCube();
-	await cube.evaluate((dialog: any) => dialog.close());
-	await cube.evaluate((dialog: any) => dialog.createOpenButton().click());
+	await vulpOS.closeWindow(cube);
+	await expect.poll(() => cube.evaluate((dialog: any) => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
+
+	const buttons = await vulpOS.page.locator('#applist button').allTextContents();
+	console.log('applist buttons', JSON.stringify(buttons));
+
+	await vulpOS.page.locator('#applist button', { hasText: 'Cube' }).click();
 
 	await vulpOS.page.waitForTimeout(1000);
-	console.log('after immediate relaunch', JSON.stringify(await cube.evaluate((dialog: any) => ({
+	console.log('after applist click', JSON.stringify(await cube.evaluate((dialog: any) => ({
 		inDom: Boolean(dialog.target?.parentElement),
 		open: dialog.isOpen,
 		stateOpen: dialog._stateOpen,

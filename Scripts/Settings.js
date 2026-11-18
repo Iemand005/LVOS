@@ -404,7 +404,6 @@ function loadElements() {
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
 	elements.squircles = document.getElementById("squircles");
-	elements.noBlurFullscreen = document.getElementById("no-blur-fullscreen");
 	elements.installAppUrl = document.getElementById("install-app-url");
 	elements.installAppButton = document.getElementById("install-app-button");
 	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");
@@ -425,7 +424,6 @@ function loadElements() {
 	if (elements.theme) elements.theme.onchange = function () { setThemeOption(this.value); };
 	if (elements.colorDebug) elements.colorDebug.onchange = function () { toggleColorDebug(this.checked); };
 	if (elements.squircles) elements.squircles.onchange = function () { toggleSquircles(this.checked); };
-	if (elements.noBlurFullscreen) elements.noBlurFullscreen.onchange = function () { toggleNoBlurFullscreen(this.checked); };
 	if (elements.installAppButton) elements.installAppButton.onclick = function () { installAppFromUrl(false); };
 	if (elements.installAppProxiedButton) elements.installAppProxiedButton.onclick = function () { installAppFromUrl(true); };
 	if (elements.wallpaperSelect) elements.wallpaperSelect.onchange = function () { setWallpaperOption(this.value); };
