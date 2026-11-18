@@ -321,8 +321,7 @@ WindowManager.prototype.createAppFromElement = function(element) {
 /** @param {Application} application */
 WindowManager.prototype.loadApp = function(application) {
 	try {
-		var dialog = new Dialog(application);
-		this._windows[application.id] = dialog;
+		var dialog = this._windows[application.id] = new Dialog(application);
 		appManager.addApp(application);
 		return dialog;
 	} catch(ex) { console.warn("App load failed", ex); return null; }
@@ -343,9 +342,7 @@ WindowManager.prototype.spawnApp = function(application) {
 	for (var key in application) if (application.hasOwnProperty(key)) instance[key] = application[key];
 	instance.id = id;
 
-	try {
-		return this._windows[id] = new Dialog(instance);
-	} catch(ex) { console.warn("App spawn failed", ex); return null; }
+	try { return this._windows[id] = new Dialog(instance); } catch(ex) { console.warn("App spawn failed", ex); return null; }
 };
 /**
  * @param {string} url
