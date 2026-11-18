@@ -64,9 +64,9 @@ Loader.loadScript = function (url, onLoad) {
 /** @type {(()=>void) | null} */
 Loader.onLoad = null;
 
-/** @param {(os: VulpOS)=>void} hanlder */
-Loader.onVulpOS = function(hanlder) {
-	Loader.onLoad = function() { LVMessenger.get("os", handler); };
+/** @param {(os: VulpOS)=>void} callback */
+Loader.onVulpOS = function(callback) {
+	Loader.onLoad = function() { LVMessenger.get("os", handbaler); };
 };
 
 /**
