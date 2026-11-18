@@ -289,9 +289,9 @@ var onLoad = function () {
 
 	window.os.to("desktop-folder").addFileView([
 		{ name: "Konk", icon: "Assets/icon-192.png"},
-		{ name: "Konk", icon: "Assets/icon-192.png"},
-		{ name: "Konk", icon: "Assets/icon-192.png"},
-		{ name: "Konk", icon: "Assets/icon-192.png"}
+		{ name: "Kink", icon: "Assets/icon-192.png"},
+		{ name: "Kenk", icon: "Assets/icon-192.png"},
+		{ name: "Kank", icon: "Assets/icon-192.png"}
 
 	]);
 };
