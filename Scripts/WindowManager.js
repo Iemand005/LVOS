@@ -2256,13 +2256,10 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 	content.style.transformOrigin = "center";
 	if (this.contentTransform) this.contentTransform.scale(scaleX, scaleY, update !== false, !noAnimation);
 };
-/**
- * @param {number} [scaleX]
- * @param {number} [scaleY]
- */
-Dialog.prototype.setDragScale = function(scaleX, scaleY) {
-	var nextX = scaleX || 1;
-	var nextY = scaleY || 1;
+/**  @param {number} [scale] */
+Dialog.prototype.setDragScale = function(scale) {
+	var nextX = scale || 1;
+	var nextY = scale || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
 	this._scaleX = nextX;
