@@ -276,7 +276,6 @@ function VulpOS() {
 }
 
 /**
- * Helper to create and append a toggleable list view.
  * @param {Array<{label: string, checked: boolean, onToggle: function(boolean): void}>} items
  * @param {string} [containerSelector="main"]
  */
@@ -291,11 +290,9 @@ VulpOS.prototype.createToggleList = function (items, containerSelector) {
 		toggle.type = "checkbox";
 		toggle.checked = !!itemData.checked;
 
-		// Using onchange captures the exact checked state and avoids var loop closure bugs
 		toggle.onchange = function () {
-			if (typeof itemData.onToggle === "function") {
+			if (typeof itemData.onToggle === "function")
 				itemData.onToggle(toggle.checked);
-			}
 		};
 
 		li.appendChild(toggle);
