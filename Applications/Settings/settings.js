@@ -15,7 +15,7 @@ Loader.onVulpOS(function(os) {
 	os.createInputList((Object.keys(f).map(function (key) {
 		var flag = f[key] || false;
 		return { label: Helpers.formatCamelCase(key), state: flag, onInput: function (enabled) {
-			os.wm.toggleExtensionEnabled(extension, enabled);
+			f[key] = enabled;
 		}};
-	}));
+	})));
 });
