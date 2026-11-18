@@ -867,10 +867,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  */
 WindowManager.prototype.getSnapSpacer = function (section) {
 	var group = this.getSnapGroup(section);
-	if (!group.spacer) {
-		group.spacer = document.createElement("div");
-		group.spacer.className = "snap-spacer";
-	}
+	if (!group.spacer) group.spacer = document.createElement("div"), group.spacer.className = "snap-spacer";
 	return group.spacer;
 };
 
@@ -888,12 +885,9 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 
 	/** @type {Record<string, boolean>} */
 	var members = {};
-	titles.forEach(function (title) {
-		if (title && title.id) members[title.id] = true;
-	})
-	for (var m = 0; m < tiles.length; m++) {
-		var memberTile = tiles[m];
-	}
+	tiles.forEach(function (tile) {
+		if (tile && tile.id) members[tile.id] = true;
+	});
 
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
