@@ -267,15 +267,15 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	}
 };
 
-Helpers./**
+/**
  * @param {string} text
  * @returns {string}
  */
-function formatCamelCase(text) {
+Helpers.formatCamelCase = function (text) {
     if (!text) return "";
     var result = text.replace(/([A-Z])/g, " $1");
     return result.charAt(0).toUpperCase() + result.slice(1);
-}
+};
 
 //#endregion
 

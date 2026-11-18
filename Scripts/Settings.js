@@ -3,16 +3,6 @@
 
 "use strict";
 
-/**
- * @param {string} text
- * @returns {string}
- */
-function formatCamelCase(text) {
-    if (!text) return "";
-    var result = text.replace(/([A-Z])/g, " $1");
-    return result.charAt(0).toUpperCase() + result.slice(1);
-}
-
 
 function SettingsHandler() { // First class declarations, then the functions and as last the initialisation. The defer attribute does give us the ability to call functions before declaration since the file is loaded and parsed, but only gets executed after the DOM and all other files get loaded.
 	this.storage = typeof localStorage !== "undefined" && localStorage || (typeof ActiveXStorage !== "undefined" && new ActiveXStorage());
@@ -74,7 +64,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
 					var label = document.createElement("label");
 					label.htmlFor = toggle.id;
-					label.appendChild(document.createTextNode(formatCamelCase(flagId)));
+					label.appendChild(document.createTextNode(Helpers.formatCamelCase(flagId)));
 
 					row.appendChild(toggle);
 					row.appendChild(label);
