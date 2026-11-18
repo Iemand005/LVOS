@@ -140,7 +140,9 @@ li:not(:last-of-type) {
 }
 
 label:has(input[type="checkbox"]) {
-	display: inline-flex;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 	align-items: center;
 	gap: 0.5rem;
 	cursor: pointer;

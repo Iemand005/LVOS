@@ -391,7 +391,7 @@ Helpers.createInputList = function (items) {
 			toggle.onchange = function () { item.onInput(toggle.checked); };
 
 			label.appendChild(toggle);
-			li.appendChild(lable);
+			li.appendChild(label);
 		} else { // Button?
 			var button = document.createElement("button");
 			button.onclick = function () { item.onClick(); };
