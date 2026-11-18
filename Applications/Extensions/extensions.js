@@ -1,5 +1,5 @@
 
-LVMessenger.get("os", function(os) {
+Loader.onVulpOS(function(os) {
 	var extensions = os.wm.extensions;
 
 	var list = os.createInputList(extensions.map(function (extension) {

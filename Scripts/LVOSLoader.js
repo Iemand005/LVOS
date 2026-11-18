@@ -66,7 +66,7 @@ Loader.onLoad = null;
 
 /** @param {(os: VulpOS)=>void} callback */
 Loader.onVulpOS = function(callback) {
-	Loader.onLoad = function() { LVMessenger.get("os", handbaler); };
+	Loader.onLoad = function() { LVMessenger.get("os", callback); };
 };
 
 /**
