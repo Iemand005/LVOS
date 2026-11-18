@@ -81,6 +81,7 @@ main {
 	position: fixed;
 
 	margin: 0 !important;
+	padding: 0 !important;
 }
 
 body .tab-scroller {

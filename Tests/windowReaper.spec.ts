@@ -45,16 +45,13 @@ test('a reaped window opens from its launch button on the first click', async ({
 	})), { timeout: 4000 }).toEqual({ inDom: true, open: true, killing: false });
 });
 
-test('diag dock relaunch', async ({ vulpOS }) => {
-	const music = await vulpOS.getWindow('music');
-	await music.evaluate((dialog: any) => dialog.close());
-	await expect.poll(() => music.evaluate((dialog: any) => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
+test('diag close race', async ({ vulpOS }) => {
+	const cube = await vulpOS.openCube();
+	await cube.evaluate((dialog: any) => dialog.close());
+	await cube.evaluate((dialog: any) => dialog.createOpenButton().click());
 
-	const buttons = await vulpOS.page.locator('#dockapplist button').allTextContents();
-	console.log('dock buttons', JSON.stringify(buttons));
-
-	await vulpOS.page.locator('#dockapplist button', { hasText: 'Music' }).click();
-	console.log('after click', JSON.stringify(await music.evaluate((dialog: any) => ({
+	await vulpOS.page.waitForTimeout(1000);
+	console.log('after immediate relaunch', JSON.stringify(await cube.evaluate((dialog: any) => ({
 		inDom: Boolean(dialog.target?.parentElement),
 		open: dialog.isOpen,
 		stateOpen: dialog._stateOpen,

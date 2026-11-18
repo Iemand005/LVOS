@@ -6,6 +6,10 @@ main {
 	height: 100%;
 }
 
+aside {
+	margin-right: 10px;
+}
+
 section {
 	width: 100%;
 	overflow: scroll;
