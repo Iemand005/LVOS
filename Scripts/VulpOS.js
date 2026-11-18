@@ -279,7 +279,7 @@ function VulpOS() {
  * @param {Array<{label: string, checked: boolean, onToggle: function(boolean): void}>} items
  * @param {string} [containerSelector="main"]
  */
-VulpOS.prototype.createToggleList = function (items, containerSelector) {
+VulpOS.prototype.createInputList = function (items, containerSelector) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (itemData) {
