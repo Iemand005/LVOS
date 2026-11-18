@@ -350,6 +350,16 @@ VulpOS.prototype.to = function (element) {
 	return new UIBuilder(element);
 };
 
+/**
+ * @template {"section"} T
+ * @param {"section"} element
+ */
+VulpOS.prototype.make = function (element) {
+	if (typeof element === "string") element = document.getElementById(element);
+	if (!element) throw new Error("Unable to find elementby ID");
+	return new UIBuilder(element);
+};
+
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
 Helpers.createInputList = function (items) {
 	var list = document.createElement("ul");
