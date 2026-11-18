@@ -1,5 +1,7 @@
 /** @class */
-function Loader() { }
+function Loader() {
+	this.
+}
 
 /**
  * @param {Document | HTMLScriptElement} target
@@ -59,6 +61,10 @@ Loader.loadScript = function (url, onLoad) {
 	if (onLoad) Loader._onEventReady(script, "load", onLoad);
 
 	head.appendChild(script);
+};
+
+Loader.onLoad = function() {
+
 };
 
 /**
