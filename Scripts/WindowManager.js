@@ -3119,7 +3119,8 @@ window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 //#region Global Variables
 
 var os = new VulpOS;
-
+window.os = os;
+/** @type {WindowManager} */
 var windowManager = os.wm;
 window.windowManager = windowManager;
 windowManager.isWindowUpdatesEnabled = true;
