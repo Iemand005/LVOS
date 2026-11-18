@@ -324,7 +324,7 @@ UIBuilder.prototype.addHeader = function (text) {
 	return this;
 };
 
-/** @typedef {{ name: string, icon: string }} LVUIFileItem */
+/** @typedef {{ icon: string }} LVUIFileItem */
 /** @typedef {({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void} | LVUIFileItem)) | undefined} UIItem */
 /** @typedef {Array<UIItem>} IOItemList */
 
@@ -374,9 +374,11 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
-/** @param {{ name: string, icon: string }} files */
+/** @param {{ name: string, icon: string }[]} files */
 VulpOS.prototype.buildFolderView = function (files) {
-	return this.newTag().addInputList(files);
+	return this.newTag().addInputList(files.map(function (file) {
+		return { label: file.name, icon: file.icon };
+	}));
 };
 
 /** @param {IOItemList} items */
