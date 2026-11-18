@@ -400,7 +400,7 @@ VulpOS.prototype.open = function (path) {
 	// TODO: make this function open the correct app for the specified file type?
 };
 
-/** @typedef {{title: string, description: strng}} Notification */
+/** @typedef {{title: string, description: string}} Notification */
 
 /** @param {Notification} notification */
 VulpOS.prototype.pushNotification = function (notification) {
