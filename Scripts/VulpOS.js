@@ -318,6 +318,11 @@ function UIBuilder(container) {
 	this.container = container;
 }
 
+/** @param {string} text */
+UIBuilder.prototype.addHeader = function (text) {
+	this.container.appendChild(createHea)
+};
+
 //#endregion
 
 //#region VulpOS
