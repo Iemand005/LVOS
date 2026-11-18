@@ -178,7 +178,7 @@ function messageReceived(type, data, source) {
 	var wm = window.windowManager;
 
 	switch (type) {
-		case "os": return /** @type {VulpOS} */({ windowManager: wm });
+		case "os": return window.os;
 	}
 
 	if (!source) return;
