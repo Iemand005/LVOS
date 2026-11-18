@@ -1623,16 +1623,11 @@ function Dialog(application) {
 	this.updateMaximizeButton();
 
 	target.ondragstart = function (event) {
-		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application) {
-			event.preventDefault();
-			return;
-		}
+		if (!(event.ctrlKey || self._ctrlDrag) || !event.dataTransfer || !self.application)
+			return event.preventDefault();
 
 		/** @type {DialogDropState} */
-		var dragState = {
-			state: self.getState(),
-			app: self.application
-		};
+		var dragState = { state: self.getState(), app: self.application };
 
 		var rect = Helpers.getRect(self.target);
 		if (rect) dragState.offset = {

@@ -404,6 +404,7 @@ function loadElements() {
 	elements.theme = document.getElementById("theme");
 	elements.colorDebug = document.getElementById("color-debug");
 	elements.squircles = document.getElementById("squircles");
+	elements.noBlurFullscreen = document.getElementById("no-blur-fullscreen");
 	elements.installAppUrl = document.getElementById("install-app-url");
 	elements.installAppButton = document.getElementById("install-app-button");
 	elements.installAppProxiedButton = document.getElementById("install-app-proxied-button");

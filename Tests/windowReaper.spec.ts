@@ -45,25 +45,6 @@ test('a reaped window opens from its launch button on the first click', async ({
 	})), { timeout: 4000 }).toEqual({ inDom: true, open: true, killing: false });
 });
 
-test('diag applist relaunch', async ({ vulpOS }) => {
-	const cube = await vulpOS.openCube();
-	await vulpOS.closeWindow(cube);
-	await expect.poll(() => cube.evaluate((dialog: any) => Boolean(dialog.target?.parentElement)), { timeout: 4000 }).toBe(false);
-
-	const buttons = await vulpOS.page.locator('#applist button').allTextContents();
-	console.log('applist buttons', JSON.stringify(buttons));
-
-	await vulpOS.page.locator('#applist button', { hasText: 'Cube' }).click();
-
-	await vulpOS.page.waitForTimeout(1000);
-	console.log('after applist click', JSON.stringify(await cube.evaluate((dialog: any) => ({
-		inDom: Boolean(dialog.target?.parentElement),
-		open: dialog.isOpen,
-		stateOpen: dialog._stateOpen,
-		killing: dialog._killing === true,
-	}))));
-});
-
 test('extension enabled states persist across reloads', async ({ vulpOS }) => {
 	const setReaper = (enabled: boolean) => vulpOS.page.evaluate((enabled) => {
 		window.windowManager.toggleExtensionEnabled(window.windowManager.getExtension('window-reaper'), enabled);
