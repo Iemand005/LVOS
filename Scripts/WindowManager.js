@@ -1801,11 +1801,7 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			Helpers.cancelDomEvent(ev);
 		};
 		var pointerUp = function () { windowManager.disableDialogDrag(); };
-		if (capabilities.supportsPointer) {
-			sizer.onpointerdown = pointerDown;
-			sizer.onpointerup = pointerUp;
-			sizer.onpointercancel = pointerUp;
-		}
+		if (capabilities.supportsPointer) sizer.onpointerdown = pointerDown, sizer.onpointerup = pointerUp, sizer.onpointercancel = pointerUp;
 		else sizer.onmousedown = pointerDown;
 		target.appendChild(sizer);
 
@@ -1820,11 +1816,8 @@ Dialog.prototype._createSizers = function(createTouchSizers){
 			touchSizer.classList.add(touchSizerId);
 			touchSizer.classList.add("touch");
 
-			if (capabilities.supportsPointer) {
-				touchSizer.onpointerdown = pointerDown;
-				touchSizer.onpointerup = pointerUp;
-				touchSizer.onpointercancel = pointerUp;
-			}
+			if (capabilities.supportsPointer)
+				touchSizer.onpointerdown = pointerDown, touchSizer.onpointerup = pointerUp, touchSizer.onpointercancel = pointerUp;
 
 			target.appendChild(touchSizer);
 		}
