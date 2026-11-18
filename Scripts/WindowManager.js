@@ -2635,7 +2635,6 @@ Dialog.prototype.toggleMaximized = function (enable) {
 	}
 };
 
-/** @param {boolean} [enable] */
 Dialog.prototype.maximize = function () { this.toggleMaximized(true); };
 /**
  * @param {MessageType} type
@@ -2688,12 +2687,8 @@ Dialog.prototype.move = function (x, y, update, animate) {
 	var windowWidth = Helpers.getViewportWidth();
 	var windowHeight = Helpers.getViewportHeight();
 	var previousX = this._x, previousY = this._y;
-	this._x = x / windowWidth;
-	this._y = y / windowHeight;
-	if (this.velocityTracking) {
-		this.velocityX = this.x - prevX;
-		this.velocityY = this.y - prevY;
-	}
+	this._x = x / windowWidth, this._y = y / windowHeight;
+	if (this.velocityTracking) this.velocityX = this.x - prevX, this.velocityY = this.y - prevY;
 
 	if (update !== false)
 		if (animate) this.animate(this.updatePosition);
@@ -3163,7 +3158,7 @@ function DragAction() {
 }
 
 /** @param {number} [direction] */
-DragAction.prototype.set = function (direction) { this.execute = this.resizeFunctions[this.direction = direction || 0] || new FUnctioin; };
+DragAction.prototype.set = function (direction) { this.execute = this.resizeFunctions[this.direction = direction || 0] || function() {}; };
 
 //#endregion
 
