@@ -354,7 +354,7 @@ VulpOS.prototype.to = function (element) {
  * @template {"section"} T
  * @param {"section"} [type]
  */
-VulpOS.prototype.make = function (type) {
+VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
