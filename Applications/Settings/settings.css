@@ -1,13 +1,10 @@
 
-body {
-	display: flex;
-}
-
 main {
 	display: flex;
 	flex-direction: row;
 
 	width: 100%;
+	height: 100%;
 }
 
 aside,  #content {
@@ -16,6 +13,7 @@ aside,  #content {
 	overflow: scroll;
 
 	padding: 10px;
+	height: 100%;
 }
 
 aside button, aside li {
