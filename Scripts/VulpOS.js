@@ -397,12 +397,19 @@ Helpers.createInputList = function (items) {
 
 			label.appendChild(toggle);
 			li.appendChild(label);
-		} else { // Button?
+		} else if ("onClick" in item) { // Button?
 			var button = document.createElement("button");
 			button.onclick = function () { item.onClick(); };
 			button.textContent = item.label;
 
 			li.appendChild(button);
+		} else if ("icon" in item) { // File!
+			var image = document.createElement("img");
+			image.src - item.icon;
+			var label = document.createElement("label");
+
+			li.appendChild(image);
+			li.appendChild(label);
 		}
 		list.appendChild(li);
 	});
