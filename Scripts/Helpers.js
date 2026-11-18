@@ -1,3 +1,6 @@
+
+//#region Foundational Helpers
+
 var isBlink = "chrome" in window;
 var isIE = typeof window !== "undefined" && typeof document !== "undefined" && !!window.MSInputMethodContext && document.documentMode === 11;
 /** @type {"webkitTransitionEnd" | "transitionend"} */
@@ -263,3 +266,10 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 		});
 	}
 };
+
+//#endregion
+
+//#region VulpOS
+
+
+//#endregion
