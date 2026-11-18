@@ -22,7 +22,8 @@ if (!capabilities.supportsTransform) useTransform = false;
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
-/** @type {{[key: string]: boolean}} */
+/** @typedef {Record<string, boolean>} Flags */
+/** @satisfies {Flags} */
 var flags = {
 	aeroSnap: true,
 	updateRateLimit: allowUpdateRateLimit,
@@ -38,40 +39,40 @@ var flags = {
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 	},
 	_useScale: useScale,
-	get useScale() { return this._useScale; },
+	get useScale() { return this._useScale || false; },
 	set useScale(value) {
 		this._useScale = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
 	},
 	_compositorResize: true,
-	get compositorResize() { return this._compositorResize; },
+	get compositorResize() { return this._compositorResize || false; },
 	set compositorResize(value) {
 		document.body.classList.toggle("compositor-animations", !!value);
 		if (value) this._useViewTransitionMaximize = false;
 		this._compositorResize = value;
 	},
 	_useViewTransitionMaximize: true,
-	get useViewTransitionMaximize() { return this._useViewTransitionMaximize; },
+	get useViewTransitionMaximize() { return this._useViewTransitionMaximize || false; },
 	set useViewTransitionMaximize(value) {
 		if (value) this.compositorResize = false;
 		this._useViewTransitionMaximize = value;
 	},
 	_preserveMaximizeAspect: false,
-	get preserveMaximizeAspect() { return this._preserveMaximizeAspect; },
+	get preserveMaximizeAspect() { return this._preserveMaximizeAspect || false; },
 	set preserveMaximizeAspect(value) {
 		document.body.classList.toggle("preserve-aspect", !!value);
 		this._preserveMaximizeAspect = value;
 	},
 	verboseLogs: false,
 	_exposeAndDesktops: true,
-	get exposeAndDesktops() { return this._exposeAndDesktops; },
+	get exposeAndDesktops() { return this._exposeAndDesktops || false; },
 	set exposeAndDesktops(value) {
 		this._exposeAndDesktops = value;
 		if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
 			window.desktopManager.setExposéEnabled(value);
 	},
 	_enableExtensions: true,
-	get enableExtensions() { return this._enableExtensions; },
+	get enableExtensions() { return this._enableExtensions || false; },
 	set enableExtensions(value) {
 		this._enableExtensions = value;
 		window.windowManager.extensions.forEach(function(ext) {
