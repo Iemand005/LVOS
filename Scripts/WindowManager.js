@@ -938,7 +938,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.saveState();
 	if (!this.activeDialog) return;
 
-	if (this.isTouchDrag) this.activeDialog.setDragScale(1, 1);
+	if (this.isTouchDrag) this.activeDialog.setDragScale(1);
 
 	var snap = !(window.desktopManager && window.desktopManager.isExposé);
 	if (snap) {
@@ -1195,7 +1195,7 @@ WindowSnap.prototype.moveToDialog = function(dialog, outset, direction, noAnimat
 
 	this.element.style.zIndex = dialog.z.toString();
 	this.hidden = false;
-	if (isTouch && !direction) dialog.setDragScale(0.9, 0.9);
+	if (isTouch && !direction) dialog.setDragScale(0.9);
 	var self = this;
 	var apply = function() { Helpers.insetElement(self.element, top, left, right, bottom); }.bind(this);
 	if (!noAnimation) Helpers.animateElement(this.element, apply, "top", undefined, this, 500);
@@ -1256,7 +1256,7 @@ WindowSnap.prototype.snap = function(type, dialog) {
  * @param {boolean} [keepScale] Skip the scale reset, for a touch drag still in progress.
  */
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
-	if (!keepScale) dialog.setDragScale(1, 1);
+	if (!keepScale) dialog.setDragScale(1);
 	if (this.hidden) return;
 
 	Helpers.animateElement(this.element, function() {
@@ -2258,8 +2258,7 @@ Dialog.prototype.setScale = function(scaleX, scaleY, update, noAnimation) {
 };
 /**  @param {number} [scale] */
 Dialog.prototype.setDragScale = function(scale) {
-	var nextX = scale || 1;
-	var nextY = scale || 1;
+	var nextX = scale || 1,  nextY = scale || 1;
 
 	if (nextX === this._scaleX && nextY === this._scaleY) return;
 	this._scaleX = nextX;
