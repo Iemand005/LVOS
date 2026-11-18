@@ -349,7 +349,6 @@ UIBuilder.prototype.addNavList = function (items, container) {
 
 /** @param {{ name: string, icon: string }[]} files */
 UIBuilder.prototype.addFileView = function (files) {
-	this.container.classList.add("file-view");
 	return this.addList(files.map(function (file) {
 		return { label: file.name, icon: file.icon };
 	}));
