@@ -68,6 +68,7 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 		window.os.to(target).addFileView([]);
 	});
 
+	vulpOS.page.on('console', message => console.log('page:', message.text()));
 	await vulpOS.page.evaluate(() => {
 		(window as any).__dragLog = [];
 		['dragenter', 'dragover', 'drop', 'dragend'].forEach(type => {
@@ -100,6 +101,7 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 	const target = vulpOS.page.locator('#desktop-folder-2');
 	await item.dragTo(target, { targetPosition: { x: 20, y: 20 } });
 	console.log('drag events', JSON.stringify(await vulpOS.page.evaluate(() => (window as any).__dragLog)));
+	console.log('folders', JSON.stringify(await vulpOS.page.evaluate(() => Array.from(document.querySelectorAll('#desktop-folder')).map(folder => ({ html: folder.outerHTML.slice(0, 180), items: folder.querySelectorAll('.file-item').length })))));
 
 	await expect(vulpOS.page.locator('#desktop-folder-2 .file-item')).toHaveCount(1);
 	await expect(vulpOS.page.locator('#desktop-folder .file-item')).toHaveCount(0);

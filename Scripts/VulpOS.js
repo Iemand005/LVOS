@@ -446,6 +446,7 @@ Helpers.hasLvosFilePayload = hasFilePayload;
 
 window.addEventListener("dragover", function (ev) {
 	if (!hasFilePayload(ev)) return;
+	ev.preventDefault();
 	if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
 }, true);
 
@@ -456,13 +457,26 @@ window.addEventListener("drop", function (ev) {
 	ev.preventDefault();
 	ev.stopPropagation();
 
-	var folder = closestFolderContent(ev.target);
-	if (folder) return;
-
 	var payload;
 	try { payload = JSON.parse(raw); } catch (ex) { return; }
 	var source = payload.id && document.getElementById(payload.id);
-	placeFileElement(source || createFileElement(payload), document.getElementById("desktop-folder") || document.body, ev.clientX, ev.clientY);
+	if (!source) source = createFileElement(payload);
+
+	var folder = closestFolderContent(ev.target) || document.getElementById("desktop-folder") || document.body;
+	var node = ev.target;
+	var inList = false;
+	while (node && node !== folder) {
+		if (node.nodeName === "UL") { inList = true; break; }
+		node = node.parentNode;
+	}
+	console.log('drop debug', JSON.stringify({ payload: payload, sourceFound: !!source, parent: source && source.parentNode && source.parentNode.id, folder: folder.id, inList: inList }));
+
+	if (!inList) placeFileElement(source, folder, ev.clientX, ev.clientY);
+	else {
+		dockFileElement(source);
+		(folder.querySelector("ul") || folder).appendChild(source);
+		Helpers.selectFileItem(source);
+	}
 }, true);
 
 Helpers.prepareFileDropTarget = function (folder) {
