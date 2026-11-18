@@ -759,8 +759,31 @@ aside#charms form {
 	top: 0;
 }
 
-.folder-content li {
-	width: auto;
+.folder-content ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 8px;
+	background: transparent;
+}
+
+.folder-content li,
+.folder-content li:not(:last-of-type) {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 6px;
+	width: 80px;
+	padding: 8px;
+	border-bottom: 0;
+	text-align: center;
+}
+
+.folder-content li img {
+	width: 48px;
+	height: 48px;
+	object-fit: contain;
 }
 
 .selector {
