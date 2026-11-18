@@ -352,12 +352,11 @@ VulpOS.prototype.to = function (element) {
 
 /**
  * @template {"section"} T
- * @param {"section"} element
+ * @param {"section"} type
  */
-VulpOS.prototype.make = function (element) {
-	if (typeof element === "string") element = document.getElementById(element);
-	if (!element) throw new Error("Unable to find elementby ID");
-	return new UIBuilder(element);
+VulpOS.prototype.make = function (type) {
+	
+	return new UIBuilder(docustomElements.createElement(type));
 };
 
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
