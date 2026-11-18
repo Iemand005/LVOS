@@ -382,6 +382,7 @@ Helpers.createInputList = function (items) {
 		var li = document.createElement("li");
 
 		if ("state" in item) { // Checkbox/toggle
+			var label = document.createElement("label");
 			li.appendChild(document.createTextNode(item.label));
 
 			var toggle = document.createElement("input");
