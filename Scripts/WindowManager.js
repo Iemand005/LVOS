@@ -84,7 +84,6 @@ var flags = {
 
 /** @class */
 function WindowManager() {
-
 	/** @type {DialogMap} @const */
 	this._windows = {};
 	/** @type {DesktopState | null} */
@@ -92,9 +91,7 @@ function WindowManager() {
 	/** @type {Record<string, boolean> | null} */
 	this._extensionStates = null;
 	this._extensionLoadHookAdded = false;
-
 	this._isWindowUpdatesEnabled = false;
-
 	this.isDragging = false;
 	/** @constant */
 	this.dragAction = new DragAction;
@@ -128,7 +125,6 @@ function WindowManager() {
 	this.ticking = false;
 	/** @type {PointerEvent | MouseEvent | null} Newest drag event waiting for the next frame. */
 	this._pendingDragEvent = null;
-
 	this.flipped = false;
 	/** @type {Dialog | null} */
 	this.focusedDialog = null;
@@ -159,7 +155,6 @@ function WindowManager() {
 			Helpers.cancelDomEvent(event);
 
 			var isTouch = "pointerType" in event && event.pointerType === "touch";
-
 			self.setPointerPosition(event.clientX, event.clientY);
 
 			if (flags.updateRateLimit) {
@@ -191,12 +186,9 @@ Object.defineProperty(WindowManager.prototype, "windows", {
 
 Object.defineProperty(WindowManager.prototype, "windowStates", {
 	get: function () {
-		if (!this._windowStates && localStorage)
-		try {
+		if (!this._windowStates && localStorage) try {
 			var string = localStorage.getItem("windowState");
-			if (string === null) return null;
-
-			this._windowStates = JSON.parse(string);
+			if (string !== null) this._windowStates = JSON.parse(string);
 		} catch (ex) { console.warn(ex); }
 		return this._windowStates;
 	}
@@ -204,11 +196,9 @@ Object.defineProperty(WindowManager.prototype, "windowStates", {
 
 Object.defineProperty(WindowManager.prototype, "extensionStates", {
 	get: function () {
-		if (!this._extensionStates && localStorage)
-		try {
+		if (!this._extensionStates && localStorage) try {
 			var string = localStorage.getItem("extensionState");
-			if (string === null) return null;
-			this._extensionStates = JSON.parse(string);
+			if (string !== null) this._extensionStates = JSON.parse(string);
 		} catch (ex) { console.warn(ex); }
 		return this._extensionStates;
 	}
@@ -2907,14 +2897,7 @@ Dialog.prototype.toggleMinSizeConstraints = function(isMaximized) {
 
 /** @returns {DialogState} */
 Dialog.prototype.getState = function() {
-	return {
-		title: this.title || this.id || "Unc",
-		x: this.x, y: this.y, z: this.z,
-		width: this.width || this.minWidth,
-		height: this.height || this.minHeight,
-		open: this._stateOpen || this.isOpen || false,
-		maximized: this.maximized
-	};
+	return { title: this.title || this.id || "Unc", x: this.x, y: this.y, z: this.z, width: this.width || this.minWidth, height: this.height || this.minHeight, open: this._stateOpen || this.isOpen || false, maximized: this.maximized };
 };
 
 /** @param {Partial<DialogState>} state */
