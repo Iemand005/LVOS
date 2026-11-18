@@ -183,7 +183,7 @@ function messageReceived(type, data, source) {
 
 	if (!source) return;
 
-	var dialog = wm && wm.windows ? wm.windows[source] : null;
+	var dialog = wm.windows[source];
 	var frame = dialog ? dialog.frame : LVMessenger.getFrameForSource(source);
 
 	if (dialog && type === "window-size" && data && typeof data === "object")
