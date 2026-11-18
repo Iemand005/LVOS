@@ -5,3 +5,7 @@ main {
 
 	height: 100%;
 }
+
+main > ul {
+	width: 100%;
+}
