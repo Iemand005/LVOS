@@ -22,7 +22,6 @@ if (!capabilities.supportsTransform) useTransform = false;
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
-/** @typedef {Record<string, boolean>} Flags */
 /** @satisfies {Flags} */
 var flags = {
 	aeroSnap: true,

@@ -236,7 +236,10 @@ interface WindowOpenProperties {
 	top?: number;
 }
 
+type Flags = Record<string, boolean>;
+
 interface VulpOS {
 	windowManager: WindowManager;
 	desktopManager: DesktopManager;
+	flags: Flags;
 }
