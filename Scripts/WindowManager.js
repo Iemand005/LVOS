@@ -264,9 +264,7 @@ WindowManager.prototype.saveExtensionStates = function() {
 	if (!this.canSave || !("localStorage" in window)) return;
 	try {
 		var states = this.extensionStates || {};
-		this.extensions.forEach(function (ext) {
-			states[ext.id] = ext.enabled === true;
-		)};
+		this.extensions.forEach(function (ext) { states[ext.id] = ext.enabled === true; });
 		this._extensionStates = states;
 		localStorage.setItem("extensionState", JSON.stringify(states));
 	} catch (exception) { handleStorageException(exception); }
@@ -275,11 +273,7 @@ WindowManager.prototype.saveExtensionStates = function() {
 WindowManager.prototype.restoreExtensionStates = function() {
 	var states = this.extensionStates;
 	if (!states) return;
-	for (var i = 0; i < this.extensions.length; i++) {
-		var ext = this.extensions[i];
-		if (ext && ext.id && typeof states[ext.id] === "boolean")
-			this.toggleExtensionEnabled(ext, states[ext.id]);
-	}
+	this.extensions.forEach(function (ext) { if (typeof states[ext.id] === "boolean") this.toggleExtensionEnabled(ext, states[ext.id]); })
 };
 
 /**
@@ -1149,11 +1143,7 @@ WindowManager.prototype.notifyExtension = function(ext, hook, dialog) {
  * @param {Dialog} [dialog]
  */
 WindowManager.prototype.notifyExtensions = function(hook, dialog) {
-	for (var i = 0; i < this.extensions.length; i++) {
-		var ext = this.extensions[i];
-		if (!ext || !ext.enabled) continue;
-		this.notifyExtension(ext, hook, dialog);
-	}
+	this.extensions.forEach(function (ext) { if (ext.enabled) this.notifyExtension(ext, hook, dialog); });
 };
 
 /** @type {number} */
