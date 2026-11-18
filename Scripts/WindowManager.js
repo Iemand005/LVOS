@@ -2832,6 +2832,18 @@ Dialog.prototype.launch = function() {
 	this._killing = false;
 	if (!this.target.parentNode || !this.isOpen) this.insertIntoDOM();
 	this.target.classList.remove("hidden");
+	if (flags.useAnimations) {
+		var target = this.target;
+		var clearLaunch = function() {
+			target.classList.remove("launching");
+			target.removeEventListener("animationend", clearLaunch, false);
+		};
+		target.classList.remove("launching");
+		void target.offsetWidth;
+		target.classList.add("launching");
+		target.addEventListener("animationend", clearLaunch, false);
+		setTimeout(clearLaunch, 600);
+	}
 	windowManager.notifyExtensions("onWindowLaunch", this);
 	this.open();
 };

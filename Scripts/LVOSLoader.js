@@ -110,13 +110,18 @@ Loader.onReady(function () {
 			console.log("LVOSLoader: no data-theme attribute.");
 		}
 
-		Loader.loadScript(scriptDir + "Messenger.js", function () {
-			console.log("Messenger.js loaded!");
+		if (typeof LVMessenger !== "undefined") {
+			if (Loader.onLoad) Loader.onLoad();
+			if (hasTheme) LVMessenger.registerThemeChangeHandler();
+		} else {
+			Loader.loadScript(scriptDir + "Messenger.js", function () {
+				console.log("Messenger.js loaded!");
 
 if(Loader.onLoad)			Loader.onLoad();
 
-			if (hasTheme) LVMessenger.registerThemeChangeHandler();
-		});
+				if (hasTheme) LVMessenger.registerThemeChangeHandler();
+			});
+		}
 
 	}
 });

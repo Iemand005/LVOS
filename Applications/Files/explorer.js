@@ -1,5 +1,5 @@
 
-Loader.onVulpOS(function(os) {
+LVMessenger.get("os", function(os) {
 	var view = document.getElementById("file-view");
 	if (!view) return;
 
