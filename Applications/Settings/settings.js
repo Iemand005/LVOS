@@ -12,11 +12,10 @@ Loader.onVulpOS(function(os) {
 
 	/** @type {Flags} */
 	var f = flags;
-	Object.keys(f).map(function (key) {
-		var flag = f[key];
-		if (!flag) return;
-		return { label: flag.name, state: extension.enabled || false, onInput: function (enabled) {
+	os.createInputList((Object.keys(f).map(function (key) {
+		var flag = f[key] || false;
+		return { label: Helpers.formatCamelCase(key), state: flag, onInput: function (enabled) {
 			os.wm.toggleExtensionEnabled(extension, enabled);
 		}};
-	});
+	}));
 });
