@@ -324,10 +324,10 @@ UIBuilder.prototype.addHeader = function (text) {
 	return this;
 };
 
-/** @typedef {Array<({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined>} UIItem */
-/** @typedef {Array<({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined>} ItemList */
+/** @typedef {({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined} UIItem */
+/** @typedef {Array<UIItem>} IOItemList */
 
-/** @param {Array<({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined>} items */
+/** @param {IOItemList} items */
 UIBuilder.prototype.addInputList = function (items) {
 	this.container.appendChild(Helpers.createInputList(items));
 	return this;
@@ -361,7 +361,7 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
-/** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
+/** @param {IOItemList} items */
 Helpers.createInputList = function (items) {
 	var list = document.createElement("ul");
 
