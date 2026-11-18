@@ -29,6 +29,8 @@ test('clicking a file selects it without opening a selection rectangle', async (
 	await vulpOS.page.evaluate(() => {
 		document.getElementById('launchpad')?.setAttribute('style', 'display: none');
 		document.getElementById('charms')?.setAttribute('style', 'display: none');
+		const applist = document.getElementById('applist');
+		if (applist && applist.parentElement) applist.parentElement.setAttribute('style', 'display: none');
 	});
 
 	const item = vulpOS.page.locator('.folder-content .file-item').first();
@@ -54,6 +56,8 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 	await vulpOS.page.evaluate(() => {
 		document.getElementById('launchpad')?.setAttribute('style', 'display: none');
 		document.getElementById('charms')?.setAttribute('style', 'display: none');
+		const applist = document.getElementById('applist');
+		if (applist && applist.parentElement) applist.parentElement.setAttribute('style', 'display: none');
 		const target = document.createElement('article');
 		target.className = 'folder-content';
 		target.id = 'desktop-folder-2';
@@ -64,8 +68,8 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 	});
 
 	const item = vulpOS.page.locator('#desktop-folder .file-item').first();
-	const target = vulpOS.page.locator('#desktop-folder-2 ul');
-	await item.dragTo(target);
+	const target = vulpOS.page.locator('#desktop-folder-2');
+	await item.dragTo(target, { targetPosition: { x: 20, y: 20 } });
 
 	await expect(vulpOS.page.locator('#desktop-folder-2 .file-item')).toHaveCount(1);
 	await expect(vulpOS.page.locator('#desktop-folder .file-item')).toHaveCount(0);

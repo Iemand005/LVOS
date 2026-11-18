@@ -128,7 +128,7 @@ var onLoad = function () {
 
 	document.body.ondragover = window.ondragover = function(ev) {
 		Helpers.cancelDomEvent(ev);
-		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "copy";
+		if (ev.dataTransfer && ev.dataTransfer.dropEffect === "none") ev.dataTransfer.dropEffect = "copy";
 	};
 
     document.body.ondrop = function(ev) {
