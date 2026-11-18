@@ -400,6 +400,72 @@ Helpers.selectFileItem = function (element) {
 	if (element) element.classList.add("selected");
 };
 
+Helpers.selectFileItemsInRect = function (rect, additive, scope) {
+	var items = (scope || document).querySelectorAll(".file-item");
+	for (var i = 0; i < items.length; i++) {
+		var itemRect = items[i].getBoundingClientRect();
+		var hit = !(itemRect.right < rect.left || itemRect.left > rect.right || itemRect.bottom < rect.top || itemRect.top > rect.bottom);
+		if (hit) items[i].classList.add("selected");
+		else if (!additive) items[i].classList.remove("selected");
+	}
+};
+
+function dockFileElement(element) {
+	element.classList.remove("placed");
+	element.style.position = "";
+	element.style.left = "";
+	element.style.top = "";
+	element.style.margin = "";
+}
+
+function createFileElement(payload) {
+	return Helpers.createList([{ label: payload.name, icon: payload.icon }]).firstChild;
+}
+
+function placeFileElement(element, folder, clientX, clientY) {
+	var rect = folder.getBoundingClientRect();
+	dockFileElement(element);
+	if (element.parentNode) element.parentNode.removeChild(element);
+	folder.appendChild(element);
+	element.style.position = "absolute";
+	element.style.left = Helpers.toPixels(clientX - rect.left - (element.offsetWidth || 80) / 2);
+	element.style.top = Helpers.toPixels(clientY - rect.top - (element.offsetHeight || 88) / 2);
+	element.style.margin = "0";
+	element.classList.add("placed");
+	Helpers.selectFileItem(element);
+}
+
+function hasFilePayload(ev) {
+	var types = ev.dataTransfer && ev.dataTransfer.types;
+	if (!types) return false;
+	try { return Array.prototype.indexOf.call(types, "application/x-lvos-file") !== -1; }
+	catch (ex) { return false; }
+}
+
+Helpers.hasLvosFilePayload = hasFilePayload;
+
+window.addEventListener("dragover", function (ev) {
+	if (!hasFilePayload(ev)) return;
+	ev.preventDefault();
+	if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
+}, true);
+
+window.addEventListener("drop", function (ev) {
+	if (!hasFilePayload(ev)) return;
+	var raw = ev.dataTransfer.getData("application/x-lvos-file");
+	if (!raw) return;
+	ev.preventDefault();
+	ev.stopPropagation();
+
+	var folder = closestFolderContent(ev.target);
+	if (folder) return;
+
+	var payload;
+	try { payload = JSON.parse(raw); } catch (ex) { return; }
+	var source = payload.id && document.getElementById(payload.id);
+	placeFileElement(source || createFileElement(payload), document.getElementById("desktop-folder") || document.body, ev.clientX, ev.clientY);
+}, true);
+
 Helpers.prepareFileDropTarget = function (folder) {
 	if (!folder || folder._fileDropTargetReady) return;
 	folder._fileDropTargetReady = true;
@@ -419,9 +485,23 @@ Helpers.prepareFileDropTarget = function (folder) {
 		var payload;
 		try { payload = JSON.parse(raw); } catch (ex) { return; }
 		var source = payload.id && document.getElementById(payload.id);
-		var list = folder.querySelector("ul") || folder;
-		if (source) list.appendChild(source);
-		else if (window.os) window.os.to(list).addFileView([{ name: payload.name, icon: payload.icon }]);
+		if (!source) source = createFileElement(payload);
+
+		var node = ev.target;
+		var inList = false;
+		while (node && node !== folder) {
+			if (node.nodeName === "UL") { inList = true; break; }
+			node = node.parentNode;
+		}
+
+		if (!inList) {
+			placeFileElement(source, folder, ev.clientX, ev.clientY);
+			return;
+		}
+
+		dockFileElement(source);
+		(folder.querySelector("ul") || folder).appendChild(source);
+		Helpers.selectFileItem(source);
 	}, false);
 };
 
@@ -433,7 +513,8 @@ Helpers.prepareFileItem = function (element, item) {
 	element.addEventListener(downEvent, function (ev) {
 		if (ev.button !== undefined && ev.button !== 0) return;
 		ev.stopPropagation();
-		Helpers.selectFileItem(element);
+		if (element.classList.contains("selected")) element.classList.remove("selected");
+		else Helpers.selectFileItem(element);
 	}, false);
 
 	element.addEventListener("dragstart", function (ev) {

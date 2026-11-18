@@ -2999,7 +2999,9 @@ window.addEventListener("resize", WindowManager.updateWindowRect, false);
 window.addEventListener("load", WindowManager.updateWindowRect, false);
 window.addEventListener("load", updateFullscreenBlurState, false);
 window.addEventListener("unload", function() { windowManager && windowManager.saveState(); }, false);
-window.addEventListener("dragover", Helpers.cancelDomEvent, false);
+window.addEventListener("dragover", function (ev) {
+	if (!Helpers.hasLvosFilePayload || !Helpers.hasLvosFilePayload(ev)) Helpers.cancelDomEvent(ev);
+}, false);
 window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
 //#endregion

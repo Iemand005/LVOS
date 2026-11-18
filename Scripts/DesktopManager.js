@@ -236,6 +236,7 @@ var onLoad = function () {
 
 		if (tingeling instanceof HTMLElement) {
 			var selector = document.createElement("div");
+		var selectionAdditive = false;
 		clickOffset.dragHandler = function(ev) {
 			clickOffset.update(ev.clientX - clickOffset.clickPosition.x, ev.clientY - clickOffset.clickPosition.y);
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -244,10 +245,14 @@ var onLoad = function () {
 
 			selector.style.width = Helpers.toPixels(Math.abs(width));
 			selector.style.height = Helpers.toPixels(Math.abs(height));
+			Helpers.selectFileItemsInRect(selector.getBoundingClientRect(), selectionAdditive, tingeling);
 		};
 
 		// if (supportsPointer)
         tingeling.addEventListener(capabilities.supportsPointer?"pointerdown":"mousedown", function(ev) {
+			if (ev.button !== undefined && ev.button !== 0) return;
+			selectionAdditive = !!(ev.shiftKey || ev.ctrlKey || ev.metaKey);
+			if (!selectionAdditive) Helpers.selectFileItem(null);
 			clickOffset.init(ev.clientX, ev.clientY);
 
 			var width = clickOffset.position.x, height = clickOffset.position.y;
@@ -266,8 +271,11 @@ var onLoad = function () {
 
 		var stopIt = function() {
 			clickOffset.toggleDragEventHandler(false);
+			if (!selector.parentNode) return;
 
-			if (selector.parentNode) selector.parentNode.removeChild(selector);
+			var dragged = parseFloat(selector.style.width) > 3 || parseFloat(selector.style.height) > 3;
+			if (!dragged) Helpers.selectFileItem(null);
+			selector.parentNode.removeChild(selector);
 		};
 
 		window.addEventListener(capabilities.supportsPointer ? "pointerup" : "mouseup", stopIt, false);
