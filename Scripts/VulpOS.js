@@ -347,7 +347,8 @@ function VulpOS(flags) {
 VulpOS.prototype.to = function (element) {
 	var e;
 	if (typeof element === "string") e = document.getElementById(element);
-	if (!e) e = element;
+	else e = element;
+	if (!e) throw new Error("Unable to find elementby ID");
 	return new UIBuilder(e);
 };
 
