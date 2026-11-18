@@ -35,7 +35,8 @@ export default defineConfig(
 				initApps: "readonly",
 				capabilities: "writable",
 				VulpOS: "readonly",
-				Loader: "readonly"
+				Loader: "readonly",
+				Cursor: "readonly"
 			}
 		},
 

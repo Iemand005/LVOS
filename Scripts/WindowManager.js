@@ -977,9 +977,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 };
 
 /** @param {string} [id] */
-WindowManager.prototype.getWindowById = function(id) {
-	return id ? this.windows[id] : null;
-};
+WindowManager.prototype.getWindowById = function(id) { return id && this.windows[id] || null; };
 
 /**
  * @param {MessageType} type
@@ -990,9 +988,8 @@ WindowManager.prototype.broadcast = function(type, data, id) {
 	if (this.channel) LVMessenger.broadcast(this.channel, type, data, id);
 };
 
-/** Share the current theme with the other running OS instances. */
 WindowManager.prototype.broadcastTheme = function() {
-	if (!document.hasFocus()) return; // only the active tab drives theme sync
+	if (!document.hasFocus()) return;
 	this.broadcast("theme", { className: document.body.className });
 };
 
@@ -1131,12 +1128,9 @@ function WindowSnap() {
 	this.element = document.createElement("div");
 	this.element.id = "window-snap";
 	this._snapped = "";
-
 	/** @type {HTMLElement | null} */
 	this._section = null;
-
 	if (document.documentMode && document.documentMode < 9) return;
-
 	this.element.classList.add("hidden");
 }
 
@@ -1258,12 +1252,9 @@ WindowSnap.prototype.snap = function(type, dialog) {
 WindowSnap.prototype.hideBehind = function(dialog, keepScale) {
 	if (!keepScale) dialog.setDragScale(1);
 	if (this.hidden) return;
-
 	Helpers.animateElement(this.element, function() {
 		this.moveToDialog(dialog, 0, undefined, true);
-	}, "inset", function() {
-		this.hidden = true;
-	}, this, 120);
+	}, "inset", function() { this.hidden = true; }, this, 120);
 };
 
 //#endregion
