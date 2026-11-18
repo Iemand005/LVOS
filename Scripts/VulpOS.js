@@ -288,9 +288,7 @@ function VulpOS(flags) {
 	this.Helpers = Helpers;
 }
 
-/**
- * @param {Array<{ label: string} & {state: boolean, onInput: (enabled: boolean) => void}>} items
- */
+/** @param {Array<{ label: string} & {state: boolean, onInput: (enabled: boolean) => void}>} items */
 VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");
 
@@ -308,6 +306,13 @@ VulpOS.prototype.createInputList = function (items) {
 	});
 
 	return list;
+};
+
+/** @param {string} text */
+VulpOS.prototype.createHeader = function(text) {
+	var extHeader = document.createElement("h2");
+	extHeader.appendChild(document.createTextNode("Extensions"));
+	return extHeader;
 };
 
 //#endregion
