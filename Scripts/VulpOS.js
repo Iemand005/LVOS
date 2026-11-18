@@ -276,7 +276,7 @@ function VulpOS() {
 }
 
 /**
- * @param {Array<{onInput: function(boolean): void} & any>} items
+ * @param {Array<{state: boolean, onInput: function(boolean): void} & any>} items
  */
 VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");

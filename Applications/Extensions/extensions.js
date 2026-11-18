@@ -7,8 +7,8 @@ function ExtensionApp(os) {
 ExtensionApp.prototype.createList = function () {
 	var extensions = this.os.wm.extensions;
 
-	createInputList(extensions.map(function (extension) {
-		return { state: extension.enabled, onInput: function () {
+	this.os.createInputList(extensions.map(function (extension) {
+		return { state: extension.enabled, onInput: function (enabled) {
 
 		}};
 	}));
