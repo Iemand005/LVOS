@@ -6,6 +6,6 @@ main {
 	height: 100%;
 }
 
-main > ul {
+main > ul, section {
 	width: 100%;
 }

@@ -5,6 +5,9 @@ Loader.onVulpOS(function(os) {
 
 	var extensions = os.wm.extensions;
 
+	var extHeader = document.createElement("h2");
+	extHeader.appendChild(document.createTextNode("Extensions"));
+	container.appendChild(extHeader);
 
 	var list = os.createInputList(extensions.map(function (extension) {
 		return { label: extension.name, state: extension.enabled || false, onInput: function (enabled) {
