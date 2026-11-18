@@ -340,7 +340,7 @@ WindowManager.prototype.spawnApp = function(application) {
  */
 WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	/** @type {Application} */
-	var application = { src: url, id: id || "custom." + getDomain(url), title: title || getSiteName(url) || "unkle" };
+	var application = { src: url, id: id || "custom." + Helpers.getDomain(url), title: title || getSiteName(url) || "unkle" };
 	if (iconUrl) application.iconUrl = iconUrl;
 	this.loadApp(application);
 	this.saveInstalledApp(application);
@@ -412,8 +412,7 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 
 	void dialog.target.offsetLeft;
 
-	if (!state) state = { x: dialog.x, y: dialog.y };
-	dialog.loadState(state || {});
+	dialog.loadState(state || { x: dialog.x, y: dialog.y });
 	return dialog;
 };
 
