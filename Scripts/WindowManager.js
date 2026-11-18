@@ -32,7 +32,7 @@ var flags = {
 	ieDropCompatibleMode: true,
 	bootAnimation: true,
 	_useTransform: useTransform,
-	get useTransform() { return this._useTransform; },
+	get useTransform() { return this._useTransform || false; },
 	set useTransform(value) {
 		this._useTransform = value;
 		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
