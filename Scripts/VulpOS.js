@@ -267,7 +267,15 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	}
 };
 
-
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+Helpers.formatCamelCase = function (text) {
+    if (!text) return "";
+    var result = text.replace(/([A-Z])/g, " $1");
+    return result.charAt(0).toUpperCase() + result.slice(1);
+};
 
 //#endregion
 
@@ -277,6 +285,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 function VulpOS(flags) {
 	this.wm = new WindowManager;
 	this.flags = flags;
+	this.Helpers = Helpers;
 }
 
 /**
@@ -299,16 +308,6 @@ VulpOS.prototype.createInputList = function (items) {
 	});
 
 	return list;
-};
-
-/**
- * @param {string} text
- * @returns {string}
- */
-VulpOS.prototype.formatCamelCase = function (text) {
-    if (!text) return "";
-    var result = text.replace(/([A-Z])/g, " $1");
-    return result.charAt(0).toUpperCase() + result.slice(1);
 };
 
 //#endregion
