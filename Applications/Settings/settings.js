@@ -10,7 +10,8 @@ Loader.onVulpOS(function(os) {
 	var main = document.querySelector("main");
 	if (main) main.appendChild(list);
 
-	Object.keys(flags).map(function (flag) {
+	Object.keys(flags).map(function (key) {
+		var flag = flags[key];
 		
 	});
 });
