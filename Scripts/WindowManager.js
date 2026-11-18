@@ -2183,28 +2183,16 @@ Object.defineProperty(Dialog.prototype, "popup", {
 	get: function() { return this._popupWindow; }
 });
 
-Object.defineProperty(Dialog.prototype, "skew", {
-	set: function(/** @type {number} */skew) { this.setSkew(skew); }
-});
-
-Object.defineProperty(Dialog.prototype, "scaleY", {
-	set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); }
-});
-Object.defineProperty(Dialog.prototype, "rotation", {
-	set: function(/** @type {number} */rotation) { this.setRotation(rotation); }
-});
+Object.defineProperty(Dialog.prototype, "skew", { set: function(/** @type {number} */skew) { this.setSkew(skew); } });
+Object.defineProperty(Dialog.prototype, "scaleY", { set: function(/** @type {number} */scaleY) { this.setScaleY(scaleY); } });
+Object.defineProperty(Dialog.prototype, "rotation", { set: function(/** @type {number} */rotation) { this.setRotation(rotation); } });
 Object.defineProperty(Dialog.prototype, "opacity", {
 	set: function(/** @type {number} */opacity) { this.target && (this.target.style.opacity = String(opacity)); },
 	get: function() { return this.target && this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
 });
 
-Object.defineProperty(Dialog.prototype, "icon", {
-	get: function() { return this._appIcon; }
-});
-
-Object.defineProperty(Dialog.prototype, "iconUrl", {
-	get: function() { return this.getIconUrl(); }
-});
+Object.defineProperty(Dialog.prototype, "icon", { get: function() { return this._appIcon; } });
+Object.defineProperty(Dialog.prototype, "iconUrl", { get: function() { return this.getIconUrl(); } });
 
 Dialog.prototype.getIconUrl = function() {
 	return this.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
