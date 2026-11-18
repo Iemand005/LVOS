@@ -300,11 +300,18 @@ WindowManager.prototype.restoreExtensionStates = function() {
  * @param {WindowCallback<any>} callback
  * @param {any} [thisArg]
  */
+/**
+ * @template [T=WindowManager]
+ * @this {WindowManager}
+ * @param {WindowCallback<T>} callback
+ * @param {T} [thisArg]
+ * @returns {void}
+ */
 WindowManager.prototype.forEachWindow = function (callback, thisArg) {
 	var context = thisArg || this;
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
 		var dialog = this.windows[id];
-		if (dialog && callback.call(context, dialog, id)) break;
+		if (dialog && callback.call(/** @type {T} */(context), dialog, id)) break;
 	}
 };
 
@@ -314,9 +321,7 @@ WindowManager.prototype.synchronizeStates = function () { this.forEachWindow(fun
  * @param {HTMLElement} element
  * @returns {Application}
  */
-WindowManager.prototype.createAppFromElement = function(element) {
-	return { id: element.id, exists: true };
-};
+WindowManager.prototype.createAppFromElement = function(element) { return { id: element.id, exists: true }; };
 
 /** @param {Application} application */
 WindowManager.prototype.loadApp = function(application) {
