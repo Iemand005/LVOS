@@ -19,13 +19,4 @@ Loader.onVulpOS(function(os) {
 		{label: "Flags", element: flagsPage.container},
 		{label: "Extensions", element: extPage.container}
 	], content);
-
-	.addHeader("General").addInputList([
-		{label: "Flags", onClick: function () {
-			if (content) content.replaceChildren(flagsPage.container);
-		}},
-		{label: "Extensions", onClick: function () {
-			if (content) content.replaceChildren(extPage.container);
-		}}
-	]);
 });
