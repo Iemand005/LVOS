@@ -1,13 +1,30 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Files</title>
 
+	<link rel="stylesheet" href="explorer.css">
+
 	<script src="../../Scripts/LVOSLoader.js" data-theme></script>
+	<script src="explorer.js" defer></script>
 </head>
 <body>
-	
+	<header>
+		<nav aria-label="File navigation">
+			<button type="button" aria-label="Back" title="Back">&larr;</button>
+			<button type="button" aria-label="Forward" title="Forward">&rarr;</button>
+			<button type="button" aria-label="Up" title="Up">&uarr;</button>
+			<input type="text" id="address" aria-label="Address" value="This PC">
+			<input type="search" id="search" aria-label="Search" placeholder="Search">
+		</nav>
+	</header>
+	<main>
+		<article class="folder-content" id="file-view"></article>
+	</main>
+	<footer>
+		<span id="file-count">0 files</span>
+	</footer>
 </body>
 </html>
