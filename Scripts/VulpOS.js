@@ -366,10 +366,7 @@ VulpOS.prototype.to = function (element) {
 	return new UIBuilder(element);
 };
 
-/**
- * @template {"section"} T
- * @param {"section"} [type]
- */
+/** @param {"section"} [type] */
 VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
