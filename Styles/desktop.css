@@ -759,6 +759,10 @@ aside#charms form {
 	top: 0;
 }
 
+.folder-content li {
+	width: auto;
+}
+
 .selector {
 	position: absolute;
 	border: 1px dashed rgb(0, 89, 255);
