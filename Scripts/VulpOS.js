@@ -435,6 +435,21 @@ function placeFileElement(element, folder, clientX, clientY) {
 	Helpers.selectFileItem(element);
 }
 
+Helpers.addDesktopFile = function (file, clientX, clientY) {
+	var folder = document.getElementById("desktop-folder");
+	if (!folder || !file) return null;
+	var list = Helpers.createList([{ label: file.name, icon: "Assets/icon-192.png" }]);
+	var element = list.firstChild;
+	if (!element) return null;
+	element.lvFile = file;
+	placeFileElement(element, folder, clientX, clientY);
+	return element;
+};
+
+Helpers.getDesktopFile = function (element) {
+	return element ? element.lvFile : null;
+};
+
 function hasFilePayload(ev) {
 	var types = ev.dataTransfer && ev.dataTransfer.types;
 	if (!types) return false;

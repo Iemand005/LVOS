@@ -131,10 +131,16 @@ var onLoad = function () {
 		if (ev.dataTransfer && ev.dataTransfer.dropEffect === "none") ev.dataTransfer.dropEffect = "copy";
 	};
 
-    document.body.ondrop = function(ev) {
+	document.body.ondrop = function(ev) {
 		Helpers.cancelDomEvent(ev);
 		setDesktopDragOpacity("");
 		if (!ev.dataTransfer) return;
+
+		if (isFileDrag(ev)) {
+			handleWallpaperDrop(ev);
+			return;
+		}
+
 
         ev.dataTransfer.dropEffect = "copy";
 
@@ -875,7 +881,10 @@ function handleWallpaperDrop(ev) {
 
     var files = ev.dataTransfer.files;
     for (var i = 0; i < files.length; i++) {
-        var file = files[i];
+        Helpers.addDesktopFile(files[i], ev.clientX + i * 24, ev.clientY + i * 24);
+    }
+    for (var j = 0; j < files.length; j++) {
+        var file = files[j];
         // Only process image files
         if (!file.type.match(/^image\//)) continue;
 
