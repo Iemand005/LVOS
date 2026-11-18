@@ -1,7 +1,7 @@
 
 Loader.onVulpOS(function(os) {
-	var main = document.querySelector("main");
-	if (!main) return;
+	var container = document.getElementById("content");
+	if (!container) return;
 
 	var extensions = os.wm.extensions;
 
@@ -12,7 +12,7 @@ Loader.onVulpOS(function(os) {
 		}};
 	}));
 
-	main.appendChild(list);
+	container.appendChild(list);
 
 	/** @type {Flags} */
 	var f = os.flags;
@@ -20,5 +20,5 @@ Loader.onVulpOS(function(os) {
 		var flag = f[key] || false;
 		return { label: os.Helpers.formatCamelCase(key), state: flag, onInput: function (enabled) { f[key] = enabled; }};
 	})));
-	main.appendChild(flagsList);
+	container.appendChild(flagsList);
 });
