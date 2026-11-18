@@ -446,7 +446,6 @@ Helpers.hasLvosFilePayload = hasFilePayload;
 
 window.addEventListener("dragover", function (ev) {
 	if (!hasFilePayload(ev)) return;
-	ev.preventDefault();
 	if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
 }, true);
 
