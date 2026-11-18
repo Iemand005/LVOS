@@ -1986,7 +1986,7 @@ Object.defineProperty(Dialog.prototype, "contentDocument", {
 Object.defineProperty(Dialog.prototype, "contentWindow", {
 	get: function() {
 		var frame = this.frame;
-		return frame ? frame.contentWindow : null;
+		return frame && frame.contentWindow;
 	}
 });
 
@@ -2190,8 +2190,7 @@ Object.defineProperty(Dialog.prototype, "title", {
 		if (this._title) return this._title;
 		if (this.application.title) return this.application.title;
 		var titleElement = this.getTitleElement();
-		if (titleElement && titleElement.innerHTML) return titleElement.innerHTML;
-		return this.id;
+		return titleElement && titleElement.innerHTML ? titleElement.innerHTML : this.id;
 	},
 	set: function(title) { this.setTitle(title); }
 });
@@ -3130,7 +3129,8 @@ Dialog.prototype.loadState = function(state) {
 
 /** @param {string} id */
 Dialog.prototype.getElementById = function(id) {
-	var doc = this.contentDocument;
+	var frame = this.frame;
+	var doc = frame && frame.contentDocument;
 	return doc && doc.getElementById(id);
 };
 Dialog.prototype.insertIntoDOM = function() {
