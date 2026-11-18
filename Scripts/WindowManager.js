@@ -2239,8 +2239,7 @@ Object.defineProperty(Dialog.prototype, "content", {
 });
 
 Object.defineProperty(Dialog.prototype, "contentTransform", {
-	/** @type {()=>Transformable | null} */
-	get: function() {
+	get: /** @type {()=>Transformable | null} */function() {
 		if (this._contentTransform) return this._contentTransform;
 		var content = this.content;
 		if (!content) return null;
@@ -2249,8 +2248,7 @@ Object.defineProperty(Dialog.prototype, "contentTransform", {
 });
 
 Object.defineProperty(Dialog.prototype, "transform", {
-	/** @type {()=>Transformable | null} */
-	get: function() { return this._transform || (this._transform = new Transformable(this.target)); }
+	get: /** @type {()=>Transformable | null} */function() { return this._transform || (this._transform = new Transformable(this.target)); }
 });
 
 Object.defineProperty(Dialog.prototype, "killable", {
