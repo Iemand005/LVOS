@@ -22,7 +22,7 @@ if (!capabilities.supportsTransform) useTransform = false;
 if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = false;
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
-/** @type {[key: string]: number} */
+/** @type {{[key: string]: boolean}} */
 var flags = {
 	aeroSnap: true,
 	updateRateLimit: allowUpdateRateLimit,
