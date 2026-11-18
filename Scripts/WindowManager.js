@@ -587,12 +587,10 @@ WindowManager.prototype.handleWindowDrag = function(newX, newY, isTouch) {
 				this._snapZone = snapZone;
 				this.windowSnap.snap(snapZone, dialog);
 			}
-		} else if (this._snapZone) {
-			this._snapZone = "";
-			this.windowSnap.hideBehind(dialog, !!isTouch);
-		} else if (isTouch) {
+		} else if (this._snapZone)
+			this._snapZone = "", this.windowSnap.hideBehind(dialog, !!isTouch);
+		else if (isTouch)
 			this.windowSnap.moveToDialog(dialog, 20, this.dragAction.direction, true, true);
-		}
 	} else this.updateExposéDragScale(dialog, newX, newY);
 
 	if (dialog.moveEvents && dialog.exchangeDialogMoveEvent) dialog.exchangeDialogMoveEvent(difference);
@@ -782,12 +780,9 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
 	var tile = index === -1 ? { id: dialog.id, width: 0.5 } : windows[index];
 
 	if (!tile) return;
-
 	if (index !== -1) windows.splice(index, 1);
-
 	if (side === "left") windows.unshift(tile);
 	else windows.push(tile);
-
 	if (this.snapInsertGaps) this.fitSnapGaps(section, windows, side);
 
 	this.reflowSnapGroup(section);
@@ -800,7 +795,7 @@ WindowManager.prototype.tileDialog = function (dialog, side) {
  * @param {"left" | "right"} [side] Which half the lone window is held in. Read from the window's current offset when omitted.
  */
 WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
-	tiles = tiles.filter(tile => !(tile && tile.gap));
+	tiles = tiles.filter(function (tile) { return !(tile && tile.gap); });
 
 	if (tiles.length !== 1) return;
 	var firstTile = tiles[0];
