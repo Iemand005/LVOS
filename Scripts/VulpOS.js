@@ -281,18 +281,14 @@ function VulpOS() {
 VulpOS.prototype.createInputList = function (items) {
 	var list = document.createElement("ul");
 
-	items.forEach(function (itemData) {
+	items.forEach(function (item) {
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(itemData.statuse));
+		li.appendChild(document.createTextNode(item.label));
 
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
-		toggle.checked = !!itemData.checked;
-
-		toggle.onchange = function () {
-			if (typeof itemData.onToggle === "function")
-				itemData.onToggle(toggle.checked);
-		};
+		toggle.checked = !!item.state;
+		toggle.onchange = function () { item.onInput(toggle.checked); };
 
 		li.appendChild(toggle);
 		list.appendChild(li);
