@@ -25,23 +25,50 @@ test('file view labels sit under a standard sized icon', async ({ vulpOS }) => {
 	expect(labelBox!.y).toBeGreaterThanOrEqual(iconBox!.y + iconBox!.height - 1);
 });
 
-test('file items drag without opening a selection rectangle', async ({ vulpOS }) => {
+test('clicking a file selects it without opening a selection rectangle', async ({ vulpOS }) => {
 	const item = vulpOS.page.locator('.folder-content .file-item').first();
-	await expect(item).toBeVisible();
+	await item.click();
 
-	const box = await item.boundingBox();
-	expect(box).not.toBeNull();
-
-	const startX = box!.x + box!.width / 2;
-	const startY = box!.y + box!.height / 2;
-	await vulpOS.page.mouse.move(startX, startY);
-	await vulpOS.page.mouse.down();
-	await vulpOS.page.mouse.move(startX + 80, startY + 40, { steps: 5 });
-	await vulpOS.page.mouse.up();
-
+	expect(await item.evaluate(element => element.classList.contains('selected'))).toBe(true);
 	expect(await vulpOS.page.locator('.folder-content .selector').count()).toBe(0);
-	expect(await item.evaluate(element => ({
-		x: (element as any)._fileDragX,
-		y: (element as any)._fileDragY,
-	}))).toEqual({ x: 80, y: 40 });
+
+	const style = await item.evaluate(element => {
+		const computed = getComputedStyle(element);
+		return {
+			background: computed.backgroundColor,
+			border: computed.borderTopColor,
+			height: element.getBoundingClientRect().height,
+		};
+	});
+	expect(style.background).not.toBe('rgba(0, 0, 0, 0)');
+	expect(style.border).toBe('rgb(0, 120, 255)');
+	expect(style.height).toBeGreaterThanOrEqual(86);
+});
+
+test('native drag and drop moves a file into another folder', async ({ vulpOS }) => {
+	await vulpOS.page.evaluate(() => {
+		const target = document.createElement('article');
+		target.className = 'folder-content';
+		target.id = 'desktop-folder-2';
+		target.style.left = '50%';
+		target.style.width = '50%';
+		document.getElementById('desktop-folder')!.parentNode!.appendChild(target);
+		window.os.to(target).addFileView([]);
+	});
+
+	const item = vulpOS.page.locator('#desktop-folder .file-item').first();
+	const target = vulpOS.page.locator('#desktop-folder-2');
+	const targetBox = await target.boundingBox();
+	console.log('target debug', JSON.stringify({
+		box: targetBox,
+		ready: await target.evaluate(element => (element as any)._fileDropTargetReady),
+		atCenter: await vulpOS.page.evaluate(({ x, y }) => {
+			const el = document.elementFromPoint(x, y);
+			return { tag: el?.tagName, id: el?.id, cls: el?.className };
+		}, { x: targetBox!.x + targetBox!.width / 2, y: targetBox!.y + targetBox!.height / 2 }),
+	}));
+	await item.dragTo(target);
+
+	await expect(vulpOS.page.locator('#desktop-folder-2 .file-item')).toHaveCount(1);
+	await expect(vulpOS.page.locator('#desktop-folder .file-item')).toHaveCount(0);
 });

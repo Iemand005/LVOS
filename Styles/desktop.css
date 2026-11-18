@@ -774,8 +774,11 @@ aside#charms form {
 	justify-content: flex-start;
 	align-items: center;
 	gap: 6px;
+	box-sizing: border-box;
 	width: 80px;
+	min-height: 88px;
 	padding: 8px;
+	border: 1px solid transparent;
 	border-bottom: 0;
 	text-align: center;
 }
@@ -794,6 +797,15 @@ aside#charms form {
 
 .folder-content .file-item:active {
 	cursor: grabbing;
+}
+
+.folder-content .file-item.selected {
+	background: rgba(0, 120, 255, 0.35);
+	border-color: #0078ff;
+}
+
+.folder-content .file-item.dragging {
+	opacity: 0.6;
 }
 
 .selector {

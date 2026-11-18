@@ -349,9 +349,11 @@ UIBuilder.prototype.addNavList = function (items, container) {
 
 /** @param {{ name: string, icon: string }[]} files */
 UIBuilder.prototype.addFileView = function (files) {
-	return this.addList(files.map(function (file) {
+	var builder = this.addList(files.map(function (file) {
 		return { label: file.name, icon: file.icon };
 	}));
+	Helpers.prepareFileDropTarget(closestFolderContent(this.container));
+	return builder;
 };
 
 //#endregion
@@ -380,43 +382,74 @@ VulpOS.prototype.newTag = function (type) {
 };
 
 
-Helpers.makeFileDraggable = function (element) {
-	var downEvent = capabilities.supportsPointer ? "pointerdown" : "mousedown";
-	var moveEvent = capabilities.supportsPointer ? "pointermove" : "mousemove";
-	var upEvent = capabilities.supportsPointer ? "pointerup" : "mouseup";
-	var startX = 0, startY = 0, originX = 0, originY = 0, dragging = false;
+var fileItemCounter = 0;
 
-	var move = function (ev) {
-		if (!dragging) return;
+function closestFolderContent(element) {
+	while (element && element.nodeType === 1) {
+		if (element.classList && element.classList.contains("folder-content")) return element;
+		element = element.parentNode;
+	}
+	return null;
+}
+
+Helpers.selectFileItem = function (element) {
+	var scope = closestFolderContent(element) || document;
+	var selected = scope.querySelectorAll(".file-item.selected");
+	for (var i = 0; i < selected.length; i++)
+		if (selected[i] !== element) selected[i].classList.remove("selected");
+	if (element) element.classList.add("selected");
+};
+
+Helpers.prepareFileDropTarget = function (folder) {
+	if (!folder || folder._fileDropTargetReady) return;
+	folder._fileDropTargetReady = true;
+
+	folder.addEventListener("dragover", function (ev) {
 		ev.preventDefault();
-		Helpers.translateElement(element, originX + ev.clientX - startX, originY + ev.clientY - startY);
-	};
+		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
+	}, false);
 
-	var up = function (ev) {
-		if (!dragging) return;
-		originX += ev.clientX - startX;
-		originY += ev.clientY - startY;
-		element._fileDragX = originX;
-		element._fileDragY = originY;
-		dragging = false;
+	folder.addEventListener("drop", function (ev) {
+		if (!ev.dataTransfer) return;
+		var raw = ev.dataTransfer.getData("application/x-lvos-file");
+		if (!raw) return;
 		ev.preventDefault();
 		ev.stopPropagation();
-		document.removeEventListener(moveEvent, move, false);
-		document.removeEventListener(upEvent, up, false);
-	};
+
+		var payload;
+		try { payload = JSON.parse(raw); } catch (ex) { return; }
+		var source = payload.id && document.getElementById(payload.id);
+		var list = folder.querySelector("ul") || folder;
+		if (source) list.appendChild(source);
+		else if (window.os) window.os.to(list).addFileView([{ name: payload.name, icon: payload.icon }]);
+	}, false);
+};
+
+Helpers.prepareFileItem = function (element, item) {
+	var downEvent = capabilities.supportsPointer ? "pointerdown" : "mousedown";
+	element.id = "lv-file-" + (++fileItemCounter);
+	element.draggable = true;
 
 	element.addEventListener(downEvent, function (ev) {
 		if (ev.button !== undefined && ev.button !== 0) return;
-		ev.preventDefault();
 		ev.stopPropagation();
-		dragging = true;
-		startX = ev.clientX;
-		startY = ev.clientY;
-		originX = element._fileDragX || 0;
-		originY = element._fileDragY || 0;
-		document.addEventListener(moveEvent, move, false);
-		document.addEventListener(upEvent, up, false);
+		Helpers.selectFileItem(element);
 	}, false);
+
+	element.addEventListener("dragstart", function (ev) {
+		if (!ev.dataTransfer) return;
+		ev.dataTransfer.effectAllowed = "move";
+		ev.dataTransfer.setData("application/x-lvos-file", JSON.stringify({
+			id: element.id,
+			name: item.label,
+			icon: item.icon
+		}));
+		ev.dataTransfer.setData("text/plain", item.label);
+		Helpers.selectFileItem(element);
+		element.classList.add("dragging");
+	}, false);
+
+	element.addEventListener("dragend", function () { element.classList.remove("dragging"); }, false);
 };
 
 /** @param {IOItemList} items */
@@ -454,7 +487,7 @@ Helpers.createList = function (items) {
 			li.className = "file-item";
 			li.appendChild(image);
 			li.appendChild(label);
-			Helpers.makeFileDraggable(li);
+			Helpers.prepareFileItem(li, { label: item.label, icon: item.icon });
 		}
 		list.appendChild(li);
 	});
