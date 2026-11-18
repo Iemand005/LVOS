@@ -5,9 +5,7 @@ Loader.onVulpOS(function(os) {
 
 	var extensions = os.wm.extensions;
 
-	var extHeader = document.createElement("h2");
-	extHeader.appendChild(document.createTextNode("Extensions"));
-	container.appendChild(extHeader);
+	container.appendChild(os.createHeader("Extensions"));
 
 	var list = os.createInputList(extensions.map(function (extension) {
 		return { label: extension.name, state: extension.enabled || false, onInput: function (enabled) {
@@ -16,6 +14,8 @@ Loader.onVulpOS(function(os) {
 	}));
 
 	container.appendChild(list);
+
+	container.appendChild(os.createHeader("Flags"));
 
 	/** @type {Flags} */
 	var f = os.flags;

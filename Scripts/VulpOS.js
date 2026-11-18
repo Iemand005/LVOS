@@ -310,9 +310,9 @@ VulpOS.prototype.createInputList = function (items) {
 
 /** @param {string} text */
 VulpOS.prototype.createHeader = function(text) {
-	var extHeader = document.createElement("h2");
-	extHeader.appendChild(document.createTextNode("Extensions"));
-	return extHeader;
+	var h = document.createElement("h2");
+	h.appendChild(document.createTextNode(text));
+	return h;
 };
 
 //#endregion
