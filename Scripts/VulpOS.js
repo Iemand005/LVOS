@@ -405,7 +405,7 @@ Helpers.createInputList = function (items) {
 			li.appendChild(button);
 		} else if ("icon" in item) { // File!
 			var image = document.createElement("img");
-			image.src - item.icon;
+			image.src = item.icon;
 			var label = document.createElement("label");
 
 			li.appendChild(image);
