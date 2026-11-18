@@ -20,9 +20,7 @@ Loader.onVulpOS(function(os) {
 	/** @type {Flags} */
 	var f = os.flags;
 	var flagsList = os.createInputList((Object.keys(f).map(function (key) {
-		var flag = f[key] || false;
-		if (key.charAt(0) === "_") return;
-		return { label: os.Helpers.formatCamelCase(key), state: flag, onInput: function (enabled) { f[key] = enabled; }};
+		return key.charAt(0) !== "_" ? { label: os.Helpers.formatCamelCase(key), state: f[key] || false, onInput: function (enabled) { f[key] = enabled; }} : undefined;
 	})));
 	container.appendChild(flagsList);
 });
