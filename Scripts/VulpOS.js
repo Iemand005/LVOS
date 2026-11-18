@@ -395,6 +395,11 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
+/** @param {string | File | URL} path */
+VulpOS.prototype.open = function (path) {
+	// TODO: make this function open the correct app for the specified file type?
+};
+
 /** @typedef {{title: string, description: strng}} Notification */
 
 /** @param {Notification} notification */
