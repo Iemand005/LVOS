@@ -888,9 +888,11 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 
 	/** @type {Record<string, boolean>} */
 	var members = {};
+	titles.forEach(function (title) {
+		if (title && title.id) members[title.id] = true;
+	})
 	for (var m = 0; m < tiles.length; m++) {
 		var memberTile = tiles[m];
-		if (memberTile && memberTile.id) members[memberTile.id] = true;
 	}
 
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
@@ -963,10 +965,8 @@ WindowManager.prototype.disableDialogDrag = function() {
 		var snapZone = this.getGestureSnapZone(this.activeDialog, dragDirection, this.pointerPosition.x, this.pointerPosition.y);
 		if (snapZone) this.snapDialog(this.activeDialog, snapZone);
 
-		if (this.isTouchDrag) {
-			this.windowSnap.hideBehind(this.activeDialog);
-			this.isTouchDrag = false;
-		}
+		if (this.isTouchDrag)
+			this.windowSnap.hideBehind(this.activeDialog), this.isTouchDrag = false;
 
 		if (!this.activeDialog.maximized) this.windowSnap.hideBehind(this.activeDialog);
 		this._snapZone = "";
@@ -1096,9 +1096,7 @@ WindowManager.prototype.registerExtension = function(extension) {
  * @param {string} id
  * @returns {Extension | null}
  */
-WindowManager.prototype.getExtension = function(id) {
-	return this.extensions.find(function(ext) { return ext.id === id; }) || null;
-};
+WindowManager.prototype.getExtension = function(id) { return this.extensions.find(function(ext) { return ext.id === id; }) || null; };
 
 /**
  * @param {Extension} ext
