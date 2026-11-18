@@ -346,6 +346,14 @@ UIBuilder.prototype.addNavList = function (items, container) {
 	}));
 };
 
+
+/** @param {{ name: string, icon: string }[]} files */
+UIBulder.prototype.addFileView = function (files) {
+	return this.newTag().addInputList(files.map(function (file) {
+		return { label: file.name, icon: file.icon };
+	}));
+};
+
 //#endregion
 
 //#region VulpOS
@@ -371,12 +379,6 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
-/** @param {{ name: string, icon: string }[]} files */
-VulpOS.prototype.buildFolderView = function (files) {
-	return this.newTag().addInputList(files.map(function (file) {
-		return { label: file.name, icon: file.icon };
-	}));
-};
 
 /** @param {IOItemList} items */
 Helpers.createInputList = function (items) {
