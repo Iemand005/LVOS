@@ -64,7 +64,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 
 					var label = document.createElement("label");
 					label.htmlFor = toggle.id;
-					label.appendChild(document.createTextNode(Helpers.formatCamelCase(flagId)));
+					label.appendChild(document.createTextNode(VulpOS.formatCamelCase(flagId)));
 
 					row.appendChild(toggle);
 					row.appendChild(label);

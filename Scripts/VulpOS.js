@@ -305,7 +305,7 @@ VulpOS.prototype.createInputList = function (items) {
  * @param {string} text
  * @returns {string}
  */
-VulpOS.formatCamelCase = function (text) {
+VulpOS.prototype.formatCamelCase = function (text) {
     if (!text) return "";
     var result = text.replace(/([A-Z])/g, " $1");
     return result.charAt(0).toUpperCase() + result.slice(1);
