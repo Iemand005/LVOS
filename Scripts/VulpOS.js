@@ -352,11 +352,10 @@ VulpOS.prototype.to = function (element) {
 
 /**
  * @template {"section"} T
- * @param {"section"} type
+ * @param {"section"} [type]
  */
 VulpOS.prototype.make = function (type) {
-	
-	return new UIBuilder(docustomElements.createElement(type));
+	return new UIBuilder(document.createElement(type || "section"));
 };
 
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
