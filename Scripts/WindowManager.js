@@ -816,12 +816,13 @@ WindowManager.prototype.fitSnapGaps = function (section, tiles, side) {
 WindowManager.prototype.findSnapTile = function (id, section) {
 	var windows = this.getSnapGroup(section).windows;
 
-	var index = -1;
-	windows.forEach(function (dialog, i) {
-		if (index >= -1 && dialog.id === id) index = i;
-	});
+	return windows.findIndex(function (dialog) { return dialog.id === id; });
+	// var index = -1;
+	// windows.forEach(function (dialog, i) {
+	// 	if (index >= -1 && dialog.id === id) index = i;
+	// });
 
-	return index;
+	// return index;
 };
 
 /** @param {Dialog} dialog */
@@ -836,10 +837,9 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
 
 	/** @type {"left" | "right" | undefined} */
 	var survivorSide;
-	if (windows.length === 2 && this.snapInsertGaps) {
+	if (windows.length === 2 && this.snapInsertGaps)
 		if (index === 0) survivorSide = "right";
 		else if (index === 1) survivorSide = "left";
-	}
 
 	windows.splice(index, 1);
 	dialog.toggleSnapped(false);
@@ -963,9 +963,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 	this.activeDialog.exchangeDialogMouseUpEvent();
 };
 
-WindowManager.prototype.enableDialogDrag = function() {
-	this.toggleDragging(true);
-};
+WindowManager.prototype.enableDialogDrag = function() { this.toggleDragging(true); };
 
 /** @param {number} [newZ]  */
 WindowManager.prototype.updateTopZ = function(newZ) {
