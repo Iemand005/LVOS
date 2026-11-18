@@ -1362,7 +1362,7 @@ function createDialogElement() {
 
 var windowButtons = { eject: 0, full: 1, close: 2 };
 
-var restoreWindowIcon = '<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg>';
+var restoreWindowIcon = /** HTML */'<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg>';
 
 /**
  * @author Lasse Lauwerys
