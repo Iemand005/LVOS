@@ -332,10 +332,12 @@ function VulpOS(flags) {
 	this.wm = new WindowManager;
 	this.flags = flags;
 	this.Helpers = Helpers;
+	/** @class */
+	this.UIBuilder = UIBuilder;
 }
 
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
-VulpOS.prototype.createInputList = function (items) {
+Helpers.createInputList = function (items) {
 	var list = document.createElement("ul");
 
 	items.forEach(function (item) {
@@ -356,7 +358,7 @@ VulpOS.prototype.createInputList = function (items) {
 };
 
 /** @param {string} text */
-VulpOS.prototype.createHeader = function(text) {
+Helpers.createHeader = function(text) {
 	var h = document.createElement("h2");
 	h.appendChild(document.createTextNode(text));
 	return h;
