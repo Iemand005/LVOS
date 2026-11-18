@@ -3163,9 +3163,7 @@ function DragAction() {
 }
 
 /** @param {number} [direction] */
-DragAction.prototype.set = function (direction) {
-	this.execute = this.resizeFunctions[this.direction = direction || 0] || function () {};
-};
+DragAction.prototype.set = function (direction) { this.execute = this.resizeFunctions[this.direction = direction || 0] || new FUnctioin; };
 
 //#endregion
 
