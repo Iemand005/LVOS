@@ -1,7 +1,5 @@
 /** @class */
-function Loader() {
-	this.
-}
+function Loader() { }
 
 /**
  * @param {Document | HTMLScriptElement} target
@@ -63,8 +61,12 @@ Loader.loadScript = function (url, onLoad) {
 	head.appendChild(script);
 };
 
-Loader.onLoad = function() {
+/** @type {(()=>void) | null} */
+Loader.onLoad = null;
 
+/** @param {VulpOS} os */
+Loader.onVulpOS = function(os) {
+	Loader.onLoad = function() {}
 };
 
 /**
