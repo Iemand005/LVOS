@@ -1,7 +1,7 @@
 
 Loader.onVulpOS(function(os) {
 	os.to(document.getElementById("root")).addHeader("General");
-	os.to("content")
+	os.to(document.getElementById("content"))
 	.addHeader("Extensions").addInputList(os.wm.extensions.map(function (extension) {
 		return { label: extension.name, state: extension.enabled || false, onInput: function (enabled) {
 			os.wm.toggleExtensionEnabled(extension, enabled);
