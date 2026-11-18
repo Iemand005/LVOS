@@ -320,7 +320,14 @@ function UIBuilder(container) {
 
 /** @param {string} text */
 UIBuilder.prototype.addHeader = function (text) {
-	this.container.appendChild(createHea)
+	this.container.appendChild(Helpers.createHeader(text));
+	return this;
+};
+
+/** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
+UIBuilder.prototype.addInputList = function (items) {
+	this.container.appendChild(Helpers.createInputList(items));
+	return this;
 };
 
 //#endregion
