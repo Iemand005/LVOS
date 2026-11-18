@@ -267,15 +267,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	}
 };
 
-/**
- * @param {string} text
- * @returns {string}
- */
-Helpers.formatCamelCase = function (text) {
-    if (!text) return "";
-    var result = text.replace(/([A-Z])/g, " $1");
-    return result.charAt(0).toUpperCase() + result.slice(1);
-};
+
 
 //#endregion
 
@@ -307,6 +299,16 @@ VulpOS.prototype.createInputList = function (items) {
 	});
 
 	return list;
+};
+
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+VulpOS.formatCamelCase = function (text) {
+    if (!text) return "";
+    var result = text.replace(/([A-Z])/g, " $1");
+    return result.charAt(0).toUpperCase() + result.slice(1);
 };
 
 //#endregion
