@@ -368,15 +368,20 @@ Helpers.createInputList = function (items) {
 	items.forEach(function (item) {
 		if (!item) return;
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(item.label));
 
-		var toggle = document.createElement("input");
-		toggle.type = "checkbox";
-		toggle.checked = !!item.state;
-		toggle.onchange = function () { item.onInput(toggle.checked); };
-
-		li.appendChild(toggle);
-		list.appendChild(li);
+		if ("state" in item) { // Checkbox/toggle
+			li.appendChild(document.createTextNode(item.label));
+	
+			var toggle = document.createElement("input");
+			toggle.type = "checkbox";
+			toggle.checked = !!item.state;
+			toggle.onchange = function () { item.onInput(toggle.checked); };
+	
+			li.appendChild(toggle);
+			list.appendChild(li);
+		} else { // Button?
+			
+		}
 	});
 
 	return list;
