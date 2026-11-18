@@ -345,8 +345,10 @@ function VulpOS(flags) {
 
 /** @param {HTMLElement | string} element */
 VulpOS.prototype.to = function (element) {
-	if (typeof element === "string") element = document.getElementById(element);
-	return new UIBuilder(element);
+	var e;
+	if (typeof element === "string") e = document.getElementById(element);
+	if (!e) e = element;
+	return new UIBuilder(e);
 };
 
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
