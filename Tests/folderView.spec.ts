@@ -26,6 +26,11 @@ test('file view labels sit under a standard sized icon', async ({ vulpOS }) => {
 });
 
 test('clicking a file selects it without opening a selection rectangle', async ({ vulpOS }) => {
+	await vulpOS.page.evaluate(() => {
+		document.getElementById('launchpad')?.setAttribute('style', 'display: none');
+		document.getElementById('charms')?.setAttribute('style', 'display: none');
+	});
+
 	const item = vulpOS.page.locator('.folder-content .file-item').first();
 	await item.click();
 
@@ -47,6 +52,8 @@ test('clicking a file selects it without opening a selection rectangle', async (
 
 test('native drag and drop moves a file into another folder', async ({ vulpOS }) => {
 	await vulpOS.page.evaluate(() => {
+		document.getElementById('launchpad')?.setAttribute('style', 'display: none');
+		document.getElementById('charms')?.setAttribute('style', 'display: none');
 		const target = document.createElement('article');
 		target.className = 'folder-content';
 		target.id = 'desktop-folder-2';
@@ -57,16 +64,7 @@ test('native drag and drop moves a file into another folder', async ({ vulpOS })
 	});
 
 	const item = vulpOS.page.locator('#desktop-folder .file-item').first();
-	const target = vulpOS.page.locator('#desktop-folder-2');
-	const targetBox = await target.boundingBox();
-	console.log('target debug', JSON.stringify({
-		box: targetBox,
-		ready: await target.evaluate(element => (element as any)._fileDropTargetReady),
-		atCenter: await vulpOS.page.evaluate(({ x, y }) => {
-			const el = document.elementFromPoint(x, y);
-			return { tag: el?.tagName, id: el?.id, cls: el?.className };
-		}, { x: targetBox!.x + targetBox!.width / 2, y: targetBox!.y + targetBox!.height / 2 }),
-	}));
+	const target = vulpOS.page.locator('#desktop-folder-2 ul');
 	await item.dragTo(target);
 
 	await expect(vulpOS.page.locator('#desktop-folder-2 .file-item')).toHaveCount(1);

@@ -762,7 +762,10 @@ aside#charms form {
 .folder-content ul {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: flex-start;
+	align-content: flex-start;
 	gap: 8px;
+	height: auto;
 	padding: 8px;
 	background: transparent;
 }
@@ -770,13 +773,15 @@ aside#charms form {
 .folder-content li,
 .folder-content li:not(:last-of-type) {
 	display: flex;
+	flex: 0 0 auto;
 	flex-direction: column;
+	align-self: flex-start;
 	justify-content: flex-start;
 	align-items: center;
 	gap: 6px;
 	box-sizing: border-box;
 	width: 80px;
-	min-height: 88px;
+	height: 88px;
 	padding: 8px;
 	border: 1px solid transparent;
 	border-bottom: 0;
