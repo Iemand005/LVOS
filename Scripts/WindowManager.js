@@ -284,23 +284,6 @@ WindowManager.prototype.restoreExtensionStates = function() {
 };
 
 /**
- * @overload
- * @param {WindowCallback<WindowManager>} callback
- * @returns {void}
- */
-/**
- * @template T
- * @overload
- * @param {WindowCallback<T>} callback
- * @param {T} thisArg
- * @returns {void}
- */
-/**
- * @this {WindowManager}
- * @param {WindowCallback<any>} callback
- * @param {any} [thisArg]
- */
-/**
  * @template [T=WindowManager]
  * @this {WindowManager}
  * @param {WindowCallback<T>} callback
