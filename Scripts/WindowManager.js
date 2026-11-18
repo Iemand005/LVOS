@@ -412,12 +412,8 @@ WindowManager.prototype.dropApplication = function (application, x, y, offset, s
 
 	void dialog.target.offsetLeft;
 
-	if (!state) state = {};
-
-	state.x = dialog.x, state.y = dialog.y;
-
+	if (!state) state = { x: dialog.x, y: dialog.y };
 	dialog.loadState(state || {});
-
 	return dialog;
 };
 
