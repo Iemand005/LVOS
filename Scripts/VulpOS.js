@@ -381,6 +381,7 @@ Helpers.createInputList = function (items) {
 		} else { // Button?
 			var button = document.createElement("button");
 			button.onclick = function () { item.onClick(); };
+			button.textContent = item.label;
 
 			li.appendChild(button);
 		}
