@@ -271,5 +271,8 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 
 //#region VulpOS
 
+function VulpOS() {
+	this.wm = new WindowManager;
+}
 
 //#endregion
