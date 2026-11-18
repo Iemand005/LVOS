@@ -343,6 +343,12 @@ function VulpOS(flags) {
 	this.UIBuilder = UIBuilder;
 }
 
+/** @param {HTMLElement | string} element */
+VulpOS.prototype.to = function (element) {
+	if (typeof element === "string") element = document.getElementById(element);
+	return new UIBuilder(element);
+};
+
 /** @param {Array<({ label: string} & {state: boolean, onInput: (enabled: boolean) => void}) | undefined>} items */
 Helpers.createInputList = function (items) {
 	var list = document.createElement("ul");
