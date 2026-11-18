@@ -324,7 +324,8 @@ UIBuilder.prototype.addHeader = function (text) {
 	return this;
 };
 
-/** @typedef {({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void})) | undefined} UIItem */
+/** @typedef {{ name: string, icon: string }} LVUIFileItem */
+/** @typedef {({ label: string} & ({state: boolean, onInput: (enabled: boolean) => void} | {onClick: () => void} | LVUIFileItem)) | undefined} UIItem */
 /** @typedef {Array<UIItem>} IOItemList */
 
 /** @param {IOItemList} items */
@@ -373,9 +374,10 @@ VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
 };
 
-VulpOS.prototype.buildFolderView = function () {
-	
-}
+/** @param {{ name: string, icon: string }} files */
+VulpOS.prototype.buildFolderView = function (files) {
+	return this.newTag().addInputList(files);
+};
 
 /** @param {IOItemList} items */
 Helpers.createInputList = function (items) {
