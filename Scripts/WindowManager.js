@@ -1492,14 +1492,14 @@ function Dialog(application) {
 	this.buttons = [];
 	this.clickOffset = new ClickOffset;
 
-	/** @type {HTMLElement | WindowDiv} */
+	/** @type {HTMLElement | WindowElement} */
 	var target;
 
 	if (application.exists) {
 		var element = id && document.getElementById(id);
 		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
-		this.target = element;
-	} else this.target = createDialogElement();
+		target = element;
+	} else target = createDialogElement();
 
 	this.target = target;
 
@@ -1547,8 +1547,6 @@ function Dialog(application) {
 	} else if (application.src) this.openUrl(application.src);
 
 	if (this.windowTarget) this.windowTarget.dialog = this;
-
-	var target = this.target;
 
 	if (application.classes && typeof application.classes === "object")
 		application.classes.forEach(function (clazz) { target.classList.add(clazz); }, this); // `class` is a reserved keyword.
