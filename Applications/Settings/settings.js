@@ -17,7 +17,7 @@ Loader.onVulpOS(function(os) {
 	os.to(document.getElementById("root"))
 	.addHeader("General").addInputList([
 		{label: "Flags", onClick: function () {
-			content.replaceChildren(flagsPage);
+			if (content) content.replaceChildren(flagsPage.container);
 		}}
 	]);
 });
