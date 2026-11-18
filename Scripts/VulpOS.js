@@ -313,6 +313,11 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
+/** @param {HTMLElement} container */
+function UIBuilder(container) {
+	this.container = container;
+}
+
 //#endregion
 
 //#region VulpOS
