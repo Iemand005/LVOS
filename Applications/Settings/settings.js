@@ -14,7 +14,6 @@ Loader.onVulpOS(function(os) {
 	}));
 
 	container.appendChild(list);
-
 	container.appendChild(os.createHeader("Flags"));
 
 	/** @type {Flags} */
