@@ -14,6 +14,9 @@ Loader.onVulpOS(function(os) {
 	var f = flags;
 	Object.keys(f).map(function (key) {
 		var flag = f[key];
-
+		if (!flag) return;
+		return { label: flag.name, state: extension.enabled || false, onInput: function (enabled) {
+			os.wm.toggleExtensionEnabled(extension, enabled);
+		}};
 	});
 });

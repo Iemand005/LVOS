@@ -56,7 +56,6 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 	for (var flagId in flags) {
 		if (!flags.hasOwnProperty(flagId) || flagId.charAt(0) === "_") continue;
 		var flag = flags[flagId];
-		var flagValue = flags[flagId];
 
 		switch (typeof flag) {
 			case "boolean":
@@ -66,7 +65,7 @@ SettingsHandler.prototype.loadFlags = function (flags) {
 					var toggle = document.createElement("input");
 					toggle.type = "checkbox";
 					toggle.id = "flag-" + flagId;
-					toggle.checked = flagValue;
+					toggle.checked = flag || false;
 
                     toggle.onchange = function() {
                         flags[currentKey] = toggle.checked;
