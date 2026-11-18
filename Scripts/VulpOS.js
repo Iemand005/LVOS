@@ -383,14 +383,15 @@ Helpers.createInputList = function (items) {
 
 		if ("state" in item) { // Checkbox/toggle
 			var label = document.createElement("label");
-			li.appendChild(document.createTextNode(item.label));
+			label.appendChild(document.createTextNode(item.label));
 
 			var toggle = document.createElement("input");
 			toggle.type = "checkbox";
 			toggle.checked = !!item.state;
 			toggle.onchange = function () { item.onInput(toggle.checked); };
 
-			li.appendChild(toggle);
+			label.appendChild(toggle);
+			li.appendChild(lable);
 		} else { // Button?
 			var button = document.createElement("button");
 			button.onclick = function () { item.onClick(); };
