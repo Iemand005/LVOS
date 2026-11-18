@@ -1,7 +1,7 @@
 
-/** @param {WindowManager} wm */
-function ExtensionApp(wm) {
-	this.wm = wm;
+/** @param {VulpOS} os */
+function ExtensionApp(os) {
+	this.os = os;
 }
 
 ExtensionApp.prototype.createList = function () {
@@ -28,7 +28,7 @@ ExtensionApp.prototype.createList = function () {
 };
 
 LVMessenger.get("os", function(os) {
-	var app = new ExtensionApp(os.windowManager);
+	var app = new ExtensionApp(os);
 	app.createList();
 });
 
