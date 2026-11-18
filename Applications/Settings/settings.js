@@ -1,9 +1,8 @@
 
 Loader.onVulpOS(function(os) {
 	var main = document.querySelector("main");
-	if (!main) reutnr;
-	
-	
+	if (!main) return;
+
 	var extensions = os.wm.extensions;
 
 
@@ -23,6 +22,5 @@ Loader.onVulpOS(function(os) {
 			f[key] = enabled;
 		}};
 	})));
-	main.appendChild(	var flagsList = os.createInputList((Object.keys(f).map(function (key) {
-);
+	main.appendChild(flagsList);
 });
