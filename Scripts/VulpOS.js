@@ -276,7 +276,7 @@ function VulpOS() {
 }
 
 /**
- * @param {Array<{label: string, checked: boolean, onToggle: function(boolean): void}>} items
+ * @param {Array<{onInput: function(boolean): void} & any>} items
  * @param {string} [containerSelector="main"]
  */
 VulpOS.prototype.createInputList = function (items) {
