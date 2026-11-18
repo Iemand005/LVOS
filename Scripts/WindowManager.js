@@ -960,8 +960,7 @@ WindowManager.prototype.disableDialogDrag = function() {
 
 	if (!this.activeDialog.moveEvents) return;
 
-	var func = this.activeDialog.exchangeDialogMouseUpEvent;
-	func();
+	this.activeDialog.exchangeDialogMouseUpEvent();
 };
 
 WindowManager.prototype.enableDialogDrag = function() {
@@ -1467,6 +1466,10 @@ function Dialog(application) {
 
 	/** @type {boolean} */
 	this.fixed = false;
+	/** @type {boolean} */
+	this.moveEvents = false;
+	/** @type {boolean} */
+	this.scroll = false;
 
 	/** Tracks the persisted open/closed state. The isOpen property is backed by a CSS class that gets applied asynchronously in a requestAnimationFrame, so it cannot be used for saving state synchronously! */
 	this._stateOpen = false;
@@ -1534,12 +1537,6 @@ function Dialog(application) {
 		windowManager.windowActivationEvent(ev, self, id);
 		return true;
 	};
-
-	/** @type {boolean} */
-	this.moveEvents = false;
-
-	/** @type {boolean} */
-	this.scroll = false;
 
 	if (application.exists) {
 		var doc = this.contentDocument;
@@ -1642,8 +1639,7 @@ function Dialog(application) {
 				transfer.setData("text/plain", self.src || self.title || self.id);
 				if (self.src) transfer.setData("text/uri-list", self.src);
 				transfer.setData("text/html", data);
-			} catch (ex) {
-				console.warn(ex);
+			} catch (ex) { console.warn(ex);
 				useFallback = true;
 			}
 		}
@@ -1654,9 +1650,7 @@ function Dialog(application) {
 		}
 
 		transfer.effectAllowed = "copyMove";
-
 		self.target.classList.add("hidden");
-
 	};
 
 	target.ondragend = function () { self._ctrlDrag = false; };
@@ -1666,14 +1660,11 @@ function Dialog(application) {
 	this.updateUseTransform(this.useTransform);
 	this.updateScale(this.useScale);
 	this.update();
-	this.updateWidth();
-	this.updateHeight();
 	this.moveCenterTo(Helpers.getViewportWidth() / 2, Helpers.getViewportHeight() / 2);
 
 	if (this.frame) this.frame.addEventListener("load", function() { self._loaded = true; }, false);
 
 	this.originalBody = this.body;
-
 	if (!this.scroll && this.originalBody) this.originalBody.style.overflow = "hidden";
 };
 
