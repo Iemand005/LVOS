@@ -9,6 +9,15 @@ header, main {
 	overflow: scroll;
 }
 
+header button, header li {
+	margin: 0;
+	padding: 0;
+}
+
+header button {
+	width: 100%;
+}
+
 main {
 	width: 100%;
 	flex: 1;
