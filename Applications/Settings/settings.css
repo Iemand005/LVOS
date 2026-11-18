@@ -3,7 +3,14 @@ body {
 	display: flex;
 }
 
-main, #content {
+main {
+	display: flex;
+	flex-direction: row;
+
+	width: 100%;
+}
+
+aside,  #content {
 	display: flex;
 	flex-direction: column;
 	overflow: scroll;
