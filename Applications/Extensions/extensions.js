@@ -8,7 +8,7 @@ ExtensionApp.prototype.createList = function () {
 	var extensions = this.os.wm.extensions;
 
 	var self = this;
-	var llst = this.os.createInputList(extensions.map(function (extension) {
+	var list = this.os.createInputList(extensions.map(function (extension) {
 		return { state: extension.enabled || false, onInput: function (enabled) {
 			self.os.wm.toggleExtensionEnabled(extension, enabled);
 		}};

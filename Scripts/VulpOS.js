@@ -283,7 +283,7 @@ VulpOS.prototype.createInputList = function (items) {
 
 	items.forEach(function (itemData) {
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(itemData.label));
+		li.appendChild(document.createTextNode(itemData.status));
 
 		var toggle = document.createElement("input");
 		toggle.type = "checkbox";
