@@ -109,3 +109,78 @@ input[type="number"] {
 	height: 1px;
 	overflow: hidden;
 }
+
+main {
+	margin: 10px;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+
+	background-color: #80808036;
+
+	border-radius: 15px;
+}
+
+li {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+}
+
+li:not(:last-of-type) {
+	border-bottom: 1px solid black;
+}
+
+label:has(input[type="checkbox"]) {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+input[type="checkbox"] {
+	appearance: none;
+	width: 44px;
+	min-width: 44px;
+	height: 24px;
+	background-color: #ccc;
+	border-radius: 999px;
+	position: relative;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+input[type="checkbox"]::before {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	bottom: 2px;
+	aspect-ratio: 1;
+	background-color: white;
+	border-radius: 50%;
+	transition: all 180ms cubic-bezier(.27,.47,.32,.94);
+}
+
+input[type="checkbox"]:hover::before {
+	top: 1px;
+	left: 1px;
+	bottom: 1px;
+}
+
+input[type="checkbox"]:checked {
+	background-color: #22c55e;
+}
+
+input[type="checkbox"]:checked::before {
+	transform: translateX(20px);
+}
+
+input[type="checkbox"]:focus-visible {
+	outline: 2px solid #2563eb;
+	outline-offset: 2px;
+}
