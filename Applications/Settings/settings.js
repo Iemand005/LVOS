@@ -18,6 +18,7 @@ Loader.onVulpOS(function(os) {
 	var f = os.flags;
 	var flagsList = os.createInputList((Object.keys(f).map(function (key) {
 		var flag = f[key] || false;
+		var handler = function (enabled) { f[key] = enabled; };
 		return { label: Helpers.formatCamelCase(key), state: flag, onInput: function (enabled) {
 			f[key] = enabled;
 		}};
