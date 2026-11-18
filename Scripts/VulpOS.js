@@ -363,7 +363,11 @@ UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClic
 
 /** @param {Notification} n */
 UIBuilder.prototype.addNotificationView = function (n) {
-	
+	var h = document.createElement("h1");
+	var p = document.createElement("p");
+	this.container.appendChild(h);
+	this.container.appendChild(p);
+	return this;
 };
 
 //#endregion
@@ -395,7 +399,8 @@ VulpOS.prototype.newTag = function (type) {
 
 /** @param {Notification} notification */
 VulpOS.prototype.pushNotification = function (notification) {
-	var bubble = this.newTag().
+	var bubble = this.newTag().addNotificationView(notification).container;
+	// TODO: make the bubble fly in and shit yeah!
 };
 
 
