@@ -15,6 +15,11 @@ Loader.onVulpOS(function(os) {
 	})));
 
 	os.to(document.getElementById("root"))
+	.addHeader("General").addNavList([
+		{label: "Flags", element: flagsPage.container},
+		{label: "Extensions", element: extPage.container}
+	], content);
+
 	.addHeader("General").addInputList([
 		{label: "Flags", onClick: function () {
 			if (content) content.replaceChildren(flagsPage.container);
