@@ -7,6 +7,8 @@ header, main {
 	display: flex;
 	flex-direction: column;
 	overflow: scroll;
+
+	padding: 10px;
 }
 
 header button, header li {
