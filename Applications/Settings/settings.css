@@ -1,16 +1,19 @@
 
-main {
+body {
 	display: flex;
-	flex-direction: row;
+}
 
-	height: 100%;
+header, main {
+	display: flex;
+	flex-direction: column;
+	overflow: scroll;
+}
+
+main {
+	width: 100%;
+	flex: 1;
 }
 
 aside {
 	margin-right: 10px;
-}
-
-section {
-	width: 100%;
-	overflow: scroll;
 }
