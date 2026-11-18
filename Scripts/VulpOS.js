@@ -277,6 +277,42 @@ Helpers.formatCamelCase = function (text) {
     return result.charAt(0).toUpperCase() + result.slice(1);
 };
 
+/**
+ * @class
+ * @param {HTMLElement} target
+ */
+function Transformable(target) {
+	this.target = target;
+	/** @type {Transform} */
+	this._transform = {};
+	this._perspective = 100;
+}
+
+Object.defineProperty(Transformable.prototype, "perspective", {
+	get: function() { return this._perspective; },
+	set: function(value) {
+		var parent = this.target.parentElement;
+		if (parent) parent.style.perspective = Helpers.toPixels(this._perspective = value);
+	}
+});
+
+Transformable.prototype.applyTransform = function() {
+	Helpers.transformElement(this.target, this._transform);
+};
+
+/** @param {boolean} [animate] */
+Transformable.prototype.update = function(animate) { if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000); else this.applyTransform(); };
+/** @param {number} x @param {number} y @param {boolean} [animate] */
+Transformable.prototype.move = function(x, y, animate) { this._transform.x = x; this._transform.y = y; this.update(animate); };
+/** @param {number} [x] @param {number} [y] @param {boolean} [update] @param {boolean} [animate] */
+Transformable.prototype.scale = function(x, y, update, animate) { this._transform.scaleX = x || 1; this._transform.scaleY = y || 1; if (update) this.update(animate); };
+/** @param {number} x @param {number} [y] @param {number} [z] @param {boolean} [animate] */
+Transformable.prototype.rotate = function(x, y, z, animate) {
+	if (y === undefined && z === undefined) this._transform.rotate = x;
+	else this._transform.rotateX = x, this._transform.rotateY = y, this._transform.rotateZ = z;
+	this.update(animate);
+};
+
 //#endregion
 
 //#region VulpOS

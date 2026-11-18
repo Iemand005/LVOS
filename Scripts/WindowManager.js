@@ -1336,43 +1336,6 @@ ClickOffset.prototype.toggleDragEventHandler = function (enable, cursor) {
 
 //#endregion
 
-/**
- * @class
- * @param {HTMLElement} target
- */
-function Transformable(target) {
-	this.target = target;
-	/** @type {Transform} */
-	this._transform = {};
-	this._perspective = 100;
-}
-
-Object.defineProperty(Transformable.prototype, "perspective", {
-	get: function() { return this._perspective; },
-	set: function(value) {
-		var parent = this.target.parentElement;
-		if (parent) parent.style.perspective = Helpers.toPixels(this._perspective = value);
-	}
-});
-
-Transformable.prototype.applyTransform = function() {
-	Helpers.transformElement(this.target, this._transform);
-};
-
-/** @param {boolean} [animate] */
-Transformable.prototype.update = function(animate) { if (animate) Helpers.animateElement(this.target, this.applyTransform, "transform", undefined, this, 1000); else this.applyTransform(); };
-/** @param {number} x @param {number} y @param {boolean} [animate] */
-Transformable.prototype.move = function(x, y, animate) { this._transform.x = x; this._transform.y = y; this.update(animate); };
-/** @param {number} [x] @param {number} [y] @param {boolean} [update] @param {boolean} [animate] */
-Transformable.prototype.scale = function(x, y, update, animate) { this._transform.scaleX = x || 1; this._transform.scaleY = y || 1; if (update) this.update(animate); };
-/** @param {number} x @param {number} [y] @param {number} [z] @param {boolean} [animate] */
-Transformable.prototype.rotate = function(x, y, z, animate) {
-	if (y === undefined && z === undefined) this._transform.rotate = x;
-	else this._transform.rotateX = x, this._transform.rotateY = y, this._transform.rotateZ = z;
-	this.update(animate);
-};
-
-
 //#region Dialog
 
 /** @param {unknown} exception */
@@ -1397,11 +1360,7 @@ function createDialogElement() {
 	return /** @type {HTMLElement} */(template.cloneNode(true));
 };
 
-var windowButtons = {
-	eject: 0,
-	full: 1,
-	close: 2
-};
+var windowButtons = { eject: 0, full: 1, close: 2 };
 
 var restoreWindowIcon = '<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg>';
 
@@ -1411,7 +1370,6 @@ var restoreWindowIcon = '<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http
  * @class
  */
 function Dialog(application) {
-
 	/** @type {number} */
 	this._x = 0;
 	/** @type {number} */
@@ -1424,15 +1382,11 @@ function Dialog(application) {
 	this._height = Math.max(1, Math.min(defaultWindowHeight, window.innerHeight - 40));
 	this._isMinWidth = false;
 	this._isMinHeight = false;
-
 	/** @type {Window | null} */
 	this._popupWindow = null;
-
 	/** @type {string| null} */
 	this._src = null;
-
 	this._loaded = false;
-
 	this.velocityTracking = false;
 	this.velocityX = 0;
 	this.velocityY = 0;
@@ -1446,11 +1400,9 @@ function Dialog(application) {
 	this._aspectRatioEnabled = false;
 	this._constrainAspectRatioInner = false;
 	this._constrainAspectRatioLine = false;
-
 	/** @type {boolean} */
 	this._useTransform = useTransform;
 	this._useScale = useScale;
-
 	this._skew = 0;
 	this._scaleX = 0;
 	this._scaleY = 0;
@@ -1459,7 +1411,6 @@ function Dialog(application) {
 	this._transform = null;
 	/** @type {Transformable | null} */
 	this._contentTransform = null;
-
 	this._maximizing = false;
 	this._maximizePending = null;
 	this.maximizeAnimations = 0;
