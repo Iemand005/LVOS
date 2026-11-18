@@ -7,9 +7,10 @@ function ExtensionApp(os) {
 ExtensionApp.prototype.createList = function () {
 	var extensions = this.os.wm.extensions;
 
-	this.os.createInputList(extensions.map(function (extension) {
+	var self = this;
+	var llst = this.os.createInputList(extensions.map(function (extension) {
 		return { state: extension.enabled || false, onInput: function (enabled) {
-
+			self.os.wm.toggleExtensionEnabled(extension, enabled);
 		}};
 	}));
 	var main = document.querySelector("main");
