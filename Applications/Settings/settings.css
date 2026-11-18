@@ -16,6 +16,9 @@ header button, header li {
 
 header button {
 	width: 100%;
+
+	background: none;
+	border: none;
 }
 
 main {
