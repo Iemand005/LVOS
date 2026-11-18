@@ -260,6 +260,14 @@ WindowManager.prototype.loadState = function(dialog) {
 	} catch (exception) { handleStorageException(exception); }
 };
 
+/** @param {(extension: Extension) => void} callback */
+WindowManager.prototype.forEachExtension = function(callback) {
+	for (var i = 0; i < this.extensions.length; i++) {
+		var ext = this.extensions[i];
+		if (ext) callback(ext);
+	}
+}
+
 WindowManager.prototype.saveExtensionStates = function() {
 	if (!this.canSave || !("localStorage" in window)) return;
 	try {
