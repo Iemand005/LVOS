@@ -2082,13 +2082,8 @@ Object.defineProperty(Dialog.prototype, "inset", {
 	set: function(inset) { this.bottom = this.right = this.left = this.top = inset; }
 });
 
-Object.defineProperty(Dialog.prototype, "isMinWidth", {
-	get: function () { return this._isMinWidth; }
-});
-
-Object.defineProperty(Dialog.prototype, "isMinHeight", {
-	get: function () { return this._isMinHeight; }
-});
+Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function () { return this._isMinWidth; } });
+Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function () { return this._isMinHeight; } });
 
 Object.defineProperty(Dialog.prototype, "useTransform", {
 	get: function () { return this._useTransform; },
@@ -2148,10 +2143,7 @@ Object.defineProperty(Dialog.prototype, "id", {
 	}
 });
 
-Object.defineProperty(Dialog.prototype, "content", {
-	get: function() { return this.getElementByTagOrClassName("content"); }
-});
-
+Object.defineProperty(Dialog.prototype, "content", { get: function() { return this.getElementByTagOrClassName("content"); } });
 Object.defineProperty(Dialog.prototype, "contentTransform", {
 	get: /** @type {()=>Transformable | null} */function() {
 		if (this._contentTransform) return this._contentTransform;
