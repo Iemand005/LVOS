@@ -281,8 +281,10 @@ Helpers.formatCamelCase = function (text) {
 
 //#region VulpOS
 
-function VulpOS() {
+/** @param {Flags} flags */
+function VulpOS(flags) {
 	this.wm = new WindowManager;
+	this.flags = flags;
 }
 
 /**

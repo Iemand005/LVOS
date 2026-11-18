@@ -3119,7 +3119,7 @@ window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
 //#region Global Variables
 
-var os = new VulpOS;
+var os = new VulpOS(flags);
 window.os = os;
 /** @type {WindowManager} */
 var windowManager = os.wm;
