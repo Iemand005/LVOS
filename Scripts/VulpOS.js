@@ -361,6 +361,11 @@ UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClic
 	return builder;
 };
 
+/** @param {Notification} n */
+UIBuilder.prototype.addNotificationView = function (n) {
+	
+};
+
 //#endregion
 
 //#region VulpOS
@@ -384,6 +389,13 @@ VulpOS.prototype.to = function (element) {
 /** @param {"section"} [type] */
 VulpOS.prototype.newTag = function (type) {
 	return new UIBuilder(document.createElement(type || "section"));
+};
+
+/** @typedef {{title: string, description: strng}} Notification */
+
+/** @param {Notification} notification */
+VulpOS.prototype.pushNotification = function (notification) {
+	var bubble = this.newTag().
 };
 
 
