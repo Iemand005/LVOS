@@ -2165,10 +2165,6 @@ Object.defineProperty(Dialog.prototype, "transform", {
 	get: /** @type {()=>Transformable | null} */function() { return this._transform || (this._transform = new Transformable(this.target)); }
 });
 
-Object.defineProperty(Dialog.prototype, "killable", {
-	get: function() { return true; }
-});
-
 Object.defineProperty(Dialog.prototype, "borderSize", {
 	set: function (value) {
 		if (!this.content) return;
@@ -2179,6 +2175,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 	get: function () { return this.content && Helpers.fromPixels(this.content.style.padding); }
 });
 
+Object.defineProperty(Dialog.prototype, "killable", { get: function() { return true; }});
 Object.defineProperty(Dialog.prototype, "popup", { get: function() { return this._popupWindow; } });
 Object.defineProperty(Dialog.prototype, "skew", { set: function(skew) { this.setSkew(skew); } });
 Object.defineProperty(Dialog.prototype, "scaleY", { set: function(scaleY) { this.setScaleY(scaleY); } });
@@ -2928,8 +2925,8 @@ Dialog.prototype.kill = function() {
 	if (this._killing) return;
 	this._killing = true;
 	var parent = this.target && this.target.parentElement;
-	if (parent && this.killable && this.target) parent.removeChild(this.target);
-	if (this.target) this.target.classList.remove("open");
+	if (parent && this.killable) parent.removeChild(this.target);
+	this.target.classList.remove("open");
 	this._stateOpen = false;
 	windowManager.saveState();
 };
