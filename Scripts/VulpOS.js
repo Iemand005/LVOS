@@ -269,6 +269,23 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 };
 
 /**
+ * @param {string} className
+ * @param {boolean} [force]
+ * @param {TransitionEndCallback} [onTransitionEnd]
+ * @param {(this:Dialog,enabled:boolean)=>void} [onEnd]
+ * @param {(this:Dialog,enabled:boolean)=>void} [onToggled]
+ * @param {number} [timeout] Safety net: a property whose transition keeps being restarted never fires transitionend, so without this the animation can hang with `animating` still on the element.
+ */
+Helpers.prototype.toggleClassAnimated = function (className, force, onTransitionEnd, onEnd, onToggled, timeout) {
+	var self = this;
+	var enabled = false;
+	this.animate(function() {
+		enabled = Helpers.setClass(self.target, className, force);
+		if (onToggled) onToggled.call(self, enabled);
+	}, onTransitionEnd, function() { if (onEnd) onEnd.call(self, enabled); }, timeout);
+};
+
+/**
  * @param {string} text
  * @returns {string}
  */
