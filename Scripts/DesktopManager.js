@@ -352,7 +352,6 @@ function ContextMenu() {
  * @param {number} y
  */
 ContextMenu.prototype.open = function(x, y) {
-    if (!this.element) return;
     // translateElement(this.element, x, y);
     this.element.style.left = Helpers.toPixels(x);
     this.element.style.top = Helpers.toPixels(y);
@@ -360,13 +359,12 @@ ContextMenu.prototype.open = function(x, y) {
 };
 
 ContextMenu.prototype.close = function() {
-	if (!this.element) return;
     this.element.classList.remove("open");
 };
 
 /** @param {{label: string, onClick: ()=>void}} items */
 ContextMenu.prototype.setItems = function(items) {
-	new UIBuilder(this.element).addList(items);
+	new window.os.UIBuilder(this.element).addList(items);
 };
 var contextMenu = new ContextMenu;
 
