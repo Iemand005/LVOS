@@ -72,6 +72,36 @@ test('VulpOS.open routes files by extension to a registered app', async ({ vulpO
 	expect(second.path).toBe('folder/main.TXT?raw=true');
 });
 
+test('photos is provisioned as the image handler and renders opened images', async ({ vulpOS }) => {
+	const mappings = await vulpOS.page.evaluate(() =>
+		['jpg', 'jpeg', 'png', 'webp', 'gif'].map(type => window.appManager.fileTypes[type])
+	);
+	expect(mappings).toEqual(['photos', 'photos', 'photos', 'photos', 'photos']);
+
+	const dialog = await vulpOS.getWindow('photos');
+	await vulpOS.launchWindow(dialog);
+	await vulpOS.assertWindowOpen(dialog);
+
+	const image = vulpOS.page.frameLocator('iframe[src*="photos.html"]').locator('#photo');
+	await expect(image).toHaveCount(1);
+
+	await vulpOS.page.evaluate(async () => {
+		const canvas = document.createElement('canvas');
+		canvas.width = 1;
+		canvas.height = 1;
+		const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+		(window as any).os.open(new File([blob!], 'pixel.png', { type: 'image/png' }));
+	});
+
+	await vulpOS.page.waitForFunction(() => {
+		const frame = window.windowManager.windows.photos.frame!;
+		const element = frame.contentDocument!.getElementById('photo') as HTMLImageElement;
+		return Boolean(element && element.complete && element.naturalWidth === 1 && element.src.startsWith('blob:'));
+	});
+
+	await expect(image).toHaveAttribute('alt', 'pixel.png');
+});
+
 test('Helpers.getFileExtension extracts extensions from paths and files', async ({ vulpOS }) => {
 	const extensions = await vulpOS.page.evaluate(() => [
 		window.Helpers.getFileExtension('notes.txt'),

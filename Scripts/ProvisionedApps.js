@@ -24,6 +24,7 @@ var applications = [
 	provisionedApp("Settings App", "settings", "./Applications/Settings/settings.html"),
 	provisionedApp("Extensions", "extensions", "./Applications/Extensions/extensions.html"),
 	provisionedApp("Files", "files", "./Applications/Files/explorer.html"),
+	provisionedApp("Photos", "photos", "./Applications/Photos/photos.html", { fileTypes: ["jpg", "jpeg", "png", "webp", "gif"] }),
 	provisionedApp("Frosted Colors", "colors", "Applications/FrostedColours/index.html", { distSrc: "https://iemand005.github.io/FrostedColours", wallpaper: true }),
 	provisionedApp("Calculator", "calculator", "./Applications/Calculator/calculator.html", { minWidth: 180, minHeight: 40 }),
 	provisionedApp("Color Tool", "colortool", "./Applications/ColorTool/colors.html", { minWidth: 180, minHeight: 240 }),
