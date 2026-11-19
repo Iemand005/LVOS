@@ -378,6 +378,7 @@ document.addEventListener("contextmenu", function(e) {
 	console.log("tarnk");
     e.preventDefault();
 	contextMenu.setItems([
+		{ label: "New file", onClick: function() {console.log("hi"); }},
 		{ label: "silly", onClick: function() {console.log("hi"); }}
 	]);
     contextMenu.open(e.clientX, e.clientY);
