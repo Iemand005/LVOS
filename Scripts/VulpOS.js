@@ -320,6 +320,9 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
  */
 function UIBuilder(container, clearChildren) {
 	this.container = container;
+	if (clearChildren) container.childNodes.forEach(function (child) {
+		container.removeChild(child);
+	});
 }
 
 /** @param {string} text */
