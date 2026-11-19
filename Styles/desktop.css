@@ -838,17 +838,22 @@ desktop #launchpad {
 	position: absolute;
     min-width: 10px;
     min-height: 10px;
-    background: gray;
+    /* background: gray; */
 	display: none;
-	S
 }
 
 .context-menu.open {
 	display: block !important;
 }
 
+.context-menu ul {
+	padding: 10px;
+}
+
 .context-menu li, .context-menu button {
-	display: block !important;
+	padding: 0;
+	margin: 0;
+	border-radius: 0;
 }
 
 time {
