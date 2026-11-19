@@ -473,6 +473,13 @@ function dockFileElement(element) {
 	element.style.margin = "";
 }
 
+function fileNameFromSource(source) {
+	var clean = String(source || "").split(/[?#]/, 1)[0];
+	var name = clean.substring(clean.lastIndexOf("/") + 1);
+	try { name = decodeURIComponent(name); } catch (ex) { }
+	return name || "file";
+}
+
 function createFileElement(payload) {
 	return Helpers.createList([{ label: payload.name, icon: payload.icon }]).firstChild;
 }
@@ -499,7 +506,7 @@ Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDo
 	folder = folder || document.getElementById("desktop-folder");
 	if (!folder || !file) return null;
 	var list = Helpers.createList([{
-		label: file.name,
+		label: typeof file === "string" ? fileNameFromSource(file) : (file.name || "file"),
 		icon: "Assets/icon-192.png",
 		onFileClick: onFileClick,
 		onFileDoubleClick: onFileDoubleClick || defaultFileDoubleClick
@@ -534,6 +541,54 @@ Helpers.getFileExtension = function (value) {
 	if (dot <= 0 || dot === name.length - 1) return "";
 	return name.substring(dot + 1).toLowerCase();
 };
+
+Helpers.isImageUrl = function (value) {
+	if (typeof value !== "string") return false;
+	var trimmed = value.trim();
+	if (!trimmed) return false;
+	if (/^data:image\//i.test(trimmed)) return true;
+	return ["jpg", "jpeg", "png", "webp", "gif"].indexOf(Helpers.getFileExtension(trimmed)) !== -1;
+};
+
+Helpers.getImageUrlFromDrop = function (ev) {
+	var dt = ev && ev.dataTransfer;
+	if (!dt || isRealFileDrag(ev) || hasFilePayload(ev)) return null;
+
+	function read(type) {
+		try { return dt.getData(type) || ""; } catch (ex) { return ""; }
+	}
+
+	function firstLine(value) {
+		var line = String(value || "").split(/\r?\n/, 1)[0];
+		return line ? line.trim() : "";
+	}
+
+	var direct = [
+		read("text/x-moz-url"),
+		read("URL"),
+		read("text/uri-list"),
+		read("text/plain"),
+		read("Text")
+	];
+
+	for (var i = 0; i < direct.length; i++) {
+		var candidate = firstLine(direct[i]);
+		if (candidate && Helpers.isImageUrl(candidate)) return candidate;
+	}
+
+	var html = read("text/html");
+	if (!html) return null;
+
+	var match = html.match(/<img\b[^>]*\bsrc\s*=\s*(["'])(.*?)\1/i) ||
+		html.match(/<img\b[^>]*\bsrc\s*=\s*([^\s>]+)/i);
+	var source = match ? (match[2] || match[1] || "") : "";
+	if (!source) return null;
+
+	source = source.replace(/&amp;/gi, "&").trim();
+	return Helpers.isImageUrl(source) ? source : null;
+};
+
+Helpers.closestFolderContent = closestFolderContent;
 
 function hasFilePayload(ev) {
 	var types = ev.dataTransfer && ev.dataTransfer.types;
@@ -604,6 +659,14 @@ Helpers.prepareFileDropTarget = function (folder) {
 			var files = ev.dataTransfer.files;
 			for (var i = 0; i < files.length; i++)
 				Helpers.addDesktopFile(files[i], ev.clientX + i * 24, ev.clientY + i * 24, undefined, undefined, folder);
+			return;
+		}
+
+		var imageUrl = Helpers.getImageUrlFromDrop(ev);
+		if (imageUrl) {
+			ev.preventDefault();
+			ev.stopPropagation();
+			Helpers.addDesktopFile(imageUrl, ev.clientX, ev.clientY, undefined, undefined, folder);
 			return;
 		}
 

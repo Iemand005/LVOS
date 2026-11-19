@@ -96,6 +96,82 @@ test('double clicking a dropped file logs the bound File object', async ({ vulpO
 	expect(result).toEqual({ loggedCount: 1, isFile: true, name: 'notes.txt', type: 'text/plain', openedCount: 1, openedIsSame: true });
 });
 
+test('dropping an image URL creates an image file instead of installing an app', async ({ vulpOS }) => {
+	const url = 'https://cdn.discordapp.com/avatars/1130212071158583457/5a2cb41bbeabf5b7e43bdbffaf86c4fc.webp?size=100';
+
+	await vulpOS.page.evaluate((imageUrl) => {
+		const transfer = new DataTransfer();
+		transfer.setData('text/html', '<html><body><!--StartFragment--><img src="' + imageUrl + '" alt=" "><!--EndFragment--></body></html>');
+		transfer.setData('text/x-moz-url', imageUrl + '\n ');
+		transfer.setData('text/plain', imageUrl);
+
+		const target = document.getElementById('desktop-folder') || document.body;
+		target.dispatchEvent(new DragEvent('drop', {
+			bubbles: true,
+			cancelable: true,
+			dataTransfer: transfer,
+			clientX: 460,
+			clientY: 260,
+		}));
+	}, url);
+
+	const icon = vulpOS.page.locator('#desktop-folder > .file-item.placed').filter({ hasText: '5a2cb41bbeabf5b7e43bdbffaf86c4fc.webp' });
+	await expect(icon).toHaveCount(1);
+
+	const result = await vulpOS.page.evaluate(() => {
+		const element = document.querySelector('#desktop-folder > .file-item.placed') as any;
+		const installed = Object.keys(window.appManager.apps).filter((id) => {
+			const app = window.appManager.apps[id];
+			return app && String(app.src).indexOf('discordapp.com') !== -1;
+		});
+		return { bound: element && element.lvFile, installed };
+	});
+	expect(result.bound).toBe(url);
+	expect(result.installed).toEqual([]);
+
+	await icon.dblclick();
+
+	await vulpOS.page.waitForFunction((expected) => {
+		const photos = window.windowManager.windows.photos;
+		const frame = photos && photos.frame;
+		const image = frame && frame.contentDocument && frame.contentDocument.getElementById('photo');
+		return Boolean(photos && photos.isOpen && image && (image as HTMLImageElement).src === expected);
+	}, url);
+
+	const rendered = await vulpOS.page.evaluate(() => {
+		const frame = window.windowManager.windows.photos.frame!;
+		const image = frame.contentDocument!.getElementById('photo') as HTMLImageElement;
+		return { src: image.src, alt: image.alt };
+	});
+	expect(rendered.src).toBe(url);
+	expect(rendered.alt).toBe('Opened image');
+});
+
+test('dropping a normal URL still installs it as an app', async ({ vulpOS }) => {
+	await vulpOS.page.evaluate(() => {
+		const transfer = new DataTransfer();
+		transfer.setData('text/uri-list', 'https://example.com/');
+		transfer.setData('text/plain', 'https://example.com/');
+
+		const target = document.getElementById('desktop-folder') || document.body;
+		target.dispatchEvent(new DragEvent('drop', {
+			bubbles: true,
+			cancelable: true,
+			dataTransfer: transfer,
+			clientX: 520,
+			clientY: 240,
+		}));
+	});
+
+	const installed = await vulpOS.page.evaluate(() => {
+		const app = Object.keys(window.appManager.apps)
+			.map(id => window.appManager.apps[id])
+			.find(candidate => candidate && candidate.src === 'https://example.com/');
+		return Boolean(app && window.windowManager.windows[app.id]);
+	});
+	expect(installed).toBe(true);
+});
+
 test('file click callbacks receive the bound File object', async ({ vulpOS }) => {
 	await vulpOS.page.evaluate(() => {
 		const file = new File(['callback'], 'callback.txt', { type: 'text/plain' });

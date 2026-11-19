@@ -199,6 +199,13 @@ var onLoad = function () {
             return;
         }
 
+        var imageUrl = Helpers.getImageUrlFromDrop && Helpers.getImageUrlFromDrop(ev);
+        if (imageUrl) {
+            var imageFolder = Helpers.closestFolderContent && Helpers.closestFolderContent(ev.target);
+            Helpers.addDesktopFile(imageUrl, ev.clientX, ev.clientY, undefined, undefined, imageFolder);
+            return;
+        }
+
         // If it's not our internal drop, treat the dropped URL as an app to open.
         if (!droppedUrl && plain && !/^\{|\[/.test(plain.trim())) {
             droppedUrl = plain.trim();
