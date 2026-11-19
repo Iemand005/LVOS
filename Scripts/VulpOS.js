@@ -724,6 +724,9 @@ Helpers.prepareFileItem = function (element, item) {
 
 	element.addEventListener("dragstart", function (ev) {
 		if (!ev.dataTransfer) return;
+		var image = element.querySelector("img");
+		if (image && typeof ev.dataTransfer.setDragImage === "function")
+			ev.dataTransfer.setDragImage(image, image.offsetWidth / 2, image.offsetHeight / 2);
 		ev.dataTransfer.effectAllowed = "move";
 		ev.dataTransfer.setData("application/x-lvos-file", JSON.stringify({
 			id: element.id,

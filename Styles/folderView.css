@@ -1,0 +1,67 @@
+.folder-content {
+	width: 100%;
+	pointer-events: all;
+}
+
+.folder-content ul {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	align-content: flex-start;
+	gap: 8px;
+	height: auto;
+	margin: 0;
+	padding: 8px;
+	border-radius: 0;
+	background: transparent;
+	overflow: visible;
+	list-style: none;
+}
+
+.folder-content li,
+.folder-content li:not(:last-of-type) {
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+	align-self: flex-start;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 6px;
+	box-sizing: border-box;
+	width: 80px;
+	height: 88px;
+	padding: 8px;
+	border: 1px solid transparent;
+	text-align: center;
+}
+
+.folder-content li img {
+	width: 48px;
+	height: 48px;
+	object-fit: contain;
+}
+
+.folder-content .file-item {
+	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+	overflow: hidden;
+}
+
+.folder-content .file-item:active {
+	cursor: grabbing;
+}
+
+.folder-content .file-item.selected {
+	background: rgba(0, 120, 255, 0.35);
+	border-color: #0078ff;
+}
+
+.folder-content .file-item.dragging {
+	opacity: 0.6;
+}
+
+.folder-content > .file-item.placed {
+	position: absolute;
+	margin: 0;
+}
