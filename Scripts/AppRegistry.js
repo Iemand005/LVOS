@@ -45,15 +45,37 @@ function AppManager() {
 	this._wallpapers = {};
 	/** @type {Application | null} */
 	this._wallpaper = null;
+	this._fileTypes = {};
 }
 
 /* --- Registry (no persistence) --- */
+
+function normalizeFileExtension(extension) {
+	return String(extension || "").replace(/^\./, "").toLowerCase();
+}
+
+AppManager.prototype.registerFileType = function(extension, appId) {
+	var key = normalizeFileExtension(extension);
+	if (key && appId) this._fileTypes[key] = appId;
+};
+
+AppManager.prototype.getAppForFileType = function(extension) {
+	var key = normalizeFileExtension(extension);
+	return key ? (this._fileTypes[key] || null) : null;
+};
+
+Object.defineProperty(AppManager.prototype, "fileTypes", {
+	get: function() { return this._fileTypes; }
+});
 
 /** @param {Application} app */
 AppManager.prototype.addApp = function(app) {
 	if (!app || typeof app !== "object") return;
 	if (!app.id) app.id = app.title || "unknown";
 	this._apps[app.id] = app;
+	if (app.fileTypes instanceof Array) app.fileTypes.forEach(function(extension) {
+		this.registerFileType(extension, app.id);
+	}, this);
 	if (app.wallpaper)  {
 		this._wallpapers[app.id] = app;
 		if (!this._wallpaper) this._wallpaper = app;
@@ -76,6 +98,12 @@ AppManager.prototype.getApp = function(id) {
 AppManager.prototype.removeApp = function(id) {
 	if (!id) return;
 	delete this._apps[id];
+
+	this._fileTypes = {};
+	this.forEachApp(function(app) {
+		if (!(app.fileTypes instanceof Array)) return;
+		app.fileTypes.forEach(function(extension) { this.registerFileType(extension, app.id); }, this);
+	}, this);
 };
 /** @param {{[id:string]: Application}} map @param {(app: Application, id: string)=>void} callback */
 AppManager.prototype._forEach = function(map, callback) {

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>File Handler Test App</title>
+<script src="../../Scripts/Messenger.js"></script>
+</head>
+<body>
+<pre id="result">no file</pre>
+<script>
+window.__receivedFiles = [];
+LVMessenger.registerFileOpenHandler(function (file, path) {
+	var entry = {
+		isFile: Object.prototype.toString.call(file) === "[object File]",
+		name: file && file.name || path,
+		path: path,
+		size: file && typeof file.size === "number" ? file.size : -1
+	};
+	window.__receivedFiles.push(entry);
+	document.getElementById("result").textContent = entry.name + " (" + entry.size + ")";
+	if (file && typeof file.text === "function") {
+		file.text().then(function (text) { entry.text = text; });
+	}
+});
+</script>
+</body>
+</html>

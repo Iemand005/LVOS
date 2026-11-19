@@ -83,6 +83,7 @@
 <div id="editor"><div id="loading">Loading editor…</div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.48.0/min/vs/loader.min.js"></script>
+<script src="../../Scripts/Messenger.js"></script>
 <script>
   require.config({
     paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.48.0/min/vs' }
@@ -108,6 +109,26 @@
       fontSize: 14,
       minimap: { enabled: true },
       scrollBeyondLastLine: false
+    });
+
+    const languages = { js: 'javascript', json: 'json', html: 'html', css: 'css' };
+    function openText(text, path) {
+      editor.setValue(text);
+      const cleanPath = String(path || '').split(/[?#]/, 1)[0];
+      const dot = cleanPath.lastIndexOf('.');
+      const extension = dot > 0 ? cleanPath.substring(dot + 1).toLowerCase() : '';
+      if (languages[extension]) {
+        document.getElementById('language').value = languages[extension];
+        monaco.editor.setModelLanguage(editor.getModel(), languages[extension]);
+      }
+    }
+
+    LVMessenger.registerFileOpenHandler(function (file, path) {
+      if (file && typeof file.text === 'function') {
+        file.text().then(function (text) { openText(text, path); });
+      } else if (typeof file === 'string') {
+        fetch(file).then(function (response) { return response.text(); }).then(function (text) { openText(text, file); });
+      }
     });
 
     document.getElementById('language').addEventListener('change', (e) => {

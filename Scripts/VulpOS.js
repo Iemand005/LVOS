@@ -211,8 +211,10 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	/** @type {T} */
 	var boundContext = thisArg || element;
 
-	var callEnd = function() {
-		if (!state.active) return;
+	var state = null;
+
+	var callEnd = function(cancelled) {
+		if (!state || !state.active) return;
 		state.active = false;
 		if (state.timer) clearTimeout(state.timer);
 		if (state.frame) window.cancelAnimationFrame(state.frame);
@@ -221,14 +223,13 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 
 		element.classList.remove("animating");
 		if (flip) Helpers.clearFlip(element);
-		if (onEnd) onEnd.call(boundContext);
+		if (!cancelled && onEnd) onEnd.call(boundContext);
 	};
 
 	var previous = element._animationState;
 	if (previous && previous.cancel) previous.cancel();
 
-	/** @type {{ timer: number, frame: number, handler: ((ev: TransitionEvent)=>void) | null, active: boolean, flip: boolean, cancel: () => void }} */
-	var state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip, cancel: callEnd };
+	state = element._animationState = { timer: 0, frame: 0, handler: null, active: true, flip: !!flip, cancel: function() { callEnd(true); } };
 
 	if (!flags.useAnimations) {
 		if (onToggled) onToggled.call(boundContext);
@@ -397,7 +398,34 @@ VulpOS.prototype.newTag = function (type) {
 
 /** @param {string | File | URL} path */
 VulpOS.prototype.open = function (path) {
-	// TODO: make this function open the correct app for the specified file type?
+	var extension = Helpers.getFileExtension(path);
+	var appId = appManager.getAppForFileType(extension);
+	if (!appId) return false;
+
+	var app = appManager.getApp(appId);
+	if (!app) return false;
+
+	var dialog = app.multiple ? this.wm.spawnApp(app) : (this.wm.windows[app.id] || this.wm.loadApp(app));
+	if (!dialog) return false;
+
+	if (!dialog._pendingFiles) dialog._pendingFiles = [];
+	dialog._pendingFiles.push({
+		file: path,
+		path: typeof path === "string" ? path : (path.name || String(path))
+	});
+	dialog.launch();
+	VulpOS.deliverPendingFiles(dialog);
+	return true;
+};
+
+VulpOS.deliverPendingFiles = function (dialog) {
+	if (!dialog.fileOpenHandler || !dialog._pendingFiles || !dialog._pendingFiles.length) return;
+
+	var pending = dialog._pendingFiles.splice(0, dialog._pendingFiles.length);
+	pending.forEach(function (item) {
+		try { dialog.fileOpenHandler(item.file, item.path); }
+		catch (ex) { console.warn("File open handler failed:", ex); }
+	});
 };
 
 /** @typedef {{title: string, description: string}} Notification */
@@ -480,6 +508,26 @@ Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDo
 
 Helpers.getDesktopFile = function (element) {
 	return element ? element.lvFile : null;
+};
+
+Helpers.getFileExtension = function (value) {
+	var name = "";
+
+	if (typeof value === "string") name = value;
+	else if (value && typeof value === "object") {
+		if (typeof File !== "undefined" && value instanceof File) name = value.name;
+		else if (typeof value.pathname === "string") name = value.pathname;
+		else if (typeof value.href === "string") name = value.href;
+		else if (typeof value.name === "string") name = value.name;
+	}
+
+	if (!name) return "";
+	name = name.split(/[?#]/, 1)[0].replace(/\\/g, "/");
+	name = name.substring(name.lastIndexOf("/") + 1);
+
+	var dot = name.lastIndexOf(".");
+	if (dot <= 0 || dot === name.length - 1) return "";
+	return name.substring(dot + 1).toLowerCase();
 };
 
 function hasFilePayload(ev) {

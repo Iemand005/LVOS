@@ -88,7 +88,7 @@ interface Graphics2D extends GraphicsBase {
 }
 }
 
-type MessageType = "dialog-state" | "open" | "window-size" | "window-move" | "window-open" | "window-close" | "window-maximize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme" | "os";
+type MessageType = "dialog-state" | "open" | "window-size" | "window-move" | "window-open" | "window-close" | "window-maximize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme" | "os" | "register-file-handler";
 
 interface WindowProperties {
 	scrollbars: boolean;

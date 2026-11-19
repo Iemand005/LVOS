@@ -96,6 +96,17 @@ LVMessenger.get = function (type, callback) {
 	LVMessenger.broadcastToParent(type, {}, undefined, callback);
 };
 
+LVMessenger.callParent = function (type, message) {
+	var target = getParentWindow();
+	if (!target || typeof target.__LVMessengerReceive !== "function") return false;
+	return target.__LVMessengerReceive(type, message, window);
+};
+
+LVMessenger.registerFileOpenHandler = function (callback) {
+	if (typeof callback !== "function") return false;
+	return LVMessenger.callParent("register-file-handler", { callback: callback }) === true;
+};
+
 /**
  * @param {MessageType} type
  * @param {HTMLIFrameElement} iFrame
@@ -168,11 +179,25 @@ LVMessenger.fullscreenFrame = function(frame) {
 	} catch (ex) {}
 };
 
+function getDialogForSource(source) {
+	var wm = window.windowManager;
+	if (!wm || !wm.windows || !source) return null;
+
+	if (typeof source === "string") return wm.windows[source] || null;
+
+	for (var id in wm.windows) {
+		if (!wm.windows.hasOwnProperty(id)) continue;
+		var candidate = wm.windows[id];
+		if (candidate && candidate.frame && candidate.frame.contentWindow === source) return candidate;
+	}
+	return null;
+}
+
 /**
  * Handle a message sent by an app frame or another LVOS instance.
  * @param {MessageType} type
  * @param {any} data
- * @param {string} [source]
+ * @param {string | Window} [source]
  */
 function messageReceived(type, data, source) {
 	var wm = window.windowManager;
@@ -183,13 +208,18 @@ function messageReceived(type, data, source) {
 
 	if (!source) return;
 
-	var dialog = wm.windows[source];
-	var frame = dialog ? dialog.frame : LVMessenger.getFrameForSource(source);
+	var dialog = getDialogForSource(source);
+	var frame = dialog ? dialog.frame : LVMessenger.getFrameForSource(typeof source === "string" ? source : undefined);
 
 	if (dialog && type === "window-size" && data && typeof data === "object")
 		dialog.resizeBody(data.width, data.height);
 
 	switch (type) {
+		case "register-file-handler":
+			if (!dialog || !data || typeof data.callback !== "function") return false;
+			dialog.fileOpenHandler = data.callback;
+			if (typeof VulpOS !== "undefined" && VulpOS.deliverPendingFiles) VulpOS.deliverPendingFiles(dialog);
+			return true;
 		case "launchOverlay":
 			if (dialog) {
 				var overlay = Helpers.getOverlay();

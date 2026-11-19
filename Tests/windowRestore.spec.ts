@@ -11,9 +11,6 @@ test('an open window is restored after a reload', async ({ vulpOS }) => {
 		d.resize(320, 240);
 	});
 
-	console.log('immediate', await dialog.evaluate(d => ({ stateOpen: (d as any)._stateOpen, isOpen: d.isOpen, cls: d.target!.className })));
-	await vulpOS.page.waitForTimeout(300);
-	console.log('after 300ms', await dialog.evaluate(d => ({ stateOpen: (d as any)._stateOpen, isOpen: d.isOpen, cls: d.target!.className, stored: (localStorage.getItem('windowState') || '').includes('"restore-test":{"title":"Restore Test","x":320,"y":120,"z":0,"width":640,"height":480,"open":true') })));
 	await vulpOS.page.waitForFunction(() => {
 		try {
 			const state = JSON.parse(localStorage.getItem('windowState') || '{}');
