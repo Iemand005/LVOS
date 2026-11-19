@@ -372,8 +372,8 @@ var contextMenu = new ContextMenu;
 document.addEventListener("contextmenu", function(e) {
     e.preventDefault();
 	contextMenu.setItems([
-		{ label: "silly", onClick: function() {console.log("hi")}}
-	])
+		{ label: "silly", onClick: function() {console.log("hi"); }}
+	]);
     contextMenu.open(e.clientX, e.clientY);
 }, false);
 
