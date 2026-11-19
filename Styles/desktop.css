@@ -855,13 +855,15 @@ desktop #launchpad {
 	margin: 0;
 	border-radius: 0;
 	border: none;
+	border-color: gray;
 }
 
 .context-menu button {
 	padding: 10px;
 	width: 100%;
 	text-align: start;
-	background-color: rgb(0 0 0 / 19%);
+	background-color: rgb(0 0 0 / 19%) !important;
+	border-color: gray;
 	backdrop-filter: blur(10px);
 }
 
