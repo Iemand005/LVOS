@@ -798,6 +798,7 @@ aside#charms form {
 	cursor: grab;
 	user-select: none;
 	-webkit-user-select: none;
+	overflow: hidden;
 }
 
 .folder-content .file-item:active {

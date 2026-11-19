@@ -1,8 +1,11 @@
 
 (function () {
+	/** @typedef {{ name: string, icon?: string, kind?: string, values?: Function }} LVDirectoryEntry */
+
 	var FILE_ICON = "../../Assets/icon-192.png";
 	var FOLDER_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='%23f4c542' d='M3 11h15l4 5h23v25H3z'/></svg>";
 
+	/** @type {any} */
 	var mountedHandle = null;
 	try {
 		if (typeof LVMessenger.callParent === "function")
@@ -10,14 +13,19 @@
 	} catch (ex) {}
 
 	LVMessenger.get("os", function (os) {
-		var view = document.getElementById("file-view");
-		if (!view) return;
+		var viewElement = document.getElementById("file-view");
+		if (!viewElement) return;
+		var view = viewElement;
 
-		var address = document.getElementById("address");
+		/** @type {HTMLInputElement | null} */
+		var address = /** @type {HTMLInputElement | null} */ (document.getElementById("address"));
+		/** @type {HTMLElement | null} */
 		var count = document.getElementById("file-count");
+		/** @type {any[]} */
 		var history = [];
 		var historyIndex = -1;
 
+		/** @param {string} message */
 		var setStatus = function (message) {
 			if (count) count.textContent = message;
 		};
@@ -26,6 +34,7 @@
 			var total = view.querySelectorAll(".file-item").length;
 			count.textContent = total + (total === 1 ? " file" : " files");
 		};
+		/** @param {LVDirectoryEntry[]} entries */
 		var render = function (entries) {
 			view.replaceChildren();
 			os.to(view).addFileView(entries.map(function (entry) {
@@ -34,16 +43,18 @@
 					icon: entry.kind === "directory" ? FOLDER_ICON : FILE_ICON,
 					onFileDoubleClick: entry.kind === "directory" ? function () { goTo(entry, true); } : undefined
 				};
-			}));
+			}), undefined, undefined);
 			updateCount();
 		};
+		/** @param {any} directory @param {boolean} push */
 		var goTo = function (directory, push) {
 			if (push) {
 				history = history.slice(0, historyIndex + 1);
 				history.push(directory);
 				historyIndex++;
 			}
-			address.value = directory.name;
+			if (address) address.value = directory.name;
+			/** @type {LVDirectoryEntry[]} */
 			var entries = [];
 			if (typeof directory.values !== "function") {
 				render(entries);
@@ -84,6 +95,7 @@
 			}
 		});
 
+		/** @param {string} label @param {number} step */
 		var bindNavigation = function (label, step) {
 			var button = document.querySelector('nav button[aria-label="' + label + '"]');
 			if (button) button.addEventListener("click", function () {

@@ -90,6 +90,10 @@ interface Graphics2D extends GraphicsBase {
 
 type MessageType = "dialog-state" | "open" | "window-size" | "window-move" | "window-open" | "window-close" | "window-maximize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme" | "os" | "register-file-handler" | "mount-directory" | "get-mounted-directory";
 
+interface Window {
+	showDirectoryPicker?: (options?: { id?: string; mode?: "read" | "readwrite"; startIn?: string }) => Promise<FileSystemDirectoryHandle>;
+}
+
 interface WindowProperties {
 	scrollbars: boolean;
 	resizable: boolean;
