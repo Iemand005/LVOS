@@ -307,6 +307,8 @@ var onLoad = function () {
 		{ name: "Kank", icon: "Assets/icon-192.png"}
 
 	]);
+
+	contextMenu = new ContextMenu;
 };
 
 function createDesktop() {
@@ -366,7 +368,9 @@ ContextMenu.prototype.close = function() {
 ContextMenu.prototype.setItems = function(items) {
 	new window.os.UIBuilder(this.element).addList(items);
 };
-var contextMenu = new ContextMenu;
+
+/** @type {ContextMenu | null} */
+var contextMenu;
 
 
 document.addEventListener("contextmenu", function(e) {

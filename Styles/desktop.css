@@ -843,7 +843,7 @@ desktop #launchpad {
 }
 
 .context-menu.open {
-	display: block;
+	display: block !important;
 }
 
 time {
