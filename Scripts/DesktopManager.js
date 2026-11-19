@@ -367,8 +367,6 @@ document.addEventListener("contextmenu", function(e) {
     contextMenu.open(e.clientX, e.clientY);
 }, false);
 
-var dock = document.getElementById("dock");
-
 window.addEventListener("keydown", function(event) {
   switch (event.key) {
     case "F11":
