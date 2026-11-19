@@ -370,6 +370,7 @@ var contextMenu = new ContextMenu;
 
 
 document.addEventListener("contextmenu", function(e) {
+	console.log("tarnk");
     e.preventDefault();
 	contextMenu.setItems([
 		{ label: "silly", onClick: function() {console.log("hi"); }}
