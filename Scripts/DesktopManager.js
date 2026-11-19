@@ -341,6 +341,11 @@ window.addEventListener("load", onLoad, false);
 
 function ContextMenu() {
     this.element = document.getElementById("context-menu");
+	if (!this.element) {
+		this.element = document.createElement("div");
+		this.element.className = "context-menu";
+		this.element.id = "context-menu";
+	}
 }
 /**
  * @param {number} x
@@ -359,8 +364,10 @@ ContextMenu.prototype.close = function() {
     this.element.classList.remove("open");
 };
 
-/** @param {{label: string, onClick: ()=>void}} */
-ContextMenu.prototype.setItems = function(items) {}
+/** @param {{label: string, onClick: ()=>void}} items */
+ContextMenu.prototype.setItems = function(items) {
+	new UIBuilder(this.element).addList(items);
+};
 var contextMenu = new ContextMenu;
 
 
