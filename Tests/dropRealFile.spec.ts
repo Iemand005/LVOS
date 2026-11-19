@@ -72,23 +72,28 @@ test('double clicking a dropped file logs the bound File object', async ({ vulpO
 
 	await vulpOS.page.evaluate(() => {
 		(window as any).__logged = [];
+		(window as any).__opened = [];
 		console.log = (...args: any[]) => (window as any).__logged.push(args);
+		(window as any).os.open = (file: File) => (window as any).__opened.push(file);
 	});
 
 	const icon = vulpOS.page.locator('#desktop-folder > .file-item.placed').filter({ hasText: 'notes.txt' });
 	await icon.dblclick();
 
-	const logged = await vulpOS.page.evaluate(() => {
+	const result = await vulpOS.page.evaluate(() => {
 		const args = (window as any).__logged;
 		const file = args[0] && args[0][0];
+		const opened = (window as any).__opened;
 		return {
-			count: args.length,
+			loggedCount: args.length,
 			isFile: file instanceof File,
 			name: file && file.name,
 			type: file && file.type,
+			openedCount: opened.length,
+			openedIsSame: opened[0] === file,
 		};
 	});
-	expect(logged).toEqual({ count: 1, isFile: true, name: 'notes.txt', type: 'text/plain' });
+	expect(result).toEqual({ loggedCount: 1, isFile: true, name: 'notes.txt', type: 'text/plain', openedCount: 1, openedIsSame: true });
 });
 
 test('file click callbacks receive the bound File object', async ({ vulpOS }) => {

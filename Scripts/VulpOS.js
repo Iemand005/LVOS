@@ -490,6 +490,11 @@ function placeFileElement(element, folder, clientX, clientY) {
 	Helpers.selectFileItem(element);
 }
 
+function defaultFileDoubleClick(file) {
+	console.log(file);
+	if (typeof os !== "undefined" && os && typeof os.open === "function") os.open(file);
+}
+
 Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDoubleClick) {
 	var folder = document.getElementById("desktop-folder");
 	if (!folder || !file) return null;
@@ -497,7 +502,7 @@ Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDo
 		label: file.name,
 		icon: "Assets/icon-192.png",
 		onFileClick: onFileClick,
-		onFileDoubleClick: onFileDoubleClick || function (droppedFile) { console.log(droppedFile); }
+		onFileDoubleClick: onFileDoubleClick || defaultFileDoubleClick
 	}]);
 	var element = list.firstChild;
 	if (!element) return null;
