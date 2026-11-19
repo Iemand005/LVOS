@@ -374,6 +374,7 @@ var contextMenu;
 
 
 document.addEventListener("contextmenu", function(e) {
+	if (!contextMenu) return;
 	console.log("tarnk");
     e.preventDefault();
 	contextMenu.setItems([
