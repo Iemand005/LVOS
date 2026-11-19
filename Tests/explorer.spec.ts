@@ -21,10 +21,39 @@ test('explorer shows the navigation shell, file view and status count', async ({
 	await expect(frame.locator('#search')).toBeVisible();
 	await expect(frame.locator('#file-view .file-item')).toHaveCount(4);
 	await expect(frame.locator('#file-count')).toHaveText('4 files');
+	await expect(frame.locator('#file-view ul')).toHaveCSS('list-style-type', 'none');
 
 	const heights = await frame.locator('header, header nav, #address, #search, footer').evaluateAll(
 		elements => elements.map(element => Math.round(element.getBoundingClientRect().height)));
 	expect(heights).toEqual([35, 35, 22, 22, 23]);
+});
+
+test('explorer uses only the icon as the drag image', async ({ vulpOS }) => {
+	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
+	await vulpOS.launchWindow(dialog);
+	const frame = await frameFor(dialog);
+
+	await frame.evaluate(() => {
+		(window as any).__dragImages = [];
+		const original = DataTransfer.prototype.setDragImage;
+		DataTransfer.prototype.setDragImage = function (element, x, y) {
+			(window as any).__dragImages.push({ tag: element.tagName, src: (element as HTMLImageElement).src, x, y });
+			return original.call(this, element, x, y);
+		};
+	});
+	await frame.evaluate(() => {
+		const item = document.querySelector<HTMLElement>('#file-view .file-item')!;
+		item.dispatchEvent(new DragEvent('dragstart', {
+			bubbles: true,
+			cancelable: true,
+			dataTransfer: new DataTransfer()
+		}));
+	});
+
+	const images = await frame.evaluate(() => (window as any).__dragImages);
+	expect(images).toHaveLength(1);
+	expect(images[0].tag).toBe('IMG');
+	expect(images[0].src).toContain('icon-192.png');
 });
 
 test('explorer accepts real file drops into the folder', async ({ vulpOS }) => {

@@ -1433,8 +1433,8 @@ function Dialog(application) {
 	} else target = createDialogElement();
 
 	this.target = target;
-	this.width = this._width;
-	this.height = this._height;
+	this.setWidth(this._width);
+	this.setHeight(this._height);
 
 	var appList = document.getElementById("applist");
 	if (appList) appList.appendChild(this.createOpenButton());
