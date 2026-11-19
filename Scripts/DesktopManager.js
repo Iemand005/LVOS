@@ -355,10 +355,12 @@ ContextMenu.prototype.open = function(x, y) {
 };
 
 ContextMenu.prototype.close = function() {
-    if (!this.element) return;
+	if (!this.element) return;
     this.element.classList.remove("open");
 };
 
+/** @param {{label: string, onClick: ()=>void}} */
+ContextMenu.prototype.setItems = function(items) {}
 var contextMenu = new ContextMenu;
 
 
