@@ -859,6 +859,8 @@ desktop #launchpad {
 
 .context-menu button {
 	padding: 10px;
+	width: 100%;
+	text-align: start;
 }
 
 time {
