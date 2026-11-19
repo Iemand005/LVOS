@@ -88,7 +88,7 @@ interface Graphics2D extends GraphicsBase {
 }
 }
 
-type MessageType = "dialog-state" | "open" | "window-size" | "window-move" | "window-open" | "window-close" | "window-maximize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme" | "os" | "register-file-handler";
+type MessageType = "dialog-state" | "open" | "window-size" | "window-move" | "window-open" | "window-close" | "window-maximize" | "windowMove" | "mouseUp" | "launchOverlay" | "prepareToLaunchOverlay" | "readyToLaunchOverlay" | "identify" | "identity" | "pip" | "visualizers" | "theme" | "os" | "register-file-handler" | "mount-directory" | "get-mounted-directory";
 
 interface WindowProperties {
 	scrollbars: boolean;
@@ -150,6 +150,7 @@ interface Dialog {
 	// The box a tiled window is drawn at, in window-area coordinates, recorded so a
 	// drag out of the group can remap the grab point without measuring the element.
 	_snapFrame?: { x: number; y: number; width: number; height: number };
+	_mountedDirectory?: FileSystemDirectoryHandle | null;
 
 	contentDocument: Document;
 

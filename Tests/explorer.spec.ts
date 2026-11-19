@@ -1,6 +1,13 @@
-import { test, expect } from './VulpOSTester';
+import { test, expect, DialogHandle } from './VulpOSTester';
 
 test.use({ headless: true, channel: 'chrome' });
+
+async function frameFor(dialog: DialogHandle) {
+	const handle = await dialog.evaluateHandle(dialog => dialog.frame);
+	const frame = await handle.asElement()!.contentFrame();
+	expect(frame).not.toBeNull();
+	return frame!;
+}
 
 test('explorer shows the navigation shell, file view and status count', async ({ vulpOS }) => {
 	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
@@ -9,7 +16,7 @@ test('explorer shows the navigation shell, file view and status count', async ({
 
 	const frame = vulpOS.page.frameLocator('iframe[src*="explorer.html"]');
 	await expect(frame.locator('script[src*="Messenger.js"]')).toHaveCount(1);
-	await expect(frame.locator('header nav button')).toHaveCount(3);
+	await expect(frame.locator('header nav button')).toHaveCount(4);
 	await expect(frame.locator('#address')).toBeVisible();
 	await expect(frame.locator('#search')).toBeVisible();
 	await expect(frame.locator('#file-view .file-item')).toHaveCount(4);
@@ -95,4 +102,44 @@ test('explorer moves existing file icons on internal drops', async ({ vulpOS }) 
 	expect(after.parent).toBe('file-view');
 	expect(after.left).not.toBe(before.left);
 	expect(after.top).not.toBe(before.top);
+});
+
+test('mounting a picked directory opens a new Files window with its contents', async ({ vulpOS }) => {
+	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
+	await vulpOS.launchWindow(dialog);
+	await vulpOS.assertWindowOpen(dialog);
+
+	const frame = await frameFor(dialog);
+	await frame.evaluate(() => {
+		(window as any).showDirectoryPicker = async () => ({
+			name: 'Documents',
+			kind: 'directory',
+			values: async function* () {
+				yield { name: 'notes.txt', kind: 'file' };
+				yield {
+					name: 'Pictures',
+					kind: 'directory',
+					values: async function* () {
+						yield { name: 'cat.png', kind: 'file' };
+					}
+				};
+			}
+		});
+	});
+
+	await frame.locator('#mount').click();
+	await vulpOS.page.waitForFunction(() => Boolean((window as any).windowManager.windows['files#2']));
+	const mounted = await vulpOS.getWindow('files#2');
+	await vulpOS.assertWindowOpen(mounted);
+
+	const mountedFrame = await frameFor(mounted);
+	await expect(mountedFrame.locator('#address')).toHaveValue('Documents');
+	await expect(mountedFrame.locator('#file-view .file-item')).toHaveCount(2);
+	await expect(mountedFrame.locator('#file-count')).toHaveText('2 files');
+	await expect(mountedFrame.locator('#file-view .file-item').first()).toContainText('Pictures');
+
+	await mountedFrame.locator('#file-view .file-item').filter({ hasText: 'Pictures' }).dblclick();
+	await expect(mountedFrame.locator('#address')).toHaveValue('Pictures');
+	await expect(mountedFrame.locator('#file-view .file-item')).toHaveCount(1);
+	await expect(mountedFrame.locator('#file-count')).toHaveText('1 file');
 });

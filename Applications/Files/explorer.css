@@ -28,6 +28,11 @@ header nav button {
 	line-height: 1;
 }
 
+#mount {
+	width: auto;
+	padding: 0 8px;
+}
+
 header nav input {
 	height: 22px;
 	box-sizing: border-box;

@@ -220,6 +220,18 @@ function messageReceived(type, data, source) {
 			dialog.fileOpenHandler = data.callback;
 			if (typeof VulpOS !== "undefined" && VulpOS.deliverPendingFiles) VulpOS.deliverPendingFiles(dialog);
 			return true;
+		case "mount-directory":
+			if (!wm || !dialog || !dialog.application || !data || !data.handle) return false;
+			var appId = String(data.appId || "files").split("#")[0];
+			if (appId !== "files" || String(dialog.application.id).split("#")[0] !== "files") return false;
+			var mountApp = (typeof appManager !== "undefined" && appManager.getApp(appId)) || dialog.application;
+			var mounted = wm.spawnApp(mountApp);
+			if (!mounted) return false;
+			mounted._mountedDirectory = data.handle;
+			mounted.launch();
+			return true;
+		case "get-mounted-directory":
+			return dialog && dialog._mountedDirectory || null;
 		case "launchOverlay":
 			if (dialog) {
 				var overlay = Helpers.getOverlay();
