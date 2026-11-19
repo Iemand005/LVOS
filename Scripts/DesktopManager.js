@@ -365,8 +365,8 @@ ContextMenu.prototype.close = function() {
 };
 
 /** @param {{label: string, onClick: ()=>void}[]} items */
-ContextMenu.prototype.setItems = function(items) {
-	new window.os.UIBuilder(this.element).addList(items);
+ContextMenu.prototype.setItems = function(items) { // ODOO I dont want it alwas recreatign the html if i desn need to
+	new window.os.UIBuilder(this.element, true).addList(items);
 };
 
 /** @type {ContextMenu | null} */
