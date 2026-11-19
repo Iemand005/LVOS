@@ -314,8 +314,11 @@ Transformable.prototype.rotate = function(x, y, z, animate) {
 	this.update(animate);
 };
 
-/** @param {HTMLElement} container */
-function UIBuilder(container) {
+/**
+ * @param {HTMLElement} container
+ * @param {boolean} clearChildren
+ */
+function UIBuilder(container, clearChildren) {
 	this.container = container;
 }
 
