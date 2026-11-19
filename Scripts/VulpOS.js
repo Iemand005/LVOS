@@ -484,6 +484,13 @@ function createFileElement(payload) {
 	return Helpers.createList([{ label: payload.name, icon: payload.icon }]).firstChild;
 }
 
+function findDropSource(payload, ev, folder) {
+	var doc = (folder && folder.ownerDocument) || (ev && ev.target && ev.target.ownerDocument) || document;
+	var source = payload.id && doc.getElementById(payload.id);
+	if (!source && payload.id) source = document.getElementById(payload.id);
+	return source || createFileElement(payload);
+}
+
 function placeFileElement(element, folder, clientX, clientY) {
 	var rect = folder.getBoundingClientRect();
 	dockFileElement(element);
@@ -623,10 +630,9 @@ window.addEventListener("drop", function (ev) {
 
 	var payload;
 	try { payload = JSON.parse(raw); } catch (ex) { return; }
-	var source = payload.id && document.getElementById(payload.id);
-	if (!source) source = createFileElement(payload);
 
 	var folder = closestFolderContent(ev.target) || document.getElementById("desktop-folder") || document.body;
+	var source = findDropSource(payload, ev, folder);
 	var node = ev.target;
 	var inList = false;
 	while (node && node !== folder) {
@@ -677,8 +683,7 @@ Helpers.prepareFileDropTarget = function (folder) {
 
 		var payload;
 		try { payload = JSON.parse(raw); } catch (ex) { return; }
-		var source = payload.id && document.getElementById(payload.id);
-		if (!source) source = createFileElement(payload);
+		var source = findDropSource(payload, ev, folder);
 
 		var node = ev.target;
 		var inList = false;

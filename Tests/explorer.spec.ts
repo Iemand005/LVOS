@@ -52,3 +52,47 @@ test('explorer accepts real file drops into the folder', async ({ vulpOS }) => {
 	}));
 	expect(bound).toEqual({ name: 'dropped.txt', text: 'dropped notes', placed: true });
 });
+
+test('explorer moves existing file icons on internal drops', async ({ vulpOS }) => {
+	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
+	await vulpOS.launchWindow(dialog);
+	await vulpOS.assertWindowOpen(dialog);
+
+	const frame = vulpOS.page.frameLocator('iframe[src*="explorer.html"]');
+	await expect(frame.locator('#file-view .file-item')).toHaveCount(4);
+
+	const before = await frame.locator('#file-view .file-item').first().evaluate((element: HTMLElement) => ({
+		id: element.id,
+		left: element.style.left,
+		top: element.style.top
+	}));
+
+	await frame.locator('#file-view').evaluate((element) => {
+		const source = element.querySelector('.file-item') as HTMLElement;
+		const transfer = new DataTransfer();
+		transfer.setData('application/x-lvos-file', JSON.stringify({
+			id: source.id,
+			name: source.querySelector('label')!.textContent,
+			icon: source.querySelector('img')!.src
+		}));
+		element.dispatchEvent(new DragEvent('drop', {
+			bubbles: true,
+			cancelable: true,
+			dataTransfer: transfer,
+			clientX: 300,
+			clientY: 200
+		}));
+	});
+
+	await expect(frame.locator('#file-view .file-item')).toHaveCount(4);
+	await expect(frame.locator('#file-count')).toHaveText('4 files');
+
+	const after = await frame.locator('#' + before.id).evaluate((element: HTMLElement) => ({
+		left: element.style.left,
+		top: element.style.top,
+		parent: element.parentElement && element.parentElement.id
+	}));
+	expect(after.parent).toBe('file-view');
+	expect(after.left).not.toBe(before.left);
+	expect(after.top).not.toBe(before.top);
+});
