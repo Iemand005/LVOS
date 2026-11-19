@@ -855,7 +855,8 @@ desktop #launchpad {
 	margin: 0;
 	border-radius: 0;
 	border: none;
-	border-color: gray;
+	border-color: gray !Im;
+	border-color: gray !important;
 }
 
 .context-menu button {
@@ -864,6 +865,10 @@ desktop #launchpad {
 	text-align: start;
 	background-color: rgb(0 0 0 / 19%) !important;
 	backdrop-filter: blur(10px);
+}
+
+.context-menu button:hover {
+	background-color: rgba(0, 0, 0, 0.296) !important;
 }
 
 time {
