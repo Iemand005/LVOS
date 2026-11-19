@@ -495,8 +495,8 @@ function defaultFileDoubleClick(file) {
 	if (typeof os !== "undefined" && os && typeof os.open === "function") os.open(file);
 }
 
-Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDoubleClick) {
-	var folder = document.getElementById("desktop-folder");
+Helpers.addDesktopFile = function (file, clientX, clientY, onFileClick, onFileDoubleClick, folder) {
+	folder = folder || document.getElementById("desktop-folder");
 	if (!folder || !file) return null;
 	var list = Helpers.createList([{
 		label: file.name,
@@ -542,7 +542,16 @@ function hasFilePayload(ev) {
 	catch (ex) { return false; }
 }
 
+function isRealFileDrag(ev) {
+	var types = ev.dataTransfer && ev.dataTransfer.types;
+	if (!types) return false;
+	for (var i = 0; i < types.length; i++)
+		if (String(types[i]).toLowerCase() === "files") return true;
+	return false;
+}
+
 Helpers.hasLvosFilePayload = hasFilePayload;
+Helpers.isRealFileDrag = isRealFileDrag;
 
 window.addEventListener("dragover", function (ev) {
 	if (!hasFilePayload(ev)) return;
@@ -569,8 +578,6 @@ window.addEventListener("drop", function (ev) {
 		if (node.nodeName === "UL") { inList = true; break; }
 		node = node.parentNode;
 	}
-	console.log('drop debug', JSON.stringify({ payload: payload, sourceFound: !!source, parent: source && source.parentNode && source.parentNode.id, folder: folder.id, inList: inList }));
-
 	if (!inList) placeFileElement(source, folder, ev.clientX, ev.clientY);
 	else {
 		dockFileElement(source);
@@ -585,11 +592,21 @@ Helpers.prepareFileDropTarget = function (folder) {
 
 	folder.addEventListener("dragover", function (ev) {
 		ev.preventDefault();
-		if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
+		if (ev.dataTransfer) ev.dataTransfer.dropEffect = isRealFileDrag(ev) ? "copy" : "move";
 	}, false);
 
 	folder.addEventListener("drop", function (ev) {
 		if (!ev.dataTransfer) return;
+
+		if (isRealFileDrag(ev)) {
+			ev.preventDefault();
+			ev.stopPropagation();
+			var files = ev.dataTransfer.files;
+			for (var i = 0; i < files.length; i++)
+				Helpers.addDesktopFile(files[i], ev.clientX + i * 24, ev.clientY + i * 24, undefined, undefined, folder);
+			return;
+		}
+
 		var raw = ev.dataTransfer.getData("application/x-lvos-file");
 		if (!raw) return;
 		ev.preventDefault();
