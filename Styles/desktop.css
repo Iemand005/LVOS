@@ -840,13 +840,15 @@ desktop #launchpad {
     min-height: 10px;
     /* background: gray; */
 	display: none;
-	border: 1px solid gray;
 }
 
 .context-menu.open {
 	display: block !important;
 }
 
+.context-menu ul {
+	border: 1px solid gray;
+}
 
 .context-menu li, .context-menu button {
 	padding: 0;
