@@ -362,7 +362,7 @@ ContextMenu.prototype.close = function() {
     this.element.classList.remove("open");
 };
 
-/** @param {{label: string, onClick: ()=>void}} items */
+/** @param {{label: string, onClick: ()=>void}[]} items */
 ContextMenu.prototype.setItems = function(items) {
 	new window.os.UIBuilder(this.element).addList(items);
 };
