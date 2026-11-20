@@ -3,6 +3,8 @@ interface Array<T> {
 	forEach<U>(callbackfn: (this: U, value: T, index: number, array: T[]) => void, thisArg?: U): void;
 }
 
+type PermissionMap = "camera" | "microphone" | "fullscreen";
+
 interface Application {
 	id: string;
 	title?: string;
@@ -11,8 +13,7 @@ interface Application {
 	fixed?: boolean;
 	scroll?: boolean;
 	hidden?: boolean;
-	camera?: boolean;
-	microphone?: boolean;
+	permissions: PermissionMap[];
 	moveEvents?: boolean;
 	classes?: string[];
 	minWidth?: number;

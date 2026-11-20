@@ -1483,14 +1483,9 @@ function Dialog(application) {
 	if (application.title) this.setTitle(application.title);
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
-	if (this.frame) {
-		var perms = /**@type {PermissionMap[]}*/(["fullscreen"]);
-		if (application.microphone) perms.push("microphone");
-		if (application.camera) perms.push("camera");
-		this.setPermissions(perms);
-		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
-		this.frame.setAttribute("allow", "fullscreen");
-	}
+
+	if (application.permissions.indexOf("fullscreen") === -1) application.permissions.push("fullscreen")
+	this.setPermissions(application.permissions);
 
 	this.moveEvents = application.moveEvents || false;
 
@@ -2099,7 +2094,6 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 	get: function() { return this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
 });
 
-/**@typedef {"camera" | "microphone" | "fullscreen"} PermissionMap */
 
 Object.defineProperty(Dialog.prototype, "permissions", {
 	set: Dialog.prototype.setPermissions,
