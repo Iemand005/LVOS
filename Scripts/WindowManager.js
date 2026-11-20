@@ -1806,11 +1806,11 @@ Dialog.prototype.getOrCreateFrame = function(create) {
 	return null;
 };
 Object.defineProperty(Dialog.prototype, "isOpen", {
-	get: function() { return Boolean(this.target && this.target.classList.contains("open")); },
+	get: function() { return Boolean(this.target.classList.contains("open")); },
 	set: function(open) { this.toggleOpen(open); }
 });
 Object.defineProperty(Dialog.prototype, "frame", {
-	get: function() { return this.target && this.target.getElementsByTagName("iframe")[0] || null; }
+	get: function() { return this.target.getElementsByTagName("iframe")[0] || null; }
 });
 Object.defineProperty(Dialog.prototype, "resizable", {
 	get: function() { return this.application.resizable !== false; },
@@ -2061,7 +2061,7 @@ Dialog.prototype.setTitle = function(title) {
 };
 
 Object.defineProperty(Dialog.prototype, "id", {
-	get: function() { return this._id || (this.target && this.target.id) || "unk"; },
+	get: function() { return this._id || (this.target.id) || "unk"; },
 	set: function(id) {
 		this._id = id;
 		windowManager.windows[id] = this;
@@ -2101,13 +2101,23 @@ Object.defineProperty(Dialog.prototype, "rotation", { set: function(rotation) { 
 Object.defineProperty(Dialog.prototype, "icon", { get: function() { return this._appIcon; } });
 Object.defineProperty(Dialog.prototype, "iconUrl", { get: function() { return this.getIconUrl(); } });
 Object.defineProperty(Dialog.prototype, "opacity", {
-	set: function(/** @type {number} */opacity) { this.target && (this.target.style.opacity = String(opacity)); },
-	get: function() { return this.target && this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
+	set: function(/** @type {number} */opacity) { this.target.style.opacity = String(opacity); },
+	get: function() { return this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
+});
+
+Object.defineProperty(Dialog.prototype, "permissions", {
+	set: function(/** @type {number} */opacity) { 
+		var frame = this.frame;
+		if (!frame) return;
+		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
+		this.frame.setAttribute("allow", "fullscreen");
+		; },
+	get: function() { return this.get; }
 });
 
 
 Dialog.prototype.getIconUrl = function() {
-	return this.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
+	return thiw.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
 };
 
 Dialog.prototype.getMiniIconUrl = function() {
@@ -2266,7 +2276,7 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 
 Dialog.prototype.stopAnimating = function () {
 	if (this._snappingOut) {
-		if (this.target && this.target._animationState !== this._snappingOutState)
+		if (this.target._animationState !== this._snappingOutState)
 			this._snappingOut = false, this._snappingOutState = null;
 		return;
 	}
@@ -2854,7 +2864,7 @@ Dialog.prototype.launch = function() {
 Dialog.prototype.kill = function() {
 	if (this._killing) return;
 	this._killing = true;
-	var parent = this.target && this.target.parentElement;
+	var parent = this.target.parentElement;
 	if (parent && this.killable) parent.removeChild(this.target);
 	this.target.classList.remove("open");
 	this._stateOpen = false;
