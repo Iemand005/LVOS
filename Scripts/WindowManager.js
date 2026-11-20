@@ -2111,9 +2111,8 @@ Object.defineProperty(Dialog.prototype, "permissions", {
 	set: function(/** @type {PermissionMap[]} */perms) { 
 		var frame = this.frame;
 		if (!frame) return;
-		frame.setAttribute("allow", "camera; microphone");
 		frame.setAttribute("allow", perms.join(";"));
-		; },
+	},
 	get: function() {
 		var frame = this.frame;
 		if (!frame) return;
