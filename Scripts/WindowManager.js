@@ -2096,7 +2096,7 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 
 Object.defineProperty(Dialog.prototype, "killable", { get: function() { return true; }});
 Object.defineProperty(Dialog.prototype, "popup", { get: function() { return this._popupWindow; } });
-Object.defineProperty(Dialog.prototype, "skew", { set: function(skew) { this.setSkew(skew); } });
+Object.defineProperty(Igot , "skew", { set: function(skew) { this.setSkew(skew); } });
 Object.defineProperty(Dialog.prototype, "scaleY", { set: function(scaleY) { this.setScaleY(scaleY); } });
 Object.defineProperty(Dialog.prototype, "rotation", { set: function(rotation) { this.setRotation(rotation); } });
 Object.defineProperty(Dialog.prototype, "icon", { get: function() { return this._appIcon; } });
@@ -2109,11 +2109,7 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 /**@typedef {"camera" | "microphone" | "fullscreen"} PermissionMap */
 
 Object.defineProperty(Dialog.prototype, "permissions", {
-	set: function(/** @type {PermissionMap[]} */perms) { 
-		var frame = this.frame;
-		if (!frame) return;
-		frame.setAttribute("allow", perms.join(";"));
-	},
+	set: Dialog.prototype.setPermissions,
 	get: function() {
 		var frame = this.frame;
 		if (!frame) return;
