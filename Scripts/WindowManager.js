@@ -2122,6 +2122,12 @@ Object.defineProperty(Dialog.prototype, "permissions", {
 	}
 });
 
+Dialog.prototype.setPermissions = function(/** @type {PermissionMap[]} */perms) {
+	var frame = this.frame;
+	if (!frame) return;
+	frame.setAttribute("allow", perms.join(";"));
+};
+
 
 Dialog.prototype.getIconUrl = function() {
 	return thiw.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
