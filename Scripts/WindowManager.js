@@ -1484,7 +1484,7 @@ function Dialog(application) {
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
 
-	if (application.permissions.indexOf("fullscreen") === -1) application.permissions.push("fullscreen")
+	if (application.permissions.indexOf("fullscreen") === -1) application.permissions.push("fullscreen");
 	this.setPermissions(application.permissions);
 
 	this.moveEvents = application.moveEvents || false;
