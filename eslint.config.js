@@ -36,7 +36,8 @@ export default defineConfig(
 				capabilities: "writable",
 				VulpOS: "readonly",
 				Loader: "readonly",
-				Cursor: "readonly"
+				Cursor: "readonly",
+				Transformable: "readonly"
 			}
 		},
 
