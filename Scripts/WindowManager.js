@@ -2112,7 +2112,7 @@ Object.defineProperty(Dialog.prototype, "permissions", {
 		var frame = this.frame;
 		if (!frame) return;
 		frame.setAttribute("allow", "camera; microphone");
-		frame.setAttribute("allow", perms.join("; "));
+		frame.setAttribute("allow", perms.join(";"));
 		; },
 	get: function() {
 		var frame = this.frame;
