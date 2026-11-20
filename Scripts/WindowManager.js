@@ -1326,10 +1326,9 @@ function handleStorageException(exception) {
 
 function getDialogTemplate() {
 	var template = document.querySelector("template") || document.getElementById("window-template");
-	if (!template) return;
-	var content = template;
-	if (template instanceof HTMLTemplateElement) return template.content.children[0];
-	return content.children ? content.children[0] : content.childNodes[1];
+	if (template)
+		return (template instanceof HTMLTemplateElement) ? template.content.children[0]
+		: template.children ? template.children[0] : template.childNodes[1];
 };
 
 /** @returns {HTMLElement | WindowElement} */
