@@ -495,7 +495,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			if (node.hasAttribute && node.hasAttribute("contenteditable")) { isInteractive = true; break; }
 			node = node.parentElement;
 		}
-		if (isInteractive) { try { dialog.focus(); } catch (ex) {} return dialog; }
+		if (isInteractive) { try { dialog.focus(); } catch (ex) { console.warn(ex); } return dialog; }
 	} catch (ex) { console.warn(ex); }
 
 	Helpers.cancelDomEvent(event);
