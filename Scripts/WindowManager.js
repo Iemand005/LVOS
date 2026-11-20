@@ -353,6 +353,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 	if (!this.canSave || typeof localStorage === "undefined") return;
 	try {
 		var apps = this.installedApps;
+		apps.find(function(app) { return app.id === application.id; });
 		for (var i = 0; i < apps.length; i++) if (apps[i].id === application.id) return;
 		apps.push(application);
 		localStorage.setItem("installedApps", JSON.stringify(apps));
@@ -414,7 +415,7 @@ WindowManager.prototype.getVisualizerApps = function() {
 	/** @type {Application[]} */
 	var apps = [];
 	this.forEachWindow(function (dialog) {
-		if (dialog.application && dialog.application.audioVisualizer) apps.push(dialog.application);
+		if (dialog.application.audioVisualizer) apps.push(dialog.application);
 	});
 	return apps;
 };
