@@ -2096,11 +2096,11 @@ Object.defineProperty(Dialog.prototype, "borderSize", {
 
 Object.defineProperty(Dialog.prototype, "killable", { get: function() { return true; }});
 Object.defineProperty(Dialog.prototype, "popup", { get: function() { return this._popupWindow; } });
-Object.defineProperty(Igot , "skew", { set: function(skew) { this.setSkew(skew); } });
-Object.defineProperty(Dialog.prototype, "scaleY", { set: function(scaleY) { this.setScaleY(scaleY); } });
-Object.defineProperty(Dialog.prototype, "rotation", { set: function(rotation) { this.setRotation(rotation); } });
+Object.defineProperty(Dialog.prototype, "skew", { set: Dialog.prototype.setSkew });
+Object.defineProperty(Dialog.prototype, "scaleY", { set: Dialog.prototype.setScaleY });
+Object.defineProperty(Dialog.prototype, "rotation", { set: Dialog.prototype.setRotation });
 Object.defineProperty(Dialog.prototype, "icon", { get: function() { return this._appIcon; } });
-Object.defineProperty(Dialog.prototype, "iconUrl", { get: function() { return this.getIconUrl(); } });
+Object.defineProperty(Dialog.prototype, "iconUrl", { get: Dialog.prototype.getIconUrl });
 Object.defineProperty(Dialog.prototype, "opacity", {
 	set: function(/** @type {number} */opacity) { this.target.style.opacity = String(opacity); },
 	get: function() { return this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
