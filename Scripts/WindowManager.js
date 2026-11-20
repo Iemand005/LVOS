@@ -1484,6 +1484,7 @@ function Dialog(application) {
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
 	if (this.frame) {
+		this.permissions
 		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
 		this.frame.setAttribute("allow", "fullscreen");
 	}
