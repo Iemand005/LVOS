@@ -1853,17 +1853,16 @@ Object.defineProperty(Dialog.prototype, "z", {
 
 Object.defineProperty(Dialog.prototype, "width", {
 	get: function() { return this._width; },
-	set: function(width) { this.setWidth(width); }
+	set: Dialog.prototype.setWidth
 });
 
 Object.defineProperty(Dialog.prototype, "height", {
 	get: function() { return this._height; },
-	/** @param {number} height */
-	set: function(/** @type {number} */height) { this.setHeight(height); }
+	set: Dialog.prototype.setHeight
 });
 Object.defineProperty(Dialog.prototype, "minWidth", {
 	get: function() { return this._minWidth; },
-	set: function(width) { this.setMinSize(width); }
+	set: Dialog.prototype.setMinSize
 });
 Object.defineProperty(Dialog.prototype, "minHeight", {
 	get: function() { return this._minHeight; },
@@ -1871,7 +1870,7 @@ Object.defineProperty(Dialog.prototype, "minHeight", {
 });
 Object.defineProperty(Dialog.prototype, "maxWidth", {
 	get: function() { return this._maxWidth; },
-	set: function(width) { this.setMaxSize(width); }
+	set: Dialog.prototype.setMaxSize
 });
 Object.defineProperty(Dialog.prototype, "maxHeight", {
 	get: function() { return this._maxHeight; },
