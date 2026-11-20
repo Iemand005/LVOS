@@ -1276,7 +1276,9 @@ ClickOffset.disableOverlay = function (ev) {
 	var o = ClickOffset._overlay;
 	if (o.remove) o.remove(); else if (o.parentNode) o.parentNode.removeChild(o);
 };
-["mousemove", "mouseup", "mouseout"].forEach(function(t) { window.addEventListener(t, ClickOffset.disableOverlay, false); });
+/** @const */
+var evts = ["mousemove", "mouseup", "mouseout"];
+evts.forEach(function(t) { window.addEventListener(t, ClickOffset.disableOverlay, false); });
 
 ClickOffset.prototype.reset = function () {
 	this.start = this.last = Date.now();
