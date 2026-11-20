@@ -1486,7 +1486,8 @@ function Dialog(application) {
 	if (this.frame) {
 		var perms = /**@type {PermissionMap[]}*/(["fullscreen"]);
 		if (application.microphone) perms.push("microphone");
-		this.setPermissions([])
+		if (application.camera) perms.push("camera");
+		this.setPermissions(perms);
 		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
 		this.frame.setAttribute("allow", "fullscreen");
 	}

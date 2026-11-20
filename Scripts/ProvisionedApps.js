@@ -29,7 +29,7 @@ var applications = [
 	provisionedApp("Calculator", "calculator", "./Applications/Calculator/calculator.html", { minWidth: 180, minHeight: 40 }),
 	provisionedApp("Color Tool", "colortool", "./Applications/ColorTool/colors.html", { minWidth: 180, minHeight: 240 }),
 	provisionedApp("Example", "0", "./example.html"),
-	provisionedApp("Camera", "camera", "./Applications/Camera/index.html", { camera: true, microphone: true }),
+	provisionedApp("Camera", "camera", "./Applications/Camera/index.html", { permissions: ["camera", "microphone"] }),
 	provisionedApp("Video", "video", "./Applications/Video/index.html", { hidden: true }),
 	provisionedApp("Cover Flow", "coverflow", "./Applications/Coverflow/Coverflow.html"),
 	provisionedApp("Music", "music", "./Applications/Music/index.html"),
