@@ -862,7 +862,7 @@ WindowManager.prototype.reflowSnapGroup = function (section) {
 	/** @type {Record<string, boolean>} */
 	var members = {};
 	tiles.forEach(function (tile) {
-		if (tile && tile.id) members[tile.id] = true;
+		if (tile.id) members[tile.id] = true;
 	});
 
 	for (var id in this.windows) if (this.windows.hasOwnProperty(id)) {
