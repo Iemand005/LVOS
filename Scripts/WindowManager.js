@@ -844,7 +844,7 @@ WindowManager.prototype.unsnapDialog = function (dialog) {
  */
 WindowManager.prototype.getSnapSpacer = function (section) {
 	var group = this.getSnapGroup(section);
-	return group.spacer || (group.spacer = document.createElement("div"), group.spacer.className = "snap-spacer");
+	return group.spacer || (group.spacer = document.createElement("div"), group.spacer.className = "snap-spacer", group.spacer);
 };
 
 /** @param {HTMLElement} section */
