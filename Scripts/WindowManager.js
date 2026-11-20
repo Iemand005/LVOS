@@ -496,7 +496,7 @@ WindowManager.prototype.windowActivationEvent = function(event, dialog, id) {
 			node = node.parentElement;
 		}
 		if (isInteractive) { try { dialog.focus(); } catch (ex) {} return dialog; }
-	} catch (ex) {}
+	} catch (ex) { console.warn(ex); }
 
 	Helpers.cancelDomEvent(event);
 
