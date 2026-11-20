@@ -353,6 +353,7 @@ WindowManager.prototype.saveInstalledApp = function(application) {
 	if (!this.canSave || typeof localStorage === "undefined") return;
 	try {
 		var apps = this.installedApps;
+		// TOOD: this is not the right logic
 		apps.find(function(app) { return app.id === application.id; });
 		for (var i = 0; i < apps.length; i++) if (apps[i].id === application.id) return;
 		apps.push(application);
