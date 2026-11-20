@@ -959,7 +959,7 @@ WindowManager.prototype.updateTopZ = function(newZ) {
 	if (typeof newZ === "number")
 		this.topZ = Math.max(this.topZ, newZ + 1);
 	else this.forEachWindow(function(dialog) {
-		if (dialog && dialog.z >= this.topZ) this.setTopZ(dialog.z + 1);
+		if (dialog.z >= this.topZ) this.setTopZ(dialog.z + 1);
 	});
 };
 
