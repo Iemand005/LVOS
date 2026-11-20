@@ -2105,12 +2105,14 @@ Object.defineProperty(Dialog.prototype, "opacity", {
 	get: function() { return this.target.style.opacity !== "" ? Number(this.target.style.opacity) : 1; }
 });
 
+/**@typedef {"camera" | "microphone" | "fullscreen" PermissionMap} */
+
 Object.defineProperty(Dialog.prototype, "permissions", {
-	set: function(/** @type {number} */opacity) { 
+	set: function(/** @type {PermissionMap[]} */opacity) { 
 		var frame = this.frame;
 		if (!frame) return;
-		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
-		this.frame.setAttribute("allow", "fullscreen");
+		if (this.application.microphone || this.application.camera) frame.setAttribute("allow", "camera; microphone");
+		frame.setAttribute("allow", "fullscreen");
 		; },
 	get: function() { return this.get; }
 });
