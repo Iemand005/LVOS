@@ -749,16 +749,9 @@ WindowManager.prototype.setPointerPosition = function (x, y) {
  * @param {"" | "maximize" | "left" | "right" | "height"} zone
  */
 WindowManager.prototype.snapDialog = function (dialog, zone) {
-	if (zone === "height") {
-		this.unsnapDialog(dialog);
-		return dialog.toggleHeightSnapped(true);
-	}
-
-	if (zone === "maximize") {
-		this.unsnapDialog(dialog);
-		return dialog.maximize();
-	}
-
+	if (zone === "height" || zone === "maximize") this.unsnapDialog(dialog);
+	if (zone === "height") return dialog.toggleHeightSnapped(true);
+	if (zone === "maximize") return dialog.maximize();
 	if (zone === "left" || zone === "right") this.tileDialog(dialog, zone);
 };
 
