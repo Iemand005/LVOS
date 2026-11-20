@@ -1416,9 +1416,7 @@ function Dialog(application) {
 	if (application.minWidth) this._minWidth = application.minWidth;
 	if (application.minHeight) this._minHeight = application.minHeight;
 
-	var id = application.id || application.title || "";
-
-	this._id = id;
+	this._id = application.id || application.title || "";
 	/** @type {HTMLButtonElement[]} */
 	this.buttons = [];
 	this.clickOffset = new ClickOffset;
@@ -1427,8 +1425,8 @@ function Dialog(application) {
 	var target;
 
 	if (application.exists) {
-		var element = id && document.getElementById(id);
-		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
+		var element = this._id && document.getElementById(this._id);
+		if (!element) throw new Error("Couldn't find a window in DOM with ID: " + this._id + ". Cannot create a dialog off oof existing DOM without one existing. (exists = true on application someone said).");
 		target = element;
 	} else target = createDialogElement();
 
@@ -1453,7 +1451,10 @@ function Dialog(application) {
 	this._appIcon = null;
 
 	var self = this;
-	/** @param {MouseEvent | PointerEvent} [ev] @param {number} [id] */
+	/**
+	 * @param {MouseEvent | PointerEvent} [ev]
+	 * @param {number} [id]
+	 */
 	this.activationHandler = function (ev, id) {
 		var target = ev && ev.target;
 		if (!ev) {
