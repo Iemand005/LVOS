@@ -2099,9 +2099,9 @@ Object.defineProperty(Dialog.prototype, "permissions", {
 	set: Dialog.prototype.setPermissions,
 	get: function() {
 		var frame = this.frame;
-		if (!frame) return;
+		if (!frame) return [];
 		var allowance = frame.getAttribute("allow");
-		if (allowance) return allowance.split(";").map(function(perm){return perm.trim();});
+		return allowance ? allowance.split(";").map(function(perm){return perm.trim();}) : [];
 	}
 });
 
