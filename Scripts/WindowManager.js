@@ -1484,7 +1484,9 @@ function Dialog(application) {
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
 	if (this.frame) {
-		this.permissions
+		var perms = /**@type {PermissionMap[]}*/(["fullscreen"]);
+		if (application.microphone) perms.push("microphone");
+		this.setPermissions([])
 		if (application.microphone || application.camera) this.frame.setAttribute("allow", "camera; microphone");
 		this.frame.setAttribute("allow", "fullscreen");
 	}
@@ -2116,7 +2118,7 @@ Dialog.prototype.setPermissions = function(/** @type {PermissionMap[]} */perms) 
 
 
 Dialog.prototype.getIconUrl = function() {
-	return thiw.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
+	return this.application.iconUrl || (this.application.src && Helpers.getFaviconUrl(this.application.src)) || null;
 };
 
 Dialog.prototype.getMiniIconUrl = function() {
