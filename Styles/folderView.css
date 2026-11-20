@@ -65,3 +65,10 @@
 	position: absolute;
 	margin: 0;
 }
+
+.selector {
+	position: absolute;
+	border: 1px dashed rgb(0, 89, 255);
+	background-color: #007cff30;
+	pointer-events: none;
+}

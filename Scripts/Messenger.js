@@ -225,7 +225,7 @@ function messageReceived(type, data, source) {
 			var appId = String(data.appId || "files").split("#")[0];
 			if (appId !== "files" || String(dialog.application.id).split("#")[0] !== "files") return false;
 			var mountApp = (typeof appManager !== "undefined" && appManager.getApp(appId)) || dialog.application;
-			var mounted = wm.spawnApp(mountApp);
+			var mounted = wm.spawnApp(mountApp, { skipOpenButton: true });
 			if (!mounted) return false;
 			mounted._mountedDirectory = data.handle;
 			mounted.launch();

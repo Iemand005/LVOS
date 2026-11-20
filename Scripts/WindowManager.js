@@ -306,9 +306,10 @@ WindowManager.prototype.loadApp = function(application) {
 
 /**
  * @param {Application} application
+ * @param {{skipOpenButton?: boolean}} [options]
  * @returns {Dialog | null}
  */
-WindowManager.prototype.spawnApp = function(application) {
+WindowManager.prototype.spawnApp = function(application, options) {
 	if (!application || !application.id) return null;
 
 	var id = application.id, n = 1;
@@ -318,6 +319,7 @@ WindowManager.prototype.spawnApp = function(application) {
 	var instance = {};
 	for (var key in application) if (application.hasOwnProperty(key)) instance[key] = application[key];
 	instance.id = id;
+	if (options && options.skipOpenButton) instance._skipOpenButton = true;
 
 	try { return this._windows[id] = new Dialog(instance); } catch(ex) { console.warn("App spawn failed", ex); return null; }
 };
@@ -1436,11 +1438,13 @@ function Dialog(application) {
 	this.setWidth(this._width);
 	this.setHeight(this._height);
 
-	var appList = document.getElementById("applist");
-	if (appList) appList.appendChild(this.createOpenButton());
+	if (!application._skipOpenButton) {
+		var appList = document.getElementById("applist");
+		if (appList) appList.appendChild(this.createOpenButton());
 
-	var metroAppList = document.getElementById("metroapplist");
-	if (metroAppList) metroAppList.appendChild(this.createOpenButton());
+		var metroAppList = document.getElementById("metroapplist");
+		if (metroAppList) metroAppList.appendChild(this.createOpenButton());
+	}
 
 	this._popupPositionInterval = 0;
 

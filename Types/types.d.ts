@@ -29,6 +29,8 @@ interface Application {
 	exists?: boolean;
 	/** When true, opening the app spawns an extra window instance instead of reusing the open one. */
 	multiple?: boolean;
+	/** Internal: spawned windows with this flag do not add an app button to the wallpaper. */
+	_skipOpenButton?: boolean;
 	fileTypes: string[];
 }
 

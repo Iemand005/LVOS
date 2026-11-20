@@ -241,59 +241,6 @@ var onLoad = function () {
 		console.warn("Registration of service worker failed:", err);
 	});
 
-    if (typeof ClickOffset === "undefined") return;
-
-	var clickOffset = new ClickOffset;
-
-	var tingeling = Array.from(document.getElementsByClassName("folder-content"))[0];
-
-		if (tingeling instanceof HTMLElement) {
-			var selector = document.createElement("div");
-		var selectionAdditive = false;
-		clickOffset.dragHandler = function(ev) {
-			clickOffset.update(ev.clientX - clickOffset.clickPosition.x, ev.clientY - clickOffset.clickPosition.y);
-			var width = clickOffset.position.x, height = clickOffset.position.y;
-
-			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickPosition.x, height < 0 ? ev.clientY : clickOffset.clickPosition.y);
-
-			selector.style.width = Helpers.toPixels(Math.abs(width));
-			selector.style.height = Helpers.toPixels(Math.abs(height));
-			Helpers.selectFileItemsInRect(selector.getBoundingClientRect(), selectionAdditive, tingeling);
-		};
-
-		// if (supportsPointer)
-        tingeling.addEventListener(capabilities.supportsPointer?"pointerdown":"mousedown", function(ev) {
-			if (ev.button !== undefined && ev.button !== 0) return;
-			selectionAdditive = !!(ev.shiftKey || ev.ctrlKey || ev.metaKey);
-			if (!selectionAdditive) Helpers.selectFileItem(null);
-			clickOffset.init(ev.clientX, ev.clientY);
-
-			var width = clickOffset.position.x, height = clickOffset.position.y;
-			Helpers.translateElement(selector, width < 0 ? ev.clientX : clickOffset.clickPosition.x, height < 0 ? ev.clientY : clickOffset.clickPosition.y);
-
-			selector.style.width = Helpers.toPixels(Math.abs(width));
-			selector.style.height = Helpers.toPixels(Math.abs(height));
-
-			// translateElement(selector, ev.clientX, ev.clientY);
-			selector.className = "selector";
-			if (tingeling) tingeling.appendChild(selector);
-
-			clickOffset.toggleDragEventHandler(true);
-			// document.body.hasPointerCapture
-		}, false);
-
-		var stopIt = function() {
-			clickOffset.toggleDragEventHandler(false);
-			if (!selector.parentNode) return;
-
-			var dragged = parseFloat(selector.style.width) > 3 || parseFloat(selector.style.height) > 3;
-			if (!dragged) Helpers.selectFileItem(null);
-			selector.parentNode.removeChild(selector);
-		};
-
-		window.addEventListener(capabilities.supportsPointer ? "pointerup" : "mouseup", stopIt, false);
-	}
-
     document.onselectstart = function (event) {
         return !!(event && event.ctrlKey);
     };

@@ -56,6 +56,36 @@ test('explorer uses only the icon as the drag image', async ({ vulpOS }) => {
 	expect(images[0].src).toContain('icon-192.png');
 });
 
+test('explorer folder views get the wallpaper selector', async ({ vulpOS }) => {
+	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
+	await vulpOS.launchWindow(dialog);
+	const frame = await frameFor(dialog);
+	await expect(frame.locator('#file-view .file-item')).toHaveCount(4);
+
+	await frame.evaluate(() => {
+		const view = document.getElementById('file-view')!;
+		const rect = view.getBoundingClientRect();
+		view.dispatchEvent(new PointerEvent('pointerdown', {
+			bubbles: true,
+			clientX: rect.left + 2,
+			clientY: rect.top + 2,
+			button: 0
+		}));
+	});
+	await expect(frame.locator('#file-view .selector')).toHaveCount(1);
+
+	await frame.evaluate(() => {
+		const view = document.getElementById('file-view')!;
+		const rect = view.getBoundingClientRect();
+		const point = { clientX: rect.right - 2, clientY: rect.bottom - 2, button: 0 };
+		view.ownerDocument.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, ...point }));
+		view.ownerDocument.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, ...point }));
+	});
+
+	await expect(frame.locator('#file-view .file-item.selected')).toHaveCount(4);
+	await expect(frame.locator('#file-view .selector')).toHaveCount(0);
+});
+
 test('explorer accepts real file drops into the folder', async ({ vulpOS }) => {
 	const dialog = await vulpOS.installApp('files', 'Files', './Applications/Files/explorer.html');
 	await vulpOS.launchWindow(dialog);
@@ -139,6 +169,7 @@ test('mounting a picked directory opens a new Files window with its contents', a
 	await vulpOS.assertWindowOpen(dialog);
 
 	const frame = await frameFor(dialog);
+	const appButtonsBefore = await vulpOS.page.locator('#applist button').allTextContents();
 	await frame.evaluate(() => {
 		(window as any).showDirectoryPicker = async () => ({
 			name: 'Documents',
@@ -149,7 +180,11 @@ test('mounting a picked directory opens a new Files window with its contents', a
 					name: 'Pictures',
 					kind: 'directory',
 					values: async function* () {
-						yield { name: 'cat.png', kind: 'file' };
+						yield {
+							name: 'cat.png',
+							kind: 'file',
+							getFile: async () => new File(['png'], 'cat.png', { type: 'image/png' })
+						};
 					}
 				};
 			}
@@ -160,6 +195,7 @@ test('mounting a picked directory opens a new Files window with its contents', a
 	await vulpOS.page.waitForFunction(() => Boolean((window as any).windowManager.windows['files#2']));
 	const mounted = await vulpOS.getWindow('files#2');
 	await vulpOS.assertWindowOpen(mounted);
+	expect(await vulpOS.page.locator('#applist button').allTextContents()).toEqual(appButtonsBefore);
 
 	const mountedFrame = await frameFor(mounted);
 	await expect(mountedFrame.locator('#address')).toHaveValue('Documents');
@@ -171,4 +207,10 @@ test('mounting a picked directory opens a new Files window with its contents', a
 	await expect(mountedFrame.locator('#address')).toHaveValue('Pictures');
 	await expect(mountedFrame.locator('#file-view .file-item')).toHaveCount(1);
 	await expect(mountedFrame.locator('#file-count')).toHaveText('1 file');
+
+	await mountedFrame.locator('#file-view .file-item').filter({ hasText: 'cat.png' }).dblclick();
+	await vulpOS.page.waitForFunction(() => {
+		const photos = (window as any).windowManager.windows['photos'];
+		return Boolean(photos && photos.isOpen);
+	});
 });

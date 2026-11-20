@@ -372,7 +372,7 @@ UIBuilder.prototype.addNavList = function (items, container) {
 
 
 /** @param {{ name: string, icon: string, onFileClick?: Function, onFileDoubleClick?: Function }[]} files */
-UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClick) {
+	UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClick) {
 	var builder = this.addList(files.map(function (file) {
 		return {
 			label: file.name,
@@ -381,7 +381,9 @@ UIBuilder.prototype.addFileView = function (files, onFileClick, onFileDoubleClic
 			onFileDoubleClick: file.onFileDoubleClick || onFileDoubleClick
 		};
 	}));
-	Helpers.prepareFileDropTarget(closestFolderContent(this.container));
+	var folder = closestFolderContent(this.container);
+	if (folder) Helpers.installFolderSelector(folder);
+	Helpers.prepareFileDropTarget(folder);
 	return builder;
 };
 
@@ -470,8 +472,9 @@ function closestFolderContent(element) {
 	return null;
 }
 
-Helpers.selectFileItem = function (element) {
-	var scope = closestFolderContent(element) || document;
+/** @param {Element | null} element @param {ParentNode} [scope] */
+Helpers.selectFileItem = function (element, scope) {
+	scope = scope || closestFolderContent(element) || document;
 	var selected = scope.querySelectorAll(".file-item.selected");
 	for (var i = 0; i < selected.length; i++)
 		if (selected[i] !== element) selected[i].classList.remove("selected");
@@ -486,6 +489,79 @@ Helpers.selectFileItemsInRect = function (rect, additive, scope) {
 		if (hit) items[i].classList.add("selected");
 		else if (!additive) items[i].classList.remove("selected");
 	}
+};
+
+/**
+ * Installs the rubber-band selector on a folder view. The listeners live on the
+ * folder's own document so views hosted in frames work the same as the desktop.
+ * @param {HTMLElement} folder
+ */
+Helpers.installFolderSelector = function (folder) {
+	if (!folder || folder.getAttribute("data-file-selector") === "installed") return;
+	folder.setAttribute("data-file-selector", "installed");
+
+	var doc = folder.ownerDocument;
+	var selector = folder.querySelector(".selector") || doc.createElement("div");
+	var pointer = !!capabilities.supportsPointer;
+	var downEvent = pointer ? "pointerdown" : "mousedown";
+	var moveEvent = pointer ? "pointermove" : "mousemove";
+	var upEvent = pointer ? "pointerup" : "mouseup";
+	var startX = 0;
+	var startY = 0;
+	var additive = false;
+	var dragging = false;
+
+	var localPoint = function (ev) {
+		var rect = folder.getBoundingClientRect();
+		return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+	};
+
+	var onMove = function (ev) {
+		if (!dragging) return;
+		var rect = folder.getBoundingClientRect();
+		var fromX = startX - rect.left;
+		var fromY = startY - rect.top;
+		var toX = ev.clientX - rect.left;
+		var toY = ev.clientY - rect.top;
+
+		Helpers.translateElement(selector, Math.min(fromX, toX), Math.min(fromY, toY));
+		selector.style.width = Helpers.toPixels(Math.abs(toX - fromX));
+		selector.style.height = Helpers.toPixels(Math.abs(toY - fromY));
+		Helpers.selectFileItemsInRect(selector.getBoundingClientRect(), additive, folder);
+	};
+
+	var onUp = function () {
+		if (!dragging) return;
+		dragging = false;
+		doc.removeEventListener(moveEvent, onMove, false);
+		doc.removeEventListener(upEvent, onUp, false);
+
+		var dragged = parseFloat(selector.style.width) > 3 || parseFloat(selector.style.height) > 3;
+		if (!dragged) Helpers.selectFileItem(null, folder);
+		if (selector.parentNode) selector.parentNode.removeChild(selector);
+	};
+
+	selector.className = "selector";
+	selector.style.left = "0";
+	selector.style.top = "0";
+
+	folder.addEventListener(downEvent, function (ev) {
+		if (ev.button !== undefined && ev.button !== 0) return;
+		additive = !!(ev.shiftKey || ev.ctrlKey || ev.metaKey);
+		if (!additive) Helpers.selectFileItem(null, folder);
+		startX = ev.clientX;
+		startY = ev.clientY;
+
+		var point = localPoint(ev);
+		Helpers.translateElement(selector, point.x, point.y);
+		selector.style.width = "0px";
+		selector.style.height = "0px";
+		if (selector.parentNode !== folder) folder.appendChild(selector);
+
+		dragging = true;
+		doc.addEventListener(moveEvent, onMove, false);
+		doc.addEventListener(upEvent, onUp, false);
+	}, false);
 };
 
 function dockFileElement(element) {

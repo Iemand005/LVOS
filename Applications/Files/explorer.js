@@ -1,6 +1,6 @@
 
 (function () {
-	/** @typedef {{ name: string, icon?: string, kind?: string, values?: Function }} LVDirectoryEntry */
+	/** @typedef {{ name: string, icon?: string, kind?: string, values?: Function, getFile?: Function }} LVDirectoryEntry */
 
 	var FILE_ICON = "../../Assets/icon-192.png";
 	var FOLDER_ICON = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='%23f4c542' d='M3 11h15l4 5h23v25H3z'/></svg>";
@@ -34,6 +34,20 @@
 			var total = view.querySelectorAll(".file-item").length;
 			count.textContent = total + (total === 1 ? " file" : " files");
 		};
+		/** @param {LVDirectoryEntry} entry */
+		var openEntry = function (entry) {
+			if (typeof os.open !== "function") return;
+			var open = function (file) {
+				try {
+					if (os.open(file) !== true) setStatus("No app for " + entry.name);
+				} catch (ex) {
+					setStatus("Could not open " + entry.name);
+				}
+			};
+			if (entry && typeof entry.getFile === "function")
+				Promise.resolve(entry.getFile()).then(open, function () { open(entry); });
+			else open(entry);
+		};
 		/** @param {LVDirectoryEntry[]} entries */
 		var render = function (entries) {
 			view.replaceChildren();
@@ -41,7 +55,7 @@
 				return {
 					name: entry.name,
 					icon: entry.kind === "directory" ? FOLDER_ICON : FILE_ICON,
-					onFileDoubleClick: entry.kind === "directory" ? function () { goTo(entry, true); } : undefined
+					onFileDoubleClick: entry.kind === "directory" ? function () { goTo(entry, true); } : function () { openEntry(entry); }
 				};
 			}), undefined, undefined);
 			updateCount();
