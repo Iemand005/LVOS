@@ -1391,6 +1391,7 @@ function Dialog(application) {
 	/** @type {Transformable | null} */
 	this._contentTransform = null;
 	this._maximizing = false;
+	/** @type {boolean | null} */
 	this._maximizePending = null;
 	this.maximizeAnimations = 0;
 
@@ -2267,10 +2268,8 @@ Dialog.prototype.toggleButton = function (buttonId, enable) {
 
 Dialog.prototype.stopAnimating = function () {
 	if (this._snappingOut) {
-		if (this.target && this.target._animationState !== this._snappingOutState) {
-			this._snappingOut = false;
-			this._snappingOutState = null;
-		}
+		if (this.target && this.target._animationState !== this._snappingOutState)
+			this._snappingOut = false, this._snappingOutState = null;
 		return;
 	}
 	this.target.classList.remove("animating");
