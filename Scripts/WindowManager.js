@@ -1819,7 +1819,7 @@ Object.defineProperty(Dialog.prototype, "resizable", {
 });
 Object.defineProperty(Dialog.prototype, "src", {
 	get: function() { return this._src || this.application.src; },
-	set: function(url) { this.openUrl(url); }
+	set: Dialog.prototype.openUrl
 });
 Object.defineProperty(Dialog.prototype, "body", {
 	get: function() {
@@ -1846,9 +1846,7 @@ Object.defineProperty(Dialog.prototype, "y", {
 
 Object.defineProperty(Dialog.prototype, "z", {
 	get: function () { return this._z; },
-	set: function (z) {
-		if (typeof z === "number") this.setZ(z);
-	}
+	set: Dialog.prototype.setZ
 });
 
 Object.defineProperty(Dialog.prototype, "width", {
@@ -2010,17 +2008,14 @@ Object.defineProperty(Dialog.prototype, "inset", {
 
 Object.defineProperty(Dialog.prototype, "isMinWidth", { get: function () { return this._isMinWidth; } });
 Object.defineProperty(Dialog.prototype, "isMinHeight", { get: function () { return this._isMinHeight; } });
-
 Object.defineProperty(Dialog.prototype, "useTransform", {
 	get: function () { return this._useTransform; },
-	set: function(useTransform) { this.updateUseTransform(useTransform); }
+	set: Dialog.prototype.updateUseTransform
 });
-
 Object.defineProperty(Dialog.prototype, "useScale", {
-	get: function () {return this._useScale; },
-	set: function(useScale) { this.updateScale(useScale); }
+	get: function () { return this._useScale; },
+	set: Dialog.prototype.updateScale
 });
-
 Object.defineProperty(Dialog.prototype, "title", {
 	get: function() {
 		if (this._title) return this._title;
@@ -2028,24 +2023,20 @@ Object.defineProperty(Dialog.prototype, "title", {
 		var titleElement = this.getTitleElement();
 		return titleElement && titleElement.innerHTML ? titleElement.innerHTML : this.id;
 	},
-	set: function(title) { this.setTitle(title); }
+	set: Dialog.prototype.setTitle
 });
-
 Object.defineProperty(Dialog.prototype, "maximized", {
 	get: function() { return this.target.classList.contains("maximized"); },
-	set: function(maximized) { this.toggleMaximized(maximized); }
+	set: Dialog.prototype.toggleMaximized
 });
-
 Object.defineProperty(Dialog.prototype, "snapped", {
 	get: function() { return this.target.classList.contains("snapped"); },
-	set: function(snapped) { this.toggleSnapped(snapped); }
+	set: Dialog.prototype.toggleSnapped
 });
-
 Object.defineProperty(Dialog.prototype, "heightSnapped", {
 	get: function() { return this.target.classList.contains("height-snapped"); },
-	set: function(snapped) { this.toggleHeightSnapped(snapped); }
+	set: Dialog.prototype.toggleHeightSnapped
 });
-
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
