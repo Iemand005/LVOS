@@ -2023,18 +2023,9 @@ Object.defineProperty(Dialog.prototype, "title", {
 	},
 	set: Dialog.prototype.setTitle
 });
-Object.defineProperty(Dialog.prototype, "maximized", {
-	get: function() { return this.target.classList.contains("maximized"); },
-	set: Dialog.prototype.toggleMaximized
-});
-Object.defineProperty(Dialog.prototype, "snapped", {
-	get: function() { return this.target.classList.contains("snapped"); },
-	set: Dialog.prototype.toggleSnapped
-});
-Object.defineProperty(Dialog.prototype, "heightSnapped", {
-	get: function() { return this.target.classList.contains("height-snapped"); },
-	set: Dialog.prototype.toggleHeightSnapped
-});
+Object.defineProperty(Dialog.prototype, "maximized", { get: function() { return this.target.classList.contains("maximized"); }, set: Dialog.prototype.toggleMaximized });
+Object.defineProperty(Dialog.prototype, "snapped", { get: function() { return this.target.classList.contains("snapped"); }, set: Dialog.prototype.toggleSnapped });
+Object.defineProperty(Dialog.prototype, "heightSnapped", { get: function() { return this.target.classList.contains("height-snapped"); }, set: Dialog.prototype.toggleHeightSnapped });
 Object.defineProperty(Dialog.prototype, "windowTarget", {
 	get: function() {
 		var target = this.target;
