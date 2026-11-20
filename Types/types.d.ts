@@ -158,8 +158,6 @@ interface Dialog {
 	_snapFrame?: { x: number; y: number; width: number; height: number };
 	_mountedDirectory?: FileSystemDirectoryHandle | null;
 
-	contentDocument: Document;
-
 	href: string;
 
 	body: HTMLElement | null;

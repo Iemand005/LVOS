@@ -1472,7 +1472,7 @@ function Dialog(application) {
 	};
 
 	if (application.exists) {
-		var doc = this.contentDocument;
+		var doc = this.frame && this.frame.contentDocument;
 		if (doc && doc.readyState !== "complete" && application.src) this.openUrl(application.src);
 	} else if (application.src) this.openUrl(application.src);
 
