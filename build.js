@@ -270,12 +270,40 @@ function writeServiceWorker(dist, ie8) {
 	}
 	const precacheUrls = urls.join(",\n\t");
 
-	const sw = `const CACHE_VERSION = 'lvos-v2';
+	const sw = `const CACHE_VERSION = 'lvos-v3';
 const STATIC_CACHE = 'lvos-static-' + CACHE_VERSION;
 const PAGE_CACHE = 'lvos-pages-' + CACHE_VERSION;
 
 const precacheUrls = [
 \t${precacheUrls}
+];
+
+const staticRoutePatterns = [
+\t'/Styles/*',
+\t'/Scripts/*',
+\t'/Assets/*',
+\t'/Applications/*',
+\t'/**/*.css',
+\t'/**/*.js',
+\t'/**/*.mjs',
+\t'/**/*.json',
+\t'/**/*.png',
+\t'/**/*.jpg',
+\t'/**/*.jpeg',
+\t'/**/*.gif',
+\t'/**/*.svg',
+\t'/**/*.webp',
+\t'/**/*.avif',
+\t'/**/*.ico',
+\t'/**/*.woff',
+\t'/**/*.woff2',
+\t'/**/*.ttf',
+\t'/**/*.otf',
+\t'/**/*.mp3',
+\t'/**/*.ogg',
+\t'/**/*.wav',
+\t'/**/*.mp4',
+\t'/**/*.webm'
 ];
 
 function isStaticAsset(url) {
@@ -285,24 +313,62 @@ function isStaticAsset(url) {
 		/\.(css|js|mjs|json|png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|otf|mp3|ogg|wav|mp4|webm)(\\?.*)?$/i.test(url.pathname);
 }
 
+async function networkFirst(request, preload) {
+	var cache = await caches.open(PAGE_CACHE);
+	try {
+		var response = null;
+		if (preload) {
+			try { response = await preload; } catch (error) {}
+		}
+		if (!response) response = await fetch(request);
+		if (response.ok) {
+			await cache.put(request, response.clone());
+		}
+		return response;
+	} catch (error) {
+		return await caches.match(request) || await caches.match('./index.html') || Response.error();
+	}
+}
+
 self.addEventListener('install', function (event) {
 	event.waitUntil(caches.open(STATIC_CACHE).then(function (cache) {
 		return Promise.allSettled(precacheUrls.map(function (url) {
 			return cache.add(url);
 		}));
 	}));
+	if (typeof event.addRoutes === 'function') {
+		event.waitUntil(event.addRoutes(staticRoutePatterns.map(function (pattern) {
+			return {
+				condition: {
+					urlPattern: pattern,
+					requestMethod: 'get',
+					runningStatus: 'not-running'
+				},
+				source: { cacheName: STATIC_CACHE }
+			};
+		})).catch(function (error) {
+			console.warn('Static route registration failed:', error);
+		}));
+	}
 	self.skipWaiting();
 });
 
 self.addEventListener('activate', function (event) {
-	event.waitUntil(caches.keys().then(function (keys) {
-		return Promise.all(keys.filter(function (key) {
-			return key !== STATIC_CACHE && key !== PAGE_CACHE;
-		}).map(function (key) {
-			return caches.delete(key);
-		}));
-	}));
-	self.clients.claim();
+	event.waitUntil((async function () {
+		var preload = self.registration.navigationPreload;
+		if (preload && typeof preload.enable === 'function') {
+			try { await preload.enable(); }
+			catch (error) { console.warn('Navigation preload enable failed:', error); }
+		}
+		await caches.keys().then(function (keys) {
+			return Promise.all(keys.filter(function (key) {
+				return key !== STATIC_CACHE && key !== PAGE_CACHE;
+			}).map(function (key) {
+				return caches.delete(key);
+			}));
+		});
+		await self.clients.claim();
+	})());
 });
 
 self.addEventListener('fetch', function (event) {
@@ -311,11 +377,7 @@ self.addEventListener('fetch', function (event) {
 	var url = new URL(request.url);
 	if (url.origin !== self.location.origin) return;
 	if (request.mode === 'navigate') {
-		event.respondWith(fetch(request).catch(function () {
-			return caches.match(request).then(function (cached) {
-				return cached || caches.match('./index.html');
-			});
-		}));
+		event.respondWith(networkFirst(request, event.preloadResponse));
 		return;
 	}
 	if (isStaticAsset(url)) {
@@ -574,8 +636,9 @@ export default async function build(options) {
 		});
 
 		const outPath = join(dist, outfile);
-		writeFileSync(outPath, result.code);
-		const bytes = Buffer.byteLength(result.code);
+		const bundleCode = result.code.replace(/(['"])\.\/Scripts\/sw\.js\1/g, "$1./sw.js$1");
+		writeFileSync(outPath, bundleCode);
+		const bytes = Buffer.byteLength(bundleCode);
 		const merged = mergeProps && group.groups
 			? " [" + group.calls + " defineProperty -> " + group.groups + " defineProperties]"
 			: "";

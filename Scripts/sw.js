@@ -30,6 +30,34 @@ const precacheUrls = [
 	'./Scripts/index.js'
 ];
 
+const staticRoutePatterns = [
+	'/Styles/*',
+	'/Scripts/*',
+	'/Assets/*',
+	'/Applications/*',
+	'/**/*.css',
+	'/**/*.js',
+	'/**/*.mjs',
+	'/**/*.json',
+	'/**/*.png',
+	'/**/*.jpg',
+	'/**/*.jpeg',
+	'/**/*.gif',
+	'/**/*.svg',
+	'/**/*.webp',
+	'/**/*.avif',
+	'/**/*.ico',
+	'/**/*.woff',
+	'/**/*.woff2',
+	'/**/*.ttf',
+	'/**/*.otf',
+	'/**/*.mp3',
+	'/**/*.ogg',
+	'/**/*.wav',
+	'/**/*.mp4',
+	'/**/*.webm'
+];
+
 function isStaticAsset(url) {
 	return url.pathname.includes('/Styles/') ||
 		url.pathname.includes('/Scripts/') ||
@@ -65,10 +93,14 @@ async function staleWhileRevalidate(request) {
 	return fetchPromise;
 }
 
-async function networkFirst(request) {
+async function networkFirst(request, preload) {
 	var cache = await caches.open(PAGE_CACHE);
 	try {
-		var response = await fetch(request);
+		var response = null;
+		if (preload) {
+			try { response = await preload; } catch (error) {}
+		}
+		if (!response) response = await fetch(request);
 		if (response.ok) {
 			await cache.put(request, response.clone());
 		}
@@ -85,27 +117,52 @@ async function networkFirst(request) {
 }
 
 self.addEventListener('install', function (event) {
-	event.waitUntil(caches.open(STATIC_CACHE).then(function (cache) {
+	var installEvent = /** @type {any} */ (event);
+	installEvent.waitUntil(caches.open(STATIC_CACHE).then(function (cache) {
 		return Promise.allSettled(precacheUrls.map(function (url) {
 			return cache.add(url);
 		}));
 	}));
-	self.skipWaiting();
+	if (typeof installEvent.addRoutes === 'function') {
+		installEvent.waitUntil(installEvent.addRoutes(staticRoutePatterns.map(function (pattern) {
+			return {
+				condition: {
+					urlPattern: pattern,
+					requestMethod: 'get',
+					runningStatus: 'not-running'
+				},
+				source: { cacheName: STATIC_CACHE }
+			};
+		})).catch(function (error) {
+			console.warn('Static route registration failed:', error);
+		}));
+	}
+	/** @type {any} */ (self).skipWaiting();
 });
 
 self.addEventListener('activate', function (event) {
-	event.waitUntil(caches.keys().then(function (keys) {
-		return Promise.all(keys.filter(function (key) {
-			return key !== STATIC_CACHE && key !== PAGE_CACHE;
-		}).map(function (key) {
-			return caches.delete(key);
-		}));
-	}));
-	self.clients.claim();
+	var activateEvent = /** @type {any} */ (event);
+	var scope = /** @type {any} */ (self);
+	activateEvent.waitUntil((async function () {
+		var preload = scope.registration.navigationPreload;
+		if (preload && typeof preload.enable === 'function') {
+			try { await preload.enable(); }
+			catch (error) { console.warn('Navigation preload enable failed:', error); }
+		}
+		await caches.keys().then(function (keys) {
+			return Promise.all(keys.filter(function (key) {
+				return key !== STATIC_CACHE && key !== PAGE_CACHE;
+			}).map(function (key) {
+				return caches.delete(key);
+			}));
+		});
+		await scope.clients.claim();
+	})());
 });
 
 self.addEventListener('fetch', function (event) {
-	var request = event.request;
+	var fetchEvent = /** @type {any} */ (event);
+	var request = fetchEvent.request;
 	if (request.method !== 'GET') {
 		return;
 	}
@@ -114,10 +171,10 @@ self.addEventListener('fetch', function (event) {
 		return;
 	}
 	if (request.mode === 'navigate') {
-		event.respondWith(networkFirst(request));
+		fetchEvent.respondWith(networkFirst(request, fetchEvent.preloadResponse));
 		return;
 	}
 	if (isStaticAsset(url)) {
-		event.respondWith(staleWhileRevalidate(request));
+		fetchEvent.respondWith(staleWhileRevalidate(request));
 	}
 });
