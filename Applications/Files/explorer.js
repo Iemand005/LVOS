@@ -37,6 +37,7 @@
 		/** @param {LVDirectoryEntry} entry */
 		var openEntry = function (entry) {
 			if (typeof os.open !== "function") return;
+			/** @param {any} file */
 			var open = function (file) {
 				try {
 					if (os.open(file) !== true) setStatus("No app for " + entry.name);

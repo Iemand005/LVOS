@@ -464,9 +464,14 @@ VulpOS.prototype.pushNotification = function (notification) {
 
 var fileItemCounter = 0;
 
+/**
+ * @param {Node | null} element
+ * @returns {HTMLElement | null}
+ */
 function closestFolderContent(element) {
 	while (element && element.nodeType === 1) {
-		if (element.classList && element.classList.contains("folder-content")) return element;
+		var html = /** @type {HTMLElement} */ (element);
+		if (html.classList && html.classList.contains("folder-content")) return html;
 		element = element.parentNode;
 	}
 	return null;
@@ -474,20 +479,25 @@ function closestFolderContent(element) {
 
 /** @param {Element | null} element @param {ParentNode} [scope] */
 Helpers.selectFileItem = function (element, scope) {
-	scope = scope || closestFolderContent(element) || document;
-	var selected = scope.querySelectorAll(".file-item.selected");
-	for (var i = 0; i < selected.length; i++)
-		if (selected[i] !== element) selected[i].classList.remove("selected");
+	var root = scope || closestFolderContent(element) || document;
+	var selected = root.querySelectorAll(".file-item.selected");
+	for (var i = 0; i < selected.length; i++) {
+		var selectedItem = selected[i];
+		if (selectedItem && selectedItem !== element) selectedItem.classList.remove("selected");
+	}
 	if (element) element.classList.add("selected");
 };
 
+/** @param {DOMRect} rect @param {boolean} additive @param {ParentNode} [scope] */
 Helpers.selectFileItemsInRect = function (rect, additive, scope) {
 	var items = (scope || document).querySelectorAll(".file-item");
 	for (var i = 0; i < items.length; i++) {
-		var itemRect = items[i].getBoundingClientRect();
+		var item = items[i];
+		if (!item) continue;
+		var itemRect = item.getBoundingClientRect();
 		var hit = !(itemRect.right < rect.left || itemRect.left > rect.right || itemRect.bottom < rect.top || itemRect.top > rect.bottom);
-		if (hit) items[i].classList.add("selected");
-		else if (!additive) items[i].classList.remove("selected");
+		if (hit) item.classList.add("selected");
+		else if (!additive) item.classList.remove("selected");
 	}
 };
 
@@ -501,7 +511,7 @@ Helpers.installFolderSelector = function (folder) {
 	folder.setAttribute("data-file-selector", "installed");
 
 	var doc = folder.ownerDocument;
-	var selector = folder.querySelector(".selector") || doc.createElement("div");
+	var selector = /** @type {HTMLElement} */ (folder.querySelector(".selector") || doc.createElement("div"));
 	var pointer = !!capabilities.supportsPointer;
 	var downEvent = pointer ? "pointerdown" : "mousedown";
 	var moveEvent = pointer ? "pointermove" : "mousemove";
@@ -511,18 +521,22 @@ Helpers.installFolderSelector = function (folder) {
 	var additive = false;
 	var dragging = false;
 
+	/** @param {Event} ev */
 	var localPoint = function (ev) {
+		var mouse = /** @type {MouseEvent} */ (ev);
 		var rect = folder.getBoundingClientRect();
-		return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+		return { x: mouse.clientX - rect.left, y: mouse.clientY - rect.top };
 	};
 
+	/** @param {Event} ev */
 	var onMove = function (ev) {
 		if (!dragging) return;
+		var mouse = /** @type {MouseEvent} */ (ev);
 		var rect = folder.getBoundingClientRect();
 		var fromX = startX - rect.left;
 		var fromY = startY - rect.top;
-		var toX = ev.clientX - rect.left;
-		var toY = ev.clientY - rect.top;
+		var toX = mouse.clientX - rect.left;
+		var toY = mouse.clientY - rect.top;
 
 		Helpers.translateElement(selector, Math.min(fromX, toX), Math.min(fromY, toY));
 		selector.style.width = Helpers.toPixels(Math.abs(toX - fromX));
@@ -545,14 +559,15 @@ Helpers.installFolderSelector = function (folder) {
 	selector.style.left = "0";
 	selector.style.top = "0";
 
-	folder.addEventListener(downEvent, function (ev) {
-		if (ev.button !== undefined && ev.button !== 0) return;
-		additive = !!(ev.shiftKey || ev.ctrlKey || ev.metaKey);
+	folder.addEventListener(downEvent, /** @param {Event} ev */ function (ev) {
+		var mouse = /** @type {MouseEvent} */ (ev);
+		if (mouse.button !== undefined && mouse.button !== 0) return;
+		additive = !!(mouse.shiftKey || mouse.ctrlKey || mouse.metaKey);
 		if (!additive) Helpers.selectFileItem(null, folder);
-		startX = ev.clientX;
-		startY = ev.clientY;
+		startX = mouse.clientX;
+		startY = mouse.clientY;
 
-		var point = localPoint(ev);
+		var point = localPoint(mouse);
 		Helpers.translateElement(selector, point.x, point.y);
 		selector.style.width = "0px";
 		selector.style.height = "0px";

@@ -1479,6 +1479,7 @@ function Dialog(application) {
 	this.fixed = application.fixed || false;
 	this.scroll = application.scroll || false;
 
+	if (!Array.isArray(application.permissions)) application.permissions = [];
 	if (application.permissions.indexOf("fullscreen") === -1) application.permissions.push("fullscreen");
 	this.setPermissions(application.permissions);
 
