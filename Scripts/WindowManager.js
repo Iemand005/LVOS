@@ -24,6 +24,7 @@ if (document.documentMode && document.documentMode < 8) useScale = true;
 
 /** @satisfies {Flags} */
 var flags = {
+	/** @type {boolean} */
 	aeroSnap: true,
 	/** @type {boolean} */
 	updateRateLimit: allowUpdateRateLimit,
@@ -332,7 +333,7 @@ WindowManager.prototype.spawnApp = function(application, options) {
  */
 WindowManager.prototype.installApp = function (url, title, id, iconUrl) {
 	/** @type {Application} */
-	var application = { src: url, id: id || "custom." + Helpers.getDomain(url), title: title || getSiteName(url) || "unkle" };
+	var application = { src: url, id: id || "custom." + Helpers.getDomain(url), title: title || Helpers.getSiteName(url) || "unkle" };
 	if (iconUrl) application.iconUrl = iconUrl;
 	this.loadApp(application);
 	this.saveInstalledApp(application);
