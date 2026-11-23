@@ -32,7 +32,7 @@ interface Application {
 	multiple?: boolean;
 	/** Internal: spawned windows with this flag do not add an app button to the wallpaper. */
 	_skipOpenButton?: boolean;
-	fileTypes: string[];
+	fileTypes?: string[];
 }
 
 interface DialogState {
