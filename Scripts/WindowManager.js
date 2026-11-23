@@ -25,7 +25,9 @@ if (document.documentMode && document.documentMode < 8) useScale = true;
 /** @satisfies {Flags} */
 var flags = {
 	aeroSnap: true,
+	/** @type {boolean} */
 	updateRateLimit: allowUpdateRateLimit,
+	/** @type {boolean} */
 	useDragOverlay: true,
 	broadcastWindowMoves: !document.documentMode,
 	useAnimations: true,
