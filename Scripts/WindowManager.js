@@ -271,7 +271,7 @@ WindowManager.prototype.saveExtensionStates = function() {
 WindowManager.prototype.restoreExtensionStates = function() {
 	var states = this.extensionStates;
 	if (!states) return;
-	this.extensions.forEach(function (ext) { if (typeof states[ext.id] === "boolean") this.toggleExtensionEnabled(ext, states[ext.id]); })
+	this.extensions.forEach(function (ext) { if (typeof states[ext.id] === "boolean") this.toggleExtensionEnabled(ext, states[ext.id]); });
 };
 
 /**
@@ -1282,8 +1282,9 @@ ClickOffset.prototype.reset = function () {
 	this.position.x = this.position.y = 0;
 	return this;
 };
-/** @param {number} x
- * @param {number} y */
+/**
+ * @param {number} x
+  @param {number} y */
 ClickOffset.prototype.update = function(x, y){
 	this.last = Date.now();
 	this.position.x = x, this.position.y = y;
@@ -1352,7 +1353,7 @@ function createDialogElement() {
 
 var windowButtons = { eject: 0, full: 1, close: 2 };
 
-var restoreWindowIcon = /** HTML */'<svg aria-hidden="true" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg>';
+var restoreWindowIcon = /** HTML */"<svg aria-hidden=\"true\" viewBox=\"0 0 10 10\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z\"></path></svg>";
 
 /**
  * @author Lasse Lauwerys
@@ -2553,7 +2554,12 @@ Dialog.prototype.setZ = function(z) {
 };
 Dialog.prototype.updateWidth = function () { this.useTransform || this.useScale ? this.target.style.width = Helpers.toPixels(this._width) : this.target.style.right = Helpers.toPixels(this.right); };
 Dialog.prototype.updateHeight = function () { this.useTransform || this.useScale ? this.target.style.height = Helpers.toPixels(this._height) : this.target.style.bottom = Helpers.toPixels(this.bottom); };
-/** @param {"width"|"height"} axis @param {number} size @param {boolean} [update] @param {boolean} [animate] */
+/**
+ * @param {"width"|"height"} axis @param {number} size @param {boolean} [update] @param {boolean} [animate]
+ * @param size
+ * @param update
+ * @param animate
+ */
 Dialog.prototype._setSize = function (axis, size, update, animate) {
 	if (typeof size !== "number" || axis === "height" && !this.target) return;
 	var isW = axis === "width", b = WindowManager.windowRect, far = isW ? b.right : b.bottom, near = isW ? b.left : b.top, pos = isW ? this.x : this.y;
@@ -2566,9 +2572,17 @@ Dialog.prototype._setSize = function (axis, size, update, animate) {
 	else { this._height = Math.max(Math.min(size, this.maxHeight), this.minHeight); this._isMinHeight = this._height === this.minHeight; }
 	if (update !== false) animate ? this.animate(isW ? this.updateWidth : this.updateHeight) : (isW ? this.updateWidth() : this.updateHeight());
 };
-/** @param {number} width @param {boolean} [update] @param {boolean} [animate] */
+/**
+ * @param {number} width @param {boolean} [update] @param {boolean} [animate]
+ * @param update
+ * @param animate
+ */
 Dialog.prototype.setWidth = function (width, update, animate) { this._setSize("width", width, update, animate); };
-/** @param {number} height @param {boolean} [update] @param {boolean} [animate] */
+/**
+ * @param {number} height @param {boolean} [update] @param {boolean} [animate]
+ * @param update
+ * @param animate
+ */
 Dialog.prototype.setHeight = function (height, update, animate) { this._setSize("height", height, update, animate); };
 
 /**
