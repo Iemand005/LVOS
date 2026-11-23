@@ -13,7 +13,7 @@ interface Application {
 	fixed?: boolean;
 	scroll?: boolean;
 	hidden?: boolean;
-	permissions: PermissionMap[];
+	permissions?: PermissionMap[];
 	moveEvents?: boolean;
 	classes?: string[];
 	minWidth?: number;
