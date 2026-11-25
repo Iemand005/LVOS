@@ -453,8 +453,6 @@ WindowManager.updateWindowRect = function () {
 	rect.bottom = inset.bottom !== null ? rect.height - inset.bottom : Infinity;
 };
 
-WindowManager.updateWindowBounds = WindowManager.updateWindowRect;
-
 Object.defineProperty(WindowManager, "windowRect", {
 	get: function () { return WindowManager._windowRect; }
 });
