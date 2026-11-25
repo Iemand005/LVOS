@@ -246,8 +246,6 @@ interface WindowOpenProperties {
 
 type AnimationState = { timer: number, frame: number, handler: ((this: HTMLElement, ev: TransitionEvent) => any) | null, active: boolean, flip: boolean, cancel: ()=>void };
 
-type Flags = Record<string, boolean>;
-
 interface VulpOS {
 	windowManager: WindowManager;
 	desktopManager: DesktopManager;
