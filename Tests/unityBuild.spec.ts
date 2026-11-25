@@ -15,15 +15,17 @@ test('unity build boots from one HTML file with no script or stylesheet requests
 			stdio: 'pipe'
 		});
 
-		const html = readFileSync(join(out, 'index.html'), 'utf8');
+		const html = readFileSync(join(out, 'unity.html'), 'utf8');
 		expect(html, 'the unity page must not load scripts from files').not.toMatch(/<script\b[^>]*\bsrc\s*=/i);
 		expect(html, 'the unity page must not load stylesheets from files').not.toMatch(/<link\b[^>]*\brel\s*=\s*["']stylesheet/i);
 		expect(html, 'the unity page must contain inline CSS').toContain('<style>');
 		expect(html, 'the unity page must contain inline JS').toContain('<script>');
+		expect(readFileSync(join(out, 'index.html'), 'utf8'), 'the normal page must stay unchanged')
+			.toMatch(/<script\b[^>]*\bsrc\s*=/i);
 
 		const errors: string[] = [];
 		page.on('pageerror', (exception) => errors.push(exception.message));
-		await page.goto(pathToFileURL(join(out, 'index.html')).href);
+		await page.goto(pathToFileURL(join(out, 'unity.html')).href);
 		await page.waitForFunction(() => Boolean((window as any).windowManager), null, { timeout: 15000 })
 			.catch(() => {});
 

@@ -15,8 +15,9 @@
  *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
  *   node build.js --ie8      -> also emit accessor-free *.ie8.dist.js bundles
  *   node build.js --unity    -> additionally inline every script and stylesheet
- *                               into a single self-contained index.html
+ *                               into a single self-contained unity.html
  *   node build.js --out=DIR  -> write the output into DIR instead of Dist
+ *   node build.js --no-assets-> skip copying static assets (used by tests)
  *   node build.js --help     -> show this message
  *
  * The dist folder defaults to the sibling "LVOS-dist" repo if it exists,
@@ -525,10 +526,9 @@ async function writeUnityPage(dist) {
 	html = html.replace(/<\/head>/i, "<style>" + css + "</style></head>");
 	html = html.replace(/<\/body>/i, inlineScripts + "</body>");
 
-	writeFileSync(join(dist, "index.html"), html);
 	writeFileSync(join(dist, "unity.html"), html);
 	console.log(
-		"[unity] index.html -> " +
+		"[unity] unity.html -> " +
 		(Buffer.byteLength(html) / 1024).toFixed(1) + " KB (" +
 		cssParts.length + " stylesheets, " + scripts.length + " scripts)"
 	);
@@ -760,6 +760,7 @@ export default async function build(options) {
 	const mergeProps = !process.argv.includes("--no-merge-props");
 	const ie8 = options?.ie8 || process.argv.includes("--ie8");
 	const unity = options?.unity || process.argv.includes("--unity");
+	const withAssets = !process.argv.includes("--no-assets");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
@@ -809,7 +810,7 @@ export default async function build(options) {
 		);
 	}
 
-	copyAssets(dist);
+	if (withAssets) copyAssets(dist);
 	writePages(dist, ie8);
 	writeServiceWorker(dist, ie8);
 	if (unity) await writeUnityPage(dist);
@@ -818,7 +819,7 @@ export default async function build(options) {
 }
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained index.html\n  --out=DIR         write output into DIR instead of Dist\n  --help            show this help");
+	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained unity.html\n  --out=DIR         write output into DIR instead of Dist\n  --help            show this help");
 } else {
 	build().catch(function (err) {
 		console.error(err);

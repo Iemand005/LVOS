@@ -23,9 +23,9 @@ Guidance for agents working in this repository (LVOS / VulpOS).
 
 - `npm run build` — minified bundles into `Dist/` (a git submodule).
 - `npm run build:dev` — unminified bundles (same output, readable).
-- `npm run build:unity` — also overwrites `Dist/index.html` with a single
+- `npm run build:unity` — also writes `Dist/unity.html` as a single
   self-contained page: every script (including extensions) and stylesheet the
-  page uses is minified and inlined. `Dist/unity.html` is an identical copy.
+  page uses is minified and inlined. `Dist/index.html` stays the normal build.
   `--out=DIR` redirects all build output to another folder (used by tests).
 - `build.js` concatenates an ordered source list per page into a single
   `desktop.dist.js` / `mobile.dist.js`. Order is load-critical; see the
