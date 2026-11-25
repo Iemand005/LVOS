@@ -23,71 +23,84 @@ if (document.documentMode && document.documentMode < 9) allowUpdateRateLimit = f
 if (document.documentMode && document.documentMode < 8) useScale = true;
 
 /** @satisfies {Record<string, boolean>} */
-var flags = {
-	/** @type {boolean} */
-	aeroSnap: true,
-	/** @type {boolean} */
-	updateRateLimit: allowUpdateRateLimit,
-	/** @type {boolean} */
-	useDragOverlay: true,
-	broadcastWindowMoves: !document.documentMode,
-	useAnimations: true,
-	ieDropCompatibleMode: true,
-	bootAnimation: true,
-	_noBlurFullscreen: true,
-	get noBlurFullscreen() { return this._noBlurFullscreen || false; },
-	set noBlurFullscreen(value) {
-		this._noBlurFullscreen = !!value;
-		updateFullscreenBlurState();
-	},
-	_useTransform: useTransform,
-	get useTransform() { return this._useTransform || false; },
-	set useTransform(value) {
-		this._useTransform = value;
-		windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
-	},
-	_useScale: useScale,
-	get useScale() { return this._useScale || false; },
-	set useScale(value) {
-		this._useScale = value;
-		windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
-	},
-	_compositorResize: true,
-	get compositorResize() { return this._compositorResize || false; },
-	set compositorResize(value) {
+var flags = (function() {
+	var _noBlurFullscreen = true;
+	var _useTransform = useTransform;
+	var _useScale = useScale;
+	var _compositorResize = true;
+	var _useViewTransitionMaximize = true;
+	var _preserveMaximizeAspect = false;
+	var _exposeAndDesktops = true;
+	var _enableExtensions = true;
+
+	/** @param {boolean} value */
+	function setCompositorResize(value) {
 		document.body.classList.toggle("compositor-animations", !!value);
-		if (value) this._useViewTransitionMaximize = false;
-		this._compositorResize = value;
-	},
-	_useViewTransitionMaximize: true,
-	get useViewTransitionMaximize() { return this._useViewTransitionMaximize || false; },
-	set useViewTransitionMaximize(value) {
-		if (value) this.compositorResize = false;
-		this._useViewTransitionMaximize = value;
-	},
-	_preserveMaximizeAspect: false,
-	get preserveMaximizeAspect() { return this._preserveMaximizeAspect || false; },
-	set preserveMaximizeAspect(value) {
-		document.body.classList.toggle("preserve-aspect", !!value);
-		this._preserveMaximizeAspect = value;
-	},
-	verboseLogs: false,
-	_exposeAndDesktops: true,
-	get exposeAndDesktops() { return this._exposeAndDesktops || false; },
-	set exposeAndDesktops(value) {
-		this._exposeAndDesktops = value;
-		if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
-			window.desktopManager.setExposéEnabled(value);
-	},
-	_enableExtensions: true,
-	get enableExtensions() { return this._enableExtensions || false; },
-	set enableExtensions(value) {
-		this._enableExtensions = value;
-		window.windowManager.extensions.forEach(function(ext) {
-			window.windowManager.toggleExtensionEnabled(ext, value);
-		});
+		if (value) _useViewTransitionMaximize = false;
+		_compositorResize = value;
 	}
-};
+
+	return {
+		aeroSnap: true,
+		updateRateLimit: allowUpdateRateLimit,
+		useDragOverlay: true,
+		broadcastWindowMoves: !document.documentMode,
+		useAnimations: true,
+		ieDropCompatibleMode: true,
+		bootAnimation: true,
+		verboseLogs: false,
+
+		get noBlurFullscreen() { return _noBlurFullscreen || false; },
+		set noBlurFullscreen(/** @type {boolean} */ value) {
+			_noBlurFullscreen = !!value;
+			updateFullscreenBlurState();
+		},
+
+		get useTransform() { return _useTransform || false; },
+		set useTransform(/** @type {boolean} */ value) {
+			_useTransform = value;
+			windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
+		},
+
+		get useScale() { return _useScale || false; },
+		set useScale(/** @type {boolean} */ value) {
+			_useScale = value;
+			windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
+		},
+
+		get compositorResize() { return _compositorResize || false; },
+		set compositorResize(/** @type {boolean} */ value) {
+			setCompositorResize(value);
+		},
+
+		get useViewTransitionMaximize() { return _useViewTransitionMaximize || false; },
+		set useViewTransitionMaximize(/** @type {boolean} */ value) {
+			if (value) setCompositorResize(false);
+			_useViewTransitionMaximize = value;
+		},
+
+		get preserveMaximizeAspect() { return _preserveMaximizeAspect || false; },
+		set preserveMaximizeAspect(/** @type {boolean} */ value) {
+			document.body.classList.toggle("preserve-aspect", !!value);
+			_preserveMaximizeAspect = value;
+		},
+
+		get exposeAndDesktops() { return _exposeAndDesktops || false; },
+		set exposeAndDesktops(/** @type {boolean} */ value) {
+			_exposeAndDesktops = value;
+			if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
+				window.desktopManager.setExposéEnabled(value);
+		},
+
+		get enableExtensions() { return _enableExtensions || false; },
+		set enableExtensions(/** @type {boolean} */ value) {
+			_enableExtensions = value;
+			window.windowManager.extensions.forEach(function(ext) {
+				window.windowManager.toggleExtensionEnabled(ext, value);
+			});
+		}
+	};
+})();
 
 //#region Window Manager
 
