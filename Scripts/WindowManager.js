@@ -41,59 +41,67 @@ var flags = (function() {
 	}
 
 	return {
+		/** @type {boolean} */
 		aeroSnap: true,
+		/** @type {boolean} */
 		updateRateLimit: allowUpdateRateLimit,
+		/** @type {boolean} */
 		useDragOverlay: true,
+		/** @type {boolean} */
 		broadcastWindowMoves: !document.documentMode,
+		/** @type {boolean} */
 		useAnimations: true,
+		/** @type {boolean} */
 		ieDropCompatibleMode: true,
+		/** @type {boolean} */
 		bootAnimation: true,
+		/** @type {boolean} */
 		verboseLogs: false,
 
 		get noBlurFullscreen() { return _noBlurFullscreen || false; },
-		set noBlurFullscreen(/** @type {boolean} */ value) {
+		set noBlurFullscreen(value) {
 			_noBlurFullscreen = !!value;
 			updateFullscreenBlurState();
 		},
 
 		get useTransform() { return _useTransform || false; },
-		set useTransform(/** @type {boolean} */ value) {
+		set useTransform(value) {
 			_useTransform = value;
 			windowManager.forEachWindow(function(dialog) { dialog.useTransform = value; });
 		},
 
 		get useScale() { return _useScale || false; },
-		set useScale(/** @type {boolean} */ value) {
+		set useScale(value) {
 			_useScale = value;
 			windowManager.forEachWindow(function(dialog) { dialog.useScale = value; });
 		},
 
 		get compositorResize() { return _compositorResize || false; },
-		set compositorResize(/** @type {boolean} */ value) {
+		set compositorResize(value) {
 			setCompositorResize(value);
 		},
 
 		get useViewTransitionMaximize() { return _useViewTransitionMaximize || false; },
-		set useViewTransitionMaximize(/** @type {boolean} */ value) {
+		set useViewTransitionMaximize(value) {
 			if (value) setCompositorResize(false);
 			_useViewTransitionMaximize = value;
 		},
 
 		get preserveMaximizeAspect() { return _preserveMaximizeAspect || false; },
-		set preserveMaximizeAspect(/** @type {boolean} */ value) {
+		set preserveMaximizeAspect(value) {
 			document.body.classList.toggle("preserve-aspect", !!value);
 			_preserveMaximizeAspect = value;
 		},
 
 		get exposeAndDesktops() { return _exposeAndDesktops || false; },
-		set exposeAndDesktops(/** @type {boolean} */ value) {
+		set exposeAndDesktops(value) {
 			_exposeAndDesktops = value;
 			if (window.desktopManager && typeof window.desktopManager.setExposéEnabled === "function")
 				window.desktopManager.setExposéEnabled(value);
 		},
 
 		get enableExtensions() { return _enableExtensions || false; },
-		set enableExtensions(/** @type {boolean} */ value) {
+		set enableExtensions(value) {
 			_enableExtensions = value;
 			window.windowManager.extensions.forEach(function(ext) {
 				window.windowManager.toggleExtensionEnabled(ext, value);
