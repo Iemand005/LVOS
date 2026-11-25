@@ -440,7 +440,6 @@ WindowManager.prototype.injectApplications = function() {
 
 /** @type {Bounds} */
 WindowManager.windowRectInset = { top: 0, left: -100, right: -100, bottom: -100 };
-
 WindowManager._windowRect = { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
 
 WindowManager.updateWindowRect = function () {
