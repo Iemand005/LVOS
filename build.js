@@ -105,7 +105,6 @@ const BUNDLES = {
 		"ProvisionedApps.js",
 		"Console.js",
 		"FileSystem.js",
-		"NewtonVirus.js",
 		"index.js"             // boot, last
 	],
 	"mobile.dist.js": [
