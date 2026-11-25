@@ -1282,8 +1282,7 @@ ClickOffset.disableOverlay = function (ev) {
 	if (o.remove) o.remove(); else if (o.parentNode) o.parentNode.removeChild(o);
 };
 
-var evts = /** @type {const} */(["mousemove", "mouseup", "mouseout"]);
-evts.forEach(function(t) { window.addEventListener(t, ClickOffset.disableOverlay, false); });
+/** @type {const} */(["mousemove", "mouseup", "mouseout"]).forEach(function(t) { window.addEventListener(t, ClickOffset.disableOverlay, false); });
 
 ClickOffset.prototype.reset = function () {
 	this.start = this.last = Date.now();
