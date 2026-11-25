@@ -47,10 +47,8 @@ var flags = (function() {
 		/** @type {boolean} */ 	broadcastWindowMoves: !document.documentMode,
 		/** @type {boolean} */ 	useAnimations: true,
 		/** @type {boolean} */ 	ieDropCompatibleMode: true,
-		/** @type {boolean} */ 	verboseLogs: false,
-
-		get bootAnimation() { return localStorage.getItem("boot-animation") || true; }
-		set bootAnimation() { return localStorage.setItem("boot-animation"); }
+		/** @type {boolean} */ 	bootAnimation: true,
+		/** @type {boolean} */ 	verboseLogs: false,jezuus
 
 		get noBlurFullscreen() { return _noBlurFullscreen || false; },
 		set noBlurFullscreen(value) {
