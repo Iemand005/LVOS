@@ -5,8 +5,8 @@ interface Array<T> {
 
 type PermissionMap = "camera" | "microphone" | "fullscreen";
 
-interface Application extends Record<string,any> {
-	// Record<string,any>;
+interface Application {
+	[key: string]: unknown;
 	id: string;
 	title?: string;
 	src?: string;
