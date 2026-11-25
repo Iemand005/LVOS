@@ -1347,10 +1347,15 @@ function handleStorageException(exception) {
 	console.warn(exception);
 }
 
+/** @returns {Element | null} */
 function getDialogTemplate() {
 	var template = document.querySelector("template") || document.getElementById("window-template");
-	return template && (template instanceof HTMLTemplateElement ? template.content.children[0] : template.children ? template.children[0] : template.childNodes[1]);
-};
+	if (!template) return null;
+	if (template instanceof HTMLTemplateElement) return template.content.children[0] || null;
+
+	var legacy = /** @type {{ children?: HTMLCollection, childNodes: NodeListOf<ChildNode> }} */ (template);
+	return legacy.children ? legacy.children[0] || null : /** @type {Element} */ (legacy.childNodes[1]);
+}
 
 /** @returns {HTMLElement | WindowElement} */
 function createDialogElement() {
