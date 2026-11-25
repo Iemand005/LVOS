@@ -2570,15 +2570,15 @@ Dialog.prototype._setSize = function (axis, size, update, animate) {
 	if (update !== false) animate ? this.animate(isW ? this.updateWidth : this.updateHeight) : (isW ? this.updateWidth() : this.updateHeight());
 };
 /**
- * @param {number} width @param {boolean} [update] @param {boolean} [animate]
- * @param update
- * @param animate
+ * @param {number} width - The new width value.
+ * @param {boolean} [update] - Whether to immediately update the dialog layout.
+ * @param {boolean} [animate] - Whether to animate the resize transition.
  */
 Dialog.prototype.setWidth = function (width, update, animate) { this._setSize("width", width, update, animate); };
 /**
- * @param {number} height @param {boolean} [update] @param {boolean} [animate]
- * @param update
- * @param animate
+ * @param {number} height - The new height value.
+ * @param {boolean} [update] - Whether to immediately update the dialog layout.
+ * @param {boolean} [animate] - Whether to animate the resize transition.
  */
 Dialog.prototype.setHeight = function (height, update, animate) { this._setSize("height", height, update, animate); };
 
