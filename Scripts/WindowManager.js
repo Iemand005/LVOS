@@ -980,14 +980,12 @@ WindowManager.prototype.broadcastTheme = function() {
 
 /**
  * @param {MessageType} type
- * @param {unknown | string} [data]
+ * @param {unknown | HTMLElement} [data]
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	if (type === "theme") {
-		var className = data && data.className;
-		if (typeof className !== "string") return;
-		document.body.className = className;
+	if (type === "theme" && typeof data === "object" && data && "className" in data) {
+		document.body.className = data.className;
 		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
 	}
 	if (type !== "dialog-state")
