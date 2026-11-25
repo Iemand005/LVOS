@@ -980,7 +980,7 @@ WindowManager.prototype.broadcastTheme = function() {
 
 /**
  * @param {MessageType} type
- * @param {*} [data]
+ * @param {unknown | string} [data]
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
