@@ -984,7 +984,8 @@ WindowManager.prototype.broadcastTheme = function() {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	if (type === "theme" && hasRegisteredWallpaperSelection.isElement(data)) {
+	if (type === "theme" && Hrlpers) {
+		
 		document.body.className = data.className;
 		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
 	}
