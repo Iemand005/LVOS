@@ -26,7 +26,8 @@ Guidance for agents working in this repository (LVOS / VulpOS).
 - `npm run build:unity` — also writes `Dist/unity.html` as a single
   self-contained page: every script (including extensions) and stylesheet the
   page uses is minified and inlined. `Dist/index.html` stays the normal build.
-  `--out=DIR` redirects all build output to another folder (used by tests).
+  `--out=DIR` redirects all build output to another folder and `--no-assets`
+  skips the static asset copy (both used by tests).
 - `build.js` concatenates an ordered source list per page into a single
   `desktop.dist.js` / `mobile.dist.js`. Order is load-critical; see the
   `BUNDLES` map and its comments. Anything referenced by `index.html`'s
