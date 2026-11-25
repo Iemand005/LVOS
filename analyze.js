@@ -20,7 +20,7 @@
 
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
-import { gzipSync } from "zlib";
+import { gzipSync, brotliCompressSync, constants as zlibConstants } from "zlib";
 import esbuild from "esbuild";
 import ts from "typescript";
 import {
@@ -170,12 +170,21 @@ cssRows.sort(byBytes);
 const shell = minifyHtml(src
 	.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
 	.replace(/<link\b[^>]*>/gi, (tag) => (/rel\s*=\s*["']stylesheet["']/i.test(tag) ? "" : tag)));
-const unityPath = join(resolveDist(), "unity.html");
-const actualBytes = existsSync(unityPath) ? readFileSync(unityPath).length : null;
+const dist = resolveDist();
+const unityPath = join(dist, "unity.html");
+const unityBuffer = existsSync(unityPath) ? readFileSync(unityPath) : null;
+const actualBytes = unityBuffer === null ? null : unityBuffer.length;
+const packedPath = join(dist, "unity.packed.html");
+const packedBytes = existsSync(packedPath) ? readFileSync(packedPath).length : null;
 const totalBytes = shell.length + cssMin.length + bundleMin.length + extraRows.reduce((sum, item) => sum + item.bytes, 0);
 
 const report = {
 	unityHtmlBytes: actualBytes,
+	unityGzipBytes: unityBuffer === null ? null : gzipSync(unityBuffer, { level: 9 }).length,
+	unityBrotliBytes: unityBuffer === null ? null : brotliCompressSync(unityBuffer, {
+		params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 11 }
+	}).length,
+	unityPackedBytes: packedBytes,
 	estimatedBytes: totalBytes,
 	shellBytes: shell.length,
 	bundleBytes: bundleMin.length,
@@ -199,8 +208,11 @@ if (asJson) {
 	};
 
 	console.log("Unity page size profile");
-	console.log("  actual unity.html: " + (actualBytes === null ? "not built" : kb(actualBytes)));
-	console.log("  estimated total:   " + kb(totalBytes));
+	console.log("  actual unity.html:     " + (actualBytes === null ? "not built" : kb(actualBytes)));
+	console.log("  unity.html.gz:         " + (report.unityGzipBytes === null ? "not built" : kb(report.unityGzipBytes)));
+	console.log("  unity.html.br:         " + (report.unityBrotliBytes === null ? "not built" : kb(report.unityBrotliBytes)));
+	console.log("  unity.packed.html:     " + (packedBytes === null ? "not built" : kb(packedBytes)));
+	console.log("  estimated total:       " + kb(totalBytes));
 	console.log("  HTML shell:        " + kb(shell.length));
 	console.log("  JS bundle:         " + kb(bundleMin.length));
 	console.log("  inline CSS:        " + kb(cssMin.length));

@@ -26,6 +26,9 @@ Guidance for agents working in this repository (LVOS / VulpOS).
 - `npm run build:unity` — also writes `Dist/unity.html` as a single
   self-contained page: every script (including extensions) and stylesheet the
   page uses is minified and inlined. `Dist/index.html` stays the normal build.
+  It also emits `unity.html.gz` / `unity.html.br` (serve with `Content-Encoding`)
+  and `unity.packed.html`, a self-decompressing single file that inflates itself
+  with `DecompressionStream` while keeping the original URL for relative assets.
   `--out=DIR` redirects all build output to another folder and `--no-assets`
   skips the static asset copy (both used by tests).
 - `npm run analyze` — profiles the unity page's minified bytes by source file,

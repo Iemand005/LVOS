@@ -15,7 +15,8 @@
  *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
  *   node build.js --ie8      -> also emit accessor-free *.ie8.dist.js bundles
  *   node build.js --unity    -> additionally inline every script and stylesheet
- *                               into a single self-contained unity.html
+ *                               into unity.html, plus .gz/.br copies and a
+ *                               self-decompressing unity.packed.html
  *   node build.js --out=DIR  -> write the output into DIR instead of Dist
  *   node build.js --no-assets-> skip copying static assets (used by tests)
  *   node build.js --help     -> show this message
@@ -27,6 +28,7 @@
 import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
+import { gzipSync, brotliCompressSync, constants as zlibConstants } from "zlib";
 import esbuild from "esbuild";
 import ts from "typescript";
 import { parse } from "acorn";
@@ -467,6 +469,26 @@ function minifyHtml(html) {
 }
 
 /**
+ * Wrap the gzipped unity page in a tiny HTML bootstrap that inflates it in the
+ * browser. document.write keeps the page on the original URL, so relative
+ * asset paths (Assets/, Applications/) still resolve normally.
+ * @param {Buffer} gzip
+ */
+function buildPackedHtml(gzip) {
+	const payload = gzip.toString("base64");
+	return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>VulpOS</title></head><body>' +
+		'<script>(async()=>{try{' +
+		'if(typeof DecompressionStream==="undefined")throw new Error("DecompressionStream is unavailable");' +
+		'var bin=atob("' + payload + '"),bytes=new Uint8Array(bin.length);' +
+		'for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);' +
+		'var stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));' +
+		'var html=await new Response(stream).text();' +
+		'document.open();document.write(html);document.close();' +
+		'}catch(error){document.body.textContent="Unable to unpack VulpOS: "+error.message;}})();' +
+		'</script></body></html>';
+}
+
+/**
  * Unity build: take the finished page and inline every script and stylesheet it
  * uses, so the OS boots from one HTML file with no JS/CSS requests. Unlike the
  * normal bundles, the unity page deliberately contains the extension scripts
@@ -526,11 +548,23 @@ async function writeUnityPage(dist) {
 	html = html.replace(/<\/head>/i, "<style>" + css + "</style></head>");
 	html = html.replace(/<\/body>/i, inlineScripts + "</body>");
 
-	writeFileSync(join(dist, "unity.html"), html);
+	const htmlBytes = Buffer.from(html, "utf8");
+	const gzip = gzipSync(htmlBytes, { level: zlibConstants.Z_BEST_COMPRESSION });
+	const brotli = brotliCompressSync(htmlBytes, {
+		params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 11 }
+	});
+	const packed = buildPackedHtml(gzip);
+	writeFileSync(join(dist, "unity.html"), htmlBytes);
+	writeFileSync(join(dist, "unity.html.gz"), gzip);
+	writeFileSync(join(dist, "unity.html.br"), brotli);
+	writeFileSync(join(dist, "unity.packed.html"), packed);
+	const kb = (bytes) => (bytes / 1024).toFixed(1) + " KB";
 	console.log(
-		"[unity] unity.html -> " +
-		(Buffer.byteLength(html) / 1024).toFixed(1) + " KB (" +
-		cssParts.length + " stylesheets, " + scripts.length + " scripts)"
+		"[unity] unity.html       -> " + kb(htmlBytes.length) + " (" +
+		cssParts.length + " stylesheets, " + scripts.length + " scripts)\n" +
+		"        unity.html.gz    -> " + kb(gzip.length) + "\n" +
+		"        unity.html.br    -> " + kb(brotli.length) + "\n" +
+		"        unity.packed.html-> " + kb(Buffer.byteLength(packed))
 	);
 }
 
@@ -833,7 +867,7 @@ export {
 const isMain = Boolean(process.argv[1]) && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 if (isMain && (process.argv.includes("--help") || process.argv.includes("-h"))) {
-	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained unity.html\n  --out=DIR         write output into DIR instead of Dist\n  --no-assets       skip copying static assets (used by tests)\n  --help            show this help");
+	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into unity.html (+ .gz/.br and packed)\n  --out=DIR         write output into DIR instead of Dist\n  --no-assets       skip copying static assets (used by tests)\n  --help            show this help");
 } else if (isMain) {
 	build().catch(function (err) {
 		console.error(err);

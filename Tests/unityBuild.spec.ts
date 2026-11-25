@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'fs';
+import { mkdtempSync, readFileSync, rmSync, existsSync } from 'fs';
+import { gunzipSync } from 'zlib';
 import { tmpdir } from 'os';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
@@ -23,6 +24,13 @@ test('unity build boots from one HTML file with no script or stylesheet requests
 		expect(readFileSync(join(out, 'index.html'), 'utf8'), 'the normal page must stay unchanged')
 			.toMatch(/<script\b[^>]*\bsrc\s*=/i);
 
+		const gzip = readFileSync(join(out, 'unity.html.gz'));
+		expect(gunzipSync(gzip).toString('utf8')).toBe(html);
+		expect(gzip.length, 'gzip must be smaller than the plain page').toBeLessThan(Buffer.byteLength(html));
+		expect(existsSync(join(out, 'unity.html.br')), 'brotli copy is missing').toBe(true);
+		const packed = readFileSync(join(out, 'unity.packed.html'), 'utf8');
+		expect(packed.length, 'packed page must be smaller than the plain page').toBeLessThan(html.length);
+
 		const errors: string[] = [];
 		page.on('pageerror', (exception) => errors.push(exception.message));
 		await page.goto(pathToFileURL(join(out, 'unity.html')).href);
@@ -42,6 +50,21 @@ test('unity build boots from one HTML file with no script or stylesheet requests
 		expect(state.screenShooter, 'the inlined WebGraphics script is missing').toBe('function');
 		expect(errors.filter((message) => /is not defined|TabScroller|ScreenShooter|Graphics3D/.test(message)))
 			.toEqual([]);
+
+		const packedPage = await page.context().newPage();
+		try {
+			const packedErrors: string[] = [];
+			packedPage.on('pageerror', (exception) => packedErrors.push(exception.message));
+			await packedPage.goto(pathToFileURL(join(out, 'unity.packed.html')).href);
+			await packedPage.waitForFunction(() => Boolean((window as any).windowManager), null, { timeout: 15000 })
+				.catch(() => {});
+			const packedState = await packedPage.evaluate(() => typeof (window as any).windowManager);
+			expect(packedState, 'the self-decompressing page did not boot').not.toBe('undefined');
+			expect(packedErrors.filter((message) => /is not defined|TabScroller|ScreenShooter|Graphics3D/.test(message)))
+				.toEqual([]);
+		} finally {
+			await packedPage.close();
+		}
 	} finally {
 		rmSync(out, { recursive: true, force: true });
 	}
