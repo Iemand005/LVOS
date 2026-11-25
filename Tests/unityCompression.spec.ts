@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { spawn, execFileSync } from 'child_process';
 import { once } from 'events';
-import { get } from 'http';
+import { get, type IncomingHttpHeaders, type IncomingMessage } from 'http';
 import { readFileSync } from 'fs';
 import { brotliDecompressSync, gunzipSync } from 'zlib';
 import { resolve } from 'path';
@@ -10,23 +10,25 @@ test.setTimeout(120000);
 
 const root = resolve('.');
 
-function request(url, acceptEncoding) {
-	return new Promise((resolveRequest, rejectRequest) => {
-		get(url, { headers: { 'Accept-Encoding': acceptEncoding } }, (res) => {
-			const chunks = [];
-			res.on('data', (chunk) => chunks.push(chunk));
+type RawResponse = { status: number | undefined; headers: IncomingHttpHeaders; body: Buffer };
+
+function request(url: string, acceptEncoding: string): Promise<RawResponse> {
+	return new Promise<RawResponse>((resolveRequest, rejectRequest) => {
+		get(url, { headers: { 'Accept-Encoding': acceptEncoding } }, (res: IncomingMessage) => {
+			const chunks: Buffer[] = [];
+			res.on('data', (chunk: Buffer) => chunks.push(chunk));
 			res.on('end', () => resolveRequest({ status: res.statusCode, headers: res.headers, body: Buffer.concat(chunks) }));
 		}).on('error', rejectRequest);
 	});
 }
 
-async function waitFor(url) {
+async function waitFor(url: string): Promise<void> {
 	for (let attempt = 0; attempt < 100; attempt++) {
 		try {
 			const response = await request(url, 'identity');
 			if (response.status === 200) return;
 		} catch {}
-		await new Promise((done) => setTimeout(done, 200));
+		await new Promise<void>((done) => setTimeout(done, 200));
 	}
 	throw new Error(`Server did not start: ${url}`);
 }
