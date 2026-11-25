@@ -150,15 +150,22 @@ test('dragging down from a maximized window clears maximize state', async ({ vul
 
 test('maximize button swaps its icon with maximize state', async ({ vulpOS }) => {
 	const cube = await vulpOS.openCube();
-	const icon = () => cube.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+	const icon = () => cube.evaluate(dialog => {
+		const button = dialog.getButton(1)!;
+		return {
+			restored: button.classList.contains('restored'),
+			maximizeVisible: getComputedStyle(button.querySelector('.maximize-icon')!).display !== 'none',
+			restoreVisible: getComputedStyle(button.querySelector('.restore-icon')!).display !== 'none',
+		};
+	});
 
-	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+	expect(await icon()).toEqual({ restored: false, maximizeVisible: true, restoreVisible: false });
 
 	await cube.evaluate(dialog => dialog.getButton(1)!.click());
 	await expect.poll(() => vulpOS.state(cube).then(state => state.maximized), { timeout: 4000 }).toBe(true);
-	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+	expect(await icon()).toEqual({ restored: true, maximizeVisible: false, restoreVisible: true });
 
 	await cube.evaluate(dialog => dialog.getButton(1)!.click());
 	await expect.poll(() => vulpOS.state(cube).then(state => state.maximized), { timeout: 4000 }).toBe(false);
-	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+	expect(await icon()).toEqual({ restored: false, maximizeVisible: true, restoreVisible: false });
 });

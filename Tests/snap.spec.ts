@@ -36,18 +36,25 @@ test('maximize button unsnaps a snapped window and swaps the icon', async ({ vul
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
 	const before = await vulpOS.measure(window);
-	const icon = () => window.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+	const icon = () => window.evaluate(dialog => {
+		const button = dialog.getButton(1)!;
+		return {
+			restored: button.classList.contains('restored'),
+			maximizeVisible: getComputedStyle(button.querySelector('.maximize-icon')!).display !== 'none',
+			restoreVisible: getComputedStyle(button.querySelector('.restore-icon')!).display !== 'none',
+		};
+	});
 
-	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+	expect(await icon()).toEqual({ restored: false, maximizeVisible: true, restoreVisible: false });
 
 	await vulpOS.drag(await vulpOS.titleBarPoint(window), { x: 2, y: 400 });
 	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(true);
-	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+	expect(await icon()).toEqual({ restored: true, maximizeVisible: false, restoreVisible: true });
 
 	await window.evaluate(dialog => dialog.getButton(1)!.click());
 	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(false);
 	expect((await vulpOS.state(window)).maximized).toBe(false);
-	expect(await icon()).toContain('M0 0v10h10V0H0zm1 1h8v8H1V1z');
+	expect(await icon()).toEqual({ restored: false, maximizeVisible: true, restoreVisible: false });
 
 	const after = await vulpOS.measure(window);
 	expectNear(after.width, before.width);
