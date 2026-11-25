@@ -1286,7 +1286,7 @@ ClickOffset.disableOverlay = function (ev) {
 
 ClickOffset.prototype.reset = function () {
 	this.start = this.last = Date.now();
-	this.position.x = this.position.y = 0;
+	this.position.x = 0, this.position.y = 0;
 	return this;
 };
 /**
