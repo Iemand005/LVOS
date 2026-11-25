@@ -984,11 +984,8 @@ WindowManager.prototype.broadcastTheme = function() {
  * @param {string} [id]
  */
 WindowManager.prototype.handleBroadcast = function(type, data, id) {
-	if (type === "theme" && Hrlpers) {
-		
-		document.body.className = data.className;
-		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: className }); });
-	}
+	if (type === "theme" && Helpers.isElement(data))
+		return this.forEachWindow(function(dialog) { dialog.messageFrame("theme", { className: document.body.className = data.className }); });
 	if (type !== "dialog-state")
 		return LVMessenger.messageReceived(type, data, id);
 	if (!data || !id) return;
@@ -998,7 +995,8 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		var app = appManager.getApp(id);
 		if (!app) return;
 		this.loadApp(app);
-		dialog = this.windows[id];
+		this.getWindowById
+		dialog = this.windows[id] || null;
 	}
 	if (!dialog) return;
 	this.synchronizing = false;
