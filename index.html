@@ -134,8 +134,6 @@
 	</script>
 
 </head>
-<!-- <body class="blur gnome"> -->
-<!-- <body class="gradient"> -->
 <body class="modern windows gnome desktop exposé  boot-flip">
 	<header><h1>VulpOS - Lasses Virtual Operating System</h1></header>
 	<section class="seo-description" aria-label="About VulpOS">
@@ -152,7 +150,6 @@
 		<section id="desktop">
 			<div id="desktop-area">
 				<section id="window-section">
-					<!-- <iframe src="./Applications/FrostedColours/index.html" id="wallpaper" frameborder="0"></iframe> -->
 					<div id="wallpaper">
 						<iframe id="wallpaper-frame" src="https://iemand005.github.io/FrostedColours/" frameborder="0"></iframe>
 					</div>
@@ -162,35 +159,26 @@
 					<div class="context-menu" id="context-menu">
 
 					</div>
-					<!-- <article id="dockcontaner">
 
-					</article> -->
-
-
-					<template><!-- Template of my semantic and minimal structure used to create floating dialogs. I used the information provided by Visual Studio Code to determine what tags fit the purpose best. I hope this makes it as semantically correct as possible while excluding excessive divs and other tags. -->
+					<template>
 						<div class="window" draggable="true" is="window-div">
-							<content class=""><!-- Visual Sudio 2013 suggested me to use content instead here to make it semantic. This places the dialog inside the shadow DOM. I don't know if it's proper HTML 5 or HTML 4 but I used it so I'm keeping it the way it is for now. -->
-								<!-- I was forced to add this extra wrapping article to work around a bug in EdgeHTML 18 that causes the backdrop filter to shift by the amount of pixels the box-shadow blur size has minus the top and left value. I don't know if it's a known bug but the browser is no longer officially supported. I will be adding this tag anyways but it's not necessary for functionality of the application. -->
-								<header><!-- This header identifies the most near ancestor (dialog). In the header are the title and the navigation buttons. -->
+							<content class="">
+								<header>
 									<img alt="App icon">
-									<h1></h1><!-- Title of the window and also identifier of the header and dialog. -->
-									<div class="window-buttons"><!-- Section used for thematic grouping of content. The grouping is necessary to keep the buttons together without needing extra unstable css tricks. -->
+									<h1></h1>
+									<div class="window-buttons">
 										<button disabled><svg viewBox="0 0 10 1" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10v1H0z"></path></svg></button>
 										<button disabled><svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path class="maximize-icon" d="M0 0v10h10V0H0zm1 1h8v8H1V1z"></path><path class="restore-icon" d="M2.1 0v2H0v8.1h8.2v-2h2V0H2.1zm5.1 9.2H1.1V3h6.1v6.2zm2-2.1h-1V2H3.1V1h6.1v6.1z"></path></svg></button>
-										<button disabled><svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M10.2.7L9.5 0 5.1 4.4.7 0 0 .7l4.4 4.4L0 9.5l.7.7 4.4-4.4 4.4 4.4.7-.7-4.4-4.4z"></path></svg></button><!-- The navigation button styling is completely taken care of by css. -->
+										<button disabled><svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M10.2.7L9.5 0 5.1 4.4.7 0 0 .7l4.4 4.4L0 9.5l.7.7 4.4-4.4 4.4 4.4.7-.7-4.4-4.4z"></path></svg></button>
 									</div>
 								</header>
-								<article><!-- The article tag is used for an interactive widget, which can range from a hard-coded app to an iframe containing an external website. -->
-									<!-- This is the client area! Here the application itself should be placed. -->
-								</article><!-- Adding a wrapper aound this allows the corners inside the window to be rounded too, in a similar way done on Windows 11. We can do it without wrapping with overflow hidden but that results in the scroll bars being rendered over top which looks ugly. Rounded corners also appear to break the experimental blur support on EdgeHTML 18 when a scrollbar appears as the blur layer then gets rendered to the screen after the border causing it to show a jagged inside lining of the quarter circle. I can't find any mentions of the bug online as it's a weird edge case (pun intended). Turns out, Edge Legacy is not the only browser that has problems here. Chrome has a very similar bug but it disappears upon resize (tested in Chrome 118), that would mean Edge Chromium, Opera, Brave and all other Chromium browsers likely have this weird effect too. I will thus not be implementing this! -->
-								<!-- This is the non-client area! -->
-							</content><!-- This necessary wrapping that is only here for many uses. -->
+								<article></article>
+							</content>
 							<span class="backdrop-clip">
 								<div class="backdrop-filter"></div>
 							</span>
-							<!-- This is also the non-client area. Primarily reserved for the borders. -->
 						</div>
-					</template><!-- The client area in graphical user interface design refers to the area of the window where the user's content should be placed. The non-client area is for managing the window itself. -->
+					</template>
 
 					<div class="window" id="console">
 						<content>
@@ -221,7 +209,6 @@
 				</section>
 			</div>
             <section id="metro">
-                <!-- <iframe src="mobile.html" frameborder="0"></iframe> -->
             </section>
         </section>
         <aside id="charms">
