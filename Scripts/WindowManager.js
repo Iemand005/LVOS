@@ -1323,8 +1323,8 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
  * @param {Cursor} [cursor]
  */
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
-	var a = document[enable ? /** @type {const} */ ("addEventListener") : /** @type {const} */ ("removeEventListener")];
-	document[a](capabilities.supportsPointer ? "pointermove" : "mousemove", handler, false);
+	if (enable) document.addEventListener("pointermove", handler, false);
+	else document.removeEventListener("pointermove", handler, false);
 	if (!flags.useDragOverlay || !this._overlay)
 		return windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 	this._overlay.style.cursor = cursor || "";
