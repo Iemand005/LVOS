@@ -2346,7 +2346,7 @@ Dialog.prototype._toggleSnap = function (className, enable, useFlip, onTransitio
 	if (useFlip) this.animate(function () { Helpers.setClass(self.target, className, enable); }, onTransitionEnd, onEnd, 1000, true);
 	else this.toggleClassAnimated(className, enable, onTransitionEnd, onEnd, undefined, 1000);
 
-	this._snappingOutState = /** @type {any} */ (target)._animationState;
+	this._snappingOutState = target._animationState || null;
 };
 
 /** @param {boolean} [enable] */
