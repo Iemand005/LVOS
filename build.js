@@ -819,7 +819,7 @@ export default async function build(options) {
 }
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained unity.html\n  --out=DIR         write output into DIR instead of Dist\n  --help            show this help");
+	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained unity.html\n  --out=DIR         write output into DIR instead of Dist\n  --no-assets       skip copying static assets (used by tests)\n  --help            show this help");
 } else {
 	build().catch(function (err) {
 		console.error(err);

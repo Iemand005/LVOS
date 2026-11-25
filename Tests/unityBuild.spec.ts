@@ -10,7 +10,7 @@ test.use({ headless: true, channel: 'chrome' });
 test('unity build boots from one HTML file with no script or stylesheet requests', async ({ page }) => {
 	const out = mkdtempSync(join(tmpdir(), 'lvos-unity-'));
 	try {
-		execFileSync(process.execPath, [resolve('build.js'), '--unity', '--out=' + out], {
+		execFileSync(process.execPath, [resolve('build.js'), '--unity', '--no-assets', '--out=' + out], {
 			cwd: resolve('.'),
 			stdio: 'pipe'
 		});
