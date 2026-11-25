@@ -8,7 +8,8 @@
 		"build:dev": "node build.js --no-minify",
 		"build:ie8": "node build.js --ie8",
 		"build:unity": "node build.js --unity",
-		"analyze": "node analyze.js"
+		"analyze": "node analyze.js",
+		"analyze:json": "node analyze.js --json"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.63.0",

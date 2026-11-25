@@ -12,9 +12,10 @@
  * functions can be spotted directly.
  *
  * Usage:
- *   npm run analyze                 -> text report
- *   npm run analyze -- --top=100    -> more symbols
- *   npm run analyze -- --json       -> machine-readable report
+ *   npm run analyze                         -> text report
+ *   node analyze.js --top=100               -> more symbols
+ *   npm run analyze:json                    -> machine-readable report
+ *   node analyze.js --top=0                 -> every symbol
  */
 
 import { readFileSync, existsSync } from "fs";

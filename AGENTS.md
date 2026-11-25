@@ -28,6 +28,10 @@ Guidance for agents working in this repository (LVOS / VulpOS).
   page uses is minified and inlined. `Dist/index.html` stays the normal build.
   `--out=DIR` redirects all build output to another folder and `--no-assets`
   skips the static asset copy (both used by tests).
+- `npm run analyze` — profiles the unity page's minified bytes by source file,
+  top-level symbol and inline script/stylesheet (with gzip sizes). Use
+  `node analyze.js --top=N` for more symbols (`--top=0` for all) and
+  `npm run analyze:json` for machine-readable output.
 - `build.js` concatenates an ordered source list per page into a single
   `desktop.dist.js` / `mobile.dist.js`. Order is load-critical; see the
   `BUNDLES` map and its comments. Anything referenced by `index.html`'s
