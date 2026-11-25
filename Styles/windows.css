@@ -120,6 +120,15 @@ svg {
 	width: 10px;
 }
 
+.window header button .restore-icon,
+.window header button.restored .maximize-icon {
+	display: none;
+}
+
+.window header button.restored .restore-icon {
+	display: inline;
+}
+
 .window header section,
 .window .header .section,
 .window header nav {
