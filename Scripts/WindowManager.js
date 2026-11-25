@@ -1323,7 +1323,8 @@ ClickOffset.prototype.init = function (x, y, width, height, startX, startY) {
  * @param {Cursor} [cursor]
  */
 ClickOffset.toggleDragEventHandler = function (enable, handler, cursor) {
-	document[enable ? "addEventListener" : "removeEventListener"](capabilities.supportsPointer ? "pointermove" : "mousemove", handler, false);
+	var a = /** @type {const} */(enable ? "addEventListener" : "removeEventListener");
+	document[a](capabilities.supportsPointer ? "pointermove" : "mousemove", handler, false);
 	if (!flags.useDragOverlay || !this._overlay)
 		return windowManager.forEachWindow(function(dialog) { dialog.togglePointerEvents(!enable); });
 	this._overlay.style.cursor = cursor || "";
@@ -2564,10 +2565,10 @@ Dialog.prototype.setZ = function(z) {
 Dialog.prototype.updateWidth = function () { this.useTransform || this.useScale ? this.target.style.width = Helpers.toPixels(this._width) : this.target.style.right = Helpers.toPixels(this.right); };
 Dialog.prototype.updateHeight = function () { this.useTransform || this.useScale ? this.target.style.height = Helpers.toPixels(this._height) : this.target.style.bottom = Helpers.toPixels(this.bottom); };
 /**
- * @param {"width"|"height"} axis @param {number} size @param {boolean} [update] @param {boolean} [animate]
- * @param size
- * @param update
- * @param animate
+ * @param {"width"|"height"} axis
+ * @param {number} size
+ * @param {boolean} [update]
+ * @param {boolean} [animate]
  */
 Dialog.prototype._setSize = function (axis, size, update, animate) {
 	if (typeof size !== "number" || axis === "height" && !this.target) return;
