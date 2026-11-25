@@ -32,9 +32,7 @@
 		"button.background": "#ca5406",
 		"button.foreground": "#ffffff",
 		"button.border": "#ca5406",
-		"button.hoverBackground": "#d36820",
-		"button.secondaryBackground": "#333333",
-		"button.secondaryForeground": "#ffffff"
+		"button.hoverBackground": "#d36820"
 	},
 	"workbench.browser.autoReloadOnFileChange": true,
 	"workbench.browser.showInTitleBar": true,
