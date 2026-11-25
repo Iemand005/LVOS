@@ -3008,6 +3008,7 @@ function DragAction() {
 		function bottomLeft(dialog, offset, d){ dialog.resize(offset.width - d.x, offset.height + d.y, "bottom-left"); }
 	];
 	this.resizeFunctions = resizeFunctions;
+	this.direction = 0;
 }
 
 /** @param {number} [direction] */
