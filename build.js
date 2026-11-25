@@ -14,6 +14,9 @@
  *   node build.js --no-minify-> write unminified (readable) bundles
  *   node build.js --no-merge-props -> keep individual Object.defineProperty calls
  *   node build.js --ie8      -> also emit accessor-free *.ie8.dist.js bundles
+ *   node build.js --unity    -> additionally inline every script and stylesheet
+ *                               into a single self-contained index.html
+ *   node build.js --out=DIR  -> write the output into DIR instead of Dist
  *   node build.js --help     -> show this message
  *
  * The dist folder defaults to the sibling "LVOS-dist" repo if it exists,
@@ -21,7 +24,7 @@
  */
 
 import { readFileSync, existsSync, mkdirSync, writeFileSync, cpSync } from "fs";
-import { basename, dirname, join } from "path";
+import { basename, dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import esbuild from "esbuild";
 import ts from "typescript";
@@ -120,6 +123,9 @@ const BUNDLES = {
 };
 
 function resolveDist() {
+	// Tests can build into a scratch folder so they never touch the real dist.
+	const outArg = process.argv.find((arg) => arg.startsWith("--out="));
+	if (outArg) return resolve(ROOT, outArg.slice("--out=".length));
 	// Prefer the sibling LVOS-dist repo if it exists.
 	const sibling = join(ROOT, "Dist");
 	if (existsSync(sibling)) return sibling;
@@ -196,6 +202,32 @@ function copyAssets(dist) {
 	}
 }
 
+/** @param {string} src */
+function getExtensionScripts(src) {
+	/** @type {string[]} */
+	const scripts = [];
+	const pattern = new RegExp(
+		'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
+		"gi"
+	);
+	for (const match of src.matchAll(pattern)) scripts.push(match[1].replace(/^\.\//, ""));
+	return scripts;
+}
+
+/** @param {string} src */
+function getStylesheets(src) {
+	/** @type {string[]} */
+	const sheets = [];
+	for (const match of src.matchAll(/<link\b[^>]*>/gi)) {
+		const tag = match[0];
+		if (!/\brel\s*=\s*["']stylesheet["']/i.test(tag)) continue;
+		const href = tag.match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1];
+		if (!href || /^[a-z][a-z\d+.-]*:/i.test(href) || href.startsWith("/")) continue;
+		sheets.push(href.replace(/^\.\//, ""));
+	}
+	return sheets;
+}
+
 function writePage(dist, page, config) {
 	const srcPath = join(ROOT, config.source);
 	if (!existsSync(srcPath)) {
@@ -213,14 +245,7 @@ function writePage(dist, page, config) {
 	// for are copied into the dist folder as they are and loaded separately
 	// (deferred) instead, so the extension is a file that can be added, changed
 	// or left out without rebuilding the bundle.
-	const extensionScripts = [];
-	const extensionPattern = new RegExp(
-		'<script\\b[^>]*\\bsrc="([^"]*' + EXTENSIONS_FOLDER + '/[^"]*)"[^>]*>',
-		"gi"
-	);
-	for (const match of src.matchAll(extensionPattern)) {
-		extensionScripts.push(match[1].replace(/^\.\//, ""));
-	}
+	const extensionScripts = getExtensionScripts(src);
 
 	const extras = (config.extras || [])
 		.concat(extensionScripts)
@@ -395,6 +420,119 @@ self.addEventListener('fetch', function (event) {
 `;
 	writeFileSync(join(dist, "sw.js"), sw);
 	console.log("[copy] sw.js -> dist (generated for bundles)");
+}
+
+const UNITY_NOMODULE_SCRIPTS = ["Scripts/LegacyPolyfills.js", "Scripts/Animation.js"];
+
+/** @param {string} code */
+function escapeInlineScript(code) {
+	return code.replace(/<\/script/gi, "<\\/script");
+}
+
+/** @param {string} code */
+async function minifyJs(code) {
+	const result = await esbuild.transform(code, {
+		minify: true,
+		target: "esnext",
+		legalComments: "none"
+	});
+	return escapeInlineScript(result.code);
+}
+
+/** @param {string} code */
+async function minifyCss(code) {
+	const result = await esbuild.transform(code, {
+		loader: "css",
+		minify: true,
+		legalComments: "none"
+	});
+	return result.code.trim().replace(/<\/style/gi, "<\\/style");
+}
+
+/**
+ * Conservative HTML minifier: strip comments, collapse whitespace in text and
+ * between tags, but keep single spaces between inline elements so words never
+ * run together. Scripts and stylesheets are injected afterwards, so their
+ * contents can never be altered here.
+ * @param {string} html
+ */
+function minifyHtml(html) {
+	return html
+		.replace(/<!--[\s\S]*?-->/g, "")
+		.replace(/>\s+</g, (match) => (match.includes("\n") ? "><" : "> <"))
+		.replace(/[ \t\r\n]+/g, " ")
+		.replace(/<\s+/g, "<")
+		.replace(/\s+>/g, ">")
+		.trim();
+}
+
+/**
+ * Unity build: take the finished page and inline every script and stylesheet it
+ * uses, so the OS boots from one HTML file with no JS/CSS requests. Unlike the
+ * normal bundles, the unity page deliberately contains the extension scripts
+ * too - there is no separate file left for them to live in.
+ * @param {string} dist
+ */
+async function writeUnityPage(dist) {
+	const config = PAGES["index.html"];
+	const srcPath = join(ROOT, config.source);
+	if (!existsSync(srcPath)) {
+		console.warn(config.source + " not found; skipping unity page.");
+		return;
+	}
+	const src = readFileSync(srcPath, "utf8");
+
+	const cssParts = [];
+	for (const sheet of getStylesheets(src)) {
+		const full = join(ROOT, sheet);
+		if (!existsSync(full)) {
+			console.warn("Stylesheet not found, skipping: " + sheet);
+			continue;
+		}
+		cssParts.push(readFileSync(full, "utf8"));
+	}
+	const css = await minifyCss(cssParts.join("\n"));
+
+	/** @type {{code: string, nomodule: boolean}[]} */
+	const scripts = [];
+	const bundlePath = join(dist, config.script);
+	if (!existsSync(bundlePath)) {
+		throw new Error("Unity build needs " + config.script + "; bundle is missing.");
+	}
+	scripts.push({ code: escapeInlineScript(readFileSync(bundlePath, "utf8")), nomodule: false });
+
+	const extraScripts = (config.extras || [])
+		.concat(getExtensionScripts(src))
+		.concat(UNITY_NOMODULE_SCRIPTS);
+	for (const extra of extraScripts) {
+		const full = join(ROOT, extra);
+		if (!existsSync(full)) {
+			console.warn("Script not found, skipping: " + extra);
+			continue;
+		}
+		scripts.push({
+			code: await minifyJs(readFileSync(full, "utf8")),
+			nomodule: UNITY_NOMODULE_SCRIPTS.includes(extra)
+		});
+	}
+
+	const stripped = src
+		.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+		.replace(/<link\b[^>]*>/gi, (tag) => (/rel\s*=\s*["']stylesheet["']/i.test(tag) ? "" : tag));
+	let html = minifyHtml(stripped);
+	const inlineScripts = scripts
+		.map((script) => "<script" + (script.nomodule ? " nomodule" : "") + ">" + script.code + "</script>")
+		.join("");
+	html = html.replace(/<\/head>/i, "<style>" + css + "</style></head>");
+	html = html.replace(/<\/body>/i, inlineScripts + "</body>");
+
+	writeFileSync(join(dist, "index.html"), html);
+	writeFileSync(join(dist, "unity.html"), html);
+	console.log(
+		"[unity] index.html -> " +
+		(Buffer.byteLength(html) / 1024).toFixed(1) + " KB (" +
+		cssParts.length + " stylesheets, " + scripts.length + " scripts)"
+	);
 }
 
 /**
@@ -622,6 +760,7 @@ export default async function build(options) {
 	const noMinify = process.argv.includes("--no-minify");
 	const mergeProps = !process.argv.includes("--no-merge-props");
 	const ie8 = options?.ie8 || process.argv.includes("--ie8");
+	const unity = options?.unity || process.argv.includes("--unity");
 	const dist = resolveDist();
 	console.log("Dist folder: " + dist);
 
