@@ -386,8 +386,7 @@ WindowManager.prototype.loadInstalledApps = function() {
  * @param {string} [proxyUrl]
  */
 WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
-	if (!proxyUrl) proxyUrl = "https://browz.netlify.app/browz-set-cookie/";
-	this.installApp(proxyUrl + url, Helpers.getSiteName(url) || "unkle", "custom." + Helpers.getDomain(url), Helpers.getFaviconUrl(url));
+	this.installApp((proxyUrl || (proxyUrl = "https://browz.netlify.app/browz-set-cookie/")) + url, Helpers.getSiteName(url) || "unkle", "custom." + Helpers.getDomain(url), Helpers.getFaviconUrl(url));
 };
 
 /**
