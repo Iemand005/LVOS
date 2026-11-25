@@ -67,7 +67,7 @@ test('vite dev and preview negotiate compressed unity.html', async () => {
 			}
 		} finally {
 			server.kill('SIGTERM');
-			await Promise.race([once(server, 'exit'), new Promise((done) => setTimeout(done, 2000))]);
+			await Promise.race([once(server, 'exit'), new Promise<void>((done) => setTimeout(done, 2000))]);
 		}
 	}
 });
