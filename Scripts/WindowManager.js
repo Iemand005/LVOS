@@ -978,7 +978,7 @@ WindowManager.prototype.getWindowById = function(id) { return id && this.windows
 
 /**
  * @param {MessageType} type
- * @param {*} [data]
+ * @param {unknown} [data]
  * @param {string} [id]
  */
 WindowManager.prototype.broadcast = function(type, data, id) {
