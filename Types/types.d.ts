@@ -244,6 +244,8 @@ interface WindowOpenProperties {
 	top?: number;
 }
 
+type AnimationState = { timer: 0, frame: 0, handler: null, active: true, flip: boolean, cancel: ()=>void };
+
 type Flags = Record<string, boolean>;
 
 interface VulpOS {
