@@ -995,8 +995,7 @@ WindowManager.prototype.handleBroadcast = function(type, data, id) {
 		var app = appManager.getApp(id);
 		if (!app) return;
 		this.loadApp(app);
-		this.getWindowById
-		dialog = this.windows[id] || null;
+		dialog = this.getWindowById(id);
 	}
 	if (!dialog) return;
 	this.synchronizing = false;
