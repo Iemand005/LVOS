@@ -132,6 +132,8 @@ declare global {
 		// ontransitionend?: () => void;
 		/** rAF id of the FLIP that is currently playing its frame on this element, if any. */
 		_flipFrame?: number;
+		/** @type {AnimationState | null} */
+		_animationState;
 	}
 
 	interface HTMLElementEventMap {

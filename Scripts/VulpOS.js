@@ -211,6 +211,7 @@ Helpers.animateElement = function(element, onToggled, onTransitionEnd, onEnd, th
 	/** @type {T} */
 	var boundContext = thisArg || element;
 
+	/** @type {AnimationState | null} */
 	var state = null;
 
 	var callEnd = function(cancelled) {

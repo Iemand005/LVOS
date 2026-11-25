@@ -20,6 +20,9 @@
 	},
 
 	"ignoreDeprecations": "6.0",
+	"typeAcquisition": {
+		"enable": false
+	},
 	"include": [
 		"Types/types.d.ts", "Types/overrides.d.ts",
 		"./Scripts/**/*.js",

@@ -244,7 +244,7 @@ interface WindowOpenProperties {
 	top?: number;
 }
 
-type AnimationState = { timer: 0, frame: 0, handler: null, active: true, flip: boolean, cancel: ()=>void };
+type AnimationState = { timer: number, frame: number, handler: ((this: HTMLElement, ev: TransitionEvent) => any) | null, active: boolean, flip: boolean, cancel: ()=>void };
 
 type Flags = Record<string, boolean>;
 
