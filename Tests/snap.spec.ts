@@ -63,15 +63,22 @@ test('maximize button unsnaps a snapped window and swaps the icon', async ({ vul
 test('maximizing a snapped window keeps the restore icon', async ({ vulpOS }) => {
 	const window = await vulpOS.openCube();
 	await vulpOS.enableAeroSnap();
-	const icon = () => window.evaluate(dialog => dialog.getButton(1)!.innerHTML);
+	const icon = () => window.evaluate(dialog => {
+		const button = dialog.getButton(1)!;
+		return {
+			restored: button.classList.contains('restored'),
+			maximizeVisible: getComputedStyle(button.querySelector('.maximize-icon')!).display !== 'none',
+			restoreVisible: getComputedStyle(button.querySelector('.restore-icon')!).display !== 'none',
+		};
+	});
 
 	await vulpOS.drag(await vulpOS.titleBarPoint(window), { x: 2, y: 400 });
 	await expect.poll(() => vulpOS.state(window).then(state => state.snapped), { timeout: 4000 }).toBe(true);
-	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+	expect(await icon()).toEqual({ restored: true, maximizeVisible: false, restoreVisible: true });
 
 	await window.evaluate(dialog => dialog.maximize());
 	await expect.poll(() => vulpOS.state(window).then(state => state.maximized), { timeout: 4000 }).toBe(true);
-	expect(await icon()).toContain('M2.1 0v2H0v8.1h8.2v-2h2V0H2.1z');
+	expect(await icon()).toEqual({ restored: true, maximizeVisible: false, restoreVisible: true });
 });
 
 test('expands the snap indicator on touch sizer pointerdown, before any move', async ({ vulpOS }) => {
