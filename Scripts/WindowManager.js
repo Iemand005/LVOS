@@ -41,22 +41,14 @@ var flags = (function() {
 	}
 
 	return {
-		/** @type {boolean} */
-		aeroSnap: true,
-		/** @type {boolean} */
-		updateRateLimit: allowUpdateRateLimit,
-		/** @type {boolean} */
-		useDragOverlay: true,
-		/** @type {boolean} */
-		broadcastWindowMoves: !document.documentMode,
-		/** @type {boolean} */
-		useAnimations: true,
-		/** @type {boolean} */
-		ieDropCompatibleMode: true,
-		/** @type {boolean} */
-		bootAnimation: true,
-		/** @type {boolean} */
-		verboseLogs: false,
+		/** @type {boolean} */ 	aeroSnap: true,
+		/** @type {boolean} */ 	updateRateLimit: allowUpdateRateLimit,
+		/** @type {boolean} */ 	useDragOverlay: true,
+		/** @type {boolean} */ 	broadcastWindowMoves: !document.documentMode,
+		/** @type {boolean} */ 	useAnimations: true,
+		/** @type {boolean} */ 	ieDropCompatibleMode: true,
+		/** @type {boolean} */ 	bootAnimation: true,
+		/** @type {boolean} */ 	verboseLogs: false,
 
 		get noBlurFullscreen() { return _noBlurFullscreen || false; },
 		set noBlurFullscreen(value) {
@@ -132,8 +124,7 @@ function WindowManager() {
 	this.heightSnapReleaseThreshold = 10;
 	/** @type {number} */
 	this.snapGapWidth = 0.5;
-	/** @type {boolean} */
-	this.snapInsertGaps = true;
+	/** @type {boolean} */ this.snapInsertGaps = true;
 	/** @type {"" | "maximize" | "left" | "right" | "height"} */
 	this._snapZone = "";
 	/** @type {Coord} */
