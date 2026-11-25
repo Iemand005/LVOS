@@ -455,7 +455,6 @@ DesktopManager.prototype.playBootAnimation = function(name) {
 	var overlay = this.overlay;
 	if (!overlay) return;
 	var logo = document.getElementById("boot-logo");
-	// logo.onanimationend
 	if (!logo) return;
 	var log = logo;
 
