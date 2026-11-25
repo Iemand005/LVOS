@@ -6,7 +6,8 @@
 		"dev:ie8": "vite --mode ie8",
 		"build": "node build.js",
 		"build:dev": "node build.js --no-minify",
-		"build:ie8": "node build.js --ie8"
+		"build:ie8": "node build.js --ie8",
+		"build:unity": "node build.js --unity"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.63.0",

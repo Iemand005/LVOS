@@ -813,12 +813,13 @@ export default async function build(options) {
 	copyAssets(dist);
 	writePages(dist, ie8);
 	writeServiceWorker(dist, ie8);
+	if (unity) await writeUnityPage(dist);
 
 	console.log("\nDone.");
 }
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --help            show this help");
+	console.log("VulpOS build script.\n\nOptions:\n  --no-minify       emit readable (unminified) bundles\n  --no-merge-props  keep individual Object.defineProperty calls\n  --ie8             also emit accessor-free *.ie8.dist.js bundles\n  --unity           inline all JS/CSS into a single self-contained index.html\n  --out=DIR         write output into DIR instead of Dist\n  --help            show this help");
 } else {
 	build().catch(function (err) {
 		console.error(err);
