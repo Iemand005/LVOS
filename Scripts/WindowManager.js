@@ -397,12 +397,9 @@ WindowManager.prototype.installAppProxied = function (url, proxyUrl) {
  * @param {Partial<DialogState>} [state] The saved state that was dragged with the window.
  */
 WindowManager.prototype.dropApplication = function (application, x, y, offset, state) {
-	if (!application || !application.id) return null;
-
 	var dialog;
-	if (application.multiple) {
-		dialog = this.spawnApp(application);
-	} else {
+	if (application.multiple) dialog = this.spawnApp(application);
+	else {
 		if (!this.windows[application.id])
 			this.loadApp(application);
 		dialog = this.windows[application.id];
