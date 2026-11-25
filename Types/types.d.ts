@@ -5,7 +5,8 @@ interface Array<T> {
 
 type PermissionMap = "camera" | "microphone" | "fullscreen";
 
-interface Application satisfies Record<string,any> {
+interface Application {
+	Record<string,any>;
 	id: string;
 	title?: string;
 	src?: string;
