@@ -21,6 +21,7 @@
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.activeBackground": "#a14000",
+		"modernActivityBarItem.activeForeground": "#fffefd",
 		"activityBar.inactiveForeground": "#bfbfbf",
 		"statusBar.background": "#9B4207",
 		"statusBar.foreground": "#FFF8F4",
